@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QStringList>
 
+using namespace Grantlee;
+
 static const char * BLOCK_TAG_START = "{%";
 static const char * BLOCK_TAG_END = "%}";
 static const char * VARIABLE_TAG_START = "{{";

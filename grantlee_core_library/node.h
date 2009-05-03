@@ -16,6 +16,9 @@
 // Tag and Node. The Tag object creates a Node from a tag.
 // The Node object knows how to render itself given the arguments to the tag.
 
+namespace Grantlee
+{
+
 /**
 Abstract base class for nodes.
 */
@@ -115,5 +118,7 @@ private:
 
 // TODO: figure out if I can use the same QMetaType tricks described in qt:qtscript for QPoint.
 // Define a macro to wrap non-qobject cpp classes.
+
+}
 
 #endif

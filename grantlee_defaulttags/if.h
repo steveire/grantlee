@@ -10,7 +10,8 @@
 
 #include "grantlee_export.h"
 
-class Parser;
+
+using namespace Grantlee;
 
 
 class IfNodeFactory : public AbstractNodeFactory

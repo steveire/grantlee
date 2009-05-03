@@ -18,7 +18,12 @@
 
 #include "grantlee_export.h"
 
+namespace Grantlee
+{
 class Parser;
+}
+
+using namespace Grantlee;
 
 class FilterNodeFactory : public AbstractNodeFactory
 {
@@ -59,7 +64,7 @@ public:
 class DefaultTagLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( TagLibraryInterface )
+  Q_INTERFACES( Grantlee::TagLibraryInterface )
 public:
   DefaultTagLibrary()
   {

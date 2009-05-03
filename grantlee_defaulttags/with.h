@@ -7,6 +7,8 @@
 
 #include "node.h"
 
+using namespace Grantlee;
+
 class WithNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT

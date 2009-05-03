@@ -9,6 +9,8 @@
 
 #include <QDebug>
 
+using namespace Grantlee;
+
 
 Context::Context(QHash<QString, QVariant> variantHash)
 {

@@ -9,6 +9,9 @@
 
 #include "context.h"
 
+namespace Grantlee
+{
+
 class Variable
 {
 public:
@@ -26,5 +29,7 @@ private:
   QString m_varString;
 
 };
+
+}
 
 #endif

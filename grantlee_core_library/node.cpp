@@ -6,6 +6,8 @@
 
 #include <QDebug>
 
+using namespace Grantlee;
+
 Node::Node(QObject *parent) : QObject(parent)
 {
 

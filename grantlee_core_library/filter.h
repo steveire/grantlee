@@ -9,8 +9,15 @@
 
 #include "grantlee_export.h"
 
+namespace Grantlee
+{
 class Parser;
+}
+
 class Token;
+
+namespace Grantlee
+{
 
 class GRANTLEE_EXPORT FilterExpression
 {
@@ -22,7 +29,7 @@ public:
   };
 
   FilterExpression();
-  FilterExpression(const QString &varString, Parser *parser = 0);
+  FilterExpression(const QString &varString, Grantlee::Parser *parser = 0);
 
 //   QList<QPair<QString, QString> > filters();
   Variable variable();
@@ -35,5 +42,7 @@ private:
   Variable m_variable;
 
 };
+
+}
 
 #endif

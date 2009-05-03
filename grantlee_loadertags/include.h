@@ -9,8 +9,13 @@
 #include "interfaces/taglibraryinterface.h"
 
 
+namespace Grantlee
+{
 class Parser;
+}
 
+
+using namespace Grantlee;
 
 class IncludeNodeFactory : public AbstractNodeFactory
 {

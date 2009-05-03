@@ -11,6 +11,9 @@
 
 #include "grantlee_export.h"
 
+namespace Grantlee
+{
+
 class GRANTLEE_EXPORT Template //: public QObject
 {
 //   Q_OBJECT
@@ -58,5 +61,7 @@ private:
   static TemplateLoader* m_instance;
   QHash<QString, QString> m_namedTemplates;
 };
+
+}
 
 #endif

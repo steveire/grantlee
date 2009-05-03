@@ -12,12 +12,17 @@
 #include "extends.h"
 #include "block.h"
 
+namespace Grantlee
+{
 class Parser;
+}
+
+using namespace Grantlee;
 
 class LoaderTagLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( TagLibraryInterface )
+  Q_INTERFACES( Grantlee::TagLibraryInterface )
 public:
   LoaderTagLibrary()
   {

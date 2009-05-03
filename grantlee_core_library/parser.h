@@ -14,11 +14,18 @@
 
 #include "node.h"
 
+namespace Grantlee
+{
 class AbstractNodeFactory;
 
 class TagLibraryInterface;
+}
 
 class ParserPrivate;
+
+
+namespace Grantlee
+{
 
 class GRANTLEE_EXPORT Parser : public QObject
 {
@@ -59,5 +66,7 @@ private:
   ParserPrivate *d_ptr;
 
 };
+
+}
 
 #endif

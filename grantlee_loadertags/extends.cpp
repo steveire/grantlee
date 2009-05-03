@@ -17,6 +17,8 @@
 
 typedef QMutableListIterator<Node*> MutableNodeListIterator;
 
+using namespace Grantlee;
+
 ExtendsNodeFactory::ExtendsNodeFactory()
 {
 

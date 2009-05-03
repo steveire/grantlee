@@ -17,6 +17,8 @@
 
 #include <QListIterator>
 
+using namespace Grantlee;
+
 typedef QListIterator<Node*> NodeListIterator;
 
 NodeList Template::compileString(const QString &str)

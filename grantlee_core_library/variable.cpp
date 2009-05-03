@@ -12,6 +12,8 @@
 
 #include <QDebug>
 
+using namespace Grantlee;
+
 Variable::Variable()
 {
 

@@ -7,6 +7,8 @@
 
 #include "node.h"
 
+using namespace Grantlee;
+
 class FirstOfNodeFactory : public AbstractNodeFactory
 {
   public:

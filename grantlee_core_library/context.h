@@ -11,6 +11,9 @@
 
 #include "grantlee_export.h"
 
+namespace Grantlee
+{
+
 class GRANTLEE_EXPORT Context //: public QObject
 {
   //Q_OBJECT
@@ -47,5 +50,7 @@ private:
   QStringList m_templateSearchDirs;
 
 };
+
+}
 
 #endif

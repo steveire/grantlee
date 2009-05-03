@@ -8,6 +8,8 @@
 
 #include <QDebug>
 
+using namespace Grantlee;
+
 
 static const QString FILTER_SEPARATOR = "|";
 static const QString FILTER_ARGUMENT_SEPARATOR = ":";

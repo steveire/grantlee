@@ -12,6 +12,9 @@
 #include "template.h"
 #include "context.h"
 
+
+using namespace Grantlee;
+
 class TestBuiltins : public QObject
 {
   Q_OBJECT

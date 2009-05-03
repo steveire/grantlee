@@ -24,6 +24,9 @@ struct Token
 
 class LexerPrivate;
 
+namespace Grantlee
+{
+
 class Lexer
 {
 public:
@@ -39,5 +42,7 @@ private:
   LexerPrivate *d_ptr;
 
 };
+
+}
 
 #endif
