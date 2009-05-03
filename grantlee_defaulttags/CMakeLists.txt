@@ -1,0 +1,42 @@
+project(grantlee_defaulttags)
+
+include_directories(
+  ${QT_INCLUDES}
+  ${PROJECT_BINARY_DIR}
+  ${PROJECT_SOURCE_DIR}/../grantlee_core_library
+)
+
+add_definitions(${QT_DEFINITIONS})
+add_definitions(-DQT_PLUGIN)
+add_definitions(-DQT_NO_DEBUG)
+add_definitions(-DQT_SHARED)
+
+
+set (grantlee_defaulttags_library_SRCS
+  defaulttags.cpp
+  if.cpp
+  for.cpp
+  with.cpp
+  cycle.cpp
+  comment.cpp
+  ifequal.cpp
+  firstof.cpp
+)
+
+set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)
+
+automoc4_add_library(grantlee_defaulttags_library SHARED
+  ${grantlee_defaulttags_library_SRCS}
+)
+
+target_link_libraries(grantlee_defaulttags_library
+  grantlee_core_library
+)
+
+set_target_properties(grantlee_defaulttags_library PROPERTIES
+  VERSION    ${GRANTLEE_LIB_MAJOR_VERSION}.${GRANTLEE_LIB_MINOR_VERSION}.${GRANTLEE_LIB_PATCH_VERSION}
+  SOVERSION  ${GRANTLEE_DEFAULTTAGS_LIB_SOVERSION}
+)
+
+install(TARGETS grantlee_defaulttags_library ${INSTALL_TARGETS_DEFAULT_ARGS})
+

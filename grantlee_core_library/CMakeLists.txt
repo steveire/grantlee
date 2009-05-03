@@ -1,0 +1,49 @@
+project(grantlee_core_library)
+
+include_directories(
+  ${QT_INCLUDES}
+)
+
+set (grantlee_core_library_SRCS
+  template.cpp
+  context.cpp
+  variable.cpp
+  filter.cpp
+  node.cpp
+  lexer.cpp
+  parser.cpp
+)
+
+set(GRANTLEE_CORE_LIB_SOVERSION 0)
+
+automoc4_add_library(grantlee_core_library SHARED
+  ${grantlee_core_library_SRCS}
+)
+
+target_link_libraries(grantlee_core_library
+  ${QT_QTCORE_LIBRARY}
+)
+
+set_target_properties(grantlee_core_library PROPERTIES
+  VERSION    ${GRANTLEE_LIB_MAJOR_VERSION}.${GRANTLEE_LIB_MINOR_VERSION}.${GRANTLEE_LIB_PATCH_VERSION}
+  SOVERSION  ${GRANTLEE_CORE_LIB_SOVERSION}
+)
+
+install(TARGETS grantlee_core_library
+#         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+#         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+#         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+   ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
+
+install(FILES
+  node.h
+  template.h
+  context.h
+  variable.h
+  filter.h
+  parser.h
+  grantlee_export.h
+  grantlee.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
+)
