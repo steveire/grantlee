@@ -47,9 +47,9 @@ public:
 
   Template loadByName(const QString &name);
 
-  TemplateLoader();
 
 private:
+  TemplateLoader();
   Template loadFromFile(const QString &fileName);
 
   QString m_themeName;
