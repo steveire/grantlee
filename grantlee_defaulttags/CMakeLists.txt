@@ -38,5 +38,10 @@ set_target_properties(grantlee_defaulttags_library PROPERTIES
   SOVERSION  ${GRANTLEE_DEFAULTTAGS_LIB_SOVERSION}
 )
 
-install(TARGETS grantlee_defaulttags_library ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS grantlee_defaulttags_library
+         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+         COMPONENT Devel
+)
 
