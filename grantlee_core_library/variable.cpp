@@ -26,6 +26,11 @@ Variable::Variable(const QString &var)
 
 QVariant Variable::resolve(Context *c)
 {
+  if (m_varString.startsWith("\"") && m_varString.endsWith("\""))
+  {
+    int size = m_varString.size();
+    return m_varString.mid(1, size - 2);
+  }
   QStringList list = m_varString.split(".");
   QString varName = list.takeFirst();
   QVariant var = c->lookup(varName);
