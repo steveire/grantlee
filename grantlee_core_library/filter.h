@@ -36,6 +36,8 @@ public:
 
   QVariant resolve(Context *c);
 
+  bool isTrue(Context *c);
+
   QVariantList toList(Context *c, int reversed = IsNotReversed);
 
 private:

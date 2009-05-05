@@ -115,9 +115,10 @@ QString IfNode::render(Context *c)
     {
       QPair<bool, FilterExpression> pair = m_boolVars.at(i);
       bool negate = pair.first;
-      QVariant variant = pair.second.resolve(c);
 
-      if ( variantIsTrue(variant) != negate )
+      bool isTrue = pair.second.isTrue(c);
+
+      if ( isTrue != negate )
       {
         return renderTrueList(c);
       }
@@ -129,7 +130,8 @@ QString IfNode::render(Context *c)
     {
       QPair<bool, FilterExpression> pair = m_boolVars.at(i);
       bool negate = pair.first;
-      QVariant variant = pair.second.resolve(c);
+
+      bool isTrue = pair.second.isTrue(c);
 
       // Karnaugh map:
       //          VariantIsTrue
@@ -137,8 +139,8 @@ QString IfNode::render(Context *c)
       //         0| 0 | 1 |
       // negate  1| 1 | 0 |
 
-      if ( ( variantIsTrue(variant) && !negate )
-        || ( !variantIsTrue(variant) && negate ) )
+      if ( ( isTrue && !negate )
+        || ( !isTrue && negate ) )
       {
         renderTrue = false;
         break;
@@ -149,67 +151,6 @@ QString IfNode::render(Context *c)
   }
 
   return renderFalseList(c);
-}
-
-// TODO: figure out where this belongs? node.h? Or variable.h?
-bool IfNode::variantIsTrue(const QVariant &variant )
-{
-//   Variable variable(varStr);
-//   QVariant variant = variable.resolve(c);
-
-  if (!variant.isValid())
-    return false;
-
-  switch (variant.type())
-  {
-  case QVariant::Bool:
-  {
-    return variant.toBool();
-    break;
-  }
-  case QVariant::String:
-  {
-    return !variant.toString().isEmpty();
-    break;
-  }
-  default:
-    break;
-  }
-
-//     if it contains QObject pointer
-//     {
-//       if pointer is null:
-//         return false;
-//       return true;
-//     }
-
-//     if (it contains number)
-//     {
-//       //       QString varString = var.toString();
-//       if (number == 0)
-//         return false;
-//       return true;
-//     }
-//     if (it contains boolean)
-//     {
-//       return boolean;
-//     }
-//     if (it contains collection)
-//     {
-//       return collection.size() > 0;
-//     }
-//
-//     if (it contains string)
-//     {
-//       QString varString = var.toString();
-//       if (varString.isEmpty())
-//         return false;
-//       return true;
-//     }
-// etc for QPoint etc.
-
-  return false;
-
 }
 
 QString IfNode::renderTrueList(Context *c)

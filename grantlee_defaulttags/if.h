@@ -43,7 +43,6 @@ public:
   QString render(Context *c);
 
 protected:
-  bool variantIsTrue( const QVariant &variant );
   QString renderTrueList(Context *c);
   QString renderFalseList(Context *c);
 
