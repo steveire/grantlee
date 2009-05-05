@@ -24,7 +24,8 @@ Node* IncludeNodeFactory::getNode(const QString &tagContent, Parser *p)
   QString includeName = expr.at(1);
   int size = includeName.size();
 
-  if (includeName.at(0) == QChar('\"') && includeName.at(size-1) == QChar('\"'))
+  if ((includeName.startsWith("\"") && includeName.endsWith("\""))
+    || ( includeName.startsWith("'") && includeName.endsWith("'") ))
   {
     return new ConstantIncludeNode(includeName.mid(1, size-2));
   }
