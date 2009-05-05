@@ -31,7 +31,8 @@ Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p)
   QString parentName = expr.at(1);
   int size = parentName.size();
 
-  if (parentName.at(0) == QChar('\"') && parentName.at(size-1) == QChar('\"'))
+  if ( ( parentName.startsWith( "\"" ) && parentName.endsWith( "\"" ) )
+    || ( parentName.startsWith( "'" ) && parentName.endsWith( "'" ) ) )
   {
     parentName = parentName.mid(1, size -2);
   }
