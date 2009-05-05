@@ -133,6 +133,10 @@ bool FilterExpression::isTrue(Context *c)
     return !variant.toString().isEmpty();
     break;
   }
+  case QVariant::Int:
+  {
+    return (variant.toInt() > 0);
+  }
   default:
     break;
   }
