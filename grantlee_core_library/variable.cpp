@@ -24,15 +24,59 @@ Variable::Variable(const QString &var)
   m_varString = var.trimmed();
 }
 
+bool isNumeric(const QString &str)
+{
+  bool ret = false;
+
+  QString searchString;
+
+  if ( str.startsWith(".") )
+    return true;
+    
+  if ( str.startsWith("+") || str.startsWith("-") )
+  {
+    searchString = str.right(str.size() - 1);
+  } else {
+    searchString = str;
+  }
+
+  if (str.isEmpty())
+    return false;
+  
+  QRegExp re("\\d+");
+
+
+  return re.exactMatch(searchString);  
+}
+
 QVariant Variable::resolve(Context *c)
 {
-  if (m_varString.startsWith("\"") && m_varString.endsWith("\""))
+  if ((m_varString.startsWith("\"") && m_varString.endsWith("\""))
+    || (m_varString.startsWith("'") && m_varString.endsWith("'")))
   {
     int size = m_varString.size();
     return m_varString.mid(1, size - 2);
   }
   QStringList list = m_varString.split(".");
   QString varName = list.takeFirst();
+  
+  if (varName.isEmpty())
+  {
+    QVariant v(m_varString);
+    return v.toDouble();    
+  }
+
+  if (isNumeric(varName))
+  {
+    QVariant v(m_varString);
+    if (list.isEmpty())
+    {
+      return v.toInt();
+    } else {
+      return v.toDouble();
+    }
+  }
+  
   QVariant var = c->lookup(varName);
   if (!var.isValid())
     return QVariant();
