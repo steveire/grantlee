@@ -130,6 +130,8 @@ QVariant Variable::resolvePart( QVariant var, const QString &nextPart )
     if ( QVariant::List == var.type() )
     {
       QVariantList varList = var.toList();
+      if (listIndex >= varList.size())
+        return QVariant();
       return varList.at(listIndex);
     } else if ( QVariant::StringList == var.type() )
     {
