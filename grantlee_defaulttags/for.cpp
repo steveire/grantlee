@@ -80,7 +80,9 @@ QString ForNode::render(Context *c)
     forloopMap.insert(parentloop, parentLoopVariant.toMap());
   }
   // If it's an iterable type, iterate, otherwise it's a list of one.
-  QVariantList varList = m_filterExpression.toList(c, m_isReversed);
+  QVariantList varList = m_filterExpression.toList(c);
+
+//   QListIterator<QVariant> varIter(varList);
 //   QVariant variant = m_filterExpression.next();
 
 //   int loopCounter = 0;
@@ -91,6 +93,7 @@ QString ForNode::render(Context *c)
   NodeList nodeList;
 
   int listSize = varList.size();
+  
   for (int i = 0; i < listSize; i++)
   {
     forloopMap.insert(counter0, i);
@@ -102,7 +105,13 @@ QString ForNode::render(Context *c)
     c->insert(forloop, forloopMap);
 
 // If here for map key, value style.
-    c->insert(m_loopVars[0], varList[i]);
+
+    if (m_isReversed == IsNotReversed)
+    {
+      c->insert(m_loopVars[0], varList[i]);
+    } else {
+      c->insert(m_loopVars[0], varList[listSize - i - 1]);
+    }
 
     for (int j = 0; j < m_loopNodeList.size();j++)
     {

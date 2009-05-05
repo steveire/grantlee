@@ -70,7 +70,7 @@ QVariant FilterExpression::resolve(Context *c)
 //   }
 // }
 
-QVariantList FilterExpression::toList(Context *c, int reversed)
+QVariantList FilterExpression::toList(Context *c)
 {
   QVariant var = resolve(c);
   if (!var.isValid())

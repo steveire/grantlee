@@ -38,7 +38,7 @@ public:
 
   bool isTrue(Context *c);
 
-  QVariantList toList(Context *c, int reversed = IsNotReversed);
+  QVariantList toList(Context *c);
 
 private:
   Variable m_variable;
