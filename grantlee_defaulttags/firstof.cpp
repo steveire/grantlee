@@ -45,10 +45,9 @@ QString FirstOfNode::render(Context *c)
 {
   foreach(FilterExpression fe, m_filterExpressionList)
   {
-    QVariant value = fe.resolve(c);
-    if (value.isValid())
+    if (fe.isTrue(c))
     {
-      return value.toString();
+      return fe.resolve(c).toString();
     }
   }
   return QString();
