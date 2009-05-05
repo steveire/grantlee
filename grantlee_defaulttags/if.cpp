@@ -23,17 +23,46 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
 //   if (expr.size() <= 0)
 //     error(Parser::TagSyntaxError, "'if' statement requires at least one argument");
 
+  int linkType = IfNode::OrLink;
+
   bool isAnd = false;
-  if (expr.contains("and"))
+  QString exprString = expr.join(" ");
+
+  QStringList boolPairs = exprString.split( " and ");
+
+  if (boolPairs.size() == 1)
   {
-    isAnd = true;
-  }
-  if (expr.contains("or"))
-  {
-    if (isAnd == true)
+    boolPairs = exprString.split( " or ");
+  } else {
+    linkType = IfNode::AndLink;
+    if (exprString.contains(" or "))
     {
-//       error(Parser::TagSyntaxError, "'if' tags can't mix 'and' and 'or'");
+      // Error; "'if' tags can't mix 'and' and 'or'"
     }
+  }
+
+  QList<QPair<bool, FilterExpression > > boolVars;
+  foreach (const QString &boolStr, boolPairs)
+  {
+    QPair<bool, FilterExpression> pair;
+    if (boolStr.contains(" "))
+    {
+      QStringList bits = boolStr.split( " " );
+      if (bits.size() != 2)
+      {
+        // TemplateSyntaxError, "'if' statement improperly formatted"
+      }
+      if (bits.at(0) != "not")
+      {
+        // TemplateSyntaxError, "Expected 'not' in if statement"
+      }
+      pair.first = true;
+      pair.second = FilterExpression(bits.at(1).trimmed());
+    } else {
+      pair.first = false;
+      pair.second = FilterExpression(boolStr.trimmed());
+    }
+    boolVars.append(pair);
   }
 
 
@@ -46,61 +75,16 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
     p->nextToken();
   } // else empty falseList.
 
-  return new IfNode(expr.join(" "), trueList, falseList);
+  return new IfNode(boolVars, trueList, falseList, linkType);
 }
 
 
-IfNode::IfNode(const QString &booleanExpression, NodeList trueList, NodeList falseList)
-              : m_linkType(OrLink)
+IfNode::IfNode(QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType)
+              : m_boolVars(boolVars),
+                m_trueList(trueList),
+                m_falseList(falseList),
+                m_linkType(linkType)
 {
-  m_booleanExpression = booleanExpression;
-  m_trueList = trueList;
-  m_falseList = falseList;
-
-  QStringList boolpairs = booleanExpression.split(" and " );
-  if ( boolpairs.size() == 1 )
-  {
-    // the expression does not contain 'and'
-    boolpairs = booleanExpression.split( " or " );
-
-  } else {
-    if (booleanExpression.contains(" or "))
-    {
-      // Error. Can't mix these.
-    }
-  }
-
-//   if (m_booleanExpression.contains("and"))
-//   {
-//     m_linkType = AndLink;
-//     boolpairs = simplified.split("and");
-//   }
-//   if (m_booleanExpression.contains("or"))
-//   {
-//     if ( m_linkType == AndLink )
-//     {
-//       // Error. can't mix these.
-//     }
-//     m_linkType = OrLink;
-//     boolpairs = simplified.split("or");
-//   }
-
-
-  foreach (const QString &boolStr, boolpairs)
-  {
-    QPair<bool, FilterExpression> pair;
-    QStringList splitted = boolStr.split("not");
-    if (splitted.size() == 2)
-    {
-      // whether to negate the result of the string.
-      pair.first = true;
-      splitted.removeFirst();
-    } else {
-      pair.first = false;
-    }
-    pair.second = FilterExpression(splitted[0].trimmed());
-    m_boolVars.append(pair);
-  }
 
 }
 
@@ -139,8 +123,8 @@ QString IfNode::render(Context *c)
       //         0| 0 | 1 |
       // negate  1| 1 | 0 |
 
-      if ( ( isTrue && !negate )
-        || ( !isTrue && negate ) )
+      if ( ( !isTrue && !negate )
+        || ( isTrue && negate ) )
       {
         renderTrue = false;
         break;

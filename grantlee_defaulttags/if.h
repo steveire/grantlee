@@ -38,7 +38,7 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  IfNode(const QString &booleanExpression, NodeList trueList, NodeList falseList);
+  IfNode(QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType);
 
   QString render(Context *c);
 
@@ -47,8 +47,7 @@ protected:
   QString renderFalseList(Context *c);
 
 private:
-  QString m_booleanExpression;
-  QList<QPair<bool, FilterExpression> > m_boolVars;
+  QList<QPair<bool, FilterExpression > > m_boolVars;
   NodeList m_trueList;
   NodeList m_falseList;
   int m_linkType;
