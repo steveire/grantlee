@@ -67,7 +67,9 @@ QString IfEqualNode::render(Context *c)
   QVariant var1 = m_fe1.resolve(c);
   QVariant var2 = m_fe2.resolve(c);
 
-  if (( m_negate && (var1 != var2) || ((!m_negate) && (var1 == var2))))
+  bool equal = ((var1 == var2) && (var1.type() == var2.type()));
+
+  if ( ( ( m_negate && !equal ) || ( !m_negate && equal ) ) )
     return m_trueList.render(c);
   return m_falseList.render(c);
 
