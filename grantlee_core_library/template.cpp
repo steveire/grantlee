@@ -31,7 +31,8 @@ NodeList Template::compileString(const QString &str)
 Template::Template(const QString &str, QStringList pluginDirs )// : QObject(parent)
 {
   m_pluginDirs = pluginDirs;
-  m_nodelist = compileString( str );
+  if (!str.isEmpty())
+    m_nodelist = compileString( str );
 }
 
 QString Template::render(Context *c)
@@ -93,7 +94,7 @@ Template TemplateLoader::loadFromFile(const QString &fileName)
   }
 
   if ( !file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text))
-      return Template(QString(), QStringList());
+      return Template(QString(), m_pluginDirs);
 
   QTextStream in(&file);
   QString content;
