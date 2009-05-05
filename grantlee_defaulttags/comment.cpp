@@ -19,7 +19,9 @@ CommentNodeFactory::CommentNodeFactory()
 Node* CommentNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
   Q_UNUSED(tagContent);
-  Q_UNUSED(p);
+
+  p->skipPast("endcomment");
+  
   return new CommentNode();
 }
 
@@ -35,3 +37,4 @@ QString CommentNode::render(Context *c)
   return QString();
   //   return QString('');
 }
+
