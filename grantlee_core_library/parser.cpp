@@ -79,6 +79,17 @@ NodeList ParserPrivate::extendNodeList(NodeList list, Node *node)
   return list;
 }
 
+void Parser::skipPast(const QString &tag)
+{
+  while (hasNextToken())
+  {
+    Token token = nextToken();
+    if (token.tokenType == BlockToken && token.content.trimmed() == tag )
+      return;
+  }
+  // Error. Unclosed tag
+}
+
 NodeList Parser::parse(QStringList stopAt)
 {
   Q_D(Parser);

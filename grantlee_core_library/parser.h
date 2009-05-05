@@ -35,6 +35,8 @@ public:
 
   NodeList parse(QStringList stopAt = QStringList());
 
+  void skipPast(const QString &tag);
+
   Token nextToken();
   bool hasNextToken();
 
