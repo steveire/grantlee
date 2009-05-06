@@ -54,9 +54,9 @@ QString ExtendsNode::render(Context *c)
 
   TemplateLoader *loader = TemplateLoader::instance();
 
-  Template t = loader->loadByName(filename);
+  Template* t = loader->loadByName(filename);
 
-  NodeList nodeList = t.nodeList();
+  NodeList nodeList = t->nodeList();
   QHash<QString, int> parentBlocks;
 
   MutableNodeListIterator i(nodeList);

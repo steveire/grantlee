@@ -14,11 +14,11 @@
 namespace Grantlee
 {
 
-class GRANTLEE_EXPORT Template //: public QObject
+class GRANTLEE_EXPORT Template : public QObject
 {
-//   Q_OBJECT
+  Q_OBJECT
 public:
-  Template(const QString &templateString, QStringList dirs );
+  Template(const QString &templateString, QStringList dirs, QObject *parent = 0  );
 
   QString render( Context *c );
 
@@ -46,14 +46,14 @@ public:
 
   void injectTemplate(const QString &name, const QString &content);
 
-  Template loadFromString(const QString &content);
+  Template* loadFromString(const QString &content);
 
-  Template loadByName(const QString &name);
+  Template* loadByName(const QString &name);
 
 
 private:
   TemplateLoader();
-  Template loadFromFile(const QString &fileName);
+  Template* loadFromFile(const QString &fileName);
 
   QString m_themeName;
   QStringList m_templateDirs;

@@ -28,7 +28,7 @@ NodeList Template::compileString(const QString &str)
   return p.parse();
 }
 
-Template::Template(const QString &str, QStringList pluginDirs )// : QObject(parent)
+Template::Template(const QString &str, QStringList pluginDirs, QObject *parent ) : QObject(parent)
 {
   m_pluginDirs = pluginDirs;
   if (!str.isEmpty())
@@ -79,7 +79,7 @@ void TemplateLoader::setTheme(const QString &themeName)
   m_themeName = themeName;
 }
 
-Template TemplateLoader::loadFromFile(const QString &fileName)
+Template* TemplateLoader::loadFromFile(const QString &fileName)
 {
   int i = 0;
   QFile file;
@@ -94,7 +94,7 @@ Template TemplateLoader::loadFromFile(const QString &fileName)
   }
 
   if ( !file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text))
-      return Template(QString(), m_pluginDirs);
+      return new Template(QString(), m_pluginDirs);
 
   QTextStream in(&file);
   QString content;
@@ -105,9 +105,9 @@ Template TemplateLoader::loadFromFile(const QString &fileName)
   return loadFromString(content);
 }
 
-Template TemplateLoader::loadFromString(const QString &content)
+Template* TemplateLoader::loadFromString(const QString &content)
 {
-  return Template(content, m_pluginDirs);
+  return new Template(content, m_pluginDirs);
 }
 
 void TemplateLoader::injectTemplate(const QString &name, const QString &content)
@@ -115,7 +115,7 @@ void TemplateLoader::injectTemplate(const QString &name, const QString &content)
   m_namedTemplates.insert(name, content);
 }
 
-Template TemplateLoader::loadByName(const QString &name)
+Template* TemplateLoader::loadByName(const QString &name)
 {
   if (m_namedTemplates.contains(name))
     return loadFromString(m_namedTemplates.value(name));
