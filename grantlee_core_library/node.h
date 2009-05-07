@@ -76,6 +76,9 @@ public:
   */
   virtual Node* getNode(const QString &tagContent, Parser *p) = 0;
 
+protected:
+  QStringList smartSplit(const QString &str);
+
 signals:
   void error(int type, const QString &message);
 
