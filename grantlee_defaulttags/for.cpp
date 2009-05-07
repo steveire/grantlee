@@ -17,7 +17,8 @@ ForNodeFactory::ForNodeFactory()
 
 Node* ForNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = smartSplit(tagContent);
+  
   expr.takeAt(0);
   QList<QString> vars;
 

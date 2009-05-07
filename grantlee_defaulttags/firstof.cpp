@@ -11,13 +11,12 @@
 
 FirstOfNodeFactory::FirstOfNodeFactory()
 {
-
 }
 
 Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
+  QStringList expr = smartSplit(tagContent);
 
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
   expr.takeAt(0);
 
   if (expr.size() <= 0 )

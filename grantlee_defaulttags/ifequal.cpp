@@ -18,7 +18,7 @@ IfEqualNodeFactory::IfEqualNodeFactory()
 
 Node* IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool negate)
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = smartSplit(tagContent);
 
   QList<QString> vars;
 

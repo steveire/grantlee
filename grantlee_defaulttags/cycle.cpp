@@ -19,7 +19,7 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   // be different here? put the cycle value into the context? Otherwise I could use a QObject::property if necesary.
 
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = smartSplit(tagContent);
   expr.takeAt(0);
 
   if (expr.size() < 1 )

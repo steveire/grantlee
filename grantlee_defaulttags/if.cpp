@@ -18,7 +18,7 @@ IfNodeFactory::IfNodeFactory()
 
 Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = smartSplit(tagContent);
   expr.takeAt(0);
 //   if (expr.size() <= 0)
 //     error(Parser::TagSyntaxError, "'if' statement requires at least one argument");

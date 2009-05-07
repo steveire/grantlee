@@ -16,8 +16,7 @@ WithNodeFactory::WithNodeFactory()
 
 Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
-
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = smartSplit(tagContent);
 
   if (expr.size() != 4 or expr.at(2) != "as")
   {
