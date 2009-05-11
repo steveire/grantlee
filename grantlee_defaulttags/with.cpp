@@ -6,6 +6,7 @@
 
 #include <QStringList>
 #include "parser.h"
+#include "grantlee.h"
 
 #include <QDebug>
 
@@ -20,7 +21,8 @@ Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   if (expr.size() != 4 or expr.at(2) != "as")
   {
-    emit error(Parser::TagSyntaxError, QString("%1 expected format is 'value as name'").arg(expr.at(0)));
+    emit error(TagSyntaxError, QString("%1 expected format is 'value as name'").arg(expr.at(0)));
+    return 0;
   }
 
   FilterExpression fe(expr.at(1), p);

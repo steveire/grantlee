@@ -7,6 +7,7 @@
 #include <QStringList>
 
 #include "parser.h"
+#include "grantlee.h"
 
 #include <QDebug>
 
@@ -20,8 +21,11 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
   QStringList expr = smartSplit(tagContent);
   expr.takeAt(0);
-//   if (expr.size() <= 0)
-//     error(Parser::TagSyntaxError, "'if' statement requires at least one argument");
+  if (expr.size() <= 0)
+  {
+    error(TagSyntaxError, "'if' statement requires at least one argument");
+    return 0;
+  }
 
   int linkType = IfNode::OrLink;
 
@@ -37,7 +41,8 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
     linkType = IfNode::AndLink;
     if (exprString.contains(" or "))
     {
-      // Error; "'if' tags can't mix 'and' and 'or'"
+      error(TagSyntaxError, "'if' tags can't mix 'and' and 'or'");
+      return 0;
     }
   }
 
@@ -50,11 +55,14 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
       QStringList bits = boolStr.split( " " );
       if (bits.size() != 2)
       {
-        // TemplateSyntaxError, "'if' statement improperly formatted"
+        error(TagSyntaxError, "'if' statement improperly formatted");
+        return 0;
       }
       if (bits.at(0) != "not")
       {
         // TemplateSyntaxError, "Expected 'not' in if statement"
+        error(TagSyntaxError, "Expected 'not' in if statement");
+        return 0;
       }
       pair.first = true;
       pair.second = FilterExpression(bits.at(1).trimmed());

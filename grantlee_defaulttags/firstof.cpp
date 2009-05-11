@@ -7,6 +7,8 @@
 #include <QStringList>
 #include "parser.h"
 
+#include "grantlee.h"
+
 #include <QDebug>
 
 FirstOfNodeFactory::FirstOfNodeFactory()
@@ -21,7 +23,8 @@ Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   if (expr.size() <= 0 )
   {
-    emit error(Parser::TagSyntaxError, QString("%1 expects at least one argument").arg(expr.at(0)));
+    emit error(TagSyntaxError, QString("%1 expects at least one argument").arg("expr.at(0)"));
+    return 0;
   }
 
   QList<FilterExpression> list;
