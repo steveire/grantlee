@@ -43,6 +43,7 @@ static const QString filterRawString = QString(
 static const QRegExp sFilterRe(filterRawString);
 
 FilterExpression::FilterExpression(const QString &varString, Parser *parser)
+  : m_error(NoError)
 {
 
   int pos = 0;
@@ -101,9 +102,15 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   QString remainder = vs.right( vs.size() - lastPos);
   if (remainder.size() > 0)
   {
-    qDebug() << "unrecognised bits:" << lastPos << remainder;
+    m_error = TagSyntaxError;
   }
 }
+
+int FilterExpression::error()
+{
+  return m_error;
+}
+
 
 FilterExpression::FilterExpression()
 {

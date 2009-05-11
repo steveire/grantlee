@@ -31,6 +31,8 @@ public:
   FilterExpression();
   FilterExpression(const QString &varString, Grantlee::Parser *parser = 0);
 
+  int error();
+
 //   QList<QPair<QString, QString> > filters();
   Variable variable();
 
@@ -42,6 +44,7 @@ public:
 
 private:
   Variable m_variable;
+  int m_error;
 
 };
 

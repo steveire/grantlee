@@ -120,8 +120,14 @@ NodeList Parser::parse(QStringList stopAt)
         else
           message = QString("Empty variable at end of input.");
         emit error(EmptyVariableError, message);
+        return NodeList();
       }
       FilterExpression filter(token.content, this);
+      if (filter.error() != NoError)
+      {
+        emit error(filter.error(), "unknown filter error");
+        return NodeList();
+      }
       nodeList = d->extendNodeList(nodeList, new VariableNode(filter));
     } else if (token.tokenType == BlockToken)
     {
@@ -134,6 +140,7 @@ NodeList Parser::parse(QStringList stopAt)
         else
           message = QString("Empty block tag at end of input.");
         emit error(EmptyBlockTagError, message);
+        return NodeList();
       }
       // TODO Should this be taken out, or should it be sent to the node?
       QString command = tagContents.at(0);
