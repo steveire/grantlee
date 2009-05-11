@@ -2,7 +2,7 @@
     Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
 */
 
-#include "filter.h"
+#include "filterexpression.h"
 #include "parser.h"
 #include "variable.h"
 #include "grantlee.h"

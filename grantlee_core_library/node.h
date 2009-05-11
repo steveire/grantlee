@@ -8,7 +8,7 @@
 #include "context.h"
 
 #include <QStringList>
-#include "filter.h"
+#include "filterexpression.h"
 
 #include "grantlee_export.h"
 

@@ -41,7 +41,7 @@ install(FILES
   template.h
   context.h
   variable.h
-  filter.h
+  filterexpression.h
   parser.h
   grantlee_export.h
   grantlee.h
