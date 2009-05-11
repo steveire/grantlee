@@ -93,6 +93,11 @@ void Parser::skipPast(const QString &tag)
   // Error. Unclosed tag
 }
 
+void Parser::emitError(int err, const QString & message)
+{
+  error(err, message);
+}
+
 NodeList Parser::parse(QStringList stopAt)
 {
   Q_D(Parser);

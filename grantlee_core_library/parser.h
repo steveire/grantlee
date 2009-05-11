@@ -13,6 +13,7 @@
 #include "lexer.h"
 
 #include "node.h"
+#include "grantlee.h"
 
 namespace Grantlee
 {
@@ -50,6 +51,8 @@ public:
     UnclosedBlockTagError,
     CompileFunctionError
   };
+
+  void emitError(int errorNumber, const QString &message);
 
 protected:
   void addTag(QObject *);

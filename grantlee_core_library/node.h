@@ -31,6 +31,9 @@ public:
 
   virtual QString render(Context *c) = 0;
 
+signals:
+  void error(int, const QString &);
+
 };
 
 
