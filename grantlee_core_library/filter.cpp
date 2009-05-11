@@ -5,20 +5,104 @@
 #include "filter.h"
 #include "parser.h"
 #include "variable.h"
+#include "grantlee.h"
 
 #include <QDebug>
 
 using namespace Grantlee;
 
 
-static const QString FILTER_SEPARATOR = "|";
-static const QString FILTER_ARGUMENT_SEPARATOR = ":";
-static const QString VARIABLE_ATTRIBUTE_SEPARATOR = ".";
-static const QString ALLOWED_VARIABLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.";
+static const char * FILTER_SEPARATOR = "|";
+static const char * FILTER_ARGUMENT_SEPARATOR = ":";
+static const char * VARIABLE_ATTRIBUTE_SEPARATOR = ".";
+static const char * ALLOWED_VARIABLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\\.";
+
+
+static const char * str = "[^\"\\\\]*(?:\\.[^\"\\\\]*)*";
+static const char * varChars = "\\w\\." ;
+static const QString filterSep( QRegExp::escape( FILTER_SEPARATOR ) );
+static const QString argSep( QRegExp::escape( FILTER_ARGUMENT_SEPARATOR ) );
+static const QString i18nOpen( QRegExp::escape( "_(" ) );
+static const QString i18nClose( QRegExp::escape( ")" ) );
+
+static const QString filterRawString = QString(
+                           "^%1\"(%2)\"%3|"
+                           "^\"(%2)\"|"
+                           "^([%4]+)|"
+                           "%5(\\w+)|"
+                           "%6(%1\"%2\"%3|\"%2\"|[%4]+)"
+                         )
+              /* 1 */    .arg(i18nOpen)
+              /* 2 */    .arg(str)
+              /* 3 */    .arg(i18nClose)
+              /* 4 */    .arg(varChars)
+              /* 5 */    .arg(filterSep)
+              /* 6 */    .arg(argSep)
+                         ;
+
+static const QRegExp sFilterRe(filterRawString);
 
 FilterExpression::FilterExpression(const QString &varString, Parser *parser)
 {
-  m_variable = Variable(varString);
+
+  int pos = 0;
+  int lastPos = 0;
+  int len;
+  QString subString;
+
+  if (varString.contains("\n"))
+  {
+    // error.
+  }
+  
+  
+  QString vs = varString.trimmed();
+  
+  while ((pos = sFilterRe.indexIn(vs, pos)) != -1) {
+    len = sFilterRe.matchedLength();
+    subString = vs.mid(pos, len);
+    int ssSize = subString.size();
+    if (subString.startsWith(FILTER_SEPARATOR))
+    {
+      subString = subString.right(ssSize - 1);
+      // create new filter
+    }
+    else if (subString.startsWith(FILTER_ARGUMENT_SEPARATOR))
+    {
+      subString = subString.right(ssSize - 1);
+      if (subString.startsWith("\"") && subString.endsWith("\""))
+      {
+        // Arg is a "constant": subString.mid(0, ssSize - 1);
+      }
+      else if (subString.startsWith("_(") && subString.endsWith(")"))
+      {
+        // Arg is _("translated"): subString.mid(2, ssSize - 1 -3);
+      } else
+      {
+        // Arg is a variable: subString;
+      }
+      
+    } else if (subString.startsWith("_(") && subString.endsWith(")"))
+    {
+      // Token is _("translated"): subString.mid(1, ssSize - 1 -2);
+    } else if (subString.startsWith("\"") && subString.endsWith("\""))
+    {
+      // Token is a "constant"
+      m_variable = Variable(subString);      
+    } else
+    {
+      // Arg is a variable
+      m_variable = Variable(subString);
+    }
+    
+    pos += len;
+    lastPos = pos;
+  }
+  QString remainder = vs.right( vs.size() - lastPos);
+  if (remainder.size() > 0)
+  {
+    qDebug() << "unrecognised bits:" << lastPos << remainder;
+  }
 }
 
 FilterExpression::FilterExpression()
