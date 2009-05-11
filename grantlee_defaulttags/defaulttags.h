@@ -15,6 +15,8 @@
 #include "ifequal.h"
 #include "firstof.h"
 #include "cycle.h"
+#include "templatetag.h"
+#include "widthratio.h"
 
 #include "grantlee_export.h"
 
@@ -76,6 +78,8 @@ public:
     m_nodeFactories.insert("ifnotequal", new IfNotEqualNodeFactory());
     m_nodeFactories.insert("firstof", new FirstOfNodeFactory());
     m_nodeFactories.insert("cycle", new CycleNodeFactory());
+    m_nodeFactories.insert("templatetag", new TemplateTagNodeFactory());
+    m_nodeFactories.insert("widthratio", new WidthRatioNodeFactory());
   }
 
   QHash<QString, AbstractNodeFactory*> nodeFactories()

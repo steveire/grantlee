@@ -21,6 +21,8 @@ set (grantlee_defaulttags_library_SRCS
   comment.cpp
   ifequal.cpp
   firstof.cpp
+  templatetag.cpp
+  widthratio.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)
