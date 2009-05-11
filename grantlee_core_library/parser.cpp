@@ -10,6 +10,9 @@
 
 #include <QDebug>
 
+#include "grantlee.h"
+#include "text_util.h"
+
 using namespace Grantlee;
 
 class ParserPrivate
@@ -117,7 +120,7 @@ NodeList Parser::parse(QStringList stopAt)
       nodeList = d->extendNodeList(nodeList, new VariableNode(filter));
     } else if (token.tokenType == BlockToken)
     {
-      QStringList tagContents = token.content.split(" ", QString::SkipEmptyParts);
+      QStringList tagContents = Grantlee::TextUtil::smartSplit(token.content);
       if (tagContents.size() == 0)
       {
         QString message;

@@ -18,8 +18,8 @@ BlockNodeFactory::BlockNodeFactory()
 
 Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
-
+  QStringList expr = smartSplit(tagContent);
+  
   NodeList list = p->parse(QStringList() << "endblock" << "endblock m_name" );
   p->nextToken();
 

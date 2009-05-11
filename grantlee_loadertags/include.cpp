@@ -19,7 +19,7 @@ IncludeNodeFactory::IncludeNodeFactory()
 
 Node* IncludeNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = smartSplit(tagContent);
 
   QString includeName = expr.at(1);
   int size = includeName.size();

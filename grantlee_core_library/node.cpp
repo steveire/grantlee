@@ -3,6 +3,7 @@
 */
 
 #include "node.h"
+#include "text_util.h"
 
 #include <QDebug>
 
@@ -36,19 +37,7 @@ AbstractNodeFactory::~AbstractNodeFactory()
 
 QStringList AbstractNodeFactory::smartSplit(const QString &str)
 {
-  // Magic regex. Move along...
-  QRegExp r("(\"(?:[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\"|\\\'(?:[^\\\'\\\\]*(?:\\\\.[^\\\'\\\\]*)*)\\\'|[^\\s]+)");
-  
-  QStringList l;
-  int count = 0;
-  int pos = 0;
-  while ((pos = r.indexIn(str, pos)) != -1) {
-      ++count;
-      pos += r.matchedLength();
-      l << r.capturedTexts().at(0);
-  }
-  
-  return l;
+  return Grantlee::TextUtil::smartSplit(str);
 }
 
 VariableNode::VariableNode(const FilterExpression &fe)
