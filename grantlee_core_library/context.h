@@ -20,14 +20,6 @@ class GRANTLEE_EXPORT Context //: public QObject
 
 public:
 
-  enum Error
-  {
-    None,
-    VariableStringInvalid,
-    VariableNotInContext,
-    ObjectReturnTypeInvalid
-  };
-
   /**
   Sets every key in the hash as a property name with the variant as the value.
   */

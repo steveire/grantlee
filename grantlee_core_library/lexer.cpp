@@ -9,17 +9,9 @@
 #include <QDebug>
 #include <QStringList>
 
+#include "grantlee.h"
+
 using namespace Grantlee;
-
-static const char * BLOCK_TAG_START = "{%";
-static const char * BLOCK_TAG_END = "%}";
-static const char * VARIABLE_TAG_START = "{{";
-static const char * VARIABLE_TAG_END = "}}";
-static const char * COMMENT_TAG_START = "{#";
-static const char * COMMENT_TAG_END = "#}";
-// static const char * SINGLE_BRACE_START = "{";
-// static const char * SINGLE_BRACE_END = "}";
-
 
 QRegExp tagRe(QString("(%1.*%2|%3.*%4|%5.*%6)")
   .arg(QRegExp::escape(BLOCK_TAG_START))
