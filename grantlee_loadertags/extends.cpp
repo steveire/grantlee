@@ -10,6 +10,7 @@
 
 #include "parser.h"
 #include "template.h"
+#include "grantlee.h"
 
 #include <QDebug>
 
@@ -54,7 +55,17 @@ QString ExtendsNode::render(Context *c)
 
   TemplateLoader *loader = TemplateLoader::instance();
 
-  Template* t = loader->loadByName(filename);
+  Template* t = loader->getTemplate();
+
+  connect(t, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
+
+  bool success = loader->loadByName(t, filename);
+
+  if (!success)
+  {
+      error(TagSyntaxError, "TODO: Fix message");
+      return QString();
+  }
 
   NodeList nodeList = t->nodeList();
   QHash<QString, int> parentBlocks;

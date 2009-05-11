@@ -18,7 +18,9 @@ class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
 public:
-  Template(const QString &templateString, QStringList dirs, QObject *parent = 0  );
+  Template(QStringList dirs, QObject *parent = 0  );
+
+  void setContent(const QString &templateString);
 
   QString render( Context *c );
 
@@ -26,6 +28,9 @@ public:
 
   // TODO: Remove this.  ??
   void setNodeList(const NodeList &list);
+  
+signals:
+  void error(int type, const QString &message);
 
 private:
   void parse();
@@ -46,14 +51,15 @@ public:
 
   void injectTemplate(const QString &name, const QString &content);
 
-  Template* loadFromString(const QString &content);
+  Template* getTemplate(QObject *parent = 0);
 
-  Template* loadByName(const QString &name);
+  bool loadFromString(Template *t, const QString &content);
 
+  bool loadByName(Template *t, const QString &name );
 
 private:
   TemplateLoader();
-  Template* loadFromFile(const QString &fileName);
+  bool loadFromFile(Template* t, const QString &fileName);
 
   QString m_themeName;
   QStringList m_templateDirs;

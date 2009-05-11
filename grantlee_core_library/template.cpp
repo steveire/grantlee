@@ -31,11 +31,15 @@ NodeList Template::compileString(const QString &str)
   return p.parse();
 }
 
-Template::Template(const QString &str, QStringList pluginDirs, QObject *parent ) : QObject(parent)
+Template::Template( QStringList pluginDirs, QObject *parent ) : QObject(parent)
 {
   m_pluginDirs = pluginDirs;
-  if (!str.isEmpty())
-    m_nodelist = compileString( str );
+}
+
+void Template::setContent(const QString &templateString)
+{
+  if (!templateString.isEmpty())
+    m_nodelist = compileString( templateString );
 }
 
 QString Template::render(Context *c)
@@ -88,7 +92,12 @@ void TemplateLoader::setTheme(const QString &themeName)
   m_themeName = themeName;
 }
 
-Template* TemplateLoader::loadFromFile(const QString &fileName)
+Template* TemplateLoader::getTemplate(QObject *parent)
+{
+  return new Template(m_pluginDirs, parent);
+}
+
+bool TemplateLoader::loadFromFile(Template *t, const QString &fileName)
 {
   int i = 0;
   QFile file;
@@ -103,7 +112,9 @@ Template* TemplateLoader::loadFromFile(const QString &fileName)
   }
 
   if ( !file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text))
-      return new Template(QString(), m_pluginDirs);
+  {
+      return false;
+  }
 
   QTextStream in(&file);
   QString content;
@@ -111,12 +122,8 @@ Template* TemplateLoader::loadFromFile(const QString &fileName)
       content += in.readLine();
   }
 
-  return loadFromString(content);
-}
-
-Template* TemplateLoader::loadFromString(const QString &content)
-{
-  return new Template(content, m_pluginDirs);
+  t->setContent(content);
+  return true;
 }
 
 void TemplateLoader::injectTemplate(const QString &name, const QString &content)
@@ -124,10 +131,13 @@ void TemplateLoader::injectTemplate(const QString &name, const QString &content)
   m_namedTemplates.insert(name, content);
 }
 
-Template* TemplateLoader::loadByName(const QString &name)
+bool TemplateLoader::loadByName(Template *t, const QString &name)
 {
   if (m_namedTemplates.contains(name))
-    return loadFromString(m_namedTemplates.value(name));
-  return loadFromFile(name);
+  {
+    t->setContent(m_namedTemplates.value(name));
+    return true;
+  }
+  return loadFromFile(t, name);
 }
 
