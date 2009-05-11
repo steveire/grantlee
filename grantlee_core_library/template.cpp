@@ -17,6 +17,8 @@
 
 #include <QListIterator>
 
+#include "grantlee.h"
+
 using namespace Grantlee;
 
 typedef QListIterator<Node*> NodeListIterator;
@@ -25,6 +27,7 @@ NodeList Template::compileString(const QString &str)
 {
   Lexer l(str);
   Parser p( l.tokenize(), m_pluginDirs );
+  connect(&p, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
   return p.parse();
 }
 
@@ -37,7 +40,13 @@ Template::Template(const QString &str, QStringList pluginDirs, QObject *parent )
 
 QString Template::render(Context *c)
 {
-  return m_nodelist.render(c);
+  QString ret = m_nodelist.render(c);
+  if (ret.isNull())
+  {
+    error(TagSyntaxError, "someError");
+    return QString();
+  }
+  return ret;
 }
 
 NodeList Template::nodeList()
