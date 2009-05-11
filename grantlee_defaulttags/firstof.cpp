@@ -52,6 +52,6 @@ QString FirstOfNode::render(Context *c)
       return fe.resolve(c).toString();
     }
   }
-  return QString();
+  return QString("");
 }
 

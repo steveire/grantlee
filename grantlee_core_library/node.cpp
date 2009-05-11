@@ -22,10 +22,18 @@ Node::~Node()
 QString NodeList::render(Context *c)
 {
   QString ret;
+  
   for (int i = 0; i < this->size(); ++i)
   {
-    ret += this->at(i)->render(c);
+    QString s = this->at(i)->render(c);
+    if (s.isNull())
+      return QString();
+    ret += s;
   }
+  
+  if (ret.isNull())
+    return QString("");
+  
   return ret;
 
 }
@@ -47,6 +55,9 @@ VariableNode::VariableNode(const FilterExpression &fe)
 
 QString VariableNode::render(Context *c)
 {
-  return m_filterExpression.resolve(c).toString();
+  QVariant v = m_filterExpression.resolve(c);
+  if (!v.isValid())
+    return QString("");
+  return v.toString();
 }
 
