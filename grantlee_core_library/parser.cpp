@@ -154,6 +154,12 @@ NodeList Parser::parse(QStringList stopAt)
 
       connect(nodeFactory, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
       Node *n = nodeFactory->getNode(tagContents.join(" "), this);
+      
+      if (!n)
+      {
+        return NodeList();
+      }
+      
       nodeFactory->disconnect(SIGNAL(error(int, QString)), this, SIGNAL(error(int, QString)));
 
       nodeList = d->extendNodeList(nodeList, n);
