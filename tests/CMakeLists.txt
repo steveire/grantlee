@@ -19,6 +19,8 @@ endmacro(GRANTLEE_UNIT_TESTS)
 
 grantlee_unit_tests(
   testbuiltins
+  testloadertags
+  testdefaulttags
 )
 
 
