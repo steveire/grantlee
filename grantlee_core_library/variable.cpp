@@ -21,75 +21,128 @@ Variable::Variable()
 
 Variable::Variable(const QString &var)
 {
-  m_varString = var.trimmed();
-}
+  m_varString = var;
 
-bool isNumeric(const QString &str)
-{
-  bool ret = false;
-
-  QString searchString;
-
-  if ( str.startsWith(".") )
-    return true;
-    
-  if ( str.startsWith("+") || str.startsWith("-") )
+  QVariant v(var);
+  if (v.convert(QVariant::Double))
   {
-    searchString = str.right(str.size() - 1);
-  } else {
-    searchString = str;
-  }
-
-  if (str.isEmpty())
-    return false;
-  
-  QRegExp re("\\d+");
-
-
-  return re.exactMatch(searchString);  
-}
-
-QVariant Variable::resolve(Context *c)
-{
-  if ((m_varString.startsWith("\"") && m_varString.endsWith("\""))
-    || (m_varString.startsWith("'") && m_varString.endsWith("'")))
-  {
-    int size = m_varString.size();
-    return m_varString.mid(1, size - 2);
-  }
-  QStringList list = m_varString.split(".");
-  QString varName = list.takeFirst();
-  
-  if (varName.isEmpty())
-  {
-    QVariant v(m_varString);
-    return v.toDouble();    
-  }
-
-  if (isNumeric(varName))
-  {
-    QVariant v(m_varString);
-    if (list.isEmpty())
+    m_literal = v;
+    if (!var.contains(".") && !var.contains("e"))
     {
-      return v.toInt();
+      if (var.endsWith("."))
+      {
+        // error
+      }
+
+      m_literal = v.toInt();
+    }
+  } else {
+    QString localVar = var;
+    if (var.startsWith("_(") && var.endsWith(")"))
+    {
+      m_translate = true;
+      localVar = var.mid(2, var.size() - 1 );
+    }
+    if ( ( localVar.startsWith( "\"" ) && localVar.endsWith( "\"" ) )
+      || ( localVar.startsWith( "'" ) && localVar.endsWith( "'" ) ) )
+    {
+      m_literal = localVar.mid(1, localVar.size() - 2 ).replace("\\'", "'");
     } else {
-      return v.toDouble();
+      m_lookups = localVar.split(".");
     }
   }
-  
-  QVariant var = c->lookup(varName);
-  if (!var.isValid())
-    return QVariant();
-  foreach (const QString &part, list)
+}
+
+bool Variable::isTrue(Context *c) const
+{
+  QVariant variant = resolve(c);
+
+  if (!variant.isValid())
+    return false;
+
+  switch (variant.type())
   {
-    var = resolvePart(var, part);
-    if (!var.isValid())
-      return var;
+  case QVariant::Bool:
+  {
+    return variant.toBool();
+    break;
+  }
+  case QVariant::String:
+  {
+    return !variant.toString().isEmpty();
+    break;
+  }
+  case QVariant::Int:
+  {
+    return (variant.toInt() > 0);
+  }
+  default:
+    break;
+  }
+
+//     if it contains QObject pointer
+//     {
+//       if pointer is null:
+//         return false;
+//       return true;
+//     }
+
+//     if (it contains number)
+//     {
+//       //       QString varString = var.toString();
+//       if (number == 0)
+//         return false;
+//       return true;
+//     }
+//     if (it contains boolean)
+//     {
+//       return boolean;
+//     }
+//     if (it contains collection)
+//     {
+//       return collection.size() > 0;
+//     }
+//
+//     if (it contains string)
+//     {
+//       QString varString = var.toString();
+//       if (varString.isEmpty())
+//         return false;
+//       return true;
+//     }
+// etc for QPoint etc.
+
+  return false;
+
+}
+
+
+QVariant Variable::resolve(Context *c) const
+{
+  QVariant var;
+  if (!m_lookups.isEmpty())
+  {
+    int i = 0;
+    var = c->lookup(m_lookups.at(i++));
+    while (i < m_lookups.size())
+    {
+      var = resolvePart(var, m_lookups.at(i++));
+      if (!var.isValid())
+        return var;
+    }
+  } else {
+    var = m_literal;
+  }
+
+
+  if (m_translate)
+  {
+//     return gettext(var.toString());
   }
   return var;
 }
 
-QVariant Variable::resolvePart( QVariant var, const QString &nextPart )
+QVariant Variable::resolvePart( QVariant var, const QString &nextPart ) const
 {
   QVariant returnVar;
 

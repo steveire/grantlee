@@ -19,14 +19,18 @@ public:
   Variable(const QString &var);
 
   QString toString() { return m_varString; }
+  bool isTrue(Context *c) const;
 
-  QVariant resolve(Context *c);
+  QVariant resolve(Context *c) const;
 
 protected:
-  QVariant resolvePart( QVariant, const QString &s );
+  QVariant resolvePart( QVariant, const QString &s ) const;
 
 private:
   QString m_varString;
+  QVariant m_literal;
+  QStringList m_lookups;
+  bool m_translate;
 
 };
 
