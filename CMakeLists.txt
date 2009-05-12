@@ -18,6 +18,8 @@ add_subdirectory(grantlee_core_library)
 add_subdirectory(grantlee_loadertags)
 add_subdirectory(grantlee_defaulttags)
 
+add_subdirectory(grantlee_defaultfilters)
+
 # add_subdirectory(grantlee_scriptabletags)
 
 add_subdirectory(tests)
