@@ -5,12 +5,15 @@
 #ifndef TAGLIBRARYINTERFACE_H
 #define TAGLIBRARYINTERFACE_H
 
+#include <QHash>
+
 namespace Grantlee
 {
 class AbstractNodeFactory;
+class Filter;
 }
 
-class QString;
+// class QString;
 
 namespace Grantlee
 {
@@ -20,8 +23,15 @@ class TagLibraryInterface
 public:
   virtual ~TagLibraryInterface() {}
 
-  virtual QHash<QString, AbstractNodeFactory*> nodeFactories() = 0;
+  virtual QHash<QString, AbstractNodeFactory*> nodeFactories() {
+    QHash<QString, AbstractNodeFactory*> h;
+    return h;
+  };
 
+  virtual QHash<QString, Filter*> filters() {
+    QHash<QString, Filter*> h;
+    return h;
+  };
 };
 
 }

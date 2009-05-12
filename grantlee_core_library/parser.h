@@ -20,6 +20,7 @@ namespace Grantlee
 class AbstractNodeFactory;
 
 class TagLibraryInterface;
+class Filter;
 }
 
 class ParserPrivate;
@@ -35,6 +36,8 @@ public:
   Parser( QList<Token> tokenList, QStringList pluginDirs );
 
   NodeList parse(QStringList stopAt = QStringList());
+
+  Filter *getFilter(const QString &name);
 
   void skipPast(const QString &tag);
 

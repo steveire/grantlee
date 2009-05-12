@@ -28,7 +28,7 @@ public:
 
   QList<Token> m_tokenList;
   QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-  QSet<FilterExpression> m_filters;
+  QHash<QString, Filter*> m_filters;
   QHash<QString, TagLibraryInterface*> m_tags;
   NodeList m_nodeList;
   QStringList m_pluginDirs;
@@ -48,6 +48,7 @@ Parser::Parser(QList<Token> tokenList, QStringList pluginDirs)
 
   loadLib("grantlee_defaulttags_library");
   loadLib("grantlee_loadertags_library");
+  loadLib("grantlee_defaultfilters_library");
 
 }
 
@@ -74,6 +75,12 @@ void Parser::loadLib(const QString &name)
     d->m_nodeFactories[i.key()] = i.value();
   }
 
+  QHashIterator<QString, Filter*> filterIter(tagLibrary->filters());
+  while (filterIter.hasNext())
+  {
+    filterIter.next();
+    d->m_filters[filterIter.key()] = filterIter.value();
+  }
 }
 
 NodeList ParserPrivate::extendNodeList(NodeList list, Node *node)
@@ -91,6 +98,12 @@ void Parser::skipPast(const QString &tag)
       return;
   }
   // Error. Unclosed tag
+}
+
+Filter *Parser::getFilter(const QString &name)
+{
+  Q_D(Parser);
+  return d->m_filters.value(name);
 }
 
 void Parser::emitError(int err, const QString & message)

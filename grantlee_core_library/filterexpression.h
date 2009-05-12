@@ -12,7 +12,12 @@
 namespace Grantlee
 {
 class Parser;
+class Filter;
 }
+
+using namespace Grantlee;
+
+typedef QPair<Filter*, Variable > ArgFilter;
 
 class Token;
 
@@ -44,6 +49,7 @@ public:
 
 private:
   Variable m_variable;
+  QList<ArgFilter> m_filters;
   int m_error;
 
 };

@@ -6,6 +6,7 @@
 #include "parser.h"
 #include "variable.h"
 #include "grantlee.h"
+#include "filter.h"
 
 #include <QDebug>
 
@@ -66,23 +67,20 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
     if (subString.startsWith(FILTER_SEPARATOR))
     {
       subString = subString.right(ssSize - 1);
-      // create new filter
+      Filter *f = parser->getFilter(subString);
+      if (f)
+        m_filters << qMakePair<Filter*, Variable>(f, Variable());
+      else
+      {
+        m_error = TagSyntaxError;
+        return;
+      }
     }
     else if (subString.startsWith(FILTER_ARGUMENT_SEPARATOR))
     {
       subString = subString.right(ssSize - 1);
-      if (subString.startsWith("\"") && subString.endsWith("\""))
-      {
-        // Arg is a "constant": subString.mid(0, ssSize - 1);
-      }
-      else if (subString.startsWith("_(") && subString.endsWith(")"))
-      {
-        // Arg is _("translated"): subString.mid(2, ssSize - 1 -3);
-      } else
-      {
-        // Arg is a variable: subString;
-      }
-      
+      int lastFilter = m_filters.size();
+      m_filters[lastFilter -1].second = Variable(subString);
     } else if (subString.startsWith("_(") && subString.endsWith(")"))
     {
       // Token is _("translated"): subString.mid(1, ssSize - 1 -2);
@@ -125,11 +123,10 @@ Variable FilterExpression::variable()
 QVariant FilterExpression::resolve(Context *c)
 {
   QVariant var = m_variable.resolve(c);
-  // filter it...
-//   foreach(Filter filter, m_filters)
-//   {
-//
-//   }
+  foreach(ArgFilter argfilter, m_filters)
+  {
+    var = argfilter.first->doFilter(var, argfilter.second.resolve(c).toString());
+  }
   return var;
 }
 
