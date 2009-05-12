@@ -18,6 +18,7 @@
 #include "templatetag.h"
 #include "widthratio.h"
 #include "filtertag.h"
+#include "load.h"
 
 #include "grantlee_export.h"
 
@@ -28,15 +29,6 @@ class Parser;
 
 using namespace Grantlee;
 
-class LoadNodeFactory : public AbstractNodeFactory
-{
-  public:
-    LoadNodeFactory();
-
-    Node* getNode(const QString &tagContent, Parser *p);
-
-};
-
 class IfChangedNodeFactory : public AbstractNodeFactory
 {
   public:
@@ -44,15 +36,6 @@ class IfChangedNodeFactory : public AbstractNodeFactory
 
     Node* getNode(const QString &tagContent, Parser *p);
 
-};
-
-class GRANTLEE_EXPORT LoadNode: public Node
-{
-  Q_OBJECT
-public:
-    LoadNode();
-
-    QString render( Context *c );
 };
 
 class DefaultTagLibrary : public QObject, public TagLibraryInterface
@@ -73,6 +56,7 @@ public:
     m_nodeFactories.insert("templatetag", new TemplateTagNodeFactory());
     m_nodeFactories.insert("widthratio", new WidthRatioNodeFactory());
     m_nodeFactories.insert("filter", new FilterNodeFactory());
+    m_nodeFactories.insert("load", new LoadNodeFactory());
   }
 
   QHash<QString, AbstractNodeFactory*> nodeFactories()

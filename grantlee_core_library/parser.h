@@ -44,7 +44,10 @@ public:
   Token nextToken();
   bool hasNextToken();
 
+  void loadLib(const QString &name);
+
   void emitError(int errorNumber, const QString &message);
+
 
 protected:
   void addTag(QObject *);
@@ -53,7 +56,6 @@ protected:
 
   void prependToken(Token token);
 
-  void loadLib(const QString &name);
 
 signals:
   void error(int type, const QString &message);

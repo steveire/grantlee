@@ -24,6 +24,7 @@ set (grantlee_defaulttags_library_SRCS
   templatetag.cpp
   widthratio.cpp
   filtertag.cpp
+  load.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)
