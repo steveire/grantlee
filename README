@@ -1,0 +1,60 @@
+
+The Grantlee Template System
+============================
+
+* About Grantlee
+* Installation 
+* Licensing
+* Contributing
+
+About Grantlee
+--------------
+
+Grantlee is a plugin based String Template system written using the Qt framework.
+The goals of the project are to make it easier for application developers to 
+separate the structure of documents from the data they contain, opening the door
+for theming.
+
+The syntax is intended to follow the syntax of the Django template system, and 
+the design of Django is reused in Grantlee. Django is covered by a BSD style license.
+
+Part of the design of both is that application developers can extend the syntax by
+implementing their own tags and filters. For details of how to do that, see the API
+documentation.
+
+For template authors, different applications using Grantlee will present the same 
+interface and core syntax for creating new themes. For details of how to write 
+templates, see the documentation.
+
+Installation
+------------
+
+To build Grantlee, you need Qt4 (with development packages) and CMake (v 1.6). 
+Out-of-source builds are recommended:
+
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=$prefix ..
+make && make install
+
+Licensing
+---------
+
+Grantlee is covered by the GNU Lesser General Public License Version 3. All
+contributions to Grantlee must be covered by the same license.
+
+The details of the license are in the COPYING file in the source distribution.
+
+Contributing
+------------
+
+Grantlee is hosted on a git repository at http://gitorious.org/grantlee.
+
+To get started, clone the repository,
+
+  git clone git://gitorious.org/grantlee/grantlee.git
+
+and build it as above. Create a merge request for your changes to be pulled into
+the main repository.
+
+
