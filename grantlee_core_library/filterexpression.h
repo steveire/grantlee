@@ -2,8 +2,8 @@
     Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
 */
 
-#ifndef FILTER_H
-#define FILTER_H
+#ifndef FILTEREXPRESSION_H
+#define FILTEREXPRESSION_H
 
 #include "variable.h"
 
