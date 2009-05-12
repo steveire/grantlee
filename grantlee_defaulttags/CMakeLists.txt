@@ -23,6 +23,7 @@ set (grantlee_defaulttags_library_SRCS
   firstof.cpp
   templatetag.cpp
   widthratio.cpp
+  filtertag.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)

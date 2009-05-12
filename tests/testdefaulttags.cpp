@@ -58,6 +58,9 @@ private slots:
   void testWidthRatioTag_data();
   void testWidthRatioTag() {  doTest();  }
 
+  void testFilterTag_data();
+  void testFilterTag() {  doTest();  }
+
 private:
 
   void doTest();
@@ -762,6 +765,25 @@ void TestDefaultTags::testWidthRatioTag_data()
 
   dict.clear();
   QTest::newRow("widthratio10") << "{% widthratio a b 100.0 %}" << dict << "" << TagSyntaxError;
+}
+
+
+void TestDefaultTags::testFilterTag_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  QTest::newRow("filter01") << "{% filter upper %}{% endfilter %}" << dict << "" << NoError;
+  QTest::newRow("filter02") << "{% filter upper %}django{% endfilter %}" << dict << "DJANGO" << NoError;
+  QTest::newRow("filter03") << "{% filter upper|lower %}django{% endfilter %}" << dict << "django" << NoError;
+
+  dict.insert("remove", "spam");
+  QTest::newRow("filter04") << "{% filter cut:remove %}djangospam{% endfilter %}" << dict << "django" << NoError;
+
 }
 
 
