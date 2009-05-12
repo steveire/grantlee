@@ -22,8 +22,8 @@ Node* IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool 
 
   QList<QString> vars;
 
-  FilterExpression val1(expr.at(1) , p);
-  FilterExpression val2(expr.at(2) , p);
+  Variable val1(expr.at(1));
+  Variable val2(expr.at(2));
 
   const QString endTag("end" + expr.at(0));
   NodeList trueList = p->parse(QStringList() << "else" << endTag);
@@ -53,10 +53,10 @@ Node* IfNotEqualNodeFactory::getNode(const QString &tagContent, Parser *p)
   return do_getNode(tagContent, p, true);
 }
 
-IfEqualNode::IfEqualNode(FilterExpression val1, FilterExpression val2, NodeList trueList, NodeList falseList, bool negate)
+IfEqualNode::IfEqualNode(Variable val1, Variable val2, NodeList trueList, NodeList falseList, bool negate)
 {
-  m_fe1 = val1;
-  m_fe2 = val2;
+  m_var1 = val1;
+  m_var2 = val2;
   m_trueList = trueList;
   m_falseList = falseList;
   m_negate = negate;
@@ -64,8 +64,8 @@ IfEqualNode::IfEqualNode(FilterExpression val1, FilterExpression val2, NodeList 
 
 QString IfEqualNode::render(Context *c)
 {
-  QVariant var1 = m_fe1.resolve(c);
-  QVariant var2 = m_fe2.resolve(c);
+  QVariant var1 = m_var1.resolve(c);
+  QVariant var2 = m_var2.resolve(c);
 
   bool equal = ((var1 == var2) && (var1.type() == var2.type()));
 

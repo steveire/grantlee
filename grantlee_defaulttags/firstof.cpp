@@ -27,29 +27,29 @@ Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p)
     return 0;
   }
 
-  QList<FilterExpression> list;
+  QList<Variable> list;
   foreach(const QString &var, expr)
   {
-    FilterExpression fe(var, p);
-    list << fe;
+    Variable v(var);
+    list << v;
   }
 
   return new FirstOfNode(list);
 }
 
 
-FirstOfNode::FirstOfNode(QList<FilterExpression> list)
+FirstOfNode::FirstOfNode(QList<Variable> list)
 {
-  m_filterExpressionList = list;
+  m_variableList = list;
 }
 
 QString FirstOfNode::render(Context *c)
 {
-  foreach(FilterExpression fe, m_filterExpressionList)
+  foreach(Variable v, m_variableList)
   {
-    if (fe.isTrue(c))
+    if (v.isTrue(c))
     {
-      return fe.resolve(c).toString();
+      return v.resolve(c).toString();
     }
   }
   return QString("");
