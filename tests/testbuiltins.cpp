@@ -77,7 +77,7 @@ private slots:
   void testListIndex() { doTest(); }
 
   void testFilterSyntax_data();
-  void testFilterSyntax() { QSKIP("Haven't even attempted to implement it yet", SkipSingle); /* doTest(); */ }
+  void testFilterSyntax() { doTest(); }
 
   void testCommentSyntax_data();
   void testCommentSyntax() { doTest(); }
@@ -280,7 +280,87 @@ void TestBuiltinSyntax::testListIndex_data()
 
 void TestBuiltinSyntax::testFilterSyntax_data()
 {
-//   // Basic filter usage
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  // Basic filter usage
+  dict.insert("var", "Django is the greatest!");
+  QTest::newRow("filter-syntax01") << "{{ var|upper }}" << dict << "DJANGO IS THE GREATEST!" << NoError;
+
+  // Chained filters
+  QTest::newRow("filter-syntax02") << "{{ var|upper|lower }}" << dict << "django is the greatest!" << NoError;
+
+  // Raise TemplateSyntaxError for space between a variable and filter pipe
+  dict.clear();
+  QTest::newRow("filter-syntax03") << "{{ var |upper }}" << dict << "" << TagSyntaxError;
+
+  // Raise TemplateSyntaxError for space after a filter pipe
+  QTest::newRow("filter-syntax04") << "{{ var| upper }}" << dict << "" << TagSyntaxError;
+
+  // Raise TemplateSyntaxError for a nonexistent filter
+  QTest::newRow("filter-syntax05") << "{{ var|does_not_exist }}" << dict << "" << TagSyntaxError;
+
+  // Raise TemplateSyntaxError when trying to access a filter containing an illegal character
+  QTest::newRow("filter-syntax06") << "{{ var|fil(ter) }}" << dict << "" << TagSyntaxError;
+
+  // Raise TemplateSyntaxError for invalid block tags
+  QTest::newRow("filter-syntax07") << "{% nothing_to_see_here %}" << dict << "" << InvalidBlockTagError;
+  // Raise TemplateSyntaxError for empty block tags
+  QTest::newRow("filter-syntax08") << "{% %}" << dict << "" << EmptyBlockTagError;
+
+  // Chained filters, with an argument to the first one
+  dict.insert("var", "<b><i>Yes</i></b>");
+  QTest::newRow("filter-syntax09") << "{{ var|removetags:\"b i\"|upper|lower }}" << dict << "yes" << NoError;
+  // Literal string as argument is always "safe" from auto-escaping..
+  dict.clear();
+  dict.insert("var", QVariant());
+  QTest::newRow("filter-syntax10") << "{{ var|default_if_none:\" endquote\\\" hah\" }}" << dict << " endquote\" hah" << NoError;
+  // Variable as argument
+  dict.insert("var2", "happy");
+  QTest::newRow("filter-syntax11") << "{{ var|default_if_none:var2 }}" << dict << "happy" << NoError;
+  // Default argument testing
+  dict.clear();
+  dict.insert("var", true);
+  QTest::newRow("filter-syntax12") << "{{ var|yesno:\"yup,nup,mup\" }} {{ var|yesno }}" << dict << "yup yes" << NoError;
+
+  // Fail silently for methods that raise an exception with a
+  // "silent_variable_failure" attribute
+//   dict.clear();
+//   QObject *someClass = new SomeClass(this);
+//   dict.insert("var", QVariant::fromValue(someClass));
+//   QTest::newRow("filter-syntax13") << "1{{ var.method3 }}2" << dict << "12" << NoError;
+//   // In methods that raise an exception without a
+//   // "silent_variable_attribute" set to True, the exception propagates
+//   // #C# SomeOtherException)
+//   QTest::newRow("filter-syntax14") << "var" << dict << "" << TagSyntaxError;
+
+  // Escaped backslash in argument
+  dict.clear();
+  dict.insert("var", QVariant());
+  QTest::newRow("filter-syntax15") << "{{ var|default_if_none:\"foo\\bar\" }}" << dict << "foo\\bar" << NoError;
+  // Escaped backslash using known escape char
+  QTest::newRow("filter-syntax16") << "{{ var|default_if_none:\"foo\\now\" }}" << dict << "foo\\now" << NoError;
+  // Empty strings can be passed as arguments to filters
+  dict.clear();
+  dict.insert("var", QVariantList() << "a" << "b" << "c");
+  QTest::newRow("filter-syntax17") << "{{ var|join:\"\" }}" << dict << "abc" << NoError;
+
+  // Make sure that any unicode strings are converted to bytestrings
+  // in the final output.
+//   FAIL'filter-syntax18': (r'{{ var }}', {'var': UTF8Class()}, u'\u0160\u0110\u0106\u017d\u0107\u017e\u0161\u0111'),
+
+  // Numbers as filter arguments should work
+  dict.clear();
+  dict.insert("var", "hello world");
+  QTest::newRow("filter-syntax19") << "{{ var|truncatewords:1 }}" << dict << "hello ..." << NoError;
+  //filters should accept empty string constants
+  dict.clear();
+  QTest::newRow("filter-syntax20") << "{{ \"\"|default_if_none:\"was none\" }}" << dict << "" << NoError;
+
 }
 
 void TestBuiltinSyntax::testCommentSyntax_data()
