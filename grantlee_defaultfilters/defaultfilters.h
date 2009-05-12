@@ -16,6 +16,7 @@
 #include "join.h"
 #include "removetags.h"
 #include "default_if_none.h"
+#include "cut.h"
 
 #include "grantlee_export.h"
 
@@ -40,6 +41,7 @@ public:
      m_filters.insert("join", new JoinFilter());
      m_filters.insert("removetags", new RemoveTagsFilter());
      m_filters.insert("default_if_none", new DefaultIfNoneFilter());
+     m_filters.insert("cut", new CutFilter());
   }
 
   virtual QHash<QString, Filter*> filters()
