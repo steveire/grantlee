@@ -41,17 +41,6 @@ public:
   Token nextToken();
   bool hasNextToken();
 
-  enum ErrorType
-  {
-    UnknownError,
-    TagSyntaxError,
-    EmptyVariableError,
-    EmptyBlockTagError,
-    InvalidBlockTagError,
-    UnclosedBlockTagError,
-    CompileFunctionError
-  };
-
   void emitError(int errorNumber, const QString &message);
 
 protected:
