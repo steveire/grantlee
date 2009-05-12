@@ -8,7 +8,7 @@ set (grantlee_core_library_SRCS
   template.cpp
   context.cpp
   variable.cpp
-  filter.cpp
+  filterexpression.cpp
   node.cpp
   lexer.cpp
   parser.cpp
@@ -38,6 +38,8 @@ install(TARGETS grantlee_core_library
 
 install(FILES
   node.h
+  filter.h
+  filterexpression.h
   template.h
   context.h
   variable.h
