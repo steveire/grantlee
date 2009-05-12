@@ -1,0 +1,16 @@
+
+The Grantlee Template System
+============================
+
+Version History
+---------------
+
+-- Version 0.1 --
+-----------------
+Initial release. Features:
+* Core library 
+* Loader tags library
+* Default tags library (mostly done)
+* Default filters library (started)
+* Unit tests (mostly done except filters)
+
