@@ -20,6 +20,7 @@
 #include "filtertag.h"
 #include "load.h"
 #include "now.h"
+#include "ssi.h"
 
 #include "grantlee_export.h"
 
@@ -59,6 +60,7 @@ public:
     m_nodeFactories.insert("filter", new FilterNodeFactory());
     m_nodeFactories.insert("load", new LoadNodeFactory());
     m_nodeFactories.insert("now", new NowNodeFactory());
+    m_nodeFactories.insert("ssi", new SsiNodeFactory());
   }
 
   QHash<QString, AbstractNodeFactory*> nodeFactories()

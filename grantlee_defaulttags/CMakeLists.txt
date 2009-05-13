@@ -26,6 +26,7 @@ set (grantlee_defaulttags_library_SRCS
   filtertag.cpp
   load.cpp
   now.cpp
+  ssi.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)
