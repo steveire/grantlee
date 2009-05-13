@@ -27,6 +27,7 @@ set (grantlee_defaulttags_library_SRCS
   load.cpp
   now.cpp
   ssi.cpp
+  spaceless.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)

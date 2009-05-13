@@ -64,6 +64,9 @@ private slots:
   void testNowTag_data();
   void testNowTag() {  doTest();  }
 
+  void testSpacelessTag_data();
+  void testSpacelessTag() {  doTest();  }
+
 private:
 
   void doTest();
@@ -805,6 +808,20 @@ void TestDefaultTags::testNowTag_data()
 
 }
 
+void TestDefaultTags::testSpacelessTag_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  QTest::newRow("spaceless01") << "{% spaceless %} <b>    <i> text </i>    </b> {% endspaceless %}" << dict << "<b><i> text </i></b>" << NoError;
+  QTest::newRow("spaceless02") << "{% spaceless %} <b> \n <i> text </i> \n </b> {% endspaceless %}" << dict << "<b><i> text </i></b>" << NoError;
+  QTest::newRow("spaceless03") << "{% spaceless %}<b><i>text</i></b>{% endspaceless %}" << dict << "<b><i>text</i></b>" << NoError;
+
+}
 
 
 QTEST_MAIN(TestDefaultTags)

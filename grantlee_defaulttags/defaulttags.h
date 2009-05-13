@@ -21,6 +21,7 @@
 #include "load.h"
 #include "now.h"
 #include "ssi.h"
+#include "spaceless.h"
 
 #include "grantlee_export.h"
 
@@ -61,6 +62,7 @@ public:
     m_nodeFactories.insert("load", new LoadNodeFactory());
     m_nodeFactories.insert("now", new NowNodeFactory());
     m_nodeFactories.insert("ssi", new SsiNodeFactory());
+    m_nodeFactories.insert("spaceless", new SpacelessNodeFactory());
   }
 
   QHash<QString, AbstractNodeFactory*> nodeFactories()
