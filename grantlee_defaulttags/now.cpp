@@ -17,7 +17,7 @@ NowNodeFactory::NowNodeFactory()
 
 }
 
-Node* NowNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool negate)
+Node* NowNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
   QStringList expr = tagContent.split("\"", QString::KeepEmptyParts);
 
@@ -31,12 +31,6 @@ Node* NowNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool nega
 
   return new NowNode(formatString);
 }
-
-Node* NowNodeFactory::getNode(const QString &tagContent, Parser *p)
-{
-  return do_getNode(tagContent, p, false);
-}
-
 
 NowNode::NowNode(const QString &formatString)
   : m_formatString(formatString)

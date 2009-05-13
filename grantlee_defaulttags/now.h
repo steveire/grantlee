@@ -19,9 +19,6 @@ public:
   NowNodeFactory();
 
   Node* getNode(const QString &tagContent, Parser *p);
-
-protected:
-  Node* do_getNode(const QString& tagContent, Parser *p, bool negate);
 };
 
 class NowNode : public Node
