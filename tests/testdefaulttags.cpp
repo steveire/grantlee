@@ -61,6 +61,9 @@ private slots:
   void testFilterTag_data();
   void testFilterTag() {  doTest();  }
 
+  void testNowTag_data();
+  void testNowTag() {  doTest();  }
+
 private:
 
   void doTest();
@@ -785,6 +788,23 @@ void TestDefaultTags::testFilterTag_data()
   QTest::newRow("filter04") << "{% filter cut:remove %}djangospam{% endfilter %}" << dict << "django" << NoError;
 
 }
+
+void TestDefaultTags::testNowTag_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  QDate today = QDateTime::currentDateTime().date();
+
+  QTest::newRow("now01") << "{% now \"d M yyyy\"%}" << dict << (QString::number(today.day()) + " " +  QString::number(today.month()) + " " + QString::number(today.year())) << NoError;
+
+
+}
+
 
 
 QTEST_MAIN(TestDefaultTags)
