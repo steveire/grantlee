@@ -14,6 +14,7 @@ add_definitions(-DQT_SHARED)
 
 set (grantlee_defaulttags_library_SRCS
   defaulttags.cpp
+  autoescape.cpp
   if.cpp
   for.cpp
   with.cpp
