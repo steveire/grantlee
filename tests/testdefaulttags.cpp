@@ -67,6 +67,9 @@ private slots:
   void testSpacelessTag_data();
   void testSpacelessTag() {  doTest();  }
 
+  void testRegroupTag_data();
+  void testRegroupTag() {  doTest();  }
+
 private:
 
   void doTest();
@@ -820,6 +823,54 @@ void TestDefaultTags::testSpacelessTag_data()
   QTest::newRow("spaceless01") << "{% spaceless %} <b>    <i> text </i>    </b> {% endspaceless %}" << dict << "<b><i> text </i></b>" << NoError;
   QTest::newRow("spaceless02") << "{% spaceless %} <b> \n <i> text </i> \n </b> {% endspaceless %}" << dict << "<b><i> text </i></b>" << NoError;
   QTest::newRow("spaceless03") << "{% spaceless %}<b><i>text</i></b>{% endspaceless %}" << dict << "<b><i>text</i></b>" << NoError;
+
+}
+
+void TestDefaultTags::testRegroupTag_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  QVariantList list;
+  QVariantMap map;
+
+  map.insert("foo", "c");
+  map.insert("bar", 1);
+  list.append(map);
+
+  map.clear();
+  map.insert("foo", "d");
+  map.insert("bar", 1);
+  list.append(map);
+
+  map.clear();
+  map.insert("foo", "a");
+  map.insert("bar", 2);
+  list.append(map);
+
+  map.clear();
+  map.insert("foo", "b");
+  map.insert("bar", 2);
+  list.append(map);
+
+  map.clear();
+  map.insert("foo", "x");
+  map.insert("bar", 3);
+  list.append(map);
+
+  dict.insert("data", list);
+
+  QTest::newRow("regroup01") << "{% regroup data by bar as grouped %}"
+                                  "{% for group in grouped %}"
+                                    "{{ group.grouper }}:"
+                                    "{% for item in group.list %}"
+                                      "{{ item.foo }}"
+                                    "{% endfor %},"
+                                  "{% endfor %}" << dict << "1:cd,2:ab,3:x," << NoError;
 
 }
 

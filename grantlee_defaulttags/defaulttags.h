@@ -9,6 +9,7 @@
 #include "interfaces/taglibraryinterface.h"
 
 #include "autoescape.h"
+#include "regroup.h"
 #include "if.h"
 #include "for.h"
 #include "with.h"
@@ -50,6 +51,7 @@ public:
   DefaultTagLibrary()
   {
     m_nodeFactories.insert("autoescape", new AutoescapeNodeFactory());
+    m_nodeFactories.insert("regroup", new RegroupNodeFactory());
     m_nodeFactories.insert("if", new IfNodeFactory());
     m_nodeFactories.insert("for", new ForNodeFactory());
     m_nodeFactories.insert("with", new WithNodeFactory());
