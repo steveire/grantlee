@@ -23,6 +23,7 @@
 #include "load.h"
 #include "now.h"
 #include "ssi.h"
+#include "ifchanged.h"
 #include "spaceless.h"
 
 #include "grantlee_export.h"
@@ -33,15 +34,6 @@ class Parser;
 }
 
 using namespace Grantlee;
-
-class IfChangedNodeFactory : public AbstractNodeFactory
-{
-  public:
-    IfChangedNodeFactory();
-
-    Node* getNode(const QString &tagContent, Parser *p);
-
-};
 
 class DefaultTagLibrary : public QObject, public TagLibraryInterface
 {
@@ -66,6 +58,7 @@ public:
     m_nodeFactories.insert("load", new LoadNodeFactory());
     m_nodeFactories.insert("now", new NowNodeFactory());
     m_nodeFactories.insert("ssi", new SsiNodeFactory());
+    m_nodeFactories.insert("ifchanged", new IfChangedNodeFactory());
     m_nodeFactories.insert("spaceless", new SpacelessNodeFactory());
   }
 

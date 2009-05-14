@@ -29,6 +29,7 @@ set (grantlee_defaulttags_library_SRCS
   load.cpp
   now.cpp
   ssi.cpp
+  ifchanged.cpp
   spaceless.cpp
 )
 

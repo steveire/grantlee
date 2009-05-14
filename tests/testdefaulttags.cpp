@@ -70,6 +70,9 @@ private slots:
   void testRegroupTag_data();
   void testRegroupTag() {  doTest();  }
 
+  void testIfChangedTag_data();
+  void testIfChangedTag() {  doTest();  }
+
 private:
 
   void doTest();
@@ -871,6 +874,143 @@ void TestDefaultTags::testRegroupTag_data()
                                       "{{ item.foo }}"
                                     "{% endfor %},"
                                   "{% endfor %}" << dict << "1:cd,2:ab,3:x," << NoError;
+
+}
+
+void TestDefaultTags::testIfChangedTag_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  dict.insert("num", QVariantList() << 1 << 2 << 3 );
+  QTest::newRow("ifchanged01") << "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}" << dict << "123" << NoError;
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 1 << 3 );
+  QTest::newRow("ifchanged02") << "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}" << dict << "13" << NoError;
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 1 << 1 );
+  QTest::newRow("ifchanged03") << "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}" << dict << "1" << NoError;
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 2 << 3 );
+  dict.insert("numx", QVariantList() << 2 << 2 << 2 );
+  QTest::newRow("ifchanged04") << "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "122232" << NoError;
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 1 << 1 );
+  dict.insert("numx", QVariantList() << 1 << 2 << 3 );
+  QTest::newRow("ifchanged05") << "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "1123123123" << NoError;
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 1 << 1 );
+  dict.insert("numx", QVariantList() << 2 << 2 << 2 );
+  QTest::newRow("ifchanged06") << "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "1222" << NoError;
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 1 << 1 );
+  dict.insert("numx", QVariantList() << 2 << 2 << 2 );
+  dict.insert("numy", QVariantList() << 3 << 3 << 3 );
+  QTest::newRow("ifchanged07") << "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% for y in numy %}{% ifchanged %}{{ y }}{% endifchanged %}{% endfor %}{% endfor %}{% endfor %}" << dict << "1233323332333" << NoError;
+
+  // datalist': [[(1, 'a'), (1, 'a'), (0, 'b'), (1, 'c')], [(0, 'a'), (1, 'c'), (1, 'd'), (1, 'd'), (0, 'e')]]}
+  dict.clear();
+  QVariantList list;
+  QVariantList innerList;
+  QVariantList tuple;
+  tuple << 1 << "a";
+  innerList << tuple;
+  tuple.clear();
+  tuple << 1 << "a";
+  innerList << tuple;
+  tuple.clear();
+  tuple << 0 << "b";
+  innerList << tuple;
+  tuple.clear();
+  tuple << 1 << "c";
+  innerList << tuple;
+  tuple.clear();
+  list << innerList;
+  innerList.clear();
+
+  tuple << 0 << "a";
+  innerList << tuple;
+  tuple.clear();
+  tuple << 1 << "c";
+  innerList << tuple;
+  tuple.clear();
+  tuple << 1 << "d";
+  innerList << tuple;
+  tuple.clear();
+  tuple << 1 << "d";
+  innerList << tuple;
+  tuple.clear();
+  tuple << 0 << "e";
+  innerList << tuple;
+  tuple.clear();
+  list << innerList;
+  innerList.clear();
+
+//   dict.insert("datalist", list);
+//   QTest::newRow("ifchanged08") << "{% for data in datalist %}{% for c,d in data %}{% if c %}{% ifchanged %}{{ d }}{% endifchanged %}{% endif %}{% endfor %}{% endfor %}" << dict << "accd" << NoError;
+
+// Test one parameter given to ifchanged.
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 2 << 3 );
+  QTest::newRow("ifchanged-param01") << "{% for n in num %}{% ifchanged n %}..{% endifchanged %}{{ n }}{% endfor %}" << dict << "..1..2..3" << NoError;
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 2 << 3 );
+  dict.insert("numx", QVariantList() << 5 << 6 << 7 );
+  QTest::newRow("ifchanged-param02") << "{% for n in num %}{% for x in numx %}{% ifchanged n %}..{% endifchanged %}{{ x }}{% endfor %}{% endfor %}" << dict << "..567..567..567" << NoError;
+
+// Test multiple parameters to ifchanged.
+
+  dict.clear();
+  dict.insert("num", QVariantList() << 1 << 1 << 2 );
+  dict.insert("numx", QVariantList() << 5 << 6 << 6 );
+  QTest::newRow("ifchanged-param03") << "{% for n in num %}{{ n }}{% for x in numx %}{% ifchanged x n %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "156156256" << NoError;
+
+// Test a date+hour like construct, where the hour of the last day
+// is the same but the date had changed, so print the hour anyway.
+
+  dict.clear();
+  QVariantList days;
+  QVariantMap day;
+  day.insert("day", 1);
+  day.insert("hours", QVariantList() << 1 << 2 << 3 );
+  days << day;
+  day.clear();
+  day.insert("day", 2);
+  day.insert("hours", QVariantList() << 3 );
+  days << day;
+  dict.insert("days", days );
+  QTest::newRow("ifchanged-param04") << "{% for d in days %}{% ifchanged %}{{ d.day }}{% endifchanged %}{% for h in d.hours %}{% ifchanged d h %}{{ h }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "112323" << NoError;
+
+
+// Logically the same as above, just written with explicit
+// ifchanged for the day.
+
+  // TODO: fix name conflict upstream
+  QTest::newRow("ifchanged-param05") << "{% for d in days %}{% ifchanged d.day %}{{ d.day }}{% endifchanged %}{% for h in d.hours %}{% ifchanged d.day h %}{{ h }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "112323" << NoError;
+
+// Test the else clause of ifchanged.
+  dict.clear();
+  dict.insert("ids", QVariantList() << 1 << 1 << 2 << 2 << 2 << 3 );
+  QTest::newRow("ifchanged-else01") << "{% for id in ids %}{{ id }}{% ifchanged id %}-first{% else %}-other{% endifchanged %},{% endfor %}" << dict << "1-first,1-other,2-first,2-other,2-other,3-first," << NoError;
+
+//   QTest::newRow("ifchanged-else02") << "{% for id in ids %}{{ id }}-{% ifchanged id %}{% cycle red,blue %}{% else %}grey{% endifchanged %},{% endfor %}" << dict << "1-red,1-grey,2-blue,2-grey,2-grey,3-red," << NoError;
+//
+//   QTest::newRow("ifchanged-else03") << "{% for id in ids %}{{ id }}{% ifchanged id %}-{% cycle red,blue %}{% else %}{% endifchanged %},{% endfor %}" << dict << "1-red,1,2-blue,2,2,3-red," << NoError;
+
+  dict.clear();
+  dict.insert("ids", QVariantList() << 1 << 1 << 2 << 2 << 2 << 3 << 4 );
+  QTest::newRow("ifchanged-else04") << "{% for id in ids %}{% ifchanged %}***{{ id }}*{% else %}...{% endifchanged %}{{ forloop.counter }}{% endfor %}" << dict << "***1*1...2***2*3...4...5***3*6***4*7" << NoError;
 
 }
 
