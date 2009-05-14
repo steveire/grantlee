@@ -31,6 +31,7 @@ set (grantlee_defaulttags_library_SRCS
   ssi.cpp
   ifchanged.cpp
   spaceless.cpp
+  debug.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)

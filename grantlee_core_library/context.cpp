@@ -48,8 +48,12 @@ void Context::pop()
   m_variantHashStack.removeFirst();
 }
 
-
 void Context::insert(const QString &name, QVariant var)
 {
   m_variantHashStack[0].insert(name, var);
+}
+
+QHash<QString, QVariant> Context::stackHash(int depth)
+{
+  return m_variantHashStack.value(depth);
 }

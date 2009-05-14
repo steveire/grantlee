@@ -25,6 +25,7 @@
 #include "ssi.h"
 #include "ifchanged.h"
 #include "spaceless.h"
+#include "debug.h"
 
 #include "grantlee_export.h"
 
@@ -60,6 +61,7 @@ public:
     m_nodeFactories.insert("ssi", new SsiNodeFactory());
     m_nodeFactories.insert("ifchanged", new IfChangedNodeFactory());
     m_nodeFactories.insert("spaceless", new SpacelessNodeFactory());
+    m_nodeFactories.insert("debug", new DebugNodeFactory());
   }
 
   QHash<QString, AbstractNodeFactory*> nodeFactories()

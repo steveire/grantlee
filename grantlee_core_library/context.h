@@ -36,6 +36,8 @@ public:
   void push();
   void pop();
 
+  QHash<QString, QVariant> stackHash(int depth);
+
 private:
   QList<QHash<QString, QVariant> > m_variantHashStack;
 
