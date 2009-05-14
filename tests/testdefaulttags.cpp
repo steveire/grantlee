@@ -483,6 +483,46 @@ void TestDefaultTags::testForTag_data()
   QTest::newRow("for-tag-vars04") << "{% for val in values %}{{ forloop.revcounter0 }}{% endfor %}" << dict << "210" << NoError;
   QTest::newRow("for-tag-vars05") << "{% for val in values %}{% if forloop.first %}f{% else %}x{% endif %}{% endfor %}" << dict << "fxx" << NoError;
   QTest::newRow("for-tag-vars06") << "{% for val in values %}{% if forloop.last %}l{% else %}x{% endif %}{% endfor %}" << dict << "xxl" << NoError;
+
+  dict.clear();
+  QVariantMap map;
+  map.insert("one", 1);
+  map.insert("two", 2);
+  dict.insert("items", map);
+  QTest::newRow("for-tag-unpack01") << "{% for key,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+
+  QTest::newRow("for-tag-unpack03") << "{% for key, value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+  QTest::newRow("for-tag-unpack04") << "{% for key , value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+  QTest::newRow("for-tag-unpack05") << "{% for key ,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+  QTest::newRow("for-tag-unpack06") << "{% for key value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+  QTest::newRow("for-tag-unpack07") << "{% for key,,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+  QTest::newRow("for-tag-unpack08") << "{% for key,value, in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+
+// Ensure that a single loopvar doesn't truncate the list in val.
+  QTest::newRow("for-tag-unpack09") << "{% for val in items %}{{ val.0 }}:{{ val.1 }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+// // Otherwise, silently truncate if the length of loopvars differs to the length of each set of items.
+// // #C# {"items": (('one'
+// QTest::newRow("for-tag-unpack10") << "{% for x,y in items %}{{ x }}:{{ y }}/{% endfor %}" << dict << " 1, 'carrot'), ('two', 2, 'orange'))}, "one:1/two:2/"),";
+// // #C# {"items": (('one'
+// QTest::newRow("for-tag-unpack11") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << " 1), ('two', 2))}, ("one:1,/two:2,/", "one:1,INVALID/two:2,INVALID/")),";
+// // #C# {"items": (('one'
+// QTest::newRow("for-tag-unpack12") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << " 1, 'carrot'), ('two', 2))}, ("one:1,carrot/two:2,/", "one:1,carrot/two:2,INVALID/")),";
+// // #C# {"items": (('one'
+
+  dict.clear();
+  list.clear();
+  QVariantList innerList;
+  innerList.clear();
+  innerList << "one" << 1 << "carrot";
+  list.append(QVariant(innerList));
+  innerList.clear();
+  innerList << "two" << 2 << "cheese";
+  list.append(QVariant(innerList));
+
+  dict.insert("items", list);
+
+  QTest::newRow("for-tag-unpack13") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << "one:1,carrot/two:2,cheese/" << NoError;
+
 }
 
 void TestDefaultTags::testIfEqualTag_data()

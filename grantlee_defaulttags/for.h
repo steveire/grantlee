@@ -38,6 +38,11 @@ public:
   QString render(Context *c);
 
 private:
+  void insertLoopVariables(Context *c, int listSize, int i);
+  QString iterateMap(Context *c, QVariantMap varMap, bool unpack);
+  QString renderLoop(Context *c);
+  QString handleMapItem(Context *c, QString key, QVariant value, int listSize, int i, bool unpack);
+
   FilterExpression m_filterExpression;
   QList<QString> m_loopVars;
   NodeList m_loopNodeList;
