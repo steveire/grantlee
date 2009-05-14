@@ -36,16 +36,16 @@ public:
   FilterExpression();
   FilterExpression(const QString &varString, Grantlee::Parser *parser = 0);
 
-  int error();
+  int error() const;
 
 //   QList<QPair<QString, QString> > filters();
-  Variable variable();
+  Variable variable() const;
 
-  QVariant resolve(Context *c);
+  QVariant resolve(Context *c) const;
 
-  bool isTrue(Context *c);
+  bool isTrue(Context *c) const;
 
-  QVariantList toList(Context *c);
+  QVariantList toList(Context *c) const;
 
 private:
   Variable m_variable;

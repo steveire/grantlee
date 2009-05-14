@@ -104,7 +104,7 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   }
 }
 
-int FilterExpression::error()
+int FilterExpression::error() const
 {
   return m_error;
 }
@@ -115,12 +115,12 @@ FilterExpression::FilterExpression()
 //   m_variable = Variable(token.content);
 }
 
-Variable FilterExpression::variable()
+Variable FilterExpression::variable() const
 {
   return m_variable;
 }
 
-QVariant FilterExpression::resolve(Context *c)
+QVariant FilterExpression::resolve(Context *c) const
 {
   QVariant var = m_variable.resolve(c);
   foreach(ArgFilter argfilter, m_filters)
@@ -158,7 +158,7 @@ QVariant FilterExpression::resolve(Context *c)
 //   }
 // }
 
-QVariantList FilterExpression::toList(Context *c)
+QVariantList FilterExpression::toList(Context *c) const
 {
   QVariant var = resolve(c);
   if (!var.isValid())
@@ -202,7 +202,7 @@ QVariantList FilterExpression::toList(Context *c)
 
 }
 
-bool FilterExpression::isTrue(Context *c)
+bool FilterExpression::isTrue(Context *c) const
 {
   QVariant variant = resolve(c);
 
