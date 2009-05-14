@@ -964,40 +964,40 @@ void TestDefaultTags::testIfChangedTag_data()
   QVariantList innerList;
   QVariantList tuple;
   tuple << 1 << "a";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
   tuple << 1 << "a";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
   tuple << 0 << "b";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
   tuple << 1 << "c";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
-  list << innerList;
+  list.append(QVariant(innerList));
   innerList.clear();
 
   tuple << 0 << "a";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
   tuple << 1 << "c";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
   tuple << 1 << "d";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
   tuple << 1 << "d";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
   tuple << 0 << "e";
-  innerList << tuple;
+  innerList.append(QVariant(tuple));
   tuple.clear();
-  list << innerList;
+  list.append(QVariant(innerList));
   innerList.clear();
 
-//   dict.insert("datalist", list);
-//   QTest::newRow("ifchanged08") << "{% for data in datalist %}{% for c,d in data %}{% if c %}{% ifchanged %}{{ d }}{% endifchanged %}{% endif %}{% endfor %}{% endfor %}" << dict << "accd" << NoError;
+  dict.insert("datalist", list);
+  QTest::newRow("ifchanged08") << "{% for data in datalist %}{% for c,d in data %}{% if c %}{% ifchanged %}{{ d }}{% endifchanged %}{% endif %}{% endfor %}{% endfor %}" << dict << "accd" << NoError;
 
 // Test one parameter given to ifchanged.
   dict.clear();
