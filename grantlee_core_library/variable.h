@@ -18,7 +18,7 @@ public:
   Variable();
   Variable(const QString &var);
 
-  QString toString() { return m_varString; }
+  QString toString() const { return m_varString; }
   bool isTrue(Context *c) const;
 
   QVariant resolve(Context *c) const;
