@@ -97,6 +97,7 @@ QString ForNode::render(Context *c)
   
   for (int i = 0; i < listSize; i++)
   {
+    forloopMap = c->lookup("forloop").toMap();
     forloopMap.insert(counter0, i);
     forloopMap.insert(counter, i + 1);
     forloopMap.insert(revcounter, listSize - i );
