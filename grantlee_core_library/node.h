@@ -81,6 +81,7 @@ public:
 
 protected:
   QStringList smartSplit(const QString &str);
+  QList<Variable> getVariableList(QStringList list);
 
 signals:
   void error(int type, const QString &message);

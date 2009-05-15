@@ -43,6 +43,18 @@ AbstractNodeFactory::~AbstractNodeFactory()
 
 }
 
+QList< Variable > AbstractNodeFactory::getVariableList(QStringList list)
+{
+  QList<Variable> variables;
+  QListIterator<QString> it(list);
+  while (it.hasNext())
+  {
+    QString varString = it.next();
+    variables << Variable(varString);
+  }
+  return variables;
+}
+
 QStringList AbstractNodeFactory::smartSplit(const QString &str)
 {
   return Grantlee::TextUtil::smartSplit(str);
