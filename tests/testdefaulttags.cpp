@@ -1046,10 +1046,8 @@ void TestDefaultTags::testIfChangedTag_data()
   dict.clear();
   dict.insert("ids", QVariantList() << 1 << 1 << 2 << 2 << 2 << 3 );
   QTest::newRow("ifchanged-else01") << "{% for id in ids %}{{ id }}{% ifchanged id %}-first{% else %}-other{% endifchanged %},{% endfor %}" << dict << "1-first,1-other,2-first,2-other,2-other,3-first," << NoError;
-
-//   QTest::newRow("ifchanged-else02") << "{% for id in ids %}{{ id }}-{% ifchanged id %}{% cycle red,blue %}{% else %}grey{% endifchanged %},{% endfor %}" << dict << "1-red,1-grey,2-blue,2-grey,2-grey,3-red," << NoError;
-//
-//   QTest::newRow("ifchanged-else03") << "{% for id in ids %}{{ id }}{% ifchanged id %}-{% cycle red,blue %}{% else %}{% endifchanged %},{% endfor %}" << dict << "1-red,1,2-blue,2,2,3-red," << NoError;
+  QTest::newRow("ifchanged-else02") << "{% for id in ids %}{{ id }}-{% ifchanged id %}{% cycle red,blue %}{% else %}grey{% endifchanged %},{% endfor %}" << dict << "1-red,1-grey,2-blue,2-grey,2-grey,3-red," << NoError;
+  QTest::newRow("ifchanged-else03") << "{% for id in ids %}{{ id }}{% ifchanged id %}-{% cycle red,blue %}{% else %}{% endifchanged %},{% endfor %}" << dict << "1-red,1,2-blue,2,2,3-red," << NoError;
 
   dict.clear();
   dict.insert("ids", QVariantList() << 1 << 1 << 2 << 2 << 2 << 3 << 4 );
