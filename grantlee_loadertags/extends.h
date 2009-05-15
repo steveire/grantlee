@@ -12,6 +12,7 @@
 namespace Grantlee
 {
 class Parser;
+class Template;
 }
 
 using namespace Grantlee;
@@ -30,14 +31,17 @@ class ExtendsNode : public Node
 {
   Q_OBJECT
 public:
-  ExtendsNode(NodeList list, const QString &filename);
+  ExtendsNode(NodeList list, const QString &filename, FilterExpression fe);
 
   QString render(Context *c);
 
   void appendNode(Node* node);
 
+  Template *getParent(Context *c);
+
 private:
   FilterExpression m_filterExpression;
+  QString m_name;
   NodeList m_list;
 };
 

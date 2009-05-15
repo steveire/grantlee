@@ -11,6 +11,8 @@
 
 #include <QDebug>
 
+const char * __loadedBlocks = "__loadedBlocks";
+
 BlockNodeFactory::BlockNodeFactory()
 {
 
@@ -19,11 +21,44 @@ BlockNodeFactory::BlockNodeFactory()
 Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
   QStringList expr = smartSplit(tagContent);
-  
-  NodeList list = p->parse(QStringList() << "endblock" << "endblock m_name" );
+
+  if (expr.size() != 2)
+  {
+    error(TagSyntaxError, "block tag takes one argument");
+    return 0;
+  }
+
+  QString blockName = expr.at(1);
+
+  QVariant loadedBlocksVariant = p->property(__loadedBlocks);
+  QVariantList blockVariantList;
+
+  if (loadedBlocksVariant.isValid() && loadedBlocksVariant.type() == QVariant::List)
+  {
+    blockVariantList = loadedBlocksVariant.toList();
+    QListIterator<QVariant> it(blockVariantList);
+    while (it.hasNext())
+    {
+      QString blockNodeName = it.next().toString();
+
+      if (blockNodeName == blockName)
+      {
+        error(TagSyntaxError, QString("%1 appears more than once.").arg(blockName));
+        return 0;
+      }
+    }
+  }
+  // Block not already in list.
+  blockVariantList.append(blockName);
+  loadedBlocksVariant = QVariant(blockVariantList);
+
+  p->setProperty(__loadedBlocks, loadedBlocksVariant);
+
+  NodeList list = p->parse(QStringList() << "endblock" << "endblock " + blockName );
+
   p->nextToken();
 
-  return new BlockNode(expr.at(1), list);
+  return new BlockNode(blockName, list);
 }
 
 BlockNode::BlockNode(const QString &name, const NodeList &list)

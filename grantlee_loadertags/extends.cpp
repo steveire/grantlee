@@ -28,30 +28,50 @@ ExtendsNodeFactory::ExtendsNodeFactory()
 Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
   QStringList expr = smartSplit(tagContent);
-  
+
   QString parentName = expr.at(1);
+  FilterExpression fe;
   int size = parentName.size();
 
   if ( ( parentName.startsWith( "\"" ) && parentName.endsWith( "\"" ) )
     || ( parentName.startsWith( "'" ) && parentName.endsWith( "'" ) ) )
   {
     parentName = parentName.mid(1, size -2);
+  } else {
+    fe = FilterExpression(parentName);
+    parentName = QString();
   }
 
   NodeList nodeList = p->parse();
 
-  return new ExtendsNode(nodeList, parentName);
+  return new ExtendsNode(nodeList, parentName, fe);
 }
 
-ExtendsNode::ExtendsNode(NodeList list, const QString &name)
+ExtendsNode::ExtendsNode(NodeList list, const QString &name, FilterExpression fe)
+  : m_filterExpression(fe),
+    m_name(name)
 {
   m_list = list;
-  m_filterExpression = FilterExpression(name);
 }
 
-QString ExtendsNode::render(Context *c)
+Template *ExtendsNode::getParent(Context *c)
 {
-  QString filename = m_filterExpression.variable().toString();
+  QString parentName;
+  if (m_name.isEmpty())
+  {
+    QVariant parentVar = m_filterExpression.resolve(c);
+    if (parentVar.userType() == QMetaType::QObjectStar)
+    {
+      QObject *parentObject = parentVar.value<QObject*>();
+      Template *parentTemplate = qobject_cast<Template *>(parentObject);
+      if (parentTemplate)
+        return parentTemplate;
+    } else {
+      parentName = parentVar.toString();
+    }
+  } else {
+    parentName = m_name;
+  }
 
   TemplateLoader *loader = TemplateLoader::instance();
 
@@ -59,15 +79,25 @@ QString ExtendsNode::render(Context *c)
 
   connect(t, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
 
-  bool success = loader->loadByName(t, filename);
+  bool success = loader->loadByName(t, parentName);
 
   if (!success)
   {
-      error(TagSyntaxError, "TODO: Fix message");
-      return QString();
+      return 0;
+  }
+  return t;
+}
+
+QString ExtendsNode::render(Context *c)
+{
+  Template *parent = getParent(c);
+  if (!parent)
+  {
+    error(TagSyntaxError, "TODO: Fix message");
+    return QString();
   }
 
-  NodeList nodeList = t->nodeList();
+  NodeList nodeList = parent->nodeList();
   QHash<QString, int> parentBlocks;
 
   MutableNodeListIterator i(nodeList);
@@ -75,7 +105,7 @@ QString ExtendsNode::render(Context *c)
   while (i.hasNext())
   {
     Node* n = i.next();
-    BlockNode *bn = dynamic_cast<BlockNode*>(n);
+    BlockNode *bn = qobject_cast<BlockNode*>(n);
     if (bn)
     {
       parentBlocks.insert(bn->name(), idx);
@@ -89,13 +119,13 @@ QString ExtendsNode::render(Context *c)
   while (j.hasNext())
   {
     Node* n = j.next();
-    BlockNode *bn = dynamic_cast<BlockNode*>(n);
+    BlockNode *bn = qobject_cast<BlockNode*>(n);
     if (bn)
     {
       if (parentBlocks.contains(bn->name()))
       {
         int ii = parentBlocks.value(bn->name());
-        BlockNode *pbn = dynamic_cast<BlockNode *>(nodeList[ii]);
+        BlockNode *pbn = qobject_cast<BlockNode *>(nodeList[ii]);
         pbn->setParent(bn->parent());
         pbn->addParent(pbn->nodeList());
         pbn->setNodeList(bn->nodeList());
@@ -111,6 +141,7 @@ QString ExtendsNode::render(Context *c)
             {
               en->appendNode(bn);
             }
+            break;
           }
         }
       }

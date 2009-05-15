@@ -175,7 +175,7 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow("inheritance06") << "{% extends foo %}" << dict << "1234" << NoError;
 
   QString inh7("{% extends 'inheritance01' %}{% block second %}5{% endblock %}");
-  m_tl->injectTemplate("inheritance04", inh7);
+  m_tl->injectTemplate("inheritance07", inh7);
 
   dict.clear();
   // Two-level with one block defined, one block not defined
@@ -198,11 +198,16 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow("inheritance13") << "{% extends 'inheritance02' %}{% block first %}a{% endblock %}{% block second %}b{% endblock %}" << dict << "1a3b" << NoError;
   // A block defined only in a child template shouldn't be displayed
   QTest::newRow("inheritance14") << "{% extends 'inheritance01' %}{% block newblock %}NO DISPLAY{% endblock %}" << dict << "1&3_" << NoError;
+
+
+  QString inh15("{% extends 'inheritance01' %}{% block first %}2{% block inner %}inner{% endblock %}{% endblock %}");
+  m_tl->injectTemplate("inheritance15", inh15);
+
   // A block within another block
-  QTest::newRow("inheritance15") << "{% extends 'inheritance01' %}{% block first %}2{% block inner %}inner{% endblock %}{% endblock %}" << dict << "12inner3_" << NoError;
+  QTest::newRow("inheritance15") << inh15 << dict << "12inner3_" << NoError;
   // A block within another block (level 2)
 
-//   QTest::newRow("inheritance16") << "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" << dict << " '12out3_'),";
+  QTest::newRow("inheritance16") << "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" << dict << "12out3" << NoError;
 //   // {% load %} tag (parent -- setup for exception04)
 //   // #C# {}
 //   QTest::newRow("inheritance17") << "{% load testtags %}{% block first %}1234{% endblock %}" << dict << " '1234'),";
