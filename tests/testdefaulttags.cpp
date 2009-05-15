@@ -53,7 +53,7 @@ private slots:
   void testWithTag() {  doTest();  }
 
   void testCycleTag_data();
-  void testCycleTag() {  /* doTest(); */ }
+  void testCycleTag() {  doTest();  }
 
   void testWidthRatioTag_data();
   void testWidthRatioTag() {  doTest();  }
@@ -741,8 +741,8 @@ void TestDefaultTags::testCycleTag_data()
   QTest::newRow("cycle05") << "{% cycle a %}" << dict << "" << TagSyntaxError;
   // TODO: This is the same as cycle01. Remove.
   QTest::newRow("cycle06") << "{% cycle a %}" << dict << "" << TagSyntaxError;
-  QTest::newRow("cycle06") << "{% cycle a,b,c as foo %}{% cycle bar %}" << dict << "" << TagSyntaxError;
-  QTest::newRow("cycle06") << "{% cycle a,b,c as foo %}{% cycle foo %}{{ foo }}{{ foo }}{% cycle foo %}{{ foo }}" << dict << "abbbcc" << TagSyntaxError;
+  QTest::newRow("cycle07") << "{% cycle a,b,c as foo %}{% cycle bar %}" << dict << "" << TagSyntaxError;
+  QTest::newRow("cycle08") << "{% cycle a,b,c as foo %}{% cycle foo %}{{ foo }}{{ foo }}{% cycle foo %}{{ foo }}" << dict << "abbbcc" << NoError;
 
   dict.insert("test", QVariantList() << 0 << 1 << 2 << 3 << 4);
   QTest::newRow("cycle09") << "{% for i in test %}{% cycle a,b %}{{ i }},{% endfor %}" << dict << "a0,b1,a2,b3,a4," << NoError;
@@ -759,10 +759,13 @@ void TestDefaultTags::testCycleTag_data()
   dict.insert("one", "1");
   dict.insert("two", "2");
   QTest::newRow("cycle14") << "{% cycle one two as foo %}{% cycle foo %}" << dict << "12" << NoError;
-  dict.insert("test", QVariantList() << 0 << 1 << 2 << 3 << 4);
+
   // TODO: Same name as cycle13 in Django. Fix upstream.
-  //  'aye': 'a', 'bee': 'b'}, '
-//   QTest::newRow("cycle15") << "{% for i in test %}{% cycle aye bee %}{{ i }},{% endfor %}" << dict << "a0,b1,a2,b3,a4," ;
+  dict.clear();
+  dict.insert("test", QVariantList() << 0 << 1 << 2 << 3 << 4);
+  dict.insert("aye", "a");
+  dict.insert("bee", "b");
+  QTest::newRow("cycle15") << "{% for i in test %}{% cycle aye bee %}{{ i }},{% endfor %}" << dict << "a0,b1,a2,b3,a4," << NoError;
 }
 
 void TestDefaultTags::testWidthRatioTag_data()

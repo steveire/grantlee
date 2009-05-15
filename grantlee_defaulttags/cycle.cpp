@@ -9,6 +9,8 @@
 
 #include <QDebug>
 
+static const char * _namedCycleNodes = "_namedCycleNodes";
+
 CycleNodeFactory::CycleNodeFactory()
 {
 
@@ -16,45 +18,94 @@ CycleNodeFactory::CycleNodeFactory()
 
 Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p)
 {
-
-  // be different here? put the cycle value into the context? Otherwise I could use a QObject::property if necesary.
-
   QStringList expr = smartSplit(tagContent);
-  expr.takeAt(0);
 
   if (expr.size() < 1 )
   {
     emit error(TagSyntaxError, QString("%1 expects at least one argument").arg(expr.at(0)));
+    return 0;
   }
 
-  QList<FilterExpression> list;
-  foreach(const QString &var, expr)
+  if (expr.at(1).contains(","))
   {
-    FilterExpression fe(var, p);
-    list << fe;
+    QStringList csvlist = expr.at(1).split(",");
+    expr.removeAt(1);
+    for (int i = 0; i < csvlist.size() ; ++i )
+    {
+      expr.insert(i+1, "\"" + csvlist.at(i) + "\"");
+    }
   }
 
-  return new CycleNode(list);
+  if (expr.size() == 2)
+  {
+    // {% cycle var %}
+    QString name = expr.at(1);
+    QVariant cycleNodes = p->property(_namedCycleNodes);
+    if (!cycleNodes.isValid() || cycleNodes.type() != QVariant::Map)
+    {
+      error(TagSyntaxError, QString("No named cycles in template. '%1' is not defined").arg(name));
+      return 0;
+    }
+    QVariantMap map = cycleNodes.toMap();
+    if (!map.contains(name))
+    {
+      error(TagSyntaxError, QString("Node not found: %1").arg(name));
+      return 0;
+    }
+    QVariant nodeVariant = map.value(name);
+    if (nodeVariant.userType() != QMetaType::QObjectStar)
+    {
+      error(TagSyntaxError, "Invalid object in node cycle list");
+      return 0;
+    }
+    QObject *obj = nodeVariant.value<QObject*>();
+    Node *node = qobject_cast<Node*>(obj);
+    if (!node)
+    {
+      error(TagSyntaxError, "Invalid object in node cycle list");
+      return 0;
+    }
+    return node;
+  }
+
+  int exprSize = expr.size();
+  if ( exprSize > 4 && expr.at( exprSize - 2 ) == "as")
+  {
+    // {% cycle "foo" "bar" "bat" as var %}
+    QString name = expr.at(exprSize - 1);
+    QStringList list = expr.mid(1, exprSize - 3);
+
+    Node *node = new CycleNode(getVariableList(list), name);
+    QVariant mapVariant = p->property(_namedCycleNodes);
+    QVariantMap map;
+    if (mapVariant.isValid() && mapVariant.type() == QVariant::Map)
+    {
+      map = mapVariant.toMap();
+    }
+    QObject *nodeObject = node;
+    QVariant nodeVariant = QVariant::fromValue(nodeObject);
+    map.insert(name, nodeVariant);
+    p->setProperty(_namedCycleNodes, QVariant(map));
+    return node;
+  } else {
+    QStringList list = expr.mid(1, exprSize - 1);
+    return new CycleNode(getVariableList(list));
+  }
 }
 
-
-CycleNode::CycleNode(QList<FilterExpression> list, const QString &name)
+CycleNode::CycleNode(QList<Variable> list, const QString &name)
+  : m_variableIterator(list)
 {
-  m_filterExpressionList = list;
   m_name = name;
 }
 
 QString CycleNode::render(Context *c)
 {
-  return QString();
-//   foreach(FilterExpression fe, m_filterExpressionList)
-//   {
-//     QVariant value = fe.resolve(c);
-//     if (value.isValid())
-//     {
-//       return value.toString();
-//     }
-//   }
-//   return QString();
+  QString value = m_variableIterator.next().resolve(c).toString();
+  if (!m_name.isEmpty())
+  {
+    c->insert(m_name, value);
+  }
+  return value;
 }
 

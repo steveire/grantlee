@@ -22,18 +22,49 @@ public:
 
 };
 
+/**
+Cycles endlessly over elements.
+*/
+template <typename T>
+class RingIterator
+{
+public:
+  RingIterator<T>(QList<T> list)
+  : m_it(list)
+  {
+    Q_ASSERT(list.size() > 0);
+  }
+
+  /**
+  Returns the next element in the list, or the first element if already
+  at the last element.
+  */
+  T next()
+  {
+    if (m_it.hasNext())
+    {
+      Variable v = m_it.next();
+      return v;
+    }
+    m_it.toFront();
+    return m_it.next();
+  }
+
+private:
+  QListIterator<T> m_it;
+};
+
 class CycleNode : public Node
 {
   Q_OBJECT
 public:
-  CycleNode(QList<FilterExpression> list, const QString &name = QString());
+  CycleNode(QList<Variable> list, const QString &name = QString());
 
   QString render(Context *c);
 
 private:
-  QList<FilterExpression> m_filterExpressionList;
+  RingIterator<Variable> m_variableIterator;
   QString m_name;
-  int m_index;
 
 };
 
