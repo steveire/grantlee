@@ -217,30 +217,53 @@ void TestLoaderTags::testExtendsTag_data()
 //   // {% load %} tag (within a child template)
 //   // #C# {}
 //   QTest::newRow("inheritance19") << "{% extends 'inheritance01' %}{% block first %}{% load testtags %}{% echo 400 %}5678{% endblock %}" << dict << " '140056783_'),";
-//   // Two-level inheritance with {{ block.super }}
-//   // #C# {}
-//   QTest::newRow("inheritance20") << "{% extends 'inheritance01' %}{% block first %}{{ block.super }}a{% endblock %}" << dict << " '1&a3_'),";
-//   // Three-level inheritance with {{ block.super }} from parent
-//   // #C# {}
-//   QTest::newRow("inheritance21") << "{% extends 'inheritance02' %}{% block first %}{{ block.super }}a{% endblock %}" << dict << " '12a34'),";
-//   // Three-level inheritance with {{ block.super }} from grandparent
-//   // #C# {}
-//   QTest::newRow("inheritance22") << "{% extends 'inheritance04' %}{% block first %}{{ block.super }}a{% endblock %}" << dict << " '1&a3_'),";
-//   // Three-level inheritance with {{ block.super }} from parent and grandparent
-//   // #C# {}
-//   QTest::newRow("inheritance23") << "{% extends 'inheritance20' %}{% block first %}{{ block.super }}b{% endblock %}" << dict << " '1&ab3_'),";
-//   // Inheritance from local context without use of template loader
-//   // #C# {'context_template': template.Template("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}")}
-//   QTest::newRow("inheritance24") << "{% extends context_template %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" << dict << " '1234'),";
-//   // Inheritance from local context with variable parent template
-//   // #C# {'context_template': [template.Template("Wrong")
-//   QTest::newRow("inheritance25") << "{% extends context_template.1 %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" << dict << " template.Template("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}")]}, '1234'),";
-//   // Set up a base template to extend
-//   // #C# {}
-//   QTest::newRow("inheritance26") << "no tags" << dict << " 'no tags'),";
-//   // Inheritance from a template that doesn't have any blocks
-//   // #C# {}
-//   QTest::newRow("inheritance27") << "{% extends 'inheritance26' %}" << dict << " 'no tags'),";
+
+  QString inh20("{% extends 'inheritance01' %}{% block first %}{{ block.super }}a{% endblock %}");
+  m_tl->injectTemplate("inheritance20", inh20);
+
+  // Two-level inheritance with {{ block.super }}
+  QTest::newRow("inheritance20") << inh20 << dict << "1&a3_" << NoError;
+  // Three-level inheritance with {{ block.super }} from parent
+  QTest::newRow("inheritance21") << "{% extends 'inheritance02' %}{% block first %}{{ block.super }}a{% endblock %}" << dict << "12a34" << NoError;
+  // Three-level inheritance with {{ block.super }} from grandparent
+  QTest::newRow("inheritance22") << "{% extends 'inheritance04' %}{% block first %}{{ block.super }}a{% endblock %}" << dict << "1&a3_" << NoError;
+  // Three-level inheritance with {{ block.super }} from parent and grandparent
+//   QTest::newRow("inheritance23") << "{% extends 'inheritance20' %}{% block first %}{{ block.super }}b{% endblock %}" << dict << "1&ab3_" << NoError;
+
+  // Inheritance from local context without use of template loader
+
+  Template *t = m_tl->getTemplate();
+  t->setContent("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}");
+  QObject *obj = t;
+  dict.insert("context_template", QVariant::fromValue(obj));
+
+  QTest::newRow("inheritance24") << "{% extends context_template %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" << dict << "1234" << NoError;
+
+  dict.clear();
+  QVariantList list;
+
+  Template *t1 = m_tl->getTemplate();
+  t1->setContent("Wrong");
+  QObject *obj1 = t1;
+  Template *t2 = m_tl->getTemplate();
+  t2->setContent("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}");
+  QObject *obj2 = t2;
+  list << QVariant::fromValue(obj1);
+  list << QVariant::fromValue(obj2);
+
+  dict.insert("context_template", list);
+
+  // Inheritance from local context with variable parent template
+  QTest::newRow("inheritance25") << "{% extends context_template.1 %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" << dict << "1234" << NoError;
+
+  dict.clear();
+
+  // Set up a base template to extend
+  QString inh26 = QString("no tags");
+  m_tl->injectTemplate("inheritance26", inh26);
+
+  // Inheritance from a template that doesn't have any blocks
+  QTest::newRow("inheritance27") << "{% extends 'inheritance26' %}" << dict << "no tags" << NoError;
 
   dict.clear();
   // Raise exception for invalid template name
