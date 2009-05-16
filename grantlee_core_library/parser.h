@@ -34,6 +34,7 @@ class GRANTLEE_EXPORT Parser : public QObject
   Q_OBJECT
 public:
   Parser( QList<Token> tokenList, QStringList pluginDirs );
+  ~Parser();
 
   NodeList parse(QStringList stopAt = QStringList());
 

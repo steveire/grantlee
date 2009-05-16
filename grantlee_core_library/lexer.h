@@ -31,6 +31,7 @@ class Lexer
 {
 public:
   Lexer(const QString &templateString);
+  ~Lexer();
 
   QList<Token> tokenize();
 

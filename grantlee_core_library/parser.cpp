@@ -52,6 +52,11 @@ Parser::Parser(QList<Token> tokenList, QStringList pluginDirs)
 
 }
 
+Parser::~Parser()
+{
+  delete d_ptr;
+}
+
 void Parser::loadLib(const QString &name)
 {
   Q_D(Parser);

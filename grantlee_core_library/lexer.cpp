@@ -51,6 +51,12 @@ Lexer::Lexer(const QString &templateString)
   d->m_templateString = templateString;
 }
 
+Lexer::~Lexer()
+{
+  delete d_ptr;
+}
+
+
 QList<Token> Lexer::tokenize()
 {
   Q_D(Lexer);
