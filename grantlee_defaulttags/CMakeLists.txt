@@ -51,7 +51,7 @@ set_target_properties(grantlee_defaulttags_library PROPERTIES
 
 install(TARGETS grantlee_defaulttags_library
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
          COMPONENT Devel
 )
