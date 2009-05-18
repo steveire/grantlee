@@ -12,6 +12,7 @@
 
 #include "grantlee.h"
 #include "text_util.h"
+#include "filter.h"
 
 using namespace Grantlee;
 
@@ -54,6 +55,7 @@ Parser::Parser(QList<Token> tokenList, QStringList pluginDirs, QObject *parent)
 
 Parser::~Parser()
 {
+  qDeleteAll(d_ptr->m_nodeFactories);
   delete d_ptr;
 }
 
@@ -84,8 +86,11 @@ void Parser::loadLib(const QString &name)
   while (filterIter.hasNext())
   {
     filterIter.next();
-    d->m_filters[filterIter.key()] = filterIter.value();
+    Filter *f = filterIter.value();
+    f->setParent(this->parent());
+    d->m_filters[filterIter.key()] = f;
   }
+  delete tagLibrary;
 }
 
 NodeList ParserPrivate::extendNodeList(NodeList list, Node *node)
