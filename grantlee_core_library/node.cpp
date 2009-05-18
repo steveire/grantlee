@@ -60,7 +60,8 @@ QStringList AbstractNodeFactory::smartSplit(const QString &str)
   return Grantlee::TextUtil::smartSplit(str);
 }
 
-VariableNode::VariableNode(const FilterExpression &fe)
+VariableNode::VariableNode(const FilterExpression &fe, QObject *parent)
+  : Node(parent)
 {
   m_filterExpression = fe;
 }

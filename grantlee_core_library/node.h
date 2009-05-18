@@ -90,8 +90,10 @@ signals:
 
 class GRANTLEE_EXPORT TextNode : public Node
 {
+  Q_OBJECT
 public:
-  TextNode(const QString &content)
+  TextNode(const QString &content, QObject *parent = 0)
+    : Node(parent)
   {
     m_content = content;
   }
@@ -107,8 +109,9 @@ private:
 
 class GRANTLEE_EXPORT VariableNode : public Node
 {
+  Q_OBJECT
 public:
-  VariableNode(const FilterExpression &fe);
+  VariableNode(const FilterExpression &fe, QObject *parent = 0);
 
   QString render(Context *c);
 
