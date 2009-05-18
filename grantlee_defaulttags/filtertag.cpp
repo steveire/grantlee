@@ -15,7 +15,7 @@ Grantlee::Node* FilterNodeFactory::getNode(const QString& tagContent, Grantlee::
   expr.removeFirst();
 
   QString expression = expr.join(" ");
-  FilterExpression *fe = new FilterExpression(QString("var|%1").arg(expression), p);
+  FilterExpression fe(QString("var|%1").arg(expression), p);
 
   NodeList filterNodes = p->parse(QStringList() << "endfilter" );
   p->nextToken();
@@ -23,7 +23,7 @@ Grantlee::Node* FilterNodeFactory::getNode(const QString& tagContent, Grantlee::
   return new FilterNode(fe, filterNodes);
 }
 
-FilterNode::FilterNode(FilterExpression* fe, NodeList filterList)
+FilterNode::FilterNode(FilterExpression fe, NodeList filterList)
   : m_fe(fe), m_filterList(filterList)
 {
 
@@ -34,7 +34,7 @@ QString FilterNode::render(Context* c)
   QString output = m_filterList.render(c);
   c->push();
   c->insert("var", output);
-  QString filtered = m_fe->resolve(c).toString();
+  QString filtered = m_fe.resolve(c).toString();
   c->pop();
   return filtered;
 }

@@ -19,12 +19,12 @@ class FilterNode : public Node
 {
   Q_OBJECT
 public:
-  FilterNode(FilterExpression *fe, NodeList filterList);
+  FilterNode(FilterExpression fe, NodeList filterList);
 
   QString render(Context *c);
 
 private:
-  FilterExpression *m_fe;
+  FilterExpression m_fe;
   NodeList m_filterList;
 };
 
