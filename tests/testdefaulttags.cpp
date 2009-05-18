@@ -506,18 +506,47 @@ void TestDefaultTags::testForTag_data()
 
 // Ensure that a single loopvar doesn't truncate the list in val.
   QTest::newRow("for-tag-unpack09") << "{% for val in items %}{{ val.0 }}:{{ val.1 }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-// // Otherwise, silently truncate if the length of loopvars differs to the length of each set of items.
-// // #C# {"items": (('one'
-// QTest::newRow("for-tag-unpack10") << "{% for x,y in items %}{{ x }}:{{ y }}/{% endfor %}" << dict << " 1, 'carrot'), ('two', 2, 'orange'))}, "one:1/two:2/"),";
-// // #C# {"items": (('one'
-// QTest::newRow("for-tag-unpack11") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << " 1), ('two', 2))}, ("one:1,/two:2,/", "one:1,INVALID/two:2,INVALID/")),";
-// // #C# {"items": (('one'
-// QTest::newRow("for-tag-unpack12") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << " 1, 'carrot'), ('two', 2))}, ("one:1,carrot/two:2,/", "one:1,carrot/two:2,INVALID/")),";
-// // #C# {"items": (('one'
+
+// Otherwise, silently truncate if the length of loopvars differs to the length of each set of items.
 
   dict.clear();
   list.clear();
   QVariantList innerList;
+  innerList << "one" << 1 << "carrot";
+  list.append(QVariant(innerList));
+  innerList.clear();
+  innerList << "two" << 2 << "orange";
+  list.append(QVariant(innerList));
+  dict.insert("items", list);
+
+  QTest::newRow("for-tag-unpack10") << "{% for x,y in items %}{{ x }}:{{ y }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+
+  dict.clear();
+  list.clear();
+  innerList.clear();
+  innerList << "one" << 1;
+  list.append(QVariant(innerList));
+  innerList.clear();
+  innerList << "two" << 2;
+  list.append(QVariant(innerList));
+  dict.insert("items", list);
+
+  QTest::newRow("for-tag-unpack11") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << "one:1,/two:2,/" << NoError;
+
+  dict.clear();
+  list.clear();
+  innerList.clear();
+  innerList << "one" << 1 << "carrot";
+  list.append(QVariant(innerList));
+  innerList.clear();
+  innerList << "two" << 2;
+  list.append(QVariant(innerList));
+  dict.insert("items", list);
+
+  QTest::newRow("for-tag-unpack12") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << "one:1,carrot/two:2,/" << NoError;
+
+  dict.clear();
+  list.clear();
   innerList.clear();
   innerList << "one" << 1 << "carrot";
   list.append(QVariant(innerList));

@@ -187,13 +187,12 @@ QString ForNode::render(Context *c)
       if (varList[index].type() == QVariant::List)
       {
         QVariantList vList = varList[index].toList();
-        if (vList.size() == m_loopVars.size())
+        int varsSize = qMin(m_loopVars.size(), vList.size());
+        for (int j = 0; j < varsSize; ++j)
         {
-          for (int j = 0; j < m_loopVars.size(); ++j)
-          {
-            c->insert(m_loopVars.at(j), vList.at(j));
-          }
+          c->insert(m_loopVars.at(j), vList.at(j));
         }
+
       } else {
         // We don't have a map, but we have to unpack several values from each item
         // in the list. And each item in the list is not itself a list.
