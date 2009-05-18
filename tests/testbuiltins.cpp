@@ -88,6 +88,9 @@ private slots:
   void testCommentSyntax_data();
   void testCommentSyntax() { doTest(); }
 
+  void testMultiline_data();
+  void testMultiline() { doTest(); }
+
   void cleanupTestCase();
 
 private:
@@ -128,9 +131,9 @@ void TestBuiltinSyntax::doTest()
     QCOMPARE(l.at(0).toInt(), (int)error );
     return;
   }
-  
+
   Context context(dict);
-  
+
   QString result = t->render(&context);
 
   if (spy.count() > 0)
@@ -378,7 +381,6 @@ void TestBuiltinSyntax::testFilterSyntax_data()
 
 void TestBuiltinSyntax::testCommentSyntax_data()
 {
-
   QTest::addColumn<QString>("input");
   QTest::addColumn<Dict>("dict");
   QTest::addColumn<QString>("output");
@@ -399,6 +401,19 @@ void TestBuiltinSyntax::testCommentSyntax_data()
   QTest::newRow("comment-syntax10") << "foo{# }} #}" << dict << "foo" << NoError;
   QTest::newRow("comment-syntax11") << "foo{# { #}" << dict << "foo" << NoError;
   QTest::newRow("comment-syntax12") << "foo{# } #}" << dict << "foo" << NoError;
+}
+
+void TestBuiltinSyntax::testMultiline_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  QTest::newRow("multiline01") << "Hello,\nboys.\nHow\nare\nyou\ngentlemen?" << dict << "Hello,\nboys.\nHow\nare\nyou\ngentlemen?" << NoError;
+
 }
 
 QTEST_MAIN(TestBuiltinSyntax)
