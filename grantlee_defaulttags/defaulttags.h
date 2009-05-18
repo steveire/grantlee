@@ -41,7 +41,8 @@ class DefaultTagLibrary : public QObject, public TagLibraryInterface
   Q_OBJECT
   Q_INTERFACES( Grantlee::TagLibraryInterface )
 public:
-  DefaultTagLibrary()
+  DefaultTagLibrary(QObject *parent = 0)
+    : QObject (parent)
   {
     m_nodeFactories.insert("autoescape", new AutoescapeNodeFactory());
     m_nodeFactories.insert("regroup", new RegroupNodeFactory());
