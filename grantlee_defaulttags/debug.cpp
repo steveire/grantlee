@@ -15,13 +15,14 @@ DebugNodeFactory::DebugNodeFactory()
 
 }
 
-Node* DebugNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* DebugNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
-  return new DebugNode();
+  return new DebugNode(parent);
 }
 
 
-DebugNode::DebugNode()
+DebugNode::DebugNode(QObject *parent)
+  : Node(parent)
 {
 
 }

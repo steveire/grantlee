@@ -39,8 +39,8 @@ public:
   Parser *q_ptr;
 };
 
-Parser::Parser(QList<Token> tokenList, QStringList pluginDirs)
-  : d_ptr(new ParserPrivate(this))
+Parser::Parser(QList<Token> tokenList, QStringList pluginDirs, QObject *parent)
+  : QObject(parent), d_ptr(new ParserPrivate(this))
 {
   Q_D(Parser);
   d->m_tokenList = tokenList;
@@ -116,7 +116,12 @@ void Parser::emitError(int err, const QString & message)
   error(err, message);
 }
 
-NodeList Parser::parse(QStringList stopAt)
+NodeList Parser::parse(QObject *parent)
+{
+  return parse(QStringList(), parent);
+}
+
+NodeList Parser::parse(QStringList stopAt, QObject *parent)
 {
   Q_D(Parser);
   NodeList nodeList;
@@ -126,7 +131,7 @@ NodeList Parser::parse(QStringList stopAt)
     Token token = nextToken();
     if (token.tokenType == TextToken)
     {
-      nodeList = d->extendNodeList(nodeList, new TextNode(token.content));
+      nodeList = d->extendNodeList(nodeList, new TextNode(token.content, parent));
     } else if (token.tokenType == VariableToken)
     {
       if (token.content.isEmpty())
@@ -146,7 +151,7 @@ NodeList Parser::parse(QStringList stopAt)
         emit error(filter.error(), "unknown filter error");
         return NodeList();
       }
-      nodeList = d->extendNodeList(nodeList, new VariableNode(filter));
+      nodeList = d->extendNodeList(nodeList, new VariableNode(filter, parent));
     } else if (token.tokenType == BlockToken)
     {
       QStringList tagContents = Grantlee::TextUtil::smartSplit(token.content);
@@ -178,8 +183,8 @@ NodeList Parser::parse(QStringList stopAt)
       }
 
       connect(nodeFactory, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
-      Node *n = nodeFactory->getNode(tagContents.join(" "), this);
-      
+      Node *n = nodeFactory->getNode(tagContents.join(" "), this, parent);
+
       if (!n)
       {
         return NodeList();

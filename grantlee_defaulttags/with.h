@@ -15,7 +15,7 @@ class WithNodeFactory : public AbstractNodeFactory
 public:
     WithNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p);
+    Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
 
 };
 
@@ -23,7 +23,7 @@ class WithNode : public Node
 {
   Q_OBJECT
 public:
-  WithNode(FilterExpression, const QString &name, NodeList nodeList );
+  WithNode(FilterExpression, const QString &name, NodeList nodeList, QObject *parent );
 
   QString render(Context *c);
 

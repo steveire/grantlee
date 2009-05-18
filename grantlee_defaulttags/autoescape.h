@@ -18,7 +18,7 @@ class AutoescapeNodeFactory : public AbstractNodeFactory
 public:
   AutoescapeNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
 };
 
 class AutoescapeNode : public Node
@@ -32,7 +32,7 @@ public:
     Off
   };
 
-  AutoescapeNode(int state, NodeList list);
+  AutoescapeNode(int state, NodeList list, QObject *parent);
 
   QString render(Context *c);
 

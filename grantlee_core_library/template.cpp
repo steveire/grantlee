@@ -26,9 +26,9 @@ typedef QListIterator<Node*> NodeListIterator;
 NodeList Template::compileString(const QString &str)
 {
   Lexer l(str);
-  Parser p( l.tokenize(), m_pluginDirs );
+  Parser p( l.tokenize(), m_pluginDirs, this );
   connect(&p, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
-  return p.parse();
+  return p.parse(this);
 }
 
 Template::Template( QStringList pluginDirs, QObject *parent ) : QObject(parent)

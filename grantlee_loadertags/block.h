@@ -22,7 +22,7 @@ class BlockNodeFactory : public AbstractNodeFactory
 public:
   BlockNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
 
 };
 
@@ -31,7 +31,7 @@ class BlockNode : public Node
   Q_OBJECT
   Q_PROPERTY(QString super READ getSuper)
 public:
-  BlockNode(const QString &blockName, const NodeList &list);
+  BlockNode(const QString &blockName, const NodeList &list, QObject *parent);
 
   QString blockName();
 

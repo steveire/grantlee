@@ -15,10 +15,10 @@ ForNodeFactory::ForNodeFactory()
 
 }
 
-Node* ForNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* ForNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
-  
+
   expr.takeAt(0);
   QList<QString> vars;
 
@@ -36,21 +36,22 @@ Node* ForNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   FilterExpression fe(expr.last(), p);
 
-  NodeList loopNodes = p->parse(QStringList() << "empty" << "endfor");
+  NodeList loopNodes = p->parse(QStringList() << "empty" << "endfor", parent);
   NodeList emptyNodes;
   if (p->nextToken().content.trimmed() == "empty")
   {
-    emptyNodes = p->parse(QStringList() << "endfor");
+    emptyNodes = p->parse(QStringList() << "endfor", parent);
     // skip past the endfor tag
     p->nextToken();
   }
 
-  return new ForNode(vars, fe, reversed, loopNodes, emptyNodes);
+  return new ForNode(vars, fe, reversed, loopNodes, emptyNodes, parent);
 }
 
 
 
-ForNode::ForNode(QList<QString> loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyNodes)
+ForNode::ForNode(QList<QString> loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyNodes, QObject *parent)
+  : Node(parent)
 {
   m_loopVars = loopVars;
   m_filterExpression = fe;

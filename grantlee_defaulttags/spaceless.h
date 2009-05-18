@@ -18,7 +18,7 @@ class SpacelessNodeFactory : public AbstractNodeFactory
 public:
   SpacelessNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
 
 };
 
@@ -26,7 +26,7 @@ class SpacelessNode : public Node
 {
   Q_OBJECT
 public:
-  SpacelessNode(NodeList nodeList);
+  SpacelessNode(NodeList nodeList, QObject *parent);
 
   QString render(Context *c);
 

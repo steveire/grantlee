@@ -18,14 +18,14 @@ class SsiNodeFactory : public AbstractNodeFactory
 public:
   SsiNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
 };
 
 class SsiNode : public Node
 {
   Q_OBJECT
 public:
-  SsiNode(const QString &filename, bool parse);
+  SsiNode(const QString &filename, bool parse, QObject *parent);
 
   QString render(Context *c);
 

@@ -15,7 +15,7 @@ RegroupNodeFactory::RegroupNodeFactory()
 
 }
 
-Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = tagContent.split(" ");
 
@@ -41,11 +41,11 @@ Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   QString name = expr.at(5);
 
-  return new RegroupNode(target, expression, name);
+  return new RegroupNode(target, expression, name, parent);
 }
 
-RegroupNode::RegroupNode(FilterExpression target, FilterExpression expression, const QString &varName)
-  : m_target(target), m_expression(expression), m_varName(varName)
+RegroupNode::RegroupNode(FilterExpression target, FilterExpression expression, const QString &varName, QObject *parent)
+  : Node(parent), m_target(target), m_expression(expression), m_varName(varName)
 {
 
 }

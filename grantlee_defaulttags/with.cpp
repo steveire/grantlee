@@ -15,7 +15,7 @@ WithNodeFactory::WithNodeFactory()
 
 }
 
-Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
 
@@ -28,14 +28,15 @@ Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p)
   FilterExpression fe(expr.at(1), p);
   QString name(expr.at(3));
 
-  NodeList nodeList = p->parse(QStringList() << "endwith");
+  NodeList nodeList = p->parse(QStringList() << "endwith", parent);
   p->nextToken();
 
-  return new WithNode(fe, name, nodeList);
+  return new WithNode(fe, name, nodeList, parent);
 }
 
 
-WithNode::WithNode(FilterExpression fe, const QString &name, NodeList list)
+WithNode::WithNode(FilterExpression fe, const QString &name, NodeList list, QObject *parent)
+  : Node(parent)
 {
   m_filterExpression = fe;
   m_name = name;

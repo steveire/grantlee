@@ -32,7 +32,8 @@ class DefaultFiltersLibrary : public QObject, public TagLibraryInterface
   Q_OBJECT
   Q_INTERFACES( Grantlee::TagLibraryInterface )
 public:
-  DefaultFiltersLibrary()
+  DefaultFiltersLibrary(QObject *parent = 0)
+    : QObject (parent)
   {
      m_filters.insert("upper", new UpperFilter());
      m_filters.insert("lower", new LowerFilter());

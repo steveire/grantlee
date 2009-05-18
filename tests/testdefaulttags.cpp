@@ -27,6 +27,7 @@ class TestDefaultTags : public QObject
 
 private slots:
   void initTestCase();
+  void cleanupTestCase();
 
   void testCommentTag_data();
   void testCommentTag() { doTest(); }
@@ -89,6 +90,11 @@ void TestDefaultTags::initTestCase()
 
 }
 
+void TestDefaultTags::cleanupTestCase()
+{
+  delete m_tl;
+}
+
 void TestDefaultTags::doTest()
 {
   QFETCH(QString, input);
@@ -96,7 +102,7 @@ void TestDefaultTags::doTest()
   QFETCH(QString, output);
   QFETCH(Grantlee::Error, error);
 
-  Template* t = m_tl->getTemplate();
+  Template *t = m_tl->getTemplate(this);
 
   QSignalSpy spy(t, SIGNAL(error(int, const QString &)));
   t->setContent(input);

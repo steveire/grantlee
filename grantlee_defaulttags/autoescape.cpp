@@ -18,7 +18,7 @@ AutoescapeNodeFactory::AutoescapeNodeFactory()
 
 }
 
-Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 
@@ -40,14 +40,14 @@ Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p)
     return 0;
   }
 
-  NodeList list = p->parse(QStringList() << "endautoescape" );
+  NodeList list = p->parse(QStringList() << "endautoescape", parent );
   p->nextToken();
 
-  return new AutoescapeNode(state, list);
+  return new AutoescapeNode(state, list, parent);
 }
 
-AutoescapeNode::AutoescapeNode(int state, NodeList list)
-  : m_state(state), m_list(list)
+AutoescapeNode::AutoescapeNode(int state, NodeList list, QObject *parent)
+  : Node(parent), m_state(state), m_list(list)
 {
 }
 

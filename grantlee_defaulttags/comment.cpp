@@ -16,16 +16,17 @@ CommentNodeFactory::CommentNodeFactory()
 
 }
 
-Node* CommentNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* CommentNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   Q_UNUSED(tagContent);
 
   p->skipPast("endcomment");
-  
-  return new CommentNode();
+
+  return new CommentNode(parent);
 }
 
-CommentNode::CommentNode()
+CommentNode::CommentNode(QObject *parent)
+  : Node(parent)
 {
 
 }

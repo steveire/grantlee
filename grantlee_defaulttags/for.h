@@ -18,7 +18,7 @@ class ForNodeFactory : public AbstractNodeFactory
   public:
     ForNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p);
+    Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
 
 };
 
@@ -33,7 +33,7 @@ public:
     IsReversed
   };
 
-  ForNode(QList<QString> loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyList = NodeList());
+  ForNode(QList<QString> loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyList, QObject *parent);
 
   QString render(Context *c);
 

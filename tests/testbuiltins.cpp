@@ -50,17 +50,23 @@ class SomeClass : public QObject
 
 public:
   SomeClass(QObject *parent = 0)
-    : QObject(parent)
+    : QObject(parent), m_other(new OtherClass(this))
   { }
 
   QString method() const
   { return "SomeClass::method"; }
 
   QVariant otherClass() const
-  { QObject *o = new OtherClass(); return QVariant::fromValue(o); }
+  {
+    return QVariant::fromValue(m_other);
+  }
 
   QString nonAccessibleMethod(const QString &str)
   { return str; }
+
+private:
+  QObject *m_other;
+
 };
 
 class TestBuiltinSyntax : public QObject
@@ -82,6 +88,8 @@ private slots:
   void testCommentSyntax_data();
   void testCommentSyntax() { doTest(); }
 
+  void cleanupTestCase();
+
 private:
 
   void doTest();
@@ -95,6 +103,11 @@ void TestBuiltinSyntax::initTestCase()
   m_tl = TemplateLoader::instance();
 
   m_tl->setPluginDirs(QStringList() << "/home/kde-devel/kde/lib/");
+}
+
+void TestBuiltinSyntax::cleanupTestCase()
+{
+  delete m_tl;
 }
 
 void TestBuiltinSyntax::doTest()

@@ -18,7 +18,7 @@ BlockNodeFactory::BlockNodeFactory()
 
 }
 
-Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
 
@@ -54,15 +54,15 @@ Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   p->setProperty(__loadedBlocks, loadedBlocksVariant);
 
-  NodeList list = p->parse(QStringList() << "endblock" << "endblock " + blockName );
+  NodeList list = p->parse(QStringList() << "endblock" << "endblock " + blockName, parent );
 
   p->nextToken();
 
-  return new BlockNode(blockName, list);
+  return new BlockNode(blockName, list, parent);
 }
 
-BlockNode::BlockNode(const QString &name, const NodeList &list)
-  : m_parent(0)
+BlockNode::BlockNode(const QString &name, const NodeList &list, QObject *parent)
+  : Node(parent), m_parent(0)
 {
 //   m_filterExpression = FilterExpression(name);
   m_name = name;
@@ -106,7 +106,7 @@ void BlockNode::addParent(NodeList nodeList)
 //     {
 //       l << block;
 //     }
-    m_parent = new BlockNode(m_name, nodeList);
+    m_parent = new BlockNode(m_name, nodeList, this->parent());
   }
 }
 

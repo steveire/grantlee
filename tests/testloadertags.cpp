@@ -28,6 +28,7 @@ class TestLoaderTags : public QObject
 
 private slots:
   void initTestCase();
+  void cleanupTestCase();
 
   void testIncludeTag_data();
   void testIncludeTag() {  doTest();  }
@@ -48,7 +49,11 @@ void TestLoaderTags::initTestCase()
   m_tl = TemplateLoader::instance();
 
   m_tl->setPluginDirs(QStringList() << "/home/kde-devel/kde/lib/");
+}
 
+void TestLoaderTags::cleanupTestCase()
+{
+  delete m_tl;
 }
 
 void TestLoaderTags::doTest()
@@ -232,7 +237,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Inheritance from local context without use of template loader
 
-  Template *t = m_tl->getTemplate();
+  Template *t = m_tl->getTemplate(this);
   t->setContent("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}");
   QObject *obj = t;
   dict.insert("context_template", QVariant::fromValue(obj));
@@ -242,10 +247,10 @@ void TestLoaderTags::testExtendsTag_data()
   dict.clear();
   QVariantList list;
 
-  Template *t1 = m_tl->getTemplate();
+  Template *t1 = m_tl->getTemplate(this);
   t1->setContent("Wrong");
   QObject *obj1 = t1;
-  Template *t2 = m_tl->getTemplate();
+  Template *t2 = m_tl->getTemplate(this);
   t2->setContent("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}");
   QObject *obj2 = t2;
   list << QVariant::fromValue(obj1);

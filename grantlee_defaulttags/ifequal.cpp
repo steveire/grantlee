@@ -16,7 +16,7 @@ IfEqualNodeFactory::IfEqualNodeFactory()
 
 }
 
-Node* IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool negate)
+Node* IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool negate, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
 
@@ -26,20 +26,21 @@ Node* IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool 
   Variable val2(expr.at(2));
 
   const QString endTag("end" + expr.at(0));
-  NodeList trueList = p->parse(QStringList() << "else" << endTag);
+  NodeList trueList = p->parse(QStringList() << "else" << endTag, parent);
   NodeList falseList;
   if (p->nextToken().content.trimmed() == "else")
   {
-    falseList = p->parse(QStringList() << endTag);
+    falseList = p->parse(QStringList() << endTag, parent);
     p->nextToken();
   } // else empty falseList.
 
-  return new IfEqualNode(val1 ,val2, trueList, falseList, negate);
+  return new IfEqualNode(val1 ,val2, trueList, falseList, negate, parent);
 }
 
-Node* IfEqualNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* IfEqualNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+
 {
-  return do_getNode(tagContent, p, false);
+  return do_getNode(tagContent, p, false, parent);
 }
 
 
@@ -48,12 +49,13 @@ IfNotEqualNodeFactory::IfNotEqualNodeFactory()
 
 }
 
-Node* IfNotEqualNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* IfNotEqualNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
-  return do_getNode(tagContent, p, true);
+  return do_getNode(tagContent, p, true, parent);
 }
 
-IfEqualNode::IfEqualNode(Variable val1, Variable val2, NodeList trueList, NodeList falseList, bool negate)
+IfEqualNode::IfEqualNode(Variable val1, Variable val2, NodeList trueList, NodeList falseList, bool negate, QObject *parent)
+  : Node(parent)
 {
   m_var1 = val1;
   m_var2 = val2;

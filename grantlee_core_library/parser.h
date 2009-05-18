@@ -33,10 +33,12 @@ class GRANTLEE_EXPORT Parser : public QObject
 {
   Q_OBJECT
 public:
-  Parser( QList<Token> tokenList, QStringList pluginDirs );
+  Parser( QList<Token> tokenList, QStringList pluginDirs, QObject *parent );
   ~Parser();
 
-  NodeList parse(QStringList stopAt = QStringList());
+  NodeList parse(QStringList stopAt, QObject *parent);
+
+  NodeList parse(QObject *parent);
 
   Filter *getFilter(const QString &name);
 

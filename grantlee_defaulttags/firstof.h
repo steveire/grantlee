@@ -14,7 +14,7 @@ class FirstOfNodeFactory : public AbstractNodeFactory
   public:
     FirstOfNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p);
+    Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
 
 };
 
@@ -22,7 +22,7 @@ class FirstOfNode : public Node
 {
   Q_OBJECT
 public:
-  FirstOfNode(QList<Variable> list);
+  FirstOfNode(QList<Variable> list, QObject *parent);
 
   QString render(Context *c);
 

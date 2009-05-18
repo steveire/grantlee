@@ -15,15 +15,15 @@ SpacelessNodeFactory::SpacelessNodeFactory()
 
 }
 
-Node* SpacelessNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* SpacelessNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
-  NodeList list = p->parse(QStringList() << "endspaceless");
+  NodeList list = p->parse(QStringList() << "endspaceless", parent);
   p->nextToken();
-  return new SpacelessNode(list);
+  return new SpacelessNode(list, parent);
 }
 
-SpacelessNode::SpacelessNode(NodeList nodeList)
-  : m_nodeList(nodeList)
+SpacelessNode::SpacelessNode(NodeList nodeList, QObject *parent)
+  : Node(parent), m_nodeList(nodeList)
 {
 
 }

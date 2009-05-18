@@ -17,16 +17,16 @@ IfChangedNodeFactory::IfChangedNodeFactory()
 
 }
 
-Node* IfChangedNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* IfChangedNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 
-  NodeList trueList = p->parse(QStringList() << "else" << "endifchanged" );
+  NodeList trueList = p->parse(QStringList() << "else" << "endifchanged", parent );
   NodeList falseList;
 
   if (p->nextToken().content.trimmed() == "else")
   {
-    falseList = p->parse(QStringList() << "endifchanged" );
+    falseList = p->parse(QStringList() << "endifchanged", parent );
     p->nextToken();
   }
 //   QList<Variable> vars;
@@ -34,11 +34,11 @@ Node* IfChangedNodeFactory::getNode(const QString &tagContent, Parser *p)
   expr.takeAt(0);
   QStringList vars = expr;
 
-  return new IfChangedNode(trueList, falseList, vars);
+  return new IfChangedNode(trueList, falseList, vars, parent);
 }
 
-IfChangedNode::IfChangedNode(NodeList trueList, NodeList falseList, QStringList vars)
-  : m_trueList(trueList), m_falseList(falseList)
+IfChangedNode::IfChangedNode(NodeList trueList, NodeList falseList, QStringList vars, QObject *parent)
+  : Node(parent), m_trueList(trueList), m_falseList(falseList)
 {
   m_lastSeen = QVariant();
   m_id = QString::number(reinterpret_cast<qint64>(this));

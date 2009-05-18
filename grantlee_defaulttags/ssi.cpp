@@ -18,7 +18,7 @@ SsiNodeFactory::SsiNodeFactory()
 
 }
 
-Node* SsiNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* SsiNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 
@@ -42,11 +42,11 @@ Node* SsiNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   QString filename = expr.at(1);
 
-  return new SsiNode(filename, parse);
+  return new SsiNode(filename, parse, parent);
 }
 
-SsiNode::SsiNode(const QString &filename, bool parse)
-  : m_filename(filename), m_parse(parse)
+SsiNode::SsiNode(const QString &filename, bool parse, QObject *parent)
+  : Node(parent), m_filename(filename), m_parse(parse)
 {
 }
 

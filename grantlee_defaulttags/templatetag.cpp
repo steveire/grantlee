@@ -27,7 +27,7 @@ TemplateTagNodeFactory::TemplateTagNodeFactory()
 }
 
 
-Node* TemplateTagNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* TemplateTagNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
   expr.takeAt(0);
@@ -41,15 +41,16 @@ Node* TemplateTagNodeFactory::getNode(const QString &tagContent, Parser *p)
 
   if (!TemplateTagNode::isKeyword(name))
   {
-    error(TagSyntaxError, "Not a template tag");    
+    error(TagSyntaxError, "Not a template tag");
     return 0;
   }
 
-  return new TemplateTagNode(name);
+  return new TemplateTagNode(name, parent);
 }
 
 
-TemplateTagNode::TemplateTagNode(const QString &name)
+TemplateTagNode::TemplateTagNode(const QString &name, QObject *parent)
+  : Node(parent)
 {
   m_name = name;
 }

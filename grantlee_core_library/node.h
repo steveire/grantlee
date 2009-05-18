@@ -77,7 +77,7 @@ public:
   /**
   Advances the parser as needed for block style tags.
   */
-  virtual Node* getNode(const QString &tagContent, Parser *p) = 0;
+  virtual Node* getNode(const QString &tagContent, Parser *p, QObject *parent) = 0;
 
 protected:
   QStringList smartSplit(const QString &str);

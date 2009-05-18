@@ -25,7 +25,7 @@ ExtendsNodeFactory::ExtendsNodeFactory()
 
 }
 
-Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
 
@@ -42,13 +42,14 @@ Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p)
     parentName = QString();
   }
 
-  NodeList nodeList = p->parse();
+  NodeList nodeList = p->parse(parent);
 
-  return new ExtendsNode(nodeList, parentName, fe);
+  return new ExtendsNode(nodeList, parentName, fe, parent);
 }
 
-ExtendsNode::ExtendsNode(NodeList list, const QString &name, FilterExpression fe)
-  : m_filterExpression(fe),
+ExtendsNode::ExtendsNode(NodeList list, const QString &name, FilterExpression fe, QObject *parent)
+  : Node(parent),
+    m_filterExpression(fe),
     m_name(name)
 {
   m_list = list;
@@ -75,7 +76,7 @@ Template *ExtendsNode::getParent(Context *c)
 
   TemplateLoader *loader = TemplateLoader::instance();
 
-  Template* t = loader->getTemplate();
+  Template* t = loader->getTemplate(this);
 
   connect(t, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
 

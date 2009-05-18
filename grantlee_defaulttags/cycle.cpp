@@ -16,7 +16,7 @@ CycleNodeFactory::CycleNodeFactory()
 
 }
 
-Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
 
@@ -75,7 +75,7 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p)
     QString name = expr.at(exprSize - 1);
     QStringList list = expr.mid(1, exprSize - 3);
 
-    Node *node = new CycleNode(getVariableList(list), name);
+    Node *node = new CycleNode(getVariableList(list), name, parent);
     QVariant mapVariant = p->property(_namedCycleNodes);
     QVariantMap map;
     if (mapVariant.isValid() && mapVariant.type() == QVariant::Map)
@@ -89,12 +89,12 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p)
     return node;
   } else {
     QStringList list = expr.mid(1, exprSize - 1);
-    return new CycleNode(getVariableList(list));
+    return new CycleNode(getVariableList(list), QString(), parent);
   }
 }
 
-CycleNode::CycleNode(QList<Variable> list, const QString &name)
-  : m_variableIterator(list)
+CycleNode::CycleNode(QList<Variable> list, const QString &name, QObject *parent)
+  : Node(parent), m_variableIterator(list)
 {
   m_name = name;
 }

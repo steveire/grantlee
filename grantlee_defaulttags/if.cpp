@@ -17,7 +17,7 @@ IfNodeFactory::IfNodeFactory()
 }
 
 
-Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
   expr.takeAt(0);
@@ -74,21 +74,22 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p)
   }
 
 
-  NodeList trueList = p->parse(QStringList() << "else" << "endif");
+  NodeList trueList = p->parse(QStringList() << "else" << "endif", parent);
   NodeList falseList;
   if (p->nextToken().content.trimmed() == "else")
   {
-    falseList = p->parse(QStringList() << "endif");
+    falseList = p->parse(QStringList() << "endif", parent);
     // skip past the endif tag
     p->nextToken();
   } // else empty falseList.
 
-  return new IfNode(boolVars, trueList, falseList, linkType);
+  return new IfNode(boolVars, trueList, falseList, linkType, parent);
 }
 
 
-IfNode::IfNode(QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType)
-              : m_boolVars(boolVars),
+IfNode::IfNode(QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType, QObject *parent)
+              : Node(parent),
+                m_boolVars(boolVars),
                 m_trueList(trueList),
                 m_falseList(falseList),
                 m_linkType(linkType)

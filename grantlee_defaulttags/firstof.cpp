@@ -15,7 +15,7 @@ FirstOfNodeFactory::FirstOfNodeFactory()
 {
 }
 
-Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p)
+Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
 {
   QStringList expr = smartSplit(tagContent);
 
@@ -34,11 +34,12 @@ Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p)
     list << v;
   }
 
-  return new FirstOfNode(list);
+  return new FirstOfNode(list, parent);
 }
 
 
-FirstOfNode::FirstOfNode(QList<Variable> list)
+FirstOfNode::FirstOfNode(QList<Variable> list, QObject *parent)
+  : Node(parent)
 {
   m_variableList = list;
 }
