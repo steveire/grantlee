@@ -8,6 +8,7 @@
 
 #include "parser.h"
 #include "template.h"
+#include "grantlee.h"
 
 #include <QDebug>
 
