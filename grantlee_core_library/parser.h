@@ -12,9 +12,6 @@
 
 namespace Grantlee
 {
-class AbstractNodeFactory;
-
-class TagLibraryInterface;
 class Filter;
 }
 
@@ -46,10 +43,6 @@ public:
   void emitError(int errorNumber, const QString &message);
 
 protected:
-  void addTag(QObject *);
-  void getBuiltInLibrary();
-  void getDefaultLibrary();
-
   void prependToken(Token token);
 
 signals:
