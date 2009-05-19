@@ -15,10 +15,10 @@ namespace Grantlee
 class Filter;
 }
 
-class ParserPrivate;
-
 namespace Grantlee
 {
+
+class ParserPrivate;
 
 class GRANTLEE_EXPORT Parser : public QObject
 {

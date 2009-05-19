@@ -8,19 +8,25 @@
 
 #include "interfaces/taglibraryinterface.h"
 
-#include <QDebug>
-
 #include "grantlee.h"
 #include "text_util.h"
 #include "filter.h"
 
+
+#include <QDebug>
+
 using namespace Grantlee;
+
+namespace Grantlee
+{
 
 class ParserPrivate
 {
 public:
-  ParserPrivate(Parser *parser)
-    : q_ptr(parser)
+  ParserPrivate(Parser *parser, QList<Token> tokenList, QStringList pluginDirs)
+    : q_ptr(parser),
+    m_tokenList(tokenList),
+    m_pluginDirs(pluginDirs)
   {
 
   }
@@ -40,17 +46,16 @@ public:
   Parser *q_ptr;
 };
 
+}
+
 Parser::Parser(QList<Token> tokenList, QStringList pluginDirs, QObject *parent)
-  : QObject(parent), d_ptr(new ParserPrivate(this))
+  : QObject(parent), d_ptr(new ParserPrivate(this, tokenList, pluginDirs))
 {
   Q_D(Parser);
-  d->m_tokenList = tokenList;
-  d->m_pluginDirs = pluginDirs;
 
   loadLib("grantlee_defaulttags_library");
   loadLib("grantlee_loadertags_library");
   loadLib("grantlee_defaultfilters_library");
-
 }
 
 Parser::~Parser()
