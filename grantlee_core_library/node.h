@@ -10,6 +10,8 @@
 #include <QStringList>
 #include "filterexpression.h"
 
+#include "grantlee.h"
+
 #include "grantlee_export.h"
 
 // The two sides of template tags:
