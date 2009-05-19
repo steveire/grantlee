@@ -8,19 +8,7 @@
 #include <QList>
 #include <QString>
 
-enum TokenType
-{
-  TextToken,
-  VariableToken,
-  BlockToken,
-  CommentToken
-};
-
-struct Token
-{
-  int tokenType;
-  QString content;
-};
+#include "token.h"
 
 namespace Grantlee
 {

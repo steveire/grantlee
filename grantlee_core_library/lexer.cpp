@@ -3,7 +3,7 @@
 */
 
 
-#include "lexer.h"
+#include "lexer_p.h"
 
 #include <QRegExp>
 #include <QDebug>

@@ -5,15 +5,10 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <QList>
-#include <QSet>
 #include <QStringList>
 
-// defines Token;
-#include "lexer.h"
-
+#include "token.h"
 #include "node.h"
-#include "grantlee.h"
 
 namespace Grantlee
 {
@@ -24,7 +19,6 @@ class Filter;
 }
 
 class ParserPrivate;
-
 
 namespace Grantlee
 {
@@ -51,14 +45,12 @@ public:
 
   void emitError(int errorNumber, const QString &message);
 
-
 protected:
   void addTag(QObject *);
   void getBuiltInLibrary();
   void getDefaultLibrary();
 
   void prependToken(Token token);
-
 
 signals:
   void error(int type, const QString &message);

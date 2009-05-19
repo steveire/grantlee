@@ -9,7 +9,7 @@
 #include <QDir>
 #include <QFile>
 
-#include "lexer.h"
+#include "lexer_p.h"
 #include "node.h"
 #include "parser.h"
 
