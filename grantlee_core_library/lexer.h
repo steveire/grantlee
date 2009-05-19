@@ -22,8 +22,6 @@ struct Token
   QString content;
 };
 
-class LexerPrivate;
-
 namespace Grantlee
 {
 
@@ -35,12 +33,16 @@ public:
 
   QList<Token> tokenize();
 
-// protected:
-//   Token createToken( const QString &fragment, bool inTag);
-
 private:
-  Q_DECLARE_PRIVATE(Lexer);
-  LexerPrivate *d_ptr;
+  enum State
+  {
+    InTag,
+    NotInTag
+  };
+
+  Token createToken( const QString &fragment, int inTag);
+
+  QString m_templateString;
 
 };
 
