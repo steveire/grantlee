@@ -155,13 +155,13 @@ NodeList Parser::parse(QStringList stopAt, QObject *parent)
         emit error(EmptyVariableError, message);
         return NodeList();
       }
-      FilterExpression filter(token.content, this);
-      if (filter.error() != NoError)
+      FilterExpression filterExpression(token.content, this);
+      if (filterExpression.error() != NoError)
       {
-        emit error(filter.error(), "unknown filter error");
+        emit error(filterExpression.error(), "unknown filter error");
         return NodeList();
       }
-      nodeList = d->extendNodeList(nodeList, new VariableNode(filter, parent));
+      nodeList = d->extendNodeList(nodeList, new VariableNode(filterExpression, parent));
     } else if (token.tokenType == BlockToken)
     {
       QStringList tagContents = Grantlee::TextUtil::smartSplit(token.content);
