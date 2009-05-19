@@ -63,18 +63,20 @@ Token Lexer::createToken( const QString &fragment, int inTag)
   } else {
     int startTagSize = 2;
     int endTagSize = 2;
+    QString content = fragment.mid(startTagSize, fragment.size() - startTagSize - endTagSize );
     if (fragment.startsWith(VARIABLE_TAG_START))
     {
       token.tokenType = VariableToken;
+      token.content = content.trimmed();
     } else if (fragment.startsWith(BLOCK_TAG_START))
     {
       token.tokenType = BlockToken;
+      token.content = content.trimmed();
     } else if (fragment.startsWith(COMMENT_TAG_START))
     {
       token.tokenType = CommentToken;
       return token;
     }
-    token.content = fragment.mid(startTagSize, fragment.size() - startTagSize - endTagSize );
   }
   return token;
 }
