@@ -164,7 +164,14 @@ NodeList Parser::parse(QStringList stopAt, QObject *parent)
       nodeList = d->extendNodeList(nodeList, new VariableNode(filterExpression, parent));
     } else if (token.tokenType == BlockToken)
     {
-      QStringList tagContents = Grantlee::TextUtil::smartSplit(token.content);
+      if (stopAt.contains(token.content))
+      {
+        // put the token back.
+        prependToken(token);
+        return nodeList;
+      }
+
+      QStringList tagContents = token.content.split(" ");
       if (tagContents.size() == 0)
       {
         QString message;
@@ -175,14 +182,7 @@ NodeList Parser::parse(QStringList stopAt, QObject *parent)
         emit error(EmptyBlockTagError, message);
         return NodeList();
       }
-      // TODO Should this be taken out, or should it be sent to the node?
       QString command = tagContents.at(0);
-      if (stopAt.contains(command))
-      {
-        // put the token back.
-        prependToken(token);
-        return nodeList;
-      }
       AbstractNodeFactory *nodeFactory = d->m_nodeFactories[command];
 
       // unknown tag.
@@ -193,7 +193,9 @@ NodeList Parser::parse(QStringList stopAt, QObject *parent)
       }
 
       connect(nodeFactory, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
-      Node *n = nodeFactory->getNode(tagContents.join(" "), this, parent);
+
+      // TODO: Make getNode take a Token instead?
+      Node *n = nodeFactory->getNode(token.content, this, parent);
 
       if (!n)
       {
