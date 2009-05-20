@@ -38,7 +38,6 @@ public:
 
   int error() const;
 
-//   QList<QPair<QString, QString> > filters();
   Variable variable() const;
 
   QVariant resolve(Context *c) const;
