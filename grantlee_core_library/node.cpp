@@ -3,7 +3,6 @@
 */
 
 #include "node.h"
-#include "text_util.h"
 
 #include <QDebug>
 
@@ -16,7 +15,16 @@ Node::Node(QObject *parent) : QObject(parent)
 
 Node::~Node()
 {
+}
 
+NodeList::NodeList()
+  : m_containsNonText(false)
+{
+
+}
+
+NodeList::~NodeList()
+{
 }
 
 QString NodeList::render(Context *c)
@@ -57,7 +65,18 @@ QList< Variable > AbstractNodeFactory::getVariableList(QStringList list)
 
 QStringList AbstractNodeFactory::smartSplit(const QString &str)
 {
-  return Grantlee::TextUtil::smartSplit(str);
+  QRegExp r("(\"(?:[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\"|\\\'(?:[^\\\'\\\\]*(?:\\\\.[^\\\'\\\\]*)*)\\\'|[^\\s]+)");
+
+  QStringList l;
+  int count = 0;
+  int pos = 0;
+  while ((pos = r.indexIn(str, pos)) != -1) {
+      ++count;
+      pos += r.matchedLength();
+      l << r.capturedTexts().at(0);
+  }
+
+  return l;
 }
 
 VariableNode::VariableNode(const FilterExpression &fe, QObject *parent)

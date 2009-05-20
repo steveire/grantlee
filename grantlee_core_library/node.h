@@ -14,10 +14,6 @@
 
 #include "grantlee_export.h"
 
-// The two sides of template tags:
-// Tag and Node. The Tag object creates a Node from a tag.
-// The Node object knows how to render itself given the arguments to the tag.
-
 namespace Grantlee
 {
 
@@ -38,15 +34,11 @@ signals:
 
 };
 
-
 class GRANTLEE_EXPORT NodeList : public QList<Node*>
 {
 public:
-  NodeList()
-  : m_containsNonText(false)
-  {
-
-  }
+  NodeList();
+  ~NodeList();
 
   //append changes m_containsNonText?
 
@@ -54,7 +46,6 @@ public:
 
 private:
   bool m_containsNonText;
-  QStringList m_templateSearchDirs;
 };
 
 
@@ -121,12 +112,6 @@ private:
   FilterExpression m_filterExpression;
 
 };
-
-// class ErrorNode : pubic Node
-// {
-//
-// };
-
 
 // TODO: figure out if I can use the same QMetaType tricks described in qt:qtscript for QPoint.
 // Define a macro to wrap non-qobject cpp classes.
