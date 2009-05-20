@@ -14,9 +14,9 @@
 
 using namespace Grantlee;
 
+
 Variable::Variable()
 {
-
 }
 
 Variable::Variable(const QString &var)
@@ -51,6 +51,11 @@ Variable::Variable(const QString &var)
       m_lookups = localVar.split(".");
     }
   }
+}
+
+QString Variable::toString() const
+{
+  return m_varString;
 }
 
 bool Variable::isTrue(Context *c) const

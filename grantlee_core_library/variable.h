@@ -6,8 +6,13 @@
 #define VARIABLE_H
 
 #include <QVariant>
+#include <QStringList>
 
-#include "context.h"
+
+namespace Grantlee
+{
+class Context;
+}
 
 namespace Grantlee
 {
@@ -18,7 +23,7 @@ public:
   Variable();
   Variable(const QString &var);
 
-  QString toString() const { return m_varString; }
+  QString toString() const;
   bool isTrue(Context *c) const;
 
   QVariant resolve(Context *c) const;
