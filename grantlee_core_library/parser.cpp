@@ -9,7 +9,6 @@
 #include "interfaces/taglibraryinterface.h"
 
 #include "grantlee.h"
-#include "text_util.h"
 #include "filter.h"
 
 
