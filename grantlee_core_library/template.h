@@ -5,11 +5,15 @@
 #ifndef TEMPLATE_H
 #define TEMPLATE_H
 
-#include "context.h"
+#include <QStringList>
 
 #include "node.h"
-
 #include "grantlee_export.h"
+
+namespace Grantlee
+{
+class Context;
+}
 
 namespace Grantlee
 {

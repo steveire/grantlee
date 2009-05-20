@@ -12,6 +12,7 @@
 #include "lexer_p.h"
 #include "node.h"
 #include "parser.h"
+#include "context.h"
 
 #include <QDebug>
 
