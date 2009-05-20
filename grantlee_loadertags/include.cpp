@@ -17,7 +17,7 @@ IncludeNodeFactory::IncludeNodeFactory()
 
 }
 
-Node* IncludeNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* IncludeNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = smartSplit(tagContent);
 

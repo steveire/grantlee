@@ -22,13 +22,13 @@ class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
 public:
-  Template(QStringList dirs, QObject *parent = 0  );
+  Template(const QStringList &dirs, QObject *parent = 0  );
 
   void setContent(const QString &templateString);
 
   QString render( Context *c );
 
-  NodeList nodeList();
+  NodeList nodeList() const;
 
   // TODO: Remove this.  ??
   void setNodeList(const NodeList &list);
@@ -55,15 +55,13 @@ public:
 
   void injectTemplate(const QString &name, const QString &content);
 
-  Template* getTemplate(QObject *parent = 0);
+  Template* getTemplate(QObject *parent = 0) const;
 
-  bool loadFromString(Template *t, const QString &content);
-
-  bool loadByName(Template *t, const QString &name );
+  bool loadByName(Template *t, const QString &name ) const;
 
 private:
   TemplateLoader();
-  bool loadFromFile(Template* t, const QString &fileName);
+  bool loadFromFile(Template* t, const QString &fileName) const;
 
   QString m_themeName;
   QStringList m_templateDirs;

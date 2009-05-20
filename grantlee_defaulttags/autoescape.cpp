@@ -18,7 +18,7 @@ AutoescapeNodeFactory::AutoescapeNodeFactory()
 
 }
 
-Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 

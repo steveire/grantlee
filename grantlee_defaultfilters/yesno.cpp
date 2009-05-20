@@ -9,7 +9,7 @@ YesNoFilter::YesNoFilter(QObject* parent): Filter(parent)
 
 }
 
-QString YesNoFilter::doFilter(const QVariant& input, const QString &argument)
+QString YesNoFilter::doFilter(const QVariant& input, const QString &argument) const
 {
   QString arg = argument;
   QString yes;

@@ -15,7 +15,7 @@ SpacelessNodeFactory::SpacelessNodeFactory()
 
 }
 
-Node* SpacelessNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* SpacelessNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   NodeList list = p->parse(QStringList() << "endspaceless", parent);
   p->nextToken();

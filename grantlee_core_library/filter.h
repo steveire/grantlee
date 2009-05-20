@@ -27,7 +27,7 @@ public:
    * Reimplement to filter @p input.
    * @returns The input string filtered.
    */
-  virtual QString doFilter(const QVariant &input, const QString &argument = QString()) = 0;
+  virtual QString doFilter(const QVariant &input, const QString &argument = QString()) const = 0;
 
 signals:
   void error(int, const QString &);

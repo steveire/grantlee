@@ -15,7 +15,7 @@ LoadNodeFactory::LoadNodeFactory()
 {
 }
 
-Node* LoadNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* LoadNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 

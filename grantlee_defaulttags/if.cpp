@@ -17,7 +17,7 @@ IfNodeFactory::IfNodeFactory()
 }
 
 
-Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = smartSplit(tagContent);
   expr.takeAt(0);

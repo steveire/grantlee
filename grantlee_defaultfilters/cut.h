@@ -15,7 +15,7 @@ class GRANTLEE_EXPORT CutFilter : public Filter
 public:
   CutFilter(QObject *parent = 0);
 
-  QString doFilter(const QVariant &input, const QString &argument = QString());
+  QString doFilter(const QVariant &input, const QString &argument = QString()) const;
 
 };
 

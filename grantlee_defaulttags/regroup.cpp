@@ -15,7 +15,7 @@ RegroupNodeFactory::RegroupNodeFactory()
 
 }
 
-Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = tagContent.split(" ");
 

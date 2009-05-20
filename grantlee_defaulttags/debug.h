@@ -15,7 +15,7 @@ class DebugNodeFactory : public AbstractNodeFactory
 public:
     DebugNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
+    Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
 
 };
 

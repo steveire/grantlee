@@ -27,6 +27,7 @@ public:
   Node(QObject *parent = 0);
   virtual ~Node();
 
+  // This can't be const because CycleNode needs to change on each render.
   virtual QString render(Context *c) = 0;
 
 signals:
@@ -70,14 +71,14 @@ public:
   /**
   Advances the parser as needed for block style tags.
   */
-  virtual Node* getNode(const QString &tagContent, Parser *p, QObject *parent) = 0;
+  virtual Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const = 0;
 
 protected:
-  QStringList smartSplit(const QString &str);
-  QList<Variable> getVariableList(QStringList list);
+  QStringList smartSplit(const QString &str) const;
+  QList<Variable> getVariableList(const QStringList &list) const;
 
 signals:
-  void error(int type, const QString &message);
+  void error(int type, const QString &message) const;
 
 };
 

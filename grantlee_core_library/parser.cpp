@@ -22,7 +22,7 @@ namespace Grantlee
 class ParserPrivate
 {
 public:
-  ParserPrivate(Parser *parser, QList<Token> tokenList, QStringList pluginDirs)
+  ParserPrivate(Parser *parser, const QList<Token> &tokenList, const QStringList &pluginDirs)
     : q_ptr(parser),
     m_tokenList(tokenList),
     m_pluginDirs(pluginDirs)
@@ -47,7 +47,7 @@ public:
 
 }
 
-Parser::Parser(QList<Token> tokenList, QStringList pluginDirs, QObject *parent)
+Parser::Parser(const QList<Token> &tokenList, const QStringList &pluginDirs, QObject *parent)
   : QObject(parent), d_ptr(new ParserPrivate(this, tokenList, pluginDirs))
 {
   Q_D(Parser);
@@ -114,9 +114,9 @@ void Parser::skipPast(const QString &tag)
   // Error. Unclosed tag
 }
 
-Filter *Parser::getFilter(const QString &name)
+Filter *Parser::getFilter(const QString &name) const
 {
-  Q_D(Parser);
+  Q_D(const Parser);
   return d->m_filters.value(name);
 }
 
@@ -130,7 +130,7 @@ NodeList Parser::parse(QObject *parent)
   return parse(QStringList(), parent);
 }
 
-NodeList Parser::parse(QStringList stopAt, QObject *parent)
+NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
 {
   Q_D(Parser);
   NodeList nodeList;
@@ -215,9 +215,9 @@ NodeList Parser::parse(QStringList stopAt, QObject *parent)
 
 }
 
-bool Parser::hasNextToken()
+bool Parser::hasNextToken() const
 {
-  Q_D(Parser);
+  Q_D(const Parser);
   return d->m_tokenList.size() > 0;
 }
 
@@ -227,7 +227,7 @@ Token Parser::nextToken()
   return d->m_tokenList.takeAt(0);
 }
 
-void Parser::prependToken(Token token)
+void Parser::prependToken(const Token &token)
 {
   Q_D(Parser);
   d->m_tokenList.prepend(token);

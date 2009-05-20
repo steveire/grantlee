@@ -19,7 +19,7 @@ public:
   Lexer(const QString &templateString);
   ~Lexer();
 
-  QList<Token> tokenize();
+  QList<Token> tokenize() const;
 
 private:
   enum State
@@ -28,7 +28,7 @@ private:
     NotInTag
   };
 
-  Token createToken( const QString &fragment, int inTag);
+  Token createToken( const QString &fragment, int inTag) const;
 
   QString m_templateString;
 

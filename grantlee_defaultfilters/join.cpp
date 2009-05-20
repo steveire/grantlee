@@ -6,7 +6,7 @@ JoinFilter::JoinFilter(QObject* parent): Filter(parent)
 
 }
 
-QString JoinFilter::doFilter(const QVariant& input, const QString &argument)
+QString JoinFilter::doFilter(const QVariant& input, const QString &argument) const
 {
   QVariantList varList = input.toList();
   QListIterator<QVariant> i(varList);

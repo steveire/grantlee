@@ -12,7 +12,7 @@ class GRANTLEE_EXPORT TruncateWordsFilter : public Filter
 public:
   TruncateWordsFilter(QObject *parent = 0);
 
-  QString doFilter(const QVariant &input, const QString &argument = QString());
+  QString doFilter(const QVariant &input, const QString &argument = QString()) const;
 
 };
 

@@ -29,7 +29,7 @@ public:
   QVariant resolve(Context *c) const;
 
 protected:
-  QVariant resolvePart( QVariant, const QString &s ) const;
+  QVariant resolvePart( const QVariant &variant, const QString &s ) const;
 
 private:
   QString m_varString;

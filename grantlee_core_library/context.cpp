@@ -12,7 +12,7 @@ namespace Grantlee
 {
 class ContextPrivate
 {
-  ContextPrivate(Context *context, QVariantHash variantHash)
+  ContextPrivate(Context *context, const QVariantHash &variantHash)
     : q_ptr(context)
   {
     m_variantHashStack.append(variantHash);
@@ -27,7 +27,7 @@ class ContextPrivate
 
 }
 
-Context::Context(QVariantHash variantHash)
+Context::Context(const QVariantHash &variantHash)
   : d_ptr(new ContextPrivate(this, variantHash))
 {
 }
@@ -68,16 +68,16 @@ void Context::pop()
   d->m_variantHashStack.removeFirst();
 }
 
-void Context::insert(const QString &name, QVariant var)
+void Context::insert(const QString &name, const QVariant &variant)
 {
   Q_D(Context);
 
-  d->m_variantHashStack[0].insert(name, var);
+  d->m_variantHashStack[0].insert(name, variant);
 }
 
-QHash<QString, QVariant> Context::stackHash(int depth)
+QHash<QString, QVariant> Context::stackHash(int depth) const
 {
-  Q_D(Context);
+  Q_D(const Context);
 
   return d->m_variantHashStack.value(depth);
 }

@@ -17,7 +17,7 @@ IfChangedNodeFactory::IfChangedNodeFactory()
 
 }
 
-Node* IfChangedNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* IfChangedNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 

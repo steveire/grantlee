@@ -6,7 +6,7 @@ DefaultIfNoneFilter::DefaultIfNoneFilter(QObject* parent): Filter(parent)
 
 }
 
-QString DefaultIfNoneFilter::doFilter(const QVariant& input, const QString &argument)
+QString DefaultIfNoneFilter::doFilter(const QVariant& input, const QString &argument) const
 {
   if (!input.isValid())
     return argument;

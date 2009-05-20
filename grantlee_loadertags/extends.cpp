@@ -25,7 +25,7 @@ ExtendsNodeFactory::ExtendsNodeFactory()
 
 }
 
-Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = smartSplit(tagContent);
 

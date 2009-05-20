@@ -18,7 +18,7 @@ SsiNodeFactory::SsiNodeFactory()
 
 }
 
-Node* SsiNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* SsiNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 

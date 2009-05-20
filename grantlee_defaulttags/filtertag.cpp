@@ -8,7 +8,7 @@ FilterNodeFactory::FilterNodeFactory()
 
 }
 
-Grantlee::Node* FilterNodeFactory::getNode(const QString& tagContent, Grantlee::Parser* p, QObject *parent)
+Grantlee::Node* FilterNodeFactory::getNode(const QString& tagContent, Grantlee::Parser* p, QObject *parent) const
 {
   QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
 

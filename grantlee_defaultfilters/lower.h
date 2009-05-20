@@ -12,7 +12,7 @@ class LowerFilter : public Filter
 public:
   LowerFilter(QObject *parent = 0);
 
-  QString doFilter(const QVariant &input, const QString &argument = QString());
+  QString doFilter(const QVariant &input, const QString &argument = QString()) const;
 
 };
 

@@ -11,7 +11,7 @@ class FilterNodeFactory : public AbstractNodeFactory
   public:
     FilterNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
+    Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
 
 };
 

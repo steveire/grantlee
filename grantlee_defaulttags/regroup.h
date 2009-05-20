@@ -18,7 +18,7 @@ class RegroupNodeFactory : public AbstractNodeFactory
 public:
   RegroupNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
 
 };
 

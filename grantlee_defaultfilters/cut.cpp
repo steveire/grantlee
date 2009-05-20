@@ -9,7 +9,7 @@ CutFilter::CutFilter(QObject* parent): Filter(parent)
 
 }
 
-QString CutFilter::doFilter(const QVariant& input, const QString &argument)
+QString CutFilter::doFilter(const QVariant& input, const QString &argument) const
 {
   QString retString = input.toString();
 

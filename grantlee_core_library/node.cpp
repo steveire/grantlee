@@ -51,7 +51,7 @@ AbstractNodeFactory::~AbstractNodeFactory()
 
 }
 
-QList< Variable > AbstractNodeFactory::getVariableList(QStringList list)
+QList< Variable > AbstractNodeFactory::getVariableList(const QStringList &list) const
 {
   QList<Variable> variables;
   QListIterator<QString> it(list);
@@ -63,7 +63,7 @@ QList< Variable > AbstractNodeFactory::getVariableList(QStringList list)
   return variables;
 }
 
-QStringList AbstractNodeFactory::smartSplit(const QString &str)
+QStringList AbstractNodeFactory::smartSplit(const QString &str) const
 {
   QRegExp r("(\"(?:[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\"|\\\'(?:[^\\\'\\\\]*(?:\\\\.[^\\\'\\\\]*)*)\\\'|[^\\s]+)");
 

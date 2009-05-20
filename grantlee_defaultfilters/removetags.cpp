@@ -10,7 +10,7 @@ RemoveTagsFilter::RemoveTagsFilter(QObject* parent): Filter(parent)
 }
 
 
-QString RemoveTagsFilter::doFilter(const QVariant& input, const QString &argument)
+QString RemoveTagsFilter::doFilter(const QVariant& input, const QString &argument) const
 {
   QStringList tags = argument.split(" ");
   QString tagRe = QString("(%1)").arg(tags.join("|"));

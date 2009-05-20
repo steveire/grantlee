@@ -32,7 +32,7 @@ NodeList Template::compileString(const QString &str)
   return p.parse(this);
 }
 
-Template::Template( QStringList pluginDirs, QObject *parent ) : QObject(parent)
+Template::Template( const QStringList &pluginDirs, QObject *parent ) : QObject(parent)
 {
   m_pluginDirs = pluginDirs;
 }
@@ -54,7 +54,7 @@ QString Template::render(Context *c)
   return ret;
 }
 
-NodeList Template::nodeList()
+NodeList Template::nodeList() const
 {
   return m_nodelist;
 }
@@ -93,12 +93,12 @@ void TemplateLoader::setTheme(const QString &themeName)
   m_themeName = themeName;
 }
 
-Template* TemplateLoader::getTemplate(QObject *parent)
+Template* TemplateLoader::getTemplate(QObject *parent) const
 {
   return new Template(m_pluginDirs, parent);
 }
 
-bool TemplateLoader::loadFromFile(Template *t, const QString &fileName)
+bool TemplateLoader::loadFromFile(Template *t, const QString &fileName) const
 {
   int i = 0;
   QFile file;
@@ -132,7 +132,7 @@ void TemplateLoader::injectTemplate(const QString &name, const QString &content)
   m_namedTemplates.insert(name, content);
 }
 
-bool TemplateLoader::loadByName(Template *t, const QString &name)
+bool TemplateLoader::loadByName(Template *t, const QString &name) const
 {
   if (m_namedTemplates.contains(name))
   {

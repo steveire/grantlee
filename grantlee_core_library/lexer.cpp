@@ -33,7 +33,7 @@ Lexer::~Lexer()
 }
 
 
-QList<Token> Lexer::tokenize()
+QList<Token> Lexer::tokenize() const
 {
   tagRe.setMinimal(true); // Can't use '?', eg '.*?', Have to setMinimal instead
 
@@ -53,7 +53,7 @@ QList<Token> Lexer::tokenize()
 
 }
 
-Token Lexer::createToken( const QString &fragment, int inTag)
+Token Lexer::createToken( const QString &fragment, int inTag) const
 {
   Token token;
   if (inTag == NotInTag)

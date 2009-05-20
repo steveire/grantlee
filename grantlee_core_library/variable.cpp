@@ -147,7 +147,7 @@ QVariant Variable::resolve(Context *c) const
   return var;
 }
 
-QVariant Variable::resolvePart( QVariant var, const QString &nextPart ) const
+QVariant Variable::resolvePart( const QVariant &var, const QString &nextPart ) const
 {
   QVariant returnVar;
 

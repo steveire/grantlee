@@ -16,7 +16,7 @@ CommentNodeFactory::CommentNodeFactory()
 
 }
 
-Node* CommentNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* CommentNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   Q_UNUSED(tagContent);
 

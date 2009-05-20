@@ -18,10 +18,10 @@ class IfEqualNodeFactory : public AbstractNodeFactory
 public:
   IfEqualNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
 
 protected:
-  Node* do_getNode(const QString& tagContent, Parser *p, bool negate, QObject *parent);
+  Node* do_getNode(const QString& tagContent, Parser *p, bool negate, QObject *parent) const;
 };
 
 class IfNotEqualNodeFactory : public IfEqualNodeFactory
@@ -30,7 +30,7 @@ class IfNotEqualNodeFactory : public IfEqualNodeFactory
 public:
   IfNotEqualNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
 };
 
 class IfEqualNode : public Node

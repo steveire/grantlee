@@ -24,26 +24,26 @@ class GRANTLEE_EXPORT Parser : public QObject
 {
   Q_OBJECT
 public:
-  Parser( QList<Token> tokenList, QStringList pluginDirs, QObject *parent );
+  Parser( const QList<Token> &tokenList, const QStringList &pluginDirs, QObject *parent );
   ~Parser();
 
-  NodeList parse(QStringList stopAt, QObject *parent);
+  NodeList parse(const QStringList &stopAt, QObject *parent);
 
   NodeList parse(QObject *parent);
 
-  Filter *getFilter(const QString &name);
+  Filter *getFilter(const QString &name) const;
 
   void skipPast(const QString &tag);
 
   Token nextToken();
-  bool hasNextToken();
+  bool hasNextToken() const;
 
   void loadLib(const QString &name);
 
   void emitError(int errorNumber, const QString &message);
 
 protected:
-  void prependToken(Token token);
+  void prependToken(const Token &token);
 
 signals:
   void error(int type, const QString &message);

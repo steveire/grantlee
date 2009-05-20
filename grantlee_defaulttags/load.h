@@ -14,7 +14,7 @@ class LoadNodeFactory : public AbstractNodeFactory
 public:
   LoadNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent);
+  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
 
 };
 

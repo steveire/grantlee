@@ -22,7 +22,7 @@ public:
   /**
   Sets every key in the hash as a property name with the variant as the value.
   */
-  Context(QVariantHash hash);
+  Context(const QVariantHash &hash);
 
   ~Context();
 
@@ -31,11 +31,11 @@ public:
   Have to think about whether QMap should work too, or would its keys already be resolved.
   */
   QVariant lookup(const QString &str) const;
-  void insert(const QString &name, QVariant);
+  void insert(const QString &name, const QVariant &variant);
   void push();
   void pop();
 
-  QVariantHash stackHash(int depth);
+  QVariantHash stackHash(int depth) const;
 
 private:
   Q_DECLARE_PRIVATE(Context)

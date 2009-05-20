@@ -8,7 +8,7 @@ TruncateWordsFilter::TruncateWordsFilter(QObject* parent): Filter(parent)
 
 }
 
-QString TruncateWordsFilter::doFilter(const QVariant& input, const QString &argument)
+QString TruncateWordsFilter::doFilter(const QVariant& input, const QString &argument) const
 {
   QVariant v(argument);
   if (!v.convert(QVariant::Int))

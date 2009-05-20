@@ -19,7 +19,7 @@ BlockNodeFactory::BlockNodeFactory()
 
 }
 
-Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = smartSplit(tagContent);
 

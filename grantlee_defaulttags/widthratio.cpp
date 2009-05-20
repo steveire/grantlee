@@ -15,7 +15,7 @@ WidthRatioNodeFactory::WidthRatioNodeFactory()
 
 }
 
-Node* WidthRatioNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* WidthRatioNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = smartSplit(tagContent);
 

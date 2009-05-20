@@ -12,7 +12,7 @@ class GRANTLEE_EXPORT DefaultIfNoneFilter : public Filter
 public:
   DefaultIfNoneFilter(QObject *parent = 0);
 
-  QString doFilter(const QVariant &input, const QString &argument = QString());
+  QString doFilter(const QVariant &input, const QString &argument = QString()) const;
 
 };
 

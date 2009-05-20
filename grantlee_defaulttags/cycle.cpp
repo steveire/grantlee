@@ -16,7 +16,7 @@ CycleNodeFactory::CycleNodeFactory()
 
 }
 
-Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   QStringList expr = smartSplit(tagContent);
 

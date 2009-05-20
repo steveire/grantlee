@@ -15,7 +15,7 @@ DebugNodeFactory::DebugNodeFactory()
 
 }
 
-Node* DebugNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent)
+Node* DebugNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
   return new DebugNode(parent);
 }
