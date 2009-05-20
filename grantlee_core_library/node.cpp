@@ -79,10 +79,14 @@ QStringList AbstractNodeFactory::smartSplit(const QString &str)
   return l;
 }
 
-VariableNode::VariableNode(const FilterExpression &fe, QObject *parent)
-  : Node(parent)
+TextNode::TextNode(const QString &content, QObject *parent)
+  : Node(parent), m_content(content)
 {
-  m_filterExpression = fe;
+}
+
+VariableNode::VariableNode(const FilterExpression &fe, QObject *parent)
+  : Node(parent), m_filterExpression(fe)
+{
 }
 
 QString VariableNode::render(Context *c)

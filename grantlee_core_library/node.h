@@ -85,11 +85,7 @@ class GRANTLEE_EXPORT TextNode : public Node
 {
   Q_OBJECT
 public:
-  TextNode(const QString &content, QObject *parent = 0)
-    : Node(parent)
-  {
-    m_content = content;
-  }
+  TextNode(const QString &content, QObject *parent = 0);
 
   QString render(Context *c)
   {
