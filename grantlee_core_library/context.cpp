@@ -3,33 +3,49 @@
 */
 
 #include "context.h"
-#include <QStringList>
-#include <QMetaEnum>
-#include <QThread>
 
 #include <QDebug>
 
 using namespace Grantlee;
 
-
-Context::Context(QHash<QString, QVariant> variantHash)
+namespace Grantlee
 {
-  m_variantHashStack.append(variantHash);
+class ContextPrivate
+{
+  ContextPrivate(Context *context, QVariantHash variantHash)
+    : q_ptr(context)
+  {
+    m_variantHashStack.append(variantHash);
+  }
+
+  QList<QVariantHash> m_variantHashStack;
+
+  Q_DECLARE_PUBLIC(Context)
+  Context *q_ptr;
+
+};
+
+}
+
+Context::Context(QVariantHash variantHash)
+  : d_ptr(new ContextPrivate(this, variantHash))
+{
 }
 
 Context::~Context()
 {
-
+  delete d_ptr;
 }
 
 QVariant Context::lookup(const QString &str) const
 {
-  // return a variant from the stack.
+  Q_D(const Context);
 
-  QListIterator<QHash<QString, QVariant> > i(m_variantHashStack);
+  // return a variant from the stack.
+  QListIterator<QVariantHash> i(d->m_variantHashStack);
   while (i.hasNext())
   {
-    QHash<QString, QVariant> h = i.next();
+    QVariantHash h = i.next();
     if (h.contains(str))
       return h[str];
   }
@@ -39,21 +55,29 @@ QVariant Context::lookup(const QString &str) const
 
 void Context::push()
 {
+  Q_D(Context);
+
   QHash<QString, QVariant> hash;
-  m_variantHashStack.prepend(hash);
+  d->m_variantHashStack.prepend(hash);
 }
 
 void Context::pop()
 {
-  m_variantHashStack.removeFirst();
+  Q_D(Context);
+
+  d->m_variantHashStack.removeFirst();
 }
 
 void Context::insert(const QString &name, QVariant var)
 {
-  m_variantHashStack[0].insert(name, var);
+  Q_D(Context);
+
+  d->m_variantHashStack[0].insert(name, var);
 }
 
 QHash<QString, QVariant> Context::stackHash(int depth)
 {
-  return m_variantHashStack.value(depth);
+  Q_D(Context);
+
+  return d->m_variantHashStack.value(depth);
 }

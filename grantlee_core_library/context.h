@@ -5,25 +5,24 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include <QHash>
-#include <QVariant>
-#include <QStringList>
+#include <QVariantHash>
 
 #include "grantlee_export.h"
 
 namespace Grantlee
 {
 
-class GRANTLEE_EXPORT Context //: public QObject
+class ContextPrivate;
+
+class GRANTLEE_EXPORT Context
 {
-  //Q_OBJECT
 
 public:
 
   /**
   Sets every key in the hash as a property name with the variant as the value.
   */
-  Context(QHash<QString, QVariant> hash);
+  Context(QVariantHash hash);
 
   ~Context();
 
@@ -36,13 +35,11 @@ public:
   void push();
   void pop();
 
-  QHash<QString, QVariant> stackHash(int depth);
+  QVariantHash stackHash(int depth);
 
 private:
-  QList<QHash<QString, QVariant> > m_variantHashStack;
-
-  QStringList m_templateSearchDirs;
-
+  Q_DECLARE_PRIVATE(Context)
+  ContextPrivate *d_ptr;
 };
 
 }
