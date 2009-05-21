@@ -3,8 +3,8 @@
 */
 
 #include "filterexpression.h"
+
 #include "parser.h"
-#include "variable.h"
 #include "grantlee.h"
 #include "filter.h"
 #include "util_p.h"
