@@ -8,17 +8,59 @@
 
 using namespace Grantlee;
 
-Node::Node(QObject *parent) : QObject(parent)
+namespace Grantlee
+{
+
+class NodePrivate
+{
+  NodePrivate(Node *node)
+    : q_ptr(node)
+  {
+
+  }
+  Q_DECLARE_PUBLIC(Node)
+  Node *q_ptr;
+};
+
+class AbstractNodeFactoryPrivate
+{
+  AbstractNodeFactoryPrivate(AbstractNodeFactory *factory)
+    : q_ptr(factory)
+  {
+
+  }
+
+  Q_DECLARE_PUBLIC(AbstractNodeFactory)
+  AbstractNodeFactory *q_ptr;
+};
+
+}
+
+Node::Node(QObject *parent) : QObject(parent),
+  d_ptr(new NodePrivate(this))
 {
 
 }
 
 Node::~Node()
 {
+  delete d_ptr;
 }
 
 NodeList::NodeList()
-  : m_containsNonText(false)
+  : QList<Grantlee::Node*>()
+{
+
+}
+
+NodeList::NodeList(const NodeList &list)
+  : QList<Grantlee::Node*>(list)
+{
+
+}
+
+NodeList::NodeList(const QList<Grantlee::Node *> &list)
+  : QList<Grantlee::Node*>(list)
 {
 
 }
@@ -46,9 +88,15 @@ QString NodeList::render(Context *c)
 
 }
 
-AbstractNodeFactory::~AbstractNodeFactory()
+AbstractNodeFactory::AbstractNodeFactory(QObject *parent)
+  : QObject(parent), d_ptr(new AbstractNodeFactoryPrivate(this))
 {
 
+}
+
+AbstractNodeFactory::~AbstractNodeFactory()
+{
+  delete d_ptr;
 }
 
 QList< Variable > AbstractNodeFactory::getVariableList(const QStringList &list) const

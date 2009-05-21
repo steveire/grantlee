@@ -17,6 +17,8 @@
 namespace Grantlee
 {
 
+class NodePrivate;
+
 /**
 Abstract base class for nodes.
 */
@@ -33,12 +35,17 @@ public:
 signals:
   void error(int, const QString &);
 
+private:
+  Q_DECLARE_PRIVATE(Node)
+  NodePrivate *d_ptr;
 };
 
-class GRANTLEE_EXPORT NodeList : public QList<Node*>
+class GRANTLEE_EXPORT NodeList : public QList<Grantlee::Node*>
 {
 public:
   NodeList();
+  NodeList(const NodeList &list);
+  NodeList(const QList<Grantlee::Node *> &list);
   ~NodeList();
 
   //append changes m_containsNonText?
@@ -49,6 +56,7 @@ private:
   bool m_containsNonText;
 };
 
+class AbstractNodeFactoryPrivate;
 
 /**
 Base class for tags. Downstreams can use this to create custom tags.
@@ -66,6 +74,7 @@ class GRANTLEE_EXPORT AbstractNodeFactory : public QObject
 {
   Q_OBJECT
 public:
+  AbstractNodeFactory(QObject* parent = 0);
   virtual ~AbstractNodeFactory();
 
   /**
@@ -80,6 +89,9 @@ protected:
 signals:
   void error(int type, const QString &message) const;
 
+private:
+  Q_DECLARE_PRIVATE(AbstractNodeFactory)
+  AbstractNodeFactoryPrivate *d_ptr;
 };
 
 class GRANTLEE_EXPORT TextNode : public Node
