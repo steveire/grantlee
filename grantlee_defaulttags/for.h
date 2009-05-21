@@ -33,7 +33,7 @@ public:
     IsReversed
   };
 
-  ForNode(QList<QString> loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyList, QObject *parent);
+  ForNode(QStringList loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyList, QObject *parent);
 
   QString render(Context *c);
 
@@ -44,7 +44,7 @@ private:
   QString handleMapItem(Context *c, QString key, QVariant value, int listSize, int i, bool unpack);
 
   FilterExpression m_filterExpression;
-  QList<QString> m_loopVars;
+  QStringList m_loopVars;
   NodeList m_loopNodeList;
   int m_isReversed;
 };

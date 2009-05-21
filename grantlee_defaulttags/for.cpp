@@ -50,7 +50,7 @@ Node* ForNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *par
 
 
 
-ForNode::ForNode(QList<QString> loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyNodes, QObject *parent)
+ForNode::ForNode(QStringList loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyNodes, QObject *parent)
   : Node(parent)
 {
   m_loopVars = loopVars;
