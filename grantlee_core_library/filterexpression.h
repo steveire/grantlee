@@ -24,6 +24,8 @@ class Token;
 namespace Grantlee
 {
 
+class FilterExpressionPrivate;
+
 class GRANTLEE_EXPORT FilterExpression
 {
 public:
@@ -33,8 +35,12 @@ public:
     IsReversed
   };
 
-  FilterExpression();
-  FilterExpression(const QString &varString, Grantlee::Parser *parser = 0);
+  explicit FilterExpression();
+  explicit FilterExpression(const QString &varString, Grantlee::Parser *parser = 0);
+  FilterExpression(const FilterExpression &other);
+  ~FilterExpression();
+
+  FilterExpression &operator=(const FilterExpression &other);
 
   int error() const;
 
@@ -47,10 +53,8 @@ public:
   QVariantList toList(Context *c) const;
 
 private:
-  Variable m_variable;
-  QList<ArgFilter> m_filters;
-  int m_error;
-
+  Q_DECLARE_PRIVATE(FilterExpression);
+  FilterExpressionPrivate *d_ptr;
 };
 
 }

@@ -12,6 +12,24 @@
 
 using namespace Grantlee;
 
+namespace Grantlee
+{
+class FilterExpressionPrivate
+{
+  FilterExpressionPrivate(FilterExpression *fe, int error)
+    : q_ptr(fe), m_error(error)
+  {
+  }
+
+  Variable m_variable;
+  QList<ArgFilter> m_filters;
+  int m_error;
+
+  Q_DECLARE_PUBLIC(FilterExpression)
+  FilterExpression *q_ptr;
+};
+
+}
 
 static const char * FILTER_SEPARATOR = "|";
 static const char * FILTER_ARGUMENT_SEPARATOR = ":";
@@ -44,8 +62,9 @@ static const QString filterRawString = QString(
 static const QRegExp sFilterRe(filterRawString);
 
 FilterExpression::FilterExpression(const QString &varString, Parser *parser)
-  : m_error(NoError)
+  : d_ptr(new FilterExpressionPrivate(this, NoError))
 {
+  Q_D(FilterExpression);
 
   int pos = 0;
   int lastPos = 0;
@@ -69,29 +88,29 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
       subString = subString.right(ssSize - 1);
       Filter *f = parser->getFilter(subString);
       if (f)
-        m_filters << qMakePair<Filter*, Variable>(f, Variable());
+        d->m_filters << qMakePair<Filter*, Variable>(f, Variable());
       else
       {
-        m_error = TagSyntaxError;
+        d->m_error = TagSyntaxError;
         return;
       }
     }
     else if (subString.startsWith(FILTER_ARGUMENT_SEPARATOR))
     {
       subString = subString.right(ssSize - 1);
-      int lastFilter = m_filters.size();
-      m_filters[lastFilter -1].second = Variable(subString);
+      int lastFilter = d->m_filters.size();
+      d->m_filters[lastFilter -1].second = Variable(subString);
     } else if (subString.startsWith("_(") && subString.endsWith(")"))
     {
       // Token is _("translated"): subString.mid(1, ssSize - 1 -2);
     } else if (subString.startsWith("\"") && subString.endsWith("\""))
     {
       // Token is a "constant"
-      m_variable = Variable(subString);      
+      d->m_variable = Variable(subString);
     } else
     {
       // Arg is a variable
-      m_variable = Variable(subString);
+      d->m_variable = Variable(subString);
     }
     
     pos += len;
@@ -100,30 +119,54 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   QString remainder = vs.right( vs.size() - lastPos);
   if (remainder.size() > 0)
   {
-    m_error = TagSyntaxError;
+    d->m_error = TagSyntaxError;
   }
 }
 
 int FilterExpression::error() const
 {
-  return m_error;
+  Q_D(const FilterExpression);
+  return d->m_error;
 }
 
 
-FilterExpression::FilterExpression()
+FilterExpression::FilterExpression(const FilterExpression &other)
+  : d_ptr(new FilterExpressionPrivate(this, other.d_ptr->m_error))
 {
-//   m_variable = Variable(token.content);
+  d_ptr->m_variable = other.d_ptr->m_variable;
+  d_ptr->m_filters = other.d_ptr->m_filters;
+}
+
+FilterExpression::FilterExpression()
+  : d_ptr(new FilterExpressionPrivate(this, NoError))
+{
+  Q_D(FilterExpression);
+}
+
+FilterExpression::~FilterExpression()
+{
+  delete d_ptr;
 }
 
 Variable FilterExpression::variable() const
 {
-  return m_variable;
+  Q_D(const FilterExpression);
+  return d->m_variable;
+}
+
+FilterExpression &FilterExpression::operator=(const FilterExpression &other)
+{
+  d_ptr->m_variable = other.d_ptr->m_variable;
+  d_ptr->m_filters = other.d_ptr->m_filters;
+  d_ptr->m_error = other.d_ptr->m_error;
+  return *this;
 }
 
 QVariant FilterExpression::resolve(Context *c) const
 {
-  QVariant var = m_variable.resolve(c);
-  foreach(ArgFilter argfilter, m_filters)
+  Q_D(const FilterExpression);
+  QVariant var = d->m_variable.resolve(c);
+  foreach(ArgFilter argfilter, d->m_filters)
   {
     var = argfilter.first->doFilter(var, argfilter.second.resolve(c).toString());
   }
