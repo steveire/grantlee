@@ -1,3 +1,6 @@
+/*
+    Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
+*/
 
 #include "default_if_none.h"
 

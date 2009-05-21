@@ -1,3 +1,6 @@
+/*
+    Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
+*/
 
 #ifndef LOWERFILTER_H
 #define LOWERFILTER_H

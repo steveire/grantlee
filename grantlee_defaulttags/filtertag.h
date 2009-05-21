@@ -1,3 +1,6 @@
+/*
+    Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
+*/
 
 #ifndef FILTERTAG_H
 #define FILTERTAG_H

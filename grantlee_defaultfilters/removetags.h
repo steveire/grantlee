@@ -1,3 +1,6 @@
+/*
+    Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
+*/
 
 #ifndef REMOVETAGSFILTER_H
 #define REMOVETAGSFILTER_H

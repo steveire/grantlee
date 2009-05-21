@@ -1,3 +1,6 @@
+/*
+    Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
+*/
 
 #ifndef JOINFILTER_H
 #define JOINFILTER_H

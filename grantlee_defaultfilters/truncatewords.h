@@ -1,3 +1,6 @@
+/*
+    Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
+*/
 
 #ifndef TRUNCATEWORDSFILTER_H
 #define TRUNCATEWORDSFILTER_H
