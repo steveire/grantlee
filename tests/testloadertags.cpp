@@ -48,7 +48,10 @@ void TestLoaderTags::initTestCase()
 {
   m_tl = TemplateLoader::instance();
 
-  m_tl->setPluginDirs(QStringList() << "/home/kde-devel/kde/lib/");
+  QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
+  m_tl->setPluginDirs(QStringList() << appDirPath + "/grantlee_loadertags/"
+                                    << appDirPath + "/grantlee_defaulttags/"
+                                    << appDirPath + "/grantlee_defaultfilters/" );
 }
 
 void TestLoaderTags::cleanupTestCase()
@@ -64,28 +67,24 @@ void TestLoaderTags::doTest()
   QFETCH(Grantlee::Error, errorNumber);
 
   Template* t = m_tl->getTemplate(this);
-  
+
   QSignalSpy spy(t, SIGNAL(error(int, const QString &)));
   t->setContent(input);
-
-  qDebug() << "ok" << spy.count();
 
   if (spy.count() > 0)
   {
     QVariantList l = spy.takeFirst();
-    qDebug() << 1 << l;
     QCOMPARE(l.at(0).toInt(), (int)errorNumber );
     return;
   }
 
   Context context(dict);
-  
+
   QString result = t->render(&context);
 
   if (spy.count() > 0)
   {
     QVariantList l = spy.takeFirst();
-    qDebug() << 2 << l;
     QCOMPARE(l.at(0).toInt(), (int)errorNumber );
     QCOMPARE(result, QString());
     return;
@@ -121,7 +120,7 @@ void TestLoaderTags::testIncludeTag_data()
 
   dict.clear();
   QTest::newRow("include04") << "a{% include \"nonexistent\" %}b" << dict << "ab" << NoError;
-  
+
 }
 
 

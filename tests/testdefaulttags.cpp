@@ -86,8 +86,10 @@ void TestDefaultTags::initTestCase()
 {
   m_tl = TemplateLoader::instance();
 
-  m_tl->setPluginDirs(QStringList() << "/home/kde-devel/kde/lib/");
-
+  QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
+  m_tl->setPluginDirs(QStringList() << appDirPath + "/grantlee_loadertags/"
+                                    << appDirPath + "/grantlee_defaulttags/"
+                                    << appDirPath + "/grantlee_defaultfilters/" );
 }
 
 void TestDefaultTags::cleanupTestCase()

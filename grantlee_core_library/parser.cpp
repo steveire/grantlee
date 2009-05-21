@@ -67,11 +67,19 @@ void Parser::loadLib(const QString &name)
 {
   Q_D(Parser);
 
-  // TODO: Loop over m_pluginDirs and raise an error if the library is not found.
-  QString libFileName = d->m_pluginDirs.at(0) + "lib" + name + ".so";
+  int pluginIndex = 0;
+  QString libFileName;
 
-  QPluginLoader loader( libFileName );
-  QObject *plugin = loader.instance();
+  QObject *plugin;
+  while (d->m_pluginDirs.size() > pluginIndex)
+  {
+    libFileName = d->m_pluginDirs.at(pluginIndex++) + "lib" + name + ".so";
+    QPluginLoader loader( libFileName );
+
+    plugin = loader.instance();
+    if (plugin)
+      break;
+  }
   if (!plugin)
     return;
 
