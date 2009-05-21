@@ -17,26 +17,26 @@ class Context;
 namespace Grantlee
 {
 
+class VariablePrivate;
+
 class Variable
 {
 public:
-  Variable();
-  Variable(const QString &var);
+  explicit Variable();
+  explicit Variable(const QString &var);
+  Variable(const Variable &other);
+  ~Variable();
+
+  Variable &operator=(const Variable &other);
 
   QString toString() const;
   bool isTrue(Context *c) const;
 
   QVariant resolve(Context *c) const;
 
-protected:
-  QVariant resolvePart( const QVariant &variant, const QString &s ) const;
-
 private:
-  QString m_varString;
-  QVariant m_literal;
-  QStringList m_lookups;
-  bool m_translate;
-
+  Q_DECLARE_PRIVATE(Variable);
+  VariablePrivate *d_ptr;
 };
 
 }

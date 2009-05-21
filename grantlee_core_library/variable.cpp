@@ -14,19 +14,69 @@
 
 using namespace Grantlee;
 
+namespace Grantlee
+{
+
+class VariablePrivate
+{
+public:
+  VariablePrivate(Variable *variable)
+    : q_ptr(variable)
+  {
+
+  }
+
+  QVariant resolvePart( QVariant, const QString &s ) const;
+
+  QString m_varString;
+  QVariant m_literal;
+  QStringList m_lookups;
+  bool m_translate;
+
+  Q_DECLARE_PUBLIC(Variable)
+  Variable *q_ptr;
+};
+
+}
+
+Variable::Variable(const Variable &other)
+  : d_ptr(new VariablePrivate(this))
+{
+  d_ptr->m_varString = other.d_ptr->m_varString;
+  d_ptr->m_literal = other.d_ptr->m_literal;
+  d_ptr->m_lookups = other.d_ptr->m_lookups;
+  d_ptr->m_translate = other.d_ptr->m_translate;
+}
 
 Variable::Variable()
+  : d_ptr(new VariablePrivate(this))
 {
 }
 
-Variable::Variable(const QString &var)
+Variable::~Variable()
 {
-  m_varString = var;
+  delete d_ptr;
+}
+
+Variable &Variable::operator=(const Variable &other)
+{
+  d_ptr->m_varString = other.d_ptr->m_varString;
+  d_ptr->m_literal = other.d_ptr->m_literal;
+  d_ptr->m_lookups = other.d_ptr->m_lookups;
+  d_ptr->m_translate = other.d_ptr->m_translate;
+  return *this;
+}
+
+Variable::Variable(const QString &var)
+  : d_ptr(new VariablePrivate(this))
+{
+  Q_D(Variable);
+  d->m_varString = var;
 
   QVariant v(var);
   if (v.convert(QVariant::Double))
   {
-    m_literal = v;
+    d->m_literal = v;
     if (!var.contains(".") && !var.contains("e"))
     {
       if (var.endsWith("."))
@@ -34,28 +84,29 @@ Variable::Variable(const QString &var)
         // error
       }
 
-      m_literal = v.toInt();
+      d->m_literal = v.toInt();
     }
   } else {
     QString localVar = var;
     if (var.startsWith("_(") && var.endsWith(")"))
     {
-      m_translate = true;
+      d->m_translate = true;
       localVar = var.mid(2, var.size() - 1 );
     }
     if ( ( localVar.startsWith( "\"" ) && localVar.endsWith( "\"" ) )
       || ( localVar.startsWith( "'" ) && localVar.endsWith( "'" ) ) )
     {
-      m_literal = localVar.mid(1, localVar.size() - 2 ).replace("\\'", "'");
+      d->m_literal = localVar.mid(1, localVar.size() - 2 ).replace("\\'", "'");
     } else {
-      m_lookups = localVar.split(".");
+      d->m_lookups = localVar.split(".");
     }
   }
 }
 
 QString Variable::toString() const
 {
-  return m_varString;
+  Q_D(const Variable);
+  return d->m_varString;
 }
 
 bool Variable::isTrue(Context *c) const
@@ -124,30 +175,31 @@ bool Variable::isTrue(Context *c) const
 
 QVariant Variable::resolve(Context *c) const
 {
+  Q_D(const Variable);
   QVariant var;
-  if (!m_lookups.isEmpty())
+  if (!d->m_lookups.isEmpty())
   {
     int i = 0;
-    var = c->lookup(m_lookups.at(i++));
-    while (i < m_lookups.size())
+    var = c->lookup(d->m_lookups.at(i++));
+    while (i < d->m_lookups.size())
     {
-      var = resolvePart(var, m_lookups.at(i++));
+      var = d->resolvePart(var, d->m_lookups.at(i++));
       if (!var.isValid())
         return var;
     }
   } else {
-    var = m_literal;
+    var = d->m_literal;
   }
 
 
-  if (m_translate)
+  if (d->m_translate)
   {
 //     return gettext(var.toString());
   }
   return var;
 }
 
-QVariant Variable::resolvePart( const QVariant &var, const QString &nextPart ) const
+QVariant VariablePrivate::resolvePart( QVariant var, const QString &nextPart ) const
 {
   QVariant returnVar;
 
