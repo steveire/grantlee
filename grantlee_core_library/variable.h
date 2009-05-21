@@ -6,7 +6,6 @@
 #define VARIABLE_H
 
 #include <QVariant>
-#include <QStringList>
 
 
 namespace Grantlee
