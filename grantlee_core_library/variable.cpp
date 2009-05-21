@@ -26,7 +26,7 @@ public:
 
   }
 
-  QVariant resolvePart( QVariant, const QString &s ) const;
+  QVariant resolvePart( const QVariant &variant, const QString &s ) const;
 
   QString m_varString;
   QVariant m_literal;
@@ -199,7 +199,7 @@ QVariant Variable::resolve(Context *c) const
   return var;
 }
 
-QVariant VariablePrivate::resolvePart( QVariant var, const QString &nextPart ) const
+QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextPart ) const
 {
   QVariant returnVar;
 
