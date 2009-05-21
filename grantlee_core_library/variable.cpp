@@ -4,14 +4,11 @@
 
 #include "variable.h"
 
-#include <QVariant>
 #include <QStringList>
 #include <QMetaEnum>
 
 #include "context.h"
 #include "util_p.h"
-
-#include <QDebug>
 
 using namespace Grantlee;
 

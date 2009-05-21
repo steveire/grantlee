@@ -8,16 +8,11 @@
 #include <QTextStream>
 #include <QDir>
 #include <QFile>
-
-#include "lexer_p.h"
-#include "node.h"
-#include "parser.h"
-#include "context.h"
-
-#include <QDebug>
-
 #include <QListIterator>
 
+#include "lexer_p.h"
+#include "parser.h"
+#include "context.h"
 #include "grantlee.h"
 
 using namespace Grantlee;

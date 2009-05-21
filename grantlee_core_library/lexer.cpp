@@ -6,7 +6,6 @@
 #include "lexer_p.h"
 
 #include <QRegExp>
-#include <QDebug>
 #include <QStringList>
 
 #include "grantlee.h"

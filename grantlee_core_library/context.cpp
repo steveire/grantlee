@@ -4,8 +4,6 @@
 
 #include "context.h"
 
-#include <QDebug>
-
 using namespace Grantlee;
 
 namespace Grantlee

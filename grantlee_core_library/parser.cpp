@@ -7,12 +7,8 @@
 #include <QPluginLoader>
 
 #include "interfaces/taglibraryinterface.h"
-
 #include "grantlee.h"
 #include "filter.h"
-
-
-#include <QDebug>
 
 using namespace Grantlee;
 

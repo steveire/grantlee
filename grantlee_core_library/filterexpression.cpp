@@ -9,8 +9,6 @@
 #include "filter.h"
 #include "util_p.h"
 
-#include <QDebug>
-
 using namespace Grantlee;
 
 namespace Grantlee
