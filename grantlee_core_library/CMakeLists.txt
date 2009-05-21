@@ -13,6 +13,7 @@ set (grantlee_core_library_SRCS
   filter.cpp
   lexer.cpp
   parser.cpp
+  util.cpp
 )
 
 set(GRANTLEE_CORE_LIB_SOVERSION 0)
