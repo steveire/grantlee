@@ -28,9 +28,6 @@ public:
 
 private:
   QList<Variable> m_variableList;
-//   QString m_name;
-//   NodeList m_list;
-
 };
 
 #endif
