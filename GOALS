@@ -1,0 +1,24 @@
+The following are goals for future released versions of Grantlee:
+
+Version 0.1:
+* Built-in syntax of template system in Django version 1.1.
+* Equivalent tags and filters as included by default in Django 1.1.
+    Some tags such as {% url %} depend on the Django views system and are not
+    relevant to Grantlee.
+* Django regression tests ported to Qt/Grantlee.
+* i18n support.
+* API docs including basics of creating templates. 
+* Grantlee support in KJots stable.
+
+Version 0.2:
+* Package structure and GHNS integration.
+* Partial redesign to take advantage of more Qt features (possibly use QScriptEngine more instead of Context and Variable).
+* Grantlee support in KMail, KNode, Akregator.
+
+Version 0.3 and later:
+* Kopete themes
+* Akonadi mail-merge agent
+* Grantlee-mime
+* Tools and widgets for creating templates.
+* Define some new goals
+
