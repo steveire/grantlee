@@ -35,28 +35,37 @@ static const char * FILTER_ARGUMENT_SEPARATOR = ":";
 static const char * VARIABLE_ATTRIBUTE_SEPARATOR = ".";
 static const char * ALLOWED_VARIABLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\\.";
 
-
-static const char * str = "[^\"\\\\]*(?:\\.[^\"\\\\]*)*";
 static const char * varChars = "\\w\\." ;
+static const char * numChars = "[-+\\.]?\\d[\\d\\.e]*";
 static const QString filterSep( QRegExp::escape( FILTER_SEPARATOR ) );
 static const QString argSep( QRegExp::escape( FILTER_ARGUMENT_SEPARATOR ) );
 static const QString i18nOpen( QRegExp::escape( "_(" ) );
 static const QString i18nClose( QRegExp::escape( ")" ) );
 
+static const QString constantString = QString(
+    "(?:%3%1%4|"
+    "%3%2%4|"
+    "%1|"
+    "%2)"
+    )
+    .arg("\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"")
+    .arg("\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'")
+    .arg(i18nOpen)
+    .arg(i18nClose)
+    ;
+
 static const QString filterRawString = QString(
-                           "^%1\"(%2)\"%3|"
-                           "^\"(%2)\"|"
-                           "^([%4]+)|"
-                           "%5(\\w+)|"
-                           "%6(%1\"%2\"%3|\"%2\"|[%4]+)"
-                         )
-              /* 1 */    .arg(i18nOpen)
-              /* 2 */    .arg(str)
-              /* 3 */    .arg(i18nClose)
-              /* 4 */    .arg(varChars)
-              /* 5 */    .arg(filterSep)
-              /* 6 */    .arg(argSep)
-                         ;
+          "^%1|"                      /* Match "strings" and 'strings' incl i18n */
+          "^[%2]+|"                   /* Match variables */
+          "%3|"                       /* Match numbers */
+          "%4\\w+|"                   /* Match filters */
+          "%5(?:%1|[%2]+|%3|%4\\w+)"  /* Match arguments to filters, which may be strings, */
+          )                           /*   variables, numbers or another filter in the chain */
+ /* 1 */  .arg(constantString)
+ /* 2 */  .arg(varChars)
+ /* 3 */  .arg(numChars)
+ /* 4 */  .arg(filterSep)
+ /* 5 */  .arg(argSep);
 
 static const QRegExp sFilterRe(filterRawString);
 
