@@ -22,6 +22,7 @@ set (grantlee_defaultfilters_library_SRCS
   removetags.cpp
   default_if_none.cpp
   cut.cpp
+  slice.cpp
 )
 
 set(GRANTLEE_DEFAULTFILTERS_LIB_SOVERSION 0)

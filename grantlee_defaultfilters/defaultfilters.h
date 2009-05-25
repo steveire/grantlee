@@ -17,6 +17,7 @@
 #include "removetags.h"
 #include "default_if_none.h"
 #include "cut.h"
+#include "slice.h"
 
 #include "grantlee_export.h"
 
@@ -43,6 +44,7 @@ public:
      m_filters.insert("removetags", new RemoveTagsFilter());
      m_filters.insert("default_if_none", new DefaultIfNoneFilter());
      m_filters.insert("cut", new CutFilter());
+     m_filters.insert("slice", new SliceFilter());
   }
 
   virtual QHash<QString, Filter*> filters()
