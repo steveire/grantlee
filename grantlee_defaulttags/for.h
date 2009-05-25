@@ -46,6 +46,7 @@ private:
   FilterExpression m_filterExpression;
   QStringList m_loopVars;
   NodeList m_loopNodeList;
+  NodeList m_emptyNodeList;
   int m_isReversed;
 };
 

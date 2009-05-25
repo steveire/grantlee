@@ -22,12 +22,12 @@ class FirstOfNode : public Node
 {
   Q_OBJECT
 public:
-  FirstOfNode(QList<Variable> list, QObject *parent);
+  FirstOfNode(QList<FilterExpression> list, QObject *parent);
 
   QString render(Context *c);
 
 private:
-  QList<Variable> m_variableList;
+  QList<FilterExpression> m_variableList;
 };
 
 #endif

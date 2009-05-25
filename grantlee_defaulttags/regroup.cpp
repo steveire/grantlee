@@ -24,7 +24,7 @@ Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
     error(TagSyntaxError, "widthratio takes five arguments");
     return 0;
   }
-  FilterExpression target(expr.at(1));
+  FilterExpression target(expr.at(1), p);
   if (expr.at(2) != "by")
   {
     error(TagSyntaxError, "second argument must be 'by'");
@@ -37,7 +37,7 @@ Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
     return 0;
   }
 
-  FilterExpression expression("\"" + expr.at(3) + "\"");
+  FilterExpression expression("\"" + expr.at(3) + "\"", p);
 
   QString name = expr.at(5);
 

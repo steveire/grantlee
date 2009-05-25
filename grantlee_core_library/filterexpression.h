@@ -35,8 +35,8 @@ public:
     IsReversed
   };
 
-  explicit FilterExpression();
-  explicit FilterExpression(const QString &varString, Grantlee::Parser *parser = 0);
+  FilterExpression();
+  FilterExpression(const QString &varString, Grantlee::Parser *parser);
   FilterExpression(const FilterExpression &other);
   ~FilterExpression();
 

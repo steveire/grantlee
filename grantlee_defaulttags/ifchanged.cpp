@@ -29,25 +29,16 @@ Node* IfChangedNodeFactory::getNode(const QString &tagContent, Parser *p, QObjec
     falseList = p->parse(QStringList() << "endifchanged", parent );
     p->nextToken();
   }
-//   QList<Variable> vars;
-//   qDebug() << expr;
   expr.takeAt(0);
-  QStringList vars = expr;
 
-  return new IfChangedNode(trueList, falseList, vars, parent);
+  return new IfChangedNode(trueList, falseList, getFilterExpressionList(expr, p), parent);
 }
 
-IfChangedNode::IfChangedNode(NodeList trueList, NodeList falseList, QStringList vars, QObject *parent)
-  : Node(parent), m_trueList(trueList), m_falseList(falseList)
+IfChangedNode::IfChangedNode(NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent)
+  : Node(parent), m_trueList(trueList), m_falseList(falseList), m_filterExpressions(feList)
 {
   m_lastSeen = QVariant();
   m_id = QString::number(reinterpret_cast<qint64>(this));
-  QListIterator<QString> i(vars);
-  while (i.hasNext())
-  {
-    QString varName = i.next();
-    m_variables << Variable(varName);
-  }
 }
 
 QString IfChangedNode::render(Context *c)
@@ -61,11 +52,11 @@ QString IfChangedNode::render(Context *c)
   }
 
   QString watchedString;
-  if (m_variables.size() == 0)
+  if (m_filterExpressions.size() == 0)
   {
     watchedString = m_trueList.render(c);
   }
-  QListIterator<Variable> i(m_variables);
+  QListIterator<FilterExpression> i(m_filterExpressions);
   QVariantList watchedVars;
   while (i.hasNext())
   {

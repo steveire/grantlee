@@ -65,10 +65,10 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pare
         return 0;
       }
       pair.first = true;
-      pair.second = FilterExpression(bits.at(1).trimmed());
+      pair.second = FilterExpression(bits.at(1).trimmed(), p);
     } else {
       pair.first = false;
-      pair.second = FilterExpression(boolStr.trimmed());
+      pair.second = FilterExpression(boolStr.trimmed(), p);
     }
     boolVars.append(pair);
   }

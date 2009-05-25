@@ -25,14 +25,14 @@ class IfChangedNode : public Node
 {
   Q_OBJECT
 public:
-  IfChangedNode(NodeList trueList, NodeList falseList, QStringList vars, QObject *parent);
+  IfChangedNode(NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent);
 
   QString render(Context *c);
 
 private:
   NodeList m_trueList;
   NodeList m_falseList;
-  QList<Variable> m_variables;
+  QList<FilterExpression> m_filterExpressions;
   QVariant m_lastSeen;
   QString m_id;
 

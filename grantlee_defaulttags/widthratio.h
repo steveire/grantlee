@@ -26,7 +26,7 @@ class WidthRatioNode : public Node
 {
   Q_OBJECT
 public:
-  WidthRatioNode(FilterExpression valExpr, FilterExpression maxExpr, int maxWidth, QObject *parent);
+  WidthRatioNode(FilterExpression valExpr, FilterExpression maxExpr, FilterExpression maxWidth, QObject *parent);
 
   QString render(Context *c);
 
@@ -35,7 +35,7 @@ private:
 
   FilterExpression m_valExpr;
   FilterExpression m_maxExpr;
-  int m_maxWidth;
+  FilterExpression m_maxWidth;
 
 };
 

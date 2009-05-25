@@ -85,7 +85,7 @@ public:
 protected:
   QStringList smartSplit(const QString &str) const;
   QList<Variable> getVariableList(const QStringList &list) const;
-  QList<FilterExpression> getFilterExpressionList(const QStringList &list) const;
+  QList<FilterExpression> getFilterExpressionList(const QStringList &list, Parser *p) const;
 
 signals:
   void error(int type, const QString &message) const;

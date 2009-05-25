@@ -43,8 +43,8 @@ public:
   {
     if (m_it.hasNext())
     {
-      Variable v = m_it.next();
-      return v;
+      T item = m_it.next();
+      return item;
     }
     m_it.toFront();
     return m_it.next();
@@ -58,12 +58,12 @@ class CycleNode : public Node
 {
   Q_OBJECT
 public:
-  CycleNode(QList<Variable> list, const QString &name, QObject *parent);
+  CycleNode(QList<FilterExpression> list, const QString &name, QObject *parent);
 
   QString render(Context *c);
 
 private:
-  RingIterator<Variable> m_variableIterator;
+  RingIterator<FilterExpression> m_variableIterator;
   QString m_name;
 
 };

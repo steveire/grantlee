@@ -31,7 +31,7 @@ class IncludeNode : public Node
 {
   Q_OBJECT
 public:
-  IncludeNode(const QString &filename, QObject *parent);
+  IncludeNode(const FilterExpression &fe, QObject *parent);
   QString render(Context *c);
 
 private:

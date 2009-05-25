@@ -50,13 +50,20 @@ Node* ForNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *par
 
 
 
-ForNode::ForNode(QStringList loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyNodes, QObject *parent)
-  : Node(parent)
+ForNode::ForNode( QStringList loopVars,
+                  FilterExpression fe,
+                  int reversed,
+                  NodeList loopNodeList,
+                  NodeList emptyNodes,
+                  QObject *parent )
+  : Node(parent),
+  m_loopVars(loopVars),
+  m_filterExpression(fe),
+  m_isReversed(reversed),
+  m_loopNodeList(loopNodeList),
+  m_emptyNodeList(emptyNodes)
 {
-  m_loopVars = loopVars;
-  m_filterExpression = fe;
-  m_isReversed = reversed;
-  m_loopNodeList = loopNodeList;
+
 }
 
 // some magic variables injected into the context while rendering.
@@ -171,6 +178,12 @@ QString ForNode::render(Context *c)
   QVariantList varList = m_filterExpression.toList(c);
   NodeList nodeList;
   int listSize = varList.size();
+
+  if (listSize < 1)
+  {
+    c->pop();
+    return m_emptyNodeList.render(c);
+  }
 
   for (int i = 0; i < listSize; i++)
   {

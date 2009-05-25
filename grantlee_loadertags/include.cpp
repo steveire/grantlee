@@ -29,13 +29,12 @@ Node* IncludeNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
   {
     return new ConstantIncludeNode(includeName.mid(1, size-2), parent);
   }
-  return new IncludeNode(includeName, parent);
+  return new IncludeNode(FilterExpression(includeName, p), parent);
 }
 
-IncludeNode::IncludeNode(const QString &name, QObject *parent)
-  : Node(parent)
+IncludeNode::IncludeNode(const FilterExpression &fe, QObject *parent)
+  : Node(parent), m_filterExpression(fe)
 {
-  m_filterExpression = FilterExpression(name);
 }
 
 QString IncludeNode::render(Context *c)

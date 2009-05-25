@@ -24,21 +24,15 @@ Node* WidthRatioNodeFactory::getNode(const QString &tagContent, Parser *p, QObje
     error(TagSyntaxError, "widthratio takes three arguments");
     return 0;
   }
-  FilterExpression valExpr(expr.at(1));
-  FilterExpression maxExpr(expr.at(2));
-  QVariant v_w(expr.at(3));
-  if (!v_w.convert(QVariant::Int))
-  {
-    error(TagSyntaxError, "widthratio final argument must be an integer");
-    return 0;
-  }
-  int width = v_w.toInt();
+  FilterExpression valExpr(expr.at(1), p);
+  FilterExpression maxExpr(expr.at(2), p);
+  FilterExpression maxWidth(expr.at(3), p);
 
-  return new WidthRatioNode(valExpr, maxExpr, width, parent);
+  return new WidthRatioNode(valExpr, maxExpr, maxWidth, parent);
 }
 
 
-WidthRatioNode::WidthRatioNode(FilterExpression valExpr, FilterExpression maxExpr, int maxWidth, QObject *parent)
+WidthRatioNode::WidthRatioNode(FilterExpression valExpr, FilterExpression maxExpr, FilterExpression maxWidth, QObject *parent)
   : Node(parent)
 {
   m_valExpr = valExpr;
@@ -67,7 +61,9 @@ QString WidthRatioNode::render(Context *c)
   if (mv == 0)
     return QString("");
 
-  qreal result = (tv / mv) * m_maxWidth;
+  int maxWidth = m_maxWidth.resolve(c).toInt();
+
+  qreal result = (tv / mv) * maxWidth;
 
   result = round(result);
 

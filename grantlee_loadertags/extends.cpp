@@ -38,7 +38,7 @@ Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
   {
     parentName = parentName.mid(1, size -2);
   } else {
-    fe = FilterExpression(parentName);
+    fe = FilterExpression(parentName, p);
     parentName = QString();
   }
 

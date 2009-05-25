@@ -74,8 +74,7 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
     // {% cycle "foo" "bar" "bat" as var %}
     QString name = expr.at(exprSize - 1);
     QStringList list = expr.mid(1, exprSize - 3);
-
-    Node *node = new CycleNode(getVariableList(list), name, parent);
+    Node *node = new CycleNode(getFilterExpressionList(list, p), name, parent);
     QVariant mapVariant = p->property(_namedCycleNodes);
     QVariantMap map;
     if (mapVariant.isValid() && mapVariant.type() == QVariant::Map)
@@ -89,11 +88,11 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
     return node;
   } else {
     QStringList list = expr.mid(1, exprSize - 1);
-    return new CycleNode(getVariableList(list), QString(), parent);
+    return new CycleNode(getFilterExpressionList(list, p), QString(), parent);
   }
 }
 
-CycleNode::CycleNode(QList<Variable> list, const QString &name, QObject *parent)
+CycleNode::CycleNode(QList<FilterExpression> list, const QString &name, QObject *parent)
   : Node(parent), m_variableIterator(list)
 {
   m_name = name;
