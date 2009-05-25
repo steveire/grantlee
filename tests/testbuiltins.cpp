@@ -184,8 +184,8 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   // A variable may not contain more than one word
   QTest::newRow("basic-syntax06") << "{{ multi word variable }}" << dict << "" << TagSyntaxError;
   // Raise TemplateSyntaxError for empty variable tags
-  QTest::newRow("basic-syntax07") << "{{ }}" << dict << "" << TagSyntaxError;
-  QTest::newRow("basic-syntax08") << "{{        }}" << dict << "" << TagSyntaxError;
+  QTest::newRow("basic-syntax07") << "{{ }}" << dict << "" << EmptyVariableError;
+  QTest::newRow("basic-syntax08") << "{{        }}" << dict << "" << EmptyVariableError;
 
 
   // Attribute syntax allows a template to call an object's attribute
@@ -329,7 +329,7 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   // Raise TemplateSyntaxError for invalid block tags
   QTest::newRow("filter-syntax07") << "{% nothing_to_see_here %}" << dict << "" << InvalidBlockTagError;
   // Raise TemplateSyntaxError for empty block tags
-  QTest::newRow("filter-syntax08") << "{% %}" << dict << "" << EmptyBlockTagError;
+  QTest::newRow("filter-syntax08") << "{% %}" << dict << "" << InvalidBlockTagError;
 
   // Chained filters, with an argument to the first one
   dict.insert("var", "<b><i>Yes</i></b>");

@@ -121,6 +121,11 @@ void TestLoaderTags::testIncludeTag_data()
   dict.clear();
   QTest::newRow("include04") << "a{% include \"nonexistent\" %}b" << dict << "ab" << NoError;
 
+  m_tl->injectTemplate("include 05", "template with a space");
+
+  dict.clear();
+  QTest::newRow("include06") << "{% include \"include 05\" %}" << dict << "template with a space" << NoError;
+
 }
 
 
@@ -269,6 +274,11 @@ void TestLoaderTags::testExtendsTag_data()
   // Inheritance from a template that doesn't have any blocks
   QTest::newRow("inheritance27") << "{% extends 'inheritance26' %}" << dict << "no tags" << NoError;
 
+  m_tl->injectTemplate("inheritance 28", "{% block first %}!{% endblock %}");
+
+  // Inheritance from a template with a space in its name should work.
+  QTest::newRow("inheritance29") << "{% extends 'inheritance 28' %}" << dict << "!" << NoError;
+
   dict.clear();
   // Raise exception for invalid template name
   QTest::newRow("exception01") << "{% extends 'nonexistent' %}" << dict << "" << TagSyntaxError;
@@ -277,7 +287,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Raise exception for extra {% extends %} tags
   QTest::newRow("exception03") << "{% extends 'inheritance01' %}{% block first %}2{% endblock %}{% extends 'inheritance16' %}" << dict << "" << TagSyntaxError;
   // Raise exception for custom tags used in child with {% load %} tag in parent, not in child
-  QTest::newRow("exception04") << "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" << dict << "" << TagSyntaxError;
+  QTest::newRow("exception04") << "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" << dict << "" << InvalidBlockTagError;
 }
 
 

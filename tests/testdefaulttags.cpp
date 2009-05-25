@@ -560,6 +560,19 @@ void TestDefaultTags::testForTag_data()
 
   QTest::newRow("for-tag-unpack13") << "{% for x,y,z in items %}{{ x }}:{{ y }},{{ z }}/{% endfor %}" << dict << "one:1,carrot/two:2,cheese/" << NoError;
 
+// Empty tag:
+
+  dict.clear();
+  dict.insert("values", QVariantList() << 1 << 2 << 3 );
+  QTest::newRow("for-tag-empty01") << "{% for val in values %}{{ val }}{% empty %}empty text{% endfor %}" << dict << "123" << NoError;
+
+  dict.clear();
+  dict.insert("values", QVariantList());
+  QTest::newRow("for-tag-empty02") << "{% for val in values %}{{ val }}{% empty %}values array empty{% endfor %}" << dict << "values array empty" << NoError;
+
+  dict.clear();
+  QTest::newRow("for-tag-empty03") << "{% for val in values %}{{ val }}{% empty %}values array not found{% endfor %}" << dict << "values array not found" << NoError;
+
 }
 
 void TestDefaultTags::testIfEqualTag_data()
@@ -692,6 +705,31 @@ void TestDefaultTags::testIfEqualTag_data()
   dict.insert("x", 5);
   QTest::newRow("ifequal-numeric12") << "{% ifequal x +5 %}yes{% endifequal %}" << dict << "yes" << NoError;
 
+
+  // FILTER EXPRESSIONS AS ARGUMENTS
+
+  dict.clear();
+  dict.insert("a", "a");
+  QTest::newRow("ifequal-filter01") << "{% ifequal a|upper \"A\" %}x{% endifequal %}" << dict << "x" << NoError;
+
+  QTest::newRow("ifequal-filter02") << "{% ifequal \"A\" a|upper %}x{% endifequal %}" << dict << "x" << NoError;
+
+  dict.clear();
+  dict.insert("a", "x");
+  dict.insert("b", "X");
+
+  QTest::newRow("ifequal-filter03") << "{% ifequal a|upper b|upper %}x{% endifequal %}" << dict << "x" << NoError;
+
+  dict.clear();
+  dict.insert("x", "aaa");
+
+  QTest::newRow("ifequal-filter04") << "{% ifequal x|slice:\"1\" \"a\" %}x{% endifequal %}" << dict << "x" << NoError;
+
+  dict.clear();
+  dict.insert("x", "aaa");
+
+  QTest::newRow("ifequal-filter05") << "{% ifequal x|slice:\"1\"|upper \"A\" %}x{% endifequal %}" << dict << "x" << NoError;
+
 }
 
 void TestDefaultTags::testIfNotEqualTag_data()
@@ -797,12 +835,16 @@ void TestDefaultTags::testCycleTag_data()
   dict.insert("two", "2");
   QTest::newRow("cycle14") << "{% cycle one two as foo %}{% cycle foo %}" << dict << "12" << NoError;
 
-  // TODO: Same name as cycle13 in Django. Fix upstream.
   dict.clear();
   dict.insert("test", QVariantList() << 0 << 1 << 2 << 3 << 4);
   dict.insert("aye", "a");
   dict.insert("bee", "b");
   QTest::newRow("cycle15") << "{% for i in test %}{% cycle aye bee %}{{ i }},{% endfor %}" << dict << "a0,b1,a2,b3,a4," << NoError;
+
+  dict.clear();
+  dict.insert("one", "A");
+  dict.insert("two", "2");
+  QTest::newRow("cycle16") << "{% cycle one|lower two as foo %}{% cycle foo %}" << dict << "a2" << NoError;
 }
 
 void TestDefaultTags::testWidthRatioTag_data()
@@ -856,7 +898,16 @@ void TestDefaultTags::testWidthRatioTag_data()
   QTest::newRow("widthratio09") << "{% widthratio a b %}" << dict << "" << TagSyntaxError;
 
   dict.clear();
-  QTest::newRow("widthratio10") << "{% widthratio a b 100.0 %}" << dict << "" << TagSyntaxError;
+  dict.insert("a", 50);
+  dict.insert("b", 100);
+  QTest::newRow("widthratio10") << "{% widthratio a b 100.0 %}" << dict << "50" << NoError;
+
+  dict.clear();
+  dict.insert("a", 50);
+  dict.insert("b", 100);
+  dict.insert("c", 100);
+  QTest::newRow("widthratio11") << "{% widthratio a b c %}" << dict << "50" << NoError;
+
 }
 
 
