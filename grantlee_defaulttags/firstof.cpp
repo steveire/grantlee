@@ -27,7 +27,7 @@ Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
     return 0;
   }
 
-  return new FirstOfNode(getFilterExpressionList(expr), parent);
+  return new FirstOfNode(getFilterExpressionList(expr, p), parent);
 }
 
 
