@@ -108,19 +108,12 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
       subString = subString.right(ssSize - 1);
       int lastFilter = d->m_filters.size();
       d->m_filters[lastFilter -1].second = Variable(subString);
-    } else if (subString.startsWith("_(") && subString.endsWith(")"))
-    {
-      // Token is _("translated"): subString.mid(1, ssSize - 1 -2);
-    } else if (subString.startsWith("\"") && subString.endsWith("\""))
-    {
-      // Token is a "constant"
-      d->m_variable = Variable(subString);
     } else
     {
-      // Arg is a variable
+      // Token is _("translated"), or "constant", or a variable;
       d->m_variable = Variable(subString);
     }
-    
+
     pos += len;
     lastPos = pos;
   }

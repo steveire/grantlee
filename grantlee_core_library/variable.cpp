@@ -89,12 +89,12 @@ Variable::Variable(const QString &var)
     if (var.startsWith("_(") && var.endsWith(")"))
     {
       d->m_translate = true;
-      localVar = var.mid(2, var.size() - 1 );
+      localVar = var.mid(2, var.size() - 3 );
     }
     if ( ( localVar.startsWith( "\"" ) && localVar.endsWith( "\"" ) )
       || ( localVar.startsWith( "'" ) && localVar.endsWith( "'" ) ) )
     {
-      d->m_literal = localVar.mid(1, localVar.size() - 2 ).replace("\\'", "'");
+      d->m_literal = Util::unescapeStringLiteral(localVar);
     } else {
       d->m_lookups = localVar.split(".");
     }

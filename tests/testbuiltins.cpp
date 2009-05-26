@@ -246,8 +246,8 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   // Literal strings are permitted inside variables, mostly for i18n
   // purposes.
   QTest::newRow("basic-syntax25") << "{{ \"fred\" }}" << dict << "fred" << NoError;
-  QTest::newRow("basic-syntax26") << "{{ \"\\\"fred\\\"\" }}" << dict << "\\\"fred\\\"" << NoError;
-//   QTest::newRow("basic-syntax27") << "{{ _(\"\\\"fred\\\"\") }" << dict << "\\\"fred\\\"" << NoError;
+  QTest::newRow("basic-syntax26") << "{{ \"\\\"fred\\\"\" }}" << dict << "\"fred\"" << NoError;
+  QTest::newRow("basic-syntax27") << "{{ _(\"\\\"fred\\\"\") }}" << dict << "\"fred\"" << NoError;
 
 
 }

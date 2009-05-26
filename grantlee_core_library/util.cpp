@@ -6,6 +6,14 @@ Util::Util()
 
 }
 
+QString Util::unescapeStringLiteral(const QString &input)
+{
+  return input.mid(1, input.size() - 2 )
+              .replace("\\\'", "'")
+              .replace("\\\"", "\"")
+              .replace("\\\\", "\\");
+}
+
 bool Util::variantIsTrue(const QVariant &variant)
 {
 

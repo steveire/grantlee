@@ -11,6 +11,8 @@ public:
 
   static bool variantIsTrue(const QVariant &variant);
 
+  static QString unescapeStringLiteral(const QString &input);
+
 };
 
 #endif
