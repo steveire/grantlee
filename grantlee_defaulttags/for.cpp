@@ -201,9 +201,16 @@ QString ForNode::render(Context *c)
       {
         QVariantList vList = varList[index].toList();
         int varsSize = qMin(m_loopVars.size(), vList.size());
-        for (int j = 0; j < varsSize; ++j)
+        int j = 0;
+        for ( ; j < varsSize; ++j)
         {
           c->insert(m_loopVars.at(j), vList.at(j));
+        }
+        // If any of the named vars don't have an item in the context,
+        // insert an invalid object for them.
+        for ( ; j < m_loopVars.size(); ++j)
+        {
+          c->insert(m_loopVars.at(j), QVariant());
         }
 
       } else {
