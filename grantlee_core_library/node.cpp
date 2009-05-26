@@ -47,10 +47,29 @@ Node::~Node()
   delete d_ptr;
 }
 
+NodeList Node::getNodesByType(const char * className)
+{
+  return NodeList();
+}
+
 NodeList::NodeList()
   : QList<Grantlee::Node*>()
 {
 
+}
+
+NodeList NodeList::getNodesByType(const char * className)
+{
+  NodeList list;
+  QListIterator<Grantlee::Node *> it(*this);
+  while (it.hasNext())
+  {
+    Grantlee::Node *n = it.next();
+    if (n->metaObject()->className() == className)
+      list << n;
+    list << n->getNodesByType(className);
+  }
+  return list;
 }
 
 NodeList::NodeList(const NodeList &list)

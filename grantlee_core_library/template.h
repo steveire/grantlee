@@ -28,6 +28,8 @@ public:
 
   QString render( Context *c );
 
+  NodeList getNodesByType(const char * className);
+
   NodeList nodeList() const;
 
   // TODO: Remove this.  ??

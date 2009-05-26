@@ -17,6 +17,8 @@
 namespace Grantlee
 {
 
+class NodeList;
+
 class NodePrivate;
 
 /**
@@ -31,6 +33,8 @@ public:
 
   // This can't be const because CycleNode needs to change on each render.
   virtual QString render(Context *c) = 0;
+
+  virtual NodeList getNodesByType(const char * className);
 
 signals:
   void error(int, const QString &);
@@ -47,6 +51,8 @@ public:
   NodeList(const NodeList &list);
   NodeList(const QList<Grantlee::Node *> &list);
   ~NodeList();
+
+  NodeList getNodesByType(const char * className);
 
   //append changes m_containsNonText?
 

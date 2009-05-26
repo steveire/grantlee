@@ -38,6 +38,11 @@ void Template::setContent(const QString &templateString)
     m_nodelist = compileString( templateString );
 }
 
+NodeList Template::getNodesByType(const char* className)
+{
+  return m_nodelist.getNodesByType(className);
+}
+
 QString Template::render(Context *c)
 {
   QString ret = m_nodelist.render(c);
