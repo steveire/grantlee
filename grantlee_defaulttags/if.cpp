@@ -80,7 +80,7 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pare
   {
     falseList = p->parse(QStringList() << "endif", parent);
     // skip past the endif tag
-    p->nextToken();
+    p->deleteNextToken();
   } // else empty falseList.
 
   return new IfNode(boolVars, trueList, falseList, linkType, parent);

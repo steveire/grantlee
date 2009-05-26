@@ -56,7 +56,7 @@ Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
 
   NodeList list = p->parse(QStringList() << "endblock" << "endblock " + blockName, parent );
 
-  p->nextToken();
+  p->deleteNextToken();
 
   return new BlockNode(blockName, list, parent);
 }

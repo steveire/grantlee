@@ -21,7 +21,7 @@ Grantlee::Node* FilterNodeFactory::getNode(const QString& tagContent, Grantlee::
   FilterExpression fe(QString("var|%1").arg(expression), p);
 
   NodeList filterNodes = p->parse(QStringList() << "endfilter", parent );
-  p->nextToken();
+  p->deleteNextToken();
 
   return new FilterNode(fe, filterNodes, parent);
 }

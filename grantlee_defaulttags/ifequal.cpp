@@ -31,7 +31,7 @@ Node* IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool 
   if (p->nextToken().content.trimmed() == "else")
   {
     falseList = p->parse(QStringList() << endTag, parent);
-    p->nextToken();
+    p->deleteNextToken();
   } // else empty falseList.
 
   return new IfEqualNode(val1 ,val2, trueList, falseList, negate, parent);

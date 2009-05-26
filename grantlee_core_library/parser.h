@@ -37,6 +37,7 @@ public:
 
   Token nextToken();
   bool hasNextToken() const;
+  void deleteNextToken();
 
   void loadLib(const QString &name);
 

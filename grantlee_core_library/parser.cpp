@@ -234,6 +234,13 @@ Token Parser::nextToken()
   return d->m_tokenList.takeAt(0);
 }
 
+void Parser::deleteNextToken()
+{
+  Q_D(Parser);
+  if (!d->m_tokenList.isEmpty())
+    d->m_tokenList.removeAt(0);
+}
+
 void Parser::prependToken(const Token &token)
 {
   Q_D(Parser);

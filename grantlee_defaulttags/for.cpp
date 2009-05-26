@@ -42,7 +42,7 @@ Node* ForNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *par
   {
     emptyNodes = p->parse(QStringList() << "endfor", parent);
     // skip past the endfor tag
-    p->nextToken();
+    p->deleteNextToken();
   }
 
   return new ForNode(vars, fe, reversed, loopNodes, emptyNodes, parent);

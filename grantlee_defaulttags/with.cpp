@@ -29,7 +29,7 @@ Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pa
   QString name(expr.at(3));
 
   NodeList nodeList = p->parse(QStringList() << "endwith", parent);
-  p->nextToken();
+  p->deleteNextToken();
 
   return new WithNode(fe, name, nodeList, parent);
 }
