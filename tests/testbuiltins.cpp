@@ -242,7 +242,7 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   dict.clear();
   // Embedded newlines make it not-a-tag.
-  QTest::newRow("basic-syntax24") << "{{ moo\n }}" << dict << "{{ moo\\n }}" << NoError;
+  QTest::newRow("basic-syntax24") << "{{ moo\n }}" << dict << "{{ moo\n }}" << NoError;
   // Literal strings are permitted inside variables, mostly for i18n
   // purposes.
   QTest::newRow("basic-syntax25") << "{{ \"fred\" }}" << dict << "fred" << NoError;

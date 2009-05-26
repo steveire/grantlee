@@ -12,7 +12,9 @@
 
 using namespace Grantlee;
 
-static QRegExp tagRe(QString("(%1.*%2|%3.*%4|%5.*%6)")
+// In python regex, '.' matches any character except newline, whereas it QRegExp,
+// it matches any character including newline. We match 'not newline' instead.
+static QRegExp tagRe(QString("(%1[^\\n]*%2|%3[^\\n]*%4|%5[^\\n]*%6)")
   .arg(QRegExp::escape(BLOCK_TAG_START))
   .arg(QRegExp::escape(BLOCK_TAG_END))
   .arg(QRegExp::escape(VARIABLE_TAG_START))
