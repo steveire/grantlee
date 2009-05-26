@@ -18,7 +18,8 @@ typedef QMutableListIterator<Node*> MutableNodeListIterator;
 
 using namespace Grantlee;
 
-ExtendsNodeFactory::ExtendsNodeFactory()
+ExtendsNodeFactory::ExtendsNodeFactory(QObject *parent)
+  : AbstractNodeFactory(parent)
 {
 
 }
@@ -41,6 +42,12 @@ Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
   }
 
   NodeList nodeList = p->parse(parent);
+
+  if (nodeList.getNodesByType(ExtendsNode::staticMetaObject.className()).size() > 0)
+  {
+    error(TagSyntaxError, "Extends tag may only appear once in a template.");
+    return 0;
+  }
 
   return new ExtendsNode(nodeList, parentName, fe, parent);
 }

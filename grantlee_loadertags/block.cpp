@@ -13,7 +13,7 @@
 
 const char * __loadedBlocks = "__loadedBlocks";
 
-BlockNodeFactory::BlockNodeFactory()
+BlockNodeFactory::BlockNodeFactory(QObject *parent) : AbstractNodeFactory(parent)
 {
 
 }

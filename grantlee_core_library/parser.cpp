@@ -195,7 +195,7 @@ NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
         continue;
       }
 
-      connect(nodeFactory, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
+      connect(nodeFactory, SIGNAL(error(int, const QString &)), SLOT(errorSlot(int, const QString &)));
 
       // TODO: Make getNode take a Token instead?
       Node *n = nodeFactory->getNode(token.content, this, parent);
@@ -204,8 +204,6 @@ NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
       {
         return NodeList();
       }
-      
-      nodeFactory->disconnect(SIGNAL(error(int, QString)), this, SIGNAL(error(int, QString)));
 
       nodeList = d->extendNodeList(nodeList, n);
     }
@@ -217,6 +215,11 @@ NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
 
   return nodeList;
 
+}
+
+void Parser::errorSlot(int type, const QString &message )
+{
+  error(type, message);
 }
 
 bool Parser::hasNextToken() const

@@ -45,6 +45,9 @@ public:
 protected:
   void prependToken(const Token &token);
 
+protected slots:
+  void errorSlot(int type, const QString &message);
+
 signals:
   void error(int type, const QString &message);
 
