@@ -216,7 +216,7 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow("inheritance15") << inh15 << dict << "12inner3_" << NoError;
   // A block within another block (level 2)
 
-  QTest::newRow("inheritance16") << "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" << dict << "12out3" << NoError;
+  QTest::newRow("inheritance16") << "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" << dict << "12out3_" << NoError;
 //   // {% load %} tag (parent -- setup for exception04)
 //   // #C# {}
 //   QTest::newRow("inheritance17") << "{% load testtags %}{% block first %}1234{% endblock %}" << dict << " '1234'),";
@@ -237,7 +237,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Three-level inheritance with {{ block.super }} from grandparent
   QTest::newRow("inheritance22") << "{% extends 'inheritance04' %}{% block first %}{{ block.super }}a{% endblock %}" << dict << "1&a3_" << NoError;
   // Three-level inheritance with {{ block.super }} from parent and grandparent
-//   QTest::newRow("inheritance23") << "{% extends 'inheritance20' %}{% block first %}{{ block.super }}b{% endblock %}" << dict << "1&ab3_" << NoError;
+  QTest::newRow("inheritance23") << "{% extends 'inheritance20' %}{% block first %}{{ block.super }}b{% endblock %}" << dict << "1&ab3_" << NoError;
 
   // Inheritance from local context without use of template loader
 

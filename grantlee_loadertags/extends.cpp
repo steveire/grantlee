@@ -12,8 +12,6 @@
 #include "template.h"
 #include "grantlee.h"
 
-#include <QDebug>
-
 #include <QMutableListIterator>
 
 typedef QMutableListIterator<Node*> MutableNodeListIterator;
@@ -55,6 +53,12 @@ ExtendsNode::ExtendsNode(NodeList list, const QString &name, FilterExpression fe
   m_list = list;
 }
 
+NodeList ExtendsNode::getNodesByType(const char* className)
+{
+  return m_list.getNodesByType(className);
+}
+
+
 Template *ExtendsNode::getParent(Context *c)
 {
   QString parentName;
@@ -92,15 +96,15 @@ Template *ExtendsNode::getParent(Context *c)
 QString ExtendsNode::render(Context *c)
 {
   Template *parent = getParent(c);
+
   if (!parent)
   {
     error(TagSyntaxError, "TODO: Fix message");
     return QString();
   }
 
-  NodeList nodeList = parent->nodeList();
-  QHash<QString, int> parentBlocks;
-
+  NodeList nodeList = parent->getNodesByType(BlockNode::staticMetaObject.className());
+  QHash<QString, BlockNode *> parentBlocks;
   MutableNodeListIterator i(nodeList);
   int idx = 0;
   while (i.hasNext())
@@ -109,13 +113,13 @@ QString ExtendsNode::render(Context *c)
     BlockNode *bn = qobject_cast<BlockNode*>(n);
     if (bn)
     {
-      parentBlocks.insert(bn->name(), idx);
-//       i.remove();
+      parentBlocks.insert(bn->name(), bn);
     }
     idx++;
   }
 
-  MutableNodeListIterator j(m_list);
+  NodeList l = m_list.getNodesByType(BlockNode::staticMetaObject.className());
+  MutableNodeListIterator j(l);
 
   while (j.hasNext())
   {
@@ -125,14 +129,12 @@ QString ExtendsNode::render(Context *c)
     {
       if (parentBlocks.contains(bn->name()))
       {
-        int ii = parentBlocks.value(bn->name());
-        BlockNode *pbn = qobject_cast<BlockNode *>(nodeList[ii]);
-        pbn->setParent(bn->parent());
+        BlockNode *pbn = parentBlocks.value(bn->name());
+        pbn->setNodeParent(bn->nodeParent());
         pbn->addParent(pbn->nodeList());
         pbn->setNodeList(bn->nodeList());
-        nodeList[ii] = pbn;
       } else {
-        foreach(Node *node, nodeList)
+        foreach(Node *node, parent->nodeList())
         {
           TextNode *tn = dynamic_cast<TextNode*>(node);
           if (!tn)
@@ -149,7 +151,7 @@ QString ExtendsNode::render(Context *c)
     }
   }
 
-  return nodeList.render(c);
+  return parent->render(c);
 }
 
 void ExtendsNode::appendNode(Node *node)

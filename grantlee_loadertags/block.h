@@ -37,11 +37,13 @@ public:
 
   QString render(Context *c);
 
-  BlockNode* parent() const;
+  NodeList getNodesByType(const char * className);
+
+  BlockNode* nodeParent() const;
 
   QString name();
 
-  void setParent(BlockNode *);
+  void setNodeParent(BlockNode *);
 
   void addParent(NodeList);
 

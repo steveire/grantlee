@@ -10,7 +10,6 @@
 #include "template.h"
 #include "grantlee.h"
 
-#include <QDebug>
 
 const char * __loadedBlocks = "__loadedBlocks";
 
@@ -91,9 +90,14 @@ QString BlockNode::blockName()
 //   return m_filterExpression.variable().toString();
 }
 
-BlockNode* BlockNode::parent() const
+BlockNode* BlockNode::nodeParent() const
 {
   return m_parent;
+}
+
+NodeList BlockNode::getNodesByType(const char* className)
+{
+  return m_list.getNodesByType(className);
 }
 
 void BlockNode::addParent(NodeList nodeList)
@@ -102,16 +106,11 @@ void BlockNode::addParent(NodeList nodeList)
     m_parent->addParent(nodeList);
   else
   {
-//     NodeList l;
-//     foreach (BlockNode *block, nodeList)
-//     {
-//       l << block;
-//     }
     m_parent = new BlockNode(m_name, nodeList, this->parent());
   }
 }
 
-void BlockNode::setParent(BlockNode* node)
+void BlockNode::setNodeParent(BlockNode* node)
 {
   m_parent = node;
 }

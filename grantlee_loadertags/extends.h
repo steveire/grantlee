@@ -35,6 +35,8 @@ public:
 
   QString render(Context *c);
 
+  NodeList getNodesByType(const char * className);
+
   void appendNode(Node* node);
 
   Template *getParent(Context *c);
