@@ -138,20 +138,14 @@ void TestLoaderTags::testExtendsTag_data()
 
   Dict dict;
   // Basic test
-//   QTest::newRow("namedendblocks01") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock first %}3" << dict << "1_2_3";
+  QTest::newRow("namedendblocks01") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock first %}3" << dict << "1_2_3" << NoError;
   // Unbalanced blocks
-  // #C# {}
-  // QTest::newRow("namedendblocks02") << "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" << dict << NoError;
-  // #C# {}
-  // QTest::newRow("namedendblocks03") << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" << dict << " template.TemplateSyntaxError),";
-  // #C# {}
-  // QTest::newRow("namedendblocks04") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" << dict << " template.TemplateSyntaxError),";
-  // #C# {}
-  // QTest::newRow("namedendblocks05") << "1{% block first %}_{% block second %}2{% endblock first %}" << dict << " template.TemplateSyntaxError),";
+  QTest::newRow("namedendblocks02") << "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" << dict << "" << InvalidBlockTagError;
+  QTest::newRow("namedendblocks03") << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" << dict << "" << InvalidBlockTagError;
+  QTest::newRow("namedendblocks04") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" << dict << "" << InvalidBlockTagError;
+  QTest::newRow("namedendblocks05") << "1{% block first %}_{% block second %}2{% endblock first %}" << dict << "" << InvalidBlockTagError;
   // Mixed named and unnamed endblocks
-  // #C# {}
   QTest::newRow("namedendblocks06") << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock first %}3" << dict << "1_2_3" << NoError;
-  // #C# {}
   QTest::newRow("namedendblocks07") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock %}3" << dict << "1_2_3" << NoError;
 
 
