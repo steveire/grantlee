@@ -6,6 +6,7 @@ include_directories(
 
 set (grantlee_core_library_SRCS
   template.cpp
+  templateloader.cpp
   context.cpp
   variable.cpp
   filterexpression.cpp
