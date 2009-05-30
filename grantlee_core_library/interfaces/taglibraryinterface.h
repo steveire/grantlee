@@ -23,12 +23,14 @@ class TagLibraryInterface
 public:
   virtual ~TagLibraryInterface() {}
 
-  virtual QHash<QString, AbstractNodeFactory*> nodeFactories() {
+  virtual QHash<QString, AbstractNodeFactory*> nodeFactories(const QString &name = QString()) {
+    Q_UNUSED(name);
     QHash<QString, AbstractNodeFactory*> h;
     return h;
   };
 
-  virtual QHash<QString, Filter*> filters() {
+  virtual QHash<QString, Filter*> filters(const QString &name = QString()) {
+    Q_UNUSED(name);
     QHash<QString, Filter*> h;
     return h;
   };

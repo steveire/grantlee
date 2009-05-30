@@ -65,8 +65,9 @@ public:
     m_nodeFactories.insert("debug", new DebugNodeFactory());
   }
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories()
+  QHash<QString, AbstractNodeFactory*> nodeFactories(const QString &name = QString())
   {
+    Q_UNUSED(name);
     return m_nodeFactories;
   }
 

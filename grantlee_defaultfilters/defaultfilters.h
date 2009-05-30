@@ -47,8 +47,9 @@ public:
      m_filters.insert("slice", new SliceFilter());
   }
 
-  virtual QHash<QString, Filter*> filters()
+  virtual QHash<QString, Filter*> filters(const QString &name = QString())
   {
+    Q_UNUSED(name);
     return m_filters;
   }
 

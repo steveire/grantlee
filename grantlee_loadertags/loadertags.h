@@ -31,8 +31,9 @@ public:
     m_nodeFactories.insert("block", new BlockNodeFactory());
   }
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories()
+  QHash<QString, AbstractNodeFactory*> nodeFactories(const QString &name = QString())
   {
+    Q_UNUSED(name);
     return m_nodeFactories;
   }
 
