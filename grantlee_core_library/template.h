@@ -60,6 +60,12 @@ public:
 
   bool loadByName(Template *t, const QString &name ) const;
 
+  QStringList defaultLibraries() const;
+  void setDefaultLibraries(const QStringList &list);
+  void addDefaultLibrary(const QString &libName);
+  void removeDefaultLibrary(const QString &libName);
+
+
 private:
   TemplateLoader();
   bool loadFromFile(Template* t, const QString &fileName) const;
@@ -67,6 +73,7 @@ private:
   QString m_themeName;
   QStringList m_templateDirs;
   QStringList m_pluginDirs;
+  QStringList m_defaultLibraries;
   static TemplateLoader* m_instance;
   QHash<QString, QString> m_namedTemplates;
 };

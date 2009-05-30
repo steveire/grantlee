@@ -76,6 +76,10 @@ TemplateLoader* TemplateLoader::instance()
 
 TemplateLoader::TemplateLoader()
 {
+  m_defaultLibraries << "grantlee_defaulttags_library"
+                     << "grantlee_loadertags_library"
+                     << "grantlee_defaultfilters_library"
+                     << "grantlee_scriptabletags_library";
 }
 
 void TemplateLoader::setTemplateDirs(const QStringList &dirs)
@@ -87,6 +91,28 @@ void TemplateLoader::setPluginDirs(const QStringList &dirs)
 {
   m_pluginDirs = dirs;
 }
+
+QStringList TemplateLoader::defaultLibraries() const
+{
+  return m_defaultLibraries;
+}
+
+void TemplateLoader::setDefaultLibraries(const QStringList &list)
+{
+  m_defaultLibraries = list;
+}
+
+void TemplateLoader::addDefaultLibrary(const QString &libName)
+{
+  m_defaultLibraries << libName;
+}
+
+void TemplateLoader::removeDefaultLibrary(const QString &libName)
+{
+  m_defaultLibraries.removeAll(libName);
+
+}
+
 
 void TemplateLoader::setTheme(const QString &themeName)
 {
