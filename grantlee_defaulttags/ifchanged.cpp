@@ -97,3 +97,11 @@ QString IfChangedNode::render(Context *c)
   return QString("");
 }
 
+NodeList IfChangedNode::getNodesByType(const char* className)
+{
+  NodeList list;
+  list << m_trueList.getNodesByType(className);
+  list << m_falseList.getNodesByType(className);
+  return list;
+}
+

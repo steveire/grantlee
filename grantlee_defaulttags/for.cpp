@@ -234,3 +234,12 @@ QString ForNode::render(Context *c)
   c->pop();
   return result;
 }
+
+NodeList ForNode::getNodesByType(const char* className)
+{
+  NodeList nodeList;
+  nodeList << m_loopNodeList.getNodesByType(className);
+  nodeList << m_emptyNodeList.getNodesByType(className);
+  return nodeList;
+}
+

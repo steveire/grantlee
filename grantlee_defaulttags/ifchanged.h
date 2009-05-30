@@ -29,6 +29,8 @@ public:
 
   QString render(Context *c);
 
+  NodeList getNodesByType(const char * className);
+
 private:
   NodeList m_trueList;
   NodeList m_falseList;

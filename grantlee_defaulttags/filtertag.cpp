@@ -42,5 +42,11 @@ QString FilterNode::render(Context* c)
   return filtered;
 }
 
+NodeList FilterNode::getNodesByType(const char* className)
+{
+  return m_filterList.getNodesByType(className);
+}
+
+
 
 

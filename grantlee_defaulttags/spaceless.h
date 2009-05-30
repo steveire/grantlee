@@ -30,6 +30,8 @@ public:
 
   QString render(Context *c);
 
+  NodeList getNodesByType(const char * className);
+
 private:
   QString stripSpacesBetweenTags(const QString &input);
 

@@ -42,6 +42,8 @@ public:
 
   QString render(Context *c);
 
+  NodeList getNodesByType(const char * className);
+
 protected:
   QString renderTrueList(Context *c);
   QString renderFalseList(Context *c);

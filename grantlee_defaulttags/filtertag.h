@@ -26,6 +26,8 @@ public:
 
   QString render(Context *c);
 
+  NodeList getNodesByType(const char * className);
+
 private:
   FilterExpression m_fe;
   NodeList m_filterList;

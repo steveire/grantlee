@@ -36,6 +36,8 @@ public:
 
   QString render(Context *c);
 
+  NodeList getNodesByType(const char * className);
+
 private:
   NodeList m_list;
   int m_state;

@@ -37,6 +37,8 @@ public:
 
   QString render(Context *c);
 
+  NodeList getNodesByType(const char * className);
+
 private:
   void insertLoopVariables(Context *c, int listSize, int i);
   QString iterateMap(Context *c, QVariantMap varMap, bool unpack);

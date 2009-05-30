@@ -43,3 +43,9 @@ QString SpacelessNode::render(Context *c)
   return stripSpacesBetweenTags(m_nodeList.render(c).trimmed());
 }
 
+NodeList SpacelessNode::getNodesByType(const char* className)
+{
+  return m_nodeList.getNodesByType(className);
+}
+
+

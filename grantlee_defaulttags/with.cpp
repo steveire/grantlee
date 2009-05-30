@@ -52,3 +52,9 @@ QString WithNode::render(Context *c)
   return ret;
 }
 
+NodeList WithNode::getNodesByType(const char* className)
+{
+  return m_list.getNodesByType(className);
+}
+
+

@@ -76,3 +76,12 @@ QString IfEqualNode::render(Context *c)
   return m_falseList.render(c);
 
 }
+
+NodeList IfEqualNode::getNodesByType(const char* className)
+{
+  NodeList list;
+  list << m_trueList.getNodesByType(className);
+  list << m_falseList.getNodesByType(className);
+  return list;
+}
+

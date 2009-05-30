@@ -60,3 +60,7 @@ QString AutoescapeNode::render(Context *c)
   return m_list.render(c);
 }
 
+NodeList AutoescapeNode::getNodesByType(const char* className)
+{
+  return m_list.getNodesByType(className);
+}
