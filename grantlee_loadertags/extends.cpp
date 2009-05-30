@@ -10,6 +10,7 @@
 
 #include "parser.h"
 #include "template.h"
+#include "templateloader.h"
 #include "grantlee.h"
 
 #include <QMutableListIterator>

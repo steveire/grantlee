@@ -10,6 +10,7 @@
 #include <QObject>
 
 #include "template.h"
+#include "templateloader.h"
 #include "context.h"
 #include "grantlee.h"
 

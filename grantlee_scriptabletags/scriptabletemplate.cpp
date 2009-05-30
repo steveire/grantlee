@@ -5,6 +5,7 @@
 #include <QScriptEngine>
 
 #include "template.h"
+#include "templateloader.h"
 #include "context.h"
 #include "node.h"
 #include "scriptablecontext.h"

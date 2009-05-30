@@ -10,6 +10,7 @@
 #include "interfaces/taglibraryinterface.h"
 #include "grantlee.h"
 #include "template.h"
+#include "templateloader.h"
 #include "filter.h"
 
 
