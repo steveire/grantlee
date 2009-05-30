@@ -4,7 +4,6 @@
 
 #include "slice.h"
 
-#include <QDebug>
 
 SliceFilter::SliceFilter(QObject* parent): Filter(parent)
 {

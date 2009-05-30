@@ -5,8 +5,6 @@
 #include "yesno.h"
 
 
-#include <QDebug>
-
 YesNoFilter::YesNoFilter(QObject* parent): Filter(parent)
 {
 

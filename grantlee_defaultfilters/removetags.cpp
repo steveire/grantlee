@@ -5,7 +5,6 @@
 #include "removetags.h"
 #include <QRegExp>
 
-#include <QDebug>
 
 RemoveTagsFilter::RemoveTagsFilter(QObject* parent): Filter(parent)
 {
