@@ -8,6 +8,7 @@
 
 #include "interfaces/taglibraryinterface.h"
 #include "grantlee.h"
+#include "template.h"
 #include "filter.h"
 
 using namespace Grantlee;
@@ -48,9 +49,13 @@ Parser::Parser(const QList<Token> &tokenList, const QStringList &pluginDirs, QOb
 {
   Q_D(Parser);
 
-  loadLib("grantlee_defaulttags_library");
-  loadLib("grantlee_loadertags_library");
-  loadLib("grantlee_defaultfilters_library");
+  TemplateLoader *tl = TemplateLoader::instance();
+
+  foreach(const QString libName, tl->defaultLibraries())
+  {
+    loadLib(libName);
+  }
+
 }
 
 Parser::~Parser()
