@@ -35,17 +35,17 @@ Template::Template( const QStringList &pluginDirs, QObject *parent ) : QObject(p
 void Template::setContent(const QString &templateString)
 {
   if (!templateString.isEmpty())
-    m_nodelist = compileString( templateString );
+    m_nodeList = compileString( templateString );
 }
 
 NodeList Template::getNodesByType(const char* className)
 {
-  return m_nodelist.getNodesByType(className);
+  return m_nodeList.getNodesByType(className);
 }
 
 QString Template::render(Context *c)
 {
-  QString ret = m_nodelist.render(c);
+  QString ret = m_nodeList.render(c);
   if (ret.isNull())
   {
     error(TagSyntaxError, "someError");
@@ -56,12 +56,12 @@ QString Template::render(Context *c)
 
 NodeList Template::nodeList() const
 {
-  return m_nodelist;
+  return m_nodeList;
 }
 
 void Template::setNodeList(const NodeList &list)
 {
-  m_nodelist = list;
+  m_nodeList = list;
 }
 
 TemplateLoader* TemplateLoader::m_instance = 0;

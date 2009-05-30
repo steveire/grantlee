@@ -32,7 +32,6 @@ public:
 
   NodeList nodeList() const;
 
-  // TODO: Remove this.  ??
   void setNodeList(const NodeList &list);
   
 signals:
@@ -42,7 +41,7 @@ private:
   void parse();
   NodeList compileString(const QString &str);
   QStringList m_pluginDirs;
-  NodeList m_nodelist;
+  NodeList m_nodeList;
 };
 
 class GRANTLEE_EXPORT TemplateLoader
