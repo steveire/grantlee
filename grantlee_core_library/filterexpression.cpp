@@ -83,10 +83,10 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   {
     // error.
   }
-  
-  
-  QString vs = varString.trimmed();
-  
+
+
+  QString vs = varString; //.trimmed();
+
   while ((pos = sFilterRe.indexIn(vs, pos)) != -1) {
     len = sFilterRe.matchedLength();
     subString = vs.mid(pos, len);
