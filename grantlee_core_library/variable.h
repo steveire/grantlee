@@ -21,7 +21,7 @@ class VariablePrivate;
 class Variable
 {
 public:
-  explicit Variable();
+  Variable();
   explicit Variable(const QString &var);
   Variable(const Variable &other);
   ~Variable();
