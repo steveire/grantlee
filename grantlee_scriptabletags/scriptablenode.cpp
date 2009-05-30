@@ -36,7 +36,7 @@ QScriptValue ScriptableNodeConstructor(QScriptContext *context,
     args << context->argument(i);
   }
 
-  QScriptValue content = concreteNode.call(concreteNode, args);
+  concreteNode.call(concreteNode, args);
 
   QScriptValue renderMethod = concreteNode.property("render");
 
