@@ -134,6 +134,11 @@ NodeList Parser::parse(QObject *parent)
   return parse(QStringList(), parent);
 }
 
+NodeList Parser::parse(const QString &stopAt, QObject *parent)
+{
+  parse(QStringList() << stopAt, parent);
+}
+
 NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
 {
   Q_D(Parser);

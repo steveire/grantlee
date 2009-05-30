@@ -27,6 +27,7 @@ public:
   Parser( const QList<Token> &tokenList, const QStringList &pluginDirs, QObject *parent );
   ~Parser();
 
+  NodeList parse(const QString &stopAt, QObject *parent);
   NodeList parse(const QStringList &stopAt, QObject *parent);
 
   NodeList parse(QObject *parent);
