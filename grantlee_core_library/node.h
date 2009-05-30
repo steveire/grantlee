@@ -89,7 +89,9 @@ public:
   virtual Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const = 0;
 
 protected:
-  QStringList smartSplit(const QString &str) const;
+  Q_INVOKABLE QStringList smartSplit(const QString &str) const;
+
+protected:
   QList<Variable> getVariableList(const QStringList &list) const;
   QList<FilterExpression> getFilterExpressionList(const QStringList &list, Parser *p) const;
 
