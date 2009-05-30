@@ -5,11 +5,15 @@
 #include "parser.h"
 
 #include <QPluginLoader>
+#include <QFile>
 
 #include "interfaces/taglibraryinterface.h"
 #include "grantlee.h"
 #include "template.h"
 #include "filter.h"
+
+
+static const char * __scriptableLibName = "grantlee_scriptabletags_library";
 
 using namespace Grantlee;
 
@@ -22,7 +26,8 @@ public:
   ParserPrivate(Parser *parser, const QList<Token> &tokenList, const QStringList &pluginDirs)
     : q_ptr(parser),
     m_tokenList(tokenList),
-    m_pluginDirs(pluginDirs)
+    m_pluginDirs(pluginDirs),
+    m_scriptableTagLibrary(0)
   {
 
   }
@@ -31,6 +36,8 @@ public:
 
   QList<Token> m_tokenList;
   QHash<QString, AbstractNodeFactory*> m_nodeFactories;
+  TagLibraryInterface *m_scriptableTagLibrary;
+
   QHash<QString, Filter*> m_filters;
   QHash<QString, TagLibraryInterface*> m_tags;
   NodeList m_nodeList;
@@ -61,6 +68,7 @@ Parser::Parser(const QList<Token> &tokenList, const QStringList &pluginDirs, QOb
 Parser::~Parser()
 {
   qDeleteAll(d_ptr->m_nodeFactories);
+  delete d_ptr->m_scriptableTagLibrary;
   delete d_ptr;
 }
 
@@ -70,6 +78,38 @@ void Parser::loadLib(const QString &name)
 
   int pluginIndex = 0;
   QString libFileName;
+
+  if (d->m_scriptableTagLibrary)
+  {
+    while (d->m_pluginDirs.size() > pluginIndex)
+    {
+      libFileName = d->m_pluginDirs.at(pluginIndex++) + name + ".qs";
+
+      QFile file(libFileName);
+      if (!file.exists())
+        continue;
+
+      QHashIterator<QString, AbstractNodeFactory*> i(d->m_scriptableTagLibrary->nodeFactories(libFileName));
+      while (i.hasNext())
+      {
+        i.next();
+        d->m_nodeFactories[i.key()] = i.value();
+      }
+
+      QHashIterator<QString, Filter*> filterIter(d->m_scriptableTagLibrary->filters(libFileName));
+      while (filterIter.hasNext())
+      {
+        filterIter.next();
+        Filter *f = filterIter.value();
+        f->setParent(this->parent());
+        d->m_filters[filterIter.key()] = f;
+      }
+
+      return;
+    }
+  }
+
+  pluginIndex = 0;
 
   QObject *plugin;
   while (d->m_pluginDirs.size() > pluginIndex)
@@ -87,6 +127,12 @@ void Parser::loadLib(const QString &name)
   TagLibraryInterface *tagLibrary = qobject_cast<TagLibraryInterface*>(plugin);
   if (!tagLibrary)
     return;
+
+  if (name == __scriptableLibName)
+  {
+    d->m_scriptableTagLibrary = tagLibrary;
+    return;
+  }
 
   QHashIterator<QString, AbstractNodeFactory*> i(tagLibrary->nodeFactories());
   while (i.hasNext())
