@@ -21,7 +21,7 @@ grantlee_unit_tests(
   testbuiltins
   testloadertags
   testdefaulttags
+  testscriptabletags
 )
-
 
 

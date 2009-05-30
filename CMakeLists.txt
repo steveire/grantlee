@@ -23,6 +23,6 @@ add_subdirectory(grantlee_defaulttags)
 
 add_subdirectory(grantlee_defaultfilters)
 
-# add_subdirectory(grantlee_scriptabletags)
+add_subdirectory(grantlee_scriptabletags)
 
 add_subdirectory(tests)
