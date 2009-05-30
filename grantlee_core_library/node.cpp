@@ -4,7 +4,6 @@
 
 #include "node.h"
 
-#include <QDebug>
 
 using namespace Grantlee;
 

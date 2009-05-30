@@ -9,7 +9,6 @@
 #include "parser.h"
 #include "grantlee.h"
 
-#include <QDebug>
 
 static QHash<QString, QString> s_map;
 

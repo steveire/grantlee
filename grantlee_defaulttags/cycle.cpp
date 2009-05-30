@@ -7,7 +7,6 @@
 #include <QStringList>
 #include "parser.h"
 
-#include <QDebug>
 
 static const char * _namedCycleNodes = "_namedCycleNodes";
 

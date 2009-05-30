@@ -9,8 +9,6 @@
 
 #include "parser.h"
 
-#include <QDebug>
-
 Q_EXPORT_PLUGIN2(grantlee_defaultfilters_library, DefaultFiltersLibrary);
 
 

@@ -6,11 +6,11 @@
 
 #include <QStringList>
 #include <QFile>
+#include <QTextStream>
 
 #include "parser.h"
 #include "template.h"
 
-#include <QDebug>
 
 
 SsiNodeFactory::SsiNodeFactory()

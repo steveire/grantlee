@@ -9,7 +9,6 @@
 
 #include "grantlee.h"
 
-#include <QDebug>
 
 LoadNodeFactory::LoadNodeFactory()
 {

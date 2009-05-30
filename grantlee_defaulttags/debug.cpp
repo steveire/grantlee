@@ -8,7 +8,6 @@
 #include "parser.h"
 #include "grantlee.h"
 
-#include <QDebug>
 
 DebugNodeFactory::DebugNodeFactory()
 {

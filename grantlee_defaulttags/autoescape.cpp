@@ -10,7 +10,6 @@
 #include "parser.h"
 #include "template.h"
 
-#include <QDebug>
 
 
 AutoescapeNodeFactory::AutoescapeNodeFactory()

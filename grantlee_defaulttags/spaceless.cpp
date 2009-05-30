@@ -8,7 +8,6 @@
 #include "parser.h"
 
 
-#include <QDebug>
 
 SpacelessNodeFactory::SpacelessNodeFactory()
 {

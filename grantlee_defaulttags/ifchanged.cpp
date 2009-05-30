@@ -9,7 +9,6 @@
 
 #include "parser.h"
 
-#include <QDebug>
 
 
 IfChangedNodeFactory::IfChangedNodeFactory()
