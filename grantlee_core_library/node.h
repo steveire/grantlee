@@ -36,8 +36,11 @@ public:
 
   virtual NodeList getNodesByType(const char * className);
 
-signals:
-  void error(int, const QString &);
+  Error error() const;
+  QString errorString() const;
+
+protected:
+  void setError(Error type, const QString &message);
 
 private:
   Q_DECLARE_PRIVATE(Node)
@@ -58,7 +61,15 @@ public:
 
   QString render(Context *c);
 
+  Error error() const;
+  QString errorString() const;
+
+protected:
+  void setError(Error type, const QString &message );
+
 private:
+  Error m_error;
+  QString m_errorString;
   bool m_containsNonText;
 };
 
@@ -88,6 +99,9 @@ public:
   */
   virtual Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const = 0;
 
+  Error error() const;
+  QString errorString() const;
+
 protected:
   Q_INVOKABLE QStringList smartSplit(const QString &str) const;
 
@@ -95,8 +109,8 @@ protected:
   QList<Variable> getVariableList(const QStringList &list) const;
   QList<FilterExpression> getFilterExpressionList(const QStringList &list, Parser *p) const;
 
-signals:
-  void error(int type, const QString &message) const;
+  // Needs to be const so it can be called from const methods.
+  void setError(Error type, const QString &message) const;
 
 private:
   Q_DECLARE_PRIVATE(AbstractNodeFactory)

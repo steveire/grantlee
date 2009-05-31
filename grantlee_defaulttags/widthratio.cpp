@@ -20,7 +20,7 @@ Node* WidthRatioNodeFactory::getNode(const QString &tagContent, Parser *p, QObje
 
   if (expr.size() != 4)
   {
-    error(TagSyntaxError, "widthratio takes three arguments");
+    setError(TagSyntaxError, "widthratio takes three arguments");
     return 0;
   }
   FilterExpression valExpr(expr.at(1), p);
@@ -52,13 +52,13 @@ QString WidthRatioNode::render(Context *c)
   QVariant thisVal = m_valExpr.resolve(c);
   QVariant maxVal = m_maxExpr.resolve(c);
   if (!thisVal.isValid() || !maxVal.isValid())
-    return QString("");
+    return QString();
 
   qreal tv = thisVal.toDouble();
   qreal mv = maxVal.toDouble();
 
   if (mv == 0)
-    return QString("");
+    return QString();
 
   int maxWidth = m_maxWidth.resolve(c).toInt();
 

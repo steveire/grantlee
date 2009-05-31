@@ -15,11 +15,17 @@ NodeList Template::compileString(const QString &str)
 {
   Lexer l(str);
   Parser p( l.tokenize(), m_pluginDirs, this );
-  connect(&p, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
-  return p.parse(this);
+  NodeList nodeList = p.parse(this);
+
+  if (NoError != p.error())
+  {
+    setError(p.error(), p.errorString());
+  }
+  return nodeList;
 }
 
-Template::Template( const QStringList &pluginDirs, QObject *parent ) : QObject(parent)
+Template::Template( const QStringList &pluginDirs, QObject *parent )
+  : QObject(parent), m_error(NoError)
 {
   m_pluginDirs = pluginDirs;
 }
@@ -37,13 +43,13 @@ NodeList Template::getNodesByType(const char* className)
 
 QString Template::render(Context *c)
 {
-  QString ret = m_nodeList.render(c);
-  if (ret.isNull())
+  QString result = m_nodeList.render(c);
+
+  if (m_nodeList.error() != NoError)
   {
-    error(TagSyntaxError, "someError");
-    return QString();
+    setError(m_nodeList.error(), m_nodeList.errorString());
   }
-  return ret;
+  return result;
 }
 
 NodeList Template::nodeList() const
@@ -55,3 +61,20 @@ void Template::setNodeList(const NodeList &list)
 {
   m_nodeList = list;
 }
+
+void Template::setError(Error type, const QString &message)
+{
+  m_error = type;
+  m_errorString = message;
+}
+
+Error Template::error()
+{
+  return m_error;
+}
+
+QString Template::errorString()
+{
+  return m_errorString;
+}
+

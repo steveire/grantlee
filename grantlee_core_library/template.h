@@ -9,6 +9,7 @@
 
 #include "node.h"
 #include "grantlee_export.h"
+#include "grantlee.h"
 
 namespace Grantlee
 {
@@ -34,12 +35,18 @@ public:
 
   void setNodeList(const NodeList &list);
 
-signals:
-  void error(int type, const QString &message);
+  Error error();
+  QString errorString();
+
+protected:
+  void setError(Error type, const QString &message);
 
 private:
   void parse();
   NodeList compileString(const QString &str);
+
+  Error m_error;
+  QString m_errorString;
   QStringList m_pluginDirs;
   NodeList m_nodeList;
 };

@@ -126,27 +126,20 @@ void TestBuiltinSyntax::doTest()
 
 
   Template* t = m_tl->getTemplate(this);
-  QSignalSpy spy(t, SIGNAL(error(int, QString)));
   t->setContent(input);
-
-  if (spy.count() > 0)
-  {
-    QVariantList l = spy.takeFirst();
-    QCOMPARE(l.at(0).toInt(), (int)error );
-    return;
-  }
 
   Context context(dict);
 
   QString result = t->render(&context);
 
-  if (spy.count() > 0)
+  if (t->error() != NoError)
   {
-    QVariantList l = spy.takeFirst();
-    QCOMPARE(l.at(0).toInt(), (int)error );
-    QCOMPARE(result, QString());
+    QCOMPARE(t->error(), error );
     return;
   }
+
+
+  QCOMPARE(t->error(), NoError);
 
   // Didn't catch any errors, so make sure I didn't expect any.
   QCOMPARE(NoError, error);

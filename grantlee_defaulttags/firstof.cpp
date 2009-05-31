@@ -22,7 +22,7 @@ Node* FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
 
   if (expr.size() <= 0 )
   {
-    emit error(TagSyntaxError, QString("%1 expects at least one argument").arg("expr.at(0)"));
+    setError(TagSyntaxError, QString("%1 expects at least one argument").arg("expr.at(0)"));
     return 0;
   }
 
@@ -44,6 +44,6 @@ QString FirstOfNode::render(Context *c)
       return fe.resolve(c).toString();
     }
   }
-  return QString("");
+  return QString();
 }
 

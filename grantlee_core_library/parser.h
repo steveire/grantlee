@@ -9,6 +9,7 @@
 
 #include "token.h"
 #include "node.h"
+#include "grantlee.h"
 
 namespace Grantlee
 {
@@ -42,16 +43,14 @@ public:
 
   void loadLib(const QString &name);
 
-  void emitError(int errorNumber, const QString &message);
+
+  Error error() const;
+  QString errorString() const;
 
 protected:
   void prependToken(const Token &token);
 
-protected slots:
-  void errorSlot(int type, const QString &message);
-
-signals:
-  void error(int type, const QString &message);
+  void setError(Error errorNumber, const QString &message);
 
 private:
   Q_DECLARE_PRIVATE(Parser);

@@ -32,7 +32,7 @@ Node* TemplateTagNodeFactory::getNode(const QString &tagContent, Parser *p, QObj
   expr.takeAt(0);
   if (expr.size() <= 0)
   {
-    error(TagSyntaxError, "'templatetag' statement takes one argument");
+    setError(TagSyntaxError, "'templatetag' statement takes one argument");
     return 0;
   }
 
@@ -40,7 +40,7 @@ Node* TemplateTagNodeFactory::getNode(const QString &tagContent, Parser *p, QObj
 
   if (!TemplateTagNode::isKeyword(name))
   {
-    error(TagSyntaxError, "Not a template tag");
+    setError(TagSyntaxError, "Not a template tag");
     return 0;
   }
 

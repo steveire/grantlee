@@ -22,7 +22,7 @@ Node* LoadNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pa
 
   if (expr.size() <= 0 )
   {
-    emit error(TagSyntaxError, QString("%1 expects at least one argument").arg("expr.at(0)"));
+    setError(TagSyntaxError, QString("%1 expects at least one argument").arg("expr.at(0)"));
     return 0;
   }
 
@@ -44,6 +44,6 @@ LoadNode::LoadNode(QObject *parent)
 
 QString LoadNode::render(Context *c)
 {
-  return QString("");
+  return QString();
 }
 

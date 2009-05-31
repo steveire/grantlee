@@ -45,7 +45,6 @@ QString IncludeNode::render(Context *c)
   TemplateLoader *loader = TemplateLoader::instance();
 
   Template *t = loader->getTemplate(this);
-  connect(t, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
   loader->loadByName(t, filename);
 
   return t->render(c);

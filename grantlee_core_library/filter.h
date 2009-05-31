@@ -29,9 +29,6 @@ public:
    */
   virtual QString doFilter(const QVariant &input, const QString &argument = QString()) const = 0;
 
-signals:
-  void error(int, const QString &);
-
 };
 
 }

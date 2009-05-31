@@ -23,7 +23,7 @@ Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p, QObje
 
   if (expr.size() != 2)
   {
-    error(TagSyntaxError, "autoescape takes two arguments.");
+    setError(TagSyntaxError, "autoescape takes two arguments.");
     return 0;
   }
 
@@ -35,7 +35,7 @@ Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p, QObje
     state = AutoescapeNode::On;
   else
   {
-    error(TagSyntaxError, "argument must be 'on' or 'off'");
+    setError(TagSyntaxError, "argument must be 'on' or 'off'");
     return 0;
   }
 

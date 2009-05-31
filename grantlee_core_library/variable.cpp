@@ -26,6 +26,9 @@ public:
 
   QVariant resolvePart( const QVariant &variant, const QString &s ) const;
 
+  Error m_error;
+  QString m_errorString;
+
   QString m_varString;
   QVariant m_literal;
   QStringList m_lookups;
@@ -136,6 +139,25 @@ QVariant Variable::resolve(Context *c) const
 //     return gettext(var.toString());
   }
   return var;
+}
+
+void Variable::setError(Error type, const QString &message)
+{
+  Q_D(Variable);
+  d->m_error = type;
+  d->m_errorString = message;
+}
+
+Error Variable::error() const
+{
+  Q_D(const Variable);
+  return d->m_error;
+}
+
+QString Variable::errorString() const
+{
+  Q_D(const Variable);
+  return d->m_errorString;
 }
 
 QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextPart ) const

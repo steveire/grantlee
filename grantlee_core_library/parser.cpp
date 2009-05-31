@@ -26,6 +26,7 @@ class ParserPrivate
 public:
   ParserPrivate(Parser *parser, const QList<Token> &tokenList, const QStringList &pluginDirs)
     : q_ptr(parser),
+    m_error(NoError),
     m_tokenList(tokenList),
     m_pluginDirs(pluginDirs),
     m_scriptableTagLibrary(0)
@@ -43,6 +44,9 @@ public:
   QHash<QString, TagLibraryInterface*> m_tags;
   NodeList m_nodeList;
   QStringList m_pluginDirs;
+
+  Error m_error;
+  QString m_errorString;
 
   QStringList m_libraryPaths;
 
@@ -176,11 +180,6 @@ Filter *Parser::getFilter(const QString &name) const
   return d->m_filters.value(name);
 }
 
-void Parser::emitError(int err, const QString & message)
-{
-  error(err, message);
-}
-
 NodeList Parser::parse(QObject *parent)
 {
   return parse(QStringList(), parent);
@@ -212,13 +211,13 @@ NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
           message = QString("Empty variable before \"%1\"").arg(nextToken().content);
         else
           message = QString("Empty variable at end of input.");
-        emit error(EmptyVariableError, message);
+        setError(EmptyVariableError, message);
         return NodeList();
       }
       FilterExpression filterExpression(token.content, this);
       if (filterExpression.error() != NoError)
       {
-        emit error(filterExpression.error(), "unknown filter error");
+        setError(filterExpression.error(), filterExpression.errorString());
         return NodeList();
       }
       nodeList = d->extendNodeList(nodeList, new VariableNode(filterExpression, parent));
@@ -239,7 +238,7 @@ NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
           message = QString("Empty block tag before \"%1\"").arg(nextToken().content);
         else
           message = QString("Empty block tag at end of input.");
-        emit error(EmptyBlockTagError, message);
+        setError(EmptyBlockTagError, message);
         return NodeList();
       }
       QString command = tagContents.at(0);
@@ -248,17 +247,22 @@ NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
       // unknown tag.
       if (!nodeFactory)
       {
-        emit error(InvalidBlockTagError, QString("Unknown tag \"%1\"").arg(command));
+        setError(InvalidBlockTagError, QString("Unknown tag \"%1\"").arg(command));
         continue;
       }
-
-      connect(nodeFactory, SIGNAL(error(int, const QString &)), SLOT(errorSlot(int, const QString &)));
 
       // TODO: Make getNode take a Token instead?
       Node *n = nodeFactory->getNode(token.content, this, parent);
 
       if (!n)
       {
+        setError(TagSyntaxError, QString("Failed to get node from %1").arg(command));
+        return NodeList();
+      }
+
+      if (NoError != nodeFactory->error())
+      {
+        setError(nodeFactory->error(), nodeFactory->errorString());
         return NodeList();
       }
 
@@ -268,15 +272,29 @@ NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
   }
 
   if (stopAt.size() > 0)
-    error(UnclosedBlockTagError, QString("Unclosed tag in template. Expected one of: %1").arg(stopAt.join(" ")));
+    setError(UnclosedBlockTagError, QString("Unclosed tag in template. Expected one of: (%1)").arg(stopAt.join(" ")));
 
   return nodeList;
 
 }
 
-void Parser::errorSlot(int type, const QString &message )
+void Parser::setError(Error errorNumber, const QString& message)
 {
-  error(type, message);
+  Q_D(Parser);
+  d->m_error = errorNumber;
+  d->m_errorString = message;
+}
+
+Error Grantlee::Parser::error() const
+{
+  Q_D(const Parser);
+  return d->m_error;
+}
+
+QString Parser::errorString() const
+{
+  Q_D(const Parser);
+  return d->m_errorString;
 }
 
 bool Parser::hasNextToken() const

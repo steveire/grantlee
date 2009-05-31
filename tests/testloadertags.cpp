@@ -14,7 +14,6 @@
 #include "context.h"
 #include "grantlee.h"
 
-#include "grantlee.h"
 
 typedef QHash<QString, QVariant> Dict;
 
@@ -69,30 +68,23 @@ void TestLoaderTags::doTest()
 
   Template* t = m_tl->getTemplate(this);
 
-  QSignalSpy spy(t, SIGNAL(error(int, const QString &)));
   t->setContent(input);
-
-  if (spy.count() > 0)
-  {
-    QVariantList l = spy.takeFirst();
-    QCOMPARE(l.at(0).toInt(), (int)errorNumber );
-    return;
-  }
 
   Context context(dict);
 
   QString result = t->render(&context);
 
-  if (spy.count() > 0)
+  if (t->error() != NoError)
   {
-    QVariantList l = spy.takeFirst();
-    QCOMPARE(l.at(0).toInt(), (int)errorNumber );
-    QCOMPARE(result, QString());
+    QCOMPARE(t->error(), errorNumber );
     return;
   }
 
   // Didn't catch any errors, so make sure I didn't expect any.
   QCOMPARE(NoError, errorNumber);
+
+  QCOMPARE(t->error(), NoError);
+
 
   QCOMPARE(result, output);
 }

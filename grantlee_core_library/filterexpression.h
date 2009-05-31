@@ -6,6 +6,7 @@
 #define FILTEREXPRESSION_H
 
 #include "variable.h"
+#include "grantlee.h"
 
 #include "grantlee_export.h"
 
@@ -42,7 +43,8 @@ public:
 
   FilterExpression &operator=(const FilterExpression &other);
 
-  int error() const;
+  Error error() const;
+  QString errorString() const;
 
   Variable variable() const;
 
@@ -51,6 +53,9 @@ public:
   bool isTrue(Context *c) const;
 
   QVariantList toList(Context *c) const;
+
+protected:
+  void setError(Error type, const QString &message);
 
 private:
   Q_DECLARE_PRIVATE(FilterExpression);

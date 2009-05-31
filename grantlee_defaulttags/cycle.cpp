@@ -21,7 +21,7 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
 
   if (expr.size() < 1 )
   {
-    emit error(TagSyntaxError, QString("%1 expects at least one argument").arg(expr.at(0)));
+    setError(TagSyntaxError, QString("%1 expects at least one argument").arg(expr.at(0)));
     return 0;
   }
 
@@ -42,26 +42,26 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
     QVariant cycleNodes = p->property(_namedCycleNodes);
     if (!cycleNodes.isValid() || cycleNodes.type() != QVariant::Map)
     {
-      error(TagSyntaxError, QString("No named cycles in template. '%1' is not defined").arg(name));
+      setError(TagSyntaxError, QString("No named cycles in template. '%1' is not defined").arg(name));
       return 0;
     }
     QVariantMap map = cycleNodes.toMap();
     if (!map.contains(name))
     {
-      error(TagSyntaxError, QString("Node not found: %1").arg(name));
+      setError(TagSyntaxError, QString("Node not found: %1").arg(name));
       return 0;
     }
     QVariant nodeVariant = map.value(name);
     if (nodeVariant.userType() != QMetaType::QObjectStar)
     {
-      error(TagSyntaxError, "Invalid object in node cycle list");
+      setError(TagSyntaxError, "Invalid object in node cycle list");
       return 0;
     }
     QObject *obj = nodeVariant.value<QObject*>();
     Node *node = qobject_cast<Node*>(obj);
     if (!node)
     {
-      error(TagSyntaxError, "Invalid object in node cycle list");
+      setError(TagSyntaxError, "Invalid object in node cycle list");
       return 0;
     }
     return node;

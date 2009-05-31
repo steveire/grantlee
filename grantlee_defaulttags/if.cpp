@@ -22,7 +22,7 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pare
   expr.takeAt(0);
   if (expr.size() <= 0)
   {
-    error(TagSyntaxError, "'if' statement requires at least one argument");
+    setError(TagSyntaxError, "'if' statement requires at least one argument");
     return 0;
   }
 
@@ -40,7 +40,7 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pare
     linkType = IfNode::AndLink;
     if (exprString.contains(" or "))
     {
-      error(TagSyntaxError, "'if' tags can't mix 'and' and 'or'");
+      setError(TagSyntaxError, "'if' tags can't mix 'and' and 'or'");
       return 0;
     }
   }
@@ -54,13 +54,12 @@ Node* IfNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pare
       QStringList bits = boolStr.split( " " );
       if (bits.size() != 2)
       {
-        error(TagSyntaxError, "'if' statement improperly formatted");
+        setError(TagSyntaxError, "'if' statement improperly formatted");
         return 0;
       }
       if (bits.at(0) != "not")
       {
-        // TemplateSyntaxError, "Expected 'not' in if statement"
-        error(TagSyntaxError, "Expected 'not' in if statement");
+        setError(TagSyntaxError, "Expected 'not' in if statement");
         return 0;
       }
       pair.first = true;

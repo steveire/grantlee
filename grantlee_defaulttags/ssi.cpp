@@ -29,7 +29,7 @@ Node* SsiNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *par
 
   if ((exprSize != 3) && (exprSize != 2))
   {
-    error(TagSyntaxError, "ssi tag takes one argument");
+    setError(TagSyntaxError, "ssi tag takes one argument");
     return 0;
   }
 

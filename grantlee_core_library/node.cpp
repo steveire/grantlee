@@ -13,21 +13,28 @@ namespace Grantlee
 class NodePrivate
 {
   NodePrivate(Node *node)
-    : q_ptr(node)
+    : q_ptr(node), m_error(NoError)
   {
 
   }
   Q_DECLARE_PUBLIC(Node)
   Node *q_ptr;
+
+  Error m_error;
+  QString m_errorString;
+
 };
 
 class AbstractNodeFactoryPrivate
 {
   AbstractNodeFactoryPrivate(AbstractNodeFactory *factory)
-    : q_ptr(factory)
+  : q_ptr(factory), m_error(NoError)
   {
 
   }
+
+  mutable Error m_error;
+  mutable QString m_errorString;
 
   Q_DECLARE_PUBLIC(AbstractNodeFactory)
   AbstractNodeFactory *q_ptr;
@@ -46,13 +53,32 @@ Node::~Node()
   delete d_ptr;
 }
 
+void Node::setError(Error type, const QString &message)
+{
+  Q_D(Node);
+  d->m_error = type;
+  d->m_errorString = message;
+}
+
+Error Node::error() const
+{
+  Q_D(const Node);
+  return d->m_error;
+}
+
+QString Node::errorString() const
+{
+  Q_D(const Node);
+  return d->m_errorString;
+}
+
 NodeList Node::getNodesByType(const char * className)
 {
   return NodeList();
 }
 
 NodeList::NodeList()
-  : QList<Grantlee::Node*>()
+  : QList<Grantlee::Node*>(), m_error(NoError)
 {
 
 }
@@ -74,11 +100,12 @@ NodeList NodeList::getNodesByType(const char * className)
 NodeList::NodeList(const NodeList &list)
   : QList<Grantlee::Node*>(list)
 {
-
+  m_error = list.error();
+  m_errorString = list.errorString();
 }
 
 NodeList::NodeList(const QList<Grantlee::Node *> &list)
-  : QList<Grantlee::Node*>(list)
+  : QList<Grantlee::Node*>(list), m_error(NoError)
 {
 
 }
@@ -90,20 +117,35 @@ NodeList::~NodeList()
 QString NodeList::render(Context *c)
 {
   QString ret;
-  
+
   for (int i = 0; i < this->size(); ++i)
   {
-    QString s = this->at(i)->render(c);
-    if (s.isNull())
-      return QString();
-    ret += s;
+    ret += this->at(i)->render(c);
+    if (this->at(i)->error() != NoError)
+    {
+      setError(this->at(i)->error(), this->at(i)->errorString());
+      break;
+    }
   }
-  
-  if (ret.isNull())
-    return QString("");
-  
+
   return ret;
 
+}
+
+void NodeList::setError(Error type, const QString &message)
+{
+  m_error = type;
+  m_errorString = message;
+}
+
+Error NodeList::error() const
+{
+  return m_error;
+}
+
+QString NodeList::errorString() const
+{
+  return m_errorString;
 }
 
 AbstractNodeFactory::AbstractNodeFactory(QObject *parent)
@@ -156,6 +198,26 @@ QStringList AbstractNodeFactory::smartSplit(const QString &str) const
 
   return l;
 }
+
+void AbstractNodeFactory::setError(Error type, const QString &message) const
+{
+  Q_D(const AbstractNodeFactory);
+  d->m_error = type;
+  d->m_errorString = message;
+}
+
+Error AbstractNodeFactory::error() const
+{
+  Q_D(const AbstractNodeFactory);
+  return d->m_error;
+}
+
+QString AbstractNodeFactory::errorString() const
+{
+  Q_D(const AbstractNodeFactory);
+  return d->m_errorString;
+}
+
 
 TextNode::TextNode(const QString &content, QObject *parent)
   : Node(parent), m_content(content)

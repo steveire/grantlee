@@ -20,7 +20,7 @@ Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *pa
 
   if (expr.size() != 4 or expr.at(2) != "as")
   {
-    emit error(TagSyntaxError, QString("%1 expected format is 'value as name'").arg(expr.at(0)));
+    setError(TagSyntaxError, QString("%1 expected format is 'value as name'").arg(expr.at(0)));
     return 0;
   }
 

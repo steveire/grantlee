@@ -15,14 +15,15 @@ namespace Grantlee
 {
 class FilterExpressionPrivate
 {
-  FilterExpressionPrivate(FilterExpression *fe, int error)
-    : q_ptr(fe), m_error(error)
+  FilterExpressionPrivate(FilterExpression *fe)
+    : q_ptr(fe), m_error(NoError)
   {
   }
 
   Variable m_variable;
   QList<ArgFilter> m_filters;
-  int m_error;
+  Error m_error;
+  QString m_errorString;
 
   Q_DECLARE_PUBLIC(FilterExpression)
   FilterExpression *q_ptr;
@@ -70,7 +71,7 @@ static const QString filterRawString = QString(
 static const QRegExp sFilterRe(filterRawString);
 
 FilterExpression::FilterExpression(const QString &varString, Parser *parser)
-  : d_ptr(new FilterExpressionPrivate(this, NoError))
+  : d_ptr(new FilterExpressionPrivate(this))
 {
   Q_D(FilterExpression);
 
@@ -79,18 +80,18 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   int len;
   QString subString;
 
-  if (varString.contains("\n"))
-  {
-    // error.
-  }
-
-
-  QString vs = varString; //.trimmed();
+  QString vs = varString;
 
   while ((pos = sFilterRe.indexIn(vs, pos)) != -1) {
     len = sFilterRe.matchedLength();
     subString = vs.mid(pos, len);
     int ssSize = subString.size();
+
+    if (pos != lastPos)
+    {
+      setError(TagSyntaxError, QString("Could not parse some characters"));
+      return;
+    }
     if (subString.startsWith(FILTER_SEPARATOR))
     {
       subString = subString.right(ssSize - 1);
@@ -99,7 +100,7 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
         d->m_filters << qMakePair<Filter*, Variable>(f, Variable());
       else
       {
-        d->m_error = TagSyntaxError;
+        setError(TagSyntaxError, QString("Could not find fiter named %1").arg(subString));
         return;
       }
     }
@@ -120,26 +121,42 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   QString remainder = vs.right( vs.size() - lastPos);
   if (remainder.size() > 0)
   {
-    d->m_error = TagSyntaxError;
+    setError(TagSyntaxError, QString("Could not parse the remainder, %1 from %2").arg(remainder).arg(varString));
+    return;
   }
 }
 
-int FilterExpression::error() const
+void FilterExpression::setError(Error type, const QString &message)
+{
+  Q_D(FilterExpression);
+  d->m_error = type;
+  d->m_errorString = message;
+}
+
+Error FilterExpression::error() const
 {
   Q_D(const FilterExpression);
   return d->m_error;
 }
 
+QString FilterExpression::errorString() const
+{
+  Q_D(const FilterExpression);
+  return d->m_errorString;
+}
+
 
 FilterExpression::FilterExpression(const FilterExpression &other)
-  : d_ptr(new FilterExpressionPrivate(this, other.d_ptr->m_error))
+  : d_ptr(new FilterExpressionPrivate(this))
 {
+  d_ptr->m_error = other.d_ptr->m_error;
+  d_ptr->m_errorString = other.d_ptr->m_errorString;
   d_ptr->m_variable = other.d_ptr->m_variable;
   d_ptr->m_filters = other.d_ptr->m_filters;
 }
 
 FilterExpression::FilterExpression()
-  : d_ptr(new FilterExpressionPrivate(this, NoError))
+  : d_ptr(new FilterExpressionPrivate(this))
 {
   Q_D(FilterExpression);
 }

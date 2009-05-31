@@ -13,6 +13,8 @@
 #include "templateloader.h"
 #include "grantlee.h"
 
+#include <QDebug>
+
 #include <QMutableListIterator>
 
 typedef QMutableListIterator<Node*> MutableNodeListIterator;
@@ -46,7 +48,7 @@ Node* ExtendsNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
 
   if (nodeList.getNodesByType(ExtendsNode::staticMetaObject.className()).size() > 0)
   {
-    error(TagSyntaxError, "Extends tag may only appear once in a template.");
+    setError(TagSyntaxError, "Extends tag may only appear once in a template.");
     return 0;
   }
 
@@ -59,6 +61,7 @@ ExtendsNode::ExtendsNode(NodeList list, const QString &name, FilterExpression fe
     m_name(name)
 {
   m_list = list;
+
 }
 
 NodeList ExtendsNode::getNodesByType(const char* className)
@@ -90,8 +93,6 @@ Template *ExtendsNode::getParent(Context *c)
 
   Template* t = loader->getTemplate(this);
 
-  connect(t, SIGNAL(error(int, QString)), SIGNAL(error(int, QString)));
-
   bool success = loader->loadByName(t, parentName);
 
   if (!success)
@@ -107,7 +108,7 @@ QString ExtendsNode::render(Context *c)
 
   if (!parent)
   {
-    error(TagSyntaxError, "TODO: Fix message");
+    setError(TagSyntaxError, "TODO: Fix message");
     return QString();
   }
 

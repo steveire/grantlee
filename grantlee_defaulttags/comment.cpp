@@ -33,8 +33,6 @@ CommentNode::CommentNode(QObject *parent)
 QString CommentNode::render(Context *c)
 {
   Q_UNUSED(c);
-  // TODO: figure out if this should be a null or an empty QString.
-//   return QString();
-  return QString("");
+  return QString();
 }
 

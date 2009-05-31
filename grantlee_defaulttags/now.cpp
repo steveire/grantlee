@@ -22,7 +22,7 @@ Node* NowNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *par
 
   if (expr.size() != 3)
   {
-    error(TagSyntaxError, "now tag takes one argument");
+    setError(TagSyntaxError, "now tag takes one argument");
     return 0;
   }
 

@@ -62,7 +62,7 @@ QString IfChangedNode::render(Context *c)
     QVariant var = i.next().resolve(c);
     if (!var.isValid())
     {
-      // error
+      // silent error
       return QString();
     }
     watchedVars << var;
@@ -93,7 +93,7 @@ QString IfChangedNode::render(Context *c)
   }
 
 
-  return QString("");
+  return QString();
 }
 
 NodeList IfChangedNode::getNodesByType(const char* className)

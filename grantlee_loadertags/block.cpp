@@ -24,7 +24,7 @@ Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
 
   if (expr.size() != 2)
   {
-    error(TagSyntaxError, "block tag takes one argument");
+    setError(TagSyntaxError, "block tag takes one argument");
     return 0;
   }
 
@@ -43,7 +43,7 @@ Node* BlockNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
 
       if (blockNodeName == blockName)
       {
-        error(TagSyntaxError, QString("%1 appears more than once.").arg(blockName));
+        setError(TagSyntaxError, QString("%1 appears more than once.").arg(blockName));
         return 0;
       }
     }

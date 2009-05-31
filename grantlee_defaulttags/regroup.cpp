@@ -20,19 +20,19 @@ Node* RegroupNodeFactory::getNode(const QString &tagContent, Parser *p, QObject 
 
   if (expr.size() != 6)
   {
-    error(TagSyntaxError, "widthratio takes five arguments");
+    setError(TagSyntaxError, "widthratio takes five arguments");
     return 0;
   }
   FilterExpression target(expr.at(1), p);
   if (expr.at(2) != "by")
   {
-    error(TagSyntaxError, "second argument must be 'by'");
+    setError(TagSyntaxError, "second argument must be 'by'");
     return 0;
   }
 
   if (expr.at(4) != "as")
   {
-    error(TagSyntaxError, "fourth argument must be 'as'");
+    setError(TagSyntaxError, "fourth argument must be 'as'");
     return 0;
   }
 
@@ -112,6 +112,6 @@ QString RegroupNode::render(Context *c)
     }
     c->insert(m_varName, contextList);
   }
-  return QString("");
+  return QString();
 }
 
