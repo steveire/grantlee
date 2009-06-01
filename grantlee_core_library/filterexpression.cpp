@@ -191,90 +191,13 @@ QVariant FilterExpression::resolve(Context *c) const
   return var;
 }
 
-// void FilterExpression::begin(Context *c, int reversed)
-// {
-//   m_position = 0;
-//   QVariant var = resolve(c);
-//   if (!var.isValid())
-//     return;
-//
-//   if (var.type() == QVariant::String)
-//   {
-//
-//   } else if (var.userType() > 0)
-//   {
-//     // A registered user type. Signal error.
-// //     void *obj = QMetaType::construct(var.userType(), (void *)var );
-//
-//     // Instead of all this messing, I can simply require that an object can't be iterated over.
-//     // Iterate over a property instead.
-//     // Or I can allow iterating over an objects children(), which is a QList<QObject>
-//
-// //     QMetaType::destroy(var.userType(), obj);
-//     //   TODO: see if I can use QMetaType::construct for user defined types.
-//   }
-//   else
-//   {
-//     m_variantList.append(var);
-//   }
-// }
-
 QVariantList FilterExpression::toList(Context *c) const
 {
   QVariant var = resolve(c);
-  if (!var.isValid())
-    return QVariantList();
-
-  if (var.type() == QVariant::List)
-  {
-    return var.toList();
-  }
-  if (var.type() == QVariant::String)
-  {
-    QString s = var.toString();
-
-    QString::iterator i;
-    QVariantList list;
-    for (i = s.begin(); i != s.end(); ++i)
-    {
-      list << *i;
-    }
-    return list;
-  } else if (var.userType() == QMetaType::QObjectStar)
-  {
-    // A registered user type. Signal error.
-//     void *obj = QMetaType::construct(var.userType(), (void *)var );
-
-    // Instead of all this messing, I can simply require that an object can't be iterated over.
-    // Iterate over a property instead.
-    // Or I can allow iterating over an objects children(), which is a QList<QObject *>
-
-//     QMetaType::destroy(var.userType(), obj);
-    //   TODO: see if I can use QMetaType::construct for user defined types.
-  }
-  else
-  {
-//     QVariantList list;
-//     list << var;
-//     return list;
-    return QVariantList() << var;
-//     m_variantList.append(var);
-  }
-
+  return Util::variantToList(var);
 }
 
 bool FilterExpression::isTrue(Context *c) const
 {
   return Util::variantIsTrue(resolve(c));
 }
-
-// QVariant FilterExpression::next()
-// {
-//   return m_variantList[m_position++];
-//
-// //   if (!var.isValid())
-// //     return QVariant();
-// //
-// //   m_iterVariant = var;
-// }
-
