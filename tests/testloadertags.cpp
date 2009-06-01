@@ -66,7 +66,7 @@ void TestLoaderTags::doTest()
   QFETCH(QString, output);
   QFETCH(Grantlee::Error, errorNumber);
 
-  Template* t = m_tl->getTemplate(this);
+  Template* t = new Template(this);
 
   t->setContent(input);
 
@@ -133,10 +133,10 @@ void TestLoaderTags::testExtendsTag_data()
   // Basic test
   QTest::newRow("namedendblocks01") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock first %}3" << dict << "1_2_3" << NoError;
   // Unbalanced blocks
-  QTest::newRow("namedendblocks02") << "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" << dict << "" << InvalidBlockTagError;
-  QTest::newRow("namedendblocks03") << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" << dict << "" << InvalidBlockTagError;
-  QTest::newRow("namedendblocks04") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" << dict << "" << InvalidBlockTagError;
-  QTest::newRow("namedendblocks05") << "1{% block first %}_{% block second %}2{% endblock first %}" << dict << "" << InvalidBlockTagError;
+  QTest::newRow("namedendblocks02") << "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" << dict << "" << UnclosedBlockTagError;
+  QTest::newRow("namedendblocks03") << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" << dict << "" << UnclosedBlockTagError;
+  QTest::newRow("namedendblocks04") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" << dict << "" << UnclosedBlockTagError;
+  QTest::newRow("namedendblocks05") << "1{% block first %}_{% block second %}2{% endblock first %}" << dict << "" << UnclosedBlockTagError;
   // Mixed named and unnamed endblocks
   QTest::newRow("namedendblocks06") << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock first %}3" << dict << "1_2_3" << NoError;
   QTest::newRow("namedendblocks07") << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock %}3" << dict << "1_2_3" << NoError;
@@ -228,7 +228,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Inheritance from local context without use of template loader
 
-  Template *t = m_tl->getTemplate(this);
+  Template *t = new Template(this);
   t->setContent("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}");
   QObject *obj = t;
   dict.insert("context_template", QVariant::fromValue(obj));
@@ -238,10 +238,10 @@ void TestLoaderTags::testExtendsTag_data()
   dict.clear();
   QVariantList list;
 
-  Template *t1 = m_tl->getTemplate(this);
+  Template *t1 = new Template(this);
   t1->setContent("Wrong");
   QObject *obj1 = t1;
-  Template *t2 = m_tl->getTemplate(this);
+  Template *t2 = new Template(this);
   t2->setContent("1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}");
   QObject *obj2 = t2;
   list << QVariant::fromValue(obj1);
@@ -274,7 +274,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Raise exception for extra {% extends %} tags
   QTest::newRow("exception03") << "{% extends 'inheritance01' %}{% block first %}2{% endblock %}{% extends 'inheritance16' %}" << dict << "" << TagSyntaxError;
   // Raise exception for custom tags used in child with {% load %} tag in parent, not in child
-  QTest::newRow("exception04") << "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" << dict << "" << InvalidBlockTagError;
+  QTest::newRow("exception04") << "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" << dict << "" << TagSyntaxError;
 }
 
 

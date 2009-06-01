@@ -25,7 +25,7 @@ class GRANTLEE_EXPORT Parser : public QObject
 {
   Q_OBJECT
 public:
-  Parser( const QList<Token> &tokenList, const QStringList &pluginDirs, QObject *parent );
+  Parser( const QList<Token> &tokenList, QObject *parent );
   ~Parser();
 
   NodeList parse(const QString &stopAt, QObject *parent);

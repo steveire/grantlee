@@ -19,7 +19,7 @@ QScriptValue ScriptableTemplateConstructor(QScriptContext *context,
 
   TemplateLoader *tl = TemplateLoader::instance();
 
-  Template *t = tl->getTemplate();
+  Template *t = new Template(engine);
 
   t->setContent(content);
 

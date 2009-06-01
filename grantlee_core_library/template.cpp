@@ -14,7 +14,7 @@ using namespace Grantlee;
 NodeList Template::compileString(const QString &str)
 {
   Lexer l(str);
-  Parser p( l.tokenize(), m_pluginDirs, this );
+  Parser p( l.tokenize(), this);
   NodeList nodeList = p.parse(this);
 
   if (NoError != p.error())
@@ -24,10 +24,10 @@ NodeList Template::compileString(const QString &str)
   return nodeList;
 }
 
-Template::Template( const QStringList &pluginDirs, QObject *parent )
-  : QObject(parent), m_error(NoError)
+Template::Template( QObject *parent )
+  : QObject(parent),
+   m_error(NoError)
 {
-  m_pluginDirs = pluginDirs;
 }
 
 void Template::setContent(const QString &templateString)

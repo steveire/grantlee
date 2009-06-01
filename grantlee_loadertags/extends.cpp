@@ -91,14 +91,8 @@ Template *ExtendsNode::getParent(Context *c)
 
   TemplateLoader *loader = TemplateLoader::instance();
 
-  Template* t = loader->getTemplate(this);
+  Template* t = loader->loadByName(parentName, this);
 
-  bool success = loader->loadByName(t, parentName);
-
-  if (!success)
-  {
-      return 0;
-  }
   return t;
 }
 

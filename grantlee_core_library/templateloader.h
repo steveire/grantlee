@@ -16,13 +16,13 @@ public:
   void setTemplateDirs(const QStringList &dirs);
   void setPluginDirs(const QStringList &dirs);
 
+  QStringList pluginDirs();
+
   void setTheme(const QString &themeName);
 
   void injectTemplate(const QString &name, const QString &content);
 
-  Template* getTemplate(QObject *parent = 0) const;
-
-  bool loadByName(Template *t, const QString &name ) const;
+  Template* loadByName(const QString &name, QObject *parent = 0 ) const;
 
   QStringList defaultLibraries() const;
   void setDefaultLibraries(const QStringList &list);
@@ -32,7 +32,7 @@ public:
 
 private:
   TemplateLoader();
-  bool loadFromFile(Template* t, const QString &fileName) const;
+  Template* loadFromFile(const QString &fileName, QObject *parent = 0) const;
 
   QString m_themeName;
   QStringList m_templateDirs;

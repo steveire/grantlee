@@ -23,7 +23,7 @@ class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
 public:
-  Template(const QStringList &dirs, QObject *parent = 0  );
+  Template(QObject *parent = 0  );
 
   void setContent(const QString &templateString);
 

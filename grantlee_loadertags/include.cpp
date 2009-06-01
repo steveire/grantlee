@@ -44,8 +44,10 @@ QString IncludeNode::render(Context *c)
 
   TemplateLoader *loader = TemplateLoader::instance();
 
-  Template *t = loader->getTemplate(this);
-  loader->loadByName(t, filename);
+  Template *t = loader->loadByName( filename, this );
+
+  if (!t)
+    return QString();
 
   return t->render(c);
 }
@@ -60,9 +62,10 @@ QString ConstantIncludeNode::render(Context *c)
 {
   TemplateLoader *loader = TemplateLoader::instance();
 
-  Template* t = loader->getTemplate(this);
+  Template* t = loader->loadByName(m_name, this);
 
-  loader->loadByName(t, m_name);
+  if (!t)
+    return QString();
 
   return t->render(c);
 }

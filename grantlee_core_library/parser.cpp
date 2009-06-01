@@ -24,11 +24,10 @@ namespace Grantlee
 class ParserPrivate
 {
 public:
-  ParserPrivate(Parser *parser, const QList<Token> &tokenList, const QStringList &pluginDirs)
+  ParserPrivate(Parser *parser, const QList<Token> &tokenList)
     : q_ptr(parser),
     m_error(NoError),
     m_tokenList(tokenList),
-    m_pluginDirs(pluginDirs),
     m_scriptableTagLibrary(0)
   {
 
@@ -56,12 +55,14 @@ public:
 
 }
 
-Parser::Parser(const QList<Token> &tokenList, const QStringList &pluginDirs, QObject *parent)
-  : QObject(parent), d_ptr(new ParserPrivate(this, tokenList, pluginDirs))
+Parser::Parser(const QList<Token> &tokenList, QObject *parent)
+  : QObject(parent), d_ptr(new ParserPrivate(this, tokenList))
 {
   Q_D(Parser);
 
   TemplateLoader *tl = TemplateLoader::instance();
+
+  d->m_pluginDirs = tl->pluginDirs();
 
   foreach(const QString libName, tl->defaultLibraries())
   {

@@ -105,7 +105,7 @@ void TestDefaultTags::doTest()
   QFETCH(QString, output);
   QFETCH(Grantlee::Error, error);
 
-  Template *t = m_tl->getTemplate(this);
+  Template *t = new Template(this);
 
   t->setContent(input);
 
