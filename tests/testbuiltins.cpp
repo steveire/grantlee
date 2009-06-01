@@ -241,6 +241,69 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   QTest::newRow("basic-syntax27") << "{{ _(\"\\\"fred\\\"\") }}" << dict << "\"fred\"" << NoError;
 
 
+  dict.clear();
+  map.clear();
+  QVariantMap innerMap;
+  innerMap.insert("3", "d");
+  map.insert("2", innerMap);
+  dict.insert("1", map);
+
+  QTest::newRow("basic-syntax28") << "{{ 1.2.3 }}" << dict << "d" << NoError;
+
+  dict.clear();
+  map.clear();
+  QVariantList list;
+  list << "a" << "b" << "c" << "d";
+  map.insert("2", list);
+  dict.insert("1", map);
+  QTest::newRow("basic-syntax29") << "{{ 1.2.3 }}" << dict << "d" << NoError;
+
+  dict.clear();
+  list.clear();
+  QVariantList innerList;
+  innerList << "x" << "x" << "x" << "x";
+  list.append(QVariant(innerList));
+  innerList.clear();
+  innerList << "y" << "y" << "y" << "y";
+  list.append(QVariant(innerList));
+  innerList.clear();
+  innerList << "a" << "b" << "c" << "d";
+  list.append(QVariant(innerList));
+  dict.insert("1", list);
+
+  QTest::newRow("basic-syntax30") << "{{ 1.2.3 }}" << dict << "d" << NoError;
+
+  dict.clear();
+  list.clear();
+  list.append("xxxx");
+  list.append("yyyy");
+  list.append("abcd");
+  dict.insert("1", list);
+
+  QTest::newRow("basic-syntax31") << "{{ 1.2.3 }}" << dict << "d" << NoError;
+
+  dict.clear();
+  list.clear();
+  map.clear();
+  map.insert("x", "x");
+  list.append(map);
+  map.clear();
+  map.insert("y", "y");
+  list.append(map);
+  map.clear();
+  map.insert("3", "d");
+  list.append(map);
+
+  dict.insert("1", list);
+
+  QTest::newRow("basic-syntax32") << "{{ 1.2.3 }}" << dict << "d" << NoError;
+
+  dict.clear();
+
+  dict.insert("1", "abc");
+  QTest::newRow("basic-syntax33") << "{{ 1 }}" << dict << "1" << NoError;
+  QTest::newRow("basic-syntax34") << "{{ 1.2 }}" << dict << "1.2" << NoError;
+
 }
 
 void TestBuiltinSyntax::testListIndex_data()
