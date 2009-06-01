@@ -24,4 +24,5 @@ grantlee_unit_tests(
   testscriptabletags
 )
 
+install(FILES testtags.qs DESTINATION ${PROJECT_BINARY_DIR} )
 

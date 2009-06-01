@@ -54,7 +54,10 @@ void TestLoaderTags::initTestCase()
   QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_tl->setPluginDirs(QStringList() << appDirPath + "/grantlee_loadertags/"
                                     << appDirPath + "/grantlee_defaulttags/"
-                                    << appDirPath + "/grantlee_defaultfilters/" );
+                                    << appDirPath + "/grantlee_scriptabletags/"
+                                    << appDirPath + "/grantlee_defaultfilters/"
+                                    << appDirPath + "/tests/" // For testtags.qs
+                                    );
 }
 
 void TestLoaderTags::cleanupTestCase()
@@ -207,15 +210,19 @@ void TestLoaderTags::testExtendsTag_data()
   // A block within another block (level 2)
 
   QTest::newRow("inheritance16") << "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" << dict << "12out3_" << NoError;
-//   // {% load %} tag (parent -- setup for exception04)
-//   // #C# {}
-//   QTest::newRow("inheritance17") << "{% load testtags %}{% block first %}1234{% endblock %}" << dict << " '1234'),";
-//   // {% load %} tag (standard usage, without inheritance)
-//   // #C# {}
-//   QTest::newRow("inheritance18") << "{% load testtags %}{% echo this that theother %}5678" << dict << " 'this that theother5678'),";
-//   // {% load %} tag (within a child template)
-//   // #C# {}
-//   QTest::newRow("inheritance19") << "{% extends 'inheritance01' %}{% block first %}{% load testtags %}{% echo 400 %}5678{% endblock %}" << dict << " '140056783_'),";
+
+  // {% load %} tag (parent -- setup for exception04)
+  QString inh17("{% load testtags %}{% block first %}1234{% endblock %}");
+  resource->setTemplate("inheritance17", inh17);
+
+  dict.clear();
+  QTest::newRow("inheritance17") << inh17 << dict << "1234" << NoError;
+
+  // {% load %} tag (standard usage, without inheritance)
+  QTest::newRow("inheritance18") << "{% load testtags %}{% echo this that theother %}5678" << dict << "this that theother5678" << NoError;
+
+  // {% load %} tag (within a child template)
+  QTest::newRow("inheritance19") << "{% extends 'inheritance01' %}{% block first %}{% load testtags %}{% echo 400 %}5678{% endblock %}" << dict << "140056783_" << NoError;
 
   QString inh20("{% extends 'inheritance01' %}{% block first %}{{ block.super }}a{% endblock %}");
   resource->setTemplate("inheritance20", inh20);
@@ -277,7 +284,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Raise exception for extra {% extends %} tags
   QTest::newRow("exception03") << "{% extends 'inheritance01' %}{% block first %}2{% endblock %}{% extends 'inheritance16' %}" << dict << "" << TagSyntaxError;
   // Raise exception for custom tags used in child with {% load %} tag in parent, not in child
-  QTest::newRow("exception04") << "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" << dict << "" << TagSyntaxError;
+  QTest::newRow("exception04") << "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" << dict << "" << InvalidBlockTagError;
 }
 
 
