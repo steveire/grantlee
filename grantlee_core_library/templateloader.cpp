@@ -6,6 +6,86 @@
 #include <QDir>
 #include <QFile>
 
+
+AbstractTemplateResource::AbstractTemplateResource(QObject* parent)
+  : QObject(parent)
+{
+
+}
+
+AbstractTemplateResource::~AbstractTemplateResource()
+{
+
+}
+
+FileSystemTemplateResource::FileSystemTemplateResource(QObject* parent)
+  : AbstractTemplateResource(parent)
+{
+
+}
+
+InMemoryTemplateResource::InMemoryTemplateResource(QObject* parent)
+  : AbstractTemplateResource(parent)
+{
+
+}
+
+void FileSystemTemplateResource::setTheme(const QString &themeName)
+{
+  m_themeName = themeName;
+}
+
+void FileSystemTemplateResource::setTemplateDirs(const QStringList &dirs)
+{
+  m_templateDirs = dirs;
+}
+
+Template* FileSystemTemplateResource::loadByName(const QString &fileName) const
+{
+  int i = 0;
+  QFile file;
+
+  while(!file.exists())
+  {
+    if ( i >= m_templateDirs.size() )
+      break;
+
+    file.setFileName(m_templateDirs.at(i) + "/" + m_themeName + "/" + fileName);
+    ++i;
+  }
+
+  if ( !file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text))
+  {
+    return 0;
+  }
+
+  QTextStream in(&file);
+  QString content;
+  while (!in.atEnd()) {
+    content += in.readLine();
+  }
+  Template *t = new Template();
+  t->setContent(content);
+  return t;
+}
+
+void InMemoryTemplateResource::setTemplate(const QString &name, const QString &content)
+{
+  m_namedTemplates.insert(name, content);
+}
+
+Template* InMemoryTemplateResource::loadByName(const QString& name) const
+{
+  if (m_namedTemplates.contains(name))
+  {
+    Template *t = new Template();
+    t->setContent(m_namedTemplates.value(name));
+    return t;
+  }
+  return 0;
+}
+
+
 TemplateLoader* TemplateLoader::m_instance = 0;
 TemplateLoader* TemplateLoader::instance()
 {
@@ -24,9 +104,14 @@ TemplateLoader::TemplateLoader()
                      << "grantlee_scriptabletags_library";
 }
 
-void TemplateLoader::setTemplateDirs(const QStringList &dirs)
+QList<AbstractTemplateResource*> TemplateLoader::templateResources()
 {
-  m_templateDirs = dirs;
+  return m_resources;
+}
+
+void TemplateLoader::addTemplateResource(AbstractTemplateResource* resource)
+{
+  m_resources << resource;
 }
 
 void TemplateLoader::setPluginDirs(const QStringList &dirs)
@@ -57,58 +142,24 @@ void TemplateLoader::addDefaultLibrary(const QString &libName)
 void TemplateLoader::removeDefaultLibrary(const QString &libName)
 {
   m_defaultLibraries.removeAll(libName);
-
-}
-
-
-void TemplateLoader::setTheme(const QString &themeName)
-{
-  m_themeName = themeName;
-}
-
-Template* TemplateLoader::loadFromFile(const QString &fileName, QObject *parent) const
-{
-  int i = 0;
-  QFile file;
-
-  while(!file.exists())
-  {
-    if ( i >= m_templateDirs.size() )
-      break;
-
-    file.setFileName(m_templateDirs.at(i) + "/" + m_themeName + "/" + fileName);
-    ++i;
-  }
-
-  if ( !file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text))
-  {
-      return 0;
-  }
-
-  QTextStream in(&file);
-  QString content;
-  while (!in.atEnd()) {
-      content += in.readLine();
-  }
-  Template *t = new Template(parent);
-  t->setContent(content);
-  return t;
-}
-
-void TemplateLoader::injectTemplate(const QString &name, const QString &content)
-{
-  m_namedTemplates.insert(name, content);
 }
 
 Template* TemplateLoader::loadByName(const QString &name, QObject *parent) const
 {
-  if (m_namedTemplates.contains(name))
+  QListIterator<AbstractTemplateResource*> it(m_resources);
+
+  while (it.hasNext())
   {
-    Template *t = new Template(parent);
-    t->setContent(m_namedTemplates.value(name));
-    return t;
+    AbstractTemplateResource* resource = it.next();
+    Template *t = resource->loadByName(name);
+    if (t)
+    {
+      t->setParent(parent);
+      return t;
+    }
   }
-  return loadFromFile(name, parent);
+  return 0;
+
 }
 
 

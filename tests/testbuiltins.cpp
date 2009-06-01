@@ -98,13 +98,11 @@ private:
 
   void doTest();
 
-  TemplateLoader *m_tl;
-
 };
 
 void TestBuiltinSyntax::initTestCase()
 {
-  m_tl = TemplateLoader::instance();
+  TemplateLoader *m_tl = TemplateLoader::instance();
 
   QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_tl->setPluginDirs(QStringList() << appDirPath + "/grantlee_loadertags/"
@@ -114,7 +112,6 @@ void TestBuiltinSyntax::initTestCase()
 
 void TestBuiltinSyntax::cleanupTestCase()
 {
-  delete m_tl;
 }
 
 void TestBuiltinSyntax::doTest()

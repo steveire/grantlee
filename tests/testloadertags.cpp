@@ -40,13 +40,16 @@ private:
 
   void doTest();
 
-  TemplateLoader *m_tl;
+  InMemoryTemplateResource *resource;
 
 };
 
 void TestLoaderTags::initTestCase()
 {
-  m_tl = TemplateLoader::instance();
+  TemplateLoader *m_tl = TemplateLoader::instance();
+
+  resource = new InMemoryTemplateResource(this);
+  m_tl->addTemplateResource(resource);
 
   QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_tl->setPluginDirs(QStringList() << appDirPath + "/grantlee_loadertags/"
@@ -56,7 +59,7 @@ void TestLoaderTags::initTestCase()
 
 void TestLoaderTags::cleanupTestCase()
 {
-  delete m_tl;
+  delete resource;
 }
 
 void TestLoaderTags::doTest()
@@ -98,8 +101,8 @@ void TestLoaderTags::testIncludeTag_data()
 
   Dict dict;
 
-  m_tl->injectTemplate("basic-syntax01", "Something cool");
-  m_tl->injectTemplate("basic-syntax02", "{{ headline }}");
+  resource->setTemplate("basic-syntax01", "Something cool");
+  resource->setTemplate("basic-syntax02", "{{ headline }}");
 
   QTest::newRow("include01") << "{% include \"basic-syntax01\" %}" << dict << "Something cool" << NoError;
 
@@ -114,7 +117,7 @@ void TestLoaderTags::testIncludeTag_data()
   dict.clear();
   QTest::newRow("include04") << "a{% include \"nonexistent\" %}b" << dict << "ab" << NoError;
 
-  m_tl->injectTemplate("include 05", "template with a space");
+  resource->setTemplate("include 05", "template with a space");
 
   dict.clear();
   QTest::newRow("include06") << "{% include \"include 05\" %}" << dict << "template with a space" << NoError;
@@ -146,12 +149,12 @@ void TestLoaderTags::testExtendsTag_data()
   // Standard template with no inheritance
 
   QString inh1("1{% block first %}&{% endblock %}3{% block second %}_{% endblock %}");
-  m_tl->injectTemplate("inheritance01", inh1);
+  resource->setTemplate("inheritance01", inh1);
 
   QTest::newRow("inheritance01") << inh1 << dict << "1&3_" << NoError;
 
   QString inh2("{% extends \"inheritance01\" %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}");
-  m_tl->injectTemplate("inheritance02", inh2);
+  resource->setTemplate("inheritance02", inh2);
 
   // Standard two-level inheritance
   QTest::newRow("inheritance02") << inh2 << dict << "1234" << NoError;
@@ -160,7 +163,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Two-level with no redefinitions on second level
 
   QString inh4("{% extends \"inheritance01\" %}");
-  m_tl->injectTemplate("inheritance04", inh4);
+  resource->setTemplate("inheritance04", inh4);
 
   QTest::newRow("inheritance04") << inh4 << dict << "1&3_" << NoError;
   // Two-level with double quotes instead of single quotes
@@ -171,7 +174,7 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow("inheritance06") << "{% extends foo %}" << dict << "1234" << NoError;
 
   QString inh7("{% extends 'inheritance01' %}{% block second %}5{% endblock %}");
-  m_tl->injectTemplate("inheritance07", inh7);
+  resource->setTemplate("inheritance07", inh7);
 
   dict.clear();
   // Two-level with one block defined, one block not defined
@@ -197,7 +200,7 @@ void TestLoaderTags::testExtendsTag_data()
 
 
   QString inh15("{% extends 'inheritance01' %}{% block first %}2{% block inner %}inner{% endblock %}{% endblock %}");
-  m_tl->injectTemplate("inheritance15", inh15);
+  resource->setTemplate("inheritance15", inh15);
 
   // A block within another block
   QTest::newRow("inheritance15") << inh15 << dict << "12inner3_" << NoError;
@@ -215,7 +218,7 @@ void TestLoaderTags::testExtendsTag_data()
 //   QTest::newRow("inheritance19") << "{% extends 'inheritance01' %}{% block first %}{% load testtags %}{% echo 400 %}5678{% endblock %}" << dict << " '140056783_'),";
 
   QString inh20("{% extends 'inheritance01' %}{% block first %}{{ block.super }}a{% endblock %}");
-  m_tl->injectTemplate("inheritance20", inh20);
+  resource->setTemplate("inheritance20", inh20);
 
   // Two-level inheritance with {{ block.super }}
   QTest::newRow("inheritance20") << inh20 << dict << "1&a3_" << NoError;
@@ -256,12 +259,12 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Set up a base template to extend
   QString inh26 = QString("no tags");
-  m_tl->injectTemplate("inheritance26", inh26);
+  resource->setTemplate("inheritance26", inh26);
 
   // Inheritance from a template that doesn't have any blocks
   QTest::newRow("inheritance27") << "{% extends 'inheritance26' %}" << dict << "no tags" << NoError;
 
-  m_tl->injectTemplate("inheritance 28", "{% block first %}!{% endblock %}");
+  resource->setTemplate("inheritance 28", "{% block first %}!{% endblock %}");
 
   // Inheritance from a template with a space in its name should work.
   QTest::newRow("inheritance29") << "{% extends 'inheritance 28' %}" << dict << "!" << NoError;
