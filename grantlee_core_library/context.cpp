@@ -11,7 +11,7 @@ namespace Grantlee
 class ContextPrivate
 {
   ContextPrivate(Context *context, const QVariantHash &variantHash)
-    : q_ptr(context), m_autoescape(false)
+    : q_ptr(context), m_autoescape(true)
   {
     m_variantHashStack.append(variantHash);
   }
