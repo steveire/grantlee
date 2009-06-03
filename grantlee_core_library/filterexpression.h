@@ -57,7 +57,7 @@ public:
   bool isConstant() const;
 
 protected:
-  void setError(Error type, const QString &message);
+  void setError(Error type, const QString &message) const;
 
 private:
   Q_DECLARE_PRIVATE(FilterExpression);

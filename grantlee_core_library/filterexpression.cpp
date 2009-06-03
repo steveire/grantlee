@@ -22,8 +22,8 @@ class FilterExpressionPrivate
 
   Variable m_variable;
   QList<ArgFilter> m_filters;
-  Error m_error;
-  QString m_errorString;
+  mutable Error m_error;
+  mutable QString m_errorString;
 
   Q_DECLARE_PUBLIC(FilterExpression)
   FilterExpression *q_ptr;
@@ -126,9 +126,9 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   }
 }
 
-void FilterExpression::setError(Error type, const QString &message)
+void FilterExpression::setError(Error type, const QString &message) const
 {
-  Q_D(FilterExpression);
+  Q_D(const FilterExpression);
   d->m_error = type;
   d->m_errorString = message;
 }
