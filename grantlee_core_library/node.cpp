@@ -53,6 +53,11 @@ Node::~Node()
   delete d_ptr;
 }
 
+QString Node::renderValueInContext(const QVariant& input, Context* c)
+{
+  return input.toString();
+}
+
 void Node::setError(Error type, const QString &message)
 {
   Q_D(Node);
@@ -233,7 +238,7 @@ QString VariableNode::render(Context *c)
 {
   QVariant v = m_filterExpression.resolve(c);
   if (!v.isValid())
-    return QString("");
-  return v.toString();
+    return QString();
+  return renderValueInContext(v, c);
 }
 

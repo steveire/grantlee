@@ -41,6 +41,7 @@ public:
 
 protected:
   void setError(Error type, const QString &message);
+  QString renderValueInContext(const QVariant &input, Grantlee::Context *c);
 
 private:
   Q_DECLARE_PRIVATE(Node)
