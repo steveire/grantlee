@@ -24,6 +24,9 @@ public:
   */
   Context(const QVariantHash &hash);
 
+  bool autoescape() const;
+  void setAutoescape(bool autoescape);
+
   ~Context();
 
   /**

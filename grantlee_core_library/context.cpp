@@ -11,12 +11,13 @@ namespace Grantlee
 class ContextPrivate
 {
   ContextPrivate(Context *context, const QVariantHash &variantHash)
-    : q_ptr(context)
+    : q_ptr(context), m_autoescape(false)
   {
     m_variantHashStack.append(variantHash);
   }
 
   QList<QVariantHash> m_variantHashStack;
+  bool m_autoescape;
 
   Q_DECLARE_PUBLIC(Context)
   Context *q_ptr;
@@ -33,6 +34,18 @@ Context::Context(const QVariantHash &variantHash)
 Context::~Context()
 {
   delete d_ptr;
+}
+
+bool Context::autoescape() const
+{
+  Q_D(const Context);
+  return d->m_autoescape;
+}
+
+void Context::setAutoescape(bool autoescape)
+{
+  Q_D(Context);
+  d->m_autoescape = autoescape;
 }
 
 QVariant Context::lookup(const QString &str) const
