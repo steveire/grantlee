@@ -104,6 +104,12 @@ Variable::Variable(const QString &var)
   }
 }
 
+bool Variable::isConstant() const
+{
+  Q_D(const Variable);
+  return !d->m_literal.isNull();
+}
+
 QString Variable::toString() const
 {
   Q_D(const Variable);

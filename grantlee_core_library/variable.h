@@ -37,6 +37,8 @@ public:
   Error error() const;
   QString errorString() const;
 
+  bool isConstant() const;
+
 protected:
   void setError(Error type, const QString &message);
 
