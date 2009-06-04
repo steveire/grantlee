@@ -29,7 +29,7 @@ public:
 class BlockNode : public Node
 {
   Q_OBJECT
-  Q_PROPERTY(QString super READ getSuper)
+  Q_PROPERTY(Grantlee::SafeString super READ getSuper)
 public:
   BlockNode(const QString &blockName, const NodeList &list, QObject *parent);
 
@@ -54,7 +54,7 @@ public:
   /**
   Returns the block overriden by this one rendered in context.
   */
-  QString getSuper() const;
+  SafeString getSuper() const;
 
 private:
 //   FilterExpression m_filterExpression;

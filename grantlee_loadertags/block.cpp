@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "template.h"
 #include "grantlee.h"
+#include <util_p.h>
 
 
 const char * __loadedBlocks = "__loadedBlocks";
@@ -79,9 +80,9 @@ QString BlockNode::render(Context *c)
   return result;
 }
 
-QString BlockNode::getSuper() const
+SafeString BlockNode::getSuper() const
 {
-  return m_parent->render(m_context);
+  return Util::markSafe(m_parent->render(m_context));
 }
 
 QString BlockNode::blockName()
