@@ -64,7 +64,6 @@ void TestScriptableTagsSyntax::doTest()
   QFETCH(Grantlee::Error, error);
 
   Template* t = new Template(this);
-
   t->setContent(input);
 
   Context context(dict);
@@ -76,6 +75,9 @@ void TestScriptableTagsSyntax::doTest()
     QCOMPARE(t->error(), error );
     return;
   }
+
+
+  QCOMPARE(t->error(), NoError);
 
   // Didn't catch any errors, so make sure I didn't expect any.
   QCOMPARE(NoError, error);

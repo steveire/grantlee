@@ -4,6 +4,8 @@
 
 #include "context.h"
 
+#include "util_p.h"
+
 using namespace Grantlee;
 
 namespace Grantlee
@@ -58,7 +60,15 @@ QVariant Context::lookup(const QString &str) const
   {
     QVariantHash h = i.next();
     if (h.contains(str))
-      return h[str];
+    {
+      QVariant var = h.value(str);
+      // If the user passed a string into the context, turn it into a Grantlee::SafeString.
+      if (var.type() == QVariant::String)
+      {
+        var = QVariant::fromValue<Grantlee::SafeString>(Util::getSafeString(var.toString()));
+      }
+      return var;
+    }
   }
 
   return QVariant();

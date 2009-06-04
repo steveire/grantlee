@@ -7,6 +7,8 @@
 #include <QStringList>
 #include "parser.h"
 
+#include "util_p.h"
+
 RegroupNodeFactory::RegroupNodeFactory()
 {
 
@@ -72,14 +74,14 @@ QString RegroupNode::render(Context *c)
   int contextListSize = 0;
   QString hashKey;
   QString lastKey;
-  QString keyName = m_expression.resolve(c).toString();
+  QString keyName = Util::getSafeString(m_expression.resolve(c)).rawString();
   QListIterator<QVariant> i(objList);
   while (i.hasNext())
   {
     QVariant var = i.next();
     c->push();
     c->insert("var", var);
-    QString key = FilterExpression("var." + keyName, 0).resolve(c).toString();
+    QString key = Util::getSafeString(FilterExpression("var." + keyName, 0).resolve(c)).rawString();
     c->pop();
     QVariantHash hash;
     if (contextList.size() > 0)

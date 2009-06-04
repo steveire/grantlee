@@ -15,7 +15,7 @@ class GRANTLEE_EXPORT YesNoFilter : public Filter
 public:
   YesNoFilter(QObject *parent = 0);
 
-  QString doFilter(const QVariant &input, const QString &argument = QString()) const;
+  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false) const;
 
 };
 

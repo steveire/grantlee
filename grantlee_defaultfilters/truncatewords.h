@@ -15,7 +15,9 @@ class GRANTLEE_EXPORT TruncateWordsFilter : public Filter
 public:
   TruncateWordsFilter(QObject *parent = 0);
 
-  QString doFilter(const QVariant &input, const QString &argument = QString()) const;
+  bool isSafe() const { return true; }
+
+  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false) const;
 
 };
 

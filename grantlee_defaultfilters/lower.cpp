@@ -9,9 +9,9 @@ LowerFilter::LowerFilter(QObject* parent): Filter(parent)
 
 }
 
-QString LowerFilter::doFilter(const QVariant& input, const QString &argument) const
+Grantlee::SafeString LowerFilter::doFilter(const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return input.toString().toLower();
+  return Util::getSafeString(input).rawString().toLower();
 }
 
 #include "lower.moc"

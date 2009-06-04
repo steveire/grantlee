@@ -9,9 +9,9 @@ UpperFilter::UpperFilter(QObject* parent): Filter(parent)
 
 }
 
-QString UpperFilter::doFilter(const QVariant& input, const QString &argument) const
+Grantlee::SafeString UpperFilter::doFilter(const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return input.toString().toUpper();
+  return Util::getSafeString(input).rawString().toUpper();
 }
 
 #include "upper.moc"

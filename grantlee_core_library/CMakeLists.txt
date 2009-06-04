@@ -18,6 +18,7 @@ set (grantlee_core_library_SRCS
   lexer.cpp
   parser.cpp
   util.cpp
+  safestring.cpp
 )
 
 set(GRANTLEE_CORE_LIB_SOVERSION 0)
@@ -54,5 +55,6 @@ install(FILES
   parser.h
   grantlee_export.h
   grantlee.h
+  safestring.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )

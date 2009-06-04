@@ -97,7 +97,9 @@ Variable::Variable(const QString &var)
     if ( ( localVar.startsWith( "\"" ) && localVar.endsWith( "\"" ) )
       || ( localVar.startsWith( "'" ) && localVar.endsWith( "'" ) ) )
     {
-      d->m_literal = Util::unescapeStringLiteral(localVar);
+      QString unesc = Util::unescapeStringLiteral(localVar);
+      Grantlee::SafeString ss = Util::markSafe(unesc);
+      d->m_literal = QVariant::fromValue<Grantlee::SafeString>(ss);
     } else {
       d->m_lookups = localVar.split(".");
     }
@@ -136,14 +138,29 @@ QVariant Variable::resolve(Context *c) const
         return var;
     }
   } else {
-    var = d->m_literal;
+    if (Util::isSafeString(var))
+      var = QVariant::fromValue(Util::getSafeString(d->m_literal));
+    else
+      var = d->m_literal;
   }
-
 
   if (d->m_translate)
   {
 //     return gettext(var.toString());
   }
+
+
+  if (Util::supportedOutputType(var))
+  {
+    return var;
+  }
+  if (var.canConvert(QVariant::String))
+  {
+    if (var.convert(QVariant::String))
+      return QVariant::fromValue<Grantlee::SafeString>(var.toString());
+    return QVariant();
+  }
+  // Could be a list or a hash.
   return var;
 }
 

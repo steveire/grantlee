@@ -15,7 +15,9 @@ class LowerFilter : public Filter
 public:
   LowerFilter(QObject *parent = 0);
 
-  QString doFilter(const QVariant &input, const QString &argument = QString()) const;
+  bool isSafe() { return true; }
+
+  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false) const;
 
 };
 

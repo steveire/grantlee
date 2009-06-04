@@ -19,16 +19,11 @@ bool Util::variantIsTrue(const QVariant &variant)
 
   if (!variant.isValid())
     return false;
-
   switch (variant.userType())
   {
   case QVariant::Bool:
   {
     return variant.toBool();
-  }
-  case QVariant::String:
-  {
-    return !variant.toString().isEmpty();
   }
   case QVariant::Int:
   {
@@ -58,9 +53,10 @@ bool Util::variantIsTrue(const QVariant &variant)
   {
     return (variant.toMap().size() > 0);
   }
-  default:
-    return false;
   }
+
+  Grantlee::SafeString str = getSafeString(variant);
+  return !str.rawString().isEmpty();
 }
 
 QVariantList Util::variantToList(const QVariant &var)
@@ -73,9 +69,10 @@ QVariantList Util::variantToList(const QVariant &var)
   {
     return var.toList();
   }
-  if (var.type() == QVariant::String)
+
+  if (isSafeString(var))
   {
-    QString s = var.toString();
+    QString s = getSafeString(var).rawString();
 
     QString::iterator i;
     QVariantList list;
@@ -98,6 +95,64 @@ QVariantList Util::variantToList(const QVariant &var)
   }
 }
 
+Grantlee::SafeString Util::conditionalEscape(const Grantlee::SafeString &input)
+{
+  Grantlee::SafeString temp = input;
+  if (!temp.isSafe())
+    return escape(temp);
+  return temp;
+}
 
+Grantlee::SafeString Util::markSafe(const Grantlee::SafeString &input)
+{
+  Grantlee::SafeString sret = input;
+  sret.setSafety(Grantlee::SafeString::IsSafe);
+  return sret;
+}
+
+Grantlee::SafeString Util::markForEscaping(const Grantlee::SafeString &input)
+{
+  Grantlee::SafeString temp = input;
+  temp.setNeedsEscape(true);
+  return temp;
+}
+
+// This should probably take a QString instead.
+Grantlee::SafeString Util::escape(const Grantlee::SafeString &input)
+{
+  QString temp = input;
+  temp.replace("&", "&amp;");
+  temp.replace("<", "&lt;");
+  temp.replace(">", "&gt;");
+  return temp;
+
+}
+
+Grantlee::SafeString Util::getSafeString(const QVariant &input)
+{
+  if (input.userType() == qMetaTypeId<Grantlee::SafeString>())
+  {
+    return input.value<Grantlee::SafeString>();
+  } else {
+    return input.toString();
+  }
+}
+
+bool Util::isSafeString(const QVariant &input)
+{
+  int type = input.userType();
+  return ((type == qMetaTypeId<Grantlee::SafeString>())
+    || type == QVariant::String);
+}
+
+bool Util::supportedOutputType(const QVariant &input)
+{
+  QList<int> primitives;
+  primitives << qMetaTypeId<Grantlee::SafeString>()
+             << QVariant::Bool
+             << QVariant::Int
+             << QVariant::Double;
+  return primitives.contains(input.userType());
+}
 
 

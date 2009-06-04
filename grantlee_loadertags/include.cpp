@@ -12,6 +12,7 @@
 #include "templateloader.h"
 
 #include <QDebug>
+#include <util_p.h>
 
 IncludeNodeFactory::IncludeNodeFactory()
 {
@@ -40,7 +41,7 @@ IncludeNode::IncludeNode(const FilterExpression &fe, QObject *parent)
 
 QString IncludeNode::render(Context *c)
 {
-  QString filename = m_filterExpression.resolve(c).toString();
+  QString filename = Util::getSafeString(m_filterExpression.resolve(c)).rawString();
 
   Engine *loader = Engine::instance();
 

@@ -6,6 +6,8 @@
 #include "parser.h"
 #include "filterexpression.h"
 
+#include "util_p.h"
+
 FilterNodeFactory::FilterNodeFactory()
 {
 
@@ -37,7 +39,7 @@ QString FilterNode::render(Context* c)
   QString output = m_filterList.render(c);
   c->push();
   c->insert("var", output);
-  QString filtered = m_fe.resolve(c).toString();
+  QString filtered = Util::getSafeString(m_fe.resolve(c)).rawString();
   c->pop();
   return filtered;
 }

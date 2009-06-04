@@ -15,7 +15,7 @@ public:
   ScriptableFilter(QScriptValue filterObject, QScriptEngine *engine, QObject *parent = 0);
   virtual ~ScriptableFilter();
 
-  QString doFilter(const QVariant &input, const QString &argument) const;
+  SafeString doFilter(const QVariant &input, const SafeString &argument, bool autoescape = false) const;
 
 private:
   QScriptValue m_filterObject;

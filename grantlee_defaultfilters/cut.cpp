@@ -9,9 +9,9 @@ CutFilter::CutFilter(QObject* parent): Filter(parent)
 
 }
 
-QString CutFilter::doFilter(const QVariant& input, const QString &argument) const
+Grantlee::SafeString CutFilter::doFilter(const QVariant& input, const Grantlee::SafeString &argument, bool autoescape) const
 {
-  QString retString = input.toString();
+  QString retString = Util::getSafeString(input).rawString();
 
   retString.remove(argument);
 

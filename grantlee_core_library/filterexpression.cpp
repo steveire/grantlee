@@ -184,10 +184,50 @@ QVariant FilterExpression::resolve(Context *c) const
 {
   Q_D(const FilterExpression);
   QVariant var = d->m_variable.resolve(c);
+
   foreach(ArgFilter argfilter, d->m_filters)
   {
-    var = argfilter.first->doFilter(var, argfilter.second.resolve(c).toString());
+    Filter *filter = argfilter.first;
+    Variable argVar = argfilter.second;
+    QVariant arg = argVar.resolve(c);
+    Grantlee::SafeString argString;
+
+    if (arg.userType() == qMetaTypeId<Grantlee::SafeString>())
+    {
+      argString = arg.value<Grantlee::SafeString>();
+    } else if (arg.canConvert(QVariant::String))
+    {
+      arg.convert(QVariant::String);
+      argString = Grantlee::SafeString(arg.toString());
+    } else if (arg.isValid()) {
+      setError(TagSyntaxError, "Argument to Filter must be string-like");
+      return QVariant();
+    }
+
+    Grantlee::SafeString nextVar;
+
+    if (argVar.isConstant())
+    {
+      argString = Util::markSafe(argString);
+    }
+
+    if (filter->needsAutoescape())
+    {
+      nextVar = filter->doFilter(var, argString, c->autoescape());
+    } else {
+      nextVar = filter->doFilter(var, argString);
+    }
+
+    if (filter->isSafe() && argString.isSafe())
+    {
+      var = QVariant::fromValue<Grantlee::SafeString>(Util::markSafe(nextVar));
+    } else if (argString.needsEscape()) {
+      var = QVariant::fromValue<Grantlee::SafeString>(Util::markForEscaping(nextVar));
+    } else {
+      var = QVariant::fromValue<Grantlee::SafeString>(nextVar);
+    }
   }
+
   return var;
 }
 

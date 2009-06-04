@@ -9,6 +9,7 @@
 
 #include <QStringList>
 #include "filterexpression.h"
+#include "safestring.h"
 
 #include "grantlee.h"
 

@@ -11,7 +11,7 @@ TruncateWordsFilter::TruncateWordsFilter(QObject* parent): Filter(parent)
 
 }
 
-QString TruncateWordsFilter::doFilter(const QVariant& input, const QString &argument) const
+Grantlee::SafeString TruncateWordsFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
 {
   QVariant v(argument);
   if (!v.convert(QVariant::Int))
@@ -19,7 +19,9 @@ QString TruncateWordsFilter::doFilter(const QVariant& input, const QString &argu
     return input.toString();
   }
   int numWords = v.toInt();
-  QStringList words = input.toString().split(" ", QString::SkipEmptyParts);
+
+  QString inputString = Util::getSafeString(input).rawString();
+  QStringList words = inputString.split(" ", QString::SkipEmptyParts);
 
   if (words.size() > numWords)
   {

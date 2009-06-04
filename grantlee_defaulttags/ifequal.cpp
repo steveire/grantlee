@@ -68,7 +68,24 @@ QString IfEqualNode::render(Context *c)
   QVariant var1 = m_var1.resolve(c);
   QVariant var2 = m_var2.resolve(c);
 
-  bool equal = ((var1 == var2) && (var1.type() == var2.type()));
+  bool equal = false;
+
+  // QVariant doesn't use operator== to compare its held data, so we do it manually instead for SafeString.
+
+  if (var1.userType() == qMetaTypeId<Grantlee::SafeString>() )
+  {
+    if( var2.userType() == qMetaTypeId<Grantlee::SafeString>() )
+    {
+      equal = (var1.value<Grantlee::SafeString>() == var2.value<Grantlee::SafeString>() );
+    } else if (var2.userType() == QVariant::String){
+      equal = (var1.value<Grantlee::SafeString>().rawString() == var2.toString());
+    }
+  } else if (var2.userType() == qMetaTypeId<Grantlee::SafeString>() && var1.userType() == QVariant::String)
+  {
+    equal = (var2.value<Grantlee::SafeString>().rawString() == var1.toString());
+  }  else {
+    equal = ((var1 == var2) && (var1.userType() == var2.userType()));
+  }
 
   if ( ( ( m_negate && !equal ) || ( !m_negate && equal ) ) )
     return m_trueList.render(c);

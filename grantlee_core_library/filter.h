@@ -9,6 +9,10 @@
 #include <QVariant>
 
 #include "grantlee_export.h"
+#include "safestring.h"
+#include "util_p.h"
+
+#include <QDebug>
 
 namespace Grantlee
 {
@@ -27,7 +31,14 @@ public:
    * Reimplement to filter @p input.
    * @returns The input string filtered.
    */
-  virtual QString doFilter(const QVariant &input, const QString &argument = QString()) const = 0;
+  virtual Grantlee::SafeString doFilter(const QVariant &input,
+                const Grantlee::SafeString &argument = Grantlee::SafeString(),
+                bool autoescape = false
+                ) const = 0;
+
+
+  virtual bool isSafe() const { return false; }
+  virtual bool needsAutoescape() const { return false; }
 
 };
 

@@ -16,6 +16,7 @@
 #include <QDebug>
 
 #include <QMutableListIterator>
+#include <util_p.h>
 
 typedef QMutableListIterator<Node*> MutableNodeListIterator;
 
@@ -83,7 +84,7 @@ Template *ExtendsNode::getParent(Context *c)
       if (parentTemplate)
         return parentTemplate;
     } else {
-      parentName = parentVar.toString();
+      parentName = Util::getSafeString(parentVar).rawString();
     }
   } else {
     parentName = m_name;

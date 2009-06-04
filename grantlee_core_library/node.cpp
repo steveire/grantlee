@@ -4,6 +4,7 @@
 
 #include "node.h"
 
+#include "util_p.h"
 
 using namespace Grantlee;
 
@@ -55,7 +56,10 @@ Node::~Node()
 
 QString Node::renderValueInContext(const QVariant& input, Context* c)
 {
-  return input.toString();
+  Grantlee::SafeString inputString = Util::getSafeString(input);
+  if (c->autoescape() && !inputString.isSafe() || inputString.needsEscape() )
+    return Util::escape(inputString);
+  return inputString.rawString();
 }
 
 void Node::setError(Error type, const QString &message)

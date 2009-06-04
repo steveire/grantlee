@@ -9,6 +9,8 @@
 
 #include "grantlee.h"
 
+#include "util_p.h"
+
 
 FirstOfNodeFactory::FirstOfNodeFactory()
 {
@@ -41,7 +43,7 @@ QString FirstOfNode::render(Context *c)
   {
     if (fe.isTrue(c))
     {
-      return fe.resolve(c).toString();
+      return Util::getSafeString(fe.resolve(c)).rawString();
     }
   }
   return QString();

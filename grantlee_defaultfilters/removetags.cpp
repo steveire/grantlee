@@ -12,14 +12,14 @@ RemoveTagsFilter::RemoveTagsFilter(QObject* parent): Filter(parent)
 }
 
 
-QString RemoveTagsFilter::doFilter(const QVariant& input, const QString &argument) const
+Grantlee::SafeString RemoveTagsFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
 {
-  QStringList tags = argument.split(" ");
+  QStringList tags = argument.rawString().split(" ");
   QString tagRe = QString("(%1)").arg(tags.join("|"));
   QRegExp startTag( QString("<%1(/?>|(\\s+[^>]*>))").arg(tagRe) );
   QRegExp endTag( QString("</%1>").arg(tagRe) );
 
-  QString value = input.toString();
+  QString value = Util::getSafeString(input);
   value.replace(startTag, "");
   value.replace(endTag, "");
   return value;

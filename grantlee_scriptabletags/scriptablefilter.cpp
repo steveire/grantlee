@@ -14,7 +14,7 @@ ScriptableFilter::~ScriptableFilter()
 }
 
 
-QString ScriptableFilter::doFilter(const QVariant &input, const QString& argument) const
+SafeString ScriptableFilter::doFilter(const QVariant &input, const SafeString& argument, bool autoescape) const
 {
   QScriptValueList args;
   if (input.type() == QVariant::List)
@@ -31,7 +31,7 @@ QString ScriptableFilter::doFilter(const QVariant &input, const QString& argumen
   {
     args << m_scriptEngine->newVariant(input);
   }
-  args << argument;
+  args << QScriptValue(argument);
   QScriptValue filterObject = m_filterObject;
   return filterObject.call(QScriptValue(), args).toString();
 }

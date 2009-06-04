@@ -7,6 +7,7 @@
 #include <QStringList>
 #include "parser.h"
 
+#include "util_p.h"
 
 static const char * _namedCycleNodes = "_namedCycleNodes";
 
@@ -99,7 +100,7 @@ CycleNode::CycleNode(QList<FilterExpression> list, const QString &name, QObject 
 
 QString CycleNode::render(Context *c)
 {
-  QString value = m_variableIterator.next().resolve(c).toString();
+  QString value = Util::getSafeString(m_variableIterator.next().resolve(c)).rawString();
   if (!m_name.isEmpty())
   {
     c->insert(m_name, value);
