@@ -21,6 +21,7 @@ set (grantlee_scriptabletags_library_SRCS
   scriptablefilter.cpp
   scriptablefilterexpression.cpp
   scriptabletemplate.cpp
+  scriptablesafestring.cpp
 )
 
 set(GRANTLEE_SCRIPTABLETAGS_LIB_SOVERSION 0)

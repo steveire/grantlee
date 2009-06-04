@@ -97,13 +97,13 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
 
   Dict dict;
 
-  dict.insert("boo", "far");
+  dict.insert("boo", "Far");
   dict.insert("booList", QVariantList() << "Tom" << "Dick" << "Harry");
 
-  QTest::newRow("scriptable-tags01") << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{{ boo }}{% endif2 %}" << dict << "far" << NoError;
+  QTest::newRow("scriptable-tags01") << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{{ boo }}{% endif2 %}" << dict << "Far" << NoError;
 
   // Nest c++ tags inside scripted tags.
-  QTest::newRow("scriptable-tags02") << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{% for letter in boo %}:{{ letter }};{% endfor %}{% endif2 %}" << dict << ":f;:a;:r;" << NoError;
+  QTest::newRow("scriptable-tags02") << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{% for letter in boo %}:{{ letter }};{% endfor %}{% endif2 %}" << dict << ":F;:a;:r;" << NoError;
 
   // Nest c++ tags inside scripted tags.
   QTest::newRow("scriptable-tags03") << "{% load scripteddefaults %}{% if2 boo %}yes{% else %}no{% endif2 %}" << dict << "yes" << NoError;
@@ -111,7 +111,12 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
 
   QTest::newRow("scriptable-tags05") << "{% load scripteddefaults %}{{ boo|upper }}" << dict << "FAR" << NoError;
 
-  QTest::newRow("scriptable-tags06") << "{% load scripteddefaults %}{{ booList|join:\" \" }}" << dict << "Tom Dick Harry" << NoError;
+
+  dict.insert("boo", "Far & away");
+  QTest::newRow("scriptable-tags06") << "{% load scripteddefaults %}{{ boo }}" << dict << "Far &amp; away" << NoError;
+  QTest::newRow("scriptable-tags07") << "{% load scripteddefaults %}{{ boo|safe }}" << dict << "Far & away" << NoError;
+
+  QTest::newRow("scriptable-tags08") << "{% load scripteddefaults %}{{ booList|join:\" \" }}" << dict << "Tom Dick Harry" << NoError;
 
   dict.clear();
 }

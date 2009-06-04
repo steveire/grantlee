@@ -29,24 +29,25 @@ var IfNodeFactory = function(tagContent, parser, parent)
 IfNodeFactory.tagName = "if2";
 Library.addFactory("IfNodeFactory");
 
-
+var SafeFilter = function(input)
+{
+  return mark_safe(input.rawString());
+};
+SafeFilter.filterName = "safe";
+Library.addFilter("SafeFilter");
 
 var UpperFilter = function(input)
 {
   // Duck-cast it to a string
-  input = input + "";
+  input = input.rawString(); // + "";
   return input.toUpperCase();
 };
 UpperFilter.filterName = "upper";
 Library.addFilter("UpperFilter");
 
-
-
 var JoinFilter = function(input, filterArgument)
 {
-  return input.join(filterArgument);
+  return input.join(filterArgument.rawString());
 };
 JoinFilter.filterName = "join";
 Library.addFilter("JoinFilter");
-
-

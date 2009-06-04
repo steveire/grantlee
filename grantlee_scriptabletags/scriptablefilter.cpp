@@ -1,5 +1,6 @@
 
 #include "scriptablefilter.h"
+#include "scriptablesafestring.h"
 
 #include <QScriptEngine>
 
@@ -29,9 +30,33 @@ SafeString ScriptableFilter::doFilter(const QVariant &input, const SafeString& a
   }
   else
   {
-    args << m_scriptEngine->newVariant(input);
+    if (Util::isSafeString(input))
+    {
+      ScriptableSafeString *ssObj = new ScriptableSafeString(m_scriptEngine);
+      ssObj->setContent(Util::getSafeString(input));
+      args << m_scriptEngine->newQObject(ssObj);
+    } else {
+      args << m_scriptEngine->newVariant(input);
+    }
   }
-  args << QScriptValue(argument);
+
+  ScriptableSafeString *ssObj = new ScriptableSafeString(m_scriptEngine);
+  ssObj->setContent(argument);
+  args << m_scriptEngine->newQObject(ssObj);
   QScriptValue filterObject = m_filterObject;
-  return filterObject.call(QScriptValue(), args).toString();
+  QScriptValue returnValue = filterObject.call(QScriptValue(), args);
+
+  if (returnValue.isString())
+  {
+    return Util::getSafeString(returnValue.toString());
+  } else if (returnValue.isQObject())
+  {
+    QObject *returnedObject = qscriptvalue_cast<QObject *>(returnValue);
+    ScriptableSafeString *returnedStringObject = qobject_cast<ScriptableSafeString*>(returnedObject);
+    if (!returnedStringObject)
+      return QString();
+    SafeString returnedString = returnedStringObject->wrappedString();
+    return returnedString;
+  }
+  return QString();
 }

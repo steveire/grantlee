@@ -11,6 +11,7 @@
 #include "scriptablefilterexpression.h"
 #include "scriptablefilter.h"
 #include "scriptabletemplate.h"
+#include "scriptablesafestring.h"
 
 #include "token.h"
 
@@ -30,6 +31,7 @@ void tokenFromScriptValue(const QScriptValue &obj, Token &t)
   t.content = obj.property("content").toString();
 }
 
+// TODO: create conversions to/from SafeString, create a mark_safe function.
 
 ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
   : QObject(parent), m_scriptEngine(0)
@@ -69,6 +71,10 @@ ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
   ScriptableNodeFactory *nodeFactory = new ScriptableNodeFactory(this);
   QScriptValue nodeFactoryObject = m_scriptEngine->newQObject(nodeFactory);
   m_scriptEngine->globalObject().setProperty("AbstractNodeFactory", nodeFactoryObject);
+
+  // Make mark_safe a globally available object.
+  QScriptValue markSafeFunctionObject = m_scriptEngine->newFunction(markSafeFunction);
+  m_scriptEngine->globalObject().setProperty("mark_safe", markSafeFunctionObject);
 
 }
 
