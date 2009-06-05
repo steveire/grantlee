@@ -113,10 +113,17 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
 
 
   dict.insert("boo", "Far & away");
+  // Variables are escaped ...
   QTest::newRow("scriptable-tags06") << "{% load scripteddefaults %}{{ boo }}" << dict << "Far &amp; away" << NoError;
-  QTest::newRow("scriptable-tags07") << "{% load scripteddefaults %}{{ boo|safe }}" << dict << "Far & away" << NoError;
+  // and scripted filters can mark output as 'safe'.
+  QTest::newRow("scriptable-tags07") << "{% load scripteddefaults %}{{ boo|safe2 }}" << dict << "Far & away" << NoError;
 
-  QTest::newRow("scriptable-tags08") << "{% load scripteddefaults %}{{ booList|join:\" \" }}" << dict << "Tom Dick Harry" << NoError;
+  // Filters can take arguments
+  QTest::newRow("scriptable-tags08") << "{% load scripteddefaults %}{{ booList|join2:\" \" }}" << dict << "Tom Dick Harry" << NoError;
+
+  // Literals in tags are compared un-escaped.
+  QTest::newRow("scriptable-tags09") << "{% load scripteddefaults %}{% ifequal2 boo \"Far & away\" %}yes{% endifequal2 %}" << dict << "yes" << NoError;
+
 
   dict.clear();
 }

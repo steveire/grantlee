@@ -66,7 +66,7 @@ var SafeFilter = function(input)
 {
   return mark_safe(input.rawString());
 };
-SafeFilter.filterName = "safe";
+SafeFilter.filterName = "safe2";
 Library.addFilter("SafeFilter");
 
 var UpperFilter = function(input)
@@ -82,5 +82,5 @@ var JoinFilter = function(input, filterArgument)
 {
   return input.join(filterArgument.rawString());
 };
-JoinFilter.filterName = "join";
+JoinFilter.filterName = "join2";
 Library.addFilter("JoinFilter");
