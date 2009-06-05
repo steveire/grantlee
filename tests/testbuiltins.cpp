@@ -92,6 +92,9 @@ private slots:
   void testMultiline_data();
   void testMultiline() { doTest(); }
 
+  void testEscaping_data();
+  void testEscaping() { doTest(); }
+
   void cleanupTestCase();
 
 private:
@@ -470,6 +473,54 @@ void TestBuiltinSyntax::testMultiline_data()
   Dict dict;
 
   QTest::newRow("multiline01") << "Hello,\nboys.\nHow\nare\nyou\ngentlemen?" << dict << "Hello,\nboys.\nHow\nare\nyou\ngentlemen?" << NoError;
+
+}
+
+void TestBuiltinSyntax::testEscaping_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+
+  // html escaping is not to be confused with for example url escaping.
+  dict.insert("var", "< > & \" \' # = % $");
+  QTest::newRow("escape01") << "{{ var }}" << dict << "&lt; &gt; &amp; \" \' # = % $" << NoError;
+
+  dict.clear();
+  dict.insert("var", "this & that");
+  QTest::newRow("escape02") << "{{ var }}" << dict << "this &amp; that" << NoError;
+
+  // Strings are compared unescaped.
+  QTest::newRow("escape03") << "{% ifequal var \"this & that\" %}yes{% endifequal %}" << dict << "yes" << NoError;
+
+  // Arguments to filters are 'safe' and manipulate their input unescaped.
+  QTest::newRow("escape04") << "{{ var|cut:\"&\" }}" << dict << "this  that" << NoError;
+
+  dict.insert("varList", QVariantList() << "Tom" << "Dick" << "Harry");
+  QTest::newRow("escape05") << "{{ varList|join:\" & \" }}" << dict << "Tom & Dick & Harry" << NoError;
+
+  // Same with variable args.
+  dict.insert("amp", " & ");
+  QTest::newRow("escape06") << "{{ varList|join:amp }}" << dict << "Tom & Dick & Harry" << NoError;
+
+  // Literal strings are safe.
+  QTest::newRow("escape07") << "{{ \"this & that\" }}" << dict << "this & that" << NoError;
+
+  // Iterating outputs safe characters.
+  QTest::newRow("escape08") << "{% for letter in var %}{{ letter }},{% endfor %}" << dict << "t,h,i,s, ,&amp;, ,t,h,a,t," << NoError;
+
+  dict.clear();
+  // escape requirement survives lookup.
+  QVariantHash hash;
+  hash.insert("key", "this & that");
+  dict.insert("var", hash);
+  QTest::newRow("escape09") << "{{ var.key }}" << dict << "this &amp; that" << NoError;
+
+  dict.clear();
 
 }
 
