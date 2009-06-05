@@ -1,0 +1,178 @@
+namespace Grantlee
+{
+
+/**
+
+@page for_themers Grantlee for theme artists.
+
+The syntax of %Grantlee templates is the same as Django templates. This page is an introduction to the syntax, but any Django template introduction is also relevant. Here's some good ones:
+
+- http://www.djangobook.com/en/2.0/chapter04/
+- http://www.djangobook.com/en/2.0/chapter09/
+- http://docs.djangoproject.com/en/dev/topics/templates/
+
+
+@section template_syntax Syntax of Grantlee templates
+
+The syntax of %Grantlee templates contains four types of tokens- plain text, comments, variables and control tags.
+
+A simple template might look like this:
+@verbatim
+{# My simple Template #}
+
+Hello {{ person.name }},
+
+{% if person.hasBirthday %}
+Happy Birthday!
+{% else %}
+Have a nice day!
+{% endif %}
+
+Bye,
+
+{{ myname }}
+@endverbatim
+
+Content inside <tt>{# #}</tt> are comments and are not part of the output.
+Content inside <tt>{{ }}</tt> are variables which are substitued when the template is rendered.
+Content inside <tt>{% %}</tt> are control tags which can affect the rendering of the template. %Grantlee ships with commonly used tags such as <tt>if</tt>, <tt>for</tt>, <tt>cycle</tt> and a host of others (see&nbsp;http://docs.djangoproject.com/en/dev/ref/templates/builtins/). It is also possible for application developers and artists to define their own tags.
+
+
+@subsection loops Loops
+The type of a variable determines how it can be used in templates. For example, treatment of items in an iterable context works as follows.
+
+Lists work as expected:
+@verbatim
+<h2>A few of my favourite things</h2>
+<ul>
+{% for item in mylist %}
+<li> {{ item }}
+{% endfor %}
+</ul>
+@endverbatim
+
+If an int or double is used in a loop, it is treated as a list containing one item. That is, this
+
+@verbatim
+{% for item in myint %}
+<li> {{ item }}
+{% endfor %}
+@endverbatim
+
+would be rendered as
+@verbatim
+<li> 6
+@endverbatim
+
+if myint is 6 in the context.
+
+If a string is used in an iterable context, it is treated as a list of QChars.
+
+If a QVariantHash is used in an iterable context, it may be unpacked into two variables.
+
+@verbatim
+{% for key,value in myhash %}
+{{ key }} = {{ value }}
+{% endfor %}
+@endverbatim
+
+@subsection truthiness Truthiness
+
+Truthiness of a variable is evaulated in a similar way to python. That is,
+
+- The invalid QVariant is false
+- An empty QString is false
+- 0 is false
+- An empty QVariantList is false
+- An empty QVariantHash is false
+- Boolean false is false
+- QObjects that define their own truth behaviour and return false are false.
+
+Everything else is true.
+
+@verbatim
+{% if mylist %}
+<ul>
+{% for item in mylist %}
+<li> {{ item }}
+{% endfor %}
+</ul>
+{% endif %}
+@endverbatim
+
+@subsection lookups Variable lookups
+
+So far we've mostly used simple variable lookups in <tt>{{ variable }}</tt> tags, but the template system is capable of a lot more. Complex structures can be evaluated using the dot ('.') character.
+
+The dot can be used for list index lookup (Note that list lookup is 0-indexed.):
+@verbatim
+The first item is {{ mylist.0 }}, and the fifth item is {{ mylist.4 }}.
+@endverbatim
+
+It can also be used for QVariantHash key lookup:
+
+@verbatim
+The hash value is {{ myhash.mykey }}.
+@endverbatim
+
+And it can retrieve properties from QObjects:
+
+@verbatim
+The object property is {{ myobj.myprop }}.
+@endverbatim
+
+@subsection filters Filters
+
+Filters can further affect the result of including a variable in a template. Filters are separated by the pipe ('|') character.
+
+@verbatim
+Name is {{ name }}, and name in uppercase is {{ name|upper }}.
+
+// rendered as
+// Name is Alice, and name in uppercase is ALICE.
+@endverbatim
+
+Note that filters may be combined with dot-lookup. For example, if people is a list of Person objects, and Person objects have name properties:
+
+@verbatim
+First persons name: {{ people.0.name|upper }}.
+
+// rendered as
+// First persons name: BOB.
+@endverbatim
+
+Filters may also be chained. Here, 'Claire' is first uppercased, then lowercased:
+
+@verbatim
+Name is {{ name|upper|lower }}
+
+// rendered as
+// First persons name: claire.
+@endverbatim
+
+Filters may take one string argument, which is delimited by a colon (':').
+
+If peoplestring contains "Dave and Ellen and Frank", we can cut the string 'and '
+
+@verbatim
+The people are {{ peoplestring|cut:"and " }}
+
+// rendered as
+// The people are Dave Ellen Frank.
+@endverbatim
+
+%Grantlee ships with many useful filters including upper, lower, slice, truncate, join, split etc (see&nbsp;http://docs.djangoproject.com/en/dev/ref/templates/builtins/). Application developers and artists can also define their own filters.
+
+
+@section templates_safestring SafeString
+
+caveats and XSS care for themers.
+
+
+@subsection template_loading Template Inclusion and Inheritance
+
+// include and extends.
+
+*/
+
+}
