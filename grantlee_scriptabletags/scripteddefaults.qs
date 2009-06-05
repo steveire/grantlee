@@ -80,7 +80,7 @@ Library.addFilter("UpperFilter");
 
 var JoinFilter = function(input, filterArgument)
 {
-  return input.join(filterArgument.rawString());
+  return mark_safe(input.join(filterArgument.rawString()));
 };
 JoinFilter.filterName = "join2";
 Library.addFilter("JoinFilter");
