@@ -67,6 +67,7 @@ var SafeFilter = function(input)
   return mark_safe(input.rawString());
 };
 SafeFilter.filterName = "safe2";
+SafeFilter.isSafe = true;
 Library.addFilter("SafeFilter");
 
 var UpperFilter = function(input)
@@ -76,6 +77,7 @@ var UpperFilter = function(input)
   return input.toUpperCase();
 };
 UpperFilter.filterName = "upper";
+UpperFilter.isSafe = false;
 Library.addFilter("UpperFilter");
 
 var JoinFilter = function(input, filterArgument)
@@ -83,4 +85,5 @@ var JoinFilter = function(input, filterArgument)
   return mark_safe(input.join(filterArgument.rawString()));
 };
 JoinFilter.filterName = "join2";
+JoinFilter.isSafe = true;
 Library.addFilter("JoinFilter");

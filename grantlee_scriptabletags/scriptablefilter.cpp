@@ -14,6 +14,15 @@ ScriptableFilter::~ScriptableFilter()
 
 }
 
+bool ScriptableFilter::isSafe() const
+{
+  QScriptValue safety = m_filterObject.property("isSafe");
+  if (safety.isBool())
+  {
+    return safety.toBool();
+  }
+  return false;
+}
 
 SafeString ScriptableFilter::doFilter(const QVariant &input, const SafeString& argument, bool autoescape) const
 {

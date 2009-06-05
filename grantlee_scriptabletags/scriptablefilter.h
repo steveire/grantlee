@@ -17,6 +17,8 @@ public:
 
   SafeString doFilter(const QVariant &input, const SafeString &argument, bool autoescape = false) const;
 
+  bool isSafe() const;
+
 private:
   QScriptValue m_filterObject;
   QScriptEngine *m_scriptEngine;
