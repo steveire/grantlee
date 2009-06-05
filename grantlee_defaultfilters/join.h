@@ -17,6 +17,8 @@ public:
 
   Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape=false) const;
 
+  bool isSafe() { return true; }
+
 };
 
 #endif
