@@ -31,8 +31,6 @@ void tokenFromScriptValue(const QScriptValue &obj, Token &t)
   t.content = obj.property("content").toString();
 }
 
-// TODO: create conversions to/from SafeString, create a mark_safe function.
-
 ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
   : QObject(parent), m_scriptEngine(0)
 {
