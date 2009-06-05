@@ -18,6 +18,7 @@
 #include "default_if_none.h"
 #include "cut.h"
 #include "slice.h"
+#include "safe.h"
 
 #include "grantlee_export.h"
 
@@ -45,6 +46,7 @@ public:
      m_filters.insert("default_if_none", new DefaultIfNoneFilter());
      m_filters.insert("cut", new CutFilter());
      m_filters.insert("slice", new SliceFilter());
+     m_filters.insert("safe", new SafeFilter());
   }
 
   virtual QHash<QString, Filter*> filters(const QString &name = QString())

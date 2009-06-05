@@ -16,6 +16,7 @@ set (grantlee_defaultfilters_library_SRCS
   defaultfilters.cpp
   upper.cpp
   lower.cpp
+  safe.cpp
   yesno.cpp
   truncatewords.cpp
   join.cpp
