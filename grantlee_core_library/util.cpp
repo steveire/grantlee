@@ -156,3 +156,25 @@ bool Util::supportedOutputType(const QVariant &input)
 }
 
 
+bool Util::equals(const QVariant &lhs, const QVariant &rhs)
+{
+
+  // QVariant doesn't use operator== to compare its held data, so we do it manually instead for SafeString.
+  bool equal = false;
+  if (lhs.userType() == qMetaTypeId<Grantlee::SafeString>() )
+  {
+    if( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() )
+    {
+      equal = (lhs.value<Grantlee::SafeString>() == rhs.value<Grantlee::SafeString>() );
+    } else if (rhs.userType() == QVariant::String){
+      equal = (lhs.value<Grantlee::SafeString>().rawString() == rhs.toString());
+    }
+  } else if (rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && lhs.userType() == QVariant::String)
+  {
+    equal = (rhs.value<Grantlee::SafeString>().rawString() == lhs.toString());
+  }  else {
+    equal = ((lhs == rhs) && (lhs.userType() == rhs.userType()));
+  }
+  return equal;
+}
+

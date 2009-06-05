@@ -37,6 +37,8 @@ public:
   */
   static bool supportedOutputType(const QVariant &input);
 
+  static bool equals(const QVariant &lhs, const QVariant &rhs);
+
 };
 
 #endif
