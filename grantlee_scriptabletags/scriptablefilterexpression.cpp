@@ -5,6 +5,8 @@
 
 #include "parser.h"
 #include "scriptablecontext.h"
+#include "util_p.h"
+
 
 Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableFilterExpression, QObject*)
 
@@ -44,3 +46,8 @@ bool ScriptableFilterExpression::isTrue(ScriptableContext* c)
   return m_filterExpression.isTrue(c->context());
 }
 
+bool ScriptableFilterExpression::equals(ScriptableFilterExpression* other, ScriptableContext *scriptableC)
+{
+  Context *c = scriptableC->context();
+  return Util::equals(m_filterExpression.resolve(c), other->m_filterExpression.resolve(c));
+}

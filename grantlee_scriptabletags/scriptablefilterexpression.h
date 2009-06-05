@@ -29,6 +29,8 @@ public slots:
 
   bool isTrue(ScriptableContext *c);
 
+  bool equals(ScriptableFilterExpression *other, ScriptableContext *scriptableC);
+
   // list? QScriptValueList? Make this a ScriptClass?
 
 private:
