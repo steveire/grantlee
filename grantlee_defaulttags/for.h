@@ -41,9 +41,9 @@ public:
 
 private:
   void insertLoopVariables(Context *c, int listSize, int i);
-  QString iterateMap(Context *c, QVariantMap varMap, bool unpack);
+  QString iterateHash(Context* c, QVariantHash varHash, bool unpack);
   QString renderLoop(Context *c);
-  QString handleMapItem(Context *c, QString key, QVariant value, int listSize, int i, bool unpack);
+  QString handleHashItem(Context *c, QString key, QVariant value, int listSize, int i, bool unpack);
 
   FilterExpression m_filterExpression;
   QStringList m_loopVars;

@@ -54,7 +54,7 @@ QString RegroupNode::render(Context *c)
   QVariantList objList = m_target.resolve(c).toList();
   if (objList.isEmpty())
   {
-    c->insert(m_varName, QVariantMap());
+    c->insert(m_varName, QVariantHash());
     return QString("");
   }
 
@@ -64,13 +64,13 @@ QString RegroupNode::render(Context *c)
   // a name parameter. The list is already sorted.
   // Say the objList contains ["David Beckham", "David Blain", "Keira Nightly"] etc.
   // We want to regroup the list into separate lists of people with the same first name.
-  // ie objMap should be: {"David": ["David Beckham", "David Blain"], "Keira": ["Keira Nightly"]}
+  // ie objHash should be: {"David": ["David Beckham", "David Blain"], "Keira": ["Keira Nightly"]}
   //
-  // We then insert the objMap into the Context ready for rendering later in a for loop.
+  // We then insert the objHash into the Context ready for rendering later in a for loop.
 
   QVariantList list;
-  QVariantMap objMap;
-  QString mapKey;
+  QVariantHash objHash;
+  QString hashKey;
   QString lastKey;
   QString keyName = m_expression.resolve(c).toString();
   QListIterator<QVariant> i(objList);
@@ -81,14 +81,14 @@ QString RegroupNode::render(Context *c)
     c->insert("var", var);
     QString key = FilterExpression("var." + keyName, 0).resolve(c).toString();
     c->pop();
-    if (key != mapKey)
+    if (key != hashKey)
     {
-      lastKey = mapKey;
-      mapKey = key;
+      lastKey = hashKey;
+      hashKey = key;
       if (!list.isEmpty())
       {
         // list is now a list of Person objects with the same first name. lastKey is that first name.
-        objMap.insert(lastKey, list);
+        objHash.insert(lastKey, list);
         list.clear();
       }
     }
@@ -96,19 +96,19 @@ QString RegroupNode::render(Context *c)
   }
   if (!list.isEmpty())
   {
-    objMap.insert(mapKey, list);
+    objHash.insert(hashKey, list);
   }
-  if (!objMap.isEmpty())
+  if (!objHash.isEmpty())
   {
     QVariantList contextList;
-    QMapIterator<QString, QVariant> i(objMap);
+    QHashIterator<QString, QVariant> i(objHash);
     while (i.hasNext())
     {
       i.next();
-      QVariantMap contextMap;
-      contextMap.insert("grouper", i.key());
-      contextMap.insert("list", i.value());
-      contextList.append(contextMap);
+      QVariantHash contextHash;
+      contextHash.insert("grouper", i.key());
+      contextHash.insert("list", i.value());
+      contextList.append(contextHash);
     }
     c->insert(m_varName, contextList);
   }

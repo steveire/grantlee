@@ -171,14 +171,14 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
   QVariant returnVar;
 
 //   Should be
-// * QVariantMap key lookup
+// * QVariantHash key lookup
 // * Property? (member in django)
 // * list index
 
-  if ( QVariant::Map == var.type() )
+  if ( QVariant::Hash == var.type() )
   {
-    QVariantMap map = var.toMap();
-    return map.value( nextPart );
+    QVariantHash hash = var.toHash();
+    return hash.value( nextPart );
   }
   else if ( QMetaType::QObjectStar == var.userType() )
   {

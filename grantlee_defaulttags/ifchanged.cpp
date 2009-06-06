@@ -42,12 +42,12 @@ IfChangedNode::IfChangedNode(NodeList trueList, NodeList falseList, QList<Filter
 
 QString IfChangedNode::render(Context *c)
 {
-  if (c->lookup("forloop").isValid() && (!c->lookup("forloop").toMap().contains(m_id)))
+  if (c->lookup("forloop").isValid() && (!c->lookup("forloop").toHash().contains(m_id)))
   {
     m_lastSeen = QVariant();
-    QVariantMap map = c->lookup("forloop").toMap();
-    map.insert(m_id, 1);
-    c->insert("forloop", map);
+    QVariantHash hash = c->lookup("forloop").toHash();
+    hash.insert(m_id, 1);
+    c->insert("forloop", hash);
   }
 
   QString watchedString;
@@ -80,10 +80,10 @@ QString IfChangedNode::render(Context *c)
     else
       m_lastSeen = watchedVars;
     c->push();
-    QVariantMap map;
+    QVariantHash hash;
     // TODO: Document this.
-    map.insert("firstloop", firstLoop);
-    c->insert("ifchanged", map);
+    hash.insert("firstloop", firstLoop);
+    c->insert("ifchanged", hash);
     QString content = m_trueList.render(c);
     c->pop();
     return content;

@@ -40,18 +40,18 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
     // {% cycle var %}
     QString name = expr.at(1);
     QVariant cycleNodes = p->property(_namedCycleNodes);
-    if (!cycleNodes.isValid() || cycleNodes.type() != QVariant::Map)
+    if (!cycleNodes.isValid() || cycleNodes.type() != QVariant::Hash)
     {
       setError(TagSyntaxError, QString("No named cycles in template. '%1' is not defined").arg(name));
       return 0;
     }
-    QVariantMap map = cycleNodes.toMap();
-    if (!map.contains(name))
+    QVariantHash hash = cycleNodes.toHash();
+    if (!hash.contains(name))
     {
       setError(TagSyntaxError, QString("Node not found: %1").arg(name));
       return 0;
     }
-    QVariant nodeVariant = map.value(name);
+    QVariant nodeVariant = hash.value(name);
     if (nodeVariant.userType() != QMetaType::QObjectStar)
     {
       setError(TagSyntaxError, "Invalid object in node cycle list");
@@ -74,16 +74,16 @@ Node* CycleNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *p
     QString name = expr.at(exprSize - 1);
     QStringList list = expr.mid(1, exprSize - 3);
     Node *node = new CycleNode(getFilterExpressionList(list, p), name, parent);
-    QVariant mapVariant = p->property(_namedCycleNodes);
-    QVariantMap map;
-    if (mapVariant.isValid() && mapVariant.type() == QVariant::Map)
+    QVariant hashVariant = p->property(_namedCycleNodes);
+    QVariantHash hash;
+    if (hashVariant.isValid() && hashVariant.type() == QVariant::Hash)
     {
-      map = mapVariant.toMap();
+      hash = hashVariant.toHash();
     }
     QObject *nodeObject = node;
     QVariant nodeVariant = QVariant::fromValue(nodeObject);
-    map.insert(name, nodeVariant);
-    p->setProperty(_namedCycleNodes, QVariant(map));
+    hash.insert(name, nodeVariant);
+    p->setProperty(_namedCycleNodes, QVariant(hash));
     return node;
   } else {
     QStringList list = expr.mid(1, exprSize - 1);

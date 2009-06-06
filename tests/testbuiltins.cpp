@@ -207,9 +207,9 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   // Attribute syntax allows a template to call a dictionary key's value
 
-  QMap<QString, QVariant> map;
-  map.insert("bar", "baz");
-  dict.insert("foo", map);
+  QVariantHash hash;
+  hash.insert("bar", "baz");
+  dict.insert("foo", hash);
   QTest::newRow("basic-syntax18") << "{{ foo.bar }}" << dict << "baz" << NoError;
 
   // Fail silently when a variable's dictionary key isn't found
@@ -242,20 +242,20 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
 
   dict.clear();
-  map.clear();
-  QVariantMap innerMap;
-  innerMap.insert("3", "d");
-  map.insert("2", innerMap);
-  dict.insert("1", map);
+  hash.clear();
+  QVariantHash innerHash;
+  innerHash.insert("3", "d");
+  hash.insert("2", innerHash);
+  dict.insert("1", hash);
 
   QTest::newRow("basic-syntax28") << "{{ 1.2.3 }}" << dict << "d" << NoError;
 
   dict.clear();
-  map.clear();
+  hash.clear();
   QVariantList list;
   list << "a" << "b" << "c" << "d";
-  map.insert("2", list);
-  dict.insert("1", map);
+  hash.insert("2", list);
+  dict.insert("1", hash);
   QTest::newRow("basic-syntax29") << "{{ 1.2.3 }}" << dict << "d" << NoError;
 
   dict.clear();
@@ -284,15 +284,15 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   dict.clear();
   list.clear();
-  map.clear();
-  map.insert("x", "x");
-  list.append(map);
-  map.clear();
-  map.insert("y", "y");
-  list.append(map);
-  map.clear();
-  map.insert("3", "d");
-  list.append(map);
+  hash.clear();
+  hash.insert("x", "x");
+  list.append(hash);
+  hash.clear();
+  hash.insert("y", "y");
+  list.append(hash);
+  hash.clear();
+  hash.insert("3", "d");
+  list.append(hash);
 
   dict.insert("1", list);
 
@@ -334,20 +334,20 @@ void TestBuiltinSyntax::testListIndex_data()
   QTest::newRow("list-index03") << "{{ var.1 }}" << dict << "" << NoError;
 
   dict.clear();
-  dict.insert("var", QVariantMap());
+  dict.insert("var", QVariantHash());
   // Fail silently when variable is a dict without the specified key.
   QTest::newRow("list-index04") << "{{ var.1 }}" << dict << "" << NoError;
 
 
   dict.clear();
 
-  QVariantMap map;
-  map.insert("1", "hello");
-  dict.insert("var", map);
+  QVariantHash hash;
+  hash.insert("1", "hello");
+  dict.insert("var", hash);
   // Dictionary lookup wins out when dict's key is a string.
   QTest::newRow("list-index05") << "{{ var.1 }}" << dict << "hello" << NoError;
 
-  // QVariantMap can only use strings as keys, so list-index06 and list-index07 are not valid.
+  // QVariantHash can only use strings as keys, so list-index06 and list-index07 are not valid.
 }
 
 

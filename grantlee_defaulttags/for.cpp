@@ -77,14 +77,14 @@ const QString last("last");
 
 void ForNode::insertLoopVariables(Context *c, int listSize, int i)
 {
-  QVariantMap forloopMap = c->lookup("forloop").toMap();
-  forloopMap.insert(counter0, i);
-  forloopMap.insert(counter, i + 1);
-  forloopMap.insert(revcounter, listSize - i );
-  forloopMap.insert(revcounter0, listSize - i -1 );
-  forloopMap.insert(first, ( i == 0 ) );
-  forloopMap.insert(last, ( i == listSize - 1 ) );
-  c->insert(forloop, forloopMap);
+  QVariantHash forloopHash = c->lookup("forloop").toHash();
+  forloopHash.insert(counter0, i);
+  forloopHash.insert(counter, i + 1);
+  forloopHash.insert(revcounter, listSize - i );
+  forloopHash.insert(revcounter0, listSize - i -1 );
+  forloopHash.insert(first, ( i == 0 ) );
+  forloopHash.insert(last, ( i == listSize - 1 ) );
+  c->insert(forloop, forloopHash);
 }
 
 QString ForNode::renderLoop(Context *c)
@@ -97,14 +97,14 @@ QString ForNode::renderLoop(Context *c)
   return result;
 }
 
-QString ForNode::handleMapItem(Context *c, QString key, QVariant value, int listSize, int i, bool unpack)
+QString ForNode::handleHashItem(Context *c, QString key, QVariant value, int listSize, int i, bool unpack)
 {
   QVariantList list;
   insertLoopVariables(c, listSize, i);
 
   if (!unpack)
   {
-    // Iterating over a map but not unpacking it.
+    // Iterating over a hash but not unpacking it.
     // convert each key-value pair to a list and insert it in the context.
     list << key << value;
     c->insert(m_loopVars.at(0), list);
@@ -116,28 +116,28 @@ QString ForNode::handleMapItem(Context *c, QString key, QVariant value, int list
   return renderLoop(c);
 }
 
-QString ForNode::iterateMap(Context *c, QVariantMap varMap, bool unpack)
+QString ForNode::iterateHash(Context *c, QVariantHash varHash, bool unpack)
 {
   QString result;
 
-  int listSize = varMap.size();
+  int listSize = varHash.size();
   int i = 0;
   QVariantList list;
 
-  QMapIterator<QString, QVariant> it(varMap);
+  QHashIterator<QString, QVariant> it(varHash);
   if (m_isReversed == IsReversed)
   {
     while (it.hasPrevious())
     {
       it.previous();
-      result += handleMapItem(c, it.key(), it.value(), listSize, i, unpack);
+      result += handleHashItem(c, it.key(), it.value(), listSize, i, unpack);
       ++i;
     }
   } else {
     while (it.hasNext())
     {
       it.next();
-      result += handleMapItem(c, it.key(), it.value(), listSize, i, unpack);
+      result += handleHashItem(c, it.key(), it.value(), listSize, i, unpack);
       ++i;
     }
   }
@@ -147,16 +147,15 @@ QString ForNode::iterateMap(Context *c, QVariantMap varMap, bool unpack)
 QString ForNode::render(Context *c)
 {
   QString result;
-  QMap<QString, QVariant> forloopMap;
+  QVariantHash forloopHash;
 
   QVariant parentLoopVariant = c->lookup(forloop);
-  QMap<QString, QVariant> parentLoopMap;
   if (parentLoopVariant.isValid())
   {
     // This is a nested loop.
-    forloopMap = parentLoopVariant.toMap();
-    forloopMap.insert(parentloop, parentLoopVariant.toMap());
-    c->insert(forloop, forloopMap);
+    forloopHash = parentLoopVariant.toHash();
+    forloopHash.insert(parentloop, parentLoopVariant.toHash());
+    c->insert(forloop, forloopHash);
   }
 
   bool unpack = m_loopVars.size() > 1;
@@ -165,10 +164,10 @@ QString ForNode::render(Context *c)
 
   c->push();
 
-  if (var.type() == QVariant::Map)
+  if (var.type() == QVariant::Hash)
   {
-    QVariantMap varMap = var.toMap();
-    result = iterateMap(c, varMap, unpack);
+    QVariantHash varHash = var.toHash();
+    result = iterateHash(c, varHash, unpack);
     c->pop();
     return result;
   }
@@ -213,7 +212,7 @@ QString ForNode::render(Context *c)
         }
 
       } else {
-        // We don't have a map, but we have to unpack several values from each item
+        // We don't have a hash, but we have to unpack several values from each item
         // in the list. And each item in the list is not itself a list.
         // Probably have a list of objects that we're taking properties from.
         foreach(const QString &loopVar, m_loopVars)

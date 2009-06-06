@@ -486,10 +486,10 @@ void TestDefaultTags::testForTag_data()
   QTest::newRow("for-tag-vars06") << "{% for val in values %}{% if forloop.last %}l{% else %}x{% endif %}{% endfor %}" << dict << "xxl" << NoError;
 
   dict.clear();
-  QVariantMap map;
-  map.insert("one", 1);
-  map.insert("two", 2);
-  dict.insert("items", map);
+  QVariantHash hash;
+  hash.insert("one", 1);
+  hash.insert("two", 2);
+  dict.insert("items", hash);
   QTest::newRow("for-tag-unpack-dict01") << "{% for key,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
 
   QTest::newRow("for-tag-unpack-dict03") << "{% for key, value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
@@ -803,9 +803,9 @@ void TestDefaultTags::testWithTag_data()
 
   Dict dict;
 
-  QVariantMap map;
-  map.insert("key", 50);
-  dict.insert("dict", map);
+  QVariantHash hash;
+  hash.insert("key", 50);
+  dict.insert("dict", hash);
   QTest::newRow("with01") << "{% with dict.key as key %}{{ key }}{% endwith %}" << dict << "50" << NoError;
   QTest::newRow("with02")
         << "{{ key }}{% with dict.key as key %}{{ key }}-{{ dict.key }}-{{ key }}{% endwith %}{{ key }}"
@@ -984,31 +984,31 @@ void TestDefaultTags::testRegroupTag_data()
   Dict dict;
 
   QVariantList list;
-  QVariantMap map;
+  QVariantHash hash;
 
-  map.insert("foo", "c");
-  map.insert("bar", 1);
-  list.append(map);
+  hash.insert("foo", "c");
+  hash.insert("bar", 1);
+  list.append(hash);
 
-  map.clear();
-  map.insert("foo", "d");
-  map.insert("bar", 1);
-  list.append(map);
+  hash.clear();
+  hash.insert("foo", "d");
+  hash.insert("bar", 1);
+  list.append(hash);
 
-  map.clear();
-  map.insert("foo", "a");
-  map.insert("bar", 2);
-  list.append(map);
+  hash.clear();
+  hash.insert("foo", "a");
+  hash.insert("bar", 2);
+  list.append(hash);
 
-  map.clear();
-  map.insert("foo", "b");
-  map.insert("bar", 2);
-  list.append(map);
+  hash.clear();
+  hash.insert("foo", "b");
+  hash.insert("bar", 2);
+  list.append(hash);
 
-  map.clear();
-  map.insert("foo", "x");
-  map.insert("bar", 3);
-  list.append(map);
+  hash.clear();
+  hash.insert("foo", "x");
+  hash.insert("bar", 3);
+  list.append(hash);
 
   dict.insert("data", list);
 
@@ -1126,14 +1126,14 @@ void TestDefaultTags::testIfChangedTag_data()
 
   dict.clear();
   QVariantList days;
-  QVariantMap day;
-  day.insert("day", 1);
-  day.insert("hours", QVariantList() << 1 << 2 << 3 );
-  days << day;
-  day.clear();
-  day.insert("day", 2);
-  day.insert("hours", QVariantList() << 3 );
-  days << day;
+  QVariantHash hash;
+  hash.insert("day", 1);
+  hash.insert("hours", QVariantList() << 1 << 2 << 3 );
+  days << hash;
+  hash.clear();
+  hash.insert("day", 2);
+  hash.insert("hours", QVariantList() << 3 );
+  days << hash;
   dict.insert("days", days );
   QTest::newRow("ifchanged-param04") << "{% for d in days %}{% ifchanged %}{{ d.day }}{% endifchanged %}{% for h in d.hours %}{% ifchanged d h %}{{ h }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "112323" << NoError;
 
