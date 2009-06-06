@@ -7,8 +7,6 @@
 #include <QStringList>
 #include "parser.h"
 
-
-
 RegroupNodeFactory::RegroupNodeFactory()
 {
 
@@ -70,6 +68,8 @@ QString RegroupNode::render(Context *c)
 
   QVariantList list;
   QVariantHash objHash;
+  QVariantList contextList;
+  int contextListSize = 0;
   QString hashKey;
   QString lastKey;
   QString keyName = m_expression.resolve(c).toString();
@@ -81,37 +81,26 @@ QString RegroupNode::render(Context *c)
     c->insert("var", var);
     QString key = FilterExpression("var." + keyName, 0).resolve(c).toString();
     c->pop();
-    if (key != hashKey)
+    QVariantHash hash;
+    if (contextList.size() > 0)
     {
-      lastKey = hashKey;
-      hashKey = key;
-      if (!list.isEmpty())
-      {
-        // list is now a list of Person objects with the same first name. lastKey is that first name.
-        objHash.insert(lastKey, list);
-        list.clear();
-      }
+      QVariant hashVar = contextList.last();
+      hash = hashVar.toHash();
     }
+    if (!hash.contains("grouper") || hash.value("grouper") != key )
+    {
+      QVariantHash newHash;
+      hash.insert("grouper", key);
+      hash.insert("list", QVariantList());
+      contextList.append(newHash);
+    }
+
+    QVariantList list = hash.value("list").toList();
     list.append(var);
+    hash.insert("list", list);
+    contextList[contextList.size() - 1] = hash;
   }
-  if (!list.isEmpty())
-  {
-    objHash.insert(hashKey, list);
-  }
-  if (!objHash.isEmpty())
-  {
-    QVariantList contextList;
-    QHashIterator<QString, QVariant> i(objHash);
-    while (i.hasNext())
-    {
-      i.next();
-      QVariantHash contextHash;
-      contextHash.insert("grouper", i.key());
-      contextHash.insert("list", i.value());
-      contextList.append(contextHash);
-    }
-    c->insert(m_varName, contextList);
-  }
+  c->insert(m_varName, contextList);
   return QString();
 }
 

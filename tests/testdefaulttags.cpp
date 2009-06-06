@@ -1020,6 +1020,47 @@ void TestDefaultTags::testRegroupTag_data()
                                     "{% endfor %},"
                                   "{% endfor %}" << dict << "1:cd,2:ab,3:x," << NoError;
 
+  dict.clear();
+  hash.clear();
+  list.clear();
+
+  hash.insert("foo", "a");
+  hash.insert("bar", 2);
+  list.append(hash);
+
+  hash.clear();
+  hash.insert("foo", "b");
+  hash.insert("bar", 2);
+  list.append(hash);
+
+  hash.clear();
+  hash.insert("foo", "x");
+  hash.insert("bar", 3);
+  list.append(hash);
+
+  hash.clear();
+  hash.insert("foo", "c");
+  hash.insert("bar", 1);
+  list.append(hash);
+
+  hash.clear();
+  hash.insert("foo", "d");
+  hash.insert("bar", 1);
+  list.append(hash);
+
+
+  dict.insert("data", list);
+
+  // Data is output in the order it is sent in.
+
+  QTest::newRow("regroup02") << "{% regroup data by bar as grouped %}"
+                                  "{% for group in grouped %}"
+                                    "{{ group.grouper }}:"
+                                    "{% for item in group.list %}"
+                                      "{{ item.foo }}"
+                                    "{% endfor %},"
+                                  "{% endfor %}" << dict << "2:ab,3:x,1:cd," << NoError;
+
 }
 
 void TestDefaultTags::testIfChangedTag_data()
