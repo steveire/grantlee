@@ -34,11 +34,7 @@ void tokenFromScriptValue(const QScriptValue &obj, Token &t)
 ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
   : QObject(parent), m_scriptEngine(0)
 {
-
-//   m_scriptEngine = ScriptEnginePointer(new QScriptEngine());
-
-  // This leaks, but my attempts to wrap it in a QSharedPointer haven't worked.
-  m_scriptEngine = new QScriptEngine();
+  m_scriptEngine = new QScriptEngine(this);
 
   qScriptRegisterMetaType(m_scriptEngine, tokenToScriptValue, tokenFromScriptValue);
   qScriptRegisterMetaType(m_scriptEngine, nodeToScriptValue, nodeFromScriptValue);
@@ -70,7 +66,7 @@ ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
   m_scriptEngine->globalObject().setProperty("Library", libraryObject);
 
   // Create a global AbstractNodeFactory object to make smartSplit available.
-  ScriptableNodeFactory *nodeFactory = new ScriptableNodeFactory();
+  ScriptableNodeFactory *nodeFactory = new ScriptableNodeFactory(this);
   QScriptValue nodeFactoryObject = m_scriptEngine->newQObject(nodeFactory);
   m_scriptEngine->globalObject().setProperty("AbstractNodeFactory", nodeFactoryObject);
 

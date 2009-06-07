@@ -24,7 +24,7 @@ var IfNodeFactory = function(tagContent, parser, parent)
     falseList =  parser.parse("endif2", parent);
     parser.deleteNextToken();
   }
-  return new Node("IfNode", truthVariable, trueList, falseList, parent);
+  return new Node("IfNode", truthVariable, trueList, falseList);
 };
 IfNodeFactory.tagName = "if2";
 Library.addFactory("IfNodeFactory");

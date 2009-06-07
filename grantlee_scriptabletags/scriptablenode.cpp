@@ -25,8 +25,6 @@ Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableNode, Node*)
 QScriptValue ScriptableNodeConstructor(QScriptContext *context,
                                         QScriptEngine *engine)
 {
-  QObject *parent = context->argument(context->argumentCount() - 1).toQObject();
-
   QScriptValue concreteNode = engine->globalObject().property(context->argument(0).toString());
 
   QScriptValueList args;
@@ -40,7 +38,7 @@ QScriptValue ScriptableNodeConstructor(QScriptContext *context,
 
   QScriptValue renderMethod = concreteNode.property("render");
 
-  ScriptableNode *object = new ScriptableNode(parent);
+  ScriptableNode *object = new ScriptableNode(engine);
   object->setEngine(engine);
   object->init(concreteNode, renderMethod);
   return engine->newQObject(object);
@@ -107,7 +105,7 @@ void ScriptableNodeFactory::setFactory(QScriptValue factoryMethod)
 
 Node* ScriptableNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
 {
-  ScriptableParser *sp = new ScriptableParser(p);
+  ScriptableParser *sp = new ScriptableParser(p, parent);
   QScriptValue parserObject = m_scriptEngine->newQObject(sp);
   QScriptValue parentObject = m_scriptEngine->newQObject(parent);
 

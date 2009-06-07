@@ -11,11 +11,7 @@ Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableFilterExpression, QObject*)
 QScriptValue ScriptableFilterExpressionConstructor(QScriptContext *context,
                                         QScriptEngine *engine)
 {
-  // TODO: Decide what the parent should be;
-  // It should be the owning scriptableNode. I think I can get that from the scriptContext.
-
-  QObject *parent = 0;
-  ScriptableFilterExpression *object = new ScriptableFilterExpression(parent);
+  ScriptableFilterExpression *object = new ScriptableFilterExpression(engine);
 
   QObject *parserObj = context->argument(1).toQObject();
   Parser *p = qobject_cast<Parser*>(parserObj);
