@@ -30,37 +30,36 @@ class FilterExpressionPrivate;
 class GRANTLEE_EXPORT FilterExpression
 {
 public:
-  enum Reversed
-  {
+  enum Reversed {
     IsNotReversed,
     IsReversed
   };
 
   FilterExpression();
-  FilterExpression(const QString &varString, Grantlee::Parser *parser);
-  FilterExpression(const FilterExpression &other);
+  FilterExpression( const QString &varString, Grantlee::Parser *parser );
+  FilterExpression( const FilterExpression &other );
   ~FilterExpression();
 
-  FilterExpression &operator=(const FilterExpression &other);
+  FilterExpression &operator=( const FilterExpression &other );
 
   Error error() const;
   QString errorString() const;
 
   Variable variable() const;
 
-  QVariant resolve(Context *c) const;
+  QVariant resolve( Context *c ) const;
 
-  bool isTrue(Context *c) const;
+  bool isTrue( Context *c ) const;
 
-  QVariantList toList(Context *c) const;
+  QVariantList toList( Context *c ) const;
 
   bool isConstant() const;
 
 protected:
-  void setError(Error type, const QString &message) const;
+  void setError( Error type, const QString &message ) const;
 
 private:
-  Q_DECLARE_PRIVATE(FilterExpression);
+  Q_DECLARE_PRIVATE( FilterExpression );
   FilterExpressionPrivate *d_ptr;
 };
 

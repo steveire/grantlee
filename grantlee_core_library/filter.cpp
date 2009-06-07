@@ -6,7 +6,7 @@
 
 using namespace Grantlee;
 
-Filter::Filter(QObject *parent) : QObject(parent)
+Filter::Filter( QObject *parent ) : QObject( parent )
 {
 }
 

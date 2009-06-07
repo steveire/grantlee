@@ -24,18 +24,18 @@ class ScriptableTagLibrary : public QObject, public TagLibraryInterface
   Q_OBJECT
   Q_INTERFACES( Grantlee::TagLibraryInterface )
 public:
-  ScriptableTagLibrary(QObject *parent = 0);
+  ScriptableTagLibrary( QObject *parent = 0 );
 
-  virtual QHash<QString, AbstractNodeFactory*> nodeFactories(const QString &name = QString());
+  virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() );
 
-  virtual QHash<QString, Filter*> filters(const QString &name = QString());
+  virtual QHash<QString, Filter*> filters( const QString &name = QString() );
 
 public slots:
-  void addFactory(const QString &factoryName);
-  void addFilter(const QString &filterName);
+  void addFactory( const QString &factoryName );
+  void addFilter( const QString &filterName );
 
 protected:
-  bool evaluateScript(const QString &name);
+  bool evaluateScript( const QString &name );
   QHash<QString, AbstractNodeFactory*> getFactories();
   QHash<QString, Filter*> getFilters();
 

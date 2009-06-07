@@ -13,11 +13,13 @@ class GRANTLEE_EXPORT JoinFilter : public Filter
 {
   Q_OBJECT
 public:
-  JoinFilter(QObject *parent = 0);
+  JoinFilter( QObject *parent = 0 );
 
-  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape=false) const;
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
-  bool isSafe() { return true; }
+  bool isSafe() {
+    return true;
+  }
 
 };
 

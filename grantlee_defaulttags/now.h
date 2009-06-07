@@ -18,16 +18,16 @@ class NowNodeFactory : public AbstractNodeFactory
 public:
   NowNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 };
 
 class NowNode : public Node
 {
   Q_OBJECT
 public:
-  NowNode(const QString &formatString, QObject *parent);
+  NowNode( const QString &formatString, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
 private:
   QString m_formatString;

@@ -12,10 +12,10 @@ class ScriptableFilter : public Filter
 {
   Q_OBJECT
 public:
-  ScriptableFilter(QScriptValue filterObject, QScriptEngine *engine, QObject *parent = 0);
+  ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine, QObject *parent = 0 );
   virtual ~ScriptableFilter();
 
-  SafeString doFilter(const QVariant &input, const SafeString &argument, bool autoescape = false) const;
+  SafeString doFilter( const QVariant &input, const SafeString &argument, bool autoescape = false ) const;
 
   bool isSafe() const;
 

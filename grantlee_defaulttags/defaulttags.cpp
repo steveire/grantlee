@@ -7,6 +7,6 @@
 #include <QtPlugin>
 
 
-Q_EXPORT_PLUGIN2(grantlee_defaulttags_library, DefaultTagLibrary);
+Q_EXPORT_PLUGIN2( grantlee_defaulttags_library, DefaultTagLibrary );
 
 #include "defaulttags.moc"

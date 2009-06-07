@@ -12,10 +12,10 @@ class AbstractTemplateLoader : public QObject
 {
   Q_OBJECT
 public:
-  AbstractTemplateLoader(QObject* parent = 0);
+  AbstractTemplateLoader( QObject* parent = 0 );
   virtual ~AbstractTemplateLoader();
 
-  virtual Template* loadByName(const QString &name) const = 0;
+  virtual Template* loadByName( const QString &name ) const = 0;
 
 };
 
@@ -23,11 +23,11 @@ class FileSystemTemplateLoader : public AbstractTemplateLoader
 {
   Q_OBJECT
 public:
-  FileSystemTemplateLoader(QObject* parent = 0);
-  Template* loadByName(const QString &name) const;
+  FileSystemTemplateLoader( QObject* parent = 0 );
+  Template* loadByName( const QString &name ) const;
 
-  void setTheme(const QString &themeName);
-  void setTemplateDirs(const QStringList &dirs);
+  void setTheme( const QString &themeName );
+  void setTemplateDirs( const QStringList &dirs );
 
 private:
   QString m_themeName;
@@ -38,10 +38,10 @@ class InMemoryTemplateLoader : public AbstractTemplateLoader
 {
   Q_OBJECT
 public:
-  InMemoryTemplateLoader(QObject* parent = 0);
-  Template* loadByName(const QString &name) const;
+  InMemoryTemplateLoader( QObject* parent = 0 );
+  Template* loadByName( const QString &name ) const;
 
-  void setTemplate(const QString &name, const QString &content);
+  void setTemplate( const QString &name, const QString &content );
 
 private:
   QHash<QString, QString> m_namedTemplates;
@@ -54,18 +54,18 @@ public:
 
   QList<AbstractTemplateLoader*> templateResources();
 
-  void addTemplateResource(AbstractTemplateLoader *resource);
+  void addTemplateResource( AbstractTemplateLoader *resource );
 
-  void setPluginDirs(const QStringList &dirs);
+  void setPluginDirs( const QStringList &dirs );
 
   QStringList pluginDirs();
 
-  Template* loadByName(const QString &name, QObject *parent ) const;
+  Template* loadByName( const QString &name, QObject *parent ) const;
 
   QStringList defaultLibraries() const;
-  void setDefaultLibraries(const QStringList &list);
-  void addDefaultLibrary(const QString &libName);
-  void removeDefaultLibrary(const QString &libName);
+  void setDefaultLibraries( const QStringList &list );
+  void addDefaultLibrary( const QString &libName );
+  void removeDefaultLibrary( const QString &libName );
 
 private:
   Engine();

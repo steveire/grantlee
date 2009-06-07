@@ -16,19 +16,18 @@ namespace Grantlee
 class Lexer
 {
 public:
-  Lexer(const QString &templateString);
+  Lexer( const QString &templateString );
   ~Lexer();
 
   QList<Token> tokenize() const;
 
 private:
-  enum State
-  {
+  enum State {
     InTag,
     NotInTag
   };
 
-  Token createToken( const QString &fragment, int inTag) const;
+  Token createToken( const QString &fragment, int inTag ) const;
 
   QString m_templateString;
 

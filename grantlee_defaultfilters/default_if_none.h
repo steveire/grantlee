@@ -13,9 +13,9 @@ class GRANTLEE_EXPORT DefaultIfNoneFilter : public Filter
 {
   Q_OBJECT
 public:
-  DefaultIfNoneFilter(QObject *parent = 0);
+  DefaultIfNoneFilter( QObject *parent = 0 );
 
-  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false) const;
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
 };
 

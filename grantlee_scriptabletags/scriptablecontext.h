@@ -16,17 +16,19 @@ class ScriptableContext : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableContext(Context *c, QObject* parent = 0);
+  ScriptableContext( Context *c, QObject* parent = 0 );
 
-  Context* context() { return m_c; }
+  Context* context() {
+    return m_c;
+  }
 
 public slots:
-  QVariant lookup(const QString &name);
-  void insert(const QString &name, const QVariant &variant);
+  QVariant lookup( const QString &name );
+  void insert( const QString &name, const QVariant &variant );
   void push();
   void pop();
 
-  QString render(const QObjectList &list);
+  QString render( const QObjectList &list );
 
 
 private:

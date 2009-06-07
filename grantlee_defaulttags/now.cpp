@@ -16,28 +16,27 @@ NowNodeFactory::NowNodeFactory()
 
 }
 
-Node* NowNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* NowNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 {
-  QStringList expr = tagContent.split("\"", QString::KeepEmptyParts);
+  QStringList expr = tagContent.split( "\"", QString::KeepEmptyParts );
 
-  if (expr.size() != 3)
-  {
-    setError(TagSyntaxError, "now tag takes one argument");
+  if ( expr.size() != 3 ) {
+    setError( TagSyntaxError, "now tag takes one argument" );
     return 0;
   }
 
-  QString formatString = expr.at(1);
+  QString formatString = expr.at( 1 );
 
-  return new NowNode(formatString, parent);
+  return new NowNode( formatString, parent );
 }
 
-NowNode::NowNode(const QString &formatString, QObject *parent)
-  : Node(parent), m_formatString(formatString)
+NowNode::NowNode( const QString &formatString, QObject *parent )
+    : Node( parent ), m_formatString( formatString )
 {
 }
 
-QString NowNode::render(Context *c)
+QString NowNode::render( Context *c )
 {
-  return QDateTime::currentDateTime().toString(m_formatString);
+  return QDateTime::currentDateTime().toString( m_formatString );
 }
 

@@ -13,11 +13,13 @@ class GRANTLEE_EXPORT TruncateWordsFilter : public Filter
 {
   Q_OBJECT
 public:
-  TruncateWordsFilter(QObject *parent = 0);
+  TruncateWordsFilter( QObject *parent = 0 );
 
-  bool isSafe() const { return true; }
+  bool isSafe() const {
+    return true;
+  }
 
-  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false) const;
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
 };
 

@@ -7,16 +7,14 @@
 
 #include <QString>
 
-enum TokenType
-{
+enum TokenType {
   TextToken,
   VariableToken,
   BlockToken,
   CommentToken
 };
 
-struct Token
-{
+struct Token {
   int tokenType;
   QString content;
 };

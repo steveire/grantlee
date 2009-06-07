@@ -29,23 +29,23 @@ class GRANTLEE_EXPORT Node : public QObject
 {
   Q_OBJECT
 public:
-  Node(QObject *parent = 0);
+  Node( QObject *parent = 0 );
   virtual ~Node();
 
   // This can't be const because CycleNode needs to change on each render.
-  virtual QString render(Context *c) = 0;
+  virtual QString render( Context *c ) = 0;
 
-  virtual NodeList getNodesByType(const char * className);
+  virtual NodeList getNodesByType( const char * className );
 
   Error error() const;
   QString errorString() const;
 
 protected:
-  void setError(Error type, const QString &message);
-  QString renderValueInContext(const QVariant &input, Grantlee::Context *c);
+  void setError( Error type, const QString &message );
+  QString renderValueInContext( const QVariant &input, Grantlee::Context *c );
 
 private:
-  Q_DECLARE_PRIVATE(Node)
+  Q_DECLARE_PRIVATE( Node )
   NodePrivate *d_ptr;
 };
 
@@ -53,21 +53,21 @@ class GRANTLEE_EXPORT NodeList : public QList<Grantlee::Node*>
 {
 public:
   NodeList();
-  NodeList(const NodeList &list);
-  NodeList(const QList<Grantlee::Node *> &list);
+  NodeList( const NodeList &list );
+  NodeList( const QList<Grantlee::Node *> &list );
   ~NodeList();
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
   //append changes m_containsNonText?
 
-  QString render(Context *c);
+  QString render( Context *c );
 
   Error error() const;
   QString errorString() const;
 
 protected:
-  void setError(Error type, const QString &message );
+  void setError( Error type, const QString &message );
 
 private:
   Error m_error;
@@ -93,29 +93,29 @@ class GRANTLEE_EXPORT AbstractNodeFactory : public QObject
 {
   Q_OBJECT
 public:
-  AbstractNodeFactory(QObject* parent = 0);
+  AbstractNodeFactory( QObject* parent = 0 );
   virtual ~AbstractNodeFactory();
 
   /**
   Advances the parser as needed for block style tags.
   */
-  virtual Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const = 0;
+  virtual Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const = 0;
 
   Error error() const;
   QString errorString() const;
 
 protected:
-  Q_INVOKABLE QStringList smartSplit(const QString &str) const;
+  Q_INVOKABLE QStringList smartSplit( const QString &str ) const;
 
 protected:
-  QList<Variable> getVariableList(const QStringList &list) const;
-  QList<FilterExpression> getFilterExpressionList(const QStringList &list, Parser *p) const;
+  QList<Variable> getVariableList( const QStringList &list ) const;
+  QList<FilterExpression> getFilterExpressionList( const QStringList &list, Parser *p ) const;
 
   // Needs to be const so it can be called from const methods.
-  void setError(Error type, const QString &message) const;
+  void setError( Error type, const QString &message ) const;
 
 private:
-  Q_DECLARE_PRIVATE(AbstractNodeFactory)
+  Q_DECLARE_PRIVATE( AbstractNodeFactory )
   AbstractNodeFactoryPrivate *d_ptr;
 };
 
@@ -123,11 +123,10 @@ class GRANTLEE_EXPORT TextNode : public Node
 {
   Q_OBJECT
 public:
-  TextNode(const QString &content, QObject *parent = 0);
+  TextNode( const QString &content, QObject *parent = 0 );
 
-  QString render(Context *c)
-  {
-    Q_UNUSED(c);
+  QString render( Context *c ) {
+    Q_UNUSED( c );
     return m_content;
   }
 private:
@@ -138,9 +137,9 @@ class GRANTLEE_EXPORT VariableNode : public Node
 {
   Q_OBJECT
 public:
-  VariableNode(const FilterExpression &fe, QObject *parent = 0);
+  VariableNode( const FilterExpression &fe, QObject *parent = 0 );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
 private:
   FilterExpression m_filterExpression;

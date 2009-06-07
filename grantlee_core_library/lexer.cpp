@@ -14,17 +14,17 @@ using namespace Grantlee;
 
 // In python regex, '.' matches any character except newline, whereas it QRegExp,
 // it matches any character including newline. We match 'not newline' instead.
-static QRegExp tagRe(QString("(%1[^\\n]*%2|%3[^\\n]*%4|%5[^\\n]*%6)")
-  .arg(QRegExp::escape(BLOCK_TAG_START))
-  .arg(QRegExp::escape(BLOCK_TAG_END))
-  .arg(QRegExp::escape(VARIABLE_TAG_START))
-  .arg(QRegExp::escape(VARIABLE_TAG_END))
-  .arg(QRegExp::escape(COMMENT_TAG_START))
-  .arg(QRegExp::escape(COMMENT_TAG_END))
-);
+static QRegExp tagRe( QString( "(%1[^\\n]*%2|%3[^\\n]*%4|%5[^\\n]*%6)" )
+                      .arg( QRegExp::escape( BLOCK_TAG_START ) )
+                      .arg( QRegExp::escape( BLOCK_TAG_END ) )
+                      .arg( QRegExp::escape( VARIABLE_TAG_START ) )
+                      .arg( QRegExp::escape( VARIABLE_TAG_END ) )
+                      .arg( QRegExp::escape( COMMENT_TAG_START ) )
+                      .arg( QRegExp::escape( COMMENT_TAG_END ) )
+                    );
 
-Lexer::Lexer(const QString &templateString)
-  : m_templateString(templateString)
+Lexer::Lexer( const QString &templateString )
+    : m_templateString( templateString )
 {
 
 }
@@ -36,45 +36,41 @@ Lexer::~Lexer()
 
 QList<Token> Lexer::tokenize() const
 {
-  tagRe.setMinimal(true); // Can't use '?', eg '.*?', Have to setMinimal instead
+  tagRe.setMinimal( true ); // Can't use '?', eg '.*?', Have to setMinimal instead
 
   QList<Token> tokenList;
 
   int pos = 0;
   int oldPosition = 0;
-  while ((pos = tagRe.indexIn(m_templateString, pos)) != -1) {
-    tokenList << createToken(m_templateString.mid(oldPosition, pos - oldPosition), NotInTag);
-    tokenList << createToken(tagRe.cap(1), InTag);
+  while (( pos = tagRe.indexIn( m_templateString, pos ) ) != -1 ) {
+    tokenList << createToken( m_templateString.mid( oldPosition, pos - oldPosition ), NotInTag );
+    tokenList << createToken( tagRe.cap( 1 ), InTag );
     pos += tagRe.matchedLength();
     oldPosition = pos;
   }
-  tokenList << createToken(m_templateString.right(m_templateString.size() - oldPosition), NotInTag);
+  tokenList << createToken( m_templateString.right( m_templateString.size() - oldPosition ), NotInTag );
 
   return tokenList;
 
 }
 
-Token Lexer::createToken( const QString &fragment, int inTag) const
+Token Lexer::createToken( const QString &fragment, int inTag ) const
 {
   Token token;
-  if (inTag == NotInTag)
-  {
+  if ( inTag == NotInTag ) {
     token.content = fragment;
     token.tokenType = TextToken;
   } else {
     int startTagSize = 2;
     int endTagSize = 2;
-    QString content = fragment.mid(startTagSize, fragment.size() - startTagSize - endTagSize );
-    if (fragment.startsWith(VARIABLE_TAG_START))
-    {
+    QString content = fragment.mid( startTagSize, fragment.size() - startTagSize - endTagSize );
+    if ( fragment.startsWith( VARIABLE_TAG_START ) ) {
       token.tokenType = VariableToken;
       token.content = content.trimmed();
-    } else if (fragment.startsWith(BLOCK_TAG_START))
-    {
+    } else if ( fragment.startsWith( BLOCK_TAG_START ) ) {
       token.tokenType = BlockToken;
       token.content = content.trimmed();
-    } else if (fragment.startsWith(COMMENT_TAG_START))
-    {
+    } else if ( fragment.startsWith( COMMENT_TAG_START ) ) {
       token.tokenType = CommentToken;
       return token;
     }

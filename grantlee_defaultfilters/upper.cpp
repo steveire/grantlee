@@ -4,14 +4,14 @@
 
 #include "upper.h"
 
-UpperFilter::UpperFilter(QObject* parent): Filter(parent)
+UpperFilter::UpperFilter( QObject* parent ): Filter( parent )
 {
 
 }
 
-Grantlee::SafeString UpperFilter::doFilter(const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+Grantlee::SafeString UpperFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return Util::getSafeString(input).rawString().toUpper();
+  return Util::getSafeString( input ).rawString().toUpper();
 }
 
 #include "upper.moc"

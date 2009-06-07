@@ -20,15 +20,14 @@ class IfNodeFactory : public AbstractNodeFactory
 public:
   IfNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 };
 
 class IfNode : public Node
 {
   Q_OBJECT
 public:
-  enum LinkType
-  {
+  enum LinkType {
     OrLink,
     AndLink
   };
@@ -38,15 +37,15 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  IfNode(QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType, QObject *parent);
+  IfNode( QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
 protected:
-  QString renderTrueList(Context *c);
-  QString renderFalseList(Context *c);
+  QString renderTrueList( Context *c );
+  QString renderFalseList( Context *c );
 
 private:
   QList<QPair<bool, FilterExpression > > m_boolVars;

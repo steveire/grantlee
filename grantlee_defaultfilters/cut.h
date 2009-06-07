@@ -13,9 +13,9 @@ class GRANTLEE_EXPORT CutFilter : public Filter
 {
   Q_OBJECT
 public:
-  CutFilter(QObject *parent = 0);
+  CutFilter( QObject *parent = 0 );
 
-  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false) const;
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
 };
 

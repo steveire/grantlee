@@ -18,18 +18,18 @@ class IfChangedNodeFactory : public AbstractNodeFactory
 public:
   IfChangedNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 };
 
 class IfChangedNode : public Node
 {
   Q_OBJECT
 public:
-  IfChangedNode(NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent);
+  IfChangedNode( NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
 private:
   NodeList m_trueList;

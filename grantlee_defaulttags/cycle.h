@@ -18,7 +18,7 @@ class CycleNodeFactory : public AbstractNodeFactory
 public:
   CycleNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
@@ -29,20 +29,17 @@ template <typename T>
 class RingIterator
 {
 public:
-  RingIterator<T>(QList<T> list)
-  : m_it(list)
-  {
-    Q_ASSERT(list.size() > 0);
+  RingIterator<T>( QList<T> list )
+      : m_it( list ) {
+    Q_ASSERT( list.size() > 0 );
   }
 
   /**
   Returns the next element in the list, or the first element if already
   at the last element.
   */
-  T next()
-  {
-    if (m_it.hasNext())
-    {
+  T next() {
+    if ( m_it.hasNext() ) {
       T item = m_it.next();
       return item;
     }
@@ -58,9 +55,9 @@ class CycleNode : public Node
 {
   Q_OBJECT
 public:
-  CycleNode(QList<FilterExpression> list, const QString &name, QObject *parent);
+  CycleNode( QList<FilterExpression> list, const QString &name, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
 private:
   RingIterator<FilterExpression> m_variableIterator;

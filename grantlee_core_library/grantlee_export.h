@@ -25,11 +25,11 @@
 
 #ifndef GRANTLEE_EXPORT
 # if defined(MAKE_GRANTLEE_LIB)
-   /* We are building this library */
+/* We are building this library */
 #  define GRANTLEE_EXPORT KDE_EXPORT
 // #  define GRANTLEE_EXPORT Q_DECL_EXPORT
 # else
-   /* We are using this library */
+/* We are using this library */
 #  define GRANTLEE_EXPORT KDE_IMPORT
 // #  define GRANTLEE_EXPORT Q_DECL_IMPORT
 # endif

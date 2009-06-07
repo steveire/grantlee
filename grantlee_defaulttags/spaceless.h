@@ -18,7 +18,7 @@ class SpacelessNodeFactory : public AbstractNodeFactory
 public:
   SpacelessNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
@@ -26,14 +26,14 @@ class SpacelessNode : public Node
 {
   Q_OBJECT
 public:
-  SpacelessNode(NodeList nodeList, QObject *parent);
+  SpacelessNode( NodeList nodeList, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
 private:
-  QString stripSpacesBetweenTags(const QString &input);
+  QString stripSpacesBetweenTags( const QString &input );
 
   NodeList m_nodeList;
 

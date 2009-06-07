@@ -12,24 +12,24 @@ class QScriptContext;
 
 class ScriptableContext;
 
-QScriptValue ScriptableFilterExpressionConstructor(QScriptContext *context,
-                                        QScriptEngine *engine);
+QScriptValue ScriptableFilterExpressionConstructor( QScriptContext *context,
+    QScriptEngine *engine );
 
 
 class ScriptableFilterExpression : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableFilterExpression(QObject *parent = 0);
+  ScriptableFilterExpression( QObject *parent = 0 );
 
-  void init(const QString &content, Parser *parser);
+  void init( const QString &content, Parser *parser );
 
 public slots:
-  QVariant resolve(ScriptableContext *c);
+  QVariant resolve( ScriptableContext *c );
 
-  bool isTrue(ScriptableContext *c);
+  bool isTrue( ScriptableContext *c );
 
-  bool equals(ScriptableFilterExpression *other, ScriptableContext *scriptableC);
+  bool equals( ScriptableFilterExpression *other, ScriptableContext *scriptableC );
 
   // list? QScriptValueList? Make this a ScriptClass?
 

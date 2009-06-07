@@ -17,49 +17,46 @@ AutoescapeNodeFactory::AutoescapeNodeFactory()
 
 }
 
-Node* AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
-  if (expr.size() != 2)
-  {
-    setError(TagSyntaxError, "autoescape takes two arguments.");
+  if ( expr.size() != 2 ) {
+    setError( TagSyntaxError, "autoescape takes two arguments." );
     return 0;
   }
 
-  QString strState = expr.at(1);
+  QString strState = expr.at( 1 );
   int state;
-  if (strState == "on")
+  if ( strState == "on" )
     state = AutoescapeNode::On;
-  else if (strState == "off")
+  else if ( strState == "off" )
     state = AutoescapeNode::On;
-  else
-  {
-    setError(TagSyntaxError, "argument must be 'on' or 'off'");
+  else {
+    setError( TagSyntaxError, "argument must be 'on' or 'off'" );
     return 0;
   }
 
-  NodeList list = p->parse(QStringList() << "endautoescape", parent );
+  NodeList list = p->parse( QStringList() << "endautoescape", parent );
   p->deleteNextToken();
 
-  return new AutoescapeNode(state, list, parent);
+  return new AutoescapeNode( state, list, parent );
 }
 
-AutoescapeNode::AutoescapeNode(int state, NodeList list, QObject *parent)
-  : Node(parent), m_state(state), m_list(list)
+AutoescapeNode::AutoescapeNode( int state, NodeList list, QObject *parent )
+    : Node( parent ), m_state( state ), m_list( list )
 {
 }
 
-QString AutoescapeNode::render(Context *c)
+QString AutoescapeNode::render( Context *c )
 {
-  if (On == m_state)
-  {
+  if ( On == m_state ) {
 //     return marksafe m_list.render(c);
   }
-  return m_list.render(c);
+  return m_list.render( c );
 }
 
-NodeList AutoescapeNode::getNodesByType(const char* className)
+NodeList AutoescapeNode::getNodesByType( const char* className )
 {
-  return m_list.getNodesByType(className);
+  return m_list.getNodesByType( className );
 }

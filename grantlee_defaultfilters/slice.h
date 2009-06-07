@@ -13,9 +13,9 @@ class GRANTLEE_EXPORT SliceFilter : public Filter
 {
   Q_OBJECT
 public:
-  SliceFilter(QObject *parent = 0);
+  SliceFilter( QObject *parent = 0 );
 
-  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false) const;
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
 };
 

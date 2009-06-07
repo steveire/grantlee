@@ -13,9 +13,9 @@ class DebugNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-    DebugNodeFactory();
+  DebugNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
@@ -23,9 +23,9 @@ class DebugNode : public Node
 {
   Q_OBJECT
 public:
-  DebugNode(QObject *parent);
+  DebugNode( QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
 private:
   FilterExpression m_filterExpression;

@@ -4,16 +4,16 @@
 
 #include "cut.h"
 
-CutFilter::CutFilter(QObject* parent): Filter(parent)
+CutFilter::CutFilter( QObject* parent ): Filter( parent )
 {
 
 }
 
-Grantlee::SafeString CutFilter::doFilter(const QVariant& input, const Grantlee::SafeString &argument, bool autoescape) const
+Grantlee::SafeString CutFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  QString retString = Util::getSafeString(input).rawString();
+  QString retString = Util::getSafeString( input ).rawString();
 
-  retString.remove(argument);
+  retString.remove( argument );
 
   return retString;
 }

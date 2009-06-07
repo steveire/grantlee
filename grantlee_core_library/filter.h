@@ -24,21 +24,25 @@ class GRANTLEE_EXPORT Filter : public QObject
 {
   Q_OBJECT
 public:
-  Filter(QObject *parent = 0);
+  Filter( QObject *parent = 0 );
   virtual ~Filter();
 
   /**
    * Reimplement to filter @p input.
    * @returns The input string filtered.
    */
-  virtual Grantlee::SafeString doFilter(const QVariant &input,
-                const Grantlee::SafeString &argument = Grantlee::SafeString(),
-                bool autoescape = false
-                ) const = 0;
+  virtual SafeString doFilter( const QVariant &input,
+                               const SafeString &argument = SafeString(),
+                               bool autoescape = false
+                             ) const = 0;
 
 
-  virtual bool isSafe() const { return false; }
-  virtual bool needsAutoescape() const { return false; }
+  virtual bool isSafe() const {
+    return false;
+  }
+  virtual bool needsAutoescape() const {
+    return false;
+  }
 
 };
 

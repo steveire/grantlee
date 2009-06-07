@@ -25,16 +25,15 @@ namespace Grantlee
 class ParserPrivate
 {
 public:
-  ParserPrivate(Parser *parser, const QList<Token> &tokenList)
-    : q_ptr(parser),
-    m_error(NoError),
-    m_tokenList(tokenList),
-    m_scriptableTagLibrary(0)
-  {
+  ParserPrivate( Parser *parser, const QList<Token> &tokenList )
+      : q_ptr( parser ),
+      m_error( NoError ),
+      m_tokenList( tokenList ),
+      m_scriptableTagLibrary( 0 ) {
 
   }
 
-  NodeList extendNodeList(NodeList list, Node *node);
+  NodeList extendNodeList( NodeList list, Node *node );
 
   QList<Token> m_tokenList;
   QHash<QString, AbstractNodeFactory*> m_nodeFactories;
@@ -50,63 +49,58 @@ public:
 
   QStringList m_libraryPaths;
 
-  Q_DECLARE_PUBLIC(Parser);
+  Q_DECLARE_PUBLIC( Parser );
   Parser *q_ptr;
 };
 
 }
 
-Parser::Parser(const QList<Token> &tokenList, QObject *parent)
-  : QObject(parent), d_ptr(new ParserPrivate(this, tokenList))
+Parser::Parser( const QList<Token> &tokenList, QObject *parent )
+    : QObject( parent ), d_ptr( new ParserPrivate( this, tokenList ) )
 {
-  Q_D(Parser);
+  Q_D( Parser );
 
   Engine *tl = Engine::instance();
 
   d->m_pluginDirs = tl->pluginDirs();
 
-  foreach(const QString libName, tl->defaultLibraries())
-  {
-    loadLib(libName);
+  foreach( const QString libName, tl->defaultLibraries() ) {
+    loadLib( libName );
   }
 
 }
 
 Parser::~Parser()
 {
-  qDeleteAll(d_ptr->m_nodeFactories);
+  qDeleteAll( d_ptr->m_nodeFactories );
   delete d_ptr;
 }
 
-void Parser::loadLib(const QString &name)
+void Parser::loadLib( const QString &name )
 {
-  Q_D(Parser);
+  Q_D( Parser );
 
   int pluginIndex = 0;
   QString libFileName;
 
-  if (d->m_scriptableTagLibrary)
-  {
-    while (d->m_pluginDirs.size() > pluginIndex)
-    {
-      libFileName = d->m_pluginDirs.at(pluginIndex++) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + name + ".qs";
-      QFile file(libFileName);
-      if (!file.exists())
+  if ( d->m_scriptableTagLibrary ) {
+    while ( d->m_pluginDirs.size() > pluginIndex ) {
+      libFileName = d->m_pluginDirs.at( pluginIndex++ ) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + name + ".qs";
+      QFile file( libFileName );
+      if ( !file.exists() )
         continue;
 
-      QHashIterator<QString, AbstractNodeFactory*> i(d->m_scriptableTagLibrary->nodeFactories(libFileName));
-      while (i.hasNext())
-      {
+      QHashIterator<QString, AbstractNodeFactory*> i( d->m_scriptableTagLibrary->nodeFactories( libFileName ) );
+      while ( i.hasNext() ) {
         i.next();
         d->m_nodeFactories[i.key()] = i.value();
       }
 
-      QHashIterator<QString, Filter*> filterIter(d->m_scriptableTagLibrary->filters(libFileName));
-      while (filterIter.hasNext())
-      {
+      QHashIterator<QString, Filter*> filterIter( d->m_scriptableTagLibrary->filters( libFileName ) );
+      while ( filterIter.hasNext() ) {
         filterIter.next();
         Filter *f = filterIter.value();
-        f->setParent(this->parent());
+        f->setParent( this->parent() );
         d->m_filters[filterIter.key()] = f;
       }
 
@@ -117,213 +111,197 @@ void Parser::loadLib(const QString &name)
   pluginIndex = 0;
 
   QObject *plugin = 0;
-  while (d->m_pluginDirs.size() > pluginIndex)
-  {
-    libFileName = d->m_pluginDirs.at(pluginIndex++) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + "lib" + name + ".so";
-    QFile file(libFileName);
-    if (!file.exists())
+  while ( d->m_pluginDirs.size() > pluginIndex ) {
+    libFileName = d->m_pluginDirs.at( pluginIndex++ ) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + "lib" + name + ".so";
+    QFile file( libFileName );
+    if ( !file.exists() )
       continue;
 
     QPluginLoader loader( libFileName );
 
     plugin = loader.instance();
-    if (plugin)
+    if ( plugin )
       break;
   }
-  if (!plugin)
+  if ( !plugin )
     return;
 
-  TagLibraryInterface *tagLibrary = qobject_cast<TagLibraryInterface*>(plugin);
-  if (!tagLibrary)
+  TagLibraryInterface *tagLibrary = qobject_cast<TagLibraryInterface*>( plugin );
+  if ( !tagLibrary )
     return;
 
-  if (name == __scriptableLibName)
-  {
+  if ( name == __scriptableLibName ) {
     d->m_scriptableTagLibrary = tagLibrary;
-    plugin->setParent(this->parent());
+    plugin->setParent( this->parent() );
     return;
   }
 
-  QHashIterator<QString, AbstractNodeFactory*> i(tagLibrary->nodeFactories());
-  while (i.hasNext())
-  {
+  QHashIterator<QString, AbstractNodeFactory*> i( tagLibrary->nodeFactories() );
+  while ( i.hasNext() ) {
     i.next();
     d->m_nodeFactories[i.key()] = i.value();
   }
 
-  QHashIterator<QString, Filter*> filterIter(tagLibrary->filters());
-  while (filterIter.hasNext())
-  {
+  QHashIterator<QString, Filter*> filterIter( tagLibrary->filters() );
+  while ( filterIter.hasNext() ) {
     filterIter.next();
     Filter *f = filterIter.value();
-    f->setParent(this->parent());
+    f->setParent( this->parent() );
     d->m_filters[filterIter.key()] = f;
   }
   delete tagLibrary;
 }
 
-NodeList ParserPrivate::extendNodeList(NodeList list, Node *node)
+NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 {
-  list.append(node);
+  list.append( node );
   return list;
 }
 
-void Parser::skipPast(const QString &tag)
+void Parser::skipPast( const QString &tag )
 {
-  while (hasNextToken())
-  {
+  while ( hasNextToken() ) {
     Token token = nextToken();
-    if (token.tokenType == BlockToken && token.content.trimmed() == tag )
+    if ( token.tokenType == BlockToken && token.content.trimmed() == tag )
       return;
   }
   // Error. Unclosed tag
 }
 
-Filter *Parser::getFilter(const QString &name) const
+Filter *Parser::getFilter( const QString &name ) const
 {
-  Q_D(const Parser);
-  return d->m_filters.value(name);
+  Q_D( const Parser );
+  return d->m_filters.value( name );
 }
 
-NodeList Parser::parse(QObject *parent)
+NodeList Parser::parse( QObject *parent )
 {
-  return parse(QStringList(), parent);
+  return parse( QStringList(), parent );
 }
 
-NodeList Parser::parse(const QString &stopAt, QObject *parent)
+NodeList Parser::parse( const QString &stopAt, QObject *parent )
 {
-  parse(QStringList() << stopAt, parent);
+  parse( QStringList() << stopAt, parent );
 }
 
-NodeList Parser::parse(const QStringList &stopAt, QObject *parent)
+NodeList Parser::parse( const QStringList &stopAt, QObject *parent )
 {
-  Q_D(Parser);
+  Q_D( Parser );
   NodeList nodeList;
 
-  while (hasNextToken())
-  {
+  while ( hasNextToken() ) {
     Token token = nextToken();
-    if (token.tokenType == TextToken)
-    {
-      nodeList = d->extendNodeList(nodeList, new TextNode(token.content, parent));
-    } else if (token.tokenType == VariableToken)
-    {
-      if (token.content.isEmpty())
-      {
+    if ( token.tokenType == TextToken ) {
+      nodeList = d->extendNodeList( nodeList, new TextNode( token.content, parent ) );
+    } else if ( token.tokenType == VariableToken ) {
+      if ( token.content.isEmpty() ) {
         // Error. Empty variable
         QString message;
-        if (hasNextToken())
-          message = QString("Empty variable before \"%1\"").arg(nextToken().content);
+        if ( hasNextToken() )
+          message = QString( "Empty variable before \"%1\"" ).arg( nextToken().content );
         else
-          message = QString("Empty variable at end of input.");
-        setError(EmptyVariableError, message);
+          message = QString( "Empty variable at end of input." );
+        setError( EmptyVariableError, message );
         return NodeList();
       }
-      FilterExpression filterExpression(token.content, this);
-      if (filterExpression.error() != NoError)
-      {
-        setError(filterExpression.error(), filterExpression.errorString());
+      FilterExpression filterExpression( token.content, this );
+      if ( filterExpression.error() != NoError ) {
+        setError( filterExpression.error(), filterExpression.errorString() );
         return NodeList();
       }
-      nodeList = d->extendNodeList(nodeList, new VariableNode(filterExpression, parent));
-    } else if (token.tokenType == BlockToken)
-    {
-      if (stopAt.contains(token.content))
-      {
+      nodeList = d->extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
+    } else if ( token.tokenType == BlockToken ) {
+      if ( stopAt.contains( token.content ) ) {
         // put the token back.
-        prependToken(token);
+        prependToken( token );
         return nodeList;
       }
 
-      QStringList tagContents = token.content.split(" ");
-      if (tagContents.size() == 0)
-      {
+      QStringList tagContents = token.content.split( " " );
+      if ( tagContents.size() == 0 ) {
         QString message;
-        if (hasNextToken())
-          message = QString("Empty block tag before \"%1\"").arg(nextToken().content);
+        if ( hasNextToken() )
+          message = QString( "Empty block tag before \"%1\"" ).arg( nextToken().content );
         else
-          message = QString("Empty block tag at end of input.");
-        setError(EmptyBlockTagError, message);
+          message = QString( "Empty block tag at end of input." );
+        setError( EmptyBlockTagError, message );
         return NodeList();
       }
-      QString command = tagContents.at(0);
+      QString command = tagContents.at( 0 );
       AbstractNodeFactory *nodeFactory = d->m_nodeFactories[command];
 
       // unknown tag.
-      if (!nodeFactory)
-      {
-        setError(InvalidBlockTagError, QString("Unknown tag \"%1\"").arg(command));
+      if ( !nodeFactory ) {
+        setError( InvalidBlockTagError, QString( "Unknown tag \"%1\"" ).arg( command ) );
         continue;
       }
 
       // TODO: Make getNode take a Token instead?
-      Node *n = nodeFactory->getNode(token.content, this, parent);
+      Node *n = nodeFactory->getNode( token.content, this, parent );
 
-      if (!n)
-      {
-        setError(TagSyntaxError, QString("Failed to get node from %1").arg(command));
+      if ( !n ) {
+        setError( TagSyntaxError, QString( "Failed to get node from %1" ).arg( command ) );
         return NodeList();
       }
 
-      if (NoError != nodeFactory->error())
-      {
-        setError(nodeFactory->error(), nodeFactory->errorString());
+      if ( NoError != nodeFactory->error() ) {
+        setError( nodeFactory->error(), nodeFactory->errorString() );
         return NodeList();
       }
 
-      nodeList = d->extendNodeList(nodeList, n);
+      nodeList = d->extendNodeList( nodeList, n );
     }
 
   }
 
-  if (stopAt.size() > 0)
-    setError(UnclosedBlockTagError, QString("Unclosed tag in template. Expected one of: (%1)").arg(stopAt.join(" ")));
+  if ( stopAt.size() > 0 )
+    setError( UnclosedBlockTagError, QString( "Unclosed tag in template. Expected one of: (%1)" ).arg( stopAt.join( " " ) ) );
 
   return nodeList;
 
 }
 
-void Parser::setError(Error errorNumber, const QString& message)
+void Parser::setError( Error errorNumber, const QString& message )
 {
-  Q_D(Parser);
+  Q_D( Parser );
   d->m_error = errorNumber;
   d->m_errorString = message;
 }
 
 Error Grantlee::Parser::error() const
 {
-  Q_D(const Parser);
+  Q_D( const Parser );
   return d->m_error;
 }
 
 QString Parser::errorString() const
 {
-  Q_D(const Parser);
+  Q_D( const Parser );
   return d->m_errorString;
 }
 
 bool Parser::hasNextToken() const
 {
-  Q_D(const Parser);
+  Q_D( const Parser );
   return d->m_tokenList.size() > 0;
 }
 
 Token Parser::nextToken()
 {
-  Q_D(Parser);
-  return d->m_tokenList.takeAt(0);
+  Q_D( Parser );
+  return d->m_tokenList.takeAt( 0 );
 }
 
 void Parser::deleteNextToken()
 {
-  Q_D(Parser);
-  if (!d->m_tokenList.isEmpty())
-    d->m_tokenList.removeAt(0);
+  Q_D( Parser );
+  if ( !d->m_tokenList.isEmpty() )
+    d->m_tokenList.removeAt( 0 );
 }
 
-void Parser::prependToken(const Token &token)
+void Parser::prependToken( const Token &token )
 {
-  Q_D(Parser);
-  d->m_tokenList.prepend(token);
+  Q_D( Parser );
+  d->m_tokenList.prepend( token );
 }
 

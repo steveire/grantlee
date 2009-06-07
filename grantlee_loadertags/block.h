@@ -20,34 +20,34 @@ class BlockNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  BlockNodeFactory(QObject *parent = 0);
+  BlockNodeFactory( QObject *parent = 0 );
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
 class BlockNode : public Node
 {
   Q_OBJECT
-  Q_PROPERTY(Grantlee::SafeString super READ getSuper)
+  Q_PROPERTY( Grantlee::SafeString super READ getSuper )
 public:
-  BlockNode(const QString &blockName, const NodeList &list, QObject *parent);
+  BlockNode( const QString &blockName, const NodeList &list, QObject *parent );
 
   QString blockName();
 
-  QString render(Context *c);
+  QString render( Context *c );
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
   BlockNode* nodeParent() const;
 
   QString name();
 
-  void setNodeParent(BlockNode *);
+  void setNodeParent( BlockNode * );
 
-  void addParent(NodeList);
+  void addParent( NodeList );
 
-  void setNodeList(NodeList);
+  void setNodeList( NodeList );
   NodeList nodeList();
 
 // slots

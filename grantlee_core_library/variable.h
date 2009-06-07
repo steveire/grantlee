@@ -23,16 +23,16 @@ class Variable
 {
 public:
   Variable();
-  explicit Variable(const QString &var);
-  Variable(const Variable &other);
+  explicit Variable( const QString &var );
+  Variable( const Variable &other );
   ~Variable();
 
-  Variable &operator=(const Variable &other);
+  Variable &operator=( const Variable &other );
 
   QString toString() const;
-  bool isTrue(Context *c) const;
+  bool isTrue( Context *c ) const;
 
-  QVariant resolve(Context *c) const;
+  QVariant resolve( Context *c ) const;
 
   Error error() const;
   QString errorString() const;
@@ -40,10 +40,10 @@ public:
   bool isConstant() const;
 
 protected:
-  void setError(Error type, const QString &message);
+  void setError( Error type, const QString &message );
 
 private:
-  Q_DECLARE_PRIVATE(Variable);
+  Q_DECLARE_PRIVATE( Variable );
   VariablePrivate *d_ptr;
 };
 

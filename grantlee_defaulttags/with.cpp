@@ -14,46 +14,45 @@ WithNodeFactory::WithNodeFactory()
 
 }
 
-Node* WithNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 {
-  QStringList expr = smartSplit(tagContent);
+  QStringList expr = smartSplit( tagContent );
 
-  if (expr.size() != 4 or expr.at(2) != "as")
-  {
-    setError(TagSyntaxError, QString("%1 expected format is 'value as name'").arg(expr.at(0)));
+  if ( expr.size() != 4 or expr.at( 2 ) != "as" ) {
+    setError( TagSyntaxError, QString( "%1 expected format is 'value as name'" ).arg( expr.at( 0 ) ) );
     return 0;
   }
 
-  FilterExpression fe(expr.at(1), p);
-  QString name(expr.at(3));
+  FilterExpression fe( expr.at( 1 ), p );
+  QString name( expr.at( 3 ) );
 
-  NodeList nodeList = p->parse(QStringList() << "endwith", parent);
+  NodeList nodeList = p->parse( QStringList() << "endwith", parent );
   p->deleteNextToken();
 
-  return new WithNode(fe, name, nodeList, parent);
+  return new WithNode( fe, name, nodeList, parent );
 }
 
 
-WithNode::WithNode(FilterExpression fe, const QString &name, NodeList list, QObject *parent)
-  : Node(parent)
+WithNode::WithNode( FilterExpression fe, const QString &name, NodeList list, QObject *parent )
+    : Node( parent )
 {
   m_filterExpression = fe;
   m_name = name;
   m_list = list;
 }
 
-QString WithNode::render(Context *c)
+QString WithNode::render( Context *c )
 {
   c->push();
-  c->insert(m_name, m_filterExpression.resolve(c));
-  QString ret = m_list.render(c);
+  c->insert( m_name, m_filterExpression.resolve( c ) );
+  QString ret = m_list.render( c );
   c->pop();
   return ret;
 }
 
-NodeList WithNode::getNodesByType(const char* className)
+NodeList WithNode::getNodesByType( const char* className )
 {
-  return m_list.getNodesByType(className);
+  return m_list.getNodesByType( className );
 }
 
 

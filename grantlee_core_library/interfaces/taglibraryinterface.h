@@ -23,14 +23,14 @@ class TagLibraryInterface
 public:
   virtual ~TagLibraryInterface() {}
 
-  virtual QHash<QString, AbstractNodeFactory*> nodeFactories(const QString &name = QString()) {
-    Q_UNUSED(name);
+  virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
+    Q_UNUSED( name );
     QHash<QString, AbstractNodeFactory*> h;
     return h;
   };
 
-  virtual QHash<QString, Filter*> filters(const QString &name = QString()) {
-    Q_UNUSED(name);
+  virtual QHash<QString, Filter*> filters( const QString &name = QString() ) {
+    Q_UNUSED( name );
     QHash<QString, Filter*> h;
     return h;
   };
@@ -38,6 +38,6 @@ public:
 
 }
 
-Q_DECLARE_INTERFACE(Grantlee::TagLibraryInterface, "org.kde.grantlee.TagLibraryInterface/1.0")
+Q_DECLARE_INTERFACE( Grantlee::TagLibraryInterface, "org.kde.grantlee.TagLibraryInterface/1.0" )
 
 #endif

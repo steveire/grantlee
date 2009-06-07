@@ -13,9 +13,9 @@ class GRANTLEE_EXPORT RemoveTagsFilter : public Filter
 {
   Q_OBJECT
 public:
-  RemoveTagsFilter(QObject *parent = 0);
+  RemoveTagsFilter( QObject *parent = 0 );
 
-  Grantlee::SafeString doFilter(const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape= false) const;
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
 };
 

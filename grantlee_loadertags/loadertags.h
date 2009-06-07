@@ -24,16 +24,14 @@ class LoaderTagLibrary : public QObject, public TagLibraryInterface
   Q_OBJECT
   Q_INTERFACES( Grantlee::TagLibraryInterface )
 public:
-  LoaderTagLibrary()
-  {
-    m_nodeFactories.insert("include", new IncludeNodeFactory());
-    m_nodeFactories.insert("extends", new ExtendsNodeFactory());
-    m_nodeFactories.insert("block", new BlockNodeFactory());
+  LoaderTagLibrary() {
+    m_nodeFactories.insert( "include", new IncludeNodeFactory() );
+    m_nodeFactories.insert( "extends", new ExtendsNodeFactory() );
+    m_nodeFactories.insert( "block", new BlockNodeFactory() );
   }
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories(const QString &name = QString())
-  {
-    Q_UNUSED(name);
+  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
+    Q_UNUSED( name );
     return m_nodeFactories;
   }
 

@@ -20,22 +20,24 @@ class ScriptableParser : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableParser(Parser *p, QObject* parent = 0);
+  ScriptableParser( Parser *p, QObject* parent = 0 );
 
-  Parser* parser() { return m_p; }
+  Parser* parser() {
+    return m_p;
+  }
 
 public slots:
-  QObjectList parse(const QString &stopAt, QObject *parent);
-  QObjectList parse(const QStringList &stopAt, QObject *parent);
-  QObjectList parse(QObject *parent);
+  QObjectList parse( const QString &stopAt, QObject *parent );
+  QObjectList parse( const QStringList &stopAt, QObject *parent );
+  QObjectList parse( QObject *parent );
 
-  void skipPast(const QString &tag);
+  void skipPast( const QString &tag );
 
   Token nextToken();
   bool hasNextToken() const;
   void deleteNextToken();
 
-  void loadLib(const QString &name);
+  void loadLib( const QString &name );
 
 private:
   Parser *m_p;

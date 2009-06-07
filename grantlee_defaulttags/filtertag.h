@@ -11,10 +11,10 @@ using namespace Grantlee;
 
 class FilterNodeFactory : public AbstractNodeFactory
 {
-  public:
-    FilterNodeFactory();
+public:
+  FilterNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
@@ -22,11 +22,11 @@ class FilterNode : public Node
 {
   Q_OBJECT
 public:
-  FilterNode(FilterExpression fe, NodeList filterList, QObject *parent);
+  FilterNode( FilterExpression fe, NodeList filterList, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
 private:
   FilterExpression m_fe;

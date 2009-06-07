@@ -14,35 +14,33 @@ LoadNodeFactory::LoadNodeFactory()
 {
 }
 
-Node* LoadNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
-  expr.takeAt(0);
+  expr.takeAt( 0 );
 
-  if (expr.size() <= 0 )
-  {
-    setError(TagSyntaxError, QString("%1 expects at least one argument").arg("expr.at(0)"));
+  if ( expr.size() <= 0 ) {
+    setError( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( "expr.at(0)" ) );
     return 0;
   }
 
-  QListIterator<QString> i(expr);
-  while (i.hasNext())
-  {
+  QListIterator<QString> i( expr );
+  while ( i.hasNext() ) {
     QString libName = i.next();
-    p->loadLib(libName);
+    p->loadLib( libName );
   }
 
-  return new LoadNode(parent);
+  return new LoadNode( parent );
 }
 
 
-LoadNode::LoadNode(QObject *parent)
-  : Node(parent)
+LoadNode::LoadNode( QObject *parent )
+    : Node( parent )
 {
 }
 
-QString LoadNode::render(Context *c)
+QString LoadNode::render( Context *c )
 {
   return QString();
 }

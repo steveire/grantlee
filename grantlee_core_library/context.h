@@ -22,10 +22,10 @@ public:
   /**
   Sets every key in the hash as a property name with the variant as the value.
   */
-  Context(const QVariantHash &hash);
+  Context( const QVariantHash &hash );
 
   bool autoescape() const;
-  void setAutoescape(bool autoescape);
+  void setAutoescape( bool autoescape );
 
   ~Context();
 
@@ -33,15 +33,15 @@ public:
   Returns a QVariant, even in the case of it containing a list which can be iterated over.
   Have to think about whether QMap should work too, or would its keys already be resolved.
   */
-  QVariant lookup(const QString &str) const;
-  void insert(const QString &name, const QVariant &variant);
+  QVariant lookup( const QString &str ) const;
+  void insert( const QString &name, const QVariant &variant );
   void push();
   void pop();
 
-  QVariantHash stackHash(int depth) const;
+  QVariantHash stackHash( int depth ) const;
 
 private:
-  Q_DECLARE_PRIVATE(Context)
+  Q_DECLARE_PRIVATE( Context )
   ContextPrivate *d_ptr;
 };
 

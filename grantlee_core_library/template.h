@@ -23,27 +23,27 @@ class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
 public:
-  Template(QObject *parent = 0  );
+  Template( QObject *parent = 0 );
 
-  void setContent(const QString &templateString);
+  void setContent( const QString &templateString );
 
   QString render( Context *c );
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
   NodeList nodeList() const;
 
-  void setNodeList(const NodeList &list);
+  void setNodeList( const NodeList &list );
 
   Error error();
   QString errorString();
 
 protected:
-  void setError(Error type, const QString &message);
+  void setError( Error type, const QString &message );
 
 private:
   void parse();
-  NodeList compileString(const QString &str);
+  NodeList compileString( const QString &str );
 
   Error m_error;
   QString m_errorString;

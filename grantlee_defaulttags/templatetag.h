@@ -20,7 +20,7 @@ class TemplateTagNodeFactory : public AbstractNodeFactory
 public:
   TemplateTagNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 };
 
 class TemplateTagNode : public Node
@@ -33,11 +33,11 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  TemplateTagNode(const QString &tagName, QObject *parent);
+  TemplateTagNode( const QString &tagName, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
-  static bool isKeyword(const QString &name);
+  static bool isKeyword( const QString &name );
 
 private:
   QString m_name;

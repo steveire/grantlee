@@ -21,9 +21,9 @@ class ExtendsNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  ExtendsNodeFactory(QObject *parent = 0);
+  ExtendsNodeFactory( QObject *parent = 0 );
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
@@ -31,15 +31,15 @@ class ExtendsNode : public Node
 {
   Q_OBJECT
 public:
-  ExtendsNode(NodeList list, const QString &filename, FilterExpression fe, QObject *parent);
+  ExtendsNode( NodeList list, const QString &filename, FilterExpression fe, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
-  NodeList getNodesByType(const char * className);
+  NodeList getNodesByType( const char * className );
 
-  void appendNode(Node* node);
+  void appendNode( Node* node );
 
-  Template *getParent(Context *c);
+  Template *getParent( Context *c );
 
 private:
   FilterExpression m_filterExpression;

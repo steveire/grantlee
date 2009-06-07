@@ -20,32 +20,31 @@ namespace Grantlee
 class SafeString
 {
 public:
-  enum Safety
-  {
+  enum Safety {
     IsSafe,
     IsNotSafe
   };
   SafeString();
-  SafeString(const QString &str, Safety safety = IsNotSafe);
+  SafeString( const QString &str, Safety safety = IsNotSafe );
   ~SafeString();
 
   QString rawString() const;
 
-  void setNeedsEscape(bool needsEscape);
+  void setNeedsEscape( bool needsEscape );
   bool needsEscape() const;
   bool isSafe() const;
-  void setSafety(Safety safety);
+  void setSafety( Safety safety );
 
-  SafeString operator+(const QString &str);
-  SafeString operator+(const SafeString &str);
-  SafeString &operator+=(const QString &str);
-  SafeString &operator+=(const SafeString &str);
+  SafeString operator+( const QString &str );
+  SafeString operator+( const SafeString &str );
+  SafeString &operator+=( const QString &str );
+  SafeString &operator+=( const SafeString &str );
 
-  bool operator==(const SafeString &other);
+  bool operator==( const SafeString &other );
 
   operator QString() const;
 
-  SafeString &operator=(const QString &s);
+  SafeString &operator=( const QString &s );
 
 private:
   QString m_string;
@@ -57,7 +56,7 @@ private:
 
 }
 
-Q_DECLARE_METATYPE(Grantlee::SafeString)
+Q_DECLARE_METATYPE( Grantlee::SafeString )
 
 #endif
 

@@ -11,10 +11,10 @@ using namespace Grantlee;
 
 class FirstOfNodeFactory : public AbstractNodeFactory
 {
-  public:
-    FirstOfNodeFactory();
+public:
+  FirstOfNodeFactory();
 
-    Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
@@ -22,9 +22,9 @@ class FirstOfNode : public Node
 {
   Q_OBJECT
 public:
-  FirstOfNode(QList<FilterExpression> list, QObject *parent);
+  FirstOfNode( QList<FilterExpression> list, QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
 private:
   QList<FilterExpression> m_variableList;

@@ -16,31 +16,30 @@ IfEqualNodeFactory::IfEqualNodeFactory()
 
 }
 
-Node* IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p, bool negate, QObject *parent) const
+Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool negate, QObject *parent ) const
 {
-  QStringList expr = smartSplit(tagContent);
+  QStringList expr = smartSplit( tagContent );
 
   QList<QString> vars;
 
-  FilterExpression val1(expr.at(1), p);
-  FilterExpression val2(expr.at(2), p);
+  FilterExpression val1( expr.at( 1 ), p );
+  FilterExpression val2( expr.at( 2 ), p );
 
-  const QString endTag("end" + expr.at(0));
-  NodeList trueList = p->parse(QStringList() << "else" << endTag, parent);
+  const QString endTag( "end" + expr.at( 0 ) );
+  NodeList trueList = p->parse( QStringList() << "else" << endTag, parent );
   NodeList falseList;
-  if (p->nextToken().content.trimmed() == "else")
-  {
-    falseList = p->parse(QStringList() << endTag, parent);
+  if ( p->nextToken().content.trimmed() == "else" ) {
+    falseList = p->parse( QStringList() << endTag, parent );
     p->deleteNextToken();
   } // else empty falseList.
 
-  return new IfEqualNode(val1 ,val2, trueList, falseList, negate, parent);
+  return new IfEqualNode( val1 , val2, trueList, falseList, negate, parent );
 }
 
-Node* IfEqualNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* IfEqualNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 
 {
-  return do_getNode(tagContent, p, false, parent);
+  return do_getNode( tagContent, p, false, parent );
 }
 
 
@@ -49,13 +48,13 @@ IfNotEqualNodeFactory::IfNotEqualNodeFactory()
 
 }
 
-Node* IfNotEqualNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* IfNotEqualNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 {
-  return do_getNode(tagContent, p, true, parent);
+  return do_getNode( tagContent, p, true, parent );
 }
 
-IfEqualNode::IfEqualNode(FilterExpression val1, FilterExpression val2, NodeList trueList, NodeList falseList, bool negate, QObject *parent)
-  : Node(parent)
+IfEqualNode::IfEqualNode( FilterExpression val1, FilterExpression val2, NodeList trueList, NodeList falseList, bool negate, QObject *parent )
+    : Node( parent )
 {
   m_var1 = val1;
   m_var2 = val2;
@@ -64,24 +63,24 @@ IfEqualNode::IfEqualNode(FilterExpression val1, FilterExpression val2, NodeList 
   m_negate = negate;
 }
 
-QString IfEqualNode::render(Context *c)
+QString IfEqualNode::render( Context *c )
 {
-  QVariant var1 = m_var1.resolve(c);
-  QVariant var2 = m_var2.resolve(c);
+  QVariant var1 = m_var1.resolve( c );
+  QVariant var2 = m_var2.resolve( c );
 
-  bool equal = Util::equals(var1, var2);
+  bool equal = Util::equals( var1, var2 );
 
-  if ( ( ( m_negate && !equal ) || ( !m_negate && equal ) ) )
-    return m_trueList.render(c);
-  return m_falseList.render(c);
+  if ((( m_negate && !equal ) || ( !m_negate && equal ) ) )
+    return m_trueList.render( c );
+  return m_falseList.render( c );
 
 }
 
-NodeList IfEqualNode::getNodesByType(const char* className)
+NodeList IfEqualNode::getNodesByType( const char* className )
 {
   NodeList list;
-  list << m_trueList.getNodesByType(className);
-  list << m_falseList.getNodesByType(className);
+  list << m_trueList.getNodesByType( className );
+  list << m_falseList.getNodesByType( className );
   return list;
 }
 

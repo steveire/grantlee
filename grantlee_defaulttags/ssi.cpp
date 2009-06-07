@@ -19,56 +19,52 @@ SsiNodeFactory::SsiNodeFactory()
 
 }
 
-Node* SsiNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* SsiNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 {
-  QStringList expr = tagContent.split(" ", QString::SkipEmptyParts);
+  QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
   int exprSize = expr.size();
 
   bool parse = false;
 
-  if ((exprSize != 3) && (exprSize != 2))
-  {
-    setError(TagSyntaxError, "ssi tag takes one argument");
+  if (( exprSize != 3 ) && ( exprSize != 2 ) ) {
+    setError( TagSyntaxError, "ssi tag takes one argument" );
     return 0;
   }
 
-  if (exprSize == 3)
-  {
-    if (expr.at(2) == "parsed")
-    {
+  if ( exprSize == 3 ) {
+    if ( expr.at( 2 ) == "parsed" ) {
       parse = true;
     }
   }
 
-  QString filename = expr.at(1);
+  QString filename = expr.at( 1 );
 
-  return new SsiNode(filename, parse, parent);
+  return new SsiNode( filename, parse, parent );
 }
 
-SsiNode::SsiNode(const QString &filename, bool parse, QObject *parent)
-  : Node(parent), m_filename(filename), m_parse(parse)
+SsiNode::SsiNode( const QString &filename, bool parse, QObject *parent )
+    : Node( parent ), m_filename( filename ), m_parse( parse )
 {
 }
 
-QString SsiNode::render(Context *c)
+QString SsiNode::render( Context *c )
 {
-  QFile file(m_filename);
+  QFile file( m_filename );
 
-  if ( !file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text))
+  if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
     return QString();
 
-  QTextStream in(&file);
+  QTextStream in( &file );
   QString content;
-  while (!in.atEnd()) {
-      content += in.readLine();
+  while ( !in.atEnd() ) {
+    content += in.readLine();
   }
 
-  if (m_parse)
-  {
-    Template *t = new Template(this);
-    t->setContent(content);
-    return t->render(c);
+  if ( m_parse ) {
+    Template *t = new Template( this );
+    t->setContent( content );
+    return t->render( c );
   }
   return content;
 

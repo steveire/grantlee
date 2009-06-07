@@ -11,6 +11,6 @@
 
 #include <QDebug>
 
-Q_EXPORT_PLUGIN2(grantlee_loadertags_library, LoaderTagLibrary);
+Q_EXPORT_PLUGIN2( grantlee_loadertags_library, LoaderTagLibrary );
 
 

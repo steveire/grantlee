@@ -14,7 +14,7 @@ class LoadNodeFactory : public AbstractNodeFactory
 public:
   LoadNodeFactory();
 
-  Node* getNode(const QString &tagContent, Parser *p, QObject *parent) const;
+  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
 
 };
 
@@ -22,9 +22,9 @@ class LoadNode : public Node
 {
   Q_OBJECT
 public:
-  LoadNode(QObject *parent);
+  LoadNode( QObject *parent );
 
-  QString render(Context *c);
+  QString render( Context *c );
 };
 
 #endif

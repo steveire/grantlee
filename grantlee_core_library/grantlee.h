@@ -8,14 +8,12 @@
 namespace Grantlee
 {
 
-enum LoopDirection
-{
+enum LoopDirection {
   ForwardLoop,
   ReversedLoop
 };
 
-enum Error
-{
+enum Error {
   NoError,
   VariableStringInvalid,
   VariableNotInContext,

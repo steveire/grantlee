@@ -28,32 +28,32 @@ public:
   Parser( const QList<Token> &tokenList, QObject *parent );
   ~Parser();
 
-  NodeList parse(const QString &stopAt, QObject *parent);
-  NodeList parse(const QStringList &stopAt, QObject *parent);
+  NodeList parse( const QString &stopAt, QObject *parent );
+  NodeList parse( const QStringList &stopAt, QObject *parent );
 
-  NodeList parse(QObject *parent);
+  NodeList parse( QObject *parent );
 
-  Filter *getFilter(const QString &name) const;
+  Filter *getFilter( const QString &name ) const;
 
-  void skipPast(const QString &tag);
+  void skipPast( const QString &tag );
 
   Token nextToken();
   bool hasNextToken() const;
   void deleteNextToken();
 
-  void loadLib(const QString &name);
+  void loadLib( const QString &name );
 
 
   Error error() const;
   QString errorString() const;
 
 protected:
-  void prependToken(const Token &token);
+  void prependToken( const Token &token );
 
-  void setError(Error errorNumber, const QString &message);
+  void setError( Error errorNumber, const QString &message );
 
 private:
-  Q_DECLARE_PRIVATE(Parser);
+  Q_DECLARE_PRIVATE( Parser );
   ParserPrivate *d_ptr;
 
 };

@@ -15,24 +15,24 @@ CommentNodeFactory::CommentNodeFactory()
 
 }
 
-Node* CommentNodeFactory::getNode(const QString &tagContent, Parser *p, QObject *parent) const
+Node* CommentNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
 {
-  Q_UNUSED(tagContent);
+  Q_UNUSED( tagContent );
 
-  p->skipPast("endcomment");
+  p->skipPast( "endcomment" );
 
-  return new CommentNode(parent);
+  return new CommentNode( parent );
 }
 
-CommentNode::CommentNode(QObject *parent)
-  : Node(parent)
+CommentNode::CommentNode( QObject *parent )
+    : Node( parent )
 {
 
 }
 
-QString CommentNode::render(Context *c)
+QString CommentNode::render( Context *c )
 {
-  Q_UNUSED(c);
+  Q_UNUSED( c );
   return QString();
 }
 

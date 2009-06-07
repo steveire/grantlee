@@ -4,14 +4,14 @@
 
 #include "lower.h"
 
-LowerFilter::LowerFilter(QObject* parent): Filter(parent)
+LowerFilter::LowerFilter( QObject* parent ): Filter( parent )
 {
 
 }
 
-Grantlee::SafeString LowerFilter::doFilter(const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+Grantlee::SafeString LowerFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return Util::getSafeString(input).rawString().toLower();
+  return Util::getSafeString( input ).rawString().toLower();
 }
 
 #include "lower.moc"
