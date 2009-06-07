@@ -44,6 +44,7 @@ install(FILES
   filter.h
   filterexpression.h
   template.h
+  templateloader.h
   context.h
   variable.h
   filterexpression.h
