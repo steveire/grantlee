@@ -9,7 +9,7 @@ configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h
 
 set (grantlee_core_library_SRCS
   template.cpp
-  templateloader.cpp
+  engine.cpp
   context.cpp
   variable.cpp
   filterexpression.cpp
@@ -48,7 +48,7 @@ install(FILES
   filter.h
   filterexpression.h
   template.h
-  templateloader.h
+  engine.h
   context.h
   variable.h
   filterexpression.h

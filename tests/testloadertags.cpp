@@ -10,7 +10,7 @@
 #include <QObject>
 
 #include "template.h"
-#include "templateloader.h"
+#include "engine.h"
 #include "context.h"
 #include "grantlee.h"
 
@@ -45,30 +45,30 @@ private:
   void doTest();
 
   InMemoryTemplateLoader *resource;
-  Engine *m_tl;
+  Engine *m_engine;
 
 };
 
 void TestLoaderTags::initTestCase()
 {
-  m_tl = Engine::instance();
+  m_engine = Engine::instance();
 
   resource = new InMemoryTemplateLoader( this );
-  m_tl->addTemplateResource( resource );
+  m_engine->addTemplateResource( resource );
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_tl->setPluginDirs( QStringList() << appDirPath + "/grantlee_loadertags/"
-                       << appDirPath + "/grantlee_defaulttags/"
-                       << appDirPath + "/grantlee_scriptabletags/"
-                       << appDirPath + "/grantlee_defaultfilters/"
-                       << appDirPath + "/tests/" // For testtags.qs
-                     );
+  m_engine->setPluginDirs( QStringList() << appDirPath + "/grantlee_loadertags/"
+                           << appDirPath + "/grantlee_defaulttags/"
+                           << appDirPath + "/grantlee_scriptabletags/"
+                           << appDirPath + "/grantlee_defaultfilters/"
+                           << appDirPath + "/tests/" // For testtags.qs
+                         );
 }
 
 void TestLoaderTags::cleanupTestCase()
 {
   delete resource;
-  delete m_tl;
+  delete m_engine;
 }
 
 void TestLoaderTags::doTest()

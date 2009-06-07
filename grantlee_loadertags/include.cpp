@@ -9,7 +9,7 @@
 
 #include "parser.h"
 #include "template.h"
-#include "templateloader.h"
+#include "engine.h"
 
 #include <QDebug>
 #include <util_p.h>
@@ -42,9 +42,9 @@ QString IncludeNode::render( Context *c )
 {
   QString filename = Util::getSafeString( m_filterExpression.resolve( c ) ).rawString();
 
-  Engine *loader = Engine::instance();
+  Engine *engine = Engine::instance();
 
-  Template *t = loader->loadByName( filename, this );
+  Template *t = engine->loadByName( filename, this );
 
   if ( !t )
     return QString();
@@ -60,9 +60,9 @@ ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
 
 QString ConstantIncludeNode::render( Context *c )
 {
-  Engine *loader = Engine::instance();
+  Engine *engine = Engine::instance();
 
-  Template* t = loader->loadByName( m_name, this );
+  Template* t = engine->loadByName( m_name, this );
 
   if ( !t )
     return QString();

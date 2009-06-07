@@ -10,7 +10,7 @@
 
 #include "parser.h"
 #include "template.h"
-#include "templateloader.h"
+#include "engine.h"
 #include "grantlee.h"
 
 #include <QDebug>
@@ -86,9 +86,9 @@ Template *ExtendsNode::getParent( Context *c )
     parentName = m_name;
   }
 
-  Engine *loader = Engine::instance();
+  Engine *engine = Engine::instance();
 
-  Template* t = loader->loadByName( parentName, this );
+  Template* t = engine->loadByName( parentName, this );
 
   return t;
 }

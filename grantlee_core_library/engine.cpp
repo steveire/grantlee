@@ -1,5 +1,5 @@
 
-#include "templateloader.h"
+#include "engine.h"
 
 #include <QRegExp>
 #include <QTextStream>

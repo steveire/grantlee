@@ -1,7 +1,7 @@
 
 
-#ifndef TEMPLATE_LOADER_H
-#define TEMPLATE_LOADER_H
+#ifndef ENGINE_H
+#define ENGINE_H
 
 #include "template.h"
 

@@ -10,7 +10,7 @@
 #include <QObject>
 
 #include "template.h"
-#include "templateloader.h"
+#include "engine.h"
 #include "context.h"
 
 #include "grantlee.h"
@@ -109,23 +109,23 @@ private:
 
   void doTest();
 
-  Engine *m_tl;
+  Engine *m_engine;
 
 };
 
 void TestDefaultTags::initTestCase()
 {
-  m_tl = Engine::instance();
+  m_engine = Engine::instance();
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_tl->setPluginDirs( QStringList() << appDirPath + "/grantlee_loadertags/"
-                       << appDirPath + "/grantlee_defaulttags/"
-                       << appDirPath + "/grantlee_defaultfilters/" );
+  m_engine->setPluginDirs( QStringList() << appDirPath + "/grantlee_loadertags/"
+                           << appDirPath + "/grantlee_defaulttags/"
+                           << appDirPath + "/grantlee_defaultfilters/" );
 }
 
 void TestDefaultTags::cleanupTestCase()
 {
-  delete m_tl;
+  delete m_engine;
 }
 
 void TestDefaultTags::doTest()
