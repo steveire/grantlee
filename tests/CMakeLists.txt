@@ -24,5 +24,5 @@ grantlee_unit_tests(
   testscriptabletags
 )
 
-install(FILES testtags.qs DESTINATION ${PROJECT_BINARY_DIR} )
+install(FILES testtags.qs DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_VERSION_STRING} )
 

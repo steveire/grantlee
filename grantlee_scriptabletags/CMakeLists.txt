@@ -46,4 +46,8 @@ install(TARGETS grantlee_scriptabletags_library
          COMPONENT Devel
 )
 
-install(FILES scripteddefaults.qs DESTINATION ${PROJECT_BINARY_DIR} )
+install(TARGETS grantlee_scriptabletags_library
+         LIBRARY DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_VERSION_STRING}
+)
+
+install(FILES scripteddefaults.qs DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_VERSION_STRING} )

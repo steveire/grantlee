@@ -88,8 +88,7 @@ void Parser::loadLib(const QString &name)
   {
     while (d->m_pluginDirs.size() > pluginIndex)
     {
-      libFileName = d->m_pluginDirs.at(pluginIndex++) + name + ".qs";
-
+      libFileName = d->m_pluginDirs.at(pluginIndex++) + VERSION_STRING + "/" + name + ".qs";
       QFile file(libFileName);
       if (!file.exists())
         continue;
@@ -119,7 +118,11 @@ void Parser::loadLib(const QString &name)
   QObject *plugin = 0;
   while (d->m_pluginDirs.size() > pluginIndex)
   {
-    libFileName = d->m_pluginDirs.at(pluginIndex++) + "lib" + name + ".so";
+    libFileName = d->m_pluginDirs.at(pluginIndex++) + VERSION_STRING + "/" + "lib" + name + ".so";
+    QFile file(libFileName);
+    if (!file.exists())
+      continue;
+
     QPluginLoader loader( libFileName );
 
     plugin = loader.instance();

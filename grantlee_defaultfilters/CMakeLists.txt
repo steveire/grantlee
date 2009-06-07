@@ -47,3 +47,8 @@ install(TARGETS grantlee_defaultfilters_library
          COMPONENT Devel
 )
 
+
+install(TARGETS grantlee_defaultfilters_library
+         LIBRARY DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_VERSION_STRING}
+)
+

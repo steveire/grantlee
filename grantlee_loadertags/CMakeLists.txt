@@ -40,3 +40,7 @@ install(TARGETS grantlee_loadertags_library
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
          COMPONENT Devel
 )
+
+install(TARGETS grantlee_loadertags_library
+         LIBRARY DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_VERSION_STRING}
+)
