@@ -116,7 +116,7 @@ void Parser::loadLib(const QString &name)
 
   pluginIndex = 0;
 
-  QObject *plugin;
+  QObject *plugin = 0;
   while (d->m_pluginDirs.size() > pluginIndex)
   {
     libFileName = d->m_pluginDirs.at(pluginIndex++) + "lib" + name + ".so";
