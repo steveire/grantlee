@@ -2,7 +2,10 @@ project(grantlee_core_library)
 
 include_directories(
   ${QT_INCLUDES}
+  ${PROJECT_BINARY_DIR}
 )
+
+configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
 
 set (grantlee_core_library_SRCS
   template.cpp
@@ -28,7 +31,7 @@ target_link_libraries(grantlee_core_library
 )
 
 set_target_properties(grantlee_core_library PROPERTIES
-  VERSION    ${GRANTLEE_LIB_MAJOR_VERSION}.${GRANTLEE_LIB_MINOR_VERSION}.${GRANTLEE_LIB_PATCH_VERSION}
+  VERSION    ${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}.${GRANTLEE_VERSION_PATCH}
   SOVERSION  ${GRANTLEE_CORE_LIB_SOVERSION}
 )
 

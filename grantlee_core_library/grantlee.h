@@ -5,8 +5,6 @@
 #ifndef GRANTLEE_H
 #define GRANTLEE_H
 
-#define VERSION_STRING "0.0.0"
-
 namespace Grantlee
 {
 

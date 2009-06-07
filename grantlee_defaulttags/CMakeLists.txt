@@ -57,6 +57,6 @@ install(TARGETS grantlee_defaulttags_library
 )
 
 install(TARGETS grantlee_defaulttags_library
-         LIBRARY DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_VERSION_STRING}
+         LIBRARY DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_MAJOR_MINOR_VERSION_STRING}
 )
 

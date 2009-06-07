@@ -13,6 +13,7 @@
 #include "templateloader.h"
 #include "filter.h"
 
+#include "grantlee_version.h"
 
 static const char * __scriptableLibName = "grantlee_scriptabletags_library";
 
@@ -88,7 +89,7 @@ void Parser::loadLib(const QString &name)
   {
     while (d->m_pluginDirs.size() > pluginIndex)
     {
-      libFileName = d->m_pluginDirs.at(pluginIndex++) + VERSION_STRING + "/" + name + ".qs";
+      libFileName = d->m_pluginDirs.at(pluginIndex++) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + name + ".qs";
       QFile file(libFileName);
       if (!file.exists())
         continue;
@@ -118,7 +119,7 @@ void Parser::loadLib(const QString &name)
   QObject *plugin = 0;
   while (d->m_pluginDirs.size() > pluginIndex)
   {
-    libFileName = d->m_pluginDirs.at(pluginIndex++) + VERSION_STRING + "/" + "lib" + name + ".so";
+    libFileName = d->m_pluginDirs.at(pluginIndex++) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + "lib" + name + ".so";
     QFile file(libFileName);
     if (!file.exists())
       continue;
