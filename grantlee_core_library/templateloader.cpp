@@ -7,40 +7,40 @@
 #include <QFile>
 
 
-AbstractTemplateResource::AbstractTemplateResource(QObject* parent)
+AbstractTemplateLoader::AbstractTemplateLoader(QObject* parent)
   : QObject(parent)
 {
 
 }
 
-AbstractTemplateResource::~AbstractTemplateResource()
+AbstractTemplateLoader::~AbstractTemplateLoader()
 {
 
 }
 
-FileSystemTemplateResource::FileSystemTemplateResource(QObject* parent)
-  : AbstractTemplateResource(parent)
+FileSystemTemplateLoader::FileSystemTemplateLoader(QObject* parent)
+  : AbstractTemplateLoader(parent)
 {
 
 }
 
-InMemoryTemplateResource::InMemoryTemplateResource(QObject* parent)
-  : AbstractTemplateResource(parent)
+InMemoryTemplateLoader::InMemoryTemplateLoader(QObject* parent)
+  : AbstractTemplateLoader(parent)
 {
 
 }
 
-void FileSystemTemplateResource::setTheme(const QString &themeName)
+void FileSystemTemplateLoader::setTheme(const QString &themeName)
 {
   m_themeName = themeName;
 }
 
-void FileSystemTemplateResource::setTemplateDirs(const QStringList &dirs)
+void FileSystemTemplateLoader::setTemplateDirs(const QStringList &dirs)
 {
   m_templateDirs = dirs;
 }
 
-Template* FileSystemTemplateResource::loadByName(const QString &fileName) const
+Template* FileSystemTemplateLoader::loadByName(const QString &fileName) const
 {
   int i = 0;
   QFile file;
@@ -69,12 +69,12 @@ Template* FileSystemTemplateResource::loadByName(const QString &fileName) const
   return t;
 }
 
-void InMemoryTemplateResource::setTemplate(const QString &name, const QString &content)
+void InMemoryTemplateLoader::setTemplate(const QString &name, const QString &content)
 {
   m_namedTemplates.insert(name, content);
 }
 
-Template* InMemoryTemplateResource::loadByName(const QString& name) const
+Template* InMemoryTemplateLoader::loadByName(const QString& name) const
 {
   if (m_namedTemplates.contains(name))
   {
@@ -86,17 +86,17 @@ Template* InMemoryTemplateResource::loadByName(const QString& name) const
 }
 
 
-TemplateLoader* TemplateLoader::m_instance = 0;
-TemplateLoader* TemplateLoader::instance()
+Engine* Engine::m_instance = 0;
+Engine* Engine::instance()
 {
   if (!m_instance)
   {
-    m_instance = new TemplateLoader();
+    m_instance = new Engine();
   }
   return m_instance;
 }
 
-TemplateLoader::TemplateLoader()
+Engine::Engine()
 {
   m_defaultLibraries << "grantlee_defaulttags_library"
                      << "grantlee_loadertags_library"
@@ -104,53 +104,53 @@ TemplateLoader::TemplateLoader()
                      << "grantlee_scriptabletags_library";
 }
 
-QList<AbstractTemplateResource*> TemplateLoader::templateResources()
+QList<AbstractTemplateLoader*> Engine::templateResources()
 {
   return m_resources;
 }
 
-void TemplateLoader::addTemplateResource(AbstractTemplateResource* resource)
+void Engine::addTemplateResource(AbstractTemplateLoader* resource)
 {
   m_resources << resource;
 }
 
-void TemplateLoader::setPluginDirs(const QStringList &dirs)
+void Engine::setPluginDirs(const QStringList &dirs)
 {
   m_pluginDirs = dirs;
 }
 
-QStringList TemplateLoader::pluginDirs()
+QStringList Engine::pluginDirs()
 {
   return m_pluginDirs;
 }
 
-QStringList TemplateLoader::defaultLibraries() const
+QStringList Engine::defaultLibraries() const
 {
   return m_defaultLibraries;
 }
 
-void TemplateLoader::setDefaultLibraries(const QStringList &list)
+void Engine::setDefaultLibraries(const QStringList &list)
 {
   m_defaultLibraries = list;
 }
 
-void TemplateLoader::addDefaultLibrary(const QString &libName)
+void Engine::addDefaultLibrary(const QString &libName)
 {
   m_defaultLibraries << libName;
 }
 
-void TemplateLoader::removeDefaultLibrary(const QString &libName)
+void Engine::removeDefaultLibrary(const QString &libName)
 {
   m_defaultLibraries.removeAll(libName);
 }
 
-Template* TemplateLoader::loadByName(const QString &name, QObject *parent) const
+Template* Engine::loadByName(const QString &name, QObject *parent) const
 {
-  QListIterator<AbstractTemplateResource*> it(m_resources);
+  QListIterator<AbstractTemplateLoader*> it(m_resources);
 
   while (it.hasNext())
   {
-    AbstractTemplateResource* resource = it.next();
+    AbstractTemplateLoader* resource = it.next();
     Template *t = resource->loadByName(name);
     if (t)
     {

@@ -42,7 +42,7 @@ QString IncludeNode::render(Context *c)
 {
   QString filename = m_filterExpression.resolve(c).toString();
 
-  TemplateLoader *loader = TemplateLoader::instance();
+  Engine *loader = Engine::instance();
 
   Template *t = loader->loadByName( filename, this );
 
@@ -60,7 +60,7 @@ ConstantIncludeNode::ConstantIncludeNode(const QString &name, QObject *parent)
 
 QString ConstantIncludeNode::render(Context *c)
 {
-  TemplateLoader *loader = TemplateLoader::instance();
+  Engine *loader = Engine::instance();
 
   Template* t = loader->loadByName(m_name, this);
 

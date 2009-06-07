@@ -89,7 +89,7 @@ Template *ExtendsNode::getParent(Context *c)
     parentName = m_name;
   }
 
-  TemplateLoader *loader = TemplateLoader::instance();
+  Engine *loader = Engine::instance();
 
   Template* t = loader->loadByName(parentName, this);
 

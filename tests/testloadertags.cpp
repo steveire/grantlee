@@ -40,15 +40,16 @@ private:
 
   void doTest();
 
-  InMemoryTemplateResource *resource;
+  InMemoryTemplateLoader *resource;
+  Engine *m_tl;
 
 };
 
 void TestLoaderTags::initTestCase()
 {
-  TemplateLoader *m_tl = TemplateLoader::instance();
+  m_tl = Engine::instance();
 
-  resource = new InMemoryTemplateResource(this);
+  resource = new InMemoryTemplateLoader(this);
   m_tl->addTemplateResource(resource);
 
   QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
@@ -63,6 +64,7 @@ void TestLoaderTags::initTestCase()
 void TestLoaderTags::cleanupTestCase()
 {
   delete resource;
+  delete m_tl;
 }
 
 void TestLoaderTags::doTest()

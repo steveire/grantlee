@@ -102,7 +102,7 @@ private:
 
 void TestBuiltinSyntax::initTestCase()
 {
-  TemplateLoader *m_tl = TemplateLoader::instance();
+  Engine *m_tl = Engine::instance();
 
   QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_tl->setPluginDirs(QStringList() << appDirPath + "/grantlee_loadertags/"

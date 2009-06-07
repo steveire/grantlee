@@ -8,22 +8,22 @@
 namespace Grantlee
 {
 
-class AbstractTemplateResource : public QObject
+class AbstractTemplateLoader : public QObject
 {
   Q_OBJECT
 public:
-  AbstractTemplateResource(QObject* parent = 0);
-  virtual ~AbstractTemplateResource();
+  AbstractTemplateLoader(QObject* parent = 0);
+  virtual ~AbstractTemplateLoader();
 
   virtual Template* loadByName(const QString &name) const = 0;
 
 };
 
-class FileSystemTemplateResource : public AbstractTemplateResource
+class FileSystemTemplateLoader : public AbstractTemplateLoader
 {
   Q_OBJECT
 public:
-  FileSystemTemplateResource(QObject* parent = 0);
+  FileSystemTemplateLoader(QObject* parent = 0);
   Template* loadByName(const QString &name) const;
 
   void setTheme(const QString &themeName);
@@ -34,11 +34,11 @@ private:
   QStringList m_templateDirs;
 };
 
-class InMemoryTemplateResource : public AbstractTemplateResource
+class InMemoryTemplateLoader : public AbstractTemplateLoader
 {
   Q_OBJECT
 public:
-  InMemoryTemplateResource(QObject* parent = 0);
+  InMemoryTemplateLoader(QObject* parent = 0);
   Template* loadByName(const QString &name) const;
 
   void setTemplate(const QString &name, const QString &content);
@@ -47,14 +47,14 @@ private:
   QHash<QString, QString> m_namedTemplates;
 };
 
-class GRANTLEE_EXPORT TemplateLoader
+class GRANTLEE_EXPORT Engine
 {
 public:
-  static TemplateLoader* instance();
+  static Engine* instance();
 
-  QList<AbstractTemplateResource*> templateResources();
+  QList<AbstractTemplateLoader*> templateResources();
 
-  void addTemplateResource(AbstractTemplateResource *resource);
+  void addTemplateResource(AbstractTemplateLoader *resource);
 
   void setPluginDirs(const QStringList &dirs);
 
@@ -68,12 +68,12 @@ public:
   void removeDefaultLibrary(const QString &libName);
 
 private:
-  TemplateLoader();
+  Engine();
 
-  QList<AbstractTemplateResource*> m_resources;
+  QList<AbstractTemplateLoader*> m_resources;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
-  static TemplateLoader* m_instance;
+  static Engine* m_instance;
 };
 
 }

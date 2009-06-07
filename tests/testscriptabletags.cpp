@@ -38,13 +38,13 @@ private:
 
   void doTest();
 
-  TemplateLoader *m_tl;
+  Engine *m_tl;
 
 };
 
 void TestScriptableTagsSyntax::initTestCase()
 {
-  m_tl = TemplateLoader::instance();
+  m_tl = Engine::instance();
 
   QString appDirPath = QFileInfo(QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_tl->setPluginDirs(QStringList() << appDirPath + "/grantlee_defaulttags/"

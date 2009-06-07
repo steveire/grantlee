@@ -60,7 +60,7 @@ Parser::Parser(const QList<Token> &tokenList, QObject *parent)
 {
   Q_D(Parser);
 
-  TemplateLoader *tl = TemplateLoader::instance();
+  Engine *tl = Engine::instance();
 
   d->m_pluginDirs = tl->pluginDirs();
 
