@@ -74,7 +74,6 @@ Parser::Parser(const QList<Token> &tokenList, QObject *parent)
 Parser::~Parser()
 {
   qDeleteAll(d_ptr->m_nodeFactories);
-  delete d_ptr->m_scriptableTagLibrary;
   delete d_ptr;
 }
 
@@ -137,6 +136,7 @@ void Parser::loadLib(const QString &name)
   if (name == __scriptableLibName)
   {
     d->m_scriptableTagLibrary = tagLibrary;
+    plugin->setParent(this->parent());
     return;
   }
 
