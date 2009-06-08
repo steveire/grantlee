@@ -79,6 +79,14 @@ QVariantList Util::variantToList( const QVariant &var )
     return var.toList();
   }
 
+  if ( var.type() == QVariant::Hash ) {
+    QVariantHash varHash = var.toHash();
+    QVariantList list;
+    foreach( QString key, varHash.keys() )
+      list << key;
+    return list;
+  }
+
   if ( var.userType() == QMetaType::QObjectStar ) {
     QObject *obj = var.value<QObject*>();
     if ( obj->property( "__list__" ).isValid() ) {

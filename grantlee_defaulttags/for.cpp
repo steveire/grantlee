@@ -170,12 +170,12 @@ QString ForNode::render( Context *c )
 
   c->push();
 
-  if ( var.type() == QVariant::Hash ) {
-    QVariantHash varHash = var.toHash();
-    result = iterateHash( c, varHash, unpack );
-    c->pop();
-    return result;
-  }
+//   if ( var.type() == QVariant::Hash ) {
+//     QVariantHash varHash = var.toHash();
+//     result = iterateHash( c, varHash, unpack );
+//     c->pop();
+//     return result;
+//   }
 
   // If it's an iterable type, iterate, otherwise it's a list of one.
   QVariantList varList = m_filterExpression.toList( c );

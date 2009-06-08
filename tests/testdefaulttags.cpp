@@ -537,20 +537,20 @@ void TestDefaultTags::testForTag_data()
 
   dict.clear();
   QVariantHash hash;
-  hash.insert( "one", 1 );
-  hash.insert( "two", 2 );
-  dict.insert( "items", hash );
-  QTest::newRow( "for-tag-unpack-dict01" ) << "{% for key,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-
-  QTest::newRow( "for-tag-unpack-dict03" ) << "{% for key, value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-  QTest::newRow( "for-tag-unpack-dict04" ) << "{% for key , value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-  QTest::newRow( "for-tag-unpack-dict05" ) << "{% for key ,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-  QTest::newRow( "for-tag-unpack-dict06" ) << "{% for key value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-  QTest::newRow( "for-tag-unpack-dict07" ) << "{% for key,,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-  QTest::newRow( "for-tag-unpack-dict08" ) << "{% for key,value, in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
-
-  // Ensure that a single loopvar doesn't truncate the list in val.
-  QTest::newRow( "for-tag-unpack-dict09" ) << "{% for val in items %}{{ val.0 }}:{{ val.1 }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//   hash.insert( "one", 1 );
+//   hash.insert( "two", 2 );
+//   dict.insert( "items", hash );
+//   QTest::newRow( "for-tag-unpack-dict01" ) << "{% for key,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//
+//   QTest::newRow( "for-tag-unpack-dict03" ) << "{% for key, value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//   QTest::newRow( "for-tag-unpack-dict04" ) << "{% for key , value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//   QTest::newRow( "for-tag-unpack-dict05" ) << "{% for key ,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//   QTest::newRow( "for-tag-unpack-dict06" ) << "{% for key value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//   QTest::newRow( "for-tag-unpack-dict07" ) << "{% for key,,value in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//   QTest::newRow( "for-tag-unpack-dict08" ) << "{% for key,value, in items %}{{ key }}:{{ value }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
+//
+//   // Ensure that a single loopvar doesn't truncate the list in val.
+//   QTest::newRow( "for-tag-unpack-dict09" ) << "{% for val in items %}{{ val.0 }}:{{ val.1 }}/{% endfor %}" << dict << "one:1/two:2/" << NoError;
 
   dict.clear();
   list.clear();
