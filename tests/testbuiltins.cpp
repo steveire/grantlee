@@ -304,9 +304,15 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   dict.clear();
   list.clear();
-  list.append( "xxxx" );
-  list.append( "yyyy" );
-  list.append( "abcd" );
+  innerList.clear();
+  innerList << "x" << "x" << "x" << "x";
+  list.append( QVariant( innerList ) );
+  innerList.clear();
+  innerList << "y" << "y" << "y" << "y";
+  list.append( QVariant( innerList ) );
+  innerList.clear();
+  innerList << "a" << "b" << "c" << "d";
+  list.append( QVariant( innerList ) );
   dict.insert( "1", list );
 
   QTest::newRow( "basic-syntax31" ) << "{{ 1.2.3 }}" << dict << "d" << NoError;
@@ -537,7 +543,11 @@ void TestBuiltinSyntax::testEscaping_data()
   QTest::newRow( "escape07" ) << "{{ \"this & that\" }}" << dict << "this & that" << NoError;
 
   // Iterating outputs safe characters.
-  QTest::newRow( "escape08" ) << "{% for letter in var %}{{ letter }},{% endfor %}" << dict << "t,h,i,s, ,&amp;, ,t,h,a,t," << NoError;
+  dict.clear();
+  QVariantList list;
+  list << "K" << "&" << "R";
+  dict.insert( "list", list );
+  QTest::newRow( "escape08" ) << "{% for letter in list %}{{ letter }},{% endfor %}" << dict << "K,&amp;,R," << NoError;
 
   dict.clear();
   // escape requirement survives lookup.

@@ -79,16 +79,7 @@ QVariantList Util::variantToList( const QVariant &var )
     return var.toList();
   }
 
-  if ( isSafeString( var ) ) {
-    QString s = getSafeString( var ).rawString();
-
-    QString::iterator i;
-    QVariantList list;
-    for ( i = s.begin(); i != s.end(); ++i ) {
-      list << *i;
-    }
-    return list;
-  } else if ( var.userType() == QMetaType::QObjectStar ) {
+  if ( var.userType() == QMetaType::QObjectStar ) {
     QObject *obj = var.value<QObject*>();
     if ( obj->property( "__list__" ).isValid() ) {
       return obj->property( "__list__" ).toList();
