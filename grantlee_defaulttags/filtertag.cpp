@@ -37,6 +37,11 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
   QString expression = expr.join( " " );
   FilterExpression fe( QString( "var|%1" ).arg( expression ), p );
 
+  if ( fe.error() ) {
+    setError( fe.error(), fe.errorString() );
+    return 0;
+  }
+
   NodeList filterNodes = p->parse( QStringList() << "endfilter", parent );
   p->deleteNextToken();
 

@@ -25,6 +25,8 @@
 #include "parser.h"
 #include "template.h"
 
+#include "util_p.h"
+
 
 
 AutoescapeNodeFactory::AutoescapeNodeFactory()
@@ -46,7 +48,7 @@ Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p, QObj
   if ( strState == "on" )
     state = AutoescapeNode::On;
   else if ( strState == "off" )
-    state = AutoescapeNode::On;
+    state = AutoescapeNode::Off;
   else {
     setError( TagSyntaxError, "argument must be 'on' or 'off'" );
     return 0;
@@ -65,10 +67,14 @@ AutoescapeNode::AutoescapeNode( int state, NodeList list, QObject *parent )
 
 QString AutoescapeNode::render( Context *c )
 {
-  if ( On == m_state ) {
-//     return marksafe m_list.render(c);
+  bool old_setting = c->autoescape();
+  c->setAutoescape( m_state == On );
+  QString output = m_list.render( c );
+  c->setAutoescape( old_setting );
+  if ( m_state == On ) {
+    return Util::markSafe( output );
   }
-  return m_list.render( c );
+  return output;
 }
 
 NodeList AutoescapeNode::getNodesByType( const char* className )

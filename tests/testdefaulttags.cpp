@@ -27,6 +27,7 @@
 #include "template.h"
 #include "engine.h"
 #include "context.h"
+#include "util_p.h"
 
 #include "grantlee.h"
 
@@ -117,6 +118,11 @@ private slots:
 
   void testIfChangedTag_data();
   void testIfChangedTag() {
+    doTest();
+  }
+
+  void testAutoescapeTag_data();
+  void testAutoescapeTag() {
     doTest();
   }
 
@@ -1240,6 +1246,53 @@ void TestDefaultTags::testIfChangedTag_data()
   dict.insert( "ids", QVariantList() << 1 << 1 << 2 << 2 << 2 << 3 << 4 );
   QTest::newRow( "ifchanged-else04" ) << "{% for id in ids %}{% ifchanged %}***{{ id }}*{% else %}...{% endifchanged %}{{ forloop.counter }}{% endfor %}" << dict << "***1*1...2***2*3...4...5***3*6***4*7" << NoError;
 
+}
+
+
+void TestDefaultTags::testAutoescapeTag_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QTest::newRow( "autoescape-tag01" ) << "{% autoescape off %}hello{% endautoescape %}" << dict << "hello" << NoError;
+
+  dict.insert( "first", "<b>hello</b>" );
+  QTest::newRow( "autoescape-tag02" ) << "{% autoescape off %}{{ first }}{% endautoescape %}" << dict << "<b>hello</b>" << NoError;
+  QTest::newRow( "autoescape-tag03" ) << "{% autoescape on %}{{ first }}{% endautoescape %}" << dict << "&lt;b&gt;hello&lt;/b&gt;" << NoError;
+  // Autoescape disabling and enabling nest in a predictable way.
+  dict.insert( "first", "<a>" );
+  QTest::newRow( "autoescape-tag04" ) << "{% autoescape off %}{{ first }} {% autoescape  on%}{{ first }}{% endautoescape %}{% endautoescape %}" << dict << "<a> &lt;a&gt;" << NoError;
+
+  dict.insert( "first", "<b>first</b>" );
+  QTest::newRow( "autoescape-tag05" ) << "{% autoescape on %}{{ first }}{% endautoescape %}" << dict << "&lt;b&gt;first&lt;/b&gt;" << NoError;
+  // Strings (ASCII or unicode) already marked as "safe" are not
+  // auto-escaped
+  SafeString safeString( "<b>first</b>" );
+  QVariant safeStringVar = QVariant::fromValue<SafeString>( Util::markSafe( safeString ) );
+  dict.insert( "first", safeStringVar );
+
+  QTest::newRow( "autoescape-tag06" ) << "{{ first }}" << dict << "<b>first</b>" << NoError;
+  QTest::newRow( "autoescape-tag07" ) << "{% autoescape on %}{{ first }}{% endautoescape %}" << dict << "<b>first</b>" << NoError;
+
+  // Literal string arguments to filters, if used in the result, are
+  // safe.
+  dict.clear();
+  dict.insert( "var", QVariant() );
+  QTest::newRow( "autoescape-tag08" ) << "{% autoescape on %}{{ var|default_if_none:\"endquote\\\" hah\" }}{% endautoescape %}" << dict << "endquote\" hah" << NoError;
+  // Objects which return safe strings as their __unicode__ method
+  // won't get double-escaped.
+//   'autoescape-tag09': (r'{{ unsafe }}', {'unsafe': filters.UnsafeClass()}, 'you &amp; me'),
+//   'autoescape-tag10': (r'{{ safe }}', {'safe': filters.SafeClass()}, 'you &gt; me'),
+  // The "safe" and "escape" filters cannot work due to internal
+  // implementation details (fortunately, the (no)autoescape block
+  // tags can be used in those cases)
+  dict.clear();
+  dict.insert( "first", "<a>" );
+  QTest::newRow( "autoescape-filtertag01" ) << "{{ first }}{% filter safe %}{{ first }} x<y{% endfilter %}" << dict << "" << TagSyntaxError;
 }
 
 
