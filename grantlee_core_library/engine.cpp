@@ -35,6 +35,11 @@ void FileSystemTemplateLoader::setTheme( const QString &themeName )
   m_themeName = themeName;
 }
 
+QString FileSystemTemplateLoader::themeName() const
+{
+  return m_themeName;
+}
+
 void FileSystemTemplateLoader::setTemplateDirs( const QStringList &dirs )
 {
   m_templateDirs = dirs;

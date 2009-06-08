@@ -27,6 +27,7 @@ public:
   Template* loadByName( const QString &name ) const;
 
   void setTheme( const QString &themeName );
+  QString themeName() const;
   void setTemplateDirs( const QStringList &dirs );
 
 private:
