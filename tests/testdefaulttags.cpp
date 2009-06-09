@@ -691,7 +691,6 @@ void TestDefaultTags::testIfEqualTag_data()
   QTest::newRow( "ifequal-split01" ) << "{% ifequal a \"test man\" %}yes{% else %}no{% endifequal %}" << dict << "no" << NoError;
 
   dict.insert( "a", "foo" );
-  QTest::newRow( "ifequal-split01" ) << "{% ifequal a \"test man\" %}yes{% else %}no{% endifequal %}" << dict << "no" << NoError;
   QTest::newRow( "ifequal-split02" ) << "{% ifequal a \"test man\" %}yes{% else %}no{% endifequal %}" << dict << "no" << NoError;
 
   dict.clear();
