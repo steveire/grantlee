@@ -361,7 +361,6 @@ void TestBuiltinSyntax::testListIndex_data()
   dict.insert( "var", l );
 
   // List-index syntax allows a template to access a certain item of a subscriptable object.
-  QTest::newRow( "list-index01" ) << "{{ var.0 }}" << dict << "first item" << NoError;
   QTest::newRow( "list-index01" ) << "{{ var.1 }}" << dict << "second item" << NoError;
   // Fail silently when the list index is out of range.
   QTest::newRow( "list-index02" ) << "{{ var.5 }}" << dict << "" << NoError;

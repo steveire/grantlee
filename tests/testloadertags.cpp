@@ -140,9 +140,11 @@ void TestLoaderTags::testIncludeTag_data()
   dict.clear();
   QTest::newRow( "include04" ) << "a{% include \"nonexistent\" %}b" << dict << "ab" << NoError;
 
-  resource->setTemplate( "include 05", "template with a space" );
+  QString incl05 = "template with a space";
+  resource->setTemplate( "include 05", incl05 );
 
-  dict.clear();
+  QTest::newRow( "include 05" ) << incl05 << dict << "template with a space" << NoError;
+
   QTest::newRow( "include06" ) << "{% include \"include 05\" %}" << dict << "template with a space" << NoError;
 
 }
@@ -291,7 +293,10 @@ void TestLoaderTags::testExtendsTag_data()
   // Inheritance from a template that doesn't have any blocks
   QTest::newRow( "inheritance27" ) << "{% extends 'inheritance26' %}" << dict << "no tags" << NoError;
 
-  resource->setTemplate( "inheritance 28", "{% block first %}!{% endblock %}" );
+  QString inh28 = "{% block first %}!{% endblock %}";
+  resource->setTemplate( "inheritance 28", inh28 );
+
+  QTest::newRow( "inheritance 28" ) << inh28 << dict << "!" << NoError;
 
   // Inheritance from a template with a space in its name should work.
   QTest::newRow( "inheritance29" ) << "{% extends 'inheritance 28' %}" << dict << "!" << NoError;
