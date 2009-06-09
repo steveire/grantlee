@@ -859,8 +859,8 @@ void TestDefaultTags::testWithTag_data()
   QTest::newRow( "with02" )
   << "{{ key }}{% with dict.key as key %}{{ key }}-{{ dict.key }}-{{ key }}{% endwith %}{{ key }}"
   << dict << "50-50-50" << NoError;
-  QTest::newRow( "with03" ) << "{% with dict.key xx key %}{{ key }}{% endwith %}" << dict << "" << TagSyntaxError;
-  QTest::newRow( "with04" ) << "{% with dict.key as %}{{ key }}{% endwith %}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "with-error01" ) << "{% with dict.key xx key %}{{ key }}{% endwith %}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "with-error02" ) << "{% with dict.key as %}{{ key }}{% endwith %}" << dict << "" << TagSyntaxError;
 }
 
 void TestDefaultTags::testCycleTag_data()
