@@ -1232,7 +1232,6 @@ void TestDefaultTags::testIfChangedTag_data()
 // Logically the same as above, just written with explicit
 // ifchanged for the day.
 
-  // TODO: fix name conflict upstream
   QTest::newRow( "ifchanged-param05" ) << "{% for d in days %}{% ifchanged d.day %}{{ d.day }}{% endifchanged %}{% for h in d.hours %}{% ifchanged d.day h %}{{ h }}{% endifchanged %}{% endfor %}{% endfor %}" << dict << "112323" << NoError;
 
 // Test the else clause of ifchanged.

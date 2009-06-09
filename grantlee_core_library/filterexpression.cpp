@@ -118,6 +118,11 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
       int lastFilter = d->m_filters.size();
       d->m_filters[lastFilter -1].second = Variable( subString );
     } else {
+      if ( subString.contains( "._" ) || ( subString.startsWith( "_" ) && !subString.startsWith( "_(" ) ) )
+      {
+        setError( TagSyntaxError, QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
+        return;
+      }
       // Token is _("translated"), or "constant", or a variable;
       d->m_variable = Variable( subString );
     }

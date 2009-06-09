@@ -224,7 +224,11 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   // TODO: Needed?
   // Raise TemplateSyntaxError when trying to access a variable beginning with an underscore
   // #C# {"var": SomeClass()}
-//   QTest::newRow("basic-syntax12") << "{{ var.__dict__ }}" << dict << " template.TemplateSyntaxError),";
+  dict.clear();
+  QVariantHash hash;
+  hash.insert("__dict__",  "foo");
+  dict.insert("var", hash);
+  QTest::newRow("basic-syntax12") << "{{ var.__dict__ }}" << dict << "" << TagSyntaxError;
 
   dict.clear();
   // Raise TemplateSyntaxError when trying to access a variable containing an illegal character
@@ -236,7 +240,7 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   // Attribute syntax allows a template to call a dictionary key's value
 
-  QVariantHash hash;
+  hash.clear();
   hash.insert( "bar", "baz" );
   dict.insert( "foo", hash );
   QTest::newRow( "basic-syntax18" ) << "{{ foo.bar }}" << dict << "baz" << NoError;
