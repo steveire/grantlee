@@ -67,7 +67,7 @@ private:
 
   void getData();
   QVariantHash getDictData( int size );
-
+  QString getTemplate(int size);
   Engine *m_engine;
   QString m_templateGeneratorString;
   Template *m_templateGenerator;
@@ -163,26 +163,28 @@ void Benchmarking::getData()
   dict.insert( "bat", "Cat" );
   dict.insert( "booList", QVariantList() << "Tom" << "Dick" << "Harry" );
 
-  QString foo;
-
   // Using Grantlee to create Grantlee templates. How recursive...
 
-  Context c( getDictData( 10 ) );
-  QTest::newRow( "growing-10" ) << m_templateGenerator->render( &c ) << dict;
+//   QList<int> repeatSizes;
+//   repeatSizes << 10 << 100 << 200 << 300 << 1000 << 1500 << 2000 << 3000 << 4000;
 
-  Context c2( getDictData( 100 ) );
-  QTest::newRow( "growing-100" ) << m_templateGenerator->render( &c2 ) << dict;
+//   foreach(int size, repeatSizes)
+//   {
+//     const char * name = QString("growing-%1").arg( size ).toLatin1();
+//     QTest::newRow( name ) << getTemplate( size ) << dict;
+//   }
 
-  Context c3( getDictData( 1000 ) );
-  QTest::newRow( "growing-1000" ) << m_templateGenerator->render( &c3 ) << dict;
-
-  Context c4( getDictData( 10000 ) );
-  QTest::newRow( "growing-10000" ) << m_templateGenerator->render( &c4 ) << dict;
-
-  Context c5( getDictData( 20000 ) );
-  QTest::newRow( "growing-20000" ) << m_templateGenerator->render( &c5 ) << dict;
-
-  dict.clear();
+  QTest::newRow( "growing-10"   ) << getTemplate( 10   ) << dict;
+  QTest::newRow( "growing-20"   ) << getTemplate( 20   ) << dict;
+  QTest::newRow( "growing-30"   ) << getTemplate( 30   ) << dict;
+  QTest::newRow( "growing-100"  ) << getTemplate( 100  ) << dict;
+  QTest::newRow( "growing-300"  ) << getTemplate( 300  ) << dict;
+  QTest::newRow( "growing-700"  ) << getTemplate( 700  ) << dict;
+  QTest::newRow( "growing-1000" ) << getTemplate( 1000 ) << dict;
+  QTest::newRow( "growing-2000" ) << getTemplate( 2000 ) << dict;
+  QTest::newRow( "growing-2500" ) << getTemplate( 2500 ) << dict;
+  QTest::newRow( "growing-2700" ) << getTemplate( 2700 ) << dict;
+  QTest::newRow( "growing-3000" ) << getTemplate( 3000 ) << dict;
 }
 
 QVariantHash Benchmarking::getDictData( int size )
@@ -196,6 +198,13 @@ QVariantHash Benchmarking::getDictData( int size )
 
   return h;
 }
+
+QString Benchmarking::getTemplate(int size)
+{
+  Context c( getDictData( size ) );
+  return m_templateGenerator->render( &c );
+}
+
 
 QTEST_MAIN( Benchmarking )
 #include "benchmarktokenizing.moc"
