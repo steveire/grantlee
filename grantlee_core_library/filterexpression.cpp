@@ -24,8 +24,6 @@
 #include "filter.h"
 #include "util_p.h"
 
-using namespace Grantlee;
-
 namespace Grantlee
 {
 class FilterExpressionPrivate
