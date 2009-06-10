@@ -125,7 +125,7 @@ void Benchmarking::testParsing()
   Parser p( tokens, 0 );
   NodeList list;
 
-  QBENCHMARK( list = p.parse( this ) );
+  QBENCHMARK{ p.setTokens(tokens); list = p.parse( this ); }
 
 }
 

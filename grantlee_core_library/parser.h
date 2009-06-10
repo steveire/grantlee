@@ -43,6 +43,8 @@ public:
   Parser( const QList<Token> &tokenList, QObject *parent );
   ~Parser();
 
+  void setTokens( const QList<Token> &tokenList );
+
   NodeList parse( const QString &stopAt, QObject *parent );
   NodeList parse( const QStringList &stopAt, QObject *parent );
 
