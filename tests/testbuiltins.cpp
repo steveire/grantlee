@@ -122,6 +122,8 @@ private slots:
     doTest();
   }
 
+  void testMultipleStates();
+
   void cleanupTestCase();
 
 private:
@@ -561,6 +563,55 @@ void TestBuiltinSyntax::testEscaping_data()
   dict.clear();
 
 }
+
+void TestBuiltinSyntax::testMultipleStates()
+{
+  Engine *engine = Engine::instance();
+
+  InMemoryTemplateLoader *loader1 = new InMemoryTemplateLoader( this );
+
+  loader1->setTemplate( "template1", "Template 1" );
+  engine->addTemplateLoader( loader1 );
+
+  Template *t1 = engine->newTemplate( "{% include \"template1\" %}", this );
+
+  engine->removeTemplateLoader( 0 );
+
+  QVERIFY( engine->templateLoaders().size() == 0 );
+
+  InMemoryTemplateLoader *loader2 = new InMemoryTemplateLoader( this );
+
+  loader2->setTemplate( "template2", "Template 2" );
+
+  engine->addTemplateLoader( loader2 );
+
+  Template *t2 = engine->newTemplate( "{% include \"template2\" %}", this );
+
+  engine->removeTemplateLoader( 0 );
+
+  QVERIFY( engine->templateLoaders().size() == 0 );
+
+  InMemoryTemplateLoader *loader3 = new InMemoryTemplateLoader( this );
+
+  loader3->setTemplate( "template3", "Template 3" );
+
+  engine->addTemplateLoader( loader3 );
+
+  Template *t3 = engine->newTemplate( "{% include var %}", this );
+
+  QVariantHash h;
+  h.insert( "var", "template3" );
+  Context c( h );
+
+  QString expected1 = "Template 1";
+  QString expected2 = "Template 2";
+  QString expected3 = "Template 3";
+  QCOMPARE( t1->render( &c ), expected1 );
+  QCOMPARE( t2->render( &c ), expected2 );
+  QCOMPARE( t3->render( &c ), expected3 );
+
+}
+
 
 QTEST_MAIN( TestBuiltinSyntax )
 #include "testbuiltins.moc"

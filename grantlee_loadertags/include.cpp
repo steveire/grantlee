@@ -58,6 +58,8 @@ QString IncludeNode::render( Context *c )
   QString filename = Util::getSafeString( m_filterExpression.resolve( c ) ).rawString();
 
   Engine *engine = Engine::instance();
+  qint64 settingsToken = parent()->property("settingsToken").toULongLong();
+  engine->setSettingsToken(settingsToken);
 
   Template *t = engine->loadByName( filename, this );
 
@@ -76,6 +78,8 @@ ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
 QString ConstantIncludeNode::render( Context *c )
 {
   Engine *engine = Engine::instance();
+  qint64 settingsToken = parent()->property("settingsToken").toULongLong();
+  engine->setSettingsToken(settingsToken);
 
   Template* t = engine->loadByName( m_name, this );
 

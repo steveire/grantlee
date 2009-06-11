@@ -99,6 +99,8 @@ Template *ExtendsNode::getParent( Context *c )
     parentName = m_name;
   }
   Engine *engine = Engine::instance();
+  qint64 settingsToken = parent()->property("settingsToken").toULongLong();
+  engine->setSettingsToken(settingsToken);
 
   Template* t = engine->loadByName( parentName, this );
 
