@@ -117,13 +117,13 @@ QHash<QString, QVariant> Context::stackHash( int depth ) const
 
 bool Context::isMutating() const
 {
-  Q_D(const Context);
+  Q_D( const Context );
   return d->m_mutating;
 }
 
-void Context::setMutating(bool mutating)
+void Context::setMutating( bool mutating )
 {
-  Q_D(Context);
+  Q_D( Context );
   d->m_mutating = mutating;
 }
 

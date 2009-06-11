@@ -67,7 +67,7 @@ private:
 
   void getData();
   QVariantHash getDictData( int size );
-  QString getTemplate(int size);
+  QString getTemplate( int size );
   Engine *m_engine;
   QString m_templateGeneratorString;
   Template *m_templateGenerator;
@@ -125,7 +125,7 @@ void Benchmarking::testParsing()
   Parser p( tokens, 0 );
   NodeList list;
 
-  QBENCHMARK{ p.setTokens(tokens); list = p.parse( this ); }
+  QBENCHMARK { p.setTokens( tokens ); list = p.parse( this ); }
 
 }
 
@@ -199,7 +199,7 @@ QVariantHash Benchmarking::getDictData( int size )
   return h;
 }
 
-QString Benchmarking::getTemplate(int size)
+QString Benchmarking::getTemplate( int size )
 {
   Context c( getDictData( size ) );
   return m_templateGenerator->render( &c );

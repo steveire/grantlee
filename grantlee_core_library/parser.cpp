@@ -92,9 +92,9 @@ Parser::~Parser()
 }
 
 
-void Parser::setTokens(const QList< Token >& tokenList)
+void Parser::setTokens( const QList< Token >& tokenList )
 {
-  Q_D(Parser);
+  Q_D( Parser );
   d->m_tokenList = tokenList;
 }
 

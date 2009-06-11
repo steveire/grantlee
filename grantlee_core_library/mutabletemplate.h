@@ -29,9 +29,9 @@ class MutableTemplate : public Template
 {
   Q_OBJECT
 public:
-  MutableTemplate(QObject *parent = 0);
+  MutableTemplate( QObject *parent = 0 );
 
-  QString render(Context *c);
+  QString render( Context *c );
 
 };
 

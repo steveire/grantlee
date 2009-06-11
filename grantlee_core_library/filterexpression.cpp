@@ -116,8 +116,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
       int lastFilter = d->m_filters.size();
       d->m_filters[lastFilter -1].second = Variable( subString );
     } else {
-      if ( subString.contains( "._" ) || ( subString.startsWith( "_" ) && !subString.startsWith( "_(" ) ) )
-      {
+      if ( subString.contains( "._" ) || ( subString.startsWith( "_" ) && !subString.startsWith( "_(" ) ) ) {
         setError( TagSyntaxError, QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
         return;
       }

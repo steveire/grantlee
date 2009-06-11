@@ -137,8 +137,8 @@ NodeList::~NodeList()
 
 QString NodeList::render( Context *c )
 {
-  if (c->isMutating())
-    return mutableRender(c);
+  if ( c->isMutating() )
+    return mutableRender( c );
 
   QString ret;
   for ( int i = 0; i < this->size(); ++i ) {
@@ -160,23 +160,19 @@ QString NodeList::mutableRender( Context *c )
   QList<Grantlee::Node*>::iterator it;
   QList<Grantlee::Node*>::iterator first = begin();
   QList<Grantlee::Node*>::iterator last = end();
-  for (it = first; it != last; ++it)
-  {
+  for ( it = first; it != last; ++it ) {
     Grantlee::Node *node = *it;
     QString renderedNode = node->render( c );
     renderedTemplate += renderedNode;
     bool isPersistent = node->isPersistent();
-    if (it != first)
-    {
-      Grantlee::Node *lastNode = *(it -1);
-      TextNode *textNode = qobject_cast<TextNode*>(lastNode);
-      if (textNode && (!isPersistent || node->isRepeatable() ) )
-      {
-        textNode->appendContent(renderedNode);
+    if ( it != first ) {
+      Grantlee::Node *lastNode = *( it - 1 );
+      TextNode *textNode = qobject_cast<TextNode*>( lastNode );
+      if ( textNode && ( !isPersistent || node->isRepeatable() ) ) {
+        textNode->appendContent( renderedNode );
       }
-      if (!isPersistent && !lastNode->isPersistent())
-      {
-        it = erase(it);
+      if ( !isPersistent && !lastNode->isPersistent() ) {
+        it = erase( it );
         --it;
       }
     }

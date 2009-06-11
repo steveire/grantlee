@@ -226,9 +226,9 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   // #C# {"var": SomeClass()}
   dict.clear();
   QVariantHash hash;
-  hash.insert("__dict__",  "foo");
-  dict.insert("var", hash);
-  QTest::newRow("basic-syntax12") << "{{ var.__dict__ }}" << dict << "" << TagSyntaxError;
+  hash.insert( "__dict__",  "foo" );
+  dict.insert( "var", hash );
+  QTest::newRow( "basic-syntax12" ) << "{{ var.__dict__ }}" << dict << "" << TagSyntaxError;
 
   dict.clear();
   // Raise TemplateSyntaxError when trying to access a variable containing an illegal character

@@ -55,8 +55,12 @@ public:
   Error error() const;
   QString errorString() const;
 
-  virtual bool isPersistent() { return isRepeatable(); }
-  virtual bool isRepeatable() { return false; }
+  virtual bool isPersistent() {
+    return isRepeatable();
+  }
+  virtual bool isRepeatable() {
+    return false;
+  }
 
 protected:
   void setError( Error type, const QString &message );
@@ -87,7 +91,7 @@ public:
 protected:
   void setError( Error type, const QString &message );
 
-  QString mutableRender(Context *c);
+  QString mutableRender( Context *c );
 
 private:
   Error m_error;
@@ -150,7 +154,9 @@ public:
     return m_content;
   }
 
-  void appendContent(const QString &content) { m_content += content; }
+  void appendContent( const QString &content ) {
+    m_content += content;
+  }
 
 private:
   QString m_content;
