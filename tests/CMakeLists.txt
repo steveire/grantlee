@@ -22,6 +22,7 @@ grantlee_unit_tests(
   testloadertags
   testdefaulttags
   testscriptabletags
+  testmutabletags
   benchmarks
 )
 
