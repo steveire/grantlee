@@ -21,6 +21,7 @@
 #define TEMPLATE_H
 
 #include <QStringList>
+#include <QUuid>
 
 #include "node.h"
 #include "grantlee_export.h"
@@ -39,6 +40,7 @@ class TemplatePrivate;
 class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
+  Q_PROPERTY( qint64 settingsToken READ settingsToken )
 public:
   ~Template();
   virtual QString render( Context *c );
@@ -48,6 +50,9 @@ public:
   NodeList nodeList() const;
 
   void setNodeList( const NodeList &list );
+
+  void setSettingsToken( qint64 settingsToken );
+  qint64 settingsToken() const;
 
   Error error();
   QString errorString();

@@ -23,6 +23,7 @@
 #include "parser.h"
 #include "context.h"
 #include "grantlee.h"
+#include "engine.h"
 
 using namespace Grantlee;
 
@@ -41,6 +42,7 @@ class TemplatePrivate
   NodeList compileString( const QString &str );
   void setError( Error type, const QString &message );
 
+  qint64 m_settingsToken;
   Error m_error;
   QString m_errorString;
   QStringList m_pluginDirs;
@@ -68,6 +70,8 @@ NodeList TemplatePrivate::compileString( const QString &str )
 Template::Template( QObject *parent )
     : QObject( parent ), d_ptr(new TemplatePrivate(this))
 {
+  Q_D(Template);
+  d->m_settingsToken = reinterpret_cast<qint64>(this);
 }
 
 Template::~Template()
@@ -109,6 +113,19 @@ void Template::setNodeList( const NodeList &list )
 {
   Q_D( Template );
   d->m_nodeList = list;
+}
+
+
+void Template::setSettingsToken( qint64 settingsToken )
+{
+  Q_D(Template);
+  d->m_settingsToken = settingsToken;
+}
+
+qint64 Template::settingsToken() const
+{
+  Q_D(const Template);
+  return d->m_settingsToken;
 }
 
 void TemplatePrivate::setError( Error type, const QString &message )
