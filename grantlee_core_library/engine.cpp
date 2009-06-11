@@ -115,7 +115,7 @@ class EnginePrivate
 
   }
 
-  QList<AbstractTemplateLoader*> m_resources;
+  QList<AbstractTemplateLoader*> m_loaders;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
 
@@ -145,16 +145,16 @@ Engine::Engine()
   << "grantlee_scriptabletags_library";
 }
 
-QList<AbstractTemplateLoader*> Engine::templateResources()
+QList<AbstractTemplateLoader*> Engine::templateLoaders()
 {
   Q_D( Engine );
-  return d->m_resources;
+  return d->m_loaders;
 }
 
-void Engine::addTemplateResource( AbstractTemplateLoader* resource )
+void Engine::addTemplateLoader( AbstractTemplateLoader* loader )
 {
   Q_D( Engine );
-  d->m_resources << resource;
+  d->m_loaders << loader;
 }
 
 void Engine::setPluginDirs( const QStringList &dirs )
@@ -196,11 +196,11 @@ void Engine::removeDefaultLibrary( const QString &libName )
 Template* Engine::loadByName( const QString &name, QObject *parent ) const
 {
   Q_D( const Engine );
-  QListIterator<AbstractTemplateLoader*> it( d->m_resources );
+  QListIterator<AbstractTemplateLoader*> it( d->m_loaders );
 
   while ( it.hasNext() ) {
-    AbstractTemplateLoader* resource = it.next();
-    Template *t = resource->loadByName( name );
+    AbstractTemplateLoader* loader = it.next();
+    Template *t = loader->loadByName( name );
     if ( t ) {
       t->setParent( parent );
       return t;

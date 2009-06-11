@@ -72,9 +72,9 @@ class GRANTLEE_EXPORT Engine
 public:
   static Engine* instance();
 
-  QList<AbstractTemplateLoader*> templateResources();
+  QList<AbstractTemplateLoader*> templateLoaders();
 
-  void addTemplateResource( AbstractTemplateLoader *resource );
+  void addTemplateLoader( AbstractTemplateLoader *loader );
 
   void setPluginDirs( const QStringList &dirs );
 
