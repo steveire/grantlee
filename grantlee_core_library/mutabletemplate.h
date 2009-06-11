@@ -17,55 +17,23 @@
 
 */
 
-#ifndef TEMPLATE_H
-#define TEMPLATE_H
+#ifndef MUTABLE_TEMPLATE_H
+#define MUTABLE_TEMPLATE_H
 
-#include <QStringList>
-
-#include "node.h"
-#include "grantlee_export.h"
-#include "grantlee.h"
-
-namespace Grantlee
-{
-class Context;
-}
+#include "template.h"
 
 namespace Grantlee
 {
 
-class GRANTLEE_EXPORT Template : public QObject
+class MutableTemplate : public Template
 {
   Q_OBJECT
 public:
-  Template( QObject *parent = 0 );
+  MutableTemplate(QObject *parent = 0);
 
-  void setContent( const QString &templateString );
+  QString render(Context *c);
 
-  virtual QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
-
-  NodeList nodeList() const;
-
-  void setNodeList( const NodeList &list );
-
-  Error error();
-  QString errorString();
-
-protected:
-  void setError( Error type, const QString &message );
-
-private:
-  void parse();
-  NodeList compileString( const QString &str );
-
-  Error m_error;
-  QString m_errorString;
-  QStringList m_pluginDirs;
-  NodeList m_nodeList;
 };
-
 
 }
 

@@ -9,6 +9,7 @@ configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h
 
 set (grantlee_core_library_SRCS
   template.cpp
+  mutabletemplate.cpp
   engine.cpp
   context.cpp
   variable.cpp
@@ -48,6 +49,7 @@ install(FILES
   filter.h
   filterexpression.h
   template.h
+  mutabletemplate.h
   engine.h
   context.h
   variable.h
