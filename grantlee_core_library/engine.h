@@ -65,6 +65,8 @@ private:
   QHash<QString, QString> m_namedTemplates;
 };
 
+class EnginePrivate;
+
 class GRANTLEE_EXPORT Engine
 {
 public:
@@ -88,9 +90,9 @@ public:
 private:
   Engine();
 
-  QList<AbstractTemplateLoader*> m_resources;
-  QStringList m_pluginDirs;
-  QStringList m_defaultLibraries;
+  Q_DECLARE_PRIVATE( Engine );
+  EnginePrivate *d_ptr;
+
   static Engine* m_instance;
 };
 

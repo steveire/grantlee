@@ -105,6 +105,26 @@ Template* InMemoryTemplateLoader::loadByName( const QString& name ) const
   return 0;
 }
 
+namespace Grantlee
+{
+
+class EnginePrivate
+{
+  EnginePrivate( Engine *engine )
+      : q_ptr( engine ) {
+
+  }
+
+  QList<AbstractTemplateLoader*> m_resources;
+  QStringList m_pluginDirs;
+  QStringList m_defaultLibraries;
+
+  Q_DECLARE_PUBLIC( Engine );
+  Engine *q_ptr;
+
+};
+
+}
 
 Engine* Engine::m_instance = 0;
 Engine* Engine::instance()
@@ -116,56 +136,67 @@ Engine* Engine::instance()
 }
 
 Engine::Engine()
+    : d_ptr( new EnginePrivate( this ) )
 {
-  m_defaultLibraries << "grantlee_defaulttags_library"
-                     << "grantlee_loadertags_library"
-                     << "grantlee_defaultfilters_library"
-                     << "grantlee_scriptabletags_library";
+  Q_D( Engine );
+  d->m_defaultLibraries << "grantlee_defaulttags_library"
+  << "grantlee_loadertags_library"
+  << "grantlee_defaultfilters_library"
+  << "grantlee_scriptabletags_library";
 }
 
 QList<AbstractTemplateLoader*> Engine::templateResources()
 {
-  return m_resources;
+  Q_D( Engine );
+  return d->m_resources;
 }
 
 void Engine::addTemplateResource( AbstractTemplateLoader* resource )
 {
-  m_resources << resource;
+  Q_D( Engine );
+  d->m_resources << resource;
 }
 
 void Engine::setPluginDirs( const QStringList &dirs )
 {
-  m_pluginDirs = dirs;
+  Q_D( Engine );
+  d->m_pluginDirs = dirs;
 }
 
 QStringList Engine::pluginDirs()
 {
-  return m_pluginDirs;
+  Q_D( Engine );
+  return d->m_pluginDirs;
 }
 
 QStringList Engine::defaultLibraries() const
 {
-  return m_defaultLibraries;
+  Q_D( const Engine );
+  return d->m_defaultLibraries;
 }
 
 void Engine::setDefaultLibraries( const QStringList &list )
 {
-  m_defaultLibraries = list;
+  Q_D( Engine );
+  d->m_defaultLibraries = list;
 }
 
 void Engine::addDefaultLibrary( const QString &libName )
 {
-  m_defaultLibraries << libName;
+  Q_D( Engine );
+  d->m_defaultLibraries << libName;
 }
 
 void Engine::removeDefaultLibrary( const QString &libName )
 {
-  m_defaultLibraries.removeAll( libName );
+  Q_D( Engine );
+  d->m_defaultLibraries.removeAll( libName );
 }
 
 Template* Engine::loadByName( const QString &name, QObject *parent ) const
 {
-  QListIterator<AbstractTemplateLoader*> it( m_resources );
+  Q_D( const Engine );
+  QListIterator<AbstractTemplateLoader*> it( d->m_resources );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* resource = it.next();
