@@ -54,6 +54,8 @@ public:
   void pop();
 
   QVariantHash stackHash( int depth ) const;
+  bool isMutating() const;
+  void setMutating(bool mutating);
 
 private:
   Q_DECLARE_PRIVATE( Context )
