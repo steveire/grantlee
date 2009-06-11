@@ -55,6 +55,9 @@ public:
   Error error() const;
   QString errorString() const;
 
+  virtual bool isPersistent() { return isRepeatable(); }
+  virtual bool isRepeatable() { return false; }
+
 protected:
   void setError( Error type, const QString &message );
   QString renderValueInContext( const QVariant &input, Grantlee::Context *c );
@@ -83,6 +86,8 @@ public:
 
 protected:
   void setError( Error type, const QString &message );
+
+  QString mutableRender(Context *c);
 
 private:
   Error m_error;

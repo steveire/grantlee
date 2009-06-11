@@ -137,8 +137,10 @@ NodeList::~NodeList()
 
 QString NodeList::render( Context *c )
 {
-  QString ret;
+  if (c->isMutating())
+    return mutableRender(c);
 
+  QString ret;
   for ( int i = 0; i < this->size(); ++i ) {
     ret += this->at( i )->render( c );
     if ( this->at( i )->error() != NoError ) {
@@ -148,7 +150,38 @@ QString NodeList::render( Context *c )
   }
 
   return ret;
+}
 
+QString NodeList::mutableRender( Context *c )
+{
+  QString renderedTemplate;
+  QString renderedNode;
+
+  QList<Grantlee::Node*>::iterator it;
+  QList<Grantlee::Node*>::iterator first = begin();
+  QList<Grantlee::Node*>::iterator last = end();
+  for (it = first; it != last; ++it)
+  {
+    Grantlee::Node *node = *it;
+    QString renderedNode = node->render( c );
+    renderedTemplate += renderedNode;
+    bool isPersistent = node->isPersistent();
+    if (it != first)
+    {
+      Grantlee::Node *lastNode = *(it -1);
+      TextNode *textNode = qobject_cast<TextNode*>(lastNode);
+      if (textNode && (!isPersistent || node->isRepeatable() ) )
+      {
+        textNode->appendContent(renderedNode);
+      }
+      if (!isPersistent && !lastNode->isPersistent())
+      {
+        it = erase(it);
+        --it;
+      }
+    }
+  }
+  return renderedTemplate;
 }
 
 void NodeList::setError( Error type, const QString &message )
