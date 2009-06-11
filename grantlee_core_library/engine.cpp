@@ -116,6 +116,41 @@ void InMemoryTemplateLoader::setTemplate( const QString &name, const QString &co
   m_namedTemplates.insert( name, content );
 }
 
+namespace Grantlee
+{
+struct EngineState
+{
+  EngineState() {
+    m_defaultLibraries << "grantlee_defaulttags_library"
+                       << "grantlee_loadertags_library"
+                       << "grantlee_defaultfilters_library"
+                       << "grantlee_scriptabletags_library";
+
+  }
+
+  QList<AbstractTemplateLoader*> m_loaders;
+
+  EngineState* clone()
+  {
+    EngineState *state = new EngineState();
+    state->m_pluginDirs = m_pluginDirs;
+    state->m_defaultLibraries = m_defaultLibraries;
+
+    QList<AbstractTemplateLoader*> list;
+    foreach(AbstractTemplateLoader *loader, m_loaders)
+    {
+      list << loader;
+    }
+    state->m_loaders = list;
+    return state;
+  }
+
+  QStringList m_pluginDirs;
+  QStringList m_defaultLibraries;
+
+};
+}
+
 Template* InMemoryTemplateLoader::loadByName( const QString& name ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
@@ -137,16 +172,31 @@ MutableTemplate* InMemoryTemplateLoader::loadMutableByName( const QString& name 
 namespace Grantlee
 {
 
+
 class EnginePrivate
 {
   EnginePrivate( Engine *engine )
-      : q_ptr( engine ) {
+      : q_ptr( engine ), m_settingsToken( 0 ) {
 
+    m_state = new EngineState();
+    m_states.insert( m_settingsToken, m_state );
   }
 
-  QList<AbstractTemplateLoader*> m_loaders;
-  QStringList m_pluginDirs;
-  QStringList m_defaultLibraries;
+  void setState( qint64 settingsToken ) {
+    if ( m_states.contains( settingsToken ) )
+    {
+      m_state = m_states.value( settingsToken );
+    }
+    else
+      m_state = m_states.value( 0 );
+    m_settingsToken = settingsToken;
+  }
+
+  qint64 m_settingsToken;
+  EngineState *m_state;
+  QHash<qint64, EngineState*> m_states;
+
+
 
   Q_DECLARE_PUBLIC( Engine );
   Engine *q_ptr;
@@ -168,10 +218,6 @@ Engine::Engine()
     : d_ptr( new EnginePrivate( this ) )
 {
   Q_D( Engine );
-  d->m_defaultLibraries << "grantlee_defaulttags_library"
-  << "grantlee_loadertags_library"
-  << "grantlee_defaultfilters_library"
-  << "grantlee_scriptabletags_library";
 }
 
 Engine::~Engine()
@@ -182,60 +228,67 @@ Engine::~Engine()
 QList<AbstractTemplateLoader*> Engine::templateLoaders()
 {
   Q_D( Engine );
-  return d->m_loaders;
+  return d->m_state->m_loaders;
 }
 
 void Engine::addTemplateLoader( AbstractTemplateLoader* loader )
 {
   Q_D( Engine );
-  d->m_loaders << loader;
+  d->m_state->m_loaders << loader;
+}
+
+void Engine::removeTemplateLoader(int index)
+{
+  Q_D( Engine );
+  d->m_state->m_loaders.removeAt(index);
 }
 
 void Engine::setPluginDirs( const QStringList &dirs )
 {
   Q_D( Engine );
-  d->m_pluginDirs = dirs;
+  d->m_state->m_pluginDirs = dirs;
 }
 
 QStringList Engine::pluginDirs()
 {
   Q_D( Engine );
-  return d->m_pluginDirs;
+  return d->m_state->m_pluginDirs;
 }
 
 QStringList Engine::defaultLibraries() const
 {
   Q_D( const Engine );
-  return d->m_defaultLibraries;
+  return d->m_state->m_defaultLibraries;
 }
 
 void Engine::setDefaultLibraries( const QStringList &list )
 {
   Q_D( Engine );
-  d->m_defaultLibraries = list;
+  d->m_state->m_defaultLibraries = list;
 }
 
 void Engine::addDefaultLibrary( const QString &libName )
 {
   Q_D( Engine );
-  d->m_defaultLibraries << libName;
+  d->m_state->m_defaultLibraries << libName;
 }
 
 void Engine::removeDefaultLibrary( const QString &libName )
 {
   Q_D( Engine );
-  d->m_defaultLibraries.removeAll( libName );
+  d->m_state->m_defaultLibraries.removeAll( libName );
 }
 
 Template* Engine::loadByName( const QString &name, QObject *parent ) const
 {
   Q_D( const Engine );
-  QListIterator<AbstractTemplateLoader*> it( d->m_loaders );
+  QListIterator<AbstractTemplateLoader*> it( d->m_state->m_loaders );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* loader = it.next();
     Template *t = loader->loadByName( name );
     if ( t ) {
+      t->setSettingsToken( d->m_settingsToken );
       t->setParent( parent );
       return t;
     }
@@ -247,12 +300,13 @@ MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent
 {
 
   Q_D( const Engine );
-  QListIterator<AbstractTemplateLoader*> it( d->m_loaders );
+  QListIterator<AbstractTemplateLoader*> it( d->m_state->m_loaders );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* loader = it.next();
     MutableTemplate *t = loader->loadMutableByName( name );
     if ( t ) {
+      t->setSettingsToken( d->m_settingsToken );
       t->setParent( parent );
       return t;
     }
@@ -264,14 +318,25 @@ MutableTemplate* Engine::newMutableTemplate( const QString &content, QObject *pa
 {
   Q_D( Engine );
   MutableTemplate *t = new MutableTemplate( parent );
-  t->setContent(content);
+  EngineState *state = d->m_state->clone();
+  d->m_states.insert( t->settingsToken(), state );
+  t->setContent( content );
   return t;
 }
 
 Template* Engine::newTemplate( const QString &content, QObject *parent )
 {
   Q_D( Engine );
-  Template *t = new Template( parent );
+  Template *t = new Template(parent);
+  EngineState *state = d->m_state->clone();
+  d->m_states.insert( t->settingsToken(), state );
   t->setContent( content );
   return t;
 }
+
+void Engine::setSettingsToken( qint64 settingsToken )
+{
+  Q_D( Engine );
+  d->setState(settingsToken);
+}
+

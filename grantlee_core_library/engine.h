@@ -81,8 +81,11 @@ public:
   QList<AbstractTemplateLoader*> templateLoaders();
 
   void addTemplateLoader( AbstractTemplateLoader *loader );
+  void removeTemplateLoader( int index );
 
   void setPluginDirs( const QStringList &dirs );
+
+  void setSettingsToken( qint64 settingsToken );
 
   QStringList pluginDirs();
 
