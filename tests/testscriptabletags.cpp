@@ -17,8 +17,8 @@
 
 */
 
-#ifndef BUILTINSTEST_H
-#define BUILTINSTEST_H
+#ifndef SCRIPTABLETAGSTEST_H
+#define SCRIPTABLETAGSTEST_H
 
 #include <QtTest>
 #include <QtCore>
