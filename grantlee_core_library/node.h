@@ -144,6 +144,9 @@ public:
     Q_UNUSED( c );
     return m_content;
   }
+
+  void appendContent(const QString &content) { m_content += content; }
+
 private:
   QString m_content;
 };
