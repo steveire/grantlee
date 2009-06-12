@@ -26,11 +26,38 @@
 
 using namespace Grantlee;
 
-NodeList Template::compileString( const QString &str )
+namespace Grantlee
 {
+
+class TemplatePrivate
+{
+  TemplatePrivate( Template *t )
+      : q_ptr(t), m_error( NoError )
+  {
+
+  }
+
+  void parse();
+  NodeList compileString( const QString &str );
+  void setError( Error type, const QString &message );
+
+  Error m_error;
+  QString m_errorString;
+  QStringList m_pluginDirs;
+  NodeList m_nodeList;
+
+  Q_DECLARE_PUBLIC(Template);
+  Template *q_ptr;
+};
+
+}
+
+NodeList TemplatePrivate::compileString( const QString &str )
+{
+  Q_Q( Template );
   Lexer l( str );
-  Parser p( l.tokenize(), this );
-  NodeList nodeList = p.parse( this );
+  Parser p( l.tokenize(), q );
+  NodeList nodeList = p.parse( q );
 
   if ( NoError != p.error() ) {
     setError( p.error(), p.errorString() );
@@ -39,43 +66,47 @@ NodeList Template::compileString( const QString &str )
 }
 
 Template::Template( QObject *parent )
-    : QObject( parent ),
-    m_error( NoError )
+    : QObject( parent ), d_ptr(new TemplatePrivate(this))
 {
 }
 
 void Template::setContent( const QString &templateString )
 {
+  Q_D( Template );
   if ( !templateString.isEmpty() )
-    m_nodeList = compileString( templateString );
+    d->m_nodeList = d->compileString( templateString );
 }
 
 NodeList Template::getNodesByType( const char* className )
 {
-  return m_nodeList.getNodesByType( className );
+  Q_D( Template );
+  return d->m_nodeList.getNodesByType( className );
 }
 
 QString Template::render( Context *c )
 {
-  QString result = m_nodeList.render( c );
+  Q_D( Template );
+  QString result = d->m_nodeList.render( c );
 
-  if ( m_nodeList.error() != NoError ) {
-    setError( m_nodeList.error(), m_nodeList.errorString() );
+  if ( d->m_nodeList.error() != NoError ) {
+    d->setError( d->m_nodeList.error(), d->m_nodeList.errorString() );
   }
   return result;
 }
 
 NodeList Template::nodeList() const
 {
-  return m_nodeList;
+  Q_D( const Template );
+  return d->m_nodeList;
 }
 
 void Template::setNodeList( const NodeList &list )
 {
-  m_nodeList = list;
+  Q_D( Template );
+  d->m_nodeList = list;
 }
 
-void Template::setError( Error type, const QString &message )
+void TemplatePrivate::setError( Error type, const QString &message )
 {
   m_error = type;
   m_errorString = message;
@@ -83,11 +114,13 @@ void Template::setError( Error type, const QString &message )
 
 Error Template::error()
 {
-  return m_error;
+  Q_D( Template );
+  return d->m_error;
 }
 
 QString Template::errorString()
 {
-  return m_errorString;
+  Q_D( Template );
+  return d->m_errorString;
 }
 

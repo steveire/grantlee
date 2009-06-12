@@ -34,6 +34,8 @@ class Context;
 namespace Grantlee
 {
 
+class TemplatePrivate;
+
 class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
@@ -53,17 +55,9 @@ public:
   Error error();
   QString errorString();
 
-protected:
-  void setError( Error type, const QString &message );
-
 private:
-  void parse();
-  NodeList compileString( const QString &str );
-
-  Error m_error;
-  QString m_errorString;
-  QStringList m_pluginDirs;
-  NodeList m_nodeList;
+  Q_DECLARE_PRIVATE( Template );
+  TemplatePrivate *d_ptr;
 };
 
 
