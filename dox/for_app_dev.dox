@@ -22,8 +22,7 @@ If you are not already familiar with Django template syntax and structure, start
 Rendering templates is also very easy in application code. A single Template may be rendered multiple times with different Context objects.
 
 @code
-Template *t = new Template(this);
-t->setContent("My name is {{ name }}.");
+Template *t = Engine::instance()->newTemplate("My name is {{ name }}.", this);
 QVariantHash mapping;
 mapping.insert("name", "Grainne");
 Context c(mapping);
@@ -36,11 +35,10 @@ c = Context(mapping);
 t.render(&c); // Returns "My name is Henry."
 @endcode
 
-Ususally, applications will not create a Template directly, but instead use a TemplateLoader to load external files. This allows artists to define the template without needing to recompile.
+Ususally, applications will not create a Template directly, but instead use a Grantlee::Engine to load external files. This allows artists to define the template without needing to recompile.
 
 @code
-TemplateLoader *loader = TemplateLoader::instance();
-Template *t = loader->getTemplate("template.html", this);
+Template *t = Engine::instance()->getTemplate("template.html", this);
 
 t->render(&c)
 @endcode

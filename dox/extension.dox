@@ -207,10 +207,9 @@ Some things to note:
 
 @subsection loaders Loaders
 
-As noted in @ref creating_templates, you will usually not create a Template directly, but retrieve it from a TemplateLoader singleton. The TemplateLoader allows you to define where the templates are retrieved from when you request them by name.
+As noted in @ref creating_templates, you will usually not create a Template directly, but retrieve it from an Engine singleton. The Engine allows you to define where the templates are retrieved from when you request them by name.
 
 You can redefine the order of places in the filesystem which are searched for templates, and even define new ways to retrieve templates (i.e, not from the filesystem) by subclassing Grantlee::AbstractTemplateResource and implementing the loadByName method. For existing loaders, see FileSystemTemplateResource, InMemoryTemplateResource, and AkonadiTemplateResource.
-
 
 */
 
