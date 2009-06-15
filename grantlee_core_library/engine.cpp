@@ -245,13 +245,12 @@ MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent
 {
 
   Q_D( const Engine );
-  QListIterator<AbstractTemplateLoader*> it( d->m_state->m_loaders );
+  QListIterator<AbstractTemplateLoader*> it( d->m_loaders );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* loader = it.next();
     MutableTemplate *t = loader->loadMutableByName( name );
     if ( t ) {
-      t->setSettingsToken(d->m_settingsToken);
       t->setParent( parent );
       return t;
     }
@@ -262,9 +261,7 @@ MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent
 MutableTemplate* Engine::newMutableTemplate(QObject *parent)
 {
   Q_D( Engine );
-  MutableTemplate *t = new MutableTemplate(parent);
-  EngineState *state = d->m_state->clone();
-  d->m_states.insert( t->settingsToken(), state );
+  MutableTemplate *t = new MutableTemplate( parent );
   return t;
 }
 
