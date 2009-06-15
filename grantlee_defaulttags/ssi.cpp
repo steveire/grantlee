@@ -77,8 +77,7 @@ QString SsiNode::render( Context *c )
   }
 
   if ( m_parse ) {
-    Template *t = new Template( this );
-    t->setContent( content );
+    Template *t = Engine::instance()->newTemplate( content, this );
     return t->render( c );
   }
   return content;

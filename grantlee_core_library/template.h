@@ -40,10 +40,6 @@ class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
 public:
-  Template( QObject *parent = 0 );
-
-  void setContent( const QString &templateString );
-
   virtual QString render( Context *c );
 
   NodeList getNodesByType( const char * className );
@@ -55,9 +51,15 @@ public:
   Error error();
   QString errorString();
 
+protected:
+  Template( QObject *parent = 0 );
+
+  void setContent( const QString &templateString );
+
 private:
   Q_DECLARE_PRIVATE( Template );
   TemplatePrivate *d_ptr;
+  friend class Engine;
 };
 
 

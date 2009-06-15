@@ -93,9 +93,7 @@ void TestLoaderTags::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, errorNumber );
 
-  Template* t = new Template( this );
-
-  t->setContent( input );
+  Template* t = Engine::instance()->newTemplate( input, this );
 
   Context context( dict );
 
@@ -260,8 +258,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Inheritance from local context without use of template loader
 
-  Template *t = new Template( this );
-  t->setContent( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}" );
+  Template *t = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", this );
   QObject *obj = t;
   dict.insert( "context_template", QVariant::fromValue( obj ) );
 
@@ -270,11 +267,9 @@ void TestLoaderTags::testExtendsTag_data()
   dict.clear();
   QVariantList list;
 
-  Template *t1 = new Template( this );
-  t1->setContent( "Wrong" );
+  Template *t1 = Engine::instance()->newTemplate( "Wrong", this );
   QObject *obj1 = t1;
-  Template *t2 = new Template( this );
-  t2->setContent( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}" );
+  Template *t2 = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", this );
   QObject *obj2 = t2;
   list << QVariant::fromValue( obj1 );
   list << QVariant::fromValue( obj2 );

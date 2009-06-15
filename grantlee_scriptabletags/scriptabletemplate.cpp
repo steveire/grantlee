@@ -35,12 +35,9 @@ QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
   QString content = context->argument( 0 ).toString();
   QObject *parent = context->argument( 1 ).toQObject();
 
-  Template *t = new Template( engine );
-
-  t->setContent( content );
+  Template *t = Engine::instance()->newTemplate( content, engine );
 
   ScriptableTemplate *object = new ScriptableTemplate( t, parent );
-  object->setContent( content );
   return engine->newQObject( object );
 }
 
@@ -48,11 +45,6 @@ ScriptableTemplate::ScriptableTemplate( Grantlee::Template* t, QObject* parent )
     : QObject( parent ), m_template( t )
 {
 
-}
-
-void ScriptableTemplate::setContent( const QString& content )
-{
-  m_template->setContent( content );
 }
 
 QString ScriptableTemplate::render( ScriptableContext* c )

@@ -83,11 +83,10 @@ void TestMutableTagsSyntax::testRawTag0()
   dict.insert( "var", "Far" );
   dict.insert( "nameList", QVariantList() << "Tom" << "Dick" << "Harry" );
 
-  Template *t = new MutableTemplate( this );
-  t->setContent( "Begin"
-                 "{% raw %} Stuff {% endraw %}"
-                 "Afters."
-               );
+  QString content = "Begin"
+                    "{% raw %} Stuff {% endraw %}"
+                    "Afters.";
+  Template *t = Engine::instance()->newMutableTemplate( content, this );
 
   Context c1( dict );
   QString result = t->render( &c1 );
@@ -112,11 +111,11 @@ void TestMutableTagsSyntax::testRawTag()
   dict.insert( "var", "Far" );
   dict.insert( "nameList", QVariantList() << "Tom" << "Dick" << "Harry" );
 
-  Template *t = new MutableTemplate( this );
-  t->setContent( "Begin {% for name in nameList %}{{ name }},{% endfor %}"
-                 "{% raw %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endraw %}"
-                 "Afters."
-               );
+
+  QString content = "Begin {% for name in nameList %}{{ name }},{% endfor %}"
+                    "{% raw %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endraw %}"
+                    "Afters.";
+  Template *t = Engine::instance()->newMutableTemplate( content, this );
 
   Context c1( dict );
   QString result = t->render( &c1 );
@@ -150,11 +149,11 @@ void TestMutableTagsSyntax::testRepeaterTag()
   dict.insert( "var", "Far" );
   dict.insert( "nameList", QVariantList() << "Tom" << "Dick" << "Harry" );
 
-  Template *t = new MutableTemplate( this );
-  t->setContent( "{% for name in nameList %}{{ name }},{% endfor %}"
-                 "{% repeater %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endrepeater %}"
-                 "Afters"
-               );
+  QString content = "{% for name in nameList %}{{ name }},{% endfor %}"
+                    "{% repeater %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endrepeater %}"
+                    "Afters";
+
+  Template *t = Engine::instance()->newMutableTemplate( content, this );
 
   Context c1( dict );
   QString result = t->render( &c1 );
@@ -192,17 +191,17 @@ void TestMutableTagsSyntax::testRepeaterTag()
 void TestMutableTagsSyntax::testMultiRepeater()
 {
 
-  Template *t = new MutableTemplate( this );
-  t->setContent( "Before."
-  "{% repeater %}"
-  "Foo."
-  "{% endrepeater %}"
-  "Middle."
-  "{% repeater %}"
-  "Bar."
-  "{% endrepeater %}"
-  "After."
-  );
+  QString content = "Before."
+                    "{% repeater %}"
+                    "Foo."
+                    "{% endrepeater %}"
+                    "Middle."
+                    "{% repeater %}"
+                    "Bar."
+                    "{% endrepeater %}"
+                    "After.";
+
+  Template *t = Engine::instance()->newMutableTemplate( content, this );
 
   QVariantHash h;
   Context c( h );
@@ -210,17 +209,16 @@ void TestMutableTagsSyntax::testMultiRepeater()
   QString expected = "Before.Foo.Middle.Bar.After.";
   QCOMPARE(result, expected);
 
-  Template *t2 = new MutableTemplate( this );
-  t2->setContent( "Before."
-  "{% repeater %}"
-  "Foo."
-  "{% endrepeater %}"
-  "Middle.{{ var }}."
-  "{% repeater %}"
-  "Bar."
-  "{% endrepeater %}"
-  "After."
-  );
+  content = "Before."
+            "{% repeater %}"
+            "Foo."
+            "{% endrepeater %}"
+            "Middle.{{ var }}."
+            "{% repeater %}"
+            "Bar."
+            "{% endrepeater %}"
+            "After.";
+  Template *t2 = Engine::instance()->newMutableTemplate( content, this );
 
   h.insert("var", "String");
   Context c2( h );

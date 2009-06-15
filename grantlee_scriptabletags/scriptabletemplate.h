@@ -49,8 +49,6 @@ public:
   ScriptableTemplate( Template *t, QObject* parent = 0 );
 
 public slots:
-  void setContent( const QString &content );
-
   QString render( ScriptableContext *c );
 
   QObjectList getNodesByType( const char * className );

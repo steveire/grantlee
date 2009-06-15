@@ -90,9 +90,7 @@ void Benchmarking::initTestCase()
     " {% templatetag openblock %} endif {% templatetag closeblock %} sit."
     "{% endfor %} amet.\n";
 
-  m_templateGenerator = new Template( this );
-
-  m_templateGenerator->setContent( m_templateGeneratorString );
+  m_templateGenerator = Engine::instance()->newTemplate( m_templateGeneratorString, this );
 
 }
 

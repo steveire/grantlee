@@ -86,11 +86,11 @@ public:
 
   Template* loadByName( const QString &name, QObject *parent ) const;
 
-  Template* newTemplate(QObject *parent);
+  Template* newTemplate( const QString &content, QObject *parent = 0 );
 
   MutableTemplate* loadMutableByName( const QString &name, QObject *parent ) const;
 
-  MutableTemplate* newMutableTemplate(QObject *parent);
+  MutableTemplate* newMutableTemplate( const QString &content, QObject *parent = 0 );
 
   QStringList defaultLibraries() const;
   void setDefaultLibraries( const QStringList &list );

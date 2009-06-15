@@ -83,8 +83,8 @@ MutableTemplate* FileSystemTemplateLoader::loadMutableByName( const QString &fil
 
   QString content;
   content = file.readAll();
-  MutableTemplate *t = new MutableTemplate();
-  t->setContent( content );
+
+  MutableTemplate *t = Engine::instance()->newMutableTemplate( content );
   return t;
 }
 
@@ -107,8 +107,7 @@ Template* FileSystemTemplateLoader::loadByName( const QString &fileName ) const
 
   QString content;
   content = file.readAll();
-  Template *t = new Template();
-  t->setContent( content );
+  Template *t = Engine::instance()->newTemplate( content );
   return t;
 }
 
@@ -120,8 +119,7 @@ void InMemoryTemplateLoader::setTemplate( const QString &name, const QString &co
 Template* InMemoryTemplateLoader::loadByName( const QString& name ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
-    Template *t = new Template();
-    t->setContent( m_namedTemplates.value( name ) );
+    Template *t = Engine::instance()->newTemplate( m_namedTemplates.value( name ) );
     return t;
   }
   return 0;
@@ -130,8 +128,7 @@ Template* InMemoryTemplateLoader::loadByName( const QString& name ) const
 MutableTemplate* InMemoryTemplateLoader::loadMutableByName( const QString& name ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
-    MutableTemplate *t = new MutableTemplate();
-    t->setContent( m_namedTemplates.value( name ) );
+    MutableTemplate *t = Engine::instance()->newMutableTemplate( m_namedTemplates.value( name ) );
     return t;
   }
   return 0;
@@ -258,10 +255,18 @@ MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent
   return 0;
 }
 
-MutableTemplate* Engine::newMutableTemplate(QObject *parent)
+MutableTemplate* Engine::newMutableTemplate( const QString &content, QObject *parent )
 {
   Q_D( Engine );
   MutableTemplate *t = new MutableTemplate( parent );
+  t->setContent(content);
   return t;
 }
 
+Template* Engine::newTemplate( const QString &content, QObject *parent )
+{
+  Q_D( Engine );
+  Template *t = new Template( parent );
+  t->setContent( content );
+  return t;
+}

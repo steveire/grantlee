@@ -28,8 +28,6 @@
 #include "engine.h"
 #include "grantlee.h"
 
-#include <QDebug>
-
 #include <QMutableListIterator>
 #include <util_p.h>
 
@@ -100,7 +98,6 @@ Template *ExtendsNode::getParent( Context *c )
   } else {
     parentName = m_name;
   }
-
   Engine *engine = Engine::instance();
 
   Template* t = engine->loadByName( parentName, this );
@@ -111,7 +108,6 @@ Template *ExtendsNode::getParent( Context *c )
 QString ExtendsNode::render( Context *c )
 {
   Template *parent = getParent( c );
-
   if ( !parent ) {
     setError( TagSyntaxError, "TODO: Fix message" );
     return QString();
