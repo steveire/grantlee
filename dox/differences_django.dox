@@ -1,0 +1,31 @@
+
+namespace Grantlee
+{
+
+/**
+
+@page differences_django Differences between Django and Grantlee
+
+There are several notable differences between Django and %Grantlee, which arise mostly due to different implementation languages and features of the Qt framework.
+
+Everything in python is a first class object, which means that django filter functions and tag functions can have properties and attributes. In %Grantlee, it is necessary to use classes to obtain the same effect. Additionally, C++ classes need to share an interface if they are to be treated the same way. This is not necessary in Django because python uses dynamic typing, and all methods behave similarly to virtual functions. %Grantlee uses the Abstract Factory pattern to achieve the same affect for tags, and a simple interface for filters.
+
+Django tag libraries are loaded through normal python modules. This means that all libraries can be loaded dynamically. %Grantlee achieves the same effect by using the QtPlugin system to load additional libraries dynamically.
+
+In Django, any python object can be inserted into a Context. Then, methods which can change a class must have the 'alters_data' attribute, so that rendering a template can not alter the objects being rendered. Objects in %Grantlee are only introspectable to a limited amount determined by Q_PROPERTIES defined in wrapper classes. Therefore, the programmer can decide which properties to make available to the template system by wrapping them or not. It is encouraged, but not enforced to make sure scriptable wrapper methods are const.
+
+Python dictionary objects can be processed in templates. In %Grantlee, QVariantHash is supported, which has the same effect. QVariantHash keys must be strings, whereas python dictionary keys may be any pickle-able object.
+
+Django uses PHP datetime string format for the {% now %} tag, whereas %Grantlee uses QDateTime format.
+
+The Django autoescape system is based on marking a string object as safe. In Qt, this is not directly possible, so a wrapper class, Grantlee::SafeString is provided with several convenient operator overloads. This has (hopefully) minimal impact on plugin writers.
+
+The Django cache system makes a lot of sense where templates are rendered in a fire-and-forget manner for a stateless protocol. It is not implemented in %Grantlee because we're generally not rendering similar templates from scratch multiple times and the templates can keep state for multiple uses. For Kopete template caching will be done with special tags (see @ref repeater_pattern).
+
+In particular, a Django template typically has the lifetime of one stateless HTTP request, and only one template will need to be stored at a time. In Grantlee, the Grantlee::Engine uses a state pattern internally to manage different states for different templates, and MutableTemplate allows changing the template with each rendering without using an external caching system.
+
+Although it's not documented, Django filters can accept multiple arguments. %Granltee currently only allows one argument to filters.
+
+*/
+
+}

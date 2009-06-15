@@ -1,0 +1,39 @@
+
+namespace Grantlee
+{
+
+/**
+
+@page examples Examples of Grantlee use
+
+@section books Books
+
+Simple use. All available books to a table. The themer has broad control over how the data is rendered.
+
+@section dbus_chat Chat
+
+Use of mutable tags. Again, themer has full control over rendering.
+
+@section kjots KJots
+
+Retrieving wrappers from a model and arbitrary nesting.
+
+@section akonadi_mail Akonadi Mail
+
+Using the AkonadiTemplateLoader.
+
+@section patterns
+
+@subsection resource_stack_pattern Resource Stack
+@subsection raw_tag_pattern {% raw %} tag
+
+http://simonwillison.net/2009/May/19/twophased/
+
+@subsection repeater_pattern Repeater
+
+Use a mutable template which can change the nodes it stores. Kopete could use something like this.
+
+
+*/
+
+}

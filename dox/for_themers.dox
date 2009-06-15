@@ -66,16 +66,6 @@ would be rendered as
 
 if myint is 6 in the context.
 
-If a string is used in an iterable context, it is treated as a list of QChars.
-
-If a QVariantHash is used in an iterable context, it may be unpacked into two variables.
-
-@verbatim
-{% for key,value in myhash %}
-{{ key }} = {{ value }}
-{% endfor %}
-@endverbatim
-
 @subsection truthiness Truthiness
 
 Truthiness of a variable is evaulated in a similar way to python. That is,
@@ -172,6 +162,10 @@ caveats and XSS care for themers.
 @subsection template_loading Template Inclusion and Inheritance
 
 // include and extends.
+
+@subsection extension Extending the syntax
+
+It is also possible to extend the syntax of Granltee as you need it using javascript if the application developer chooses. See @ref qtscript_libraries for more. This is considered an advanced topic.
 
 */
 

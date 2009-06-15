@@ -7,38 +7,21 @@ namespace Grantlee
 
 @section overview Overview
 
-%Grantlee is a Free Software, Open Source string template system based on the <a href="http://docs.djangoproject.com/en/dev/topics/templates/">Django template system</a> from the <a href="http://www.djangoproject.com">Django project</a>. The syntax and design of %Grantlee is intended to be the same as the Django syntax, such that many Django templates should be source-compatible with %Grantlee templates. %Grantlee is covered by the GNU Lesser General Public Licence version 3.
+%Grantlee is a Free Software, Open Source string template system based on the <a href="http://docs.djangoproject.com/en/dev/topics/templates/">Django template system</a> from the <a href="http://www.djangoproject.com">Django project</a>. The syntax and design of %Grantlee is intended to be the same as the Django syntax, such that many Django templates should be source-compatible with %Grantlee templates.
+
+%Grantlee is covered by the GNU Lesser General Public Licence version 3.
 
 @section start_howto How to use Grantlee
 
 %Grantlee allows application developers to make it very easy to create themes for exported data by separating the data to export from the structure of how it is presented. As such, there are two separate roles to use %Grantlee. See @ref for_app_dev and @ref for_themers.
 
-@section start_project Communication
+@section start_community Community
 
 The %Grantlee project mailing list is grantlee@lists.kde.org, and the IRC channel is \#grantlee on freenode.
 
-The source repository is located at http://gitorious.org/grantlee .
+The source repository is located at http://gitorious.org/grantlee.
 
 Report bugs in the KDE bug tracker under the component 'grantlee'.
-
-@section django_diff Differences between Django and Grantlee
-
-There are several notable differences between Django and %Grantlee, which arise mostly due to different implementation languages and features of the Qt framework.
-
-Everything in python is a first class object, which means that django filter functions and tag functions can have properties and attributes. In %Grantlee, it is necessary to use classes to obtain the same effect. Additionally, C++ classes need to share an interface if they are to be treated the same way. This is not necessary in Django because python uses dynamic typing, and all methods behave similarly to virtual functions. %Grantlee uses the Abstract Factory pattern to achieve the same affect for tags, and a simple interface for filters.
-
-Django tag libraries are loaded through normal python modules. This means that all libraries can be loaded dynamically. %Grantlee achieves the same effect by using the QtPlugin system to load additional libraries dynamically.
-
-In Django, any python object can be inserted into a Context. Then, methods which can change a class must have the 'alters_data' attribute, so that rendering a template can not alter the objects being rendered. Objects in %Grantlee are only introspectable to a limited amount determined by Q_PROPERTIES defined in wrapper classes. Therefore, the programmer can decide which properties to make available to the template system by wrapping them or not. It is encouraged, but not enforced to make sure scriptable wrapper methods are const.
-
-Python dictionary objects can be processed in templates. In %Grantlee, QVariantHash is supported, which has the same effect. QVariantHash keys must be strings, whereas python dictionary keys may be any pickle-able object.
-
-Django uses PHP datetime string format for the {% now %} tag, whereas %Grantlee uses QDateTime format.
-
-The Django autoescape system is based on marking a string object as safe. In Qt, this is not directly possible, so a wrapper class, Grantlee::SafeString is provided with several convenient operator overloads. This has (hopefully) minimal impact on plugin writers.
-
-The Django cache system makes a lot of sense where templates are rendered in a fire-and-forget manner for a stateless protocol. It is not implemented in %Grantlee because we're generally not rendering similar templates from scratch multiple times and the templates can keep state for multiple uses. For Kopete template caching will be done with special tags (see @ref repeater_pattern).
-
 
 @section todo Todo
 - Finish %Grantlee
@@ -48,9 +31,13 @@ The Django cache system makes a lot of sense where templates are rendered in a f
 - Finish Grantlee::Mime.
 - Port Doxygen to %Grantlee
 
-@include dox/for_app_dev.dox
+@section contents Contents
 
-@include dox/for_themers.dox
+- @ref for_themers
+- @ref for_app_dev
+- @ref extension
+- @ref examples
+- @ref differences_django
 
 */
 
