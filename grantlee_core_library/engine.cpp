@@ -80,11 +80,8 @@ Template* FileSystemTemplateLoader::loadByName( const QString &fileName ) const
     return 0;
   }
 
-  QTextStream in( &file );
   QString content;
-  while ( !in.atEnd() ) {
-    content += in.readLine();
-  }
+  content = file.readAll();
   Template *t = new Template();
   t->setContent( content );
   return t;
