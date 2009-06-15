@@ -46,6 +46,7 @@ private slots:
   void testRawTag0();
   void testRawTag();
   void testRepeaterTag();
+  void testMultiRepeater();
 
   void cleanupTestCase();
 
@@ -186,6 +187,46 @@ void TestMutableTagsSyntax::testRepeaterTag()
              "John,Michael,Terry, var: EGGS. "
              "Afters";
   QCOMPARE( result, expected );
+}
+
+void TestMutableTagsSyntax::testMultiRepeater()
+{
+
+  Template *t = new MutableTemplate( this );
+  t->setContent( "Before."
+  "{% repeater %}"
+  "Foo."
+  "{% endrepeater %}"
+  "Middle."
+  "{% repeater %}"
+  "Bar."
+  "{% endrepeater %}"
+  "After."
+  );
+
+  QVariantHash h;
+  Context c( h );
+  QString result = t->render( &c );
+  QString expected = "Before.Foo.Middle.Bar.After.";
+  QCOMPARE(result, expected);
+
+  Template *t2 = new MutableTemplate( this );
+  t2->setContent( "Before."
+  "{% repeater %}"
+  "Foo."
+  "{% endrepeater %}"
+  "Middle.{{ var }}."
+  "{% repeater %}"
+  "Bar."
+  "{% endrepeater %}"
+  "After."
+  );
+
+  h.insert("var", "String");
+  Context c2( h );
+  QString result2 = t2->render( &c2 );
+  QString expected2 = "Before.Foo.Middle.String.Bar.After.";
+  QCOMPARE(result2, expected2);
 }
 
 QTEST_MAIN( TestMutableTagsSyntax )
