@@ -21,6 +21,7 @@
 #define ENGINE_H
 
 #include "template.h"
+#include "mutabletemplate.h"
 
 namespace Grantlee
 {
@@ -32,6 +33,7 @@ public:
   AbstractTemplateLoader( QObject* parent = 0 );
   virtual ~AbstractTemplateLoader();
 
+  virtual MutableTemplate* loadMutableByName( const QString &name ) const = 0;
   virtual Template* loadByName( const QString &name ) const = 0;
 
 };
@@ -41,6 +43,7 @@ class FileSystemTemplateLoader : public AbstractTemplateLoader
   Q_OBJECT
 public:
   FileSystemTemplateLoader( QObject* parent = 0 );
+  MutableTemplate* loadMutableByName( const QString &name ) const;
   Template* loadByName( const QString &name ) const;
 
   void setTheme( const QString &themeName );
@@ -57,6 +60,7 @@ class InMemoryTemplateLoader : public AbstractTemplateLoader
   Q_OBJECT
 public:
   InMemoryTemplateLoader( QObject* parent = 0 );
+  MutableTemplate* loadMutableByName( const QString &name ) const;
   Template* loadByName( const QString &name ) const;
 
   void setTemplate( const QString &name, const QString &content );
@@ -81,6 +85,12 @@ public:
   QStringList pluginDirs();
 
   Template* loadByName( const QString &name, QObject *parent ) const;
+
+  Template* newTemplate(QObject *parent);
+
+  MutableTemplate* loadMutableByName( const QString &name, QObject *parent ) const;
+
+  MutableTemplate* newMutableTemplate(QObject *parent);
 
   QStringList defaultLibraries() const;
   void setDefaultLibraries( const QStringList &list );

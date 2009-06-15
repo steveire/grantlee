@@ -63,6 +63,31 @@ void FileSystemTemplateLoader::setTemplateDirs( const QStringList &dirs )
   m_templateDirs = dirs;
 }
 
+// TODO Refactor these two.
+MutableTemplate* FileSystemTemplateLoader::loadMutableByName( const QString &fileName ) const
+{
+  int i = 0;
+  QFile file;
+
+  while ( !file.exists() ) {
+    if ( i >= m_templateDirs.size() )
+      break;
+
+    file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+    ++i;
+  }
+
+  if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
+    return 0;
+  }
+
+  QString content;
+  content = file.readAll();
+  MutableTemplate *t = new MutableTemplate();
+  t->setContent( content );
+  return t;
+}
+
 Template* FileSystemTemplateLoader::loadByName( const QString &fileName ) const
 {
   int i = 0;
@@ -96,6 +121,16 @@ Template* InMemoryTemplateLoader::loadByName( const QString& name ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
     Template *t = new Template();
+    t->setContent( m_namedTemplates.value( name ) );
+    return t;
+  }
+  return 0;
+}
+
+MutableTemplate* InMemoryTemplateLoader::loadMutableByName( const QString& name ) const
+{
+  if ( m_namedTemplates.contains( name ) ) {
+    MutableTemplate *t = new MutableTemplate();
     t->setContent( m_namedTemplates.value( name ) );
     return t;
   }
@@ -204,6 +239,32 @@ Template* Engine::loadByName( const QString &name, QObject *parent ) const
     }
   }
   return 0;
+}
 
+MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent ) const
+{
+
+  Q_D( const Engine );
+  QListIterator<AbstractTemplateLoader*> it( d->m_state->m_loaders );
+
+  while ( it.hasNext() ) {
+    AbstractTemplateLoader* loader = it.next();
+    MutableTemplate *t = loader->loadMutableByName( name );
+    if ( t ) {
+      t->setSettingsToken(d->m_settingsToken);
+      t->setParent( parent );
+      return t;
+    }
+  }
+  return 0;
+}
+
+MutableTemplate* Engine::newMutableTemplate(QObject *parent)
+{
+  Q_D( Engine );
+  MutableTemplate *t = new MutableTemplate(parent);
+  EngineState *state = d->m_state->clone();
+  d->m_states.insert( t->settingsToken(), state );
+  return t;
 }
 
