@@ -171,6 +171,10 @@ QString NodeList::mutableRender( Context *c )
       if ( textNode && ( !isPersistent || node->isRepeatable() ) ) {
         textNode->appendContent( renderedNode );
       }
+      if (*it == *( last - 1 ) )
+      {
+        break;
+      }
       if ( !isPersistent && !lastNode->isPersistent() ) {
         it = erase( it );
         --it;
