@@ -40,6 +40,7 @@ class GRANTLEE_EXPORT Template : public QObject
 {
   Q_OBJECT
 public:
+  ~Template();
   virtual QString render( Context *c );
 
   NodeList getNodesByType( const char * className );

@@ -76,6 +76,8 @@ class GRANTLEE_EXPORT Engine
 public:
   static Engine* instance();
 
+  ~Engine();
+
   QList<AbstractTemplateLoader*> templateLoaders();
 
   void addTemplateLoader( AbstractTemplateLoader *loader );

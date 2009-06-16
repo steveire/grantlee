@@ -174,6 +174,11 @@ Engine::Engine()
   << "grantlee_scriptabletags_library";
 }
 
+Engine::~Engine()
+{
+  delete d_ptr;
+}
+
 QList<AbstractTemplateLoader*> Engine::templateLoaders()
 {
   Q_D( Engine );

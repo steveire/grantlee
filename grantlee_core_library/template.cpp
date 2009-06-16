@@ -70,6 +70,11 @@ Template::Template( QObject *parent )
 {
 }
 
+Template::~Template()
+{
+  delete d_ptr;
+}
+
 void Template::setContent( const QString &templateString )
 {
   Q_D( Template );

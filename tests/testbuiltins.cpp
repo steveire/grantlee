@@ -125,6 +125,7 @@ private slots:
   void cleanupTestCase();
 
 private:
+  Engine *m_engine;
 
   void doTest();
 
@@ -132,7 +133,7 @@ private:
 
 void TestBuiltinSyntax::initTestCase()
 {
-  Engine *m_engine = Engine::instance();
+  m_engine = Engine::instance();
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_engine->setPluginDirs( QStringList() << appDirPath + "/grantlee_loadertags/"
@@ -142,6 +143,7 @@ void TestBuiltinSyntax::initTestCase()
 
 void TestBuiltinSyntax::cleanupTestCase()
 {
+  delete m_engine;
 }
 
 void TestBuiltinSyntax::doTest()
