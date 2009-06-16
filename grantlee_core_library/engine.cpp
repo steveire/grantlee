@@ -222,6 +222,7 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+  qDeleteAll(d_ptr->m_states);
   delete d_ptr;
 }
 
