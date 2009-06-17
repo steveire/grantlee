@@ -36,6 +36,7 @@ class FilterExpressionPrivate
   QList<ArgFilter> m_filters;
   mutable Error m_error;
   mutable QString m_errorString;
+  QStringList m_filterNames;
 
   Q_DECLARE_PUBLIC( FilterExpression )
   FilterExpression *q_ptr;
@@ -106,7 +107,10 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
       subString = subString.right( ssSize - 1 );
       Filter *f = parser->getFilter( subString );
       if ( f )
+      {
+        d->m_filterNames << subString;
         d->m_filters << qMakePair<Filter*, Variable>( f, Variable() );
+      }
       else {
         setError( TagSyntaxError, QString( "Could not find fiter named %1" ).arg( subString ) );
         return;
@@ -250,3 +254,8 @@ bool FilterExpression::isConstant() const
   return d->m_variable.isConstant();
 }
 
+QStringList FilterExpression::filters() const
+{
+  Q_D( const FilterExpression );
+  return d->m_filterNames;
+}

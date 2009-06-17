@@ -70,6 +70,8 @@ public:
 
   bool isConstant() const;
 
+  QStringList filters() const;
+
 protected:
   void setError( Error type, const QString &message ) const;
 
