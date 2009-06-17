@@ -45,7 +45,6 @@ class TemplatePrivate
   qint64 m_settingsToken;
   Error m_error;
   QString m_errorString;
-  QStringList m_pluginDirs;
   NodeList m_nodeList;
 
   Q_DECLARE_PUBLIC(Template);

@@ -55,14 +55,11 @@ public:
   TagLibraryInterface *m_scriptableTagLibrary;
 
   QHash<QString, Filter*> m_filters;
-  QHash<QString, TagLibraryInterface*> m_tags;
   NodeList m_nodeList;
   QStringList m_pluginDirs;
 
   Error m_error;
   QString m_errorString;
-
-  QStringList m_libraryPaths;
 
   Q_DECLARE_PUBLIC( Parser );
   Parser *q_ptr;
