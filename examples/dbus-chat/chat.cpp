@@ -42,13 +42,21 @@
 #include "chat.h"
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
+#include <QtGui/QScrollBar>
+
+#include <grantlee/context.h>
+#include <grantlee/engine.h>
+#include <grantlee/mutabletemplate.h>
 
 #include "chat_adaptor.h"
 #include "chat_interface.h"
+#include "chatitem.h"
+#include "grantlee_paths.h"
 
 ChatMainWindow::ChatMainWindow()
     : m_nickname(QLatin1String("nickname"))
 {
+    m_availableColours << "#000066" << "#009966" << "#0000FF" << "#00CCFF" << "#FF0000";
     setupUi(this);
     sendButton->setEnabled(false);
 
@@ -73,39 +81,86 @@ ChatMainWindow::ChatMainWindow()
     dialog.cancelButton->setVisible(false);
     dialog.exec();
     m_nickname = dialog.nickname->text().trimmed();
+
+    themeChooser->insertItems(0, QStringList() << "plain" << "colored" << "boxes");
+    connect(themeChooser, SIGNAL(activated(const QString &)), SLOT(changeTheme(const QString &)));
+
+    m_engine = Grantlee::Engine::instance();
+
+    Grantlee::FileSystemTemplateLoader *loader = new Grantlee::FileSystemTemplateLoader(this);
+    loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH );
+    m_engine->addTemplateLoader(loader);
+    m_engine->setPluginDirs(QStringList() << GRANTLEE_PLUGIN_PATH );
+
+    m_engine->setDefaultLibraries( QStringList() << m_engine->defaultLibraries()
+                                                 << "grantlee_mutabletags_library" );
+
+    changeTheme("plain");
+
     emit action(m_nickname, QLatin1String("joins the chat"));
 }
 
 ChatMainWindow::~ChatMainWindow()
 {
+    delete m_engine;
+}
+
+void ChatMainWindow::addColour(const QString &nickname, const QString &colour)
+{
+    QVariantHash h;
+    QVariantList nameColours;
+    QVariantList innerPair;
+    innerPair << nickname << colour;
+    nameColours.append(QVariant(innerPair));
+    m_nameColours.insert( nickname, QVariant(innerPair));
+
+    h.insert("name_colours", nameColours);
+    Context c(h);
+    QString content = m_template->render(&c);
+}
+
+void ChatMainWindow::addItem(ChatItem *item)
+{
+    QVariantHash h;
+    QVariant chatVariant = QVariant::fromValue(static_cast<QObject*>(item));
+    m_chatItems.append(chatVariant);
+    h.insert("chat_items", QVariantList() << chatVariant);
+    Context c(h);
+    QString content = m_template->render(&c);
+    chatHistory->setHtml(content);
+    QScrollBar *sb = chatHistory->verticalScrollBar();
+    sb->setValue(sb->maximum());
 }
 
 void ChatMainWindow::rebuildHistory()
 {
-    QString history = m_messages.join( QLatin1String("\n" ) );
-    chatHistory->setPlainText(history);
+    QVariantHash h;
+    h.insert("chat_items", m_chatItems);
+    h.insert("mynickname", m_nickname);
+    h.insert("name_colours", m_nameColours.values());
+    Context c(h);
+    QString content = m_template->render(&c);
+    chatHistory->setHtml(content);
+    QScrollBar *sb = chatHistory->verticalScrollBar();
+    sb->setValue(sb->maximum());
 }
 
 void ChatMainWindow::messageSlot(const QString &nickname, const QString &text)
 {
-    QString msg( QLatin1String("<%1> %2") );
-    msg = msg.arg(nickname, text);
-    m_messages.append(msg);
+    if (!m_nameColours.contains(nickname))
+    {
+      QString colour = m_availableColours.at(qrand() % m_availableColours.size());
+      addColour(nickname, colour);
+    }
 
-    if (m_messages.count() > 100)
-        m_messages.removeFirst();
-    rebuildHistory();
+    ChatItem *message = new ChatItem(nickname, text, ChatItem::Message, this);
+    addItem(message);
 }
 
 void ChatMainWindow::actionSlot(const QString &nickname, const QString &text)
 {
-    QString msg( QLatin1String("* %1 %2") );
-    msg = msg.arg(nickname, text);
-    m_messages.append(msg);
-
-    if (m_messages.count() > 100)
-        m_messages.removeFirst();
-    rebuildHistory();
+    ChatItem *message = new ChatItem(nickname, text, ChatItem::Action, this);
+    addItem(message);
 }
 
 void ChatMainWindow::textChangedSlot(const QString &newText)
@@ -115,10 +170,17 @@ void ChatMainWindow::textChangedSlot(const QString &newText)
 
 void ChatMainWindow::sendClickedSlot()
 {
-    //emit message(m_nickname, messageLineEdit->text());
-    QDBusMessage msg = QDBusMessage::createSignal("/", "com.trolltech.chat", "message");
-    msg << m_nickname << messageLineEdit->text();
-    QDBusConnection::sessionBus().send(msg);
+    QString content = messageLineEdit->text();
+    if (content.startsWith("/me "))
+    {
+      content.remove(0, 4);
+      action(m_nickname, content);
+    } else {
+      //emit message(m_nickname, messageLineEdit->text());
+      QDBusMessage msg = QDBusMessage::createSignal("/", "com.trolltech.chat", "message");
+      msg << m_nickname << content;
+      QDBusConnection::sessionBus().send(msg);
+    }
     messageLineEdit->setText(QString());
 }
 
@@ -130,6 +192,12 @@ void ChatMainWindow::changeNickname()
         m_nickname = dialog.nickname->text().trimmed();
         emit action(old, QString("is now known as %1").arg(m_nickname));
     }
+}
+
+void ChatMainWindow::changeTheme(const QString &themeName)
+{
+    m_template = m_engine->loadMutableByName(themeName + ".html", this);
+    rebuildHistory();
 }
 
 void ChatMainWindow::aboutQt()

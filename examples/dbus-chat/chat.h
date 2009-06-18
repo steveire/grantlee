@@ -47,16 +47,30 @@
 #include "ui_chatmainwindow.h"
 #include "ui_chatsetnickname.h"
 
+class ChatItem;
+
+namespace Grantlee
+{
+class Engine;
+class MutableTemplate;
+}
+
 class ChatMainWindow: public QMainWindow, Ui::ChatMainWindow
 {
     Q_OBJECT
     QString m_nickname;
     QStringList m_messages;
+    QVariantList m_chatItems;
+    QVariantHash m_nameColours;
+    QStringList m_availableColours;
+    Grantlee::MutableTemplate *m_template;
 public:
     ChatMainWindow();
     ~ChatMainWindow();
 
     void rebuildHistory();
+    void addItem(ChatItem *item);
+    void addColour(const QString &nickname, const QString &colour);
 
 signals:
     void message(const QString &nickname, const QString &text);
@@ -68,8 +82,12 @@ private slots:
     void textChangedSlot(const QString &newText);
     void sendClickedSlot();
     void changeNickname();
+    void changeTheme(const QString &themeName);
     void aboutQt();
     void exiting();
+
+private:
+  Grantlee::Engine *m_engine;
 };
 
 class NicknameDialog: public QDialog, public Ui::NicknameDialog
