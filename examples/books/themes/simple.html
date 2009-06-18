@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block document_title %}{{ block.super }} - Simple style{% endblock %}
+{% block page_title %}{{ block.super }} - Simple style{% endblock %}
+
+{% block book_rows %}
+  {% for book in books %}
+    <tr><td>{{ book.author }}</td><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{{ book.rating }}</td></tr>
+  {% empty %}
+    <tr><td colspan="4" >No Books here!</td></tr>
+  {% endfor %}
+{% endblock %}

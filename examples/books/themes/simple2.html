@@ -1,0 +1,15 @@
+
+{% extends "base.html" %}
+
+{% block document_title %}{{ block.super }} - Simple2 style{% endblock %}
+{% block page_title %}{{ block.super }} - Simple2 style{% endblock %}
+
+{% block title_row %}<tr><th>Title</th><th>Genre</th><th>Rating</th></tr>{% endblock %}
+{% block book_rows %}
+  {% for book in books %}
+    {% ifchanged %}<tr><td colspan="3" align="center" style="background:yellow;" >{{ book.author }}</td></tr>{% endifchanged %}
+    <tr><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{{ book.rating }}</td></tr>
+  {% empty %}
+    <tr><td><div>No Books here!</div></td></tr>
+  {% endfor %}
+{% endblock %}

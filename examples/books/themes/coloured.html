@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+
+{% block style %}
+table {
+  color: #151B54;
+}
+
+table tr th {
+  color: white;
+  background: #736F6E;
+}
+{% endblock %}
+
+{% block document_title %}{{ block.super }} - Coloured style{% endblock %}
+{% block page_title %}{{ block.super }} - Coloured style{% endblock %}
+
+{% block title_row %}<tr><th>Author</th><th>Title</th><th>Genre</th><th>Rating</th></tr>{% endblock %}
+{% block book_rows %}
+  {% for book in books %}
+    <tr style="background-color:{% cycle "#E3E4FA" "#FCDFFF" "#E9CFEC" "#C8BBBE" %};" ><td>{{ book.author }}</td><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{{ book.rating }}</td></tr>
+  {% empty %}
+    <tr><td><div>No Books here!</div></td></tr>
+  {% endfor %}
+{% endblock %}

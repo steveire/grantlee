@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>{% block document_title %}My Books{% endblock %}</title>
+<style>{% block style %}{% endblock %}</style>
+</head>
+<body>
+<h1>{% block page_title %}My Books{% endblock %}</h1>
+<div>
+  <table>
+  {% block title_row %}<tr><th>Author</th><th>Title</th><th>Genre</th><th>Rating</th></tr>{% endblock %}
+  {% block book_rows %}
+  {% endblock %}
+  </table>
+</div>
+</body>
+</html>
+
