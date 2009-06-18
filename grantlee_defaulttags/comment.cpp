@@ -30,13 +30,13 @@ CommentNodeFactory::CommentNodeFactory()
 
 }
 
-Node* CommentNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* CommentNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   Q_UNUSED( tagContent );
 
   p->skipPast( "endcomment" );
 
-  return new CommentNode( parent );
+  return new CommentNode();
 }
 
 CommentNode::CommentNode( QObject *parent )

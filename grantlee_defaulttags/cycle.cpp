@@ -31,7 +31,7 @@ CycleNodeFactory::CycleNodeFactory()
 
 }
 
-Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
@@ -80,7 +80,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *
     // {% cycle "foo" "bar" "bat" as var %}
     QString name = expr.at( exprSize - 1 );
     QStringList list = expr.mid( 1, exprSize - 3 );
-    Node *node = new CycleNode( getFilterExpressionList( list, p ), name, parent );
+    Node *node = new CycleNode( getFilterExpressionList( list, p ), name );
     QVariant hashVariant = p->property( _namedCycleNodes );
     QVariantHash hash;
     if ( hashVariant.isValid() && hashVariant.type() == QVariant::Hash ) {
@@ -93,7 +93,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *
     return node;
   } else {
     QStringList list = expr.mid( 1, exprSize - 1 );
-    return new CycleNode( getFilterExpressionList( list, p ), QString(), parent );
+    return new CycleNode( getFilterExpressionList( list, p ), QString() );
   }
 }
 

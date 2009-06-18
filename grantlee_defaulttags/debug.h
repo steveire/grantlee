@@ -30,7 +30,7 @@ class DebugNodeFactory : public AbstractNodeFactory
 public:
   DebugNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 
 };
 
@@ -38,7 +38,7 @@ class DebugNode : public Node
 {
   Q_OBJECT
 public:
-  DebugNode( QObject *parent );
+  DebugNode( QObject *parent = 0 );
 
   QString render( Context *c );
 

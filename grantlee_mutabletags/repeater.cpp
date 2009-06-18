@@ -27,10 +27,10 @@ RepeaterNodeFactory::RepeaterNodeFactory( QObject* parent )
 
 }
 
-Node* RepeaterNodeFactory::getNode( const QString& tagContent, Parser* p, QObject* parent ) const
+Node* RepeaterNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  NodeList nodeList = p->parse( "endrepeater", parent );
-  return new RepeaterNode( nodeList, parent );
+  NodeList nodeList = p->parse( "endrepeater" );
+  return new RepeaterNode( nodeList );
 }
 
 RepeaterNode::RepeaterNode( NodeList nodeList, QObject* parent )

@@ -119,16 +119,14 @@ void ScriptableNodeFactory::setFactory( QScriptValue factoryMethod )
   m_factoryMethod = factoryMethod;
 }
 
-Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  ScriptableParser *sp = new ScriptableParser( p, parent );
+  ScriptableParser *sp = new ScriptableParser( p, m_scriptEngine );
   QScriptValue parserObject = m_scriptEngine->newQObject( sp );
-  QScriptValue parentObject = m_scriptEngine->newQObject( parent );
 
   QScriptValueList args;
   args << tagContent;
   args << parserObject;
-  args << parentObject;
 
   QScriptValue factory = m_factoryMethod;
 

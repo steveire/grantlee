@@ -33,7 +33,7 @@ class CycleNodeFactory : public AbstractNodeFactory
 public:
   CycleNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 
 };
 
@@ -70,7 +70,7 @@ class CycleNode : public Node
 {
   Q_OBJECT
 public:
-  CycleNode( QList<FilterExpression> list, const QString &name, QObject *parent );
+  CycleNode( QList<FilterExpression> list, const QString &name, QObject *parent = 0 );
 
   QString render( Context *c );
 

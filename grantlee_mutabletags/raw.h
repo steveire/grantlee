@@ -30,7 +30,7 @@ class RawNodeFactory : public AbstractNodeFactory
 public:
   RawNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 
 };
 
@@ -39,7 +39,7 @@ class RawNode : public Node
 {
   Q_OBJECT
 public:
-  RawNode( NodeList nodeList, QObject *parent );
+  RawNode( NodeList nodeList, QObject *parent = 0 );
 
   QString render( Context *c );
 

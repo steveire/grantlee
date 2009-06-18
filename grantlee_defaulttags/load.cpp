@@ -29,7 +29,7 @@ LoadNodeFactory::LoadNodeFactory()
 {
 }
 
-Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
@@ -46,7 +46,7 @@ Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *p
     p->loadLib( libName );
   }
 
-  return new LoadNode( parent );
+  return new LoadNode();
 }
 
 

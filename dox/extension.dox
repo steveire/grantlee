@@ -101,7 +101,7 @@ Here is an example of a {% current_time %} tag which displays the current time.
 
 class CurrentTimeTag : public Grantlee::AbstractNodeFactory
 {
-  Node *getNode(const QString &tagContent, Parser *p, QObject *parent)
+  Node *getNode(const QString &tagContent, Parser *p)
   {
     // You almost always want to use smartSplit.
     QStringList content = smartSplit(tagContent);
@@ -186,7 +186,7 @@ var EchoNode = function(content)
   };
 };
 
-function EchoNodeFactory(tagContent, parser, parent)
+function EchoNodeFactory(tagContent, parser)
 {
   var content = tagContent.split(" ");
   content = content.slice(1, content.length);

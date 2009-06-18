@@ -32,7 +32,7 @@ class CommentNodeFactory : public AbstractNodeFactory
 public:
   CommentNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 
 };
 
@@ -41,7 +41,7 @@ class CommentNode : public Node
 {
   Q_OBJECT
 public:
-  CommentNode( QObject *parent );
+  CommentNode( QObject *parent = 0 );
 
   QString render( Context *c );
 };

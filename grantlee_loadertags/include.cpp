@@ -34,7 +34,7 @@ IncludeNodeFactory::IncludeNodeFactory()
 
 }
 
-Node* IncludeNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* IncludeNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
@@ -43,9 +43,9 @@ Node* IncludeNodeFactory::getNode( const QString &tagContent, Parser *p, QObject
 
   if (( includeName.startsWith( "\"" ) && includeName.endsWith( "\"" ) )
       || ( includeName.startsWith( "'" ) && includeName.endsWith( "'" ) ) ) {
-    return new ConstantIncludeNode( includeName.mid( 1, size - 2 ), parent );
+    return new ConstantIncludeNode( includeName.mid( 1, size - 2 ) );
   }
-  return new IncludeNode( FilterExpression( includeName, p ), parent );
+  return new IncludeNode( FilterExpression( includeName, p ) );
 }
 
 IncludeNode::IncludeNode( const FilterExpression &fe, QObject *parent )

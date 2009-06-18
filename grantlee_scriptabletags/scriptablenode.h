@@ -78,7 +78,7 @@ public:
   void setEngine( QScriptEngine *engine );
   void setFactory( QScriptValue factoryMethod );
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent = 0 ) const;
+  Node* getNode( const QString &tagContent, Parser *p = 0 ) const;
 
 private:
   QScriptEngine* m_scriptEngine;

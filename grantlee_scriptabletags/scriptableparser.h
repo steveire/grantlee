@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QScriptValue>
+#include <QStringList>
 #include <QVariant>
 
 #include "token.h"
@@ -44,9 +45,8 @@ public:
   }
 
 public slots:
-  QObjectList parse( const QString &stopAt, QObject *parent );
-  QObjectList parse( const QStringList &stopAt, QObject *parent );
-  QObjectList parse( QObject *parent );
+  QObjectList parse( const QString &stopAt );
+  QObjectList parse( const QStringList &stopAt = QStringList() );
 
   void skipPast( const QString &tag );
 

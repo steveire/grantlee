@@ -33,14 +33,14 @@ class IfChangedNodeFactory : public AbstractNodeFactory
 public:
   IfChangedNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 };
 
 class IfChangedNode : public Node
 {
   Q_OBJECT
 public:
-  IfChangedNode( NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent );
+  IfChangedNode( NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent = 0 );
 
   QString render( Context *c );
 

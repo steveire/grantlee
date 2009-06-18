@@ -31,7 +31,7 @@ FirstOfNodeFactory::FirstOfNodeFactory()
 {
 }
 
-Node* FirstOfNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* FirstOfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
@@ -42,7 +42,7 @@ Node* FirstOfNodeFactory::getNode( const QString &tagContent, Parser *p, QObject
     return 0;
   }
 
-  return new FirstOfNode( getFilterExpressionList( expr, p ), parent );
+  return new FirstOfNode( getFilterExpressionList( expr, p ) );
 }
 
 

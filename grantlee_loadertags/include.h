@@ -38,7 +38,7 @@ class IncludeNodeFactory : public AbstractNodeFactory
 public:
   IncludeNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 
 };
 
@@ -46,7 +46,7 @@ class IncludeNode : public Node
 {
   Q_OBJECT
 public:
-  IncludeNode( const FilterExpression &fe, QObject *parent );
+  IncludeNode( const FilterExpression &fe, QObject *parent = 0 );
   QString render( Context *c );
 
 private:
@@ -58,7 +58,7 @@ class ConstantIncludeNode : public Node
 {
   Q_OBJECT
 public:
-  ConstantIncludeNode( const QString &filename, QObject *parent );
+  ConstantIncludeNode( const QString &filename, QObject *parent = 0 );
   QString render( Context *c );
 
 private:

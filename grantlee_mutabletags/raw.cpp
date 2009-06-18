@@ -27,11 +27,11 @@ RawNodeFactory::RawNodeFactory()
 
 }
 
-Node* RawNodeFactory::getNode( const QString& tagContent, Parser* p, QObject* parent ) const
+Node* RawNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  NodeList nodeList = p->parse( "endraw", parent );
+  NodeList nodeList = p->parse( "endraw" );
   p->deleteNextToken();
-  return new RawNode( nodeList, parent );
+  return new RawNode( nodeList );
 }
 
 

@@ -31,20 +31,20 @@ IfChangedNodeFactory::IfChangedNodeFactory()
 
 }
 
-Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
-  NodeList trueList = p->parse( QStringList() << "else" << "endifchanged", parent );
+  NodeList trueList = p->parse( QStringList() << "else" << "endifchanged" );
   NodeList falseList;
 
   if ( p->nextToken().content.trimmed() == "else" ) {
-    falseList = p->parse( QStringList() << "endifchanged", parent );
+    falseList = p->parse( QStringList() << "endifchanged" );
     p->deleteNextToken();
   }
   expr.takeAt( 0 );
 
-  return new IfChangedNode( trueList, falseList, getFilterExpressionList( expr, p ), parent );
+  return new IfChangedNode( trueList, falseList, getFilterExpressionList( expr, p ) );
 }
 
 IfChangedNode::IfChangedNode( NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent )

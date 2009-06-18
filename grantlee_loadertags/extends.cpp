@@ -41,7 +41,7 @@ ExtendsNodeFactory::ExtendsNodeFactory( QObject *parent )
 
 }
 
-Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
@@ -57,14 +57,14 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p, QObject
     parentName = QString();
   }
 
-  NodeList nodeList = p->parse( parent );
+  NodeList nodeList = p->parse();
 
   if ( nodeList.getNodesByType( ExtendsNode::staticMetaObject.className() ).size() > 0 ) {
     setError( TagSyntaxError, "Extends tag may only appear once in a template." );
     return 0;
   }
 
-  return new ExtendsNode( nodeList, parentName, fe, parent );
+  return new ExtendsNode( nodeList, parentName, fe );
 }
 
 ExtendsNode::ExtendsNode( NodeList list, const QString &name, FilterExpression fe, QObject *parent )

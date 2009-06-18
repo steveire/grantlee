@@ -35,7 +35,7 @@ class TemplateTagNodeFactory : public AbstractNodeFactory
 public:
   TemplateTagNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 };
 
 class TemplateTagNode : public Node
@@ -48,7 +48,7 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  TemplateTagNode( const QString &tagName, QObject *parent );
+  TemplateTagNode( const QString &tagName, QObject *parent = 0 );
 
   QString render( Context *c );
 

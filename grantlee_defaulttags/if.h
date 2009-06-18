@@ -35,7 +35,7 @@ class IfNodeFactory : public AbstractNodeFactory
 public:
   IfNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 };
 
 class IfNode : public Node
@@ -52,7 +52,7 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  IfNode( QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType, QObject *parent );
+  IfNode( QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType, QObject *parent = 0 );
 
   QString render( Context *c );
 

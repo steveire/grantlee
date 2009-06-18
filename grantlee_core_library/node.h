@@ -123,7 +123,7 @@ public:
   /**
   Advances the parser as needed for block style tags.
   */
-  virtual Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const = 0;
+  virtual Node* getNode( const QString &tagContent, Parser *p ) const = 0;
 
   Error error() const;
   QString errorString() const;

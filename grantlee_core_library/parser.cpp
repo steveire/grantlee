@@ -197,17 +197,12 @@ Filter *Parser::getFilter( const QString &name ) const
   return d->m_filters.value( name );
 }
 
-NodeList Parser::parse( QObject *parent )
+NodeList Parser::parse( const QString &stopAt )
 {
-  return parse( QStringList(), parent );
+  return parse( QStringList() << stopAt );
 }
 
-NodeList Parser::parse( const QString &stopAt, QObject *parent )
-{
-  return parse( QStringList() << stopAt, parent );
-}
-
-NodeList Parser::parse( const QStringList &stopAt, QObject *parent )
+NodeList Parser::parse( const QStringList &stopAt )
 {
   Q_D( Parser );
   NodeList nodeList;
@@ -215,7 +210,7 @@ NodeList Parser::parse( const QStringList &stopAt, QObject *parent )
   while ( hasNextToken() ) {
     Token token = nextToken();
     if ( token.tokenType == TextToken ) {
-      nodeList = d->extendNodeList( nodeList, new TextNode( token.content, parent ) );
+      nodeList = d->extendNodeList( nodeList, new TextNode( token.content, parent() ) );
     } else if ( token.tokenType == VariableToken ) {
       if ( token.content.isEmpty() ) {
         // Error. Empty variable
@@ -232,7 +227,7 @@ NodeList Parser::parse( const QStringList &stopAt, QObject *parent )
         setError( filterExpression.error(), filterExpression.errorString() );
         return NodeList();
       }
-      nodeList = d->extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
+      nodeList = d->extendNodeList( nodeList, new VariableNode( filterExpression, parent() ) );
     } else if ( token.tokenType == BlockToken ) {
       if ( stopAt.contains( token.content ) ) {
         // put the token back.
@@ -260,12 +255,14 @@ NodeList Parser::parse( const QStringList &stopAt, QObject *parent )
       }
 
       // TODO: Make getNode take a Token instead?
-      Node *n = nodeFactory->getNode( token.content, this, parent );
+      Node *n = nodeFactory->getNode( token.content, this );
 
       if ( !n ) {
         setError( TagSyntaxError, QString( "Failed to get node from %1" ).arg( command ) );
         return NodeList();
       }
+
+      n->setParent( parent() );
 
       if ( NoError != nodeFactory->error() ) {
         setError( nodeFactory->error(), nodeFactory->errorString() );

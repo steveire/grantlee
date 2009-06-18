@@ -33,7 +33,7 @@ class WidthRatioNodeFactory : public AbstractNodeFactory
 public:
   WidthRatioNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 
 };
 
@@ -41,7 +41,7 @@ class WidthRatioNode : public Node
 {
   Q_OBJECT
 public:
-  WidthRatioNode( FilterExpression valExpr, FilterExpression maxExpr, FilterExpression maxWidth, QObject *parent );
+  WidthRatioNode( FilterExpression valExpr, FilterExpression maxExpr, FilterExpression maxWidth, QObject *parent = 0 );
 
   QString render( Context *c );
 

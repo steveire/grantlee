@@ -45,10 +45,8 @@ public:
 
   void setTokens( const QList<Token> &tokenList );
 
-  NodeList parse( const QString &stopAt, QObject *parent );
-  NodeList parse( const QStringList &stopAt, QObject *parent );
-
-  NodeList parse( QObject *parent );
+  NodeList parse( const QStringList &stopAt = QStringList() );
+  NodeList parse( const QString &stopAt );
 
   Filter *getFilter( const QString &name ) const;
 

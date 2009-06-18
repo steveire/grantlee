@@ -34,7 +34,7 @@ BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( par
 
 }
 
-Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
@@ -66,11 +66,11 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *
 
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
-  NodeList list = p->parse( QStringList() << "endblock" << "endblock " + blockName, parent );
+  NodeList list = p->parse( QStringList() << "endblock" << "endblock " + blockName );
 
   p->deleteNextToken();
 
-  return new BlockNode( blockName, list, parent );
+  return new BlockNode( blockName, list );
 }
 
 BlockNode::BlockNode( const QString &name, const NodeList &list, QObject *parent )

@@ -29,11 +29,11 @@ SpacelessNodeFactory::SpacelessNodeFactory()
 
 }
 
-Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  NodeList list = p->parse( QStringList() << "endspaceless", parent );
+  NodeList list = p->parse( QStringList() << "endspaceless" );
   p->deleteNextToken();
-  return new SpacelessNode( list, parent );
+  return new SpacelessNode( list );
 }
 
 SpacelessNode::SpacelessNode( NodeList nodeList, QObject *parent )

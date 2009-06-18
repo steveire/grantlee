@@ -123,7 +123,7 @@ void Benchmarking::testParsing()
   Parser p( tokens, 0 );
   NodeList list;
 
-  QBENCHMARK { p.setTokens( tokens ); list = p.parse( this ); }
+  QBENCHMARK { p.setTokens( tokens ); list = p.parse(); }
 
 }
 
@@ -140,7 +140,7 @@ void Benchmarking::testRendering()
   Parser p( tokens, 0 );
   NodeList list;
 
-  list = p.parse( this );
+  list = p.parse();
 
   Context context( dict );
 

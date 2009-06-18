@@ -29,7 +29,7 @@ WidthRatioNodeFactory::WidthRatioNodeFactory()
 
 }
 
-Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
@@ -41,7 +41,7 @@ Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p, QObj
   FilterExpression maxExpr( expr.at( 2 ), p );
   FilterExpression maxWidth( expr.at( 3 ), p );
 
-  return new WidthRatioNode( valExpr, maxExpr, maxWidth, parent );
+  return new WidthRatioNode( valExpr, maxExpr, maxWidth );
 }
 
 

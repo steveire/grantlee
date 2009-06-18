@@ -29,7 +29,7 @@ class FirstOfNodeFactory : public AbstractNodeFactory
 public:
   FirstOfNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p, QObject *parent ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const;
 
 };
 
@@ -37,7 +37,7 @@ class FirstOfNode : public Node
 {
   Q_OBJECT
 public:
-  FirstOfNode( QList<FilterExpression> list, QObject *parent );
+  FirstOfNode( QList<FilterExpression> list, QObject *parent = 0 );
 
   QString render( Context *c );
 

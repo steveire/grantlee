@@ -31,7 +31,7 @@ NowNodeFactory::NowNodeFactory()
 
 }
 
-Node* NowNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* NowNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = tagContent.split( "\"", QString::KeepEmptyParts );
 
@@ -42,7 +42,7 @@ Node* NowNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *pa
 
   QString formatString = expr.at( 1 );
 
-  return new NowNode( formatString, parent );
+  return new NowNode( formatString );
 }
 
 NowNode::NowNode( const QString &formatString, QObject *parent )

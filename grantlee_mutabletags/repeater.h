@@ -30,7 +30,7 @@ class RepeaterNodeFactory : public AbstractNodeFactory
 public:
   RepeaterNodeFactory( QObject* parent = 0 );
 
-  Node* getNode( const QString& tagContent, Parser* p, QObject* parent ) const;
+  Node* getNode( const QString& tagContent, Parser* p ) const;
 
 };
 

@@ -41,7 +41,7 @@ TemplateTagNodeFactory::TemplateTagNodeFactory()
 }
 
 
-Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p, QObject *parent ) const
+Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
   expr.takeAt( 0 );
@@ -57,7 +57,7 @@ Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p, QOb
     return 0;
   }
 
-  return new TemplateTagNode( name, parent );
+  return new TemplateTagNode( name );
 }
 
 
