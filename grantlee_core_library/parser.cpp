@@ -19,7 +19,6 @@
 
 #include "parser.h"
 
-#include <QPluginLoader>
 #include <QFile>
 
 #include "interfaces/taglibraryinterface.h"
@@ -29,8 +28,6 @@
 #include "filter.h"
 
 #include "grantlee_version.h"
-
-static const char * __scriptableLibName = "grantlee_scriptabletags_library";
 
 using namespace Grantlee;
 
@@ -43,20 +40,19 @@ public:
   ParserPrivate( Parser *parser, const QList<Token> &tokenList )
       : q_ptr( parser ),
       m_error( NoError ),
-      m_tokenList( tokenList ),
-      m_scriptableTagLibrary( 0 ) {
+      m_tokenList( tokenList ) {
 
   }
 
   NodeList extendNodeList( NodeList list, Node *node );
 
+  void openLibrary( TagLibraryInterface * library );
   QList<Token> m_tokenList;
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-  TagLibraryInterface *m_scriptableTagLibrary;
 
+  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
   QHash<QString, Filter*> m_filters;
+
   NodeList m_nodeList;
-  QStringList m_pluginDirs;
 
   Error m_error;
   QString m_errorString;
@@ -67,19 +63,37 @@ public:
 
 }
 
+void ParserPrivate::openLibrary( TagLibraryInterface *library )
+{
+  Q_Q( Parser );
+  QHashIterator<QString, AbstractNodeFactory*> nodeIt( library->nodeFactories() );
+  while ( nodeIt.hasNext() )
+  {
+    nodeIt.next();
+    m_nodeFactories.insert( nodeIt.key(), nodeIt.value() );
+  }
+  QHashIterator<QString, Filter*> filterIt( library->filters() );
+  while ( filterIt.hasNext() )
+  {
+    filterIt.next();
+    Filter *f = filterIt.value();
+    f->setParent( q->parent() );
+    m_filters.insert( filterIt.key(), f );
+  }
+}
+
 Parser::Parser( const QList<Token> &tokenList, QObject *parent )
     : QObject( parent ), d_ptr( new ParserPrivate( this, tokenList ) )
 {
   Q_D( Parser );
 
-  Engine *tl = Engine::instance();
+  Engine *engine = Engine::instance();
 
-  d->m_pluginDirs = tl->pluginDirs();
-
-  foreach( const QString libName, tl->defaultLibraries() ) {
-    loadLib( libName );
+  qint64 settingsToken = parent->property( "settingsToken" ).toULongLong();
+  foreach ( TagLibraryInterface *library, engine->loadDefaultLibraries( settingsToken ) )
+  {
+    d->openLibrary( library );
   }
-
 }
 
 Parser::~Parser()
@@ -99,77 +113,11 @@ void Parser::setTokens( const QList< Token >& tokenList )
 void Parser::loadLib( const QString &name )
 {
   Q_D( Parser );
-
-  int pluginIndex = 0;
-  QString libFileName;
-
-  if ( d->m_scriptableTagLibrary ) {
-    while ( d->m_pluginDirs.size() > pluginIndex ) {
-      libFileName = d->m_pluginDirs.at( pluginIndex++ ) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + name + ".qs";
-      QFile file( libFileName );
-      if ( !file.exists() )
-        continue;
-
-      QHashIterator<QString, AbstractNodeFactory*> i( d->m_scriptableTagLibrary->nodeFactories( libFileName ) );
-      while ( i.hasNext() ) {
-        i.next();
-        d->m_nodeFactories[i.key()] = i.value();
-      }
-
-      QHashIterator<QString, Filter*> filterIter( d->m_scriptableTagLibrary->filters( libFileName ) );
-      while ( filterIter.hasNext() ) {
-        filterIter.next();
-        Filter *f = filterIter.value();
-        f->setParent( this->parent() );
-        d->m_filters[filterIter.key()] = f;
-      }
-
-      return;
-    }
-  }
-
-  pluginIndex = 0;
-
-  QObject *plugin = 0;
-  while ( d->m_pluginDirs.size() > pluginIndex ) {
-    libFileName = d->m_pluginDirs.at( pluginIndex++ ) + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + "lib" + name + ".so";
-    QFile file( libFileName );
-    if ( !file.exists() )
-      continue;
-
-    QPluginLoader loader( libFileName );
-
-    plugin = loader.instance();
-    if ( plugin )
-      break;
-  }
-  if ( !plugin )
+  qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
+  TagLibraryInterface *library = Engine::instance()->loadLibrary( name, settingsToken );
+  if (!library)
     return;
-
-  TagLibraryInterface *tagLibrary = qobject_cast<TagLibraryInterface*>( plugin );
-  if ( !tagLibrary )
-    return;
-
-  if ( name == __scriptableLibName ) {
-    d->m_scriptableTagLibrary = tagLibrary;
-    plugin->setParent( this->parent() );
-    return;
-  }
-
-  QHashIterator<QString, AbstractNodeFactory*> i( tagLibrary->nodeFactories() );
-  while ( i.hasNext() ) {
-    i.next();
-    d->m_nodeFactories[i.key()] = i.value();
-  }
-
-  QHashIterator<QString, Filter*> filterIter( tagLibrary->filters() );
-  while ( filterIter.hasNext() ) {
-    filterIter.next();
-    Filter *f = filterIter.value();
-    f->setParent( this->parent() );
-    d->m_filters[filterIter.key()] = f;
-  }
-  delete tagLibrary;
+  d->openLibrary( library );
 }
 
 NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )

@@ -22,6 +22,7 @@
 
 #include "template.h"
 #include "mutabletemplate.h"
+#include "interfaces/taglibraryinterface.h"
 
 namespace Grantlee
 {
@@ -109,6 +110,10 @@ public:
   void setDefaultLibraries( const QStringList &list, qint64 settingsToken = 0 );
   void addDefaultLibrary( const QString &libName, qint64 settingsToken = 0 );
   void removeDefaultLibrary( const QString &libName, qint64 settingsToken = 0 );
+
+  QList<TagLibraryInterface*> loadDefaultLibraries( qint64 settingsToken = 0 );
+
+  TagLibraryInterface* loadLibrary( const QString &name, qint64 settingsToken = 0 );
 
 private:
   Engine();
