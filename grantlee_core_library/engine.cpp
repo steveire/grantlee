@@ -281,40 +281,79 @@ void Engine::removeDefaultLibrary( const QString &libName, qint64 settingsToken 
 Template* Engine::loadByName( const QString &name, QObject *parent, qint64 settingsToken ) const
 {
   Q_D( const Engine );
+  qint64 currentSettingsToken = d->m_mostRecentState;
+  if (settingsToken)
+  {
+    d->m_mostRecentState = settingsToken;
+  }
+
   QListIterator<AbstractTemplateLoader*> it( d->m_states.value( d->m_mostRecentState )->m_loaders );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* loader = it.next();
     Template *t = loader->loadByName( name );
     if ( t ) {
-      t->setSettingsToken( d->m_settingsToken );
+      if ( !settingsToken )
+      {
+        EngineState *state = d->m_states.value( d->m_mostRecentState )->clone();
+        d->m_mostRecentState = t->settingsToken();
+        d->m_states.insert( d->m_mostRecentState, state );
+      }
+      else
+        t->setSettingsToken( settingsToken );
       t->setParent( parent );
+      if ( settingsToken )
+        d->m_mostRecentState = currentSettingsToken;
       return t;
     }
   }
+  if ( settingsToken )
+    d->m_mostRecentState = currentSettingsToken;
   return 0;
 }
 
 MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent, qint64 settingsToken ) const
 {
   Q_D( const Engine );
+  qint64 currentSettingsToken = d->m_mostRecentState;
+  if ( settingsToken )
+  {
+    d->m_mostRecentState = settingsToken;
+  }
+
   QListIterator<AbstractTemplateLoader*> it( d->m_states.value(d->m_mostRecentState)->m_loaders );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* loader = it.next();
     MutableTemplate *t = loader->loadMutableByName( name );
     if ( t ) {
-      t->setSettingsToken( d->m_settingsToken );
+      if ( !settingsToken )
+      {
+        EngineState *state = d->m_states.value( d->m_mostRecentState )->clone();
+        d->m_mostRecentState = t->settingsToken();
+        d->m_states.insert( d->m_mostRecentState, state );
+      }
+      else
+        t->setSettingsToken( settingsToken );
       t->setParent( parent );
+      if ( settingsToken )
+        d->m_mostRecentState = currentSettingsToken;
       return t;
     }
   }
+  if (settingsToken)
+    d->m_mostRecentState = currentSettingsToken;
   return 0;
 }
 
 MutableTemplate* Engine::newMutableTemplate( const QString &content, QObject *parent, qint64 settingsToken )
 {
   Q_D( Engine );
+  qint64 currentSettingsToken = d->m_mostRecentState;
+  if (settingsToken)
+  {
+    d->m_mostRecentState = settingsToken;
+  }
   MutableTemplate *t = new MutableTemplate( parent );
   if ( !settingsToken )
   {
@@ -325,12 +364,21 @@ MutableTemplate* Engine::newMutableTemplate( const QString &content, QObject *pa
     t->setSettingsToken( settingsToken );
   }
   t->setContent( content );
+  if ( settingsToken )
+  {
+    d->m_mostRecentState = currentSettingsToken;
+  }
   return t;
 }
 
 Template* Engine::newTemplate( const QString &content, QObject *parent, qint64 settingsToken )
 {
   Q_D( Engine );
+  qint64 currentSettingsToken = d->m_mostRecentState;
+  if ( settingsToken )
+  {
+    d->m_mostRecentState = settingsToken;
+  }
   Template *t = new Template(parent);
   if ( !settingsToken )
   {
@@ -341,5 +389,9 @@ Template* Engine::newTemplate( const QString &content, QObject *parent, qint64 s
     t->setSettingsToken( settingsToken );
   }
   t->setContent( content );
+  if ( settingsToken )
+  {
+    d->m_mostRecentState = currentSettingsToken;
+  }
   return t;
 }
