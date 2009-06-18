@@ -38,6 +38,7 @@ Report bugs in the KDE bug tracker under the component 'grantlee'.
 - @ref extension
 - @ref examples
 - @ref differences_django
+- @ref internals
 
 */
 

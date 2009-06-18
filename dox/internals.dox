@@ -1,0 +1,32 @@
+
+namespace Grantlee
+{
+
+/**
+@page internals Internals
+
+@note This page is intended only to be informative for new contributors to %Grantlee or people who are really interested in this kind of thing. These are implementation details and are likely to change without notice.
+
+@section how_works How Grantlee works.
+
+A template string is first tokenized by the lexer class. The result is a list of tokens with content which can be of type TextToken, CommentToken, VariableToken or TagToken.
+
+The tokens are further processed by the Parser class. The Parser generates nodes from the token stream. For a TextToken it generates a TextNode, for a CommentToken it generates nothing, for a VariableToken it generates a VariableNode, and for a TagToken it generates another type of Node determined by available plugins. Some plugins are built in, and others may be loaded by the template itself using the {% load %} tag, or preloaded by the application developer.
+
+The plugin uses the Abstract Factory pattern. It returns a list of concrete factories, one for each tag handled by that plugin. The factories have a getNode method which accepts the tag content and the active parser as an argument and returns a concrete Node. The getNode method may advance the parser in the case of begin/end tags etc. When the parser is finished, it has created a tree of nodes, which is essentially a Template object.
+
+A Template is rendered with a Context object. During rendering, each node in the template has its render method called with the Context. The node may contain different sub-trees, one of which is rendered, as is the case for IfNode, or it might contain a single sub-tree which is rendered multiple times, as in the case of ForNode, etc. The rendering outputs a string, which is the rendered output of the template for a particular context. A single Template may be rendered multiple times with mutliple different Contexts.
+
+Plugins can return Filters as well as AbstractNodeFactories. Filters can manipulate Variables in some way before rendering them to the output.
+
+Grantlee::Engine is a Singleton. Internally it uses a State pattern to manage plugins, loaders and other templates available (for extension/ inclusion etc) when rendering a Template. Each time a new Template is created either using the newTemplate method a snapshot of the 'current' state is taken, and a reference to it is stored with a unique token (settingsToken). This snapshot can later be used when the template is rendered. While rendering, the template will need to retrieve filters from the Engine, load other templates in include or extends tags etc.
+
+\image html grantlee_state_simple.png "Simple description of state transitions."
+
+Loading templates to include or entend is accomplished using the load{Mutable,}ByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins. The load{Mutable,}ByName methods take an optional settingsToken which can be used to specify an engine state to use instead of the 'current' engine state. If the settingsToken is omitted, the 'current' engine state is used. Only the load{Mutable,}ByName and new{Mutable,}Template can cause a permanent retrievable state transition in the Engine. All other methods will either use the most recent state, or use the state specified by the settingsToken.
+
+\image html grantlee_state_reuse.png "Reusing an existing state to load secondary templates."
+
+*/
+
+}
