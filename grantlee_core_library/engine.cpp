@@ -143,6 +143,7 @@ struct EngineState
   QStringList m_defaultLibraries;
 
 };
+
 }
 
 Template* InMemoryTemplateLoader::loadByName( const QString& name ) const
@@ -166,7 +167,6 @@ MutableTemplate* InMemoryTemplateLoader::loadMutableByName( const QString& name 
 namespace Grantlee
 {
 
-
 class EnginePrivate
 {
   EnginePrivate( Engine *engine )
@@ -182,7 +182,6 @@ class EnginePrivate
 
   Q_DECLARE_PUBLIC( Engine );
   Engine *q_ptr;
-
 };
 
 }
@@ -199,7 +198,6 @@ Engine* Engine::instance()
 Engine::Engine()
     : d_ptr( new EnginePrivate( this ) )
 {
-  Q_D( Engine );
 }
 
 Engine::~Engine()
@@ -299,7 +297,6 @@ Template* Engine::loadByName( const QString &name, QObject *parent, qint64 setti
 
 MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent, qint64 settingsToken ) const
 {
-
   Q_D( const Engine );
   QListIterator<AbstractTemplateLoader*> it( d->m_states.value(d->m_mostRecentState)->m_loaders );
 
