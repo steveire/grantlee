@@ -133,6 +133,20 @@
       </layout>
      </widget>
     </item>
+    <item>
+     <widget class="QComboBox" name="exportTheme" >
+      <property name="enabled" >
+       <bool>true</bool>
+      </property>
+     </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exportButton" >
+        <property name="text" >
+          <string>Export</string>
+        </property>
+      </widget>
+     </item>
    </layout>
   </widget>
  </widget>
