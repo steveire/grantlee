@@ -135,13 +135,7 @@ struct EngineState
     EngineState *state = new EngineState();
     state->m_pluginDirs = m_pluginDirs;
     state->m_defaultLibraries = m_defaultLibraries;
-
-    QList<AbstractTemplateLoader*> list;
-    foreach(AbstractTemplateLoader *loader, m_loaders)
-    {
-      list << loader;
-    }
-    state->m_loaders = list;
+    state->m_loaders = m_loaders;
     return state;
   }
 
