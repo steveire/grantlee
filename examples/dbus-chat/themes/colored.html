@@ -1,0 +1,36 @@
+<html>
+<head>
+<style>
+p {
+margin-top: 0px;
+margin-bottom: 0px;
+}
+
+p.action {
+color: blue;
+}
+
+{% repeater %}
+{% for name,colour in name_colours %}
+span.{{ name }} {
+color: {{ colour }};
+}
+
+{% endfor %}
+{% endrepeater %}
+</style>
+</head>
+<h1>{{ mynickname }} - Chat History</h1>
+
+<div>
+{% repeater %}
+  {% for chat_item in chat_items %}
+    {% if chat_item.is_message %}
+<p>&lt;<span class="{{ chat_item.sender }}" >{{ chat_item.sender }}</span>&gt; {{ chat_item.content }}</p>
+    {% else %}{% if chat_item.is_action %}
+<p class="action" >*** {{ chat_item.sender }} {{ chat_item.content }}</p>
+    {% endif %}{% endif %}
+  {% endfor %}
+{% endrepeater %}
+</div>
+</html>
