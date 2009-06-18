@@ -51,26 +51,25 @@ class DefaultFiltersLibrary : public QObject, public TagLibraryInterface
 public:
   DefaultFiltersLibrary( QObject *parent = 0 )
       : QObject( parent ) {
-    m_filters.insert( "upper", new UpperFilter() );
-    m_filters.insert( "lower", new LowerFilter() );
-    m_filters.insert( "yesno", new YesNoFilter() );
-    m_filters.insert( "truncatewords", new TruncateWordsFilter() );
-    m_filters.insert( "join", new JoinFilter() );
-    m_filters.insert( "removetags", new RemoveTagsFilter() );
-    m_filters.insert( "default_if_none", new DefaultIfNoneFilter() );
-    m_filters.insert( "cut", new CutFilter() );
-    m_filters.insert( "slice", new SliceFilter() );
-    m_filters.insert( "safe", new SafeFilter() );
   }
 
   virtual QHash<QString, Filter*> filters( const QString &name = QString() ) {
     Q_UNUSED( name );
-    return m_filters;
+
+    QHash<QString, Filter*> filters;
+
+    filters.insert( "upper", new UpperFilter() );
+    filters.insert( "lower", new LowerFilter() );
+    filters.insert( "yesno", new YesNoFilter() );
+    filters.insert( "truncatewords", new TruncateWordsFilter() );
+    filters.insert( "join", new JoinFilter() );
+    filters.insert( "removetags", new RemoveTagsFilter() );
+    filters.insert( "default_if_none", new DefaultIfNoneFilter() );
+    filters.insert( "cut", new CutFilter() );
+    filters.insert( "slice", new SliceFilter() );
+    filters.insert( "safe", new SafeFilter() );
+    return filters;
   }
-
-private:
-  QHash<QString, Filter*> m_filters;
-
 };
 
 #endif

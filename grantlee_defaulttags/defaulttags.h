@@ -58,35 +58,35 @@ class DefaultTagLibrary : public QObject, public TagLibraryInterface
 public:
   DefaultTagLibrary( QObject *parent = 0 )
       : QObject( parent ) {
-    m_nodeFactories.insert( "autoescape", new AutoescapeNodeFactory() );
-    m_nodeFactories.insert( "regroup", new RegroupNodeFactory() );
-    m_nodeFactories.insert( "if", new IfNodeFactory() );
-    m_nodeFactories.insert( "for", new ForNodeFactory() );
-    m_nodeFactories.insert( "with", new WithNodeFactory() );
-    m_nodeFactories.insert( "comment", new CommentNodeFactory() );
-    m_nodeFactories.insert( "ifequal", new IfEqualNodeFactory() );
-    m_nodeFactories.insert( "ifnotequal", new IfNotEqualNodeFactory() );
-    m_nodeFactories.insert( "firstof", new FirstOfNodeFactory() );
-    m_nodeFactories.insert( "cycle", new CycleNodeFactory() );
-    m_nodeFactories.insert( "templatetag", new TemplateTagNodeFactory() );
-    m_nodeFactories.insert( "widthratio", new WidthRatioNodeFactory() );
-    m_nodeFactories.insert( "filter", new FilterNodeFactory() );
-    m_nodeFactories.insert( "load", new LoadNodeFactory() );
-    m_nodeFactories.insert( "now", new NowNodeFactory() );
-    m_nodeFactories.insert( "ssi", new SsiNodeFactory() );
-    m_nodeFactories.insert( "ifchanged", new IfChangedNodeFactory() );
-    m_nodeFactories.insert( "spaceless", new SpacelessNodeFactory() );
-    m_nodeFactories.insert( "debug", new DebugNodeFactory() );
   }
 
   QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
     Q_UNUSED( name );
-    return m_nodeFactories;
+
+    QHash<QString, AbstractNodeFactory*> nodeFactories;
+
+    nodeFactories.insert( "autoescape", new AutoescapeNodeFactory() );
+    nodeFactories.insert( "regroup", new RegroupNodeFactory() );
+    nodeFactories.insert( "if", new IfNodeFactory() );
+    nodeFactories.insert( "for", new ForNodeFactory() );
+    nodeFactories.insert( "with", new WithNodeFactory() );
+    nodeFactories.insert( "comment", new CommentNodeFactory() );
+    nodeFactories.insert( "ifequal", new IfEqualNodeFactory() );
+    nodeFactories.insert( "ifnotequal", new IfNotEqualNodeFactory() );
+    nodeFactories.insert( "firstof", new FirstOfNodeFactory() );
+    nodeFactories.insert( "cycle", new CycleNodeFactory() );
+    nodeFactories.insert( "templatetag", new TemplateTagNodeFactory() );
+    nodeFactories.insert( "widthratio", new WidthRatioNodeFactory() );
+    nodeFactories.insert( "filter", new FilterNodeFactory() );
+    nodeFactories.insert( "load", new LoadNodeFactory() );
+    nodeFactories.insert( "now", new NowNodeFactory() );
+    nodeFactories.insert( "ssi", new SsiNodeFactory() );
+    nodeFactories.insert( "ifchanged", new IfChangedNodeFactory() );
+    nodeFactories.insert( "spaceless", new SpacelessNodeFactory() );
+    nodeFactories.insert( "debug", new DebugNodeFactory() );
+
+    return nodeFactories;
   }
-
-private:
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-
 };
 
 #endif

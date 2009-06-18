@@ -36,17 +36,15 @@ class GRANTLEE_EXPORT MutableTagsLibrary : public QObject, public TagLibraryInte
 public:
   MutableTagsLibrary( QObject *parent = 0 )
       : QObject( parent ) {
-    m_nodeFactories.insert( "raw", new RawNodeFactory() );
-    m_nodeFactories.insert( "repeater", new RepeaterNodeFactory() );
   }
 
   QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
     Q_UNUSED( name );
-    return m_nodeFactories;
+    QHash<QString, AbstractNodeFactory*> nodeFactories;
+    nodeFactories.insert( "raw", new RawNodeFactory() );
+    nodeFactories.insert( "repeater", new RepeaterNodeFactory() );
+    return nodeFactories;
   }
-
-private:
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
 };
 
 #endif
