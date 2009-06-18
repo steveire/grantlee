@@ -575,10 +575,6 @@ void TestBuiltinSyntax::testMultipleStates()
 
   Template *t1 = engine->newTemplate( "{% include \"template1\" %}", this );
 
-  engine->removeTemplateLoader( 0 );
-
-  QVERIFY( engine->templateLoaders().size() == 0 );
-
   InMemoryTemplateLoader *loader2 = new InMemoryTemplateLoader( this );
 
   loader2->setTemplate( "template2", "Template 2" );
@@ -586,10 +582,6 @@ void TestBuiltinSyntax::testMultipleStates()
   engine->addTemplateLoader( loader2 );
 
   Template *t2 = engine->newTemplate( "{% include \"template2\" %}", this );
-
-  engine->removeTemplateLoader( 0 );
-
-  QVERIFY( engine->templateLoaders().size() == 0 );
 
   InMemoryTemplateLoader *loader3 = new InMemoryTemplateLoader( this );
 
