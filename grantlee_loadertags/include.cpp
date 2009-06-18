@@ -59,9 +59,8 @@ QString IncludeNode::render( Context *c )
 
   Engine *engine = Engine::instance();
   qint64 settingsToken = parent()->property("settingsToken").toULongLong();
-  engine->setSettingsToken(settingsToken);
 
-  Template *t = engine->loadByName( filename, this );
+  Template *t = engine->loadByName( filename, this, settingsToken );
 
   if ( !t )
     return QString();
@@ -79,9 +78,7 @@ QString ConstantIncludeNode::render( Context *c )
 {
   Engine *engine = Engine::instance();
   qint64 settingsToken = parent()->property("settingsToken").toULongLong();
-  engine->setSettingsToken(settingsToken);
-
-  Template* t = engine->loadByName( m_name, this );
+  Template *t = engine->loadByName( m_name, this, settingsToken );
 
   if ( !t )
     return QString();

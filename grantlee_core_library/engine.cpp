@@ -176,27 +176,15 @@ namespace Grantlee
 class EnginePrivate
 {
   EnginePrivate( Engine *engine )
-      : q_ptr( engine ), m_settingsToken( 0 ) {
+      : q_ptr( engine ),
+      m_mostRecentState( 0 ) {
 
-    m_state = new EngineState();
-    m_states.insert( m_settingsToken, m_state );
+    EngineState *initialState = new EngineState();
+    m_states.insert( m_mostRecentState, initialState );
   }
 
-  void setState( qint64 settingsToken ) {
-    if ( m_states.contains( settingsToken ) )
-    {
-      m_state = m_states.value( settingsToken );
-    }
-    else
-      m_state = m_states.value( 0 );
-    m_settingsToken = settingsToken;
-  }
-
-  qint64 m_settingsToken;
-  EngineState *m_state;
-  QHash<qint64, EngineState*> m_states;
-
-
+  mutable qint64 m_mostRecentState;
+  mutable QHash<qint64, EngineState*> m_states;
 
   Q_DECLARE_PUBLIC( Engine );
   Engine *q_ptr;
@@ -226,64 +214,82 @@ Engine::~Engine()
   delete d_ptr;
 }
 
-QList<AbstractTemplateLoader*> Engine::templateLoaders()
+QList<AbstractTemplateLoader*> Engine::templateLoaders( qint64 settingsToken )
 {
   Q_D( Engine );
-  return d->m_state->m_loaders;
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  return d->m_states.value( settingsToken )->m_loaders;
 }
 
-void Engine::addTemplateLoader( AbstractTemplateLoader* loader )
+void Engine::addTemplateLoader( AbstractTemplateLoader* loader, qint64 settingsToken )
 {
   Q_D( Engine );
-  d->m_state->m_loaders << loader;
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  d->m_states.value( settingsToken )->m_loaders << loader;
 }
 
-void Engine::removeTemplateLoader(int index)
+void Engine::removeTemplateLoader( int index, qint64 settingsToken )
 {
   Q_D( Engine );
-  d->m_state->m_loaders.removeAt(index);
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  d->m_states.value( settingsToken )->m_loaders.removeAt( index );
 }
 
-void Engine::setPluginDirs( const QStringList &dirs )
+void Engine::setPluginDirs( const QStringList &dirs, qint64 settingsToken )
 {
   Q_D( Engine );
-  d->m_state->m_pluginDirs = dirs;
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  d->m_states.value( settingsToken )->m_pluginDirs = dirs;
 }
 
-QStringList Engine::pluginDirs()
+QStringList Engine::pluginDirs( qint64 settingsToken )
 {
   Q_D( Engine );
-  return d->m_state->m_pluginDirs;
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  return d->m_states.value( settingsToken )->m_pluginDirs;
 }
 
-QStringList Engine::defaultLibraries() const
+QStringList Engine::defaultLibraries( qint64 settingsToken ) const
 {
   Q_D( const Engine );
-  return d->m_state->m_defaultLibraries;
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  return d->m_states.value( settingsToken )->m_defaultLibraries;
 }
 
-void Engine::setDefaultLibraries( const QStringList &list )
+void Engine::setDefaultLibraries( const QStringList &list, qint64 settingsToken )
 {
   Q_D( Engine );
-  d->m_state->m_defaultLibraries = list;
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  d->m_states.value( settingsToken )->m_defaultLibraries = list;
 }
 
-void Engine::addDefaultLibrary( const QString &libName )
+void Engine::addDefaultLibrary( const QString &libName, qint64 settingsToken )
 {
   Q_D( Engine );
-  d->m_state->m_defaultLibraries << libName;
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  d->m_states.value( settingsToken )->m_defaultLibraries << libName;
 }
 
-void Engine::removeDefaultLibrary( const QString &libName )
+void Engine::removeDefaultLibrary( const QString &libName, qint64 settingsToken )
 {
   Q_D( Engine );
-  d->m_state->m_defaultLibraries.removeAll( libName );
+  if ( !settingsToken )
+    settingsToken = d->m_mostRecentState;
+  d->m_states.value( settingsToken )->m_defaultLibraries.removeAll( libName );
 }
 
-Template* Engine::loadByName( const QString &name, QObject *parent ) const
+Template* Engine::loadByName( const QString &name, QObject *parent, qint64 settingsToken ) const
 {
   Q_D( const Engine );
-  QListIterator<AbstractTemplateLoader*> it( d->m_state->m_loaders );
+  QListIterator<AbstractTemplateLoader*> it( d->m_states.value( d->m_mostRecentState )->m_loaders );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* loader = it.next();
@@ -297,11 +303,11 @@ Template* Engine::loadByName( const QString &name, QObject *parent ) const
   return 0;
 }
 
-MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent ) const
+MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent, qint64 settingsToken ) const
 {
 
   Q_D( const Engine );
-  QListIterator<AbstractTemplateLoader*> it( d->m_state->m_loaders );
+  QListIterator<AbstractTemplateLoader*> it( d->m_states.value(d->m_mostRecentState)->m_loaders );
 
   while ( it.hasNext() ) {
     AbstractTemplateLoader* loader = it.next();
@@ -315,29 +321,34 @@ MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent
   return 0;
 }
 
-MutableTemplate* Engine::newMutableTemplate( const QString &content, QObject *parent )
+MutableTemplate* Engine::newMutableTemplate( const QString &content, QObject *parent, qint64 settingsToken )
 {
   Q_D( Engine );
   MutableTemplate *t = new MutableTemplate( parent );
-  EngineState *state = d->m_state->clone();
-  d->m_states.insert( t->settingsToken(), state );
+  if ( !settingsToken )
+  {
+    EngineState *state = d->m_states.value( d->m_mostRecentState )->clone();
+    d->m_mostRecentState = t->settingsToken();
+    d->m_states.insert( d->m_mostRecentState, state );
+  } else {
+    t->setSettingsToken( settingsToken );
+  }
   t->setContent( content );
   return t;
 }
 
-Template* Engine::newTemplate( const QString &content, QObject *parent )
+Template* Engine::newTemplate( const QString &content, QObject *parent, qint64 settingsToken )
 {
   Q_D( Engine );
   Template *t = new Template(parent);
-  EngineState *state = d->m_state->clone();
-  d->m_states.insert( t->settingsToken(), state );
+  if ( !settingsToken )
+  {
+    EngineState *state = d->m_states.value( d->m_mostRecentState )->clone();
+    d->m_mostRecentState = t->settingsToken();
+    d->m_states.insert( d->m_mostRecentState, state );
+  } else {
+    t->setSettingsToken( settingsToken );
+  }
   t->setContent( content );
   return t;
 }
-
-void Engine::setSettingsToken( qint64 settingsToken )
-{
-  Q_D( Engine );
-  d->setState(settingsToken);
-}
-

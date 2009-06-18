@@ -78,29 +78,37 @@ public:
 
   ~Engine();
 
-  QList<AbstractTemplateLoader*> templateLoaders();
+  QList<AbstractTemplateLoader*> templateLoaders( qint64 settingsToken = 0 );
+  void addTemplateLoader( AbstractTemplateLoader *loader, qint64 settingsToken = 0 );
+  void removeTemplateLoader( int index, qint64 settingsToken = 0 );
 
-  void addTemplateLoader( AbstractTemplateLoader *loader );
-  void removeTemplateLoader( int index );
+  void setPluginDirs( const QStringList &dirs, qint64 settingsToken = 0 );
+  QStringList pluginDirs( qint64 settingsToken = 0 );
 
-  void setPluginDirs( const QStringList &dirs );
+  /**
+  Causes a state transition if settingsToken is 0.
+  */
+  Template* loadByName( const QString &name, QObject *parent, qint64 settingsToken = 0 ) const;
 
-  void setSettingsToken( qint64 settingsToken );
+  /**
+  Causes a state transition if settingsToken is 0.
+  */
+  Template* newTemplate( const QString &content, QObject *parent = 0, qint64 settingsToken = 0 );
 
-  QStringList pluginDirs();
+  /**
+  Causes a state transition if settingsToken is 0.
+  */
+  MutableTemplate* loadMutableByName( const QString &name, QObject *parent, qint64 settingsToken = 0 ) const;
 
-  Template* loadByName( const QString &name, QObject *parent ) const;
+  /**
+  Causes a state transition if settingsToken is 0.
+  */
+  MutableTemplate* newMutableTemplate( const QString &content, QObject *parent = 0, qint64 settingsToken = 0 );
 
-  Template* newTemplate( const QString &content, QObject *parent = 0 );
-
-  MutableTemplate* loadMutableByName( const QString &name, QObject *parent ) const;
-
-  MutableTemplate* newMutableTemplate( const QString &content, QObject *parent = 0 );
-
-  QStringList defaultLibraries() const;
-  void setDefaultLibraries( const QStringList &list );
-  void addDefaultLibrary( const QString &libName );
-  void removeDefaultLibrary( const QString &libName );
+  QStringList defaultLibraries( qint64 settingsToken = 0 ) const;
+  void setDefaultLibraries( const QStringList &list, qint64 settingsToken = 0 );
+  void addDefaultLibrary( const QString &libName, qint64 settingsToken = 0 );
+  void removeDefaultLibrary( const QString &libName, qint64 settingsToken = 0 );
 
 private:
   Engine();
