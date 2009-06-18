@@ -17,7 +17,7 @@ fi
 
 echo Creating $tempDir/grantlee-$version.tar.gz
 
-git archive --format=tar --prefix=grantlee-$version/ HEAD | gzip > $tempDir/grantlee-$version.tar.gz
+git archive --format=tar --prefix=grantlee-$version/ v_$version | gzip > $tempDir/grantlee-$version.tar.gz
 
 echo Unpacking to $tempDir/grantlee-$version
 tar -C $tempDir -xvf $tempDir/grantlee-$version.tar.gz
