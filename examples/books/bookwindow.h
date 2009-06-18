@@ -54,6 +54,9 @@ class BookWindow: public QMainWindow
 public:
     BookWindow();
 
+protected slots:
+    void renderBooks();
+
 private:
     void showError(const QSqlError &err);
     Ui::BookWindow ui;

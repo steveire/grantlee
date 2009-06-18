@@ -40,10 +40,16 @@
 ****************************************************************************/
 
 #include "bookwindow.h"
+#include "bookwrapper.h"
 #include "bookdelegate.h"
 #include "initdb.h"
+#include "grantlee_paths.h"
 
 #include <QtSql>
+
+#include <grantlee/context.h>
+#include <grantlee/engine.h>
+#include <grantlee/template.h>
 
 BookWindow::BookWindow()
 {
@@ -111,6 +117,17 @@ BookWindow::BookWindow()
             mapper, SLOT(setCurrentModelIndex(QModelIndex)));
 
     ui.bookTable->setCurrentIndex(model->index(0, 0));
+
+    ui.exportTheme->insertItems(0, QStringList() << "simple" << "coloured" << "simple2" << "coloured2" );
+
+    connect(ui.exportButton, SIGNAL(pressed()), SLOT(renderBooks()));
+
+    Grantlee::Engine *engine = Grantlee::Engine::instance();
+    Grantlee::FileSystemTemplateLoader *loader = new Grantlee::FileSystemTemplateLoader(this);
+    loader->setTemplateDirs( QStringList() << GRANTLEE_TEMPLATE_PATH );
+    engine->addTemplateLoader(loader);
+
+    engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
 }
 
 void BookWindow::showError(const QSqlError &err)
@@ -118,4 +135,49 @@ void BookWindow::showError(const QSqlError &err)
     QMessageBox::critical(this, "Unable to initialize Database",
                 "Error initializing database: " + err.text());
 }
+
+void BookWindow::renderBooks()
+{
+    int rows = model->rowCount();
+    QVariantHash mapping;
+    QVariantList bookList;
+    for (int row = 0; row < rows; ++row)
+    {
+      QString title = model->index(row, 1).data().toString();
+      QString author = model->index(row, 2).data().toString();
+      QString genre = model->index(row, 3).data().toString();
+      int rating = model->index(row, 5).data().toInt();
+      QObject *book = new BookWrapper(author, title, genre, rating, this);
+      QVariant var = QVariant::fromValue(book);
+      bookList.append(var);
+    }
+    mapping.insert("books", bookList);
+
+    QString themeName = ui.exportTheme->currentText();
+
+    Grantlee::Context c(mapping);
+    Grantlee::Engine *engine = Grantlee::Engine::instance();
+    Grantlee::Template *t = engine->loadByName( themeName + ".html", this );
+    if (!t)
+    {
+      return;
+    }
+
+    bool ok;
+    QString text = QInputDialog::getText(this, tr("Export Location"),
+                                         tr("file name:"), QLineEdit::Normal,
+                                         QDir::home().absolutePath() + "/book_export.html", &ok);
+    if (!ok || text.isEmpty())
+      return;
+
+    QFile file( text );
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Text ) )
+      return;
+
+    QString content = t->render(&c);
+    file.write(content.toLocal8Bit());
+    file.close();
+
+}
+
 
