@@ -44,3 +44,6 @@ cd tests && ctest
 echo Copying archive to $oldDir/grantlee-$version.tar.gz
 cp $tempDir/grantlee-$version.tar.gz $oldDir
 
+cd $oldDir
+md5sum grantlee-$version.tar.gz > grantlee-$version-md5.txt
+
