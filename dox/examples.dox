@@ -26,7 +26,7 @@ The idea for the Mutable Tags comes from <a href="http://simonwillison.net/2009/
 
 @section kjots KJots Rewrite.
 (see playground/pim/akonadi)
-KJots shows a use of Grantlee by retrieving items from a Model using a custom role, and allows arbitrary nesting by recursively including templates.
+KJots shows a use of %Grantlee by retrieving items from a Model using a custom role, and allows arbitrary nesting by recursively including templates.
 
 @section akonadi_mail Akonadi Mail
 
@@ -36,3 +36,4 @@ The example_mail %Akonadi application demonstrates a custom written AkonadiTempl
 */
 
 }
+

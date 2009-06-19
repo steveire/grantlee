@@ -22,10 +22,11 @@ The Django autoescape system is based on marking a string object as safe. In Qt,
 
 The Django cache system makes a lot of sense where templates are rendered in a fire-and-forget manner for a stateless protocol. It is not implemented in %Grantlee because we're generally not rendering similar templates from scratch multiple times and the templates can keep state for multiple uses. For Kopete template caching will be done with special tags (see @ref repeater_pattern).
 
-In particular, a Django template typically has the lifetime of one stateless HTTP request, and only one template will need to be stored at a time. In Grantlee, the Grantlee::Engine uses a state pattern internally to manage different states for different templates, and MutableTemplate allows changing the template with each rendering without using an external caching system.
+In particular, a Django template typically has the lifetime of one stateless HTTP request, and only one template will need to be stored at a time. In %Grantlee, the Grantlee::Engine uses a state pattern internally to manage different states for different templates, and MutableTemplate allows changing the template with each rendering without using an external caching system.
 
 Although it's not documented, Django filters can accept multiple arguments. %Granltee currently only allows one argument to filters.
 
 */
 
 }
+
