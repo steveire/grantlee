@@ -60,3 +60,8 @@ install(FILES
   safestring.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )
+
+install(FILE
+    interfaces/taglibraryinterface.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee/interfaces COMPONENT Devel
+)
