@@ -16,12 +16,13 @@ set( LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib )
 set( PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/grantlee/${GRANTLEE_MAJOR_MINOR_VERSION_STRING} )
 set( BIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/bin )
 set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
+set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
 
 
 # Install FindGrantlee.cmake
 install(FILES
     cmake/Modules/FindGrantlee.cmake
-    DESTINATION share/cmake/Modules)
+    DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
     
 # Next target
 add_subdirectory(grantlee_core_library)
