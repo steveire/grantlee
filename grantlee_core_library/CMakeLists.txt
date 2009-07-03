@@ -61,7 +61,7 @@ install(FILES
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )
 
-install(FILE
+install(FILES
     interfaces/taglibraryinterface.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee/interfaces COMPONENT Devel
 )
