@@ -132,3 +132,9 @@ find_library(Grantlee_LIBRARY
 set(Grantlee_PROCESS_INCLUDES Grantlee_INCLUDE_DIR QT_INCLUDES)
 set(Grantlee_PROCESS_LIBS Grantlee_LIBRARY QT_LIBRARIES)
 libfind_process(Grantlee)
+
+if (Grantlee_FOUND)
+  string(REGEX REPLACE "/[^/]*$" "/grantlee/" GRANTLEE_PLUGIN_PATH ${Grantlee_LIBRARY} )
+endif(Grantlee_FOUND)
+       
+
