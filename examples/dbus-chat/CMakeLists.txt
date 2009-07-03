@@ -2,7 +2,7 @@ project(dbus_chat_grantlee)
 
 cmake_minimum_required(VERSION 2.6)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/ )
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/Modules/ )
 
 find_package(Qt4 REQUIRED)
 find_package(Automoc4 REQUIRED)
@@ -15,7 +15,7 @@ add_definitions(-DQT_GUI_LIB)
 include_directories(
   ${QT_INCLUDES}
   ${QT_QTGUI_INCLUDE_DIR}
-  ${GRANTLEE_INCLUDE_DIR}
+  ${Grantlee_INCLUDE_DIR}
   ${PROJECT_BINARY_DIR}
 )
 
@@ -46,7 +46,7 @@ target_link_libraries(
   dbus_chat
   ${QT_QTGUI_LIBRARIES}
   ${QT_QTDBUS_LIBRARIES}
-  ${GRANTLEE_LIBRARY}
+  ${Grantlee_LIBRARY}
 )
 
 
