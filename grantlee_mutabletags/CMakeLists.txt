@@ -20,10 +20,6 @@ target_link_libraries(grantlee_mutabletags_library
   grantlee_core_library
 )
 
-set_target_properties(grantlee_mutabletags_library PROPERTIES
-  VERSION    ${GRANTLEE_LIB_MAJOR_VERSION}.${GRANTLEE_LIB_MINOR_VERSION}.${GRANTLEE_LIB_PATCH_VERSION}
-)
-
 install(TARGETS grantlee_mutabletags_library
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}

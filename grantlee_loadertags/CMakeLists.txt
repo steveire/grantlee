@@ -29,11 +29,6 @@ target_link_libraries(grantlee_loadertags_library
   grantlee_core_library
 )
 
-set_target_properties(grantlee_loadertags_library PROPERTIES
-  VERSION    ${GRANTLEE_LIB_MAJOR_VERSION}.${GRANTLEE_LIB_MINOR_VERSION}.${GRANTLEE_LIB_PATCH_VERSION}
-  SOVERSION  ${GRANTLEE_LOADERTAGS_LIB_SOVERSION}
-)
-
 install(TARGETS grantlee_loadertags_library
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
