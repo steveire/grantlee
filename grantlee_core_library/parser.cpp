@@ -57,7 +57,7 @@ public:
   Error m_error;
   QString m_errorString;
 
-  Q_DECLARE_PUBLIC( Parser );
+  Q_DECLARE_PUBLIC( Parser )
   Parser *q_ptr;
 };
 

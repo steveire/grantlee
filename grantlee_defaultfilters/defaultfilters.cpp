@@ -24,7 +24,7 @@
 
 #include "parser.h"
 
-Q_EXPORT_PLUGIN2( grantlee_defaultfilters_library, DefaultFiltersLibrary );
+Q_EXPORT_PLUGIN2( grantlee_defaultfilters_library, DefaultFiltersLibrary )
 
 
 #include "defaultfilters.moc"

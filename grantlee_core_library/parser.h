@@ -68,7 +68,7 @@ protected:
   void setError( Error errorNumber, const QString &message );
 
 private:
-  Q_DECLARE_PRIVATE( Parser );
+  Q_DECLARE_PRIVATE( Parser )
   ParserPrivate *d_ptr;
 
 };
