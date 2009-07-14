@@ -47,7 +47,7 @@ class TemplatePrivate
   QString m_errorString;
   NodeList m_nodeList;
 
-  Q_DECLARE_PUBLIC(Template);
+  Q_DECLARE_PUBLIC(Template)
   Template *q_ptr;
 };
 

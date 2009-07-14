@@ -220,7 +220,7 @@ class EnginePrivate
   QHash<QString, TagLibraryInterface*> m_libraries;
   QList<TagLibraryInterface*> m_scriptableLibraries;
 
-  Q_DECLARE_PUBLIC( Engine );
+  Q_DECLARE_PUBLIC( Engine )
   Engine *q_ptr;
 };
 

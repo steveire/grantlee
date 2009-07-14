@@ -118,7 +118,7 @@ public:
 private:
   Engine();
 
-  Q_DECLARE_PRIVATE( Engine );
+  Q_DECLARE_PRIVATE( Engine )
   EnginePrivate *d_ptr;
 
   static Engine* m_instance;

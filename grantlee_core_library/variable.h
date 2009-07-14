@@ -58,7 +58,7 @@ protected:
   void setError( Error type, const QString &message );
 
 private:
-  Q_DECLARE_PRIVATE( Variable );
+  Q_DECLARE_PRIVATE( Variable )
   VariablePrivate *d_ptr;
 };
 

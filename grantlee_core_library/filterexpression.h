@@ -76,7 +76,7 @@ protected:
   void setError( Error type, const QString &message ) const;
 
 private:
-  Q_DECLARE_PRIVATE( FilterExpression );
+  Q_DECLARE_PRIVATE( FilterExpression )
   FilterExpressionPrivate *d_ptr;
 };
 

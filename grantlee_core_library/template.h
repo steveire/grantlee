@@ -63,7 +63,7 @@ protected:
   void setContent( const QString &templateString );
 
 private:
-  Q_DECLARE_PRIVATE( Template );
+  Q_DECLARE_PRIVATE( Template )
   TemplatePrivate *d_ptr;
   friend class Engine;
 };
