@@ -32,6 +32,8 @@ set (grantlee_defaulttags_library_SRCS
   ifchanged.cpp
   spaceless.cpp
   debug.cpp
+  mediafinder.cpp
+  range.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)

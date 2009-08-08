@@ -41,6 +41,8 @@
 #include "ifchanged.h"
 #include "spaceless.h"
 #include "debug.h"
+#include "mediafinder.h"
+#include "range.h"
 
 #include "grantlee_export.h"
 
@@ -84,6 +86,8 @@ public:
     nodeFactories.insert( "ifchanged", new IfChangedNodeFactory() );
     nodeFactories.insert( "spaceless", new SpacelessNodeFactory() );
     nodeFactories.insert( "debug", new DebugNodeFactory() );
+    nodeFactories.insert( "media_finder", new MediaFinderNodeFactory() );
+    nodeFactories.insert( "range", new RangeNodeFactory() );
 
     return nodeFactories;
   }
