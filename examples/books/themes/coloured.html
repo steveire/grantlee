@@ -18,7 +18,7 @@ table tr th {
 {% block title_row %}<tr><th>Author</th><th>Title</th><th>Genre</th><th>Rating</th></tr>{% endblock %}
 {% block book_rows %}
   {% for book in books %}
-    <tr style="background-color:{% cycle "#E3E4FA" "#FCDFFF" "#E9CFEC" "#C8BBBE" %};" ><td>{{ book.author }}</td><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{{ book.rating }}</td></tr>
+    <tr style="background-color:{% cycle "#E3E4FA" "#FCDFFF" "#E9CFEC" "#C8BBBE" %};" ><td>{{ book.author }}</td><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{% range book.rating %}<img src="{% media_finder "star.png" %}" />{% endrange %}</td></tr>
   {% empty %}
     <tr><td><div>No Books here!</div></td></tr>
   {% endfor %}

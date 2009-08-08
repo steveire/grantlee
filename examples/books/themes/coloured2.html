@@ -20,7 +20,7 @@ table tr th {
 {% block book_rows %}
   {% for book in books %}
     {% ifchanged %}<tr><td colspan="3" align="center" style="background:yellow;" >{{ book.author }}</td>{% endifchanged %}
-    <tr style="background-color:{% cycle "#E3E4FA" "#FCDFFF" "#E9CFEC" "#C8BBBE" %};" ><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{{ book.rating }}</td></tr>
+    <tr style="background-color:{% cycle "#E3E4FA" "#FCDFFF" "#E9CFEC" "#C8BBBE" %};" ><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{% range book.rating %}<img src="{% media_finder "star.png" %}" />{% endrange %}</td></tr>
   {% empty %}
     <tr><td><div>No Books here!</div></td></tr>
   {% endfor %}

@@ -8,7 +8,7 @@
 {% block book_rows %}
   {% for book in books %}
     {% ifchanged %}<tr><td colspan="3" align="center" style="background:yellow;" >{{ book.author }}</td></tr>{% endifchanged %}
-    <tr><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{{ book.rating }}</td></tr>
+    <tr><td>{{ book.title }}</td><td>{{ book.genre }}</td><td>{% range book.rating %}<img src="{% media_finder "star.png" %}" />{% endrange %}</td></tr>
   {% empty %}
     <tr><td><div>No Books here!</div></td></tr>
   {% endfor %}
