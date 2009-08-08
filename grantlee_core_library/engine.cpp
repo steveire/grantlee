@@ -143,6 +143,27 @@ Template* FileSystemTemplateLoader::loadByName( const QString &fileName ) const
   return t;
 }
 
+QString FileSystemTemplateLoader::getMediaUri(const QString& fileName) const
+{
+  int i = 0;
+  QFile file;
+  while ( !file.exists() ) {
+    if ( i >= m_templateDirs.size() )
+      break;
+
+    file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+
+    if (file.exists())
+    {
+      QFileInfo fi(file);
+      return fi.absoluteFilePath();
+    }
+    ++i;
+  }
+  return QString();
+}
+
+
 void InMemoryTemplateLoader::setTemplate( const QString &name, const QString &content )
 {
   m_namedTemplates.insert( name, content );
@@ -195,6 +216,13 @@ MutableTemplate* InMemoryTemplateLoader::loadMutableByName( const QString& name 
   }
   return 0;
 }
+
+QString InMemoryTemplateLoader::getMediaUri(const QString& fileName) const
+{
+  // This loader doesn't make any media available yet.
+  return QString();
+}
+
 
 namespace Grantlee
 {
@@ -271,6 +299,27 @@ void Engine::removeTemplateLoader( int index, qint64 settingsToken )
   if ( !settingsToken )
     settingsToken = d->m_mostRecentState;
   d->m_states.value( settingsToken )->m_loaders.removeAt( index );
+}
+
+QString Engine::mediaUri( const QString &fileName, qint64 settingsToken ) const
+{
+  Q_D( const Engine );
+
+  if ( !settingsToken )
+  {
+    settingsToken  = d->m_mostRecentState;
+  }
+
+  QListIterator<AbstractTemplateLoader*> it( d->m_states.value( settingsToken )->m_loaders );
+
+  QString uri;
+  while ( it.hasNext() ) {
+    AbstractTemplateLoader* loader = it.next();
+    uri = loader->getMediaUri( fileName );
+    if ( !uri.isEmpty() )
+      break;
+  }
+  return uri;
 }
 
 void Engine::setPluginDirs( const QStringList &dirs, qint64 settingsToken )

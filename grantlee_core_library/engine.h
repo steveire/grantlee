@@ -36,6 +36,7 @@ public:
 
   virtual MutableTemplate* loadMutableByName( const QString &name ) const = 0;
   virtual Template* loadByName( const QString &name ) const = 0;
+  virtual QString getMediaUri( const QString &fileName ) const = 0;
 
 };
 
@@ -46,6 +47,8 @@ public:
   FileSystemTemplateLoader( QObject* parent = 0 );
   MutableTemplate* loadMutableByName( const QString &name ) const;
   Template* loadByName( const QString &name ) const;
+
+  virtual QString getMediaUri(const QString& fileName) const;
 
   void setTheme( const QString &themeName );
   QString themeName() const;
@@ -63,6 +66,8 @@ public:
   InMemoryTemplateLoader( QObject* parent = 0 );
   MutableTemplate* loadMutableByName( const QString &name ) const;
   Template* loadByName( const QString &name ) const;
+
+  virtual QString getMediaUri( const QString& fileName ) const;
 
   void setTemplate( const QString &name, const QString &content );
 
@@ -85,6 +90,8 @@ public:
 
   void setPluginDirs( const QStringList &dirs, qint64 settingsToken = 0 );
   QStringList pluginDirs( qint64 settingsToken = 0 );
+
+  QString mediaUri( const QString &fileName, qint64 settingsToken = 0 ) const;
 
   /**
   Causes a state transition if settingsToken is 0.
