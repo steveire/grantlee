@@ -44,6 +44,8 @@ public:
 
   Variable &operator=( const Variable &other );
 
+  bool isValid() const;
+
   QString toString() const;
   bool isTrue( Context *c ) const;
 

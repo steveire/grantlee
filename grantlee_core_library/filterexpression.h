@@ -55,6 +55,8 @@ public:
   FilterExpression( const FilterExpression &other );
   ~FilterExpression();
 
+  bool isValid() const;
+
   FilterExpression &operator=( const FilterExpression &other );
 
   Error error() const;

@@ -115,6 +115,12 @@ Variable::Variable( const QString &var )
   }
 }
 
+bool Variable::isValid() const
+{
+  Q_D( const Variable );
+  return !d->m_varString.isEmpty();
+}
+
 bool Variable::isConstant() const
 {
   Q_D( const Variable );

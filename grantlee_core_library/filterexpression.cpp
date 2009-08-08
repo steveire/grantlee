@@ -173,6 +173,12 @@ FilterExpression::FilterExpression()
   Q_D( FilterExpression );
 }
 
+bool FilterExpression::isValid() const
+{
+  Q_D( const FilterExpression );
+  return d->m_variable.isValid();
+}
+
 FilterExpression::~FilterExpression()
 {
   delete d_ptr;
