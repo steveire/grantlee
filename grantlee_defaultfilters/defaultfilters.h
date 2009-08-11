@@ -24,16 +24,12 @@
 #include "filter.h"
 #include "interfaces/taglibraryinterface.h"
 
-#include "upper.h"
-#include "lower.h"
-#include "yesno.h"
-#include "truncatewords.h"
-#include "join.h"
-#include "removetags.h"
-#include "default_if_none.h"
-#include "cut.h"
-#include "slice.h"
-#include "safe.h"
+#include "strings.h"
+#include "lists.h"
+#include "integers.h"
+#include "datetime.h"
+#include "logic.h"
+#include "misc.h"
 
 #include "grantlee_export.h"
 
@@ -68,6 +64,13 @@ public:
     filters.insert( "cut", new CutFilter() );
     filters.insert( "slice", new SliceFilter() );
     filters.insert( "safe", new SafeFilter() );
+    filters.insert( "addslashes", new AddSlashesFilter() );
+    filters.insert( "capfirst", new CapFirstFilter() );
+    filters.insert( "fixampersands", new FixAmpersandsFilter() );
+    filters.insert( "linenumbers", new LineNumbersFilter() );
+    filters.insert( "date", new DateFilter() );
+    filters.insert( "time", new TimeFilter() );
+    filters.insert( "timesince", new TimeSinceFilter() );
     return filters;
   }
 };

@@ -16,21 +16,3 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
-#include "default_if_none.h"
-#include "util_p.h"
-
-DefaultIfNoneFilter::DefaultIfNoneFilter( QObject* parent ): Filter( parent )
-{
-
-}
-
-Grantlee::SafeString DefaultIfNoneFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
-{
-  if ( !input.isValid() )
-    return argument;
-  return Util::getSafeString( input );
-}
-
-#include "default_if_none.moc"
-

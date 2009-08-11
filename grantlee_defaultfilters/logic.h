@@ -17,24 +17,50 @@
 
 */
 
-#ifndef TRUNCATEWORDSFILTER_H
-#define TRUNCATEWORDSFILTER_H
+#ifndef LOGICFILTERS_H
+#define LOGICFILTERS_H
 
 #include "filter.h"
 
 using namespace Grantlee;
 
-class GRANTLEE_EXPORT TruncateWordsFilter : public Filter
+class GRANTLEE_EXPORT DefaultFilter : public Filter
 {
   Q_OBJECT
 public:
-  TruncateWordsFilter( QObject *parent = 0 );
-
-  bool isSafe() const {
-    return true;
-  }
+  DefaultFilter( QObject *parent = 0 );
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+
+};
+
+class GRANTLEE_EXPORT DefaultIfNoneFilter : public Filter
+{
+  Q_OBJECT
+public:
+  DefaultIfNoneFilter( QObject *parent = 0 );
+
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+
+};
+
+class GRANTLEE_EXPORT DivisibleByFilter : public Filter
+{
+  Q_OBJECT
+public:
+  DivisibleByFilter( QObject *parent = 0 );
+
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+
+};
+
+class GRANTLEE_EXPORT YesNoFilter : public Filter
+{
+  Q_OBJECT
+  public:
+    YesNoFilter( QObject *parent = 0 );
+
+    Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
 
 };
 

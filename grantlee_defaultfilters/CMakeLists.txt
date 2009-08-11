@@ -14,16 +14,13 @@ add_definitions(-DQT_SHARED)
 
 set (grantlee_defaultfilters_library_SRCS
   defaultfilters.cpp
-  upper.cpp
-  lower.cpp
-  safe.cpp
-  yesno.cpp
-  truncatewords.cpp
-  join.cpp
-  removetags.cpp
-  default_if_none.cpp
-  cut.cpp
-  slice.cpp
+
+  strings.cpp
+  lists.cpp
+  integers.cpp
+  datetime.cpp
+  logic.cpp
+  misc.cpp
 )
 
 set(GRANTLEE_DEFAULTFILTERS_LIB_SOVERSION 0)

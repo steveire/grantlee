@@ -17,10 +17,51 @@
 
 */
 
-#include "yesno.h"
+#include "logic.h"
+#include "util_p.h"
 
 
-YesNoFilter::YesNoFilter( QObject* parent ): Filter( parent )
+DefaultFilter::DefaultFilter( QObject* parent )
+    : Filter( parent )
+{
+
+}
+
+Grantlee::SafeString DefaultFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+{
+  if ( !input.isValid() )
+    return argument;
+  return Util::getSafeString( input );
+}
+
+DefaultIfNoneFilter::DefaultIfNoneFilter( QObject* parent )
+    : Filter( parent )
+{
+
+}
+
+Grantlee::SafeString DefaultIfNoneFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+{
+  if ( !input.isValid() )
+    return argument;
+  return Util::getSafeString( input );
+}
+
+DivisibleByFilter::DivisibleByFilter( QObject* parent )
+    : Filter( parent )
+{
+
+}
+
+Grantlee::SafeString DivisibleByFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+{
+  return ( QVariant( Util::getSafeString( input ).rawString() ).toInt()
+        % QVariant( argument.rawString() ).toInt() == 0 )
+        ? QString( "true" ) : QString();
+}
+
+YesNoFilter::YesNoFilter( QObject* parent )
+    : Filter( parent )
 {
 
 }
@@ -56,6 +97,4 @@ Grantlee::SafeString YesNoFilter::doFilter( const QVariant& input, const Grantle
     return yes;
   return no;
 }
-
-#include "yesno.moc"
 
