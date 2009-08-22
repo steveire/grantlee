@@ -42,9 +42,8 @@ Node* SsiNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   bool parse = false;
 
-  if (( exprSize != 3 ) && ( exprSize != 2 ) ) {
-    setError( TagSyntaxError, "ssi tag takes one argument" );
-    return 0;
+  if ( ( exprSize != 3 ) && ( exprSize != 2 ) ) {
+    throw Grantlee::Exception( TagSyntaxError, "ssi tag takes one argument" );
   }
 
   if ( exprSize == 3 ) {

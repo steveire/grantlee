@@ -20,6 +20,10 @@
 #ifndef GRANTLEE_H
 #define GRANTLEE_H
 
+#include <exception>
+
+#include <QDebug>
+
 namespace Grantlee
 {
 
@@ -30,15 +34,16 @@ enum LoopDirection {
 
 enum Error {
   NoError,
-  VariableStringInvalid,
-  VariableNotInContext,
-  ObjectReturnTypeInvalid,
-  UnknownError,
-  TagSyntaxError,
   EmptyVariableError,
   EmptyBlockTagError,
   InvalidBlockTagError,
   UnclosedBlockTagError,
+  UnknownFilterError,
+  TagSyntaxError,
+//   VariableSyntaxError,
+
+  VariableNotInContext,
+  ObjectReturnTypeInvalid,
   CompileFunctionError
 };
 
@@ -50,6 +55,27 @@ static const char * COMMENT_TAG_START = "{#";
 static const char * COMMENT_TAG_END = "#}";
 static const char * SINGLE_BRACE_START = "{";
 static const char * SINGLE_BRACE_END = "}";
+
+class Exception : public std::exception
+{
+public:
+  Exception( Error errorCode, const QString &what )
+      : m_errorCode( errorCode ), m_what( what ) {}
+
+  virtual ~Exception() throw() {}
+
+  virtual const char* what() const throw() {
+    return m_what.toAscii();
+  }
+
+  Error errorCode() const {
+    return m_errorCode;
+  }
+
+private:
+  Error m_errorCode;
+  QString m_what;
+};
 
 }
 

@@ -39,7 +39,6 @@ class ParserPrivate
 public:
   ParserPrivate( Parser *parser, const QList<Token> &tokenList )
       : q_ptr( parser ),
-      m_error( NoError ),
       m_tokenList( tokenList ) {
 
   }
@@ -59,9 +58,6 @@ public:
   QHash<QString, Filter*> m_filters;
 
   NodeList m_nodeList;
-
-  Error m_error;
-  QString m_errorString;
 
   Q_DECLARE_PUBLIC( Parser )
   Parser *q_ptr;
@@ -127,8 +123,8 @@ NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 {
   Q_Q( Parser );
   if ( node->mustBeFirst() && list.containsNonText() ) {
-    q->setError( TagSyntaxError, "Node appeared twice in template" );
-    return NodeList();
+    throw Grantlee::Exception( TagSyntaxError, QString(
+        "Node appeared twice in template: %1" ).arg( node->metaObject()->className() ) );
   }
 
   list.append( node );
@@ -142,12 +138,14 @@ void Parser::skipPast( const QString &tag )
     if ( token.tokenType == BlockToken && token.content.trimmed() == tag )
       return;
   }
-  // Error. Unclosed tag
+  throw Grantlee::Exception( UnclosedBlockTagError, QString( "No closing tag found for %1" ).arg( tag ) );
 }
 
 Filter *Parser::getFilter( const QString &name ) const
 {
   Q_D( const Parser );
+  if ( !d->m_filters.contains( name ) )
+    throw Grantlee::Exception( UnknownFilterError, QString( "Unknown filter: %1" ).arg( name ) );
   return d->m_filters.value( name );
 }
 
@@ -186,14 +184,11 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
           message = QString( "Empty variable before \"%1\"" ).arg( q->nextToken().content );
         else
           message = QString( "Empty variable at end of input." );
-        q->setError( EmptyVariableError, message );
-        return NodeList();
+
+        throw Grantlee::Exception( EmptyVariableError, message );
       }
       FilterExpression filterExpression( token.content, q );
-      if ( filterExpression.error() != NoError ) {
-        q->setError( filterExpression.error(), filterExpression.errorString() );
-        return NodeList();
-      }
+
       nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
     } else if ( token.tokenType == BlockToken ) {
       if ( stopAt.contains( token.content ) ) {
@@ -209,64 +204,37 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
           message = QString( "Empty block tag before \"%1\"" ).arg( q->nextToken().content );
         else
           message = QString( "Empty block tag at end of input." );
-        q->setError( EmptyBlockTagError, message );
-        return NodeList();
+
+        throw Grantlee::Exception( EmptyBlockTagError, message );
       }
       QString command = tagContents.at( 0 );
       AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
 
       // unknown tag.
       if ( !nodeFactory ) {
-        q->setError( InvalidBlockTagError, QString( "Unknown tag \"%1\"" ).arg( command ) );
-        continue;
+        throw Grantlee::Exception( InvalidBlockTagError, QString( "Unknown tag: \"%1\"" ).arg( command ) );
       }
 
       // TODO: Make getNode take a Token instead?
       Node *n = nodeFactory->getNode( token.content, q );
 
       if ( !n ) {
-        q->setError( TagSyntaxError, QString( "Failed to get node from %1" ).arg( command ) );
-        return NodeList();
+        throw Grantlee::Exception( EmptyBlockTagError, QString( "Failed to get node from %1" ).arg( command ) );
       }
 
       n->setParent( parent );
 
-      if ( NoError != nodeFactory->error() ) {
-        q->setError( nodeFactory->error(), nodeFactory->errorString() );
-        return NodeList();
-      }
       nodeList = extendNodeList( nodeList, n );
-      if ( q->error() ) {
-        return nodeList;
-      }
     }
-
   }
 
-  if ( stopAt.size() > 0 )
-    q->setError( UnclosedBlockTagError, QString( "Unclosed tag in template. Expected one of: (%1)" ).arg( stopAt.join( " " ) ) );
+  if ( !stopAt.isEmpty() ) {
+    QString message = QString( "Unclosed tag in template. Expected one of: (%1)" ).arg( stopAt.join( " " ) );
+    throw Grantlee::Exception( UnclosedBlockTagError, message );
+  }
 
   return nodeList;
 
-}
-
-void Parser::setError( Error errorNumber, const QString& message )
-{
-  Q_D( Parser );
-  d->m_error = errorNumber;
-  d->m_errorString = message;
-}
-
-Error Grantlee::Parser::error() const
-{
-  Q_D( const Parser );
-  return d->m_error;
-}
-
-QString Parser::errorString() const
-{
-  Q_D( const Parser );
-  return d->m_errorString;
 }
 
 bool Parser::hasNextToken() const

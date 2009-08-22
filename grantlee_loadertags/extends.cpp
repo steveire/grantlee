@@ -43,6 +43,9 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
+  if ( expr.size() != 2 )
+    throw Grantlee::Exception( TagSyntaxError, "Error: Include tag takes only one argument" );
+
   QString parentName = expr.at( 1 );
   FilterExpression fe;
   int size = parentName.size();
@@ -65,8 +68,7 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   n->setNodeList( nodeList );
 
   if ( t->findChildren<ExtendsNode *>().size() > 0 ) {
-    setError( TagSyntaxError, "Extends tag may only appear once in a template." );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "Extends tag may only appear once in a template." );
   }
 
   return n;
@@ -113,8 +115,7 @@ QString ExtendsNode::render( Context *c )
   Template *parentTemplate = getParent( c );
 
   if ( !parentTemplate ) {
-    setError( TagSyntaxError, "TODO: Fix message" );
-    return QString();
+    throw Grantlee::Exception( TagSyntaxError, QString( "Cannot load template '%1'" ).arg( m_name ) );
   }
 
   QList<BlockNode*> nodeList = parentTemplate->findChildren<BlockNode *>();

@@ -36,8 +36,7 @@ Node* NowNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = tagContent.split( "\"", QString::KeepEmptyParts );
 
   if ( expr.size() != 3 ) {
-    setError( TagSyntaxError, "now tag takes one argument" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "now tag takes one argument" );
   }
 
   QString formatString = expr.at( 1 );

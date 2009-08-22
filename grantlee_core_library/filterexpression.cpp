@@ -29,13 +29,11 @@ namespace Grantlee
 class FilterExpressionPrivate
 {
   FilterExpressionPrivate( FilterExpression *fe )
-      : q_ptr( fe ), m_error( NoError ) {
+      : q_ptr( fe ) {
   }
 
   Variable m_variable;
   QList<ArgFilter> m_filters;
-  mutable Error m_error;
-  mutable QString m_errorString;
   QStringList m_filterNames;
 
   Q_DECLARE_PUBLIC( FilterExpression )
@@ -100,27 +98,31 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     int ssSize = subString.size();
 
     if ( pos != lastPos ) {
-      setError( TagSyntaxError, QString( "Could not parse some characters" ) );
-      return;
+      throw Grantlee::Exception( TagSyntaxError,
+          QString( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
     }
+
     if ( subString.startsWith( FILTER_SEPARATOR ) ) {
       subString = subString.right( ssSize - 1 );
       Filter *f = parser->getFilter( subString );
-      if ( f ) {
-        d->m_filterNames << subString;
-        d->m_filters << qMakePair<Filter*, Variable>( f, Variable() );
-      } else {
-        setError( TagSyntaxError, QString( "Could not find fiter named %1" ).arg( subString ) );
-        return;
-      }
+
+      Q_ASSERT( f );
+
+      d->m_filterNames << subString;
+      d->m_filters << qMakePair<Filter*, Variable>( f, Variable() );
+
     } else if ( subString.startsWith( FILTER_ARGUMENT_SEPARATOR ) ) {
       subString = subString.right( ssSize - 1 );
       int lastFilter = d->m_filters.size();
+      if ( subString.isEmpty() )
+        throw Grantlee::Exception( EmptyVariableError,
+            QString( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
+
       d->m_filters[lastFilter -1].second = Variable( subString );
     } else {
       if ( subString.contains( "._" ) || ( subString.startsWith( "_" ) && !subString.startsWith( "_(" ) ) ) {
-        setError( TagSyntaxError, QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
-        return;
+        throw Grantlee::Exception( TagSyntaxError,
+            QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
       }
       // Token is _("translated"), or "constant", or a variable;
       d->m_variable = Variable( subString );
@@ -129,38 +131,17 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     pos += len;
     lastPos = pos;
   }
+
   QString remainder = vs.right( vs.size() - lastPos );
-  if ( remainder.size() > 0 ) {
-    setError( TagSyntaxError, QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
-    return;
+  if ( !remainder.isEmpty() ) {
+    throw Grantlee::Exception( TagSyntaxError,
+        QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
   }
 }
-
-void FilterExpression::setError( Error type, const QString &message ) const
-{
-  Q_D( const FilterExpression );
-  d->m_error = type;
-  d->m_errorString = message;
-}
-
-Error FilterExpression::error() const
-{
-  Q_D( const FilterExpression );
-  return d->m_error;
-}
-
-QString FilterExpression::errorString() const
-{
-  Q_D( const FilterExpression );
-  return d->m_errorString;
-}
-
 
 FilterExpression::FilterExpression( const FilterExpression &other )
     : d_ptr( new FilterExpressionPrivate( this ) )
 {
-  d_ptr->m_error = other.d_ptr->m_error;
-  d_ptr->m_errorString = other.d_ptr->m_errorString;
   d_ptr->m_variable = other.d_ptr->m_variable;
   d_ptr->m_filters = other.d_ptr->m_filters;
 }
@@ -192,7 +173,6 @@ FilterExpression &FilterExpression::operator=( const FilterExpression & other )
 {
   d_ptr->m_variable = other.d_ptr->m_variable;
   d_ptr->m_filters = other.d_ptr->m_filters;
-  d_ptr->m_error = other.d_ptr->m_error;
   return *this;
 }
 
@@ -213,8 +193,7 @@ QVariant FilterExpression::resolve( Context *c ) const
       arg.convert( QVariant::String );
       argString = Grantlee::SafeString( arg.toString() );
     } else if ( arg.isValid() ) {
-      setError( TagSyntaxError, "Argument to Filter must be string-like" );
-      return QVariant();
+      throw Grantlee::Exception( TagSyntaxError, "Argument to Filter must be string-like" );
     }
 
     Grantlee::SafeString nextVar;

@@ -50,9 +50,6 @@ public:
   // This can't be const because CycleNode needs to change on each render.
   virtual QString render( Context *c ) = 0;
 
-  Error error() const;
-  QString errorString() const;
-
   virtual bool isPersistent() {
     return isRepeatable();
   }
@@ -65,7 +62,6 @@ public:
   }
 
 protected:
-  void setError( Error type, const QString &message );
   QString renderValueInContext( const QVariant &input, Grantlee::Context *c );
 
 private:
@@ -102,17 +98,10 @@ public:
 
   QString render( Context *c );
 
-  Error error() const;
-  QString errorString() const;
-
 protected:
-  void setError( Error type, const QString &message );
-
   QString mutableRender( Context *c );
 
 private:
-  Error m_error;
-  QString m_errorString;
   bool m_containsNonText;
 };
 
@@ -142,18 +131,12 @@ public:
   */
   virtual Node* getNode( const QString &tagContent, Parser *p ) const = 0;
 
-  Error error() const;
-  QString errorString() const;
-
 protected:
   Q_INVOKABLE QStringList smartSplit( const QString &str ) const;
 
 protected:
   QList<Variable> getVariableList( const QStringList &list ) const;
   QList<FilterExpression> getFilterExpressionList( const QStringList &list, Parser *p ) const;
-
-  // Needs to be const so it can be called from const methods.
-  void setError( Error type, const QString &message ) const;
 
 private:
   Q_DECLARE_PRIVATE( AbstractNodeFactory )

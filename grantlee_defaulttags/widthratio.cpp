@@ -34,8 +34,7 @@ Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 4 ) {
-    setError( TagSyntaxError, "widthratio takes three arguments" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "widthratio takes three arguments" );
   }
   FilterExpression valExpr( expr.at( 1 ), p );
   FilterExpression maxExpr( expr.at( 2 ), p );

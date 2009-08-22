@@ -33,12 +33,11 @@ Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
-  expr.takeAt( 0 );
-
-  if ( expr.size() <= 0 ) {
-    setError( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( "expr.at(0)" ) );
-    return 0;
+  if ( expr.size() <= 1 ) {
+    throw Grantlee::Exception( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( expr.at( 0 ) ) );
   }
+
+  expr.takeAt( 0 );
 
   QListIterator<QString> i( expr );
   while ( i.hasNext() ) {

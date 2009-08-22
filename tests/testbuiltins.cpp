@@ -414,10 +414,10 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   QTest::newRow( "filter-syntax04" ) << "{{ var| upper }}" << dict << "" << TagSyntaxError;
 
   // Raise TemplateSyntaxError for a nonexistent filter
-  QTest::newRow( "filter-syntax05" ) << "{{ var|does_not_exist }}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "filter-syntax05" ) << "{{ var|does_not_exist }}" << dict << "" << UnknownFilterError;
 
   // Raise TemplateSyntaxError when trying to access a filter containing an illegal character
-  QTest::newRow( "filter-syntax06" ) << "{{ var|fil(ter) }}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "filter-syntax06" ) << "{{ var|fil(ter) }}" << dict << "" << UnknownFilterError;
 
   // Raise TemplateSyntaxError for invalid block tags
   QTest::newRow( "filter-syntax07" ) << "{% nothing_to_see_here %}" << dict << "" << InvalidBlockTagError;

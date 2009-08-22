@@ -39,8 +39,7 @@ Grantlee::Node* MediaFinderNodeFactory::getNode( const QString& tagContent, Pars
 
   expr.takeAt( 0 );
   if ( expr.size() <= 0 ) {
-    setError( TagSyntaxError, "'media_finder' tag requires at least one argument" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "'media_finder' tag requires at least one argument" );
   }
 
   return new MediaFinderNode( getFilterExpressionList( expr, p ) );

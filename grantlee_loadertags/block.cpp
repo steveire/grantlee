@@ -39,8 +39,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 ) {
-    setError( TagSyntaxError, "block tag takes one argument" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "block tag takes one argument" );
   }
 
   QString blockName = expr.at( 1 );
@@ -55,8 +54,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       QString blockNodeName = it.next().toString();
 
       if ( blockNodeName == blockName ) {
-        setError( TagSyntaxError, QString( "%1 appears more than once." ).arg( blockName ) );
-        return 0;
+        throw Grantlee::Exception( TagSyntaxError, QString( "%1 appears more than once." ).arg( blockName ) );
       }
     }
   }

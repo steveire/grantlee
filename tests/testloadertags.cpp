@@ -99,6 +99,7 @@ void TestLoaderTags::doTest()
 
   QString result = t->render( &context );
 
+  qDebug() << t->error() << errorNumber << t->errorString();
   if ( t->error() != NoError ) {
     QCOMPARE( t->error(), errorNumber );
     return;
@@ -160,9 +161,9 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow( "namedendblocks01" ) << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock first %}3" << dict << "1_2_3" << NoError;
   // Unbalanced blocks
   QTest::newRow( "namedendblocks02" ) << "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" << dict << "" << InvalidBlockTagError;
-  QTest::newRow( "namedendblocks03" ) << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" << dict << "" << UnclosedBlockTagError;
-  QTest::newRow( "namedendblocks04" ) << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" << dict << "" << UnclosedBlockTagError;
-  QTest::newRow( "namedendblocks05" ) << "1{% block first %}_{% block second %}2{% endblock first %}" << dict << "" << UnclosedBlockTagError;
+  QTest::newRow( "namedendblocks03" ) << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" << dict << "" << InvalidBlockTagError;
+  QTest::newRow( "namedendblocks04" ) << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" << dict << "" << InvalidBlockTagError;
+  QTest::newRow( "namedendblocks05" ) << "1{% block first %}_{% block second %}2{% endblock first %}" << dict << "" << InvalidBlockTagError;
   // Mixed named and unnamed endblocks
   QTest::newRow( "namedendblocks06" ) << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock first %}3" << dict << "1_2_3" << NoError;
   QTest::newRow( "namedendblocks07" ) << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock %}3" << dict << "1_2_3" << NoError;

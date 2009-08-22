@@ -60,14 +60,8 @@ public:
 
   void loadLib( const QString &name );
 
-
-  Error error() const;
-  QString errorString() const;
-
 protected:
   void prependToken( const Token &token );
-
-  void setError( Error errorNumber, const QString &message );
 
 private:
   Q_DECLARE_PRIVATE( Parser )

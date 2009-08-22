@@ -57,12 +57,8 @@ NodeList TemplatePrivate::compileString( const QString &str )
   Q_Q( Template );
   Lexer l( str );
   Parser p( l.tokenize(), q );
-  NodeList nodeList = p.parse( q );
 
-  if ( NoError != p.error() ) {
-    setError( p.error(), p.errorString() );
-  }
-  return nodeList;
+  return p.parse( q );
 }
 
 Template::Template( QObject *parent )
@@ -80,18 +76,28 @@ Template::~Template()
 void Template::setContent( const QString &templateString )
 {
   Q_D( Template );
-  if ( !templateString.isEmpty() )
+  if ( templateString.isEmpty() )
+    return;
+
+  try {
     d->m_nodeList = d->compileString( templateString );
+  } catch ( Grantlee::Exception &e ) {
+    d->setError( e.errorCode(), e.what() );
+  }
 }
 
 QString Template::render( Context *c )
 {
   Q_D( Template );
-  QString result = d->m_nodeList.render( c );
 
-  if ( d->m_nodeList.error() != NoError ) {
-    d->setError( d->m_nodeList.error(), d->m_nodeList.errorString() );
+  QString result;
+  try {
+    result = d->m_nodeList.render( c );
+  } catch ( Grantlee::Exception &e ) {
+    d->setError( e.errorCode(), e.what() );
+    return QString();
   }
+
   return result;
 }
 

@@ -51,13 +51,7 @@ public:
 
   QVariant resolve( Context *c ) const;
 
-  Error error() const;
-  QString errorString() const;
-
   bool isConstant() const;
-
-protected:
-  void setError( Error type, const QString &message );
 
 private:
   Q_DECLARE_PRIVATE( Variable )

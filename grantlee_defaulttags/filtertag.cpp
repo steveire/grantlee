@@ -37,15 +37,9 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
   QString expression = expr.join( " " );
   FilterExpression fe( QString( "var|%1" ).arg( expression ), p );
 
-  if ( fe.error() ) {
-    setError( fe.error(), fe.errorString() );
-    return 0;
-  }
-
   QStringList filters = fe.filters();
   if ( filters.contains( "safe" ) || filters.contains( "escape" ) ) {
-    setError( TagSyntaxError, "Use the \"autoescape\" tag instead." );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "Use the \"autoescape\" tag instead." );
   }
 
   FilterNode *n = new FilterNode( fe );

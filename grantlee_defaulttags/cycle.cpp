@@ -36,8 +36,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() < 1 ) {
-    setError( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( expr.at( 0 ) ) );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( expr.at( 0 ) ) );
   }
 
   if ( expr.at( 1 ).contains( "," ) ) {
@@ -53,24 +52,20 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     QString name = expr.at( 1 );
     QVariant cycleNodes = p->property( _namedCycleNodes );
     if ( !cycleNodes.isValid() || cycleNodes.type() != QVariant::Hash ) {
-      setError( TagSyntaxError, QString( "No named cycles in template. '%1' is not defined" ).arg( name ) );
-      return 0;
+      throw Grantlee::Exception( TagSyntaxError, QString( "No named cycles in template. '%1' is not defined" ).arg( name ) );
     }
     QVariantHash hash = cycleNodes.toHash();
     if ( !hash.contains( name ) ) {
-      setError( TagSyntaxError, QString( "Node not found: %1" ).arg( name ) );
-      return 0;
+      throw Grantlee::Exception( TagSyntaxError, QString( "Node not found: %1" ).arg( name ) );
     }
     QVariant nodeVariant = hash.value( name );
     if ( nodeVariant.userType() != QMetaType::QObjectStar ) {
-      setError( TagSyntaxError, "Invalid object in node cycle list" );
-      return 0;
+      throw Grantlee::Exception( TagSyntaxError, "Invalid object in node cycle list" );
     }
     QObject *obj = nodeVariant.value<QObject*>();
     Node *node = qobject_cast<Node*>( obj );
     if ( !node ) {
-      setError( TagSyntaxError, "Invalid object in node cycle list" );
-      return 0;
+      throw Grantlee::Exception( TagSyntaxError, "Invalid object in node cycle list" );
     }
     return node;
   }

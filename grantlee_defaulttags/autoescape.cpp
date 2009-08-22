@@ -39,8 +39,7 @@ Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
   if ( expr.size() != 2 ) {
-    setError( TagSyntaxError, "autoescape takes two arguments." );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "autoescape takes two arguments." );
   }
 
   QString strState = expr.at( 1 );
@@ -50,8 +49,7 @@ Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   else if ( strState == "off" )
     state = AutoescapeNode::Off;
   else {
-    setError( TagSyntaxError, "argument must be 'on' or 'off'" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "argument must be 'on' or 'off'" );
   }
 
   AutoescapeNode *n = new AutoescapeNode( state );

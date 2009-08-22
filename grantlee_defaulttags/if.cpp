@@ -36,8 +36,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
   expr.takeAt( 0 );
   if ( expr.size() <= 0 ) {
-    setError( TagSyntaxError, "'if' statement requires at least one argument" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "'if' statement requires at least one argument" );
   }
 
   int linkType = IfNode::OrLink;
@@ -52,8 +51,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   } else {
     linkType = IfNode::AndLink;
     if ( exprString.contains( " or " ) ) {
-      setError( TagSyntaxError, "'if' tags can't mix 'and' and 'or'" );
-      return 0;
+      throw Grantlee::Exception( TagSyntaxError, "'if' tags can't mix 'and' and 'or'" );
     }
   }
 
@@ -63,12 +61,10 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     if ( boolStr.contains( " " ) ) {
       QStringList bits = boolStr.split( " " );
       if ( bits.size() != 2 ) {
-        setError( TagSyntaxError, "'if' statement improperly formatted" );
-        return 0;
+        throw Grantlee::Exception( TagSyntaxError, "'if' statement improperly formatted" );
       }
       if ( bits.at( 0 ) != "not" ) {
-        setError( TagSyntaxError, "Expected 'not' in if statement" );
-        return 0;
+        throw Grantlee::Exception( TagSyntaxError, "Expected 'not' in if statement" );
       }
       pair.first = true;
       pair.second = FilterExpression( bits.at( 1 ).trimmed(), p );

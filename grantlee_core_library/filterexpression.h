@@ -59,9 +59,6 @@ public:
 
   FilterExpression &operator=( const FilterExpression &other );
 
-  Error error() const;
-  QString errorString() const;
-
   Variable variable() const;
 
   QVariant resolve( Context *c ) const;
@@ -73,9 +70,6 @@ public:
   bool isConstant() const;
 
   QStringList filters() const;
-
-protected:
-  void setError( Error type, const QString &message ) const;
 
 private:
   Q_DECLARE_PRIVATE( FilterExpression )

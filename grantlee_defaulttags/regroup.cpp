@@ -34,18 +34,15 @@ Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = tagContent.split( " " );
 
   if ( expr.size() != 6 ) {
-    setError( TagSyntaxError, "widthratio takes five arguments" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "widthratio takes five arguments" );
   }
   FilterExpression target( expr.at( 1 ), p );
   if ( expr.at( 2 ) != "by" ) {
-    setError( TagSyntaxError, "second argument must be 'by'" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "second argument must be 'by'" );
   }
 
   if ( expr.at( 4 ) != "as" ) {
-    setError( TagSyntaxError, "fourth argument must be 'as'" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "fourth argument must be 'as'" );
   }
 
   FilterExpression expression( "\"" + expr.at( 3 ) + "\"", p );

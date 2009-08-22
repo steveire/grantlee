@@ -46,15 +46,13 @@ Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p ) co
   QStringList expr = smartSplit( tagContent );
   expr.takeAt( 0 );
   if ( expr.size() <= 0 ) {
-    setError( TagSyntaxError, "'templatetag' statement takes one argument" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "'templatetag' statement takes one argument" );
   }
 
   QString name = expr.at( 0 );
 
   if ( !TemplateTagNode::isKeyword( name ) ) {
-    setError( TagSyntaxError, "Not a template tag" );
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, "Not a template tag" );
   }
 
   return new TemplateTagNode( name );

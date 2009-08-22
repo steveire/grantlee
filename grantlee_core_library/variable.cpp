@@ -40,9 +40,6 @@ public:
 
   QVariant resolvePart( const QVariant &variant, const QString &s ) const;
 
-  Error m_error;
-  QString m_errorString;
-
   QString m_varString;
   QVariant m_literal;
   QStringList m_lookups;
@@ -93,7 +90,7 @@ Variable::Variable( const QString &var )
     d->m_literal = v;
     if ( !var.contains( "." ) && !var.contains( "e" ) ) {
       if ( var.endsWith( "." ) ) {
-        // error
+//         throw Grantlee::Exception( VariableSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( v.toString() ) );
       }
 
       d->m_literal = v.toInt();
@@ -172,25 +169,6 @@ QVariant Variable::resolve( Context *c ) const
   }
   // Could be a list or a hash.
   return var;
-}
-
-void Variable::setError( Error type, const QString &message )
-{
-  Q_D( Variable );
-  d->m_error = type;
-  d->m_errorString = message;
-}
-
-Error Variable::error() const
-{
-  Q_D( const Variable );
-  return d->m_error;
-}
-
-QString Variable::errorString() const
-{
-  Q_D( const Variable );
-  return d->m_errorString;
 }
 
 QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextPart ) const

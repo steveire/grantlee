@@ -33,8 +33,13 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
+  if ( expr.size() < 4 ) {
+    throw Grantlee::Exception( TagSyntaxError,
+        QString( "'for' statements should have at least four words: %1" ).arg( tagContent ) );
+  }
+
   expr.takeAt( 0 );
-  QList<QString> vars;
+  QStringList vars;
 
   int reversed = ForNode::IsNotReversed;
   if ( expr.last() == "reversed" ) {
@@ -42,8 +47,18 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     expr.removeLast();
   }
 
+  if ( expr.mid( expr.size() - 2 ).at( 0 ) != "in" ) {
+    throw Grantlee::Exception( TagSyntaxError,
+      QString( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
+  }
+
   foreach( const QString &arg, expr.mid( 0, expr.size() - 2 ) ) {
     vars << arg.split( ",", QString::SkipEmptyParts );
+  }
+
+  foreach( const QString &var, vars ) {
+    if ( var.isNull() )
+      throw Grantlee::Exception( TagSyntaxError, "'for' tag received invalid argument" );
   }
 
   FilterExpression fe( expr.last(), p );
@@ -83,12 +98,10 @@ void ForNode::setLoopList( NodeList loopNodeList )
   m_loopNodeList = loopNodeList;
 }
 
-
 void ForNode::setEmptyList( NodeList emptyList )
 {
   m_emptyNodeList = emptyList;
 }
-
 
 // some magic variables injected into the context while rendering.
 const QString forloop( "forloop" );
