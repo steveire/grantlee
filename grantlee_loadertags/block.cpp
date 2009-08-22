@@ -76,11 +76,17 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 BlockNode::BlockNode( const QString &name, QObject *parent )
-    : Node( parent ), m_parent( 0 )
+    : Node( parent ), m_nodeParent( 0 )
 {
 //   m_filterExpression = FilterExpression(name);
   m_name = name;
 
+  qRegisterMetaType<Grantlee::SafeString>( "Grantlee::SafeString" );
+}
+
+BlockNode::~BlockNode()
+{
+  delete m_nodeParent;
 }
 
 void BlockNode::setNodeList( NodeList list )
@@ -100,7 +106,7 @@ QString BlockNode::render( Context *c )
 
 SafeString BlockNode::getSuper() const
 {
-  return Util::markSafe( m_parent->render( m_context ) );
+  return Util::markSafe( m_nodeParent->render( m_context ) );
 }
 
 QString BlockNode::blockName()
@@ -111,21 +117,23 @@ QString BlockNode::blockName()
 
 BlockNode* BlockNode::nodeParent() const
 {
-  return m_parent;
+  return m_nodeParent;
 }
 
 void BlockNode::addParent( NodeList nodeList )
 {
-  if ( m_parent )
-    m_parent->addParent( nodeList );
+  if ( m_nodeParent )
+    m_nodeParent->addParent( nodeList );
   else {
-    m_parent = new BlockNode( m_name, nodeList, this->parent() );
+    BlockNode *n = new BlockNode( m_name );
+    n->setNodeList( nodeList );
+    m_nodeParent = n;
   }
 }
 
 void BlockNode::setNodeParent( BlockNode* node )
 {
-  m_parent = node;
+  m_nodeParent = node;
 }
 
 NodeList BlockNode::nodeList()

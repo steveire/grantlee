@@ -47,6 +47,7 @@ class BlockNode : public Node
   Q_PROPERTY( Grantlee::SafeString super READ getSuper )
 public:
   BlockNode( const QString &blockName, QObject *parent = 0 );
+  ~BlockNode();
 
   void setNodeList( NodeList list );
 
@@ -75,7 +76,7 @@ private:
   QString m_name;
   NodeList m_list;
   Context *m_context;
-  BlockNode *m_parent;
+  BlockNode *m_nodeParent;
 
 };
 
