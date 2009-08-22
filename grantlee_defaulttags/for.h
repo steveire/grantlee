@@ -47,11 +47,12 @@ public:
     IsReversed
   };
 
-  ForNode( QStringList loopVars, FilterExpression fe, int reversed, NodeList loopNodeList, NodeList emptyList, QObject *parent = 0 );
+  ForNode( QStringList loopVars, FilterExpression fe, int reversed, QObject *parent = 0 );
+
+  void setLoopList( NodeList loopNodeList );
+  void setEmptyList( NodeList emptyList );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
 private:
   void insertLoopVariables( Context *c, int listSize, int i );

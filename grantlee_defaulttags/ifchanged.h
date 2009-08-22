@@ -40,11 +40,12 @@ class IfChangedNode : public Node
 {
   Q_OBJECT
 public:
-  IfChangedNode( NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent = 0 );
+  IfChangedNode( QList<FilterExpression> feList, QObject *parent = 0 );
+
+  void setTrueList( NodeList trueList );
+  void setFalseList( NodeList falseList );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
 private:
   NodeList m_trueList;

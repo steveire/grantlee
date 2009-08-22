@@ -46,11 +46,11 @@ public:
     Off
   };
 
-  AutoescapeNode( int state, NodeList list, QObject *parent = 0 );
+  AutoescapeNode( int state, QObject *parent = 0 );
+
+  void setList(NodeList list);
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
 private:
   NodeList m_list;

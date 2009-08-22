@@ -54,15 +54,25 @@ Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p ) con
     return 0;
   }
 
-  NodeList list = p->parse( QStringList() << "endautoescape" );
+  AutoescapeNode *n = new AutoescapeNode( state );
+
+  NodeList list = p->parse( n, QStringList() << "endautoescape" );
   p->deleteNextToken();
 
-  return new AutoescapeNode( state, list );
+  n->setList(list);
+
+  return n;
 }
 
-AutoescapeNode::AutoescapeNode( int state, NodeList list, QObject *parent )
-    : Node( parent ), m_state( state ), m_list( list )
+AutoescapeNode::AutoescapeNode( int state, QObject *parent )
+    : Node( parent ), m_state( state )
 {
+}
+
+
+void AutoescapeNode::setList(NodeList list)
+{
+  m_list = list;
 }
 
 QString AutoescapeNode::render( Context *c )
@@ -76,9 +86,3 @@ QString AutoescapeNode::render( Context *c )
   }
   return output;
 }
-
-NodeList AutoescapeNode::getNodesByType( const char* className )
-{
-  return m_list.getNodesByType( className );
-}
-

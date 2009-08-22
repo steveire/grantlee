@@ -46,11 +46,11 @@ class ExtendsNode : public Node
 {
   Q_OBJECT
 public:
-  ExtendsNode( NodeList list, const QString &filename, FilterExpression fe, QObject *parent = 0 );
+  ExtendsNode( const QString &filename, FilterExpression fe, QObject *parent = 0 );
+
+  void setNodeList( NodeList list );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
   void appendNode( Node* node );
 

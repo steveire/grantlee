@@ -61,9 +61,6 @@ public:
 
   QString render( Context *c );
 
-public slots:
-  QObjectList scriptableNodesbyType( const char * className );
-
 private:
   QScriptEngine* m_scriptEngine;
   QScriptValue m_concreteNode;

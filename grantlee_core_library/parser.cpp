@@ -46,6 +46,12 @@ public:
 
   NodeList extendNodeList( NodeList list, Node *node );
 
+  /**
+    Parses the template to create a Nodelist.
+    The given @p parent is the parent of each node in the returned list.
+  */
+  NodeList parse( QObject *parent, const QStringList &stopAt = QStringList() );
+
   void openLibrary( TagLibraryInterface * library );
   QList<Token> m_tokenList;
 
@@ -149,85 +155,101 @@ Filter *Parser::getFilter( const QString &name ) const
   return d->m_filters.value( name );
 }
 
-NodeList Parser::parse( const QString &stopAt )
-{
-  return parse( QStringList() << stopAt );
-}
-
-NodeList Parser::parse( const QStringList &stopAt )
+NodeList Parser::parse( Node *parent, const QString &stopAt )
 {
   Q_D( Parser );
+  return d->parse( parent, QStringList() << stopAt );
+}
+
+NodeList Parser::parse( Template *parent, const QStringList &stopAt )
+{
+  Q_D( Parser );
+  return d->parse( parent, stopAt );
+}
+
+NodeList Parser::parse( Node *parent, const QStringList &stopAt )
+{
+  Q_D( Parser );
+  return d->parse( parent, stopAt );
+}
+
+NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
+{
+  Q_Q( Parser );
   NodeList nodeList;
 
-  while ( hasNextToken() ) {
-    Token token = nextToken();
+  while ( q->hasNextToken() ) {
+    Token token = q->nextToken();
     if ( token.tokenType == TextToken ) {
-      nodeList = d->extendNodeList( nodeList, new TextNode( token.content, parent() ) );
+      nodeList = extendNodeList( nodeList, new TextNode( token.content, parent ) );
     } else if ( token.tokenType == VariableToken ) {
       if ( token.content.isEmpty() ) {
         // Error. Empty variable
         QString message;
-        if ( hasNextToken() )
-          message = QString( "Empty variable before \"%1\"" ).arg( nextToken().content );
+        if ( q->hasNextToken() )
+          message = QString( "Empty variable before \"%1\"" ).arg( q->nextToken().content );
         else
           message = QString( "Empty variable at end of input." );
-        setError( EmptyVariableError, message );
+        q->setError( EmptyVariableError, message );
         return NodeList();
       }
-      FilterExpression filterExpression( token.content, this );
+      FilterExpression filterExpression( token.content, q );
       if ( filterExpression.error() != NoError ) {
-        setError( filterExpression.error(), filterExpression.errorString() );
+        q->setError( filterExpression.error(), filterExpression.errorString() );
         return NodeList();
       }
-      nodeList = d->extendNodeList( nodeList, new VariableNode( filterExpression, parent() ) );
+      nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
     } else if ( token.tokenType == BlockToken ) {
       if ( stopAt.contains( token.content ) ) {
         // put the token back.
-        prependToken( token );
+        q->prependToken( token );
         return nodeList;
       }
 
       QStringList tagContents = token.content.split( " " );
       if ( tagContents.size() == 0 ) {
         QString message;
-        if ( hasNextToken() )
-          message = QString( "Empty block tag before \"%1\"" ).arg( nextToken().content );
+        if ( q->hasNextToken() )
+          message = QString( "Empty block tag before \"%1\"" ).arg( q->nextToken().content );
         else
           message = QString( "Empty block tag at end of input." );
-        setError( EmptyBlockTagError, message );
+        q->setError( EmptyBlockTagError, message );
         return NodeList();
       }
       QString command = tagContents.at( 0 );
-      AbstractNodeFactory *nodeFactory = d->m_nodeFactories[command];
+      AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
 
       // unknown tag.
       if ( !nodeFactory ) {
-        setError( InvalidBlockTagError, QString( "Unknown tag \"%1\"" ).arg( command ) );
+        q->setError( InvalidBlockTagError, QString( "Unknown tag \"%1\"" ).arg( command ) );
         continue;
       }
 
       // TODO: Make getNode take a Token instead?
-      Node *n = nodeFactory->getNode( token.content, this );
+      Node *n = nodeFactory->getNode( token.content, q );
 
       if ( !n ) {
-        setError( TagSyntaxError, QString( "Failed to get node from %1" ).arg( command ) );
+        q->setError( TagSyntaxError, QString( "Failed to get node from %1" ).arg( command ) );
         return NodeList();
       }
 
-      n->setParent( parent() );
+      n->setParent( parent );
 
       if ( NoError != nodeFactory->error() ) {
-        setError( nodeFactory->error(), nodeFactory->errorString() );
+        q->setError( nodeFactory->error(), nodeFactory->errorString() );
         return NodeList();
       }
-
-      nodeList = d->extendNodeList( nodeList, n );
+      nodeList = extendNodeList( nodeList, n );
+      if ( q->error() )
+      {
+        return nodeList;
+      }
     }
 
   }
 
   if ( stopAt.size() > 0 )
-    setError( UnclosedBlockTagError, QString( "Unclosed tag in template. Expected one of: (%1)" ).arg( stopAt.join( " " ) ) );
+    q->setError( UnclosedBlockTagError, QString( "Unclosed tag in template. Expected one of: (%1)" ).arg( stopAt.join( " " ) ) );
 
   return nodeList;
 

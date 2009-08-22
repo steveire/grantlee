@@ -50,8 +50,6 @@ public:
   // This can't be const because CycleNode needs to change on each render.
   virtual QString render( Context *c ) = 0;
 
-  virtual NodeList getNodesByType( const char * className );
-
   Error error() const;
   QString errorString() const;
 
@@ -87,6 +85,23 @@ public:
   void append( Grantlee::Node* node );
   void append( QList<Grantlee::Node*> nodeList );
   bool containsNonText() const;
+
+  template <typename T> QList<T> findChildren()
+  {
+    QList<T> children;
+    QList<Grantlee::Node*>::const_iterator it;
+    const QList<Grantlee::Node*>::const_iterator first = constBegin();
+    const QList<Grantlee::Node*>::const_iterator last = constEnd();
+    for ( it = first; it != last; ++it ) {
+      T *object = qobject_cast<T>( *it );
+      if ( object )
+      {
+        children << object;
+      }
+      children << object->findChildren<T>();
+    }
+    return children;
+  }
 
   QString render( Context *c );
 

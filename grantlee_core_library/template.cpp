@@ -58,7 +58,7 @@ NodeList TemplatePrivate::compileString( const QString &str )
   Q_Q( Template );
   Lexer l( str );
   Parser p( l.tokenize(), q );
-  NodeList nodeList = p.parse();
+  NodeList nodeList = p.parse( q );
 
   if ( NoError != p.error() ) {
     setError( p.error(), p.errorString() );
@@ -83,12 +83,6 @@ void Template::setContent( const QString &templateString )
   Q_D( Template );
   if ( !templateString.isEmpty() )
     d->m_nodeList = d->compileString( templateString );
-}
-
-NodeList Template::getNodesByType( const char* className )
-{
-  Q_D( Template );
-  return d->m_nodeList.getNodesByType( className );
 }
 
 QString Template::render( Context *c )

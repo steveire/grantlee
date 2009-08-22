@@ -37,7 +37,9 @@ class RangeNode : public Node
 {
   Q_OBJECT
 public:
-  RangeNode( NodeList list, const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression = FilterExpression(), FilterExpression stepExpression = FilterExpression(), QObject *parent = 0 );
+  RangeNode( const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression = FilterExpression(), FilterExpression stepExpression = FilterExpression(), QObject *parent = 0 );
+
+  void setNodeList( NodeList list );
 
   QString render( Context *c );
 

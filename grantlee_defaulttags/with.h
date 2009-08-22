@@ -38,11 +38,11 @@ class WithNode : public Node
 {
   Q_OBJECT
 public:
-  WithNode( FilterExpression, const QString &name, NodeList nodeList, QObject *parent = 0 );
+  WithNode( FilterExpression, const QString &name, QObject *parent = 0 );
+
+  void setNodeList( NodeList nodeList );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
 private:
   FilterExpression m_filterExpression;

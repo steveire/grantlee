@@ -39,7 +39,9 @@ class RawNode : public Node
 {
   Q_OBJECT
 public:
-  RawNode( NodeList nodeList, QObject *parent = 0 );
+  RawNode( QObject *parent = 0 );
+
+  void setNodeList( NodeList nodeList );
 
   QString render( Context *c );
 

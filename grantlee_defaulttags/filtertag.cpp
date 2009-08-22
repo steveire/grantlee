@@ -49,16 +49,24 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
     return 0;
   }
 
-  NodeList filterNodes = p->parse( QStringList() << "endfilter" );
+  FilterNode *n = new FilterNode( fe );
+
+  NodeList filterNodes = p->parse( n, QStringList() << "endfilter" );
   p->deleteNextToken();
 
-  return new FilterNode( fe, filterNodes );
+  n->setNodeList(filterNodes);
+  return n;
 }
 
-FilterNode::FilterNode( FilterExpression fe, NodeList filterList, QObject *parent )
-    : Node( parent ), m_fe( fe ), m_filterList( filterList )
+FilterNode::FilterNode( FilterExpression fe, QObject *parent )
+    : Node( parent ), m_fe( fe )
 {
 
+}
+
+void FilterNode::setNodeList(NodeList filterList)
+{
+  m_filterList = filterList;
 }
 
 QString FilterNode::render( Context* c )
@@ -70,9 +78,3 @@ QString FilterNode::render( Context* c )
   c->pop();
   return filtered;
 }
-
-NodeList FilterNode::getNodesByType( const char* className )
-{
-  return m_filterList.getNodesByType( className );
-}
-

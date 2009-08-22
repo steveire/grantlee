@@ -94,28 +94,10 @@ QString Node::errorString() const
   return d->m_errorString;
 }
 
-NodeList Node::getNodesByType( const char * className )
-{
-  return NodeList();
-}
-
 NodeList::NodeList()
     : QList<Grantlee::Node*>(), m_error( NoError ), m_containsNonText(false)
 {
 
-}
-
-NodeList NodeList::getNodesByType( const char * className )
-{
-  NodeList list;
-  QListIterator<Grantlee::Node *> it( *this );
-  while ( it.hasNext() ) {
-    Grantlee::Node *n = it.next();
-    if ( n->metaObject()->className() == className )
-      list << n;
-    list << n->getNodesByType( className );
-  }
-  return list;
 }
 
 NodeList::NodeList( const NodeList &list )

@@ -46,13 +46,13 @@ class BlockNode : public Node
   Q_OBJECT
   Q_PROPERTY( Grantlee::SafeString super READ getSuper )
 public:
-  BlockNode( const QString &blockName, const NodeList &list, QObject *parent = 0 );
+  BlockNode( const QString &blockName, QObject *parent = 0 );
+
+  void setNodeList( NodeList list );
 
   QString blockName();
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
   BlockNode* nodeParent() const;
 
@@ -62,7 +62,6 @@ public:
 
   void addParent( NodeList );
 
-  void setNodeList( NodeList );
   NodeList nodeList();
 
 // slots

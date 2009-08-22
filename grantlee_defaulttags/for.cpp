@@ -48,15 +48,20 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   FilterExpression fe( expr.last(), p );
 
-  NodeList loopNodes = p->parse( QStringList() << "empty" << "endfor" );
+  ForNode *n = new ForNode( vars, fe, reversed );
+
+  NodeList loopNodes = p->parse( n, QStringList() << "empty" << "endfor" );
+  n->setLoopList( loopNodes );
+
   NodeList emptyNodes;
   if ( p->nextToken().content.trimmed() == "empty" ) {
-    emptyNodes = p->parse( QStringList() << "endfor" );
+    emptyNodes = p->parse( n, QStringList() << "endfor" );
+    n->setEmptyList( emptyNodes );
     // skip past the endfor tag
     p->deleteNextToken();
   }
 
-  return new ForNode( vars, fe, reversed, loopNodes, emptyNodes );
+  return n;
 }
 
 
@@ -64,18 +69,26 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 ForNode::ForNode( QStringList loopVars,
                   FilterExpression fe,
                   int reversed,
-                  NodeList loopNodeList,
-                  NodeList emptyNodes,
                   QObject *parent )
     : Node( parent ),
     m_loopVars( loopVars ),
     m_filterExpression( fe ),
-    m_isReversed( reversed ),
-    m_loopNodeList( loopNodeList ),
-    m_emptyNodeList( emptyNodes )
+    m_isReversed( reversed )
 {
 
 }
+
+void ForNode::setLoopList(NodeList loopNodeList)
+{
+  m_loopNodeList = loopNodeList;
+}
+
+
+void ForNode::setEmptyList(NodeList emptyList)
+{
+  m_emptyNodeList = emptyList;
+}
+
 
 // some magic variables injected into the context while rendering.
 const QString forloop( "forloop" );
@@ -229,12 +242,3 @@ QString ForNode::render( Context *c )
   c->pop();
   return result;
 }
-
-NodeList ForNode::getNodesByType( const char* className )
-{
-  NodeList nodeList;
-  nodeList << m_loopNodeList.getNodesByType( className );
-  nodeList << m_emptyNodeList.getNodesByType( className );
-  return nodeList;
-}
-

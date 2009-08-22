@@ -52,12 +52,12 @@ class IfEqualNode : public Node
 {
   Q_OBJECT
 public:
-  IfEqualNode( FilterExpression val11, FilterExpression val2, NodeList trueList, NodeList falseList, bool negate, QObject *parent = 0 );
+  IfEqualNode( FilterExpression val11, FilterExpression val2, bool negate, QObject *parent = 0 );
+
+  void setTrueList( NodeList trueList );
+  void setFalseList( NodeList falseList );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
-
 
 private:
   FilterExpression m_var1;

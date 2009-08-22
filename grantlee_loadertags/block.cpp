@@ -66,18 +66,25 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
-  NodeList list = p->parse( QStringList() << "endblock" << "endblock " + blockName );
+  BlockNode *n = new BlockNode( blockName );
+  NodeList list = p->parse( n, QStringList() << "endblock" << "endblock " + blockName );
 
+  n->setNodeList( list );
   p->deleteNextToken();
 
-  return new BlockNode( blockName, list );
+  return n;
 }
 
-BlockNode::BlockNode( const QString &name, const NodeList &list, QObject *parent )
+BlockNode::BlockNode( const QString &name, QObject *parent )
     : Node( parent ), m_parent( 0 )
 {
 //   m_filterExpression = FilterExpression(name);
   m_name = name;
+
+}
+
+void BlockNode::setNodeList( NodeList list )
+{
   m_list = list;
 }
 
@@ -107,11 +114,6 @@ BlockNode* BlockNode::nodeParent() const
   return m_parent;
 }
 
-NodeList BlockNode::getNodesByType( const char* className )
-{
-  return m_list.getNodesByType( className );
-}
-
 void BlockNode::addParent( NodeList nodeList )
 {
   if ( m_parent )
@@ -124,11 +126,6 @@ void BlockNode::addParent( NodeList nodeList )
 void BlockNode::setNodeParent( BlockNode* node )
 {
   m_parent = node;
-}
-
-void BlockNode::setNodeList( NodeList list )
-{
-  m_list = list;
 }
 
 NodeList BlockNode::nodeList()

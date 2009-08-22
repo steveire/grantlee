@@ -37,11 +37,11 @@ class FilterNode : public Node
 {
   Q_OBJECT
 public:
-  FilterNode( FilterExpression fe, NodeList filterList, QObject *parent = 0 );
+  FilterNode( FilterExpression fe, QObject *parent = 0 );
+
+  void setNodeList( NodeList filterList );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
 private:
   FilterExpression m_fe;

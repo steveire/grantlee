@@ -40,15 +40,19 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
   FilterExpression val1( expr.at( 1 ), p );
   FilterExpression val2( expr.at( 2 ), p );
 
+  IfEqualNode *n = new IfEqualNode( val1 , val2, negate );
+
   const QString endTag( "end" + expr.at( 0 ) );
-  NodeList trueList = p->parse( QStringList() << "else" << endTag );
+  NodeList trueList = p->parse( n, QStringList() << "else" << endTag );
+  n->setTrueList( trueList );
   NodeList falseList;
   if ( p->nextToken().content.trimmed() == "else" ) {
-    falseList = p->parse( QStringList() << endTag );
+    falseList = p->parse( n, QStringList() << endTag );
+    n->setFalseList( falseList );
     p->deleteNextToken();
   } // else empty falseList.
 
-  return new IfEqualNode( val1 , val2, trueList, falseList, negate );
+  return n;
 }
 
 Node* IfEqualNodeFactory::getNode( const QString &tagContent, Parser *p ) const
@@ -68,14 +72,22 @@ Node* IfNotEqualNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   return do_getNode( tagContent, p, true );
 }
 
-IfEqualNode::IfEqualNode( FilterExpression val1, FilterExpression val2, NodeList trueList, NodeList falseList, bool negate, QObject *parent )
+IfEqualNode::IfEqualNode( FilterExpression val1, FilterExpression val2, bool negate, QObject *parent )
     : Node( parent )
 {
   m_var1 = val1;
   m_var2 = val2;
-  m_trueList = trueList;
-  m_falseList = falseList;
   m_negate = negate;
+}
+
+void IfEqualNode::setTrueList( NodeList trueList )
+{
+  m_trueList = trueList;
+}
+
+void IfEqualNode::setFalseList( NodeList falseList )
+{
+  m_falseList = falseList;
 }
 
 QString IfEqualNode::render( Context *c )
@@ -90,12 +102,3 @@ QString IfEqualNode::render( Context *c )
   return m_falseList.render( c );
 
 }
-
-NodeList IfEqualNode::getNodesByType( const char* className )
-{
-  NodeList list;
-  list << m_trueList.getNodesByType( className );
-  list << m_falseList.getNodesByType( className );
-  return list;
-}
-

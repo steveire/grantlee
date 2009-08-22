@@ -41,19 +41,25 @@ Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   FilterExpression fe( expr.at( 1 ), p );
   QString name( expr.at( 3 ) );
 
-  NodeList nodeList = p->parse( QStringList() << "endwith" );
+  WithNode *n = new WithNode( fe, name );
+  NodeList nodeList = p->parse( n, QStringList() << "endwith" );
+  n->setNodeList( nodeList );
   p->deleteNextToken();
 
-  return new WithNode( fe, name, nodeList );
+  return n;
 }
 
 
-WithNode::WithNode( FilterExpression fe, const QString &name, NodeList list, QObject *parent )
+WithNode::WithNode( FilterExpression fe, const QString &name, QObject *parent )
     : Node( parent )
 {
   m_filterExpression = fe;
   m_name = name;
-  m_list = list;
+}
+
+void WithNode::setNodeList(NodeList nodeList)
+{
+  m_list = nodeList;
 }
 
 QString WithNode::render( Context *c )
@@ -64,9 +70,3 @@ QString WithNode::render( Context *c )
   c->pop();
   return ret;
 }
-
-NodeList WithNode::getNodesByType( const char* className )
-{
-  return m_list.getNodesByType( className );
-}
-

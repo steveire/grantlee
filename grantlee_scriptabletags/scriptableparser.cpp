@@ -53,14 +53,18 @@ void ScriptableParser::skipPast( const QString& tag )
   m_p->skipPast( tag );
 }
 
-QObjectList ScriptableParser::parse( const QString& stopAt )
+QObjectList ScriptableParser::parse( QObject *parent, const QString& stopAt )
 {
-  return parse( QStringList() << stopAt );
+  return parse( parent, QStringList() << stopAt );
 }
 
-QObjectList ScriptableParser::parse( const QStringList& stopAt )
+QObjectList ScriptableParser::parse( QObject *parent, const QStringList& stopAt )
 {
-  NodeList nodeList = m_p->parse( stopAt );
+  Node *node = qobject_cast<Node*>(parent);
+  Q_ASSERT(node);
+
+  NodeList nodeList = m_p->parse( node, stopAt );
+  qDebug() << nodeList.size();
   QObjectList objList;
   QListIterator<Node*> it( nodeList );
   while ( it.hasNext() ) {

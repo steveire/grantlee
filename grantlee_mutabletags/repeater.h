@@ -38,7 +38,9 @@ class RepeaterNode : public Node
 {
   Q_OBJECT
 public:
-  RepeaterNode( NodeList nodeList, QObject* parent = 0 );
+  RepeaterNode( QObject* parent = 0 );
+
+  void setNodeList( NodeList nodeList );
 
   QString render( Context* c );
 

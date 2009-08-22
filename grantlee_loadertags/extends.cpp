@@ -28,10 +28,8 @@
 #include "engine.h"
 #include "grantlee.h"
 
-#include <QMutableListIterator>
+#include <QListIterator>
 #include <util_p.h>
-
-typedef QMutableListIterator<Node*> MutableNodeListIterator;
 
 using namespace Grantlee;
 
@@ -57,30 +55,34 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     parentName = QString();
   }
 
-  NodeList nodeList = p->parse();
+  ExtendsNode *n = new ExtendsNode( parentName, fe );
 
-  if ( nodeList.getNodesByType( ExtendsNode::staticMetaObject.className() ).size() > 0 ) {
+  Template *t = qobject_cast<Template *>(p->parent());
+
+  Q_ASSERT( t );
+
+  NodeList nodeList = p->parse( t );
+  n->setNodeList( nodeList );
+
+  if ( t->findChildren<ExtendsNode *>().size() > 0 ) {
     setError( TagSyntaxError, "Extends tag may only appear once in a template." );
     return 0;
   }
 
-  return new ExtendsNode( nodeList, parentName, fe );
+  return n;
 }
 
-ExtendsNode::ExtendsNode( NodeList list, const QString &name, FilterExpression fe, QObject *parent )
+ExtendsNode::ExtendsNode( const QString &name, FilterExpression fe, QObject *parent )
     : Node( parent ),
     m_filterExpression( fe ),
     m_name( name )
 {
-  m_list = list;
-
 }
 
-NodeList ExtendsNode::getNodesByType( const char* className )
+void ExtendsNode::setNodeList(NodeList list)
 {
-  return m_list.getNodesByType( className );
+  m_list = list;
 }
-
 
 Template *ExtendsNode::getParent( Context *c )
 {
@@ -101,64 +103,61 @@ Template *ExtendsNode::getParent( Context *c )
   Engine *engine = Engine::instance();
   qint64 settingsToken = parent()->property("settingsToken").toULongLong();
 
-  Template* t = engine->loadByName( parentName, this, settingsToken );
+  Template* t = engine->loadByName( parentName, 0, settingsToken );
 
   return t;
 }
 
 QString ExtendsNode::render( Context *c )
 {
-  Template *parent = getParent( c );
-  if ( !parent ) {
+  Template *parentTemplate = getParent( c );
+
+  if ( !parentTemplate ) {
     setError( TagSyntaxError, "TODO: Fix message" );
     return QString();
   }
 
-  NodeList nodeList = parent->getNodesByType( BlockNode::staticMetaObject.className() );
+  QList<BlockNode*> nodeList = parentTemplate->findChildren<BlockNode *>();
+
   QHash<QString, BlockNode *> parentBlocks;
-  MutableNodeListIterator i( nodeList );
-  int idx = 0;
+
+  QListIterator<BlockNode *> i( nodeList );
+
   while ( i.hasNext() ) {
-    Node* n = i.next();
-    BlockNode *bn = qobject_cast<BlockNode*>( n );
-    if ( bn ) {
-      parentBlocks.insert( bn->name(), bn );
-    }
-    idx++;
+    BlockNode* bn = i.next();
+    parentBlocks.insert( bn->name(), bn );
   }
 
-  NodeList l = m_list.getNodesByType( BlockNode::staticMetaObject.className() );
-  MutableNodeListIterator j( l );
+  QList<BlockNode*> l = parent()->findChildren<BlockNode *>();
+  QListIterator<BlockNode *> j( l );
 
   while ( j.hasNext() ) {
-    Node* n = j.next();
-    BlockNode *bn = qobject_cast<BlockNode*>( n );
-    if ( bn ) {
-      if ( parentBlocks.contains( bn->name() ) ) {
-        BlockNode *pbn = parentBlocks.value( bn->name() );
-        pbn->setNodeParent( bn->nodeParent() );
-        pbn->addParent( pbn->nodeList() );
-        pbn->setNodeList( bn->nodeList() );
-      } else {
-        foreach( Node *node, parent->nodeList() ) {
-          TextNode *tn = dynamic_cast<TextNode*>( node );
-          if ( !tn ) {
-            ExtendsNode *en = dynamic_cast<ExtendsNode*>( node );
-            if ( en ) {
-              en->appendNode( bn );
-            }
-            break;
+    BlockNode *bn = j.next();
+    if ( parentBlocks.contains( bn->name() ) ) {
+      BlockNode *pbn = parentBlocks.value( bn->name() );
+      pbn->setNodeParent( bn->nodeParent() );
+      pbn->addParent( pbn->nodeList() );
+      pbn->setNodeList( bn->nodeList() );
+    } else {
+      foreach( Node *node, parentTemplate->nodeList() ) {
+        TextNode *tn = qobject_cast<TextNode*>( node );
+        if ( !tn ) {
+          ExtendsNode *en = qobject_cast<ExtendsNode*>( node );
+          if ( en ) {
+            en->appendNode( bn );
           }
+          break;
         }
       }
     }
   }
 
-  return parent->render( c );
+  return parentTemplate->render( c );
 }
 
 void ExtendsNode::appendNode( Node *node )
 {
   m_list.append( node );
+  node->setParent( parent() );
 }
 

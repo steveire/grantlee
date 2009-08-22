@@ -91,18 +91,6 @@ QString ScriptableNode::render( Context *c )
   return m_renderMethod.call( m_concreteNode, args ).toString();
 }
 
-QObjectList ScriptableNode::scriptableNodesbyType( const char * className )
-{
-  NodeList nodeList = getNodesByType( className );
-
-  QObjectList objList;
-  QListIterator<Node*> it( nodeList );
-  while ( it.hasNext() ) {
-    objList << it.next();
-  }
-  return objList;
-}
-
 ScriptableNodeFactory::ScriptableNodeFactory( QObject* parent )
     : AbstractNodeFactory( parent ), m_scriptEngine( 0 )
 {

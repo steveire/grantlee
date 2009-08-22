@@ -29,14 +29,22 @@ RepeaterNodeFactory::RepeaterNodeFactory( QObject* parent )
 
 Node* RepeaterNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  NodeList nodeList = p->parse( "endrepeater" );
-  return new RepeaterNode( nodeList );
+  RepeaterNode *n = new RepeaterNode();
+  NodeList nodeList = p->parse( n, "endrepeater" );
+  p->deleteNextToken();
+  n->setNodeList( nodeList );
+  return n;
 }
 
-RepeaterNode::RepeaterNode( NodeList nodeList, QObject* parent )
-    : Node( parent ), m_nodeList( nodeList )
+RepeaterNode::RepeaterNode( QObject* parent )
+    : Node( parent )
 {
 
+}
+
+void RepeaterNode::setNodeList(NodeList nodeList)
+{
+  m_nodeList = nodeList;
 }
 
 QString RepeaterNode::render( Context* c )

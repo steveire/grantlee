@@ -79,16 +79,3 @@ void ScriptableTemplate::setNodeList( const QObjectList& list )
   }
   m_template->setNodeList( nodeList );
 }
-
-QObjectList ScriptableTemplate::getNodesByType( const char* className )
-{
-  NodeList nodeList = m_template->getNodesByType( className );
-  QObjectList objList;
-
-  QListIterator<Node *> it( nodeList );
-  while ( it.hasNext() ) {
-    objList << it.next();
-  }
-  return objList;
-}
-

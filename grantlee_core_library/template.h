@@ -45,8 +45,6 @@ public:
   ~Template();
   virtual QString render( Context *c );
 
-  NodeList getNodesByType( const char * className );
-
   NodeList nodeList() const;
 
   void setNodeList( const NodeList &list );

@@ -51,8 +51,6 @@ public:
 public slots:
   QString render( ScriptableContext *c );
 
-  QObjectList getNodesByType( const char * className );
-
   QObjectList nodeList() const;
 
   void setNodeList( const QObjectList &list );

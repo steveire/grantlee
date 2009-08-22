@@ -41,11 +41,11 @@ class SpacelessNode : public Node
 {
   Q_OBJECT
 public:
-  SpacelessNode( NodeList nodeList, QObject *parent = 0 );
+  SpacelessNode( QObject *parent = 0 );
+
+  void setList( NodeList nodeList );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
 private:
   QString stripSpacesBetweenTags( const QString &input );

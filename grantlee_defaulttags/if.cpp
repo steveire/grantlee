@@ -79,27 +79,38 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     boolVars.append( pair );
   }
 
+  IfNode *n = new IfNode( boolVars, linkType );
 
-  NodeList trueList = p->parse( QStringList() << "else" << "endif" );
+  NodeList trueList = p->parse( n, QStringList() << "else" << "endif" );
+  n->setTrueList( trueList );
   NodeList falseList;
   if ( p->nextToken().content.trimmed() == "else" ) {
-    falseList = p->parse( QStringList() << "endif" );
+    falseList = p->parse( n, QStringList() << "endif" );
+    n->setFalseList( falseList );
     // skip past the endif tag
     p->deleteNextToken();
   } // else empty falseList.
 
-  return new IfNode( boolVars, trueList, falseList, linkType );
+  return n;
 }
 
 
-IfNode::IfNode( QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType, QObject *parent )
+IfNode::IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent )
     : Node( parent ),
     m_boolVars( boolVars ),
-    m_trueList( trueList ),
-    m_falseList( falseList ),
     m_linkType( linkType )
 {
 
+}
+
+void IfNode::setTrueList( NodeList trueList )
+{
+  m_trueList = trueList;
+}
+
+void IfNode::setFalseList( NodeList falseList )
+{
+  m_falseList = falseList;
 }
 
 QString IfNode::render( Context *c )
@@ -154,13 +165,5 @@ QString IfNode::renderTrueList( Context *c )
 QString IfNode::renderFalseList( Context *c )
 {
   return m_falseList.render( c );
-}
-
-NodeList IfNode::getNodesByType( const char* className )
-{
-  NodeList list;
-  list << m_trueList.getNodesByType( className );
-  list << m_falseList.getNodesByType( className );
-  return list;
 }
 

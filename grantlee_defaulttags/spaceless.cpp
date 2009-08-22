@@ -31,16 +31,25 @@ SpacelessNodeFactory::SpacelessNodeFactory()
 
 Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  NodeList list = p->parse( QStringList() << "endspaceless" );
+  SpacelessNode *n = new SpacelessNode();
+  NodeList list = p->parse( n, QStringList() << "endspaceless" );
+  n->setList( list );
   p->deleteNextToken();
-  return new SpacelessNode( list );
+  return n;
 }
 
-SpacelessNode::SpacelessNode( NodeList nodeList, QObject *parent )
-    : Node( parent ), m_nodeList( nodeList )
+SpacelessNode::SpacelessNode( QObject *parent )
+    : Node( parent )
 {
 
 }
+
+
+void SpacelessNode::setList( NodeList nodeList )
+{
+  m_nodeList = nodeList;
+}
+
 
 QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 {
@@ -56,9 +65,3 @@ QString SpacelessNode::render( Context *c )
 {
   return stripSpacesBetweenTags( m_nodeList.render( c ).trimmed() );
 }
-
-NodeList SpacelessNode::getNodesByType( const char* className )
-{
-  return m_nodeList.getNodesByType( className );
-}
-

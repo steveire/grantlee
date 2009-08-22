@@ -35,23 +35,37 @@ Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
 {
   QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
-  NodeList trueList = p->parse( QStringList() << "else" << "endifchanged" );
+  expr.takeAt( 0 );
+  IfChangedNode *n =  new IfChangedNode( getFilterExpressionList( expr, p ) );
+
+  NodeList trueList = p->parse( n, QStringList() << "else" << "endifchanged" );
+  n->setTrueList( trueList );
   NodeList falseList;
 
   if ( p->nextToken().content.trimmed() == "else" ) {
-    falseList = p->parse( QStringList() << "endifchanged" );
+    falseList = p->parse( n, QStringList() << "endifchanged" );
+    n->setFalseList( falseList );
     p->deleteNextToken();
   }
-  expr.takeAt( 0 );
 
-  return new IfChangedNode( trueList, falseList, getFilterExpressionList( expr, p ) );
+  return n;
 }
 
-IfChangedNode::IfChangedNode( NodeList trueList, NodeList falseList, QList<FilterExpression> feList, QObject *parent )
-    : Node( parent ), m_trueList( trueList ), m_falseList( falseList ), m_filterExpressions( feList )
+IfChangedNode::IfChangedNode( QList<FilterExpression> feList, QObject *parent )
+    : Node( parent ), m_filterExpressions( feList )
 {
   m_lastSeen = QVariant();
   m_id = QString::number( reinterpret_cast<qint64>( this ) );
+}
+
+void IfChangedNode::setTrueList( NodeList trueList )
+{
+  m_trueList = trueList;
+}
+
+void IfChangedNode::setFalseList( NodeList falseList )
+{
+  m_falseList = falseList;
 }
 
 QString IfChangedNode::render( Context *c )
@@ -103,12 +117,3 @@ QString IfChangedNode::render( Context *c )
 
   return QString();
 }
-
-NodeList IfChangedNode::getNodesByType( const char* className )
-{
-  NodeList list;
-  list << m_trueList.getNodesByType( className );
-  list << m_falseList.getNodesByType( className );
-  return list;
-}
-

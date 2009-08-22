@@ -52,11 +52,12 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  IfNode( QList<QPair<bool, FilterExpression > > boolVars, NodeList trueList, NodeList falseList, int linkType, QObject *parent = 0 );
+  IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent = 0 );
+
+  void setTrueList( NodeList trueList );
+  void setFalseList( NodeList falseList );
 
   QString render( Context *c );
-
-  NodeList getNodesByType( const char * className );
 
 protected:
   QString renderTrueList( Context *c );

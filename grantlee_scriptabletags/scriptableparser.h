@@ -45,8 +45,8 @@ public:
   }
 
 public slots:
-  QObjectList parse( const QString &stopAt );
-  QObjectList parse( const QStringList &stopAt = QStringList() );
+  QObjectList parse( QObject *parent, const QString &stopAt );
+  QObjectList parse( QObject *parent, const QStringList &stopAt = QStringList() );
 
   void skipPast( const QString &tag );
 
