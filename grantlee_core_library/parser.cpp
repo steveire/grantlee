@@ -122,6 +122,13 @@ void Parser::loadLib( const QString &name )
 
 NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 {
+  Q_Q( Parser );
+  if ( node->mustBeFirst() && list.containsNonText() )
+  {
+    q->setError( TagSyntaxError, "Node appeared twice in template" );
+    return NodeList();
+  }
+
   list.append( node );
   return list;
 }

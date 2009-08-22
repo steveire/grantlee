@@ -100,7 +100,7 @@ NodeList Node::getNodesByType( const char * className )
 }
 
 NodeList::NodeList()
-    : QList<Grantlee::Node*>(), m_error( NoError )
+    : QList<Grantlee::Node*>(), m_error( NoError ), m_containsNonText(false)
 {
 
 }
@@ -123,16 +123,61 @@ NodeList::NodeList( const NodeList &list )
 {
   m_error = list.error();
   m_errorString = list.errorString();
+  m_containsNonText = list.m_containsNonText;
 }
 
 NodeList::NodeList( const QList<Grantlee::Node *> &list )
     : QList<Grantlee::Node*>( list ), m_error( NoError )
 {
-
+  foreach(Grantlee::Node *node, list)
+  {
+    TextNode *textNode = qobject_cast<TextNode *>( node );
+    if (!textNode)
+    {
+      m_containsNonText = true;
+      return;
+    }
+  }
+  m_containsNonText = false;
 }
 
 NodeList::~NodeList()
 {
+}
+
+void NodeList::append( Grantlee::Node *node )
+{
+  if (!m_containsNonText)
+  {
+    TextNode *textNode = qobject_cast<TextNode *>( node );
+    if (!textNode)
+      m_containsNonText = true;
+  }
+
+  QList<Grantlee::Node *>::append( node );
+}
+
+void NodeList::append( QList<Grantlee::Node*> nodeList )
+{
+  if (!m_containsNonText)
+  {
+    foreach (Grantlee::Node *node, nodeList)
+    {
+      TextNode *textNode = qobject_cast<TextNode *>( node );
+      if (!textNode)
+      {
+        m_containsNonText = true;
+        break;
+      }
+    }
+  }
+
+  QList<Grantlee::Node *>::append( nodeList );
+}
+
+bool NodeList::containsNonText() const
+{
+  return m_containsNonText;
 }
 
 QString NodeList::render( Context *c )

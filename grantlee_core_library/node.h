@@ -62,6 +62,11 @@ public:
     return false;
   }
 
+  virtual bool mustBeFirst()
+  {
+    return false;
+  }
+
 protected:
   void setError( Error type, const QString &message );
   QString renderValueInContext( const QVariant &input, Grantlee::Context *c );
@@ -79,9 +84,9 @@ public:
   NodeList( const QList<Grantlee::Node *> &list );
   ~NodeList();
 
-  NodeList getNodesByType( const char * className );
-
-  //append changes m_containsNonText?
+  void append( Grantlee::Node* node );
+  void append( QList<Grantlee::Node*> nodeList );
+  bool containsNonText() const;
 
   QString render( Context *c );
 

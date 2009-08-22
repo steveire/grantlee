@@ -56,6 +56,12 @@ public:
 
   Template *getParent( Context *c );
 
+  virtual bool mustBeFirst()
+  {
+    return true;
+  }
+
+
 private:
   FilterExpression m_filterExpression;
   QString m_name;
