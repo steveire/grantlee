@@ -93,7 +93,7 @@ void TestLoaderTags::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, errorNumber );
 
-  Template* t = Engine::instance()->newTemplate( input, this );
+  Template* t = Engine::instance()->newTemplate( input, QTest::currentDataTag(), this );
 
   Context context( dict );
 
@@ -159,7 +159,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Basic test
   QTest::newRow( "namedendblocks01" ) << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock first %}3" << dict << "1_2_3" << NoError;
   // Unbalanced blocks
-  QTest::newRow( "namedendblocks02" ) << "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" << dict << "" << UnclosedBlockTagError;
+  QTest::newRow( "namedendblocks02" ) << "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" << dict << "" << InvalidBlockTagError;
   QTest::newRow( "namedendblocks03" ) << "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" << dict << "" << UnclosedBlockTagError;
   QTest::newRow( "namedendblocks04" ) << "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" << dict << "" << UnclosedBlockTagError;
   QTest::newRow( "namedendblocks05" ) << "1{% block first %}_{% block second %}2{% endblock first %}" << dict << "" << UnclosedBlockTagError;
@@ -258,7 +258,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Inheritance from local context without use of template loader
 
-  Template *t = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", this );
+  Template *t = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template", this );
   QObject *obj = t;
   dict.insert( "context_template", QVariant::fromValue( obj ) );
 
@@ -267,9 +267,9 @@ void TestLoaderTags::testExtendsTag_data()
   dict.clear();
   QVariantList list;
 
-  Template *t1 = Engine::instance()->newTemplate( "Wrong", this );
+  Template *t1 = Engine::instance()->newTemplate( "Wrong", "context_template_1", this );
   QObject *obj1 = t1;
-  Template *t2 = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", this );
+  Template *t2 = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template_2", this );
   QObject *obj2 = t2;
   list << QVariant::fromValue( obj1 );
   list << QVariant::fromValue( obj2 );

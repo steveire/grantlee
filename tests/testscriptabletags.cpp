@@ -80,7 +80,7 @@ void TestScriptableTagsSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template* t = Engine::instance()->newTemplate( input, this );
+  Template* t = Engine::instance()->newTemplate( input, QTest::currentDataTag(), this );
 
   Context context( dict );
 

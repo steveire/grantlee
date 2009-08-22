@@ -101,7 +101,7 @@ public:
   /**
   Causes a state transition if settingsToken is 0.
   */
-  Template* newTemplate( const QString &content, QObject *parent = 0, qint64 settingsToken = 0 );
+  Template* newTemplate( const QString &content, const QString &name,  QObject *parent = 0, qint64 settingsToken = 0 );
 
   /**
   Causes a state transition if settingsToken is 0.
@@ -111,7 +111,7 @@ public:
   /**
   Causes a state transition if settingsToken is 0.
   */
-  MutableTemplate* newMutableTemplate( const QString &content, QObject *parent = 0, qint64 settingsToken = 0 );
+  MutableTemplate* newMutableTemplate( const QString &content, const QString &name, QObject *parent = 0, qint64 settingsToken = 0 );
 
   QStringList defaultLibraries( qint64 settingsToken = 0 ) const;
   void setDefaultLibraries( const QStringList &list, qint64 settingsToken = 0 );

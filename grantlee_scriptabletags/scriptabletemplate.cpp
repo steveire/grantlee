@@ -33,9 +33,10 @@ QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
     QScriptEngine *engine )
 {
   QString content = context->argument( 0 ).toString();
-  QObject *parent = context->argument( 1 ).toQObject();
+  QString name = context->argument( 1 ).toString();
+  QObject *parent = context->argument( 2 ).toQObject();
 
-  Template *t = Engine::instance()->newTemplate( content, engine );
+  Template *t = Engine::instance()->newTemplate( content, name, engine );
 
   ScriptableTemplate *object = new ScriptableTemplate( t, parent );
   return engine->newQObject( object );
