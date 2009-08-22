@@ -70,14 +70,14 @@ public:
 class GRANTLEE_EXPORT RandomFilter : public Filter
 {
   Q_OBJECT
-  public:
-    RandomFilter( QObject *parent = 0 );
+public:
+  RandomFilter( QObject *parent = 0 );
 
-    Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
-    bool isSafe() {
-      return true;
-    }
+  bool isSafe() {
+    return true;
+  }
 
 };
 

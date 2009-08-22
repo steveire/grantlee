@@ -48,7 +48,7 @@ public:
 
   AutoescapeNode( int state, QObject *parent = 0 );
 
-  void setList(NodeList list);
+  void setList( NodeList list );
 
   QString render( Context *c );
 

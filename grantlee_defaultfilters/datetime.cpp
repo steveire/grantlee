@@ -22,14 +22,14 @@
 
 Grantlee::SafeString timeSince( QDateTime dt, QDateTime now = QDateTime() )
 {
-  if (!now.isValid())
+  if ( !now.isValid() )
     now = QDateTime::currentDateTime();
 
-  int secsSince = dt.secsTo(now);
+  int secsSince = dt.secsTo( now );
 
   qDebug() << dt << now << secsSince;
 
-  if (secsSince < 0)
+  if ( secsSince < 0 )
     return SafeString( "0 minutes" );
 
   // TODO: i18n
@@ -48,8 +48,7 @@ Grantlee::SafeString timeSince( QDateTime dt, QDateTime now = QDateTime() )
 
   int count = secsSince;
   int i = 0;
-  for ( ; i < seconds.size(); ++i )
-  {
+  for ( ; i < seconds.size(); ++i ) {
     count = ( int )( secsSince / seconds.at( i ) );
     if ( count != 0 )
       break;
@@ -60,11 +59,9 @@ Grantlee::SafeString timeSince( QDateTime dt, QDateTime now = QDateTime() )
   else
     firstChunk.append( QString( "%1 %2" ).arg( count ).arg( singularNames.at( i ) ) );
 
-  if ( seconds.size() > i )
-  {
+  if ( seconds.size() > i ) {
     int count2 = ( secsSince - ( seconds.at( i + 1 ) * count ) ) / seconds.at( i + 1 );
-    if (count2 != 0)
-    {
+    if ( count2 != 0 ) {
       if ( count2 > 1 )
         firstChunk.append( QString( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i + 1 ) ) );
       else
@@ -76,7 +73,7 @@ Grantlee::SafeString timeSince( QDateTime dt, QDateTime now = QDateTime() )
 
 Grantlee::SafeString timeUntil( QDateTime dt, QDateTime now = QDateTime() )
 {
-  if (!now.isValid())
+  if ( !now.isValid() )
     now = QDateTime::currentDateTime();
 
   return timeSince( now, dt );
@@ -91,7 +88,7 @@ DateFilter::DateFilter( QObject* parent )
 
 Grantlee::SafeString DateFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return QDateTime::fromString( Util::getSafeString(input).rawString(), "yyyy-MM-ddThh:mm:ss" ).toString( argument.rawString() );
+  return QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" ).toString( argument.rawString() );
 }
 
 TimeFilter::TimeFilter( QObject* parent )
@@ -102,7 +99,7 @@ TimeFilter::TimeFilter( QObject* parent )
 
 Grantlee::SafeString TimeFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return QDateTime::fromString( Util::getSafeString(input).rawString(), "yyyy-MM-ddThh:mm:ss" ).toString( argument.rawString() );
+  return QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" ).toString( argument.rawString() );
 }
 
 
@@ -115,8 +112,8 @@ TimeSinceFilter::TimeSinceFilter( QObject* parent )
 Grantlee::SafeString TimeSinceFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
   QDateTime now = QDateTime::currentDateTime();
-  QDateTime other = QDateTime::fromString( Util::getSafeString(input).rawString(), "yyyy-MM-ddThh:mm:ss" );
-qDebug() << "####" << now << other;
+  QDateTime other = QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" );
+  qDebug() << "####" << now << other;
   return timeSince( other, now );
 
 }

@@ -48,7 +48,7 @@ public:
   MutableTemplate* loadMutableByName( const QString &name ) const;
   Template* loadByName( const QString &name ) const;
 
-  virtual QString getMediaUri(const QString& fileName) const;
+  virtual QString getMediaUri( const QString& fileName ) const;
 
   void setTheme( const QString &themeName );
   QString themeName() const;

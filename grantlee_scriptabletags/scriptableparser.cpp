@@ -60,8 +60,8 @@ QObjectList ScriptableParser::parse( QObject *parent, const QString& stopAt )
 
 QObjectList ScriptableParser::parse( QObject *parent, const QStringList& stopAt )
 {
-  Node *node = qobject_cast<Node*>(parent);
-  Q_ASSERT(node);
+  Node *node = qobject_cast<Node*>( parent );
+  Q_ASSERT( node );
 
   NodeList nodeList = m_p->parse( node, stopAt );
   qDebug() << nodeList.size();

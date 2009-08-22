@@ -57,7 +57,7 @@ WithNode::WithNode( FilterExpression fe, const QString &name, QObject *parent )
   m_name = name;
 }
 
-void WithNode::setNodeList(NodeList nodeList)
+void WithNode::setNodeList( NodeList nodeList )
 {
   m_list = nodeList;
 }

@@ -43,8 +43,7 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
   }
 
   QStringList filters = fe.filters();
-  if ( filters.contains( "safe" ) || filters.contains( "escape" ) )
-  {
+  if ( filters.contains( "safe" ) || filters.contains( "escape" ) ) {
     setError( TagSyntaxError, "Use the \"autoescape\" tag instead." );
     return 0;
   }
@@ -54,7 +53,7 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
   NodeList filterNodes = p->parse( n, QStringList() << "endfilter" );
   p->deleteNextToken();
 
-  n->setNodeList(filterNodes);
+  n->setNodeList( filterNodes );
   return n;
 }
 
@@ -64,7 +63,7 @@ FilterNode::FilterNode( FilterExpression fe, QObject *parent )
 
 }
 
-void FilterNode::setNodeList(NodeList filterList)
+void FilterNode::setNodeList( NodeList filterList )
 {
   m_filterList = filterList;
 }

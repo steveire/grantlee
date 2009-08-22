@@ -95,7 +95,7 @@ QString Node::errorString() const
 }
 
 NodeList::NodeList()
-    : QList<Grantlee::Node*>(), m_error( NoError ), m_containsNonText(false)
+    : QList<Grantlee::Node*>(), m_error( NoError ), m_containsNonText( false )
 {
 
 }
@@ -111,11 +111,9 @@ NodeList::NodeList( const NodeList &list )
 NodeList::NodeList( const QList<Grantlee::Node *> &list )
     : QList<Grantlee::Node*>( list ), m_error( NoError )
 {
-  foreach(Grantlee::Node *node, list)
-  {
+  foreach( Grantlee::Node *node, list ) {
     TextNode *textNode = qobject_cast<TextNode *>( node );
-    if (!textNode)
-    {
+    if ( !textNode ) {
       m_containsNonText = true;
       return;
     }
@@ -129,10 +127,9 @@ NodeList::~NodeList()
 
 void NodeList::append( Grantlee::Node *node )
 {
-  if (!m_containsNonText)
-  {
+  if ( !m_containsNonText ) {
     TextNode *textNode = qobject_cast<TextNode *>( node );
-    if (!textNode)
+    if ( !textNode )
       m_containsNonText = true;
   }
 
@@ -141,13 +138,10 @@ void NodeList::append( Grantlee::Node *node )
 
 void NodeList::append( QList<Grantlee::Node*> nodeList )
 {
-  if (!m_containsNonText)
-  {
-    foreach (Grantlee::Node *node, nodeList)
-    {
+  if ( !m_containsNonText ) {
+    foreach( Grantlee::Node *node, nodeList ) {
       TextNode *textNode = qobject_cast<TextNode *>( node );
-      if (!textNode)
-      {
+      if ( !textNode ) {
         m_containsNonText = true;
         break;
       }
@@ -198,12 +192,12 @@ QString NodeList::mutableRender( Context *c )
       if ( textNode && ( !isPersistent || node->isRepeatable() ) ) {
         textNode->appendContent( renderedNode );
       }
-      if (*it == *( last - 1 ) )
-      {
+      if ( *it == *( last - 1 ) ) {
         break;
       }
       if ( !isPersistent && !lastNode->isPersistent() ) {
         it = erase( it );
+        // TODO: This --it is broken. Fix this iteration.
         --it;
       }
     }

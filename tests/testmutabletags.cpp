@@ -207,7 +207,7 @@ void TestMutableTagsSyntax::testMultiRepeater()
   Context c( h );
   QString result = t->render( &c );
   QString expected = "Before.Foo.Middle.Bar.After.";
-  QCOMPARE(result, expected);
+  QCOMPARE( result, expected );
 
   content = "Before."
             "{% repeater %}"
@@ -220,11 +220,11 @@ void TestMutableTagsSyntax::testMultiRepeater()
             "After.";
   Template *t2 = Engine::instance()->newMutableTemplate( content, "t2", this );
 
-  h.insert("var", "String");
+  h.insert( "var", "String" );
   Context c2( h );
   QString result2 = t2->render( &c2 );
   QString expected2 = "Before.Foo.Middle.String.Bar.After.";
-  QCOMPARE(result2, expected2);
+  QCOMPARE( result2, expected2 );
 }
 
 QTEST_MAIN( TestMutableTagsSyntax )

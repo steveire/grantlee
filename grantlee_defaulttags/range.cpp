@@ -32,7 +32,7 @@ RangeNodeFactory::RangeNodeFactory()
 
 }
 
-Grantlee::Node* RangeNodeFactory::getNode(const QString& tagContent, Parser* p) const
+Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
@@ -44,16 +44,14 @@ Grantlee::Node* RangeNodeFactory::getNode(const QString& tagContent, Parser* p) 
   }
 
   QString name;
-  if ( numArgs >= 3 && expr.at( numArgs - 3 ) == "as" )
-  {
+  if ( numArgs >= 3 && expr.at( numArgs - 3 ) == "as" ) {
     name = expr.at( numArgs - 2 );
     numArgs -= 2;
   }
 
   RangeNode *n = 0;
 
-  switch( numArgs )
-  {
+  switch ( numArgs ) {
   case 1:
     n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ) );
   case 2:
@@ -72,16 +70,16 @@ Grantlee::Node* RangeNodeFactory::getNode(const QString& tagContent, Parser* p) 
 
 }
 
-RangeNode::RangeNode( const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression, FilterExpression stepExpression, QObject* parent)
-  : Node( parent ),
-    m_name(name),
-    m_startOrStopExpression(startOrStopExpression),
-    m_stopExpression(stopExpression),
-    m_stepExpression(stepExpression)
+RangeNode::RangeNode( const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression, FilterExpression stepExpression, QObject* parent )
+    : Node( parent ),
+    m_name( name ),
+    m_startOrStopExpression( startOrStopExpression ),
+    m_stopExpression( stopExpression ),
+    m_stepExpression( stepExpression )
 {
 }
 
-void RangeNode::setNodeList(NodeList list)
+void RangeNode::setNodeList( NodeList list )
 {
   m_list = list;
 }
@@ -92,40 +90,32 @@ QString RangeNode::render( Context* c )
   int stop;
   int step;
 
-  if ( m_stopExpression.isValid() )
-  {
+  if ( m_stopExpression.isValid() ) {
     start = m_startOrStopExpression.resolve( c ).toInt();
     stop = m_stopExpression.resolve( c ).toInt();
-  }
-  else
-  {
+  } else {
     start = 0;
     stop = m_startOrStopExpression.resolve( c ).toInt();
   }
 
-  if ( m_stepExpression.isValid() )
-  {
+  if ( m_stepExpression.isValid() ) {
     step = m_stepExpression.resolve( c ).toInt();
-  }
-  else
-  {
+  } else {
     step = 1;
   }
 
   const bool insertContext = !m_name.isEmpty();
 
-  Q_ASSERT(start < stop);
+  Q_ASSERT( start < stop );
 
   QString ret;
-  for (int i = start; start < stop; start += step)
-  {
-    if (insertContext)
-    {
+  for ( int i = start; start < stop; start += step ) {
+    if ( insertContext ) {
       c->push();
-      c->insert(m_name, i);
+      c->insert( m_name, i );
     }
     ret += m_list.render( c );
-    if (insertContext)
+    if ( insertContext )
       c->pop();
   }
   return ret;

@@ -22,78 +22,77 @@
 #include <QVariant>
 
 
-AddSlashesFilter::AddSlashesFilter(QObject* parent)
-    : Filter(parent)
+AddSlashesFilter::AddSlashesFilter( QObject* parent )
+    : Filter( parent )
 {
 
 }
 
 
-Grantlee::SafeString AddSlashesFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
+Grantlee::SafeString AddSlashesFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
   QString retString = Util::getSafeString( input ).rawString();
 
-  retString.replace( "\\", "\\\\" ).replace('"', "\\\"").replace('\'', "\\'");
+  retString.replace( "\\", "\\\\" ).replace( '"', "\\\"" ).replace( '\'', "\\'" );
 
   return retString;
 }
 
-CapFirstFilter::CapFirstFilter(QObject* parent)
-    : Filter(parent)
+CapFirstFilter::CapFirstFilter( QObject* parent )
+    : Filter( parent )
 {
 
 }
 
-Grantlee::SafeString CapFirstFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
+Grantlee::SafeString CapFirstFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
   QString retString = Util::getSafeString( input ).rawString();
-  if (retString.isEmpty())
+  if ( retString.isEmpty() )
     return QString();
 
-  return retString.at(0).toUpper() + retString.right(retString.size() - 1);
+  return retString.at( 0 ).toUpper() + retString.right( retString.size() - 1 );
 
 }
 
 
-EscapeJsFilter::EscapeJsFilter(QObject* parent)
-    : Filter(parent)
+EscapeJsFilter::EscapeJsFilter( QObject* parent )
+    : Filter( parent )
 {
 
 }
 
 
 
-Grantlee::SafeString EscapeJsFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
+Grantlee::SafeString EscapeJsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
   QString retString = Util::getSafeString( input ).rawString();
 
   QList<QPair<QString, QString> > jsEscapes;
 
-  jsEscapes << QPair<QString, QString>("\\", "\\x5C");
+  jsEscapes << QPair<QString, QString>( "\\", "\\x5C" );
 
-  QListIterator<QPair<QString, QString> > it(jsEscapes);
+  QListIterator<QPair<QString, QString> > it( jsEscapes );
 
-  while (it.hasNext())
-  {
+  while ( it.hasNext() ) {
     QPair<QString, QString> escape = it.next();
-    retString.replace(escape.first, escape.second);
+    retString.replace( escape.first, escape.second );
   }
   return retString;
 }
 
-FixAmpersandsFilter::FixAmpersandsFilter(QObject* parent)
-    : Filter(parent)
+FixAmpersandsFilter::FixAmpersandsFilter( QObject* parent )
+    : Filter( parent )
 {
 
 }
 
-Grantlee::SafeString FixAmpersandsFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
+Grantlee::SafeString FixAmpersandsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
   QString retString = Util::getSafeString( input ).rawString();
 
-  QRegExp fixAmpersandsRegexp("&(?!(\\w+|#\\d+);)");
+  QRegExp fixAmpersandsRegexp( "&(?!(\\w+|#\\d+);)" );
 
-  retString.replace(fixAmpersandsRegexp, "&amp;");
+  retString.replace( fixAmpersandsRegexp, "&amp;" );
 
   return retString;
 }
@@ -123,23 +122,22 @@ Grantlee::SafeString SafeFilter::doFilter( const QVariant& input, const Grantlee
   return Util::markSafe( Util::getSafeString( input ) );
 }
 
-LineNumbersFilter::LineNumbersFilter(QObject* parent)
-    : Filter(parent)
+LineNumbersFilter::LineNumbersFilter( QObject* parent )
+    : Filter( parent )
 {
 
 }
 
 
-SafeString LineNumbersFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
+SafeString LineNumbersFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  SafeString safeString = Util::getSafeString(input);
-  QStringList lines = safeString.rawString().split('\n');
-  int width = QString::number(lines.size()).size();
+  SafeString safeString = Util::getSafeString( input );
+  QStringList lines = safeString.rawString().split( '\n' );
+  int width = QString::number( lines.size() ).size();
 
   const bool shouldEscape = ( !autoescape || safeString.isSafe() );
 
-  for ( int i = 0; i < lines.size(); ++i )
-  {
+  for ( int i = 0; i < lines.size(); ++i ) {
     lines[ i ] = QString( "%0" + QString::number( width ) + "d. %s" ).arg( i + 1 ).arg(
                   shouldEscape ? Util::escape( lines.at( i ) ).rawString() : lines.at( i )
                   );
@@ -172,24 +170,24 @@ Grantlee::SafeString LowerFilter::doFilter( const QVariant& input, const Grantle
 // }
 
 
-StringFormatFilter::StringFormatFilter(QObject* parent)
-    : Filter(parent)
+StringFormatFilter::StringFormatFilter( QObject* parent )
+    : Filter( parent )
 {
 
 }
 
 
-SafeString StringFormatFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
+SafeString StringFormatFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
   return argument.rawString().arg( Util::getSafeString( input ).rawString() );
 }
 
-TitleFilter::TitleFilter(QObject* parent): Filter(parent)
+TitleFilter::TitleFilter( QObject* parent ): Filter( parent )
 {
 
 }
 
-SafeString TitleFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
+SafeString TitleFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
 //   QRegExp re( "\b([a-z])" );
 
@@ -305,7 +303,7 @@ Grantlee::SafeString EscapeFilter::doFilter( const QVariant& input, const Grantl
 }
 
 ForceEscapeFilter::ForceEscapeFilter( QObject* parent )
-: Filter( parent )
+    : Filter( parent )
 {
 
 }

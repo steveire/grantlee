@@ -47,7 +47,7 @@ Grantlee::Node* MediaFinderNodeFactory::getNode( const QString& tagContent, Pars
 }
 
 MediaFinderNode::MediaFinderNode( QList<FilterExpression> mediaExpressionList, QObject* parent )
-  : Node( parent ), m_mediaExpressionList(mediaExpressionList)
+    : Node( parent ), m_mediaExpressionList( mediaExpressionList )
 {
 }
 
@@ -56,7 +56,7 @@ QString MediaFinderNode::render( Context* c )
   Grantlee::Engine *engine = Grantlee::Engine::instance();
   foreach( FilterExpression fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
-      return engine->mediaUri( Util::getSafeString( fe.resolve( c ) ).rawString(), parent()->property("settingsToken").toULongLong() );
+      return engine->mediaUri( Util::getSafeString( fe.resolve( c ) ).rawString(), parent()->property( "settingsToken" ).toULongLong() );
     }
   }
   return QString();

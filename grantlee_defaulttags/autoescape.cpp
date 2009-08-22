@@ -59,7 +59,7 @@ Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   NodeList list = p->parse( n, QStringList() << "endautoescape" );
   p->deleteNextToken();
 
-  n->setList(list);
+  n->setList( list );
 
   return n;
 }
@@ -70,7 +70,7 @@ AutoescapeNode::AutoescapeNode( int state, QObject *parent )
 }
 
 
-void AutoescapeNode::setList(NodeList list)
+void AutoescapeNode::setList( NodeList list )
 {
   m_list = list;
 }

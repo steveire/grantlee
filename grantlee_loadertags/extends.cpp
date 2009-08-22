@@ -57,7 +57,7 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   ExtendsNode *n = new ExtendsNode( parentName, fe );
 
-  Template *t = qobject_cast<Template *>(p->parent());
+  Template *t = qobject_cast<Template *>( p->parent() );
 
   Q_ASSERT( t );
 
@@ -79,12 +79,12 @@ ExtendsNode::ExtendsNode( const QString &name, FilterExpression fe, QObject *par
 {
 }
 
-void ExtendsNode::setNodeList(NodeList list)
+void ExtendsNode::setNodeList( NodeList list )
 {
   m_list = list;
 }
 
-Template *ExtendsNode::getParent( Context *c )
+Template* ExtendsNode::getParent( Context *c )
 {
   QString parentName;
   if ( m_name.isEmpty() ) {
@@ -101,7 +101,7 @@ Template *ExtendsNode::getParent( Context *c )
     parentName = m_name;
   }
   Engine *engine = Engine::instance();
-  qint64 settingsToken = parent()->property("settingsToken").toULongLong();
+  qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
 
   Template* t = engine->loadByName( parentName, 0, settingsToken );
 

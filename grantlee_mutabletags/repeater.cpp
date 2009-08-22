@@ -42,7 +42,7 @@ RepeaterNode::RepeaterNode( QObject* parent )
 
 }
 
-void RepeaterNode::setNodeList(NodeList nodeList)
+void RepeaterNode::setNodeList( NodeList nodeList )
 {
   m_nodeList = nodeList;
 }

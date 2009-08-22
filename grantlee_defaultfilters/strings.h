@@ -30,8 +30,7 @@ class GRANTLEE_EXPORT AddSlashesFilter : public Filter
 public:
   AddSlashesFilter( QObject *parent = 0 );
 
-  virtual bool isSafe() const
-  {
+  virtual bool isSafe() const {
     return true;
   }
 
@@ -45,8 +44,7 @@ class GRANTLEE_EXPORT CapFirstFilter : public Filter
 public:
   CapFirstFilter( QObject *parent = 0 );
 
-  virtual bool isSafe() const
-  {
+  virtual bool isSafe() const {
     return true;
   }
 
@@ -70,8 +68,7 @@ class GRANTLEE_EXPORT FixAmpersandsFilter : public Filter
 public:
   FixAmpersandsFilter( QObject *parent = 0 );
 
-  virtual bool isSafe() const
-  {
+  virtual bool isSafe() const {
     return true;
   }
 
@@ -114,8 +111,7 @@ public:
     return true;
   }
 
-  bool needsAutoEscape()
-  {
+  bool needsAutoEscape() {
     return true;
   }
 

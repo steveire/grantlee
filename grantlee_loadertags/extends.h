@@ -56,8 +56,7 @@ public:
 
   Template *getParent( Context *c );
 
-  virtual bool mustBeFirst()
-  {
+  virtual bool mustBeFirst() {
     return true;
   }
 

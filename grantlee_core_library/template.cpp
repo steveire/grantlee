@@ -33,8 +33,7 @@ namespace Grantlee
 class TemplatePrivate
 {
   TemplatePrivate( Template *t )
-      : q_ptr(t), m_error( NoError )
-  {
+      : q_ptr( t ), m_error( NoError ) {
 
   }
 
@@ -47,7 +46,7 @@ class TemplatePrivate
   QString m_errorString;
   NodeList m_nodeList;
 
-  Q_DECLARE_PUBLIC(Template)
+  Q_DECLARE_PUBLIC( Template )
   Template *q_ptr;
 };
 
@@ -67,10 +66,10 @@ NodeList TemplatePrivate::compileString( const QString &str )
 }
 
 Template::Template( QObject *parent )
-    : QObject( parent ), d_ptr(new TemplatePrivate(this))
+    : QObject( parent ), d_ptr( new TemplatePrivate( this ) )
 {
-  Q_D(Template);
-  d->m_settingsToken = reinterpret_cast<qint64>(this);
+  Q_D( Template );
+  d->m_settingsToken = reinterpret_cast<qint64>( this );
 }
 
 Template::~Template()
@@ -111,13 +110,13 @@ void Template::setNodeList( const NodeList &list )
 
 void Template::setSettingsToken( qint64 settingsToken )
 {
-  Q_D(Template);
+  Q_D( Template );
   d->m_settingsToken = settingsToken;
 }
 
 qint64 Template::settingsToken() const
 {
-  Q_D(const Template);
+  Q_D( const Template );
   return d->m_settingsToken;
 }
 

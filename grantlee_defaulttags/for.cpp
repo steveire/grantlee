@@ -78,13 +78,13 @@ ForNode::ForNode( QStringList loopVars,
 
 }
 
-void ForNode::setLoopList(NodeList loopNodeList)
+void ForNode::setLoopList( NodeList loopNodeList )
 {
   m_loopNodeList = loopNodeList;
 }
 
 
-void ForNode::setEmptyList(NodeList emptyList)
+void ForNode::setEmptyList( NodeList emptyList )
 {
   m_emptyNodeList = emptyList;
 }

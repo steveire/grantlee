@@ -106,12 +106,10 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     if ( subString.startsWith( FILTER_SEPARATOR ) ) {
       subString = subString.right( ssSize - 1 );
       Filter *f = parser->getFilter( subString );
-      if ( f )
-      {
+      if ( f ) {
         d->m_filterNames << subString;
         d->m_filters << qMakePair<Filter*, Variable>( f, Variable() );
-      }
-      else {
+      } else {
         setError( TagSyntaxError, QString( "Could not find fiter named %1" ).arg( subString ) );
         return;
       }

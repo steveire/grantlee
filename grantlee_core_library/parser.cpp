@@ -73,14 +73,12 @@ void ParserPrivate::openLibrary( TagLibraryInterface *library )
 {
   Q_Q( Parser );
   QHashIterator<QString, AbstractNodeFactory*> nodeIt( library->nodeFactories() );
-  while ( nodeIt.hasNext() )
-  {
+  while ( nodeIt.hasNext() ) {
     nodeIt.next();
     m_nodeFactories.insert( nodeIt.key(), nodeIt.value() );
   }
   QHashIterator<QString, Filter*> filterIt( library->filters() );
-  while ( filterIt.hasNext() )
-  {
+  while ( filterIt.hasNext() ) {
     filterIt.next();
     Filter *f = filterIt.value();
     f->setParent( q->parent() );
@@ -96,8 +94,7 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
   Engine *engine = Engine::instance();
 
   qint64 settingsToken = parent->property( "settingsToken" ).toULongLong();
-  foreach ( TagLibraryInterface *library, engine->loadDefaultLibraries( settingsToken ) )
-  {
+  foreach( TagLibraryInterface *library, engine->loadDefaultLibraries( settingsToken ) ) {
     d->openLibrary( library );
   }
 }
@@ -121,7 +118,7 @@ void Parser::loadLib( const QString &name )
   Q_D( Parser );
   qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
   TagLibraryInterface *library = Engine::instance()->loadLibrary( name, settingsToken );
-  if (!library)
+  if ( !library )
     return;
   d->openLibrary( library );
 }
@@ -129,8 +126,7 @@ void Parser::loadLib( const QString &name )
 NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 {
   Q_Q( Parser );
-  if ( node->mustBeFirst() && list.containsNonText() )
-  {
+  if ( node->mustBeFirst() && list.containsNonText() ) {
     q->setError( TagSyntaxError, "Node appeared twice in template" );
     return NodeList();
   }
@@ -240,8 +236,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         return NodeList();
       }
       nodeList = extendNodeList( nodeList, n );
-      if ( q->error() )
-      {
+      if ( q->error() ) {
         return nodeList;
       }
     }
