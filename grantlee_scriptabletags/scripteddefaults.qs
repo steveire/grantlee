@@ -1,40 +1,46 @@
 
-function IfNode(truthVariable, trueList, falseList){
+function IfNode( truthVariable )
+{
   this.truthVariable = truthVariable;
-  this.trueList = trueList;
-  this.falseList = falseList;
-  this.render = function(context) {
-    if (this.truthVariable.isTrue(context))
+
+  this.render = function( context )
+  {
+    if ( this.truthVariable.isTrue( context ) )
     {
       return context.render(this.trueList);
     } else {
       return context.render(this.falseList);
     }
-  };
-};
+  }
+}
 
-var IfNodeFactory = function(tagContent, parser, parent)
+
+function IfNodeFactory( tagContent, parser )
 {
+  // TODO: Make smartSplit globally available standalone
   var tagArgs = AbstractNodeFactory.smartSplit(tagContent);
   var truthVariable = FilterExpression(tagArgs[1]);
   var falseList;
-  var trueList = parser.parse(["else", "endif2"], parent);
+
+  var node = new Node("IfNode", truthVariable);
+
+  var trueList = parser.parse( node, [ "else", "endif2" ] );
+  node.setNodeList("trueList", trueList);
   if (parser.nextToken().content == "else")
   {
-    falseList =  parser.parse("endif2", parent);
+    falseList =  parser.parse( node, "endif2" );
+    node.setNodeList("falseList", falseList);
     parser.deleteNextToken();
   }
-  return new Node("IfNode", truthVariable, trueList, falseList);
-};
-IfNodeFactory.tagName = "if2";
-Library.addFactory("IfNodeFactory");
+  return node;
+}
+Library.addFactory("IfNodeFactory", "if2");
 
-function IfEqualNode(expression1, expression2, trueList, falseList){
+
+function IfEqualNode(expression1, expression2 ){
   this.expression1 = expression1;
   this.expression2 = expression2;
-  this.trueList = trueList;
-  this.falseList = falseList;
-  this.render = function(context)
+  this.render = function( context )
   {
     if (expression1.equals(expression2 , context))
     {
@@ -45,22 +51,25 @@ function IfEqualNode(expression1, expression2, trueList, falseList){
   }
 }
 
-IfEqualNodeFactory = function(tagContent, parser, parent)
+function IfEqualNodeFactory(tagContent, parser)
 {
   var tagArgs = AbstractNodeFactory.smartSplit(tagContent);
   var expression1 = FilterExpression(tagArgs[1], parser);
   var expression2 = FilterExpression(tagArgs[2], parser);
-  var falseList;
-  var trueList = parser.parse(["else", "endifequal2"], parent);
+
+  var node = new Node("IfEqualNode", expression1, expression2 );
+  var trueList = parser.parse(node, ["else", "endifequal2"]);
+  node.setNodeList("trueList", trueList);
   if (parser.nextToken().content == "else")
   {
-    falseList =  parser.parse("endifequal2", parent);
+    falseList = parser.parse(node, "endifequal2");
+    node.setNodeList("falseList", falseList);
     parser.deleteNextToken();
   }
-  return new Node("IfEqualNode", expression1, expression2, trueList, falseList);
+  return node;
 }
-IfEqualNodeFactory.tagName = "ifequal2";
-Library.addFactory("IfEqualNodeFactory");
+Library.addFactory("IfEqualNodeFactory", "ifequal2");
+
 
 var SafeFilter = function(input)
 {

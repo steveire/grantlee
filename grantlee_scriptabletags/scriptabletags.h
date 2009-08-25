@@ -49,7 +49,7 @@ public:
   virtual QHash<QString, Filter*> filters( const QString &name = QString() );
 
 public slots:
-  void addFactory( const QString &factoryName );
+  void addFactory( const QString &factoryName, const QString &tagname );
   void addFilter( const QString &filterName );
 
 protected:
@@ -61,7 +61,7 @@ private:
 //   ScriptEnginePointer m_scriptEngine;
   QScriptEngine *m_scriptEngine;
   QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-  QStringList m_factoryNames;
+  QHash<QString, QString> m_factoryNames;
   QStringList m_filterNames;
   QHash<QString, Filter*> m_filters;
 

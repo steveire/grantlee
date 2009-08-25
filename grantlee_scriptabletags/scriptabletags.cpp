@@ -109,7 +109,7 @@ bool ScriptableTagLibrary::evaluateScript( const QString &name )
   m_scriptEngine->evaluate( fileContent );
 
   if ( m_scriptEngine->hasUncaughtException() ) {
-    return false;
+    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
   }
   return true;
 }
@@ -143,14 +143,13 @@ QHash< QString, Filter* > ScriptableTagLibrary::filters( const QString& name )
 QHash<QString, AbstractNodeFactory*> ScriptableTagLibrary::getFactories()
 {
   QHash<QString, AbstractNodeFactory*> factories;
-  QListIterator<QString> it( m_factoryNames );
+  QHashIterator<QString, QString> it( m_factoryNames );
   while ( it.hasNext() ) {
-    QString factoryName = it.next();
+    it.next();
+    QString factoryName = it.value();
+    QString tagName = it.key();
 
     QScriptValue factoryObject = m_scriptEngine->globalObject().property( factoryName );
-
-    factoryObject.call( factoryObject );
-    QString tagName = factoryObject.property( "tagName" ).toString();
 
     ScriptableNodeFactory *snf = new ScriptableNodeFactory();
     snf->setEngine( m_scriptEngine );
@@ -169,18 +168,20 @@ QHash<QString, Filter*> ScriptableTagLibrary::getFilters()
   QListIterator<QString> it( m_filterNames );
   while ( it.hasNext() ) {
     QScriptValue filterObject = m_scriptEngine->globalObject().property( it.next() );
-    filterObject.call( QScriptValue() );
     QString filterName = filterObject.property( "filterName" ).toString();
     ScriptableFilter *filter = new ScriptableFilter( filterObject, m_scriptEngine );
     filters.insert( filterName, filter );
+  }
+  if ( m_scriptEngine->hasUncaughtException() ) {
+    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
   }
 
   return filters;
 }
 
-void ScriptableTagLibrary::addFactory( const QString &factoryName )
+void ScriptableTagLibrary::addFactory( const QString &factoryName, const QString &tagName )
 {
-  m_factoryNames << factoryName;
+  m_factoryNames.insert(tagName, factoryName);
 }
 
 void ScriptableTagLibrary::addFilter( const QString &filterName )

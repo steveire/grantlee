@@ -43,7 +43,8 @@ Q_SCRIPT_DECLARE_QMETAOBJECT( ScriptableNode, Node* )
 QScriptValue ScriptableNodeConstructor( QScriptContext *context,
                                         QScriptEngine *engine )
 {
-  QScriptValue concreteNode = engine->globalObject().property( context->argument( 0 ).toString() );
+  QString scriptableNodeName = context->argument( 0 ).toString();
+  QScriptValue concreteNode = engine->globalObject().property( scriptableNodeName );
 
   QScriptValueList args;
   // First is the node type
@@ -56,6 +57,7 @@ QScriptValue ScriptableNodeConstructor( QScriptContext *context,
   QScriptValue renderMethod = concreteNode.property( "render" );
 
   ScriptableNode *object = new ScriptableNode( engine );
+  object->setObjectName( scriptableNodeName );
   object->setEngine( engine );
   object->init( concreteNode, renderMethod );
   return engine->newQObject( object );
@@ -109,6 +111,9 @@ void ScriptableNodeFactory::setFactory( QScriptValue factoryMethod )
 
 Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
+  if ( m_scriptEngine->hasUncaughtException() ) {
+    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
+  }
   ScriptableParser *sp = new ScriptableParser( p, m_scriptEngine );
   QScriptValue parserObject = m_scriptEngine->newQObject( sp );
 
@@ -119,6 +124,8 @@ Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   QScriptValue factory = m_factoryMethod;
 
   QScriptValue scriptNode = factory.call( factory, args );
+  if (m_scriptEngine->hasUncaughtException())
+    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
 
   Node* node = qscriptvalue_cast<Node*>( scriptNode );
   ScriptableNode *sn = qobject_cast<ScriptableNode *>( node );
@@ -129,5 +136,16 @@ Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) con
 QScriptEngine* ScriptableNode::engine()
 {
   return m_scriptEngine;
+}
+
+void ScriptableNode::setNodeList( const QString &name, QObjectList objectList )
+{
+  QScriptValue objectListArray = m_scriptEngine->newArray( objectList.size() );
+
+  for ( int i = 0; i < objectList.size(); ++i )
+  {
+    objectListArray.setProperty( i, m_scriptEngine->newQObject( objectList.at( i ) ) );
+  }
+  m_concreteNode.setProperty( name, objectListArray );
 }
 

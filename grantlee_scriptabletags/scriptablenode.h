@@ -65,6 +65,10 @@ private:
   QScriptEngine* m_scriptEngine;
   QScriptValue m_concreteNode;
   QScriptValue m_renderMethod;
+
+public slots:
+  void setNodeList( const QString &name, QObjectList );
+
 };
 
 class ScriptableNodeFactory : public AbstractNodeFactory

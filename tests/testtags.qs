@@ -15,5 +15,5 @@ function EchoNodeFactory(tagContent, parser, parent)
   content = content.slice(1, content.length);
   return new Node("EchoNode", content);
 };
-EchoNodeFactory.tagName = "echo";
-Library.addFactory("EchoNodeFactory");
+Library.addFactory("EchoNodeFactory", "echo");
+
