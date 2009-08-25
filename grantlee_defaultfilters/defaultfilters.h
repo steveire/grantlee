@@ -60,6 +60,8 @@ public:
     filters.insert( "truncatewords", new TruncateWordsFilter() );
     filters.insert( "join", new JoinFilter() );
     filters.insert( "removetags", new RemoveTagsFilter() );
+    filters.insert( "default", new DefaultFilter() );
+    filters.insert( "divisibleby", new DivisibleByFilter() );
     filters.insert( "default_if_none", new DefaultIfNoneFilter() );
     filters.insert( "cut", new CutFilter() );
     filters.insert( "slice", new SliceFilter() );
@@ -71,6 +73,17 @@ public:
     filters.insert( "date", new DateFilter() );
     filters.insert( "time", new TimeFilter() );
     filters.insert( "timesince", new TimeSinceFilter() );
+    filters.insert( "timeuntil", new TimeUntilFilter() );
+    filters.insert( "add", new AddFilter() );
+    filters.insert( "getdigit", new GetDigitFilter() );
+    filters.insert( "length", new LengthFilter() );
+    filters.insert( "lengthis", new LengthIsFilter() );
+    filters.insert( "random", new RandomFilter() );
+    filters.insert( "slice", new SliceFilter() );
+    filters.insert( "escapejs", new EscapeJsFilter() );
+    filters.insert( "fix_ampersands", new FixAmpersandsFilter() );
+//     filters.insert( "floatformat", new FloatFormatFilter() );
+
     return filters;
   }
 };
