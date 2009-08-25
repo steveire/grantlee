@@ -181,7 +181,7 @@ QHash<QString, Filter*> ScriptableTagLibrary::getFilters()
 
 void ScriptableTagLibrary::addFactory( const QString &factoryName, const QString &tagName )
 {
-  m_factoryNames.insert(tagName, factoryName);
+  m_factoryNames.insert( tagName, factoryName );
 }
 
 void ScriptableTagLibrary::addFilter( const QString &filterName )

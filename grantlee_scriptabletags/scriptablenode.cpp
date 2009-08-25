@@ -124,7 +124,7 @@ Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   QScriptValue factory = m_factoryMethod;
 
   QScriptValue scriptNode = factory.call( factory, args );
-  if (m_scriptEngine->hasUncaughtException())
+  if ( m_scriptEngine->hasUncaughtException() )
     throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
 
   Node* node = qscriptvalue_cast<Node*>( scriptNode );
@@ -142,8 +142,7 @@ void ScriptableNode::setNodeList( const QString &name, QObjectList objectList )
 {
   QScriptValue objectListArray = m_scriptEngine->newArray( objectList.size() );
 
-  for ( int i = 0; i < objectList.size(); ++i )
-  {
+  for ( int i = 0; i < objectList.size(); ++i ) {
     objectListArray.setProperty( i, m_scriptEngine->newQObject( objectList.at( i ) ) );
   }
   m_concreteNode.setProperty( name, objectListArray );
