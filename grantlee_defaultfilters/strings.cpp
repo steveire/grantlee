@@ -109,7 +109,10 @@ Grantlee::SafeString CutFilter::doFilter( const QVariant& input, const Grantlee:
 
   retString.remove( argument );
 
-  return retString;
+  if ( argument.rawString() == ";" )
+    return retString;
+
+  return SafeString( retString, Util::getSafeString( input ).isSafe() ? SafeString::IsSafe : SafeString::IsNotSafe );
 }
 
 SafeFilter::SafeFilter( QObject* parent ): Filter( parent )
@@ -135,12 +138,11 @@ SafeString LineNumbersFilter::doFilter( const QVariant& input, const Grantlee::S
   QStringList lines = safeString.rawString().split( '\n' );
   int width = QString::number( lines.size() ).size();
 
-  const bool shouldEscape = ( !autoescape || safeString.isSafe() );
-
+  const bool shouldEscape = ( autoescape && !safeString.isSafe() );
   for ( int i = 0; i < lines.size(); ++i ) {
-    lines[ i ] = QString( "%0" + QString::number( width ) + "d. %s" ).arg( i + 1 ).arg(
-                  shouldEscape ? Util::escape( lines.at( i ) ).rawString() : lines.at( i )
-                  );
+    lines[ i ] = QString( "%1. %2" ).arg( i + 1, width ).arg(
+                   shouldEscape ? Util::escape( lines.at( i ) ).rawString() : lines.at( i )
+                 );
   }
 
   return Util::markSafe( lines.join( QString( '\n' ) ) );
@@ -179,7 +181,10 @@ StringFormatFilter::StringFormatFilter( QObject* parent )
 
 SafeString StringFormatFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  return argument.rawString().arg( Util::getSafeString( input ).rawString() );
+
+  QString a = Util::getSafeString( input ).rawString();
+  SafeString s = SafeString( argument.rawString().arg( a ), Util::getSafeString( input ).isSafe() ? SafeString::IsSafe : SafeString::IsNotSafe );
+  return s;
 }
 
 TitleFilter::TitleFilter( QObject* parent ): Filter( parent )
@@ -283,11 +288,10 @@ Grantlee::SafeString CenterFilter::doFilter( const QVariant& input, const Grantl
   QString value = Util::getSafeString( input ).rawString();
   const int valueWidth = value.size();
   const int width = QVariant( argument ).toInt();
-  const int totalPadding = valueWidth - width;
-  const int leftPadding = totalPadding >> 1;
-  const int rightPadding = totalPadding - leftPadding;
+  const int totalPadding = width - valueWidth;
+  const int rightPadding = totalPadding >> 1;
 
-  return value.leftJustified( rightPadding ).rightJustified( leftPadding );
+  return value.leftJustified( valueWidth + rightPadding ).rightJustified( width );
 }
 
 
@@ -340,9 +344,10 @@ StripTagsFilter::StripTagsFilter( QObject* parent )
 
 Grantlee::SafeString StripTagsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  QRegExp tagRe( "<[^>]*?>" );
+  QRegExp tagRe( "<[^>]*>" );
+  tagRe.setMinimal( true );
 
-  QString value = Util::getSafeString( input );
+  QString value = Util::getSafeString( input ).rawString();
   value.replace( tagRe, "" );;
   return value;
 }
