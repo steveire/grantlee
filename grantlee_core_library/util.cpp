@@ -115,6 +115,9 @@ Grantlee::SafeString Util::markSafe( const Grantlee::SafeString &input )
 Grantlee::SafeString Util::markForEscaping( const Grantlee::SafeString &input )
 {
   Grantlee::SafeString temp = input;
+  if ( input.isSafe() || input.needsEscape() )
+    return input;
+
   temp.setNeedsEscape( true );
   return temp;
 }
