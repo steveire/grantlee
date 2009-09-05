@@ -35,11 +35,6 @@ target_link_libraries(grantlee_scriptabletags_library
   ${QT_QTSCRIPT_LIBRARY}
 )
 
-set_target_properties(grantlee_scriptabletags_library PROPERTIES
-  VERSION    ${GRANTLEE_LIB_MAJOR_VERSION}.${GRANTLEE_LIB_MINOR_VERSION}.${GRANTLEE_LIB_PATCH_VERSION}
-  SOVERSION  ${GRANTLEE_SCRIPTABLETAGS_LIB_SOVERSION}
-)
-
 install(TARGETS grantlee_scriptabletags_library
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}

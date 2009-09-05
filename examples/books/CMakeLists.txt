@@ -2,7 +2,7 @@ project(books_grantlee)
 
 cmake_minimum_required(VERSION 2.6)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/ )
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/Modules/ )
 
 find_package(Qt4 REQUIRED)
 find_package(Automoc4 REQUIRED)
@@ -16,7 +16,7 @@ include_directories(
   ${QT_INCLUDES}
   ${QT_QTGUI_INCLUDE_DIR}
   ${QT_QTSQL_INCLUDE_DIR}
-  ${GRANTLEE_INCLUDE_DIR}
+  ${Grantlee_INCLUDE_DIR}
   ${PROJECT_BINARY_DIR}
 )
 
@@ -54,7 +54,7 @@ target_link_libraries(
   books
   ${QT_QTGUI_LIBRARIES}
   ${QT_QTSQL_LIBRARIES}
-  ${GRANTLEE_LIBRARY}
+  ${Grantlee_LIBRARIES}
 )
 
 
