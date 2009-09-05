@@ -64,6 +64,40 @@ Grantlee::SafeString LengthIsFilter::doFilter( const QVariant& input, const Gran
   return ( Util::variantToList( input ).size() == QVariant( argument ).toInt() ) ? "true" : QString();
 }
 
+FirstFilter::FirstFilter( QObject* parent )
+    : Filter( parent )
+{
+
+}
+
+Grantlee::SafeString FirstFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+{
+  QVariantList varList = Util::variantToList( input );
+
+  if ( varList.isEmpty() )
+    return QString();
+
+  return Util::getSafeString( varList.at( 0 ) );
+}
+
+
+LastFilter::LastFilter( QObject* parent )
+    : Filter( parent )
+{
+
+}
+
+Grantlee::SafeString LastFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+{
+  QVariantList varList = Util::variantToList( input );
+
+  if ( varList.isEmpty() )
+    return QString();
+
+  return Util::getSafeString( varList.at( varList.size() - 1 ) );
+}
+
+
 RandomFilter::RandomFilter( QObject* parent )
     : Filter( parent )
 {

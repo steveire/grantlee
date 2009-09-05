@@ -93,7 +93,7 @@ class GRANTLEE_EXPORT SafeFilter : public Filter
 public:
   SafeFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -107,11 +107,11 @@ class GRANTLEE_EXPORT LineNumbersFilter : public Filter
 public:
   LineNumbersFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
-  bool needsAutoEscape() {
+  bool needsAutoescape() const {
     return true;
   }
 
@@ -125,7 +125,7 @@ class LowerFilter : public Filter
 public:
   LowerFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -153,7 +153,7 @@ class StringFormatFilter : public Filter
 public:
   StringFormatFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -166,7 +166,7 @@ class TitleFilter : public Filter
 public:
   TitleFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -194,7 +194,7 @@ public:
   UpperFilter( QObject *parent = 0 );
 
   // &amp; may be safe, but it will be changed to &AMP; which is not safe.
-  bool isSafe() {
+  bool isSafe() const {
     return false;
   }
 
@@ -208,7 +208,7 @@ class GRANTLEE_EXPORT WordCountFilter : public Filter
 public:
   WordCountFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -222,7 +222,7 @@ class GRANTLEE_EXPORT LJustFilter : public Filter
 public:
   LJustFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -236,7 +236,7 @@ class GRANTLEE_EXPORT RJustFilter : public Filter
 public:
   RJustFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -250,7 +250,7 @@ class GRANTLEE_EXPORT CenterFilter : public Filter
 public:
   CenterFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -264,7 +264,7 @@ class GRANTLEE_EXPORT EscapeFilter : public Filter
 public:
   EscapeFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -278,7 +278,7 @@ class GRANTLEE_EXPORT ForceEscapeFilter : public Filter
 public:
   ForceEscapeFilter( QObject *parent = 0 );
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 

@@ -32,7 +32,11 @@ public:
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
-  bool isSafe() {
+  bool isSafe() const {
+    return true;
+  }
+
+  bool needsAutoescape() const {
     return true;
   }
 
@@ -46,7 +50,7 @@ public:
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -61,9 +65,29 @@ public:
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
+
+};
+
+class GRANTLEE_EXPORT FirstFilter : public Filter
+{
+  Q_OBJECT
+public:
+  FirstFilter( QObject *parent = 0 );
+
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+
+};
+
+class GRANTLEE_EXPORT LastFilter : public Filter
+{
+  Q_OBJECT
+public:
+  LastFilter( QObject *parent = 0 );
+
+  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
 };
 
@@ -75,7 +99,7 @@ public:
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
-  bool isSafe() {
+  bool isSafe() const {
     return true;
   }
 
@@ -90,6 +114,9 @@ public:
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
+  bool isSafe() const {
+    return true;
+  }
 };
 
 #endif
