@@ -186,6 +186,7 @@ QVariant FilterExpression::resolve( Context *c ) const
     Variable argVar = argfilter.second;
     QVariant arg = argVar.resolve( c );
     Grantlee::SafeString argString;
+    SafeString varString = Util::getSafeString( var );
 
     if ( arg.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
       argString = arg.value<Grantlee::SafeString>();
@@ -208,9 +209,9 @@ QVariant FilterExpression::resolve( Context *c ) const
       nextVar = filter->doFilter( var, argString );
     }
 
-    if ( filter->isSafe() && argString.isSafe() ) {
+    if ( filter->isSafe() && varString.isSafe() ) {
       var = QVariant::fromValue<Grantlee::SafeString>( Util::markSafe( nextVar ) );
-    } else if ( argString.needsEscape() ) {
+    } else if ( varString.needsEscape() ) {
       var = QVariant::fromValue<Grantlee::SafeString>( Util::markForEscaping( nextVar ) );
     } else {
       var = QVariant::fromValue<Grantlee::SafeString>( nextVar );
