@@ -82,13 +82,13 @@ QString RegroupNode::render( Context *c )
   int contextListSize = 0;
   QString hashKey;
   QString lastKey;
-  QString keyName = Util::getSafeString( m_expression.resolve( c ) ).rawString();
+  QString keyName = Util::getSafeString( m_expression.resolve( c ) );
   QListIterator<QVariant> i( objList );
   while ( i.hasNext() ) {
     QVariant var = i.next();
     c->push();
     c->insert( "var", var );
-    QString key = Util::getSafeString( FilterExpression( "var." + keyName, 0 ).resolve( c ) ).rawString();
+    QString key = Util::getSafeString( FilterExpression( "var." + keyName, 0 ).resolve( c ) );
     c->pop();
     QVariantHash hash;
     if ( contextList.size() > 0 ) {

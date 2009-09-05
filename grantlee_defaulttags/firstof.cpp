@@ -54,7 +54,7 @@ QString FirstOfNode::render( Context *c )
 {
   foreach( FilterExpression fe, m_variableList ) {
     if ( fe.isTrue( c ) ) {
-      return Util::getSafeString( fe.resolve( c ) ).rawString();
+      return Util::getSafeString( fe.resolve( c ) );
     }
   }
   return QString();

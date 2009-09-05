@@ -31,11 +31,9 @@ AddSlashesFilter::AddSlashesFilter( QObject* parent )
 
 Grantlee::SafeString AddSlashesFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  QString retString = Util::getSafeString( input ).rawString();
-
-  retString.replace( "\\", "\\\\" ).replace( '"', "\\\"" ).replace( '\'', "\\'" );
-
-  return retString;
+  SafeString safeString = Util::getSafeString( input );
+  safeString.replace( "\\", "\\\\" ).replace( "\"", "\\\"" ).replace( "\'", "\\\'" );
+  return safeString;
 }
 
 CapFirstFilter::CapFirstFilter( QObject* parent )
@@ -46,11 +44,11 @@ CapFirstFilter::CapFirstFilter( QObject* parent )
 
 Grantlee::SafeString CapFirstFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  QString retString = Util::getSafeString( input ).rawString();
-  if ( retString.isEmpty() )
+  SafeString safeString = Util::getSafeString( input );
+  if ( safeString.isEmpty() )
     return QString();
 
-  return retString.at( 0 ).toUpper() + retString.right( retString.size() - 1 );
+  return safeString.at( 0 ).toUpper() + safeString.right( safeString.size() - 1 );
 
 }
 
@@ -65,7 +63,7 @@ EscapeJsFilter::EscapeJsFilter( QObject* parent )
 
 Grantlee::SafeString EscapeJsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  QString retString = Util::getSafeString( input ).rawString();
+  QString retString = Util::getSafeString( input );
 
   QList<QPair<QString, QString> > jsEscapes;
 
@@ -88,13 +86,13 @@ FixAmpersandsFilter::FixAmpersandsFilter( QObject* parent )
 
 Grantlee::SafeString FixAmpersandsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  QString retString = Util::getSafeString( input ).rawString();
+  SafeString safeString = Util::getSafeString( input );
 
   QRegExp fixAmpersandsRegexp( "&(?!(\\w+|#\\d+);)" );
 
-  retString.replace( fixAmpersandsRegexp, "&amp;" );
+  safeString.replace( fixAmpersandsRegexp, "&amp;" );
 
-  return retString;
+  return safeString;
 }
 
 CutFilter::CutFilter( QObject* parent )
@@ -105,14 +103,14 @@ CutFilter::CutFilter( QObject* parent )
 
 Grantlee::SafeString CutFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  QString retString = Util::getSafeString( input ).rawString();
+  SafeString retString = Util::getSafeString( input );
 
   retString.remove( argument );
 
-  if ( argument.rawString() == ";" )
-    return retString;
+  if ( argument == ";" )
+    retString.setSafety(SafeString::IsNotSafe);
 
-  return SafeString( retString, Util::getSafeString( input ).isSafe() ? SafeString::IsSafe : SafeString::IsNotSafe );
+  return retString;
 }
 
 SafeFilter::SafeFilter( QObject* parent ): Filter( parent )
@@ -135,13 +133,13 @@ LineNumbersFilter::LineNumbersFilter( QObject* parent )
 SafeString LineNumbersFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
   SafeString safeString = Util::getSafeString( input );
-  QStringList lines = safeString.rawString().split( '\n' );
+  QStringList lines = safeString.split( '\n' );
   int width = QString::number( lines.size() ).size();
 
   const bool shouldEscape = ( autoescape && !safeString.isSafe() );
   for ( int i = 0; i < lines.size(); ++i ) {
     lines[ i ] = QString( "%1. %2" ).arg( i + 1, width ).arg(
-                   shouldEscape ? Util::escape( lines.at( i ) ).rawString() : lines.at( i )
+                   shouldEscape ? Util::escape( lines.at( i ) ) : lines.at( i )
                  );
   }
 
@@ -156,7 +154,7 @@ LowerFilter::LowerFilter( QObject* parent )
 
 Grantlee::SafeString LowerFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return Util::getSafeString( input ).rawString().toLower();
+  return Util::getSafeString( input ).toLower();
 }
 
 //TODO: consider making doFilter return a QVariant.
@@ -168,7 +166,7 @@ Grantlee::SafeString LowerFilter::doFilter( const QVariant& input, const Grantle
 //
 // SafeString MakeListFilter::doFilter(const QVariant& input, const Grantlee::SafeString& argument, bool autoescape) const
 // {
-//   return Util::getSafeString( input ).rawString().split();
+//   return Util::getSafeString( input ).split();
 // }
 
 
@@ -182,8 +180,8 @@ StringFormatFilter::StringFormatFilter( QObject* parent )
 SafeString StringFormatFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
 
-  QString a = Util::getSafeString( input ).rawString();
-  SafeString s = SafeString( argument.rawString().arg( a ), Util::getSafeString( input ).isSafe() ? SafeString::IsSafe : SafeString::IsNotSafe );
+  QString a = Util::getSafeString( input );
+  SafeString s = SafeString( argument.arg( a ), Util::getSafeString( input ).isSafe() ? SafeString::IsSafe : SafeString::IsNotSafe );
   return s;
 }
 
@@ -198,7 +196,7 @@ SafeString TitleFilter::doFilter( const QVariant& input, const Grantlee::SafeStr
 
   QRegExp re( "([a-z])'([A-Z])" );
 
-  QString str = Util::getSafeString( input ).rawString();
+  QString str = Util::getSafeString( input );
 
   str.replace( re, QString( "\\1" ).toUpper() );
 
@@ -219,7 +217,7 @@ Grantlee::SafeString TruncateWordsFilter::doFilter( const QVariant& input, const
   }
   int numWords = v.toInt();
 
-  QString inputString = Util::getSafeString( input ).rawString();
+  QString inputString = Util::getSafeString( input );
   QStringList words = inputString.split( " ", QString::SkipEmptyParts );
 
   if ( words.size() > numWords ) {
@@ -240,7 +238,7 @@ UpperFilter::UpperFilter( QObject* parent )
 
 Grantlee::SafeString UpperFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return Util::getSafeString( input ).rawString().toUpper();
+  return Util::getSafeString( input ).toUpper();
 }
 
 WordCountFilter::WordCountFilter( QObject* parent )
@@ -251,7 +249,7 @@ WordCountFilter::WordCountFilter( QObject* parent )
 
 Grantlee::SafeString WordCountFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return QString::number( Util::getSafeString( input ).rawString().split( " " ).size() );
+  return QString::number( Util::getSafeString( input ).split( " " ).size() );
 }
 
 LJustFilter::LJustFilter( QObject* parent )
@@ -262,7 +260,7 @@ LJustFilter::LJustFilter( QObject* parent )
 
 Grantlee::SafeString LJustFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return Util::getSafeString( input ).rawString().leftJustified( QVariant( argument ).toInt() );
+  return Util::getSafeString( input ).leftJustified( QVariant( argument ).toInt() );
 }
 
 
@@ -274,7 +272,7 @@ RJustFilter::RJustFilter( QObject* parent )
 
 Grantlee::SafeString RJustFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return Util::getSafeString( input ).rawString().rightJustified( QVariant( argument ).toInt() );
+  return Util::getSafeString( input ).rightJustified( QVariant( argument ).toInt() );
 }
 
 CenterFilter::CenterFilter( QObject* parent )
@@ -285,7 +283,7 @@ CenterFilter::CenterFilter( QObject* parent )
 
 Grantlee::SafeString CenterFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  QString value = Util::getSafeString( input ).rawString();
+  QString value = Util::getSafeString( input );
   const int valueWidth = value.size();
   const int width = QVariant( argument ).toInt();
   const int totalPadding = width - valueWidth;
@@ -325,12 +323,12 @@ RemoveTagsFilter::RemoveTagsFilter( QObject* parent )
 
 Grantlee::SafeString RemoveTagsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-  QStringList tags = argument.rawString().split( " " );
+  QStringList tags = argument.split( " " );
   QString tagRe = QString( "(%1)" ).arg( tags.join( "|" ) );
   QRegExp startTag( QString( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
   QRegExp endTag( QString( "</%1>" ).arg( tagRe ) );
 
-  QString value = Util::getSafeString( input );
+  SafeString value = Util::getSafeString( input );
   value.replace( startTag, "" );
   value.replace( endTag, "" );
   return value;
@@ -347,7 +345,7 @@ Grantlee::SafeString StripTagsFilter::doFilter( const QVariant& input, const Gra
   QRegExp tagRe( "<[^>]*>" );
   tagRe.setMinimal( true );
 
-  QString value = Util::getSafeString( input ).rawString();
+  QString value = Util::getSafeString( input );
   value.replace( tagRe, "" );;
   return value;
 }

@@ -66,7 +66,7 @@ bool Util::variantIsTrue( const QVariant &variant )
   }
 
   Grantlee::SafeString str = getSafeString( variant );
-  return !str.rawString().isEmpty();
+  return !str.isEmpty();
 }
 
 QVariantList Util::variantToList( const QVariant &var )
@@ -170,10 +170,10 @@ bool Util::equals( const QVariant &lhs, const QVariant &rhs )
     if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
       equal = ( lhs.value<Grantlee::SafeString>() == rhs.value<Grantlee::SafeString>() );
     } else if ( rhs.userType() == QVariant::String ) {
-      equal = ( lhs.value<Grantlee::SafeString>().rawString() == rhs.toString() );
+      equal = ( lhs.value<Grantlee::SafeString>() == rhs.toString() );
     }
   } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && lhs.userType() == QVariant::String ) {
-    equal = ( rhs.value<Grantlee::SafeString>().rawString() == lhs.toString() );
+    equal = ( rhs.value<Grantlee::SafeString>() == lhs.toString() );
   }  else {
     equal = (( lhs == rhs ) && ( lhs.userType() == rhs.userType() ) );
   }

@@ -100,7 +100,7 @@ CycleNode::CycleNode( QList<FilterExpression> list, const QString &name, QObject
 
 QString CycleNode::render( Context *c )
 {
-  QString value = Util::getSafeString( m_variableIterator.next().resolve( c ) ).rawString();
+  QString value = Util::getSafeString( m_variableIterator.next().resolve( c ) );
   if ( !m_name.isEmpty() ) {
     c->insert( m_name, value );
   }

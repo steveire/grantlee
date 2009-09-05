@@ -88,10 +88,10 @@ DateFilter::DateFilter( QObject* parent )
 
 Grantlee::SafeString DateFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  QDateTime d = QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" );
+  QDateTime d = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
 
   if ( !argument.isEmpty() )
-    return d.toString( argument.rawString() );
+    return d.toString( argument );
 
   return d.toString( "MMM. d, yyyy" );
 }
@@ -104,7 +104,7 @@ TimeFilter::TimeFilter( QObject* parent )
 
 Grantlee::SafeString TimeFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" ).toString( argument.rawString() );
+  return QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" ).toString( argument );
 }
 
 
@@ -117,12 +117,12 @@ TimeSinceFilter::TimeSinceFilter( QObject* parent )
 Grantlee::SafeString TimeSinceFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
   QDateTime late;
-  if ( argument.rawString().isEmpty() )
+  if ( argument.isEmpty() )
     late = QDateTime::currentDateTime();
   else
-    late = QDateTime::fromString( argument.rawString(), "yyyy-MM-ddThh:mm:ss" );
+    late = QDateTime::fromString( argument, "yyyy-MM-ddThh:mm:ss" );
 
-  QDateTime early = QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" );
+  QDateTime early = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
   return timeSince( early, late );
 }
 
@@ -137,12 +137,12 @@ Grantlee::SafeString TimeUntilFilter::doFilter( const QVariant& input, const Gra
 {
 
   QDateTime early;
-  if ( argument.rawString().isEmpty() )
+  if ( argument.isEmpty() )
     early = QDateTime::currentDateTime();
   else
-    early = QDateTime::fromString( argument.rawString(), "yyyy-MM-ddThh:mm:ss" );
+    early = QDateTime::fromString( argument, "yyyy-MM-ddThh:mm:ss" );
 
-  QDateTime late = QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" );
+  QDateTime late = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
 
   return timeSince( early, late );
 }

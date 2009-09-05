@@ -55,7 +55,7 @@ QString MediaFinderNode::render( Context* c )
   Grantlee::Engine *engine = Grantlee::Engine::instance();
   foreach( FilterExpression fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
-      return engine->mediaUri( Util::getSafeString( fe.resolve( c ) ).rawString(), parent()->property( "settingsToken" ).toULongLong() );
+      return engine->mediaUri( Util::getSafeString( fe.resolve( c ) ), parent()->property( "settingsToken" ).toULongLong() );
     }
   }
   return QString();

@@ -32,7 +32,7 @@ namespace Grantlee
  * This allows lazy escaping of strings. Otherwise a string may be escaped multiple times where it
  * should only be escaped once.
  */
-class SafeString
+class SafeString : public QString
 {
 public:
   enum Safety {
@@ -40,10 +40,9 @@ public:
     IsNotSafe
   };
   SafeString();
+  SafeString( const QString &str, bool safe );
   SafeString( const QString &str, Safety safety = IsNotSafe );
   ~SafeString();
-
-  QString rawString() const;
 
   void setNeedsEscape( bool needsEscape );
   bool needsEscape() const;
@@ -55,9 +54,8 @@ public:
   SafeString &operator+=( const QString &str );
   SafeString &operator+=( const SafeString &str );
 
-  bool operator==( const SafeString &other );
-
-  operator QString() const;
+  bool operator==( const SafeString &other ) const;
+  bool operator==( const QString &other ) const;
 
   SafeString &operator=( const QString &s );
 

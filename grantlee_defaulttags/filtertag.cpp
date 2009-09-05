@@ -67,7 +67,7 @@ QString FilterNode::render( Context* c )
   QString output = m_filterList.render( c );
   c->push();
   c->insert( "var", output );
-  QString filtered = Util::getSafeString( m_fe.resolve( c ) ).rawString();
+  QString filtered = Util::getSafeString( m_fe.resolve( c ) );
   c->pop();
   return filtered;
 }

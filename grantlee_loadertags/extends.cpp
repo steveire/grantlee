@@ -97,7 +97,7 @@ Template* ExtendsNode::getParent( Context *c )
       if ( parentTemplate )
         return parentTemplate;
     } else {
-      parentName = Util::getSafeString( parentVar ).rawString();
+      parentName = Util::getSafeString( parentVar );
     }
   } else {
     parentName = m_name;

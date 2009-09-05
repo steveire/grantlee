@@ -29,7 +29,7 @@ AddFilter::AddFilter( QObject* parent )
 
 Grantlee::SafeString AddFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return QString::number( QVariant( Util::getSafeString( input ).rawString() ).toInt() + QVariant( argument.rawString() ).toInt() );
+  return QString::number( QVariant( Util::getSafeString( input ) ).toInt() + QVariant( argument ).toInt() );
 }
 
 GetDigitFilter::GetDigitFilter( QObject* parent )
@@ -50,7 +50,7 @@ Grantlee::SafeString GetDigitFilter::doFilter( const QVariant& input, const Gran
   if ( value.size() < 1 )
     return value;
 
-  int arg = QVariant( argument.rawString() ).toInt();
+  int arg = QVariant( argument ).toInt();
 
   if ( value.size() < arg )
     return SafeString( "0" );

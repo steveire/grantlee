@@ -58,7 +58,7 @@ IncludeNode::IncludeNode( const FilterExpression &fe, QObject *parent )
 
 QString IncludeNode::render( Context *c )
 {
-  QString filename = Util::getSafeString( m_filterExpression.resolve( c ) ).rawString();
+  QString filename = Util::getSafeString( m_filterExpression.resolve( c ) );
 
   Engine *engine = Engine::instance();
   qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();

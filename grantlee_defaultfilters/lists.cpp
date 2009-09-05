@@ -37,7 +37,7 @@ Grantlee::SafeString JoinFilter::doFilter( const QVariant& input, const Grantlee
     if ( autoescape )
       s = Util::conditionalEscape( s );
 
-    ret.append( s.rawString() );
+    ret.append( s );
     if ( i.hasNext() )
       ret.append( argument );
   }
@@ -121,11 +121,11 @@ SliceFilter::SliceFilter( QObject* parent )
 
 Grantlee::SafeString SliceFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  int splitterIndex = argument.rawString().indexOf( ":" );
-  QString inputString = Util::getSafeString( input ).rawString();
+  int splitterIndex = argument.indexOf( ":" );
+  QString inputString = Util::getSafeString( input );
   if ( splitterIndex >= 0 ) {
-    int left = QVariant( argument.rawString().left( splitterIndex ) ).toInt();
-    int right = QVariant( argument.rawString().right( splitterIndex ) ).toInt();
+    int left = QVariant( argument.left( splitterIndex ) ).toInt();
+    int right = QVariant( argument.right( splitterIndex ) ).toInt();
     if ( right < 0 ) {
       right = inputString.size() + right;
     }

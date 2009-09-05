@@ -55,8 +55,8 @@ DivisibleByFilter::DivisibleByFilter( QObject* parent )
 
 Grantlee::SafeString DivisibleByFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return ( QVariant( Util::getSafeString( input ).rawString() ).toInt()
-        % QVariant( argument.rawString() ).toInt() == 0 )
+  return ( QVariant( Util::getSafeString( input ) ).toInt()
+        % QVariant( argument ).toInt() == 0 )
         ? QString( "true" ) : QString();
 }
 
@@ -93,7 +93,7 @@ Grantlee::SafeString YesNoFilter::doFilter( const QVariant& input, const Grantle
   }
   if ( !input.isValid() )
     return maybe;
-  if ( !Util::getSafeString( input ).rawString().isEmpty() )
+  if ( !Util::getSafeString( input ).isEmpty() )
     return yes;
   return no;
 }

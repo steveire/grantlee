@@ -74,6 +74,6 @@ void ScriptableSafeString::setSafety( bool safeness )
 
 QString ScriptableSafeString::rawString()
 {
-  return m_safeString.rawString();
+  return m_safeString;
 }
 

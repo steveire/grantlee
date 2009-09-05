@@ -65,7 +65,7 @@ QString Node::renderValueInContext( const QVariant& input, Context* c )
   Grantlee::SafeString inputString = Util::getSafeString( input );
   if ( c->autoescape() && !inputString.isSafe() || inputString.needsEscape() )
     return Util::escape( inputString );
-  return inputString.rawString();
+  return inputString;
 }
 
 NodeList::NodeList()
