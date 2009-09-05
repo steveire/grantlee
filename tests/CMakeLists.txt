@@ -24,6 +24,7 @@ grantlee_unit_tests(
   testscriptabletags
   testmutabletags
 #   benchmarks
+  testfilters
 )
 
 install(FILES testtags.qs DESTINATION ${PROJECT_BINARY_DIR}/${GRANTLEE_MAJOR_MINOR_VERSION_STRING} )

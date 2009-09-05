@@ -82,6 +82,21 @@ public:
     filters.insert( "slice", new SliceFilter() );
     filters.insert( "escapejs", new EscapeJsFilter() );
     filters.insert( "fix_ampersands", new FixAmpersandsFilter() );
+    filters.insert( "stringformat", new StringFormatFilter() );
+    filters.insert( "wordcount", new WordCountFilter() );
+    filters.insert( "ljust", new LJustFilter() );
+    filters.insert( "rjust", new RJustFilter() );
+    filters.insert( "center", new CenterFilter() );
+    filters.insert( "escape", new EscapeFilter() );
+    filters.insert( "force_escape", new ForceEscapeFilter() );
+    filters.insert( "striptags", new StripTagsFilter() );
+
+    filters.insert( "first", new FirstFilter() );
+    filters.insert( "last", new LastFilter() );
+    filters.insert( "length_is", new LengthIsFilter() );
+
+
+
 //     filters.insert( "floatformat", new FloatFormatFilter() );
 
     return filters;
