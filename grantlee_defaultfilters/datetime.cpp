@@ -88,7 +88,12 @@ DateFilter::DateFilter( QObject* parent )
 
 Grantlee::SafeString DateFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  return QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" ).toString( argument.rawString() );
+  QDateTime d = QDateTime::fromString( Util::getSafeString( input ).rawString(), "yyyy-MM-ddThh:mm:ss" );
+
+  if ( !argument.isEmpty() )
+    return d.toString( argument.rawString() );
+
+  return d.toString( "MMM. d, yyyy" );
 }
 
 TimeFilter::TimeFilter( QObject* parent )
