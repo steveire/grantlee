@@ -129,6 +129,7 @@ Grantlee::SafeString Util::escape( const Grantlee::SafeString &input )
   temp.replace( "&", "&amp;" );
   temp.replace( "<", "&lt;" );
   temp.replace( ">", "&gt;" );
+  temp.replace( "'", "&#39;" );
   return temp;
 
 }

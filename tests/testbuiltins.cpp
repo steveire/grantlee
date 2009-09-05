@@ -524,7 +524,7 @@ void TestBuiltinSyntax::testEscaping_data()
 
   // html escaping is not to be confused with for example url escaping.
   dict.insert( "var", "< > & \" \' # = % $" );
-  QTest::newRow( "escape01" ) << "{{ var }}" << dict << "&lt; &gt; &amp; \" \' # = % $" << NoError;
+  QTest::newRow( "escape01" ) << "{{ var }}" << dict << "&lt; &gt; &amp; \" &#39; # = % $" << NoError;
 
   dict.clear();
   dict.insert( "var", "this & that" );
