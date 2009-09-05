@@ -29,7 +29,7 @@ DefaultFilter::DefaultFilter( QObject* parent )
 
 Grantlee::SafeString DefaultFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-  if ( !input.isValid() )
+  if ( !input.isValid() || Util::getSafeString( input ).isEmpty() )
     return argument;
   return Util::getSafeString( input );
 }
