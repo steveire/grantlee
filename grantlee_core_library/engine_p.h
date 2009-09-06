@@ -1,3 +1,4 @@
+
 /*
   This file is part of the Grantlee template system.
 
@@ -17,39 +18,34 @@
 
 */
 
-#ifndef TEMPLATE_P_H
-#define TEMPLATE_P_H
+#ifndef ENGINE_P_H
+#define ENGINE_P_H
 
-#include "template.h"
-
+#include "engine.h"
 #include "enginestate_p.h"
 
 namespace Grantlee
 {
 
-class TemplatePrivate
+class EnginePrivate
 {
-  TemplatePrivate( Template *t )
-      : q_ptr( t ), m_error( NoError ) {
+  EnginePrivate( Engine *engine );
 
-  }
+  TagLibraryInterface* loadScriptableLibrary( const QString &name, qint64 settingsToken );
+  TagLibraryInterface* loadCppLibrary( const QString& name, qint64 settingsToken );
 
-  void parse();
-  NodeList compileString( const QString &str );
-  void setError( Error type, const QString &message );
+  mutable qint64 m_mostRecentState;
+  mutable QHash<qint64, EngineStateWeakPtr> m_states;
+  EngineState m_defaultStatePtr;
 
-  qint64 m_settingsToken;
-  Error m_error;
-  QString m_errorString;
-  NodeList m_nodeList;
+  TagLibraryInterface *m_scriptableTagLibrary;
+  QHash<QString, TagLibraryInterface*> m_libraries;
+  QList<TagLibraryInterface*> m_scriptableLibraries;
 
-  EngineState m_state;
+  Q_DECLARE_PUBLIC( Engine )
+  Engine *q_ptr;
 
-  Q_DECLARE_PUBLIC( Template )
-  Template *q_ptr;
-
-  friend class Grantlee::Engine;
-
+  friend class EngineStateImpl;
 };
 
 }

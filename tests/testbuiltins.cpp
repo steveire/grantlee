@@ -591,6 +591,9 @@ void TestBuiltinSyntax::testMultipleStates()
 
   Template *t3 = engine->newTemplate( "{% include var %}", "var", this );
 
+  // Cause Engine to change to a new state.
+  Template *t4 = engine->newTemplate( "", "Dummy template", this );
+
   QVariantHash h;
   h.insert( "var", "template3" );
   Context c( h );

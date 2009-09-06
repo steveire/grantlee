@@ -17,39 +17,37 @@
 
 */
 
-#ifndef TEMPLATE_P_H
-#define TEMPLATE_P_H
+#ifndef ENGINE_STATE_P_H
+#define ENGINE_STATE_P_H
 
-#include "template.h"
+#include <QSharedPointer>
 
-#include "enginestate_p.h"
+#include "engine.h"
 
 namespace Grantlee
 {
 
-class TemplatePrivate
+struct EngineStateImpl;
+
+typedef QWeakPointer<EngineStateImpl> EngineStateWeakPtr;
+typedef QSharedPointer<EngineStateImpl> EngineState;
+
+struct EngineStateImpl
 {
-  TemplatePrivate( Template *t )
-      : q_ptr( t ), m_error( NoError ) {
+  static void deleteAndRemove( Grantlee::EngineStateImpl *engineState );
 
-  }
+  static EngineState getPtr();
 
-  void parse();
-  NodeList compileString( const QString &str );
-  void setError( Error type, const QString &message );
+  EngineState clone();
 
-  qint64 m_settingsToken;
-  Error m_error;
-  QString m_errorString;
-  NodeList m_nodeList;
+  QList<AbstractTemplateLoader*> m_loaders;
+  QStringList m_pluginDirs;
+  QStringList m_defaultLibraries;
 
-  EngineState m_state;
+  qint64 id;
 
-  Q_DECLARE_PUBLIC( Template )
-  Template *q_ptr;
-
-  friend class Grantlee::Engine;
-
+private:
+  EngineStateImpl();
 };
 
 }

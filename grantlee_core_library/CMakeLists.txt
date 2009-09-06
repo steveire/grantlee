@@ -11,6 +11,7 @@ set (grantlee_core_library_SRCS
   template.cpp
   mutabletemplate.cpp
   engine.cpp
+  enginestate_p.cpp
   context.cpp
   variable.cpp
   filterexpression.cpp

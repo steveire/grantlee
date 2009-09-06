@@ -129,6 +129,7 @@ private:
   EnginePrivate *d_ptr;
 
   static Engine* m_instance;
+  friend class EngineStateImpl;
 };
 
 }
