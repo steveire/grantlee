@@ -18,6 +18,7 @@
 */
 
 #include "template.h"
+#include "template_p.h"
 
 #include "lexer_p.h"
 #include "parser.h"
@@ -26,31 +27,6 @@
 #include "engine.h"
 
 using namespace Grantlee;
-
-namespace Grantlee
-{
-
-class TemplatePrivate
-{
-  TemplatePrivate( Template *t )
-      : q_ptr( t ), m_error( NoError ) {
-
-  }
-
-  void parse();
-  NodeList compileString( const QString &str );
-  void setError( Error type, const QString &message );
-
-  qint64 m_settingsToken;
-  Error m_error;
-  QString m_errorString;
-  NodeList m_nodeList;
-
-  Q_DECLARE_PUBLIC( Template )
-  Template *q_ptr;
-};
-
-}
 
 NodeList TemplatePrivate::compileString( const QString &str )
 {
