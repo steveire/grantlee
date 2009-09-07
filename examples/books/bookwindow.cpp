@@ -157,7 +157,7 @@ void BookWindow::renderBooks()
 
     Grantlee::Context c(mapping);
     Grantlee::Engine *engine = Grantlee::Engine::instance();
-    Grantlee::Template *t = engine->loadByName( themeName + ".html", this );
+    Grantlee::Template t = engine->loadByName( themeName + ".html" );
     if (!t)
     {
       return;

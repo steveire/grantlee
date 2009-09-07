@@ -46,7 +46,6 @@
 
 #include <grantlee/context.h>
 #include <grantlee/engine.h>
-#include <grantlee/mutabletemplate.h>
 
 #include "chat_adaptor.h"
 #include "chat_interface.h"
@@ -196,7 +195,7 @@ void ChatMainWindow::changeNickname()
 
 void ChatMainWindow::changeTheme(const QString &themeName)
 {
-    m_template = m_engine->loadMutableByName(themeName + ".html", this);
+    m_template = m_engine->loadMutableByName(themeName + ".html");
     rebuildHistory();
 }
 

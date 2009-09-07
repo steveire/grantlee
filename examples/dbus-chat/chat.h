@@ -47,12 +47,13 @@
 #include "ui_chatmainwindow.h"
 #include "ui_chatsetnickname.h"
 
+#include <grantlee/mutabletemplate.h>
+
 class ChatItem;
 
 namespace Grantlee
 {
 class Engine;
-class MutableTemplate;
 }
 
 class ChatMainWindow: public QMainWindow, Ui::ChatMainWindow
@@ -63,7 +64,7 @@ class ChatMainWindow: public QMainWindow, Ui::ChatMainWindow
     QVariantList m_chatItems;
     QVariantHash m_nameColours;
     QStringList m_availableColours;
-    Grantlee::MutableTemplate *m_template;
+    Grantlee::MutableTemplate m_template;
 public:
     ChatMainWindow();
     ~ChatMainWindow();
