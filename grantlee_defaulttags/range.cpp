@@ -53,10 +53,13 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
   switch ( numArgs ) {
   case 1:
     n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ) );
+    break;
   case 2:
     n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ) );
+    break;
   case 3:
     n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ), FilterExpression( expr.at( 2 ), p ) );
+    break;
   default:
     return 0;
   }
