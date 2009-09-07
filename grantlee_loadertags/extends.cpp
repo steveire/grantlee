@@ -60,7 +60,7 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   ExtendsNode *n = new ExtendsNode( parentName, fe );
 
-  Template *t = qobject_cast<Template *>( p->parent() );
+  TemplateImpl *t = qobject_cast<TemplateImpl *>( p->parent() );
 
   Q_ASSERT( t );
 
@@ -81,44 +81,54 @@ ExtendsNode::ExtendsNode( const QString &name, FilterExpression fe, QObject *par
 {
 }
 
+
+ExtendsNode::~ExtendsNode()
+{
+}
+
+
 void ExtendsNode::setNodeList( NodeList list )
 {
   m_list = list;
 }
 
-Template* ExtendsNode::getParent( Context *c )
+Template ExtendsNode::getParent( Context *c )
 {
   QString parentName;
   if ( m_name.isEmpty() ) {
     QVariant parentVar = m_filterExpression.resolve( c );
-    if ( parentVar.userType() == QMetaType::QObjectStar ) {
-      QObject *parentObject = parentVar.value<QObject*>();
-      Template *parentTemplate = qobject_cast<Template *>( parentObject );
-      if ( parentTemplate )
-        return parentTemplate;
-    } else {
-      parentName = Util::getSafeString( parentVar );
+    if ( parentVar.userType() == qMetaTypeId<Grantlee::Template>() )
+    {
+      Template parentTemplate = parentVar.value<Template>();
+      return parentTemplate;
     }
+
+    if ( parentVar.userType() == qMetaTypeId<Grantlee::MutableTemplate>() )
+    {
+      Template parentTemplate = parentVar.value<Template>();
+      return parentTemplate;
+    }
+    parentName = Util::getSafeString( parentVar );
   } else {
     parentName = m_name;
   }
   Engine *engine = Engine::instance();
   qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
 
-  Template* t = engine->loadByName( parentName, 0, settingsToken );
+  Template t = engine->loadByName( parentName, settingsToken );
 
   return t;
 }
 
 QString ExtendsNode::render( Context *c )
 {
-  Template *parentTemplate = getParent( c );
+  m_parentTemplate = getParent( c );
 
-  if ( !parentTemplate ) {
+  if ( !m_parentTemplate ) {
     throw Grantlee::Exception( TagSyntaxError, QString( "Cannot load template '%1'" ).arg( m_name ) );
   }
 
-  QList<BlockNode*> nodeList = parentTemplate->findChildren<BlockNode *>();
+  QList<BlockNode*> nodeList = m_parentTemplate->findChildren<BlockNode *>();
 
   QHash<QString, BlockNode *> parentBlocks;
 
@@ -140,7 +150,7 @@ QString ExtendsNode::render( Context *c )
       pbn->addParent( pbn->nodeList() );
       pbn->setNodeList( bn->nodeList() );
     } else {
-      foreach( Node *node, parentTemplate->nodeList() ) {
+      foreach( Node *node, m_parentTemplate->nodeList() ) {
         TextNode *tn = qobject_cast<TextNode*>( node );
         if ( !tn ) {
           ExtendsNode *en = qobject_cast<ExtendsNode*>( node );
@@ -153,7 +163,8 @@ QString ExtendsNode::render( Context *c )
     }
   }
 
-  return parentTemplate->render( c );
+  QString res = m_parentTemplate->render( c );
+  return res;
 }
 
 void ExtendsNode::appendNode( Node *node )

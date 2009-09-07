@@ -25,9 +25,10 @@
 
 #include <QScriptValue>
 
+#include "template.h"
+
 namespace Grantlee
 {
-class Template;
 class Node;
 }
 
@@ -37,8 +38,6 @@ class ScriptableContext;
 
 using namespace Grantlee;
 
-Q_DECLARE_METATYPE( Grantlee::Template* )
-
 QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
     QScriptEngine *engine );
 
@@ -46,7 +45,7 @@ class ScriptableTemplate : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableTemplate( Template *t, QObject* parent = 0 );
+  ScriptableTemplate( Template t, QObject* parent = 0 );
 
 public slots:
   QString render( ScriptableContext *c );
@@ -56,7 +55,7 @@ public slots:
   void setNodeList( const QObjectList &list );
 
 private:
-  Template *m_template;
+  Template m_template;
 
 };
 

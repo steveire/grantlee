@@ -34,9 +34,10 @@ public:
   AbstractTemplateLoader( QObject* parent = 0 );
   virtual ~AbstractTemplateLoader();
 
-  virtual MutableTemplate* loadMutableByName( const QString &name ) const = 0;
-  virtual Template* loadByName( const QString &name ) const = 0;
+  virtual MutableTemplate loadMutableByName( const QString &name ) const = 0;
+  virtual Template loadByName( const QString &name ) const = 0;
   virtual QString getMediaUri( const QString &fileName ) const = 0;
+  virtual bool canLoadTemplate( const QString &name ) const = 0;
 
 };
 
@@ -45,8 +46,10 @@ class FileSystemTemplateLoader : public AbstractTemplateLoader
   Q_OBJECT
 public:
   FileSystemTemplateLoader( QObject* parent = 0 );
-  MutableTemplate* loadMutableByName( const QString &name ) const;
-  Template* loadByName( const QString &name ) const;
+  MutableTemplate loadMutableByName( const QString &name ) const;
+  Template loadByName( const QString &name ) const;
+
+  virtual bool canLoadTemplate( const QString &name ) const;
 
   virtual QString getMediaUri( const QString& fileName ) const;
 
@@ -64,8 +67,10 @@ class InMemoryTemplateLoader : public AbstractTemplateLoader
   Q_OBJECT
 public:
   InMemoryTemplateLoader( QObject* parent = 0 );
-  MutableTemplate* loadMutableByName( const QString &name ) const;
-  Template* loadByName( const QString &name ) const;
+  MutableTemplate loadMutableByName( const QString &name ) const;
+  Template loadByName( const QString &name ) const;
+
+  virtual bool canLoadTemplate( const QString &name ) const;
 
   virtual QString getMediaUri( const QString& fileName ) const;
 
@@ -96,22 +101,22 @@ public:
   /**
   Causes a state transition if settingsToken is 0.
   */
-  Template* loadByName( const QString &name, QObject *parent, qint64 settingsToken = 0 ) const;
+  Template loadByName( const QString &name, qint64 settingsToken = 0 ) const;
 
   /**
   Causes a state transition if settingsToken is 0.
   */
-  Template* newTemplate( const QString &content, const QString &name,  QObject *parent = 0, qint64 settingsToken = 0 );
+  Template newTemplate( const QString &content, const QString &name, qint64 settingsToken = 0 );
 
   /**
   Causes a state transition if settingsToken is 0.
   */
-  MutableTemplate* loadMutableByName( const QString &name, QObject *parent, qint64 settingsToken = 0 ) const;
+  MutableTemplate loadMutableByName( const QString &name, qint64 settingsToken = 0 ) const;
 
   /**
   Causes a state transition if settingsToken is 0.
   */
-  MutableTemplate* newMutableTemplate( const QString &content, const QString &name, QObject *parent = 0, qint64 settingsToken = 0 );
+  MutableTemplate newMutableTemplate( const QString &content, const QString &name, qint64 settingsToken = 0 );
 
   QStringList defaultLibraries( qint64 settingsToken = 0 ) const;
   void setDefaultLibraries( const QStringList &list, qint64 settingsToken = 0 );

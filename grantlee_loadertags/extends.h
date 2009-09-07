@@ -22,12 +22,11 @@
 
 #include "node.h"
 #include "interfaces/taglibraryinterface.h"
-
+#include "template.h"
 
 namespace Grantlee
 {
 class Parser;
-class Template;
 }
 
 using namespace Grantlee;
@@ -47,6 +46,7 @@ class ExtendsNode : public Node
   Q_OBJECT
 public:
   ExtendsNode( const QString &filename, FilterExpression fe, QObject *parent = 0 );
+  ~ExtendsNode();
 
   void setNodeList( NodeList list );
 
@@ -54,7 +54,7 @@ public:
 
   void appendNode( Node* node );
 
-  Template *getParent( Context *c );
+  Template getParent( Context *c );
 
   virtual bool mustBeFirst() {
     return true;
@@ -65,6 +65,7 @@ private:
   FilterExpression m_filterExpression;
   QString m_name;
   NodeList m_list;
+  Template m_parentTemplate;
 };
 
 #endif

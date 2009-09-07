@@ -21,7 +21,7 @@
 #define TEMPLATE_H
 
 #include <QStringList>
-#include <QUuid>
+#include <QSharedPointer>
 
 #include "node.h"
 #include "grantlee_export.h"
@@ -30,19 +30,19 @@
 namespace Grantlee
 {
 class Context;
-}
+class TemplateImpl;
 
-namespace Grantlee
-{
+typedef QWeakPointer<TemplateImpl> TemplateWeakPtr;
+typedef QSharedPointer<TemplateImpl> Template;
 
 class TemplatePrivate;
 
-class GRANTLEE_EXPORT Template : public QObject
+class GRANTLEE_EXPORT TemplateImpl : public QObject
 {
   Q_OBJECT
   Q_PROPERTY( qint64 settingsToken READ settingsToken )
 public:
-  ~Template();
+  ~TemplateImpl();
   virtual QString render( Context *c );
 
   NodeList nodeList() const;
@@ -56,7 +56,7 @@ public:
   QString errorString();
 
 protected:
-  Template( QObject *parent = 0 );
+  TemplateImpl( QObject *parent = 0 );
 
   void setContent( const QString &templateString );
 
@@ -66,8 +66,9 @@ private:
   friend class Engine;
 };
 
-
 }
+
+Q_DECLARE_METATYPE(Grantlee::Template)
 
 #endif
 

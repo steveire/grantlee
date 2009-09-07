@@ -30,26 +30,26 @@ using namespace Grantlee;
 
 NodeList TemplatePrivate::compileString( const QString &str )
 {
-  Q_Q( Template );
+  Q_Q( TemplateImpl );
   Lexer l( str );
   Parser p( l.tokenize(), q );
 
   return p.parse( q );
 }
 
-Template::Template( QObject *parent )
+TemplateImpl::TemplateImpl( QObject *parent )
     : QObject( parent ), d_ptr( new TemplatePrivate( this ) )
 {
   Q_D( Template );
   d->m_settingsToken = reinterpret_cast<qint64>( this );
 }
 
-Template::~Template()
+TemplateImpl::~TemplateImpl()
 {
   delete d_ptr;
 }
 
-void Template::setContent( const QString &templateString )
+void TemplateImpl::setContent( const QString &templateString )
 {
   Q_D( Template );
   if ( templateString.isEmpty() )
@@ -62,7 +62,7 @@ void Template::setContent( const QString &templateString )
   }
 }
 
-QString Template::render( Context *c )
+QString TemplateImpl::render( Context *c )
 {
   Q_D( Template );
 
@@ -77,26 +77,26 @@ QString Template::render( Context *c )
   return result;
 }
 
-NodeList Template::nodeList() const
+NodeList TemplateImpl::nodeList() const
 {
   Q_D( const Template );
   return d->m_nodeList;
 }
 
-void Template::setNodeList( const NodeList &list )
+void TemplateImpl::setNodeList( const NodeList &list )
 {
   Q_D( Template );
   d->m_nodeList = list;
 }
 
 
-void Template::setSettingsToken( qint64 settingsToken )
+void TemplateImpl::setSettingsToken( qint64 settingsToken )
 {
   Q_D( Template );
   d->m_settingsToken = settingsToken;
 }
 
-qint64 Template::settingsToken() const
+qint64 TemplateImpl::settingsToken() const
 {
   Q_D( const Template );
   return d->m_settingsToken;
@@ -108,13 +108,13 @@ void TemplatePrivate::setError( Error type, const QString &message )
   m_errorString = message;
 }
 
-Error Template::error()
+Error TemplateImpl::error()
 {
   Q_D( Template );
   return d->m_error;
 }
 
-QString Template::errorString()
+QString TemplateImpl::errorString()
 {
   Q_D( Template );
   return d->m_errorString;

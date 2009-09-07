@@ -28,7 +28,7 @@
 
 namespace Grantlee
 {
-class Template;
+class TemplateImpl;
 class Filter;
 }
 
@@ -47,7 +47,7 @@ public:
   void setTokens( const QList<Token> &tokenList );
 
   NodeList parse( Node *parent, const QStringList &stopAt = QStringList() );
-  NodeList parse( Template *parent, const QStringList &stopAt = QStringList() );
+  NodeList parse( TemplateImpl *parent, const QStringList &stopAt = QStringList() );
   NodeList parse( Node *parent, const QString &stopAt );
 
   Filter *getFilter( const QString &name ) const;

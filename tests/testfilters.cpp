@@ -110,13 +110,11 @@ void TestFilters::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, errorNumber );
 
-  Template* t = Engine::instance()->newTemplate( input, QTest::currentDataTag(), this );
+  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 
   QString result = t->render( &context );
-
-//   qDebug() << result << t->error() << t->errorString();
 
   if ( t->error() != NoError ) {
     QCOMPARE( t->error(), errorNumber );
@@ -127,7 +125,6 @@ void TestFilters::doTest()
   QCOMPARE( NoError, errorNumber );
 
   QCOMPARE( t->error(), NoError );
-
 
   QCOMPARE( result, output );
 }

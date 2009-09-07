@@ -77,7 +77,7 @@ void ParserPrivate::openLibrary( TagLibraryInterface *library )
   while ( filterIt.hasNext() ) {
     filterIt.next();
     Filter *f = filterIt.value();
-    f->setParent( q->parent() );
+//     f->setParent( q->parent() );
     m_filters.insert( filterIt.key(), f );
   }
 }
@@ -155,7 +155,7 @@ NodeList Parser::parse( Node *parent, const QString &stopAt )
   return d->parse( parent, QStringList() << stopAt );
 }
 
-NodeList Parser::parse( Template *parent, const QStringList &stopAt )
+NodeList Parser::parse( TemplateImpl *parent, const QStringList &stopAt )
 {
   Q_D( Parser );
   return d->parse( parent, stopAt );

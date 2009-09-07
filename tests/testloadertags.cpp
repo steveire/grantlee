@@ -93,13 +93,12 @@ void TestLoaderTags::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, errorNumber );
 
-  Template* t = Engine::instance()->newTemplate( input, QTest::currentDataTag(), this );
+  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 
   QString result = t->render( &context );
 
-  qDebug() << t->error() << errorNumber << t->errorString();
   if ( t->error() != NoError ) {
     QCOMPARE( t->error(), errorNumber );
     return;
@@ -109,7 +108,6 @@ void TestLoaderTags::doTest()
   QCOMPARE( NoError, errorNumber );
 
   QCOMPARE( t->error(), NoError );
-
 
   QCOMPARE( result, output );
 }
@@ -259,21 +257,18 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Inheritance from local context without use of template loader
 
-  Template *t = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template", this );
-  QObject *obj = t;
-  dict.insert( "context_template", QVariant::fromValue( obj ) );
+  Template t = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template" );
+  dict.insert( "context_template", QVariant::fromValue( t ) );
 
   QTest::newRow( "inheritance24" ) << "{% extends context_template %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" << dict << "1234" << NoError;
 
   dict.clear();
   QVariantList list;
 
-  Template *t1 = Engine::instance()->newTemplate( "Wrong", "context_template_1", this );
-  QObject *obj1 = t1;
-  Template *t2 = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template_2", this );
-  QObject *obj2 = t2;
-  list << QVariant::fromValue( obj1 );
-  list << QVariant::fromValue( obj2 );
+  Template t1 = Engine::instance()->newTemplate( "Wrong", "context_template_1" );
+  Template t2 = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template_2" );
+  list << QVariant::fromValue( t1 );
+  list << QVariant::fromValue( t2 );
 
   dict.insert( "context_template", list );
 

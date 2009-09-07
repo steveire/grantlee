@@ -72,7 +72,6 @@ public:
   SafeString getSuper() const;
 
 private:
-//   FilterExpression m_filterExpression;
   QString m_name;
   NodeList m_list;
   Context *m_context;

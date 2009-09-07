@@ -156,7 +156,7 @@ void TestDefaultTags::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template *t = Engine::instance()->newTemplate( input, QTest::currentDataTag(), this );
+  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 

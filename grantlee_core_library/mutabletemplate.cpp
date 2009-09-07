@@ -20,16 +20,16 @@
 #include "mutabletemplate.h"
 
 
-MutableTemplate::MutableTemplate( QObject *parent )
-    : Template( parent )
+MutableTemplateImpl::MutableTemplateImpl( QObject *parent )
+    : TemplateImpl( parent )
 {
 
 }
 
-QString MutableTemplate::render( Context* c )
+QString MutableTemplateImpl::render( Context* c )
 {
   c->setMutating( true );
-  return Template::render( c );
+  return TemplateImpl::render( c );
 
 }
 

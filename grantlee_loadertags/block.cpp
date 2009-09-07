@@ -76,7 +76,6 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 BlockNode::BlockNode( const QString &name, QObject *parent )
     : Node( parent ), m_nodeParent( 0 )
 {
-//   m_filterExpression = FilterExpression(name);
   m_name = name;
 
   qRegisterMetaType<Grantlee::SafeString>( "Grantlee::SafeString" );
@@ -84,7 +83,6 @@ BlockNode::BlockNode( const QString &name, QObject *parent )
 
 BlockNode::~BlockNode()
 {
-  delete m_nodeParent;
 }
 
 void BlockNode::setNodeList( NodeList list )
@@ -110,7 +108,6 @@ SafeString BlockNode::getSuper() const
 QString BlockNode::blockName()
 {
   return m_name;
-//   return m_filterExpression.variable().toString();
 }
 
 BlockNode* BlockNode::nodeParent() const

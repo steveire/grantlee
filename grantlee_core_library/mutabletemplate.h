@@ -24,18 +24,24 @@
 
 namespace Grantlee
 {
+class MutableTemplateImpl;
 
-class MutableTemplate : public Template
+typedef QWeakPointer<MutableTemplateImpl> MutableTemplateWeakPtr;
+typedef QSharedPointer<MutableTemplateImpl> MutableTemplate;
+
+class MutableTemplateImpl : public TemplateImpl
 {
   Q_OBJECT
 public:
-  MutableTemplate( QObject *parent = 0 );
+  MutableTemplateImpl( QObject *parent = 0 );
 
   QString render( Context *c );
 
 };
 
 }
+
+Q_DECLARE_METATYPE(Grantlee::MutableTemplate)
 
 #endif
 

@@ -95,8 +95,28 @@ void FileSystemTemplateLoader::setTemplateDirs( const QStringList &dirs )
   m_templateDirs = dirs;
 }
 
+bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
+{
+  int i = 0;
+  QFile file;
+
+  while ( !file.exists() ) {
+    if ( i >= m_templateDirs.size() )
+      break;
+
+    file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + name );
+    ++i;
+  }
+
+  if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
+    return false;
+  }
+  file.close();
+  return true;
+}
+
 // TODO Refactor these two.
-MutableTemplate* FileSystemTemplateLoader::loadMutableByName( const QString &fileName ) const
+MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &fileName ) const
 {
   int i = 0;
   QFile file;
@@ -110,17 +130,17 @@ MutableTemplate* FileSystemTemplateLoader::loadMutableByName( const QString &fil
   }
 
   if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-    return 0;
+    throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist.").arg( fileName ) );
   }
 
   QString content;
   content = file.readAll();
 
-  MutableTemplate *t = Engine::instance()->newMutableTemplate( content, fileName );
+  MutableTemplate t = Engine::instance()->newMutableTemplate( content, fileName );
   return t;
 }
 
-Template* FileSystemTemplateLoader::loadByName( const QString &fileName ) const
+Template FileSystemTemplateLoader::loadByName( const QString &fileName ) const
 {
   int i = 0;
   QFile file;
@@ -133,13 +153,13 @@ Template* FileSystemTemplateLoader::loadByName( const QString &fileName ) const
     ++i;
   }
 
-  if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-    return 0;
+if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
+  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist.").arg( fileName ) );
   }
 
   QString content;
   content = file.readAll();
-  Template *t = Engine::instance()->newTemplate( content, fileName );
+  Template t = Engine::instance()->newTemplate( content, fileName );
   return t;
 }
 
@@ -168,22 +188,27 @@ void InMemoryTemplateLoader::setTemplate( const QString &name, const QString &co
   m_namedTemplates.insert( name, content );
 }
 
-Template* InMemoryTemplateLoader::loadByName( const QString& name ) const
+bool InMemoryTemplateLoader::canLoadTemplate( const QString &name ) const
 {
-  if ( m_namedTemplates.contains( name ) ) {
-    Template *t = Engine::instance()->newTemplate( m_namedTemplates.value( name ), name );
-    return t;
-  }
-  return 0;
+  return m_namedTemplates.contains( name );
 }
 
-MutableTemplate* InMemoryTemplateLoader::loadMutableByName( const QString& name ) const
+Template InMemoryTemplateLoader::loadByName( const QString& name ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
-    MutableTemplate *t = Engine::instance()->newMutableTemplate( m_namedTemplates.value( name ), name );
+    Template t = Engine::instance()->newTemplate( m_namedTemplates.value( name ), name );
     return t;
   }
-  return 0;
+  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist.").arg( name ) );
+}
+
+MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name ) const
+{
+  if ( m_namedTemplates.contains( name ) ) {
+    MutableTemplate t = Engine::instance()->newMutableTemplate( m_namedTemplates.value( name ), name );
+    return t;
+  }
+  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist.").arg( name ) );
 }
 
 QString InMemoryTemplateLoader::getMediaUri( const QString& fileName ) const
@@ -466,41 +491,7 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, qint64 
   return 0;
 }
 
-Template* Engine::loadByName( const QString &name, QObject *parent, qint64 settingsToken ) const
-{
-  Q_D( const Engine );
-  qint64 currentSettingsToken = d->m_mostRecentState;
-  if ( settingsToken ) {
-    d->m_mostRecentState = settingsToken;
-  }
-
-  if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
-  {
-
-    QListIterator<AbstractTemplateLoader*> it( p->m_loaders );
-
-    while ( it.hasNext() ) {
-      AbstractTemplateLoader* loader = it.next();
-      Template *t = loader->loadByName( name );
-
-      if ( t ) {
-        if ( !settingsToken ) {
-          d->m_mostRecentState = t->settingsToken();
-        } else
-          t->setSettingsToken( settingsToken );
-        t->setParent( parent );
-        if ( settingsToken )
-          d->m_mostRecentState = currentSettingsToken;
-        return t;
-      }
-    }
-  }
-  if ( settingsToken )
-    d->m_mostRecentState = currentSettingsToken;
-  return 0;
-}
-
-MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent, qint64 settingsToken ) const
+Template Engine::loadByName( const QString &name, qint64 settingsToken ) const
 {
   Q_D( const Engine );
   qint64 currentSettingsToken = d->m_mostRecentState;
@@ -511,16 +502,19 @@ MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent
   if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
   {
     QListIterator<AbstractTemplateLoader*> it( p->m_loaders );
-
     while ( it.hasNext() ) {
       AbstractTemplateLoader* loader = it.next();
-      MutableTemplate *t = loader->loadMutableByName( name );
+
+      if ( !loader->canLoadTemplate( name ) )
+        continue;
+
+      Template t = loader->loadByName( name );
+
       if ( t ) {
         if ( !settingsToken ) {
           d->m_mostRecentState = t->settingsToken();
         } else
           t->setSettingsToken( settingsToken );
-        t->setParent( parent );
         if ( settingsToken )
           d->m_mostRecentState = currentSettingsToken;
         return t;
@@ -529,17 +523,48 @@ MutableTemplate* Engine::loadMutableByName( const QString &name, QObject *parent
   }
   if ( settingsToken )
     d->m_mostRecentState = currentSettingsToken;
-  return 0;
+  throw Grantlee::Exception( TagSyntaxError, QString( "Most recent state is invalid." ) );
 }
 
-MutableTemplate* Engine::newMutableTemplate( const QString &content, const QString &name, QObject *parent, qint64 settingsToken )
+MutableTemplate Engine::loadMutableByName( const QString &name, qint64 settingsToken ) const
+{
+  Q_D( const Engine );
+  qint64 currentSettingsToken = d->m_mostRecentState;
+  if ( settingsToken ) {
+    d->m_mostRecentState = settingsToken;
+  }
+
+  if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
+  {
+    QListIterator<AbstractTemplateLoader*> it( p->m_loaders );
+
+    while ( it.hasNext() ) {
+      AbstractTemplateLoader* loader = it.next();
+      MutableTemplate t = loader->loadMutableByName( name );
+      if ( t ) {
+        if ( !settingsToken ) {
+          d->m_mostRecentState = t->settingsToken();
+        } else
+          t->setSettingsToken( settingsToken );
+        if ( settingsToken )
+          d->m_mostRecentState = currentSettingsToken;
+        return t;
+      }
+    }
+  }
+  if ( settingsToken )
+    d->m_mostRecentState = currentSettingsToken;
+  throw Grantlee::Exception( TagSyntaxError, QString( "Most recent state is invalid." ) );
+}
+
+MutableTemplate Engine::newMutableTemplate( const QString &content, const QString &name, qint64 settingsToken )
 {
   Q_D( Engine );
   qint64 currentSettingsToken = d->m_mostRecentState;
   if ( settingsToken ) {
     d->m_mostRecentState = settingsToken;
   }
-  MutableTemplate *t = new MutableTemplate( parent );
+  MutableTemplate t = MutableTemplate( new MutableTemplateImpl() );
   t->setObjectName( name );
   if ( !settingsToken ) {
     if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
@@ -563,14 +588,14 @@ MutableTemplate* Engine::newMutableTemplate( const QString &content, const QStri
   return t;
 }
 
-Template* Engine::newTemplate( const QString &content, const QString &name, QObject *parent, qint64 settingsToken )
+Template Engine::newTemplate( const QString &content, const QString &name, qint64 settingsToken )
 {
   Q_D( Engine );
   qint64 currentSettingsToken = d->m_mostRecentState;
   if ( settingsToken ) {
     d->m_mostRecentState = settingsToken;
   }
-  Template *t = new Template( parent );
+  Template t = Template( new TemplateImpl() );
 
   t->setObjectName( name );
   if ( !settingsToken ) {

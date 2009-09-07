@@ -29,7 +29,7 @@ namespace Grantlee
 
 class TemplatePrivate
 {
-  TemplatePrivate( Template *t )
+  TemplatePrivate( TemplateImpl *t )
       : q_ptr( t ), m_error( NoError ) {
 
   }
@@ -45,8 +45,8 @@ class TemplatePrivate
 
   EngineState m_state;
 
-  Q_DECLARE_PUBLIC( Template )
-  Template *q_ptr;
+  Q_DECLARE_PUBLIC( TemplateImpl )
+  TemplateImpl *q_ptr;
 
   friend class Grantlee::Engine;
 

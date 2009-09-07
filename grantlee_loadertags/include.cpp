@@ -63,12 +63,18 @@ QString IncludeNode::render( Context *c )
   Engine *engine = Engine::instance();
   qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
 
-  Template *t = engine->loadByName( filename, this, settingsToken );
+  try {
+    Template t = engine->loadByName( filename, settingsToken );
 
-  if ( !t )
+    if ( !t )
+      return QString();
+
+    return t->render( c );
+  } catch (Grantlee::Exception e)
+  {
     return QString();
+  }
 
-  return t->render( c );
 }
 
 ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
@@ -81,11 +87,17 @@ QString ConstantIncludeNode::render( Context *c )
 {
   Engine *engine = Engine::instance();
   qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
-  Template *t = engine->loadByName( m_name, this, settingsToken );
 
-  if ( !t )
+  try {
+    Template t = engine->loadByName( m_name, settingsToken );
+
+    if ( !t )
+      return QString();
+
+    return t->render( c );
+  } catch (Grantlee::Exception e)
+  {
     return QString();
-
-  return t->render( c );
+  }
 }
 

@@ -70,7 +70,7 @@ private:
   QString getTemplate( int size );
   Engine *m_engine;
   QString m_templateGeneratorString;
-  Template *m_templateGenerator;
+  TemplateImpl *m_templateGenerator;
 
 };
 

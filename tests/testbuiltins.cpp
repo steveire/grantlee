@@ -155,7 +155,7 @@ void TestBuiltinSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template* t = Engine::instance()->newTemplate( input, QTest::currentDataTag(), this );
+  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 
@@ -573,7 +573,7 @@ void TestBuiltinSyntax::testMultipleStates()
   loader1->setTemplate( "template1", "Template 1" );
   engine->addTemplateLoader( loader1 );
 
-  Template *t1 = engine->newTemplate( "{% include \"template1\" %}", "\"template1\"", this );
+  Template t1 = engine->newTemplate( "{% include \"template1\" %}", "\"template1\"" );
 
   InMemoryTemplateLoader *loader2 = new InMemoryTemplateLoader( this );
 
@@ -581,7 +581,7 @@ void TestBuiltinSyntax::testMultipleStates()
 
   engine->addTemplateLoader( loader2 );
 
-  Template *t2 = engine->newTemplate( "{% include \"template2\" %}", "\"template2\"", this );
+  Template t2 = engine->newTemplate( "{% include \"template2\" %}", "\"template2\"" );
 
   InMemoryTemplateLoader *loader3 = new InMemoryTemplateLoader( this );
 
@@ -589,10 +589,10 @@ void TestBuiltinSyntax::testMultipleStates()
 
   engine->addTemplateLoader( loader3 );
 
-  Template *t3 = engine->newTemplate( "{% include var %}", "var", this );
+  Template t3 = engine->newTemplate( "{% include var %}", "var" );
 
   // Cause Engine to change to a new state.
-  Template *t4 = engine->newTemplate( "", "Dummy template", this );
+  Template t4 = engine->newTemplate( "", "Dummy template" );
 
   QVariantHash h;
   h.insert( "var", "template3" );

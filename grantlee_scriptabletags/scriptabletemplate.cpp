@@ -22,7 +22,6 @@
 #include <QScriptContext>
 #include <QScriptEngine>
 
-#include "template.h"
 #include "engine.h"
 #include "context.h"
 #include "node.h"
@@ -36,13 +35,13 @@ QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
   QString name = context->argument( 1 ).toString();
   QObject *parent = context->argument( 2 ).toQObject();
 
-  Template *t = Engine::instance()->newTemplate( content, name, engine );
+  Template t = Engine::instance()->newTemplate( content, name );
 
   ScriptableTemplate *object = new ScriptableTemplate( t, parent );
   return engine->newQObject( object );
 }
 
-ScriptableTemplate::ScriptableTemplate( Grantlee::Template* t, QObject* parent )
+ScriptableTemplate::ScriptableTemplate( Grantlee::Template t, QObject* parent )
     : QObject( parent ), m_template( t )
 {
 
