@@ -56,7 +56,7 @@ static const char * COMMENT_TAG_END = "#}";
 static const char * SINGLE_BRACE_START = "{";
 static const char * SINGLE_BRACE_END = "}";
 
-class Exception : public std::exception
+class Exception
 {
 public:
   Exception( Error errorCode, const QString &what )
@@ -64,8 +64,8 @@ public:
 
   virtual ~Exception() throw() {}
 
-  virtual const char* what() const throw() {
-    return m_what.toAscii();
+  virtual const QString what() const throw() {
+    return m_what;
   }
 
   Error errorCode() const {
