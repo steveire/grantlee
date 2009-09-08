@@ -26,9 +26,8 @@ using namespace Grantlee;
 
 class GRANTLEE_EXPORT JoinFilter : public Filter
 {
-  Q_OBJECT
 public:
-  JoinFilter( QObject *parent = 0 );
+  JoinFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
@@ -39,78 +38,66 @@ public:
   bool needsAutoescape() const {
     return true;
   }
-
 };
 
 class GRANTLEE_EXPORT LengthFilter : public Filter
 {
-  Q_OBJECT
 public:
-  LengthFilter( QObject *parent = 0 );
+  LengthFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
   }
-
 };
 
 
 class GRANTLEE_EXPORT LengthIsFilter : public Filter
 {
-  Q_OBJECT
 public:
-  LengthIsFilter( QObject *parent = 0 );
+  LengthIsFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
   }
-
 };
 
 class GRANTLEE_EXPORT FirstFilter : public Filter
 {
-  Q_OBJECT
 public:
-  FirstFilter( QObject *parent = 0 );
+  FirstFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT LastFilter : public Filter
 {
-  Q_OBJECT
 public:
-  LastFilter( QObject *parent = 0 );
+  LastFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT RandomFilter : public Filter
 {
-  Q_OBJECT
 public:
-  RandomFilter( QObject *parent = 0 );
+  RandomFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
   }
-
 };
 
 
 class GRANTLEE_EXPORT SliceFilter : public Filter
 {
-  Q_OBJECT
 public:
-  SliceFilter( QObject *parent = 0 );
+  SliceFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
 

@@ -25,11 +25,11 @@
 #include "token.h"
 #include "node.h"
 #include "grantlee.h"
+#include "filter.h"
 
 namespace Grantlee
 {
 class TemplateImpl;
-class Filter;
 }
 
 namespace Grantlee
@@ -50,7 +50,7 @@ public:
   NodeList parse( TemplateImpl *parent, const QStringList &stopAt = QStringList() );
   NodeList parse( Node *parent, const QString &stopAt );
 
-  Filter *getFilter( const QString &name ) const;
+  Filter::Ptr getFilter( const QString &name ) const;
 
   void skipPast( const QString &tag );
 

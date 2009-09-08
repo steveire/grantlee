@@ -80,10 +80,8 @@ Grantlee::SafeString timeUntil( QDateTime dt, QDateTime now = QDateTime() )
 }
 
 
-DateFilter::DateFilter( QObject* parent )
-    : Filter( parent )
+DateFilter::DateFilter()
 {
-
 }
 
 Grantlee::SafeString DateFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -96,10 +94,8 @@ Grantlee::SafeString DateFilter::doFilter( const QVariant& input, const Grantlee
   return d.toString( "MMM. d, yyyy" );
 }
 
-TimeFilter::TimeFilter( QObject* parent )
-    : Filter( parent )
+TimeFilter::TimeFilter()
 {
-
 }
 
 Grantlee::SafeString TimeFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -108,10 +104,8 @@ Grantlee::SafeString TimeFilter::doFilter( const QVariant& input, const Grantlee
 }
 
 
-TimeSinceFilter::TimeSinceFilter( QObject* parent )
-    : Filter( parent )
+TimeSinceFilter::TimeSinceFilter()
 {
-
 }
 
 Grantlee::SafeString TimeSinceFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -127,15 +121,12 @@ Grantlee::SafeString TimeSinceFilter::doFilter( const QVariant& input, const Gra
 }
 
 
-TimeUntilFilter::TimeUntilFilter( QObject* parent )
-    : Filter( parent )
+TimeUntilFilter::TimeUntilFilter()
 {
-
 }
 
 Grantlee::SafeString TimeUntilFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
-
   QDateTime early;
   if ( argument.isEmpty() )
     early = QDateTime::currentDateTime();

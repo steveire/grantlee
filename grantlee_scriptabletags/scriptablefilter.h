@@ -28,9 +28,8 @@ using namespace Grantlee;
 
 class ScriptableFilter : public Filter
 {
-  Q_OBJECT
 public:
-  ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine, QObject *parent = 0 );
+  ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine );
   virtual ~ScriptableFilter();
 
   SafeString doFilter( const QVariant &input, const SafeString &argument, bool autoescape = false ) const;

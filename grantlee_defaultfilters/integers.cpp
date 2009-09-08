@@ -21,10 +21,8 @@
 
 #include "util_p.h"
 
-AddFilter::AddFilter( QObject* parent )
-    : Filter( parent )
+AddFilter::AddFilter()
 {
-
 }
 
 Grantlee::SafeString AddFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -32,10 +30,8 @@ Grantlee::SafeString AddFilter::doFilter( const QVariant& input, const Grantlee:
   return QString::number( QVariant( Util::getSafeString( input ) ).toInt() + QVariant( argument ).toInt() );
 }
 
-GetDigitFilter::GetDigitFilter( QObject* parent )
-    : Filter( parent )
+GetDigitFilter::GetDigitFilter()
 {
-
 }
 
 Grantlee::SafeString GetDigitFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const

@@ -24,6 +24,7 @@
 #include "grantlee.h"
 
 #include "grantlee_export.h"
+#include "filter.h"
 
 namespace Grantlee
 {
@@ -33,7 +34,7 @@ class Filter;
 
 using namespace Grantlee;
 
-typedef QPair<Filter*, Variable > ArgFilter;
+typedef QPair<Filter::Ptr, Variable > ArgFilter;
 
 class Token;
 

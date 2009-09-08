@@ -21,10 +21,8 @@
 #include "util_p.h"
 
 
-DefaultFilter::DefaultFilter( QObject* parent )
-    : Filter( parent )
+DefaultFilter::DefaultFilter()
 {
-
 }
 
 Grantlee::SafeString DefaultFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -34,10 +32,8 @@ Grantlee::SafeString DefaultFilter::doFilter( const QVariant& input, const Grant
   return Util::getSafeString( input );
 }
 
-DefaultIfNoneFilter::DefaultIfNoneFilter( QObject* parent )
-    : Filter( parent )
+DefaultIfNoneFilter::DefaultIfNoneFilter()
 {
-
 }
 
 Grantlee::SafeString DefaultIfNoneFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -47,23 +43,19 @@ Grantlee::SafeString DefaultIfNoneFilter::doFilter( const QVariant& input, const
   return Util::getSafeString( input );
 }
 
-DivisibleByFilter::DivisibleByFilter( QObject* parent )
-    : Filter( parent )
+DivisibleByFilter::DivisibleByFilter()
 {
-
 }
 
 Grantlee::SafeString DivisibleByFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
 {
   return ( QVariant( Util::getSafeString( input ) ).toInt()
-        % QVariant( argument ).toInt() == 0 )
-        ? QString( "true" ) : QString();
+           % QVariant( argument ).toInt() == 0 )
+         ? QString( "true" ) : QString();
 }
 
-YesNoFilter::YesNoFilter( QObject* parent )
-    : Filter( parent )
+YesNoFilter::YesNoFilter()
 {
-
 }
 
 Grantlee::SafeString YesNoFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const

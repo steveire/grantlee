@@ -55,7 +55,7 @@ public:
   QList<Token> m_tokenList;
 
   QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-  QHash<QString, Filter*> m_filters;
+  QHash<QString, Filter::Ptr> m_filters;
 
   NodeList m_nodeList;
 
@@ -76,8 +76,7 @@ void ParserPrivate::openLibrary( TagLibraryInterface *library )
   QHashIterator<QString, Filter*> filterIt( library->filters() );
   while ( filterIt.hasNext() ) {
     filterIt.next();
-    Filter *f = filterIt.value();
-//     f->setParent( q->parent() );
+    Filter::Ptr f = Filter::Ptr( filterIt.value() );
     m_filters.insert( filterIt.key(), f );
   }
 }
@@ -97,6 +96,8 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
 
 Parser::~Parser()
 {
+  // Don't delete filters here because filters must out-live the parser in the
+  // filter expressions.
   qDeleteAll( d_ptr->m_nodeFactories );
   delete d_ptr;
 }
@@ -141,7 +142,7 @@ void Parser::skipPast( const QString &tag )
   throw Grantlee::Exception( UnclosedBlockTagError, QString( "No closing tag found for %1" ).arg( tag ) );
 }
 
-Filter *Parser::getFilter( const QString &name ) const
+Filter::Ptr Parser::getFilter( const QString &name ) const
 {
   Q_D( const Parser );
   if ( !d->m_filters.contains( name ) )

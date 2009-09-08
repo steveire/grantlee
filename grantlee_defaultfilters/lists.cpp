@@ -21,9 +21,8 @@
 #include <util_p.h>
 #include <QDateTime>
 
-JoinFilter::JoinFilter( QObject* parent ): Filter( parent )
+JoinFilter::JoinFilter()
 {
-
 }
 
 Grantlee::SafeString JoinFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -44,9 +43,8 @@ Grantlee::SafeString JoinFilter::doFilter( const QVariant& input, const Grantlee
   return Util::markSafe( ret );
 }
 
-LengthFilter::LengthFilter( QObject* parent ): Filter( parent )
+LengthFilter::LengthFilter()
 {
-
 }
 
 Grantlee::SafeString LengthFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -54,9 +52,8 @@ Grantlee::SafeString LengthFilter::doFilter( const QVariant& input, const Grantl
   return QString::number( Util::variantToList( input ).size() );
 }
 
-LengthIsFilter::LengthIsFilter( QObject* parent ): Filter( parent )
+LengthIsFilter::LengthIsFilter()
 {
-
 }
 
 Grantlee::SafeString LengthIsFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -64,10 +61,8 @@ Grantlee::SafeString LengthIsFilter::doFilter( const QVariant& input, const Gran
   return ( Util::variantToList( input ).size() == QVariant( argument ).toInt() ) ? "true" : QString();
 }
 
-FirstFilter::FirstFilter( QObject* parent )
-    : Filter( parent )
+FirstFilter::FirstFilter()
 {
-
 }
 
 Grantlee::SafeString FirstFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -81,10 +76,8 @@ Grantlee::SafeString FirstFilter::doFilter( const QVariant& input, const Grantle
 }
 
 
-LastFilter::LastFilter( QObject* parent )
-    : Filter( parent )
+LastFilter::LastFilter()
 {
-
 }
 
 Grantlee::SafeString LastFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -98,10 +91,8 @@ Grantlee::SafeString LastFilter::doFilter( const QVariant& input, const Grantlee
 }
 
 
-RandomFilter::RandomFilter( QObject* parent )
-    : Filter( parent )
+RandomFilter::RandomFilter()
 {
-
 }
 
 Grantlee::SafeString RandomFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -113,10 +104,8 @@ Grantlee::SafeString RandomFilter::doFilter( const QVariant& input, const Grantl
   return Util::getSafeString( varList.at( rnd ) );
 }
 
-SliceFilter::SliceFilter( QObject* parent )
-    : Filter( parent )
+SliceFilter::SliceFilter()
 {
-
 }
 
 Grantlee::SafeString SliceFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const

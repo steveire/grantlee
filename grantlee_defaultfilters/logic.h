@@ -26,42 +26,34 @@ using namespace Grantlee;
 
 class GRANTLEE_EXPORT DefaultFilter : public Filter
 {
-  Q_OBJECT
 public:
-  DefaultFilter( QObject *parent = 0 );
+  DefaultFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT DefaultIfNoneFilter : public Filter
 {
-  Q_OBJECT
 public:
-  DefaultIfNoneFilter( QObject *parent = 0 );
+  DefaultIfNoneFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT DivisibleByFilter : public Filter
 {
-  Q_OBJECT
 public:
-  DivisibleByFilter( QObject *parent = 0 );
+  DivisibleByFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT YesNoFilter : public Filter
 {
-  Q_OBJECT
 public:
-  YesNoFilter( QObject *parent = 0 );
+  YesNoFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 #endif

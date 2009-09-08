@@ -22,6 +22,7 @@
 
 #include <QStringList>
 #include <QVariant>
+#include <QSharedPointer>
 
 #include "grantlee_export.h"
 #include "safestring.h"
@@ -35,12 +36,12 @@ namespace Grantlee
 /**
 Abstract base class for filters.
 */
-class GRANTLEE_EXPORT Filter : public QObject
+class GRANTLEE_EXPORT Filter
 {
-  Q_OBJECT
 public:
-  Filter( QObject *parent = 0 );
-  virtual ~Filter();
+  typedef QSharedPointer<Filter> Ptr;
+
+  virtual ~Filter() {}
 
   /**
    * Reimplement to filter @p input.

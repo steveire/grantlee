@@ -26,86 +26,73 @@ using namespace Grantlee;
 
 class GRANTLEE_EXPORT AddSlashesFilter : public Filter
 {
-  Q_OBJECT
 public:
-  AddSlashesFilter( QObject *parent = 0 );
+  AddSlashesFilter();
 
   virtual bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT CapFirstFilter : public Filter
 {
-  Q_OBJECT
 public:
-  CapFirstFilter( QObject *parent = 0 );
+  CapFirstFilter();
 
   virtual bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT EscapeJsFilter : public Filter
 {
-  Q_OBJECT
 public:
-  EscapeJsFilter( QObject *parent = 0 );
+  EscapeJsFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT FixAmpersandsFilter : public Filter
 {
-  Q_OBJECT
 public:
-  FixAmpersandsFilter( QObject *parent = 0 );
+  FixAmpersandsFilter();
 
   virtual bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 
 class GRANTLEE_EXPORT CutFilter : public Filter
 {
-  Q_OBJECT
 public:
-  CutFilter( QObject *parent = 0 );
+  CutFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT SafeFilter : public Filter
 {
-  Q_OBJECT
 public:
-  SafeFilter( QObject *parent = 0 );
+  SafeFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT LineNumbersFilter : public Filter
 {
-  Q_OBJECT
 public:
-  LineNumbersFilter( QObject *parent = 0 );
+  LineNumbersFilter();
 
   bool isSafe() const {
     return true;
@@ -116,28 +103,24 @@ public:
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class LowerFilter : public Filter
 {
-  Q_OBJECT
 public:
-  LowerFilter( QObject *parent = 0 );
+  LowerFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 // class MakeListFilter : public Filter
-// {
-//   Q_OBJECT
+// {//
 // public:
-//   MakeListFilter( QObject *parent = 0 );
+//   MakeListFilter();
 //
 //   bool isSafe() {
 //     return false;
@@ -149,9 +132,8 @@ public:
 
 class StringFormatFilter : public Filter
 {
-  Q_OBJECT
 public:
-  StringFormatFilter( QObject *parent = 0 );
+  StringFormatFilter();
 
   bool isSafe() const {
     return true;
@@ -162,9 +144,8 @@ public:
 
 class TitleFilter : public Filter
 {
-  Q_OBJECT
 public:
-  TitleFilter( QObject *parent = 0 );
+  TitleFilter();
 
   bool isSafe() const {
     return true;
@@ -175,23 +156,20 @@ public:
 
 class GRANTLEE_EXPORT TruncateWordsFilter : public Filter
 {
-  Q_OBJECT
 public:
-  TruncateWordsFilter( QObject *parent = 0 );
+  TruncateWordsFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT UpperFilter : public Filter
 {
-  Q_OBJECT
 public:
-  UpperFilter( QObject *parent = 0 );
+  UpperFilter();
 
   // &amp; may be safe, but it will be changed to &AMP; which is not safe.
   bool isSafe() const {
@@ -199,111 +177,94 @@ public:
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT WordCountFilter : public Filter
 {
-  Q_OBJECT
 public:
-  WordCountFilter( QObject *parent = 0 );
+  WordCountFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT LJustFilter : public Filter
 {
-  Q_OBJECT
 public:
-  LJustFilter( QObject *parent = 0 );
+  LJustFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT RJustFilter : public Filter
 {
-  Q_OBJECT
 public:
-  RJustFilter( QObject *parent = 0 );
+  RJustFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT CenterFilter : public Filter
 {
-  Q_OBJECT
 public:
-  CenterFilter( QObject *parent = 0 );
+  CenterFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT EscapeFilter : public Filter
 {
-  Q_OBJECT
 public:
-  EscapeFilter( QObject *parent = 0 );
+  EscapeFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT ForceEscapeFilter : public Filter
 {
-  Q_OBJECT
 public:
-  ForceEscapeFilter( QObject *parent = 0 );
+  ForceEscapeFilter();
 
   bool isSafe() const {
     return true;
   }
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT RemoveTagsFilter : public Filter
 {
-  Q_OBJECT
 public:
-  RemoveTagsFilter( QObject *parent = 0 );
+  RemoveTagsFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GRANTLEE_EXPORT StripTagsFilter : public Filter
 {
-  Q_OBJECT
 public:
-  StripTagsFilter( QObject *parent = 0 );
+  StripTagsFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 

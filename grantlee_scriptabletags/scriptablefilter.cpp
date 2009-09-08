@@ -22,8 +22,8 @@
 
 #include <QScriptEngine>
 
-ScriptableFilter::ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine, QObject* parent )
-    : Filter( parent ), m_filterObject( filterObject ), m_scriptEngine( engine )
+ScriptableFilter::ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine )
+    : m_filterObject( filterObject ), m_scriptEngine( engine )
 {
 }
 

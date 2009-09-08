@@ -104,12 +104,12 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
     if ( subString.startsWith( FILTER_SEPARATOR ) ) {
       subString = subString.right( ssSize - 1 );
-      Filter *f = parser->getFilter( subString );
+      Filter::Ptr f = parser->getFilter( subString );
 
       Q_ASSERT( f );
 
       d->m_filterNames << subString;
-      d->m_filters << qMakePair<Filter*, Variable>( f, Variable() );
+      d->m_filters << qMakePair<Filter::Ptr, Variable>( f, Variable() );
 
     } else if ( subString.startsWith( FILTER_ARGUMENT_SEPARATOR ) ) {
       subString = subString.right( ssSize - 1 );
@@ -144,6 +144,7 @@ FilterExpression::FilterExpression( const FilterExpression &other )
 {
   d_ptr->m_variable = other.d_ptr->m_variable;
   d_ptr->m_filters = other.d_ptr->m_filters;
+  d_ptr->m_filterNames = other.d_ptr->m_filterNames;
 }
 
 FilterExpression::FilterExpression()
@@ -182,7 +183,7 @@ QVariant FilterExpression::resolve( Context *c ) const
   QVariant var = d->m_variable.resolve( c );
 
   foreach( ArgFilter argfilter, d->m_filters ) {
-    Filter *filter = argfilter.first;
+    Filter::Ptr filter = argfilter.first;
     Variable argVar = argfilter.second;
     QVariant arg = argVar.resolve( c );
     Grantlee::SafeString argString;

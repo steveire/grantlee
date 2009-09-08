@@ -22,10 +22,8 @@
 #include <QVariant>
 
 
-AddSlashesFilter::AddSlashesFilter( QObject* parent )
-    : Filter( parent )
+AddSlashesFilter::AddSlashesFilter()
 {
-
 }
 
 
@@ -36,10 +34,8 @@ Grantlee::SafeString AddSlashesFilter::doFilter( const QVariant& input, const Gr
   return safeString;
 }
 
-CapFirstFilter::CapFirstFilter( QObject* parent )
-    : Filter( parent )
+CapFirstFilter::CapFirstFilter()
 {
-
 }
 
 Grantlee::SafeString CapFirstFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
@@ -53,10 +49,8 @@ Grantlee::SafeString CapFirstFilter::doFilter( const QVariant& input, const Gran
 }
 
 
-EscapeJsFilter::EscapeJsFilter( QObject* parent )
-    : Filter( parent )
+EscapeJsFilter::EscapeJsFilter()
 {
-
 }
 
 
@@ -78,10 +72,8 @@ Grantlee::SafeString EscapeJsFilter::doFilter( const QVariant& input, const Gran
   return retString;
 }
 
-FixAmpersandsFilter::FixAmpersandsFilter( QObject* parent )
-    : Filter( parent )
+FixAmpersandsFilter::FixAmpersandsFilter()
 {
-
 }
 
 Grantlee::SafeString FixAmpersandsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
@@ -95,10 +87,8 @@ Grantlee::SafeString FixAmpersandsFilter::doFilter( const QVariant& input, const
   return safeString;
 }
 
-CutFilter::CutFilter( QObject* parent )
-    : Filter( parent )
+CutFilter::CutFilter()
 {
-
 }
 
 Grantlee::SafeString CutFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -108,14 +98,13 @@ Grantlee::SafeString CutFilter::doFilter( const QVariant& input, const Grantlee:
   retString.remove( argument );
 
   if ( argument == ";" )
-    retString.setSafety(SafeString::IsNotSafe);
+    retString.setSafety( SafeString::IsNotSafe );
 
   return retString;
 }
 
-SafeFilter::SafeFilter( QObject* parent ): Filter( parent )
+SafeFilter::SafeFilter()
 {
-
 }
 
 Grantlee::SafeString SafeFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -123,10 +112,8 @@ Grantlee::SafeString SafeFilter::doFilter( const QVariant& input, const Grantlee
   return Util::markSafe( Util::getSafeString( input ) );
 }
 
-LineNumbersFilter::LineNumbersFilter( QObject* parent )
-    : Filter( parent )
+LineNumbersFilter::LineNumbersFilter()
 {
-
 }
 
 
@@ -146,10 +133,8 @@ SafeString LineNumbersFilter::doFilter( const QVariant& input, const Grantlee::S
   return Util::markSafe( lines.join( QString( '\n' ) ) );
 }
 
-LowerFilter::LowerFilter( QObject* parent )
-    : Filter( parent )
+LowerFilter::LowerFilter()
 {
-
 }
 
 Grantlee::SafeString LowerFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -158,7 +143,7 @@ Grantlee::SafeString LowerFilter::doFilter( const QVariant& input, const Grantle
 }
 
 //TODO: consider making doFilter return a QVariant.
-// MakeListFilter::MakeListFilter(QObject* parent)
+// MakeListFilter::MakeListFilter()
 //     : Filter(parent)
 // {
 //
@@ -170,8 +155,7 @@ Grantlee::SafeString LowerFilter::doFilter( const QVariant& input, const Grantle
 // }
 
 
-StringFormatFilter::StringFormatFilter( QObject* parent )
-    : Filter( parent )
+StringFormatFilter::StringFormatFilter()
 {
 
 }
@@ -179,15 +163,13 @@ StringFormatFilter::StringFormatFilter( QObject* parent )
 
 SafeString StringFormatFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
 {
-
   QString a = Util::getSafeString( input );
   SafeString s = SafeString( argument.arg( a ), Util::getSafeString( input ).isSafe() ? SafeString::IsSafe : SafeString::IsNotSafe );
   return s;
 }
 
-TitleFilter::TitleFilter( QObject* parent ): Filter( parent )
+TitleFilter::TitleFilter()
 {
-
 }
 
 SafeString TitleFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
@@ -203,10 +185,8 @@ SafeString TitleFilter::doFilter( const QVariant& input, const Grantlee::SafeStr
   return str;
 }
 
-TruncateWordsFilter::TruncateWordsFilter( QObject* parent )
-    : Filter( parent )
+TruncateWordsFilter::TruncateWordsFilter()
 {
-
 }
 
 Grantlee::SafeString TruncateWordsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
@@ -230,10 +210,8 @@ Grantlee::SafeString TruncateWordsFilter::doFilter( const QVariant& input, const
 
 }
 
-UpperFilter::UpperFilter( QObject* parent )
-    : Filter( parent )
+UpperFilter::UpperFilter()
 {
-
 }
 
 Grantlee::SafeString UpperFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -241,10 +219,8 @@ Grantlee::SafeString UpperFilter::doFilter( const QVariant& input, const Grantle
   return Util::getSafeString( input ).toUpper();
 }
 
-WordCountFilter::WordCountFilter( QObject* parent )
-    : Filter( parent )
+WordCountFilter::WordCountFilter()
 {
-
 }
 
 Grantlee::SafeString WordCountFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -252,10 +228,8 @@ Grantlee::SafeString WordCountFilter::doFilter( const QVariant& input, const Gra
   return QString::number( Util::getSafeString( input ).split( " " ).size() );
 }
 
-LJustFilter::LJustFilter( QObject* parent )
-    : Filter( parent )
+LJustFilter::LJustFilter()
 {
-
 }
 
 Grantlee::SafeString LJustFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -264,10 +238,8 @@ Grantlee::SafeString LJustFilter::doFilter( const QVariant& input, const Grantle
 }
 
 
-RJustFilter::RJustFilter( QObject* parent )
-    : Filter( parent )
+RJustFilter::RJustFilter()
 {
-
 }
 
 Grantlee::SafeString RJustFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -275,10 +247,8 @@ Grantlee::SafeString RJustFilter::doFilter( const QVariant& input, const Grantle
   return Util::getSafeString( input ).rightJustified( QVariant( argument ).toInt() );
 }
 
-CenterFilter::CenterFilter( QObject* parent )
-    : Filter( parent )
+CenterFilter::CenterFilter()
 {
-
 }
 
 Grantlee::SafeString CenterFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -293,10 +263,8 @@ Grantlee::SafeString CenterFilter::doFilter( const QVariant& input, const Grantl
 }
 
 
-EscapeFilter::EscapeFilter( QObject* parent )
-    : Filter( parent )
+EscapeFilter::EscapeFilter()
 {
-
 }
 
 Grantlee::SafeString EscapeFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -304,10 +272,8 @@ Grantlee::SafeString EscapeFilter::doFilter( const QVariant& input, const Grantl
   return Util::markForEscaping( Util::getSafeString( input ) );
 }
 
-ForceEscapeFilter::ForceEscapeFilter( QObject* parent )
-    : Filter( parent )
+ForceEscapeFilter::ForceEscapeFilter()
 {
-
 }
 
 Grantlee::SafeString ForceEscapeFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
@@ -315,10 +281,8 @@ Grantlee::SafeString ForceEscapeFilter::doFilter( const QVariant& input, const G
   return Util::markSafe( Util::escape( Util::getSafeString( input ) ) );
 }
 
-RemoveTagsFilter::RemoveTagsFilter( QObject* parent )
-    : Filter( parent )
+RemoveTagsFilter::RemoveTagsFilter()
 {
-
 }
 
 Grantlee::SafeString RemoveTagsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const
@@ -334,10 +298,8 @@ Grantlee::SafeString RemoveTagsFilter::doFilter( const QVariant& input, const Gr
   return value;
 }
 
-StripTagsFilter::StripTagsFilter( QObject* parent )
-    : Filter( parent )
+StripTagsFilter::StripTagsFilter()
 {
-
 }
 
 Grantlee::SafeString StripTagsFilter::doFilter( const QVariant& input, const Grantlee::SafeString& argument, bool autoescape ) const

@@ -26,22 +26,18 @@ using namespace Grantlee;
 
 class AddFilter : public Filter
 {
-  Q_OBJECT
 public:
-  AddFilter( QObject *parent = 0 );
+  AddFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class GetDigitFilter : public Filter
 {
-  Q_OBJECT
 public:
-  GetDigitFilter( QObject *parent = 0 );
+  GetDigitFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 

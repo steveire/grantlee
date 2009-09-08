@@ -16,7 +16,6 @@ set (grantlee_core_library_SRCS
   variable.cpp
   filterexpression.cpp
   node.cpp
-  filter.cpp
   lexer.cpp
   parser.cpp
   util.cpp

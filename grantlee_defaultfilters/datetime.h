@@ -26,42 +26,34 @@ using namespace Grantlee;
 
 class DateFilter : public Filter
 {
-  Q_OBJECT
 public:
-  DateFilter( QObject *parent = 0 );
+  DateFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class TimeFilter : public Filter
 {
-  Q_OBJECT
 public:
-  TimeFilter( QObject *parent = 0 );
+  TimeFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class TimeSinceFilter : public Filter
 {
-  Q_OBJECT
 public:
-  TimeSinceFilter( QObject *parent = 0 );
+  TimeSinceFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 class TimeUntilFilter : public Filter
 {
-  Q_OBJECT
 public:
-  TimeUntilFilter( QObject *parent = 0 );
+  TimeUntilFilter();
 
   Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
-
 };
 
 
