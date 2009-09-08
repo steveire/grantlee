@@ -146,7 +146,7 @@ QString ExtendsNode::render( Context *c )
     BlockNode *bn = j.next();
     if ( parentBlocks.contains( bn->name() ) ) {
       BlockNode *pbn = parentBlocks.value( bn->name() );
-      pbn->setNodeParent( bn->nodeParent() );
+      pbn->setNodeParent( bn->takeNodeParent() );
       pbn->addParent( pbn->nodeList() );
       pbn->setNodeList( bn->nodeList() );
     } else {

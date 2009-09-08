@@ -55,7 +55,7 @@ public:
 
   QString render( Context *c );
 
-  BlockNode* nodeParent() const;
+  BlockNode* takeNodeParent();
 
   QString name();
 

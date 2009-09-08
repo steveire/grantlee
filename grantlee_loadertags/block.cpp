@@ -83,6 +83,7 @@ BlockNode::BlockNode( const QString &name, QObject *parent )
 
 BlockNode::~BlockNode()
 {
+  delete m_nodeParent;
 }
 
 void BlockNode::setNodeList( NodeList list )
@@ -110,9 +111,13 @@ QString BlockNode::blockName()
   return m_name;
 }
 
-BlockNode* BlockNode::nodeParent() const
+BlockNode* BlockNode::takeNodeParent()
 {
-  return m_nodeParent;
+  BlockNode *n = m_nodeParent;
+  // Make sure there's only one valid pointer to m_nodeParent
+  // It's safe to delete 0.
+  m_nodeParent = 0;
+  return n;
 }
 
 void BlockNode::addParent( NodeList nodeList )
@@ -120,6 +125,9 @@ void BlockNode::addParent( NodeList nodeList )
   if ( m_nodeParent )
     m_nodeParent->addParent( nodeList );
   else {
+    // This new node is not really part of the template, so it can't be added as
+    // a descendant of it or else it would show up in findChildren for the template.
+    // So, we manage the resource manually.
     BlockNode *n = new BlockNode( m_name );
     n->setNodeList( nodeList );
     m_nodeParent = n;
