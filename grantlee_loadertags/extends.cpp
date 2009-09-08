@@ -58,7 +58,7 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     parentName = QString();
   }
 
-  ExtendsNode *n = new ExtendsNode( parentName, fe );
+  ExtendsNode *n = new ExtendsNode( parentName, fe, p );
 
   TemplateImpl *t = qobject_cast<TemplateImpl *>( p->parent() );
 
@@ -67,7 +67,7 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   NodeList nodeList = p->parse( t );
   n->setNodeList( nodeList );
 
-  if ( t->findChildren<ExtendsNode *>().size() > 0 ) {
+  if ( t->findChildren<ExtendsNode *>().size() > 1 ) {
     throw Grantlee::Exception( TagSyntaxError, "Extends tag may only appear once in a template." );
   }
 

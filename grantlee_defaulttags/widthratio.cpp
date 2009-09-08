@@ -40,7 +40,7 @@ Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   FilterExpression maxExpr( expr.at( 2 ), p );
   FilterExpression maxWidth( expr.at( 3 ), p );
 
-  return new WidthRatioNode( valExpr, maxExpr, maxWidth );
+  return new WidthRatioNode( valExpr, maxExpr, maxWidth, p );
 }
 
 

@@ -31,7 +31,7 @@ DebugNodeFactory::DebugNodeFactory()
 
 Node* DebugNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  return new DebugNode();
+  return new DebugNode( p );
 }
 
 

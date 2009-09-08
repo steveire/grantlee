@@ -42,7 +42,7 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
     throw Grantlee::Exception( TagSyntaxError, "Use the \"autoescape\" tag instead." );
   }
 
-  FilterNode *n = new FilterNode( fe );
+  FilterNode *n = new FilterNode( fe, p );
 
   NodeList filterNodes = p->parse( n, QStringList() << "endfilter" );
   p->deleteNextToken();

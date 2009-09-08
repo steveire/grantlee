@@ -52,13 +52,13 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
 
   switch ( numArgs ) {
   case 1:
-    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ) );
+    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), p );
     break;
   case 2:
-    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ) );
+    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ), p );
     break;
   case 3:
-    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ), FilterExpression( expr.at( 2 ), p ) );
+    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ), FilterExpression( expr.at( 2 ), p ), p );
     break;
   default:
     return 0;
@@ -70,6 +70,21 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
   n->setNodeList( list );
   return n;
 
+}
+
+RangeNode::RangeNode( const QString &name, FilterExpression stopExpression, QObject* parent )
+    : Node( parent ),
+    m_name( name ),
+    m_stopExpression( stopExpression )
+{
+}
+
+RangeNode::RangeNode( const QString &name, FilterExpression startExpression, FilterExpression stopExpression, QObject* parent )
+    : Node( parent ),
+    m_name( name ),
+    m_startOrStopExpression( startExpression ),
+    m_stopExpression( stopExpression )
+{
 }
 
 RangeNode::RangeNode( const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression, FilterExpression stepExpression, QObject* parent )

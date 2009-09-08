@@ -41,7 +41,7 @@ Node* NowNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   QString formatString = expr.at( 1 );
 
-  return new NowNode( formatString );
+  return new NowNode( formatString, p );
 }
 
 NowNode::NowNode( const QString &formatString, QObject *parent )

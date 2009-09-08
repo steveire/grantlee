@@ -41,7 +41,7 @@ Node* FirstOfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     throw Grantlee::Exception( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( "expr.at(0)" ) );
   }
 
-  return new FirstOfNode( getFilterExpressionList( expr, p ) );
+  return new FirstOfNode( getFilterExpressionList( expr, p ), p );
 }
 
 

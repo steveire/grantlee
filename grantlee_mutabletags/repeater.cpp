@@ -29,7 +29,7 @@ RepeaterNodeFactory::RepeaterNodeFactory( QObject* parent )
 
 Node* RepeaterNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  RepeaterNode *n = new RepeaterNode();
+  RepeaterNode *n = new RepeaterNode( p );
   NodeList nodeList = p->parse( n, "endrepeater" );
   p->deleteNextToken();
   n->setNodeList( nodeList );

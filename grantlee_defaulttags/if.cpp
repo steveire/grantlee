@@ -75,7 +75,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     boolVars.append( pair );
   }
 
-  IfNode *n = new IfNode( boolVars, linkType );
+  IfNode *n = new IfNode( boolVars, linkType, p );
 
   NodeList trueList = p->parse( n, QStringList() << "else" << "endif" );
   n->setTrueList( trueList );

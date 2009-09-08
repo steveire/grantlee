@@ -36,7 +36,7 @@ Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
   QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
 
   expr.takeAt( 0 );
-  IfChangedNode *n =  new IfChangedNode( getFilterExpressionList( expr, p ) );
+  IfChangedNode *n =  new IfChangedNode( getFilterExpressionList( expr, p ), p );
 
   NodeList trueList = p->parse( n, QStringList() << "else" << "endifchanged" );
   n->setTrueList( trueList );

@@ -31,7 +31,7 @@ SpacelessNodeFactory::SpacelessNodeFactory()
 
 Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  SpacelessNode *n = new SpacelessNode();
+  SpacelessNode *n = new SpacelessNode( p );
   NodeList list = p->parse( n, QStringList() << "endspaceless" );
   n->setList( list );
   p->deleteNextToken();

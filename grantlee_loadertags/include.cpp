@@ -48,7 +48,7 @@ Node* IncludeNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       || ( includeName.startsWith( "'" ) && includeName.endsWith( "'" ) ) ) {
     return new ConstantIncludeNode( includeName.mid( 1, size - 2 ) );
   }
-  return new IncludeNode( FilterExpression( includeName, p ) );
+  return new IncludeNode( FilterExpression( includeName, p ), p );
 }
 
 IncludeNode::IncludeNode( const FilterExpression &fe, QObject *parent )

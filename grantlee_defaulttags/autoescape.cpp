@@ -52,7 +52,7 @@ Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p ) con
     throw Grantlee::Exception( TagSyntaxError, "argument must be 'on' or 'off'" );
   }
 
-  AutoescapeNode *n = new AutoescapeNode( state );
+  AutoescapeNode *n = new AutoescapeNode( state, p );
 
   NodeList list = p->parse( n, QStringList() << "endautoescape" );
   p->deleteNextToken();

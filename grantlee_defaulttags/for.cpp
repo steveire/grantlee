@@ -63,7 +63,7 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   FilterExpression fe( expr.last(), p );
 
-  ForNode *n = new ForNode( vars, fe, reversed );
+  ForNode *n = new ForNode( vars, fe, reversed, p );
 
   NodeList loopNodes = p->parse( n, QStringList() << "empty" << "endfor" );
   n->setLoopList( loopNodes );

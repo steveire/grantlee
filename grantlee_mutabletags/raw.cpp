@@ -29,7 +29,7 @@ RawNodeFactory::RawNodeFactory()
 
 Node* RawNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  RawNode *n = new RawNode();
+  RawNode *n = new RawNode( p );
   NodeList nodeList = p->parse( n, "endraw" );
   n->setNodeList( nodeList );
   p->deleteNextToken();

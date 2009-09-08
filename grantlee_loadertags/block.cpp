@@ -64,7 +64,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
-  BlockNode *n = new BlockNode( blockName );
+  BlockNode *n = new BlockNode( blockName, p );
   NodeList list = p->parse( n, QStringList() << "endblock" << "endblock " + blockName );
 
   n->setNodeList( list );

@@ -44,7 +44,7 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
   FilterExpression val1( expr.at( 1 ), p );
   FilterExpression val2( expr.at( 2 ), p );
 
-  IfEqualNode *n = new IfEqualNode( val1 , val2, negate );
+  IfEqualNode *n = new IfEqualNode( val1 , val2, negate, p );
 
   const QString endTag( "end" + expr.at( 0 ) );
   NodeList trueList = p->parse( n, QStringList() << "else" << endTag );

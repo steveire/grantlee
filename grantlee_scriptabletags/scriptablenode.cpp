@@ -128,6 +128,7 @@ Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) con
     throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
 
   Node* node = qscriptvalue_cast<Node*>( scriptNode );
+  node->setParent( p );
   ScriptableNode *sn = qobject_cast<ScriptableNode *>( node );
   return node;
 

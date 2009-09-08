@@ -49,7 +49,7 @@ Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   QString name = expr.at( 5 );
 
-  return new RegroupNode( target, expression, name );
+  return new RegroupNode( target, expression, name, p );
 }
 
 RegroupNode::RegroupNode( FilterExpression target, FilterExpression expression, const QString &varName, QObject *parent )

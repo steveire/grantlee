@@ -45,7 +45,7 @@ Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     p->loadLib( libName );
   }
 
-  return new LoadNode();
+  return new LoadNode( p );
 }
 
 

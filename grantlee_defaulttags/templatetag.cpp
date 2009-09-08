@@ -55,7 +55,7 @@ Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p ) co
     throw Grantlee::Exception( TagSyntaxError, "Not a template tag" );
   }
 
-  return new TemplateTagNode( name );
+  return new TemplateTagNode( name, p );
 }
 
 

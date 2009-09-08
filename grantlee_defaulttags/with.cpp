@@ -40,7 +40,7 @@ Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   FilterExpression fe( expr.at( 1 ), p );
   QString name( expr.at( 3 ) );
 
-  WithNode *n = new WithNode( fe, name );
+  WithNode *n = new WithNode( fe, name, p );
   NodeList nodeList = p->parse( n, QStringList() << "endwith" );
   n->setNodeList( nodeList );
   p->deleteNextToken();

@@ -54,7 +54,7 @@ Node* SsiNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   QString filename = expr.at( 1 );
 
-  return new SsiNode( filename, parse );
+  return new SsiNode( filename, parse, p );
 }
 
 SsiNode::SsiNode( const QString &filename, bool parse, QObject *parent )
