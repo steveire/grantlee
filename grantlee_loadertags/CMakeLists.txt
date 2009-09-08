@@ -14,9 +14,9 @@ add_definitions(-DQT_SHARED)
 
 set (grantlee_loadertags_library_SRCS
   loadertags.cpp
-  include.cpp
-  extends.cpp
   block.cpp
+  extends.cpp
+  include.cpp
 )
 
 set(GRANTLEE_LOADERTAGS_LIB_SOVERSION 0)

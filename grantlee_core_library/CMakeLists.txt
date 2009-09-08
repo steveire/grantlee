@@ -8,18 +8,18 @@ include_directories(
 configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
 
 set (grantlee_core_library_SRCS
-  template.cpp
-  mutabletemplate.cpp
+  context.cpp
   engine.cpp
   enginestate_p.cpp
-  context.cpp
-  variable.cpp
   filterexpression.cpp
-  node.cpp
   lexer.cpp
+  mutabletemplate.cpp
+  node.cpp
   parser.cpp
-  util.cpp
   safestring.cpp
+  template.cpp
+  util.cpp
+  variable.cpp
 )
 
 set(GRANTLEE_CORE_LIB_SOVERSION 0)
@@ -45,19 +45,18 @@ install(TARGETS grantlee_core_library
 )
 
 install(FILES
-  node.h
+  context.h
+  engine.h
   filter.h
   filterexpression.h
-  template.h
-  mutabletemplate.h
-  engine.h
-  context.h
-  variable.h
-  filterexpression.h
-  parser.h
-  grantlee_export.h
   grantlee.h
+  grantlee_export.h
+  mutabletemplate.h
+  node.h
+  parser.h
   safestring.h
+  template.h
+  variable.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )
 

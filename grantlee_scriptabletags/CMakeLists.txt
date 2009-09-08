@@ -13,15 +13,15 @@ add_definitions(-DQT_SHARED)
 
 
 set (grantlee_scriptabletags_library_SRCS
-  scriptabletags.cpp
-  scriptablenode.cpp
   scriptablecontext.cpp
-  scriptableparser.cpp
-  scriptablevariable.cpp
   scriptablefilter.cpp
   scriptablefilterexpression.cpp
-  scriptabletemplate.cpp
+  scriptablenode.cpp
+  scriptableparser.cpp
   scriptablesafestring.cpp
+  scriptabletags.cpp
+  scriptabletemplate.cpp
+  scriptablevariable.cpp
 )
 
 set(GRANTLEE_SCRIPTABLETAGS_LIB_SOVERSION 0)

@@ -15,25 +15,25 @@ add_definitions(-DQT_SHARED)
 set (grantlee_defaulttags_library_SRCS
   defaulttags.cpp
   autoescape.cpp
-  regroup.cpp
-  if.cpp
-  for.cpp
-  with.cpp
-  cycle.cpp
   comment.cpp
-  ifequal.cpp
+  cycle.cpp
+  debug.cpp
+  filtertag.cpp
   firstof.cpp
+  for.cpp
+  if.cpp
+  ifchanged.cpp
+  ifequal.cpp
+  load.cpp
+  mediafinder.cpp
+  now.cpp
+  range.cpp
+  regroup.cpp
+  spaceless.cpp
+  ssi.cpp
   templatetag.cpp
   widthratio.cpp
-  filtertag.cpp
-  load.cpp
-  now.cpp
-  ssi.cpp
-  ifchanged.cpp
-  spaceless.cpp
-  debug.cpp
-  mediafinder.cpp
-  range.cpp
+  with.cpp
 )
 
 set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)

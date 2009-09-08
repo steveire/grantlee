@@ -24,26 +24,25 @@
 #include "interfaces/taglibraryinterface.h"
 
 #include "autoescape.h"
-#include "regroup.h"
-#include "if.h"
-#include "for.h"
-#include "with.h"
 #include "comment.h"
-#include "ifequal.h"
-#include "firstof.h"
 #include "cycle.h"
+#include "debug.h"
+#include "filtertag.h"
+#include "firstof.h"
+#include "for.h"
+#include "if.h"
+#include "ifchanged.h"
+#include "ifequal.h"
+#include "load.h"
+#include "mediafinder.h"
+#include "now.h"
+#include "range.h"
+#include "regroup.h"
+#include "spaceless.h"
+#include "ssi.h"
 #include "templatetag.h"
 #include "widthratio.h"
-#include "filtertag.h"
-#include "load.h"
-#include "now.h"
-#include "ssi.h"
-#include "ifchanged.h"
-#include "spaceless.h"
-#include "debug.h"
-#include "mediafinder.h"
-#include "range.h"
-
+#include "with.h"
 #include "grantlee_export.h"
 
 namespace Grantlee
@@ -68,26 +67,26 @@ public:
     QHash<QString, AbstractNodeFactory*> nodeFactories;
 
     nodeFactories.insert( "autoescape", new AutoescapeNodeFactory() );
-    nodeFactories.insert( "regroup", new RegroupNodeFactory() );
-    nodeFactories.insert( "if", new IfNodeFactory() );
-    nodeFactories.insert( "for", new ForNodeFactory() );
-    nodeFactories.insert( "with", new WithNodeFactory() );
     nodeFactories.insert( "comment", new CommentNodeFactory() );
+    nodeFactories.insert( "cycle", new CycleNodeFactory() );
+    nodeFactories.insert( "debug", new DebugNodeFactory() );
+    nodeFactories.insert( "filter", new FilterNodeFactory() );
+    nodeFactories.insert( "firstof", new FirstOfNodeFactory() );
+    nodeFactories.insert( "for", new ForNodeFactory() );
+    nodeFactories.insert( "if", new IfNodeFactory() );
+    nodeFactories.insert( "ifchanged", new IfChangedNodeFactory() );
     nodeFactories.insert( "ifequal", new IfEqualNodeFactory() );
     nodeFactories.insert( "ifnotequal", new IfNotEqualNodeFactory() );
-    nodeFactories.insert( "firstof", new FirstOfNodeFactory() );
-    nodeFactories.insert( "cycle", new CycleNodeFactory() );
+    nodeFactories.insert( "load", new LoadNodeFactory() );
+    nodeFactories.insert( "media_finder", new MediaFinderNodeFactory() );
+    nodeFactories.insert( "now", new NowNodeFactory() );
+    nodeFactories.insert( "range", new RangeNodeFactory() );
+    nodeFactories.insert( "regroup", new RegroupNodeFactory() );
+    nodeFactories.insert( "spaceless", new SpacelessNodeFactory() );
+    nodeFactories.insert( "ssi", new SsiNodeFactory() );
     nodeFactories.insert( "templatetag", new TemplateTagNodeFactory() );
     nodeFactories.insert( "widthratio", new WidthRatioNodeFactory() );
-    nodeFactories.insert( "filter", new FilterNodeFactory() );
-    nodeFactories.insert( "load", new LoadNodeFactory() );
-    nodeFactories.insert( "now", new NowNodeFactory() );
-    nodeFactories.insert( "ssi", new SsiNodeFactory() );
-    nodeFactories.insert( "ifchanged", new IfChangedNodeFactory() );
-    nodeFactories.insert( "spaceless", new SpacelessNodeFactory() );
-    nodeFactories.insert( "debug", new DebugNodeFactory() );
-    nodeFactories.insert( "media_finder", new MediaFinderNodeFactory() );
-    nodeFactories.insert( "range", new RangeNodeFactory() );
+    nodeFactories.insert( "with", new WithNodeFactory() );
 
     return nodeFactories;
   }

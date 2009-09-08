@@ -15,12 +15,12 @@ add_definitions(-DQT_SHARED)
 set (grantlee_defaultfilters_library_SRCS
   defaultfilters.cpp
 
-  strings.cpp
-  lists.cpp
-  integers.cpp
   datetime.cpp
+  integers.cpp
+  lists.cpp
   logic.cpp
   misc.cpp
+  strings.cpp
 )
 
 set(GRANTLEE_DEFAULTFILTERS_LIB_SOVERSION 0)

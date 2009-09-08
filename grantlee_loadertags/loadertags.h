@@ -23,9 +23,9 @@
 #include "node.h"
 #include "interfaces/taglibraryinterface.h"
 
-#include "include.h"
-#include "extends.h"
 #include "block.h"
+#include "extends.h"
+#include "include.h"
 
 namespace Grantlee
 {
@@ -46,9 +46,9 @@ public:
     Q_UNUSED( name );
 
     QHash<QString, AbstractNodeFactory*> nodeFactories;
-    nodeFactories.insert( "include", new IncludeNodeFactory() );
-    nodeFactories.insert( "extends", new ExtendsNodeFactory() );
     nodeFactories.insert( "block", new BlockNodeFactory() );
+    nodeFactories.insert( "extends", new ExtendsNodeFactory() );
+    nodeFactories.insert( "include", new IncludeNodeFactory() );
     return nodeFactories;
   }
 };
