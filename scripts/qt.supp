@@ -269,5 +269,192 @@
    fun:_ZN16QCoreApplication4initEv
 }
 
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   fun:dlopen
+   fun:_ZN15QLibraryPrivate8load_sysEv
+   fun:_ZN15QLibraryPrivate4loadEv
+   fun:_ZN15QLibraryPrivate10loadPluginEv
+   fun:_ZN13QPluginLoader4loadEv
+   fun:_ZN13QPluginLoader8instanceEv
+   fun:_ZN8Grantlee13EnginePrivate14loadCppLibraryERK7QStringx
+   fun:_ZN8Grantlee6Engine11loadLibraryERK7QStringx
+   fun:_ZN8Grantlee6Engine20loadDefaultLibrariesEx
+   fun:_ZN8Grantlee6ParserC1ERK5QListI5TokenEP7QObject
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   obj:/usr/lib/libglib-2.0.so.0.2000.1
+   fun:g_array_set_size
+   fun:g_static_private_set
+   fun:g_get_language_names
+   fun:g_thread_init
+   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
+   fun:_ZN20QEventDispatcherGlibC1EP7QObject
+   fun:_ZN23QCoreApplicationPrivate21createEventDispatcherEv
+   fun:_ZN16QCoreApplication4initEv
+   fun:_ZN16QCoreApplicationC1ERiPPc
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   fun:dlopen
+   fun:_ZN15QLibraryPrivate8load_sysEv
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   fun:dlopen
+   fun:_ZN15QLibraryPrivate8load_sysEv
+   fun:_ZN15QLibraryPrivate4loadEv
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   fun:dlopen
+   fun:_ZN15QLibraryPrivate8load_sysEv
+   fun:_ZN15QLibraryPrivate4loadEv
+   fun:_ZN15QLibraryPrivate10loadPluginEv
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   fun:dlopen
+   fun:_ZN15QLibraryPrivate8load_sysEv
+   fun:_ZN15QLibraryPrivate4loadEv
+   fun:_ZN15QLibraryPrivate10loadPluginEv
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.2000.1
+   fun:g_slice_alloc
+   fun:g_array_sized_new
+   fun:g_array_new
+   fun:g_static_private_set
+   fun:g_get_filename_charsets
+   obj:/usr/lib/libglib-2.0.so.0.2000.1
+   fun:g_thread_init_glib
+   fun:g_thread_init
+   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   obj:/usr/lib/libgthread-2.0.so.0.2000.1
+   fun:g_thread_init_glib
+   fun:g_thread_init
+   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
+   fun:_ZN20QEventDispatcherGlibC1EP7QObject
+   fun:_ZN23QCoreApplicationPrivate21createEventDispatcherEv
+   fun:_ZN16QCoreApplication4initEv
+   fun:_ZN16QCoreApplicationC1ERiPPc
+   fun:main
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   fun:dlopen
+   fun:_ZN15QLibraryPrivate8load_sysEv
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/usr/lib/libglib-2.0.so.0.2000.1
+   fun:g_slice_alloc
+   fun:g_array_sized_new
+   fun:g_array_new
+   fun:g_static_private_set
+   fun:g_get_filename_charsets
+   obj:/usr/lib/libglib-2.0.so.0.2000.1
+   fun:g_thread_init_glib
+   fun:g_thread_init
+   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+   obj:/lib/ld-2.9.so
+   obj:/lib/tls/i686/cmov/libdl-2.9.so
+}
+
+
 
 
