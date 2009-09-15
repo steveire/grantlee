@@ -18,7 +18,10 @@
 */
 
 #include "datetime.h"
+
 #include <QDateTime>
+
+#include "util_p.h"
 
 Grantlee::SafeString timeSince( QDateTime early, QDateTime late )
 {

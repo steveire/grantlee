@@ -21,6 +21,8 @@
 
 #include <QVariant>
 
+#include "util_p.h"
+
 
 AddSlashesFilter::AddSlashesFilter()
 {

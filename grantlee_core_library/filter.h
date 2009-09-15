@@ -26,7 +26,6 @@
 
 #include "grantlee_export.h"
 #include "safestring.h"
-#include "util_p.h"
 
 #include <QDebug>
 

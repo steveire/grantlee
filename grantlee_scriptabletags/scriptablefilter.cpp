@@ -20,6 +20,8 @@
 #include "scriptablefilter.h"
 #include "scriptablesafestring.h"
 
+#include "util_p.h"
+
 #include <QScriptEngine>
 
 ScriptableFilter::ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine )
