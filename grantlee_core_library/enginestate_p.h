@@ -40,7 +40,7 @@ struct EngineStateImpl
 
   EngineState clone();
 
-  QList<AbstractTemplateLoader*> m_loaders;
+  QList<AbstractTemplateLoader::Ptr> m_loaders;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
 

@@ -37,8 +37,8 @@ public:
 
   ~Engine();
 
-  QList<AbstractTemplateLoader*> templateLoaders( qint64 settingsToken = 0 );
-  void addTemplateLoader( AbstractTemplateLoader *loader, qint64 settingsToken = 0 );
+  QList<AbstractTemplateLoader::Ptr> templateLoaders( qint64 settingsToken = 0 );
+  void addTemplateLoader( AbstractTemplateLoader::Ptr loader, qint64 settingsToken = 0 );
   void removeTemplateLoader( int index, qint64 settingsToken = 0 );
 
   void setPluginDirs( const QStringList &dirs, qint64 settingsToken = 0 );

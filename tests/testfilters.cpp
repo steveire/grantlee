@@ -76,7 +76,7 @@ private:
 
   void doTest();
 
-  InMemoryTemplateLoader *loader;
+  InMemoryTemplateLoader::Ptr loader;
   Engine *m_engine;
 
 };
@@ -85,7 +85,7 @@ void TestFilters::initTestCase()
 {
   m_engine = Engine::instance();
 
-  loader = new InMemoryTemplateLoader( this );
+  loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
   m_engine->addTemplateLoader( loader );
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
@@ -99,7 +99,6 @@ void TestFilters::initTestCase()
 
 void TestFilters::cleanupTestCase()
 {
-  delete loader;
   delete m_engine;
 }
 

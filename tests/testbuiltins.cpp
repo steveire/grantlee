@@ -568,14 +568,14 @@ void TestBuiltinSyntax::testMultipleStates()
 {
   Engine *engine = Engine::instance();
 
-  InMemoryTemplateLoader *loader1 = new InMemoryTemplateLoader( this );
+  InMemoryTemplateLoader::Ptr loader1 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
   loader1->setTemplate( "template1", "Template 1" );
   engine->addTemplateLoader( loader1 );
 
   Template t1 = engine->newTemplate( "{% include \"template1\" %}", "\"template1\"" );
 
-  InMemoryTemplateLoader *loader2 = new InMemoryTemplateLoader( this );
+  InMemoryTemplateLoader::Ptr loader2 = InMemoryTemplateLoader::Ptr(new InMemoryTemplateLoader() );
 
   loader2->setTemplate( "template2", "Template 2" );
 
@@ -583,7 +583,7 @@ void TestBuiltinSyntax::testMultipleStates()
 
   Template t2 = engine->newTemplate( "{% include \"template2\" %}", "\"template2\"" );
 
-  InMemoryTemplateLoader *loader3 = new InMemoryTemplateLoader( this );
+  InMemoryTemplateLoader::Ptr loader3 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
   loader3->setTemplate( "template3", "Template 3" );
 

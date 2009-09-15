@@ -23,25 +23,29 @@
 #include <QFile>
 #include <QFileInfo>
 
-AbstractTemplateLoader::AbstractTemplateLoader( QObject* parent )
-    : QObject( parent )
-{
-
-}
-
 AbstractTemplateLoader::~AbstractTemplateLoader()
 {
 
 }
 
-FileSystemTemplateLoader::FileSystemTemplateLoader( QObject* parent )
-    : AbstractTemplateLoader( parent )
+FileSystemTemplateLoader::FileSystemTemplateLoader()
+    : AbstractTemplateLoader()
 {
 
 }
 
-InMemoryTemplateLoader::InMemoryTemplateLoader( QObject* parent )
-    : AbstractTemplateLoader( parent )
+FileSystemTemplateLoader::~FileSystemTemplateLoader()
+{
+
+}
+
+InMemoryTemplateLoader::InMemoryTemplateLoader()
+    : AbstractTemplateLoader()
+{
+
+}
+
+InMemoryTemplateLoader::~InMemoryTemplateLoader()
 {
 
 }

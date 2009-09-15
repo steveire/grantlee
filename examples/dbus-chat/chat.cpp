@@ -86,7 +86,7 @@ ChatMainWindow::ChatMainWindow()
 
     m_engine = Grantlee::Engine::instance();
 
-    Grantlee::FileSystemTemplateLoader *loader = new Grantlee::FileSystemTemplateLoader(this);
+    Grantlee::FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
     loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH );
     m_engine->addTemplateLoader(loader);
     m_engine->setPluginDirs(QStringList() << GRANTLEE_PLUGIN_PATH );

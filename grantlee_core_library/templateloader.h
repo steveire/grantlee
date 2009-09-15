@@ -20,7 +20,7 @@
 #ifndef TEMPLATELOADER_H
 #define TEMPLATELOADER_H
 
-#include <QObject>
+#include <QSharedPointer>
 
 #include "template.h"
 #include "mutabletemplate.h"
@@ -29,11 +29,11 @@
 namespace Grantlee
 {
 
-class AbstractTemplateLoader : public QObject
+class AbstractTemplateLoader
 {
-  Q_OBJECT
 public:
-  AbstractTemplateLoader( QObject* parent = 0 );
+  typedef QSharedPointer<AbstractTemplateLoader> Ptr;
+
   virtual ~AbstractTemplateLoader();
 
   virtual MutableTemplate loadMutableByName( const QString &name ) const = 0;
@@ -45,9 +45,11 @@ public:
 
 class FileSystemTemplateLoader : public AbstractTemplateLoader
 {
-  Q_OBJECT
 public:
-  FileSystemTemplateLoader( QObject* parent = 0 );
+  typedef QSharedPointer<FileSystemTemplateLoader> Ptr;
+
+  FileSystemTemplateLoader();
+  virtual ~FileSystemTemplateLoader();
   MutableTemplate loadMutableByName( const QString &name ) const;
   Template loadByName( const QString &name ) const;
 
@@ -66,9 +68,11 @@ private:
 
 class InMemoryTemplateLoader : public AbstractTemplateLoader
 {
-  Q_OBJECT
 public:
-  InMemoryTemplateLoader( QObject* parent = 0 );
+  typedef QSharedPointer<InMemoryTemplateLoader> Ptr;
+
+  InMemoryTemplateLoader();
+  virtual ~InMemoryTemplateLoader();
   MutableTemplate loadMutableByName( const QString &name ) const;
   Template loadByName( const QString &name ) const;
 

@@ -123,7 +123,7 @@ BookWindow::BookWindow()
     connect(ui.exportButton, SIGNAL(pressed()), SLOT(renderBooks()));
 
     Grantlee::Engine *engine = Grantlee::Engine::instance();
-    Grantlee::FileSystemTemplateLoader *loader = new Grantlee::FileSystemTemplateLoader(this);
+    Grantlee::FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
     loader->setTemplateDirs( QStringList() << GRANTLEE_TEMPLATE_PATH );
     engine->addTemplateLoader(loader);
 

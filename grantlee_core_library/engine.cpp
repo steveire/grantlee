@@ -80,7 +80,7 @@ Engine::~Engine()
   m_instance = 0;
 }
 
-QList<AbstractTemplateLoader*> Engine::templateLoaders( qint64 settingsToken )
+QList<AbstractTemplateLoader::Ptr> Engine::templateLoaders( qint64 settingsToken )
 {
   Q_D( Engine );
   if ( !settingsToken )
@@ -89,10 +89,10 @@ QList<AbstractTemplateLoader*> Engine::templateLoaders( qint64 settingsToken )
   {
     return p->m_loaders;
   }
-  return QList<AbstractTemplateLoader*>();
+  return QList<AbstractTemplateLoader::Ptr>();
 }
 
-void Engine::addTemplateLoader( AbstractTemplateLoader* loader, qint64 settingsToken )
+void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader, qint64 settingsToken )
 {
   Q_D( Engine );
   if ( !settingsToken )
@@ -124,11 +124,11 @@ QString Engine::mediaUri( const QString &fileName, qint64 settingsToken ) const
 
   if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
   {
-    QListIterator<AbstractTemplateLoader*> it( p->m_loaders );
+    QListIterator<AbstractTemplateLoader::Ptr> it( p->m_loaders );
 
     QString uri;
     while ( it.hasNext() ) {
-      AbstractTemplateLoader* loader = it.next();
+      AbstractTemplateLoader::Ptr loader = it.next();
       uri = loader->getMediaUri( fileName );
       if ( !uri.isEmpty() )
         break;
@@ -339,9 +339,9 @@ Template Engine::loadByName( const QString &name, qint64 settingsToken ) const
 
   if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
   {
-    QListIterator<AbstractTemplateLoader*> it( p->m_loaders );
+    QListIterator<AbstractTemplateLoader::Ptr> it( p->m_loaders );
     while ( it.hasNext() ) {
-      AbstractTemplateLoader* loader = it.next();
+      AbstractTemplateLoader::Ptr loader = it.next();
 
       if ( !loader->canLoadTemplate( name ) )
         continue;
@@ -374,10 +374,10 @@ MutableTemplate Engine::loadMutableByName( const QString &name, qint64 settingsT
 
   if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
   {
-    QListIterator<AbstractTemplateLoader*> it( p->m_loaders );
+    QListIterator<AbstractTemplateLoader::Ptr> it( p->m_loaders );
 
     while ( it.hasNext() ) {
-      AbstractTemplateLoader* loader = it.next();
+      AbstractTemplateLoader::Ptr loader = it.next();
       MutableTemplate t = loader->loadMutableByName( name );
       if ( t ) {
         if ( !settingsToken ) {
