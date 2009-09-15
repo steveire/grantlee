@@ -92,50 +92,57 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
   QString vs = varString;
 
-  while ( ( pos = sFilterRe.indexIn( vs, pos ) ) != -1 ) {
-    len = sFilterRe.matchedLength();
-    subString = vs.mid( pos, len );
-    int ssSize = subString.size();
+  // This is one fo the few contstructors that can throw so we make sure to delete its d->pointer.
+  try {
+    while ( ( pos = sFilterRe.indexIn( vs, pos ) ) != -1 ) {
+      len = sFilterRe.matchedLength();
+      subString = vs.mid( pos, len );
+      int ssSize = subString.size();
 
-    if ( pos != lastPos ) {
-      throw Grantlee::Exception( TagSyntaxError,
-          QString( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
-    }
-
-    if ( subString.startsWith( FILTER_SEPARATOR ) ) {
-      subString = subString.right( ssSize - 1 );
-      Filter::Ptr f = parser->getFilter( subString );
-
-      Q_ASSERT( f );
-
-      d->m_filterNames << subString;
-      d->m_filters << qMakePair<Filter::Ptr, Variable>( f, Variable() );
-
-    } else if ( subString.startsWith( FILTER_ARGUMENT_SEPARATOR ) ) {
-      subString = subString.right( ssSize - 1 );
-      int lastFilter = d->m_filters.size();
-      if ( subString.isEmpty() )
-        throw Grantlee::Exception( EmptyVariableError,
-            QString( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
-
-      d->m_filters[lastFilter -1].second = Variable( subString );
-    } else {
-      if ( subString.contains( "._" ) || ( subString.startsWith( "_" ) && !subString.startsWith( "_(" ) ) ) {
+      if ( pos != lastPos ) {
         throw Grantlee::Exception( TagSyntaxError,
-            QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
+            QString( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
       }
-      // Token is _("translated"), or "constant", or a variable;
-      d->m_variable = Variable( subString );
+
+      if ( subString.startsWith( FILTER_SEPARATOR ) ) {
+        subString = subString.right( ssSize - 1 );
+        Filter::Ptr f = parser->getFilter( subString );
+
+        Q_ASSERT( f );
+
+        d->m_filterNames << subString;
+        d->m_filters << qMakePair<Filter::Ptr, Variable>( f, Variable() );
+
+      } else if ( subString.startsWith( FILTER_ARGUMENT_SEPARATOR ) ) {
+        subString = subString.right( ssSize - 1 );
+        int lastFilter = d->m_filters.size();
+        if ( subString.isEmpty() )
+          throw Grantlee::Exception( EmptyVariableError,
+              QString( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
+
+        d->m_filters[lastFilter -1].second = Variable( subString );
+      } else {
+        if ( subString.contains( "._" ) || ( subString.startsWith( "_" ) && !subString.startsWith( "_(" ) ) ) {
+          throw Grantlee::Exception( TagSyntaxError,
+              QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
+        }
+        // Token is _("translated"), or "constant", or a variable;
+        d->m_variable = Variable( subString );
+      }
+
+      pos += len;
+      lastPos = pos;
     }
 
-    pos += len;
-    lastPos = pos;
-  }
-
-  QString remainder = vs.right( vs.size() - lastPos );
-  if ( !remainder.isEmpty() ) {
-    throw Grantlee::Exception( TagSyntaxError,
-        QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
+    QString remainder = vs.right( vs.size() - lastPos );
+    if ( !remainder.isEmpty() ) {
+      throw Grantlee::Exception( TagSyntaxError,
+          QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
+    }
+  } catch (...)
+  {
+    delete d_ptr;
+    throw;
   }
 }
 
