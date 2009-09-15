@@ -18,6 +18,7 @@ set (grantlee_core_library_SRCS
   parser.cpp
   safestring.cpp
   template.cpp
+  templateloader.cpp
   util.cpp
   variable.cpp
 )
@@ -56,6 +57,7 @@ install(FILES
   parser.h
   safestring.h
   template.h
+  templateloader.h
   variable.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )

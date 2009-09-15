@@ -23,62 +23,10 @@
 #include "template.h"
 #include "mutabletemplate.h"
 #include "interfaces/taglibraryinterface.h"
+#include "templateloader.h"
 
 namespace Grantlee
 {
-
-class AbstractTemplateLoader : public QObject
-{
-  Q_OBJECT
-public:
-  AbstractTemplateLoader( QObject* parent = 0 );
-  virtual ~AbstractTemplateLoader();
-
-  virtual MutableTemplate loadMutableByName( const QString &name ) const = 0;
-  virtual Template loadByName( const QString &name ) const = 0;
-  virtual QString getMediaUri( const QString &fileName ) const = 0;
-  virtual bool canLoadTemplate( const QString &name ) const = 0;
-
-};
-
-class FileSystemTemplateLoader : public AbstractTemplateLoader
-{
-  Q_OBJECT
-public:
-  FileSystemTemplateLoader( QObject* parent = 0 );
-  MutableTemplate loadMutableByName( const QString &name ) const;
-  Template loadByName( const QString &name ) const;
-
-  virtual bool canLoadTemplate( const QString &name ) const;
-
-  virtual QString getMediaUri( const QString& fileName ) const;
-
-  void setTheme( const QString &themeName );
-  QString themeName() const;
-  void setTemplateDirs( const QStringList &dirs );
-
-private:
-  QString m_themeName;
-  QStringList m_templateDirs;
-};
-
-class InMemoryTemplateLoader : public AbstractTemplateLoader
-{
-  Q_OBJECT
-public:
-  InMemoryTemplateLoader( QObject* parent = 0 );
-  MutableTemplate loadMutableByName( const QString &name ) const;
-  Template loadByName( const QString &name ) const;
-
-  virtual bool canLoadTemplate( const QString &name ) const;
-
-  virtual QString getMediaUri( const QString& fileName ) const;
-
-  void setTemplate( const QString &name, const QString &content );
-
-private:
-  QHash<QString, QString> m_namedTemplates;
-};
 
 class EnginePrivate;
 
