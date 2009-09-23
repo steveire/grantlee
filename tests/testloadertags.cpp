@@ -291,6 +291,106 @@ void TestLoaderTags::testExtendsTag_data()
   // Inheritance from a template with a space in its name should work.
   QTest::newRow( "inheritance29" ) << "{% extends 'inheritance 28' %}" << dict << "!" << NoError;
 
+  dict.insert("list", QVariantList() << "One" << "Two" << "Three");
+
+  // Tags that affect rendering have no afftect outside of a block in an extension template
+  // (and therefore "i" is undefined here)
+  // {% load %} tags for example are ok in child templates because they are processed at
+  // compile-time, not at rendering time.
+  QTest::newRow( "inheritance30" ) << "{% extends 'inheritance01' %}"
+      "{% for i in list %}{% block first %}A{{ i }}B{% endblock %}{% endfor %}" << dict << "1AB3_" << NoError;
+
+  QString inh31 = "{% extends 'inheritance01' %}{% block first %}2{% block second %}4{% endblock %}{% endblock %}";
+  loader->setTemplate( "inheritance31", inh31 );
+
+  // If blocks are siblings in a parent template and defined as children in an extension template,
+  // the 'moved' block is rendered in its position in its parent template and in its position
+  // in the extended template
+  QTest::newRow( "inheritance31" ) << inh31 << dict << "12434" << NoError;
+
+  QString inh32 = "{% extends 'inheritance01' %}{% block second %}4{% block first %}2{% endblock %}{% endblock %}";
+  loader->setTemplate( "inheritance32", inh32 );
+
+  // The order of appearance of the blocks does not determine this.
+  QTest::newRow( "inheritance32" ) << inh32 << dict << "12342" << NoError;
+
+  QTest::newRow( "inheritance33" ) << "{% extends 'inheritance01' %}"
+      "{% block first %}2{% block second %}A{{ block.super }}B{% endblock %}{% endblock %}" << dict << "12AB3A_B" << NoError;
+
+  QTest::newRow( "inheritance34" ) << "{% extends 'inheritance01' %}"
+      "{% block second %}4{% block first %}A{{ block.super }}B{% endblock %}{% endblock %}" << dict << "1A&B34AB" << NoError;
+
+  // Looping a block inside another block causes the block to be rendered multiple times. Once again,
+  // When {{ i }} is rendered outside of the "first" block, "i" is not in context
+  QTest::newRow( "inheritance35" ) << "{% extends 'inheritance01' %}"
+      "{% block first %}"
+      "A{% for i in list %}{% block second %}~{{ i }}:{% endblock %}{% endfor %}B"
+      "{% endblock %}" << dict << "1A~One:~Two:~Three:B3~:" << NoError;
+
+  QString inh36 = "1{% block first %}&{% endblock %}3{% block second %}_{% endblock %}5{% block third %}+{% endblock %}";
+  loader->setTemplate( "inheritance36", inh36 );
+
+  QTest::newRow( "inheritance36" ) << inh36 << dict << "1&3_5+" << NoError;
+
+  QString inh37 = "{% extends 'inheritance36' %}{% block second %}4{% block third %}6{% endblock %}{% endblock %}";
+  loader->setTemplate( "inheritance37", inh37 );
+
+  // The second contains the third:
+  QTest::newRow( "inheritance37" ) << inh37 << dict << "1&34656" << NoError;
+
+  // The first contains the second, contains the third:
+  QTest::newRow( "inheritance38" ) << "{% extends 'inheritance37' %}"
+      "{% block first %}2{% block second %}4{% block third %}6{% endblock %}{% endblock %}{% endblock %}" << dict << "124634656" << NoError;
+
+  // ### Unexpected behaviour: we get "12AB3AABB56" here.
+  QTest::newRow( "inheritance39" ) << "{% extends 'inheritance37' %}"
+      "{% block first %}2{% block second %}A{{ block.super }}B{% endblock %}{% endblock %}" << dict << "12A46B3A46B56" << NoError;
+
+  // When {% block second %}{{ block.super }}{% endblock %} is rendered in the parent position (inheritance35)
+  QTest::newRow( "inheritance40" ) << "{% extends 'inheritance37' %}"
+      "{% block first %}2{% block third %}A{{ block.super }}B{% endblock %}{% endblock %}" << dict << "12AB34AB5AABB" << NoError;
+
+  // ### Unexpected behaviour: we get "1&3A46ABB56AB" here
+  // Actually, this is an infinite loop...
+  QTest::newRow( "inheritance41" ) << "{% extends 'inheritance37' %}"
+      "{% block third %}6{% block second %}A{{ block.super }}B{% endblock %}{% endblock %}" << dict << "1&3A46B56A46B" << NoError;
+
+  // ### Unexpected behaviour: we get "1A&B346AB56AB" here
+  QTest::newRow( "inheritance42" ) << "{% extends 'inheritance37' %}"
+      "{% block third %}6{% block first %}A{{ block.super }}B{% endblock %}{% endblock %}" << dict << "1A&B346A&B56A&B" << NoError;
+
+  QString inh43 = "A{% block first %}B{% block second %}C{% endblock %}D{% endblock %}E";
+  loader->setTemplate( "inheritance43", inh43 );
+
+  QTest::newRow( "inheritance43" ) << inh43 << dict << "ABCDE" << NoError;
+
+  QTest::newRow( "inheritance44" ) << "{% extends 'inheritance43' %}"
+      "{% block first %}1{% endblock %}" << dict << "A1E" << NoError;
+
+  QTest::newRow( "inheritance45" ) << "{% extends 'inheritance43' %}"
+      "{% block first %}1{{ block.super }}2{% endblock %}" << dict << "A1BCD2E" << NoError;
+
+  QTest::newRow( "inheritance46" ) << "{% extends 'inheritance43' %}"
+      "{% block second %}2{% endblock %}" << dict << "AB2DE" << NoError;
+
+  QTest::newRow( "inheritance47" ) << "{% extends 'inheritance43' %}"
+      "{% block second %}2{{ block.super }}3{% endblock %}" << dict << "AB2C3DE" << NoError;
+
+  // Although block second is overriden, it is not rendered because first is overridden excluding it.
+  QTest::newRow( "inheritance48" ) << "{% extends 'inheritance43' %}"
+      "{% block first %}1{% endblock %}{% block second %}2{% endblock %}" << dict << "A1E" << NoError;
+
+  // Block.super, which uses block second, renders the overriden block second.
+  QTest::newRow( "inheritance49" ) << "{% extends 'inheritance43' %}"
+      "{% block first %}{{ block.super }}{% endblock %}{% block second %}2{% endblock %}" << dict << "AB2DE" << NoError;
+
+  QTest::newRow( "inheritance50" ) << "{% extends 'inheritance43' %}"
+      "{% block first %}{{ block.super }}{% endblock %}{% block second %}2{{ block.super }}3{% endblock %}" << dict << "AB2C3DE" << NoError;
+
+  // ### Unexpected result: We get A1234E here. block.super doesn't work if overriding in a nested block I guess.
+  QTest::newRow( "inheritance51" ) << "{% extends 'inheritance43' %}"
+      "{% block first %}1{% block second %}2{{ block.super }}3{% endblock %}4{% endblock %}" << dict << "A12C34E" << NoError;
+
   dict.clear();
   // Raise exception for invalid template name
   QTest::newRow( "exception01" ) << "{% extends 'nonexistent' %}" << dict << "" << TagSyntaxError;

@@ -103,6 +103,12 @@ QString BlockNode::render( Context *c )
 
 SafeString BlockNode::getSuper() const
 {
+  // If blocks which are siblings in a parent are arranged nested in an extended template,
+  // and {{ block.super }} is used, m_nodeParent will be 0 in the nested instance of
+  // the block. See testExtendsTag:inheritance33
+  if ( !m_nodeParent )
+    return SafeString();
+
   return Util::markSafe( m_nodeParent->render( m_context ) );
 }
 
