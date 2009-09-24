@@ -52,7 +52,13 @@ LengthFilter::LengthFilter()
 
 QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  return Util::variantToList( input ).size();
+  if (input.type() == QVariant::List)
+    return input.toList().size();
+
+  if (input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String)
+    return Util::getSafeString( input ).size();
+
+  return QVariant();
 }
 
 LengthIsFilter::LengthIsFilter()
