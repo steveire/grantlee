@@ -154,9 +154,10 @@ bool Util::supportedOutputType( const QVariant &input )
 {
   QList<int> primitives;
   primitives << qMetaTypeId<Grantlee::SafeString>()
-  << QVariant::Bool
-  << QVariant::Int
-  << QVariant::Double;
+             << QVariant::Bool
+             << QVariant::Int
+             << QVariant::Double
+             << QVariant::DateTime;
   return primitives.contains( input.userType() );
 }
 

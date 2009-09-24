@@ -117,14 +117,12 @@ TimeSinceFilter::TimeSinceFilter()
 QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QDateTime late;
-  SafeString argString = Util::getSafeString( argument );
-  if ( argString.isEmpty() )
+  if ( argument.type() != QVariant::DateTime )
     late = QDateTime::currentDateTime();
   else
-    late = QDateTime::fromString( argString, "yyyy-MM-ddThh:mm:ss" );
+    late = argument.toDateTime();
 
-  QDateTime early = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
-  return timeSince( early, late );
+  return timeSince( input.toDateTime(), late );
 }
 
 
@@ -135,13 +133,10 @@ TimeUntilFilter::TimeUntilFilter()
 QVariant TimeUntilFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QDateTime early;
-  SafeString argString = Util::getSafeString( argument );
-  if ( argString.isEmpty() )
+  if ( argument.type() != QVariant::DateTime )
     early = QDateTime::currentDateTime();
   else
-    early = QDateTime::fromString( argString, "yyyy-MM-ddThh:mm:ss" );
+    early = argument.toDateTime();
 
-  QDateTime late = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
-
-  return timeSince( early, late );
+  return timeSince( early, input.toDateTime() );
 }
