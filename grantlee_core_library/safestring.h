@@ -59,6 +59,11 @@ public:
 
   SafeString &operator=( const QString &s );
 
+  operator QVariant()
+  {
+    return QVariant::fromValue(*this);
+  }
+
 private:
   QString m_string;
   bool m_safety;

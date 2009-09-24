@@ -29,7 +29,7 @@ class AddFilter : public Filter
 public:
   AddFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class GetDigitFilter : public Filter
@@ -37,7 +37,7 @@ class GetDigitFilter : public Filter
 public:
   GetDigitFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 

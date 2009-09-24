@@ -25,7 +25,7 @@ DefaultFilter::DefaultFilter()
 {
 }
 
-Grantlee::SafeString DefaultFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant DefaultFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   if ( !input.isValid() || Util::getSafeString( input ).isEmpty() )
     return argument;
@@ -36,7 +36,7 @@ DefaultIfNoneFilter::DefaultIfNoneFilter()
 {
 }
 
-Grantlee::SafeString DefaultIfNoneFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant DefaultIfNoneFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   if ( !input.isValid() )
     return argument;
@@ -47,7 +47,7 @@ DivisibleByFilter::DivisibleByFilter()
 {
 }
 
-Grantlee::SafeString DivisibleByFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant DivisibleByFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   return ( QVariant( Util::getSafeString( input ) ).toInt()
            % QVariant( argument ).toInt() == 0 )
@@ -58,9 +58,9 @@ YesNoFilter::YesNoFilter()
 {
 }
 
-Grantlee::SafeString YesNoFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  QString arg = argument;
+  SafeString arg = Util::getSafeString( argument );
   QString yes;
   QString no;
   QString maybe;

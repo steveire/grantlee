@@ -43,7 +43,7 @@ bool ScriptableFilter::isSafe() const
   return false;
 }
 
-SafeString ScriptableFilter::doFilter( const QVariant &input, const SafeString& argument, bool autoescape ) const
+QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argument, bool autoescape ) const
 {
   QScriptValueList args;
   if ( input.type() == QVariant::List ) {
@@ -63,9 +63,14 @@ SafeString ScriptableFilter::doFilter( const QVariant &input, const SafeString& 
     }
   }
 
-  ScriptableSafeString *ssObj = new ScriptableSafeString( m_scriptEngine );
-  ssObj->setContent( argument );
-  args << m_scriptEngine->newQObject( ssObj );
+  if (argument.userType() == qMetaTypeId<SafeString>())
+  {
+    ScriptableSafeString *ssObj = new ScriptableSafeString( m_scriptEngine );
+    ssObj->setContent( Util::getSafeString( argument ) );
+    args << m_scriptEngine->newQObject( ssObj );
+  } else {
+    args << m_scriptEngine->newVariant( argument );
+  }
   QScriptValue filterObject = m_filterObject;
   QScriptValue returnValue = filterObject.call( QScriptValue(), args );
 
@@ -75,10 +80,13 @@ SafeString ScriptableFilter::doFilter( const QVariant &input, const SafeString& 
     QObject *returnedObject = qscriptvalue_cast<QObject *>( returnValue );
     ScriptableSafeString *returnedStringObject = qobject_cast<ScriptableSafeString*>( returnedObject );
     if ( !returnedStringObject )
-      return QString();
+      return QVariant();
     SafeString returnedString = returnedStringObject->wrappedString();
     return returnedString;
+  } else if ( returnValue.isVariant() )
+  {
+    return qscriptvalue_cast<QVariant>( returnValue );
   }
-  return QString();
+  return QVariant();
 }
 

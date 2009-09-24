@@ -29,7 +29,7 @@ class DateFilter : public Filter
 public:
   DateFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class TimeFilter : public Filter
@@ -37,7 +37,7 @@ class TimeFilter : public Filter
 public:
   TimeFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class TimeSinceFilter : public Filter
@@ -45,7 +45,7 @@ class TimeSinceFilter : public Filter
 public:
   TimeSinceFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class TimeUntilFilter : public Filter
@@ -53,7 +53,7 @@ class TimeUntilFilter : public Filter
 public:
   TimeUntilFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 

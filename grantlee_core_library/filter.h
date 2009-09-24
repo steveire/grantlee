@@ -46,8 +46,8 @@ public:
    * Reimplement to filter @p input.
    * @returns The input string filtered.
    */
-  virtual SafeString doFilter( const QVariant &input,
-                               const SafeString &argument = SafeString(),
+  virtual QVariant doFilter( const QVariant &input,
+                               const QVariant &argument = QVariant(),
                                bool autoescape = false
                              ) const = 0;
 

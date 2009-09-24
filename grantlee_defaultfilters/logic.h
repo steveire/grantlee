@@ -29,7 +29,7 @@ class GRANTLEE_EXPORT DefaultFilter : public Filter
 public:
   DefaultFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class GRANTLEE_EXPORT DefaultIfNoneFilter : public Filter
@@ -37,7 +37,7 @@ class GRANTLEE_EXPORT DefaultIfNoneFilter : public Filter
 public:
   DefaultIfNoneFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class GRANTLEE_EXPORT DivisibleByFilter : public Filter
@@ -45,7 +45,7 @@ class GRANTLEE_EXPORT DivisibleByFilter : public Filter
 public:
   DivisibleByFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class GRANTLEE_EXPORT YesNoFilter : public Filter
@@ -53,7 +53,7 @@ class GRANTLEE_EXPORT YesNoFilter : public Filter
 public:
   YesNoFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = Grantlee::SafeString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 #endif

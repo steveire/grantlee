@@ -64,7 +64,6 @@ QObjectList ScriptableParser::parse( QObject *parent, const QStringList& stopAt 
   Q_ASSERT( node );
 
   NodeList nodeList = m_p->parse( node, stopAt );
-  qDebug() << nodeList.size();
   QObjectList objList;
   QListIterator<Node*> it( nodeList );
   while ( it.hasNext() ) {

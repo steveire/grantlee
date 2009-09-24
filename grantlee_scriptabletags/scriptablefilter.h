@@ -32,7 +32,7 @@ public:
   ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine );
   virtual ~ScriptableFilter();
 
-  SafeString doFilter( const QVariant &input, const SafeString &argument, bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument, bool autoescape = false ) const;
 
   bool isSafe() const;
 

@@ -25,16 +25,16 @@ AddFilter::AddFilter()
 {
 }
 
-Grantlee::SafeString AddFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  return QString::number( QVariant( Util::getSafeString( input ) ).toInt() + QVariant( argument ).toInt() );
+  return Util::getSafeString( input ).toInt() + Util::getSafeString( argument ).toInt();
 }
 
 GetDigitFilter::GetDigitFilter()
 {
 }
 
-Grantlee::SafeString GetDigitFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QVariant variant = QVariant( Util::getSafeString( input ) );
 

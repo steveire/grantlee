@@ -23,7 +23,7 @@
 
 #include "util_p.h"
 
-Grantlee::SafeString timeSince( QDateTime early, QDateTime late )
+QVariant timeSince( QDateTime early, QDateTime late )
 {
   Q_ASSERT( early.isValid() );
   Q_ASSERT( late.isValid() );
@@ -74,7 +74,7 @@ Grantlee::SafeString timeSince( QDateTime early, QDateTime late )
   return firstChunk;
 }
 
-Grantlee::SafeString timeUntil( QDateTime dt, QDateTime now = QDateTime() )
+QVariant timeUntil( QDateTime dt, QDateTime now = QDateTime() )
 {
   if ( !now.isValid() )
     now = QDateTime::currentDateTime();
@@ -87,12 +87,14 @@ DateFilter::DateFilter()
 {
 }
 
-Grantlee::SafeString DateFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QDateTime d = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
 
-  if ( !argument.isEmpty() )
-    return d.toString( argument );
+  SafeString argString = Util::getSafeString( argument );
+
+  if ( !argString.isEmpty() )
+    return d.toString( argString );
 
   return d.toString( "MMM. d, yyyy" );
 }
@@ -101,9 +103,10 @@ TimeFilter::TimeFilter()
 {
 }
 
-Grantlee::SafeString TimeFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant TimeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  return QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" ).toString( argument );
+  SafeString argString = Util::getSafeString( argument );
+  return QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" ).toString( argString );
 }
 
 
@@ -111,13 +114,14 @@ TimeSinceFilter::TimeSinceFilter()
 {
 }
 
-Grantlee::SafeString TimeSinceFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QDateTime late;
-  if ( argument.isEmpty() )
+  SafeString argString = Util::getSafeString( argument );
+  if ( argString.isEmpty() )
     late = QDateTime::currentDateTime();
   else
-    late = QDateTime::fromString( argument, "yyyy-MM-ddThh:mm:ss" );
+    late = QDateTime::fromString( argString, "yyyy-MM-ddThh:mm:ss" );
 
   QDateTime early = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
   return timeSince( early, late );
@@ -128,13 +132,14 @@ TimeUntilFilter::TimeUntilFilter()
 {
 }
 
-Grantlee::SafeString TimeUntilFilter::doFilter( const QVariant& input, const Grantlee::SafeString &argument, bool autoescape ) const
+QVariant TimeUntilFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QDateTime early;
-  if ( argument.isEmpty() )
+  SafeString argString = Util::getSafeString( argument );
+  if ( argString.isEmpty() )
     early = QDateTime::currentDateTime();
   else
-    early = QDateTime::fromString( argument, "yyyy-MM-ddThh:mm:ss" );
+    early = QDateTime::fromString( argString, "yyyy-MM-ddThh:mm:ss" );
 
   QDateTime late = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
 

@@ -29,7 +29,7 @@ class GRANTLEE_EXPORT JoinFilter : public Filter
 public:
   JoinFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
@@ -45,7 +45,7 @@ class GRANTLEE_EXPORT LengthFilter : public Filter
 public:
   LengthFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
@@ -58,7 +58,7 @@ class GRANTLEE_EXPORT LengthIsFilter : public Filter
 public:
   LengthIsFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
@@ -70,7 +70,7 @@ class GRANTLEE_EXPORT FirstFilter : public Filter
 public:
   FirstFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class GRANTLEE_EXPORT LastFilter : public Filter
@@ -78,7 +78,7 @@ class GRANTLEE_EXPORT LastFilter : public Filter
 public:
   LastFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class GRANTLEE_EXPORT RandomFilter : public Filter
@@ -86,7 +86,7 @@ class GRANTLEE_EXPORT RandomFilter : public Filter
 public:
   RandomFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
@@ -99,7 +99,7 @@ class GRANTLEE_EXPORT SliceFilter : public Filter
 public:
   SliceFilter();
 
-  Grantlee::SafeString doFilter( const QVariant &input, const Grantlee::SafeString &argument = QString(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
     return true;
