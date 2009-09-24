@@ -71,6 +71,11 @@ private slots:
     doTest();
   }
 
+  void testIntegerFilters_data();
+  void testIntegerFilters() {
+    doTest();
+  }
+
 
 private:
 
@@ -914,6 +919,24 @@ void TestFilters::testMiscFilters_data()
 //   //  {"safe": SafeClass()
 //   QTest::newRow( "autoescape-stringfilter04") << "{% autoescape off %}{{ safe|capfirst }}{% endautoescape %}" << dict << "You &gt; me" << NoError;
 //
+}
+
+void TestFilters::testIntegerFilters_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "errorNumber" );
+
+  Dict dict;
+
+  QTest::newRow( "filter-add01" ) << "{{ 1|add:2 }}" << dict << "3" << NoError;
+
+  QTest::newRow( "filter-getdigit01" ) << "{{ 123|get_digit:1 }}" << dict << "3" << NoError;
+  QTest::newRow( "filter-getdigit02" ) << "{{ 123|get_digit:2 }}" << dict << "2" << NoError;
+  QTest::newRow( "filter-getdigit03" ) << "{{ 123|get_digit:3 }}" << dict << "1" << NoError;
+  QTest::newRow( "filter-getdigit04" ) << "{{ 123|get_digit:4 }}" << dict << "123" << NoError;
+
 }
 
 QTEST_MAIN( TestFilters )

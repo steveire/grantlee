@@ -38,7 +38,7 @@ QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argume
 {
   QVariant variant = QVariant( Util::getSafeString( input ) );
 
-  if ( !variant.canConvert( QVariant::Int ) || variant.convert( QVariant::Int ) )
+  if ( !variant.canConvert( QVariant::Int ) || !variant.convert( QVariant::Int ) )
     return QString();
 
   QString value = variant.toString();
@@ -46,10 +46,10 @@ QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argume
   if ( value.size() < 1 )
     return value;
 
-  int arg = QVariant( argument ).toInt();
+  int arg = QVariant( Util::getSafeString( argument ) ).toInt();
 
   if ( value.size() < arg )
-    return SafeString( "0" );
+    return value;
 
-  return SafeString( value.at( arg ) );
+  return SafeString( value.at( value.size() - arg ) );
 }

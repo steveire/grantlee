@@ -68,7 +68,7 @@ public:
     filters.insert( "first", new FirstFilter() );
     filters.insert( "fix_ampersands", new FixAmpersandsFilter() );
     filters.insert( "force_escape", new ForceEscapeFilter() );
-    filters.insert( "getdigit", new GetDigitFilter() );
+    filters.insert( "get_digit", new GetDigitFilter() );
     filters.insert( "join", new JoinFilter() );
     filters.insert( "last", new LastFilter() );
     filters.insert( "length", new LengthFilter() );
