@@ -67,6 +67,7 @@ public:
     filters.insert( "escapejs", new EscapeJsFilter() );
     filters.insert( "first", new FirstFilter() );
     filters.insert( "fix_ampersands", new FixAmpersandsFilter() );
+    filters.insert( "floatformat", new FloatFormatFilter() );
     filters.insert( "force_escape", new ForceEscapeFilter() );
     filters.insert( "get_digit", new GetDigitFilter() );
     filters.insert( "join", new JoinFilter() );
@@ -91,10 +92,6 @@ public:
     filters.insert( "wordcount", new WordCountFilter() );
     filters.insert( "wordwrap", new WordWrapFilter() );
     filters.insert( "yesno", new YesNoFilter() );
-
-
-
-//     filters.insert( "floatformat", new FloatFormatFilter() );
 
     return filters;
   }

@@ -345,4 +345,15 @@ QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argume
   return output;
 }
 
+QVariant FloatFormatFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+{
+  double _input = Util::getSafeString( input ).toDouble();
+  int precision;
+  if (argument.isValid())
+    precision = Util::getSafeString( argument ).toInt();
+  else
+    precision = 1;
+
+  return QString::number( _input, 'f', precision );
+}
 
