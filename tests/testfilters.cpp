@@ -537,9 +537,9 @@ void TestFilters::testStringFilters_data()
   dict.insert( "a", "a & b" );
   dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a & b" ) ) ) );
 
-  QTest::newRow( "filter-wordwrap01" ) << "{% autoescape off %}{{ a|wordwrap:\"3\" }} {{ b|wordwrap:\"3\" }}{% endautoescape %}" << dict << "a &\nb a &\nb" << NoError;
+  QTest::newRow( "filter-wordwrap01" ) << "{% autoescape off %}{{ a|wordwrap:3 }} {{ b|wordwrap:3 }}{% endautoescape %}" << dict << "a &\nb a &\nb" << NoError;
 
-  QTest::newRow( "filter-wordwrap02" ) << "{{ a|wordwrap:\"3\" }} {{ b|wordwrap:\"3\" }}" << dict << "a &amp;\nb a &\nb" << NoError;
+  QTest::newRow( "filter-wordwrap02" ) << "{{ a|wordwrap:3 }} {{ b|wordwrap:3 }}" << dict << "a &amp;\nb a &\nb" << NoError;
 
   dict.clear();
   dict.insert( "a", "a&b" );

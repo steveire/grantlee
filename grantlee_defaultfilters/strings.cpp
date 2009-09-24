@@ -314,3 +314,35 @@ QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argum
 }
 
 
+QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+{
+  QString _input = Util::getSafeString( input );
+  int width = argument.toInt();
+  QStringList partList = _input.split( " ", QString::SkipEmptyParts );
+  QString output = partList.takeFirst();
+  int pos = output.size() - output.lastIndexOf("\n") - 1;
+  foreach( const QString &part, partList )
+  {
+    QStringList lines;
+    if ( part.contains( "\n" ) )
+    {
+      lines = part.split( "\n" );
+    } else {
+      lines.append( part );
+    }
+    pos += lines.first().size() + 1;
+    if ( pos > width )
+    {
+      output.append( "\n" );
+      pos += lines.last().size();
+    } else {
+      output.append( " " );
+      if ( lines.size() > 1 )
+        pos += lines.last().size();
+    }
+    output.append( part );
+  }
+  return output;
+}
+
+

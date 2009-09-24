@@ -89,6 +89,7 @@ public:
     filters.insert( "truncatewords", new TruncateWordsFilter() );
     filters.insert( "upper", new UpperFilter() );
     filters.insert( "wordcount", new WordCountFilter() );
+    filters.insert( "wordwrap", new WordWrapFilter() );
     filters.insert( "yesno", new YesNoFilter() );
 
 
