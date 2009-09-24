@@ -67,7 +67,23 @@ LengthIsFilter::LengthIsFilter()
 
 QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  return Util::variantToList( input ).size() == QVariant( argument ).toInt();
+  if (!input.isValid() || (input.type() == QVariant::Int) || (input.type() == QVariant::DateTime))
+    return QVariant();
+
+  int size = 0;
+  if (input.type() == QVariant::List)
+    size = input.toList().size();
+
+  if (input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String)
+    size = Util::getSafeString( input ).size();
+
+  bool ok;
+  int argInt = Util::getSafeString( argument ).toInt(&ok);
+
+  if (!ok)
+    return QVariant();
+
+  return size == argInt;
 }
 
 FirstFilter::FirstFilter()
