@@ -81,6 +81,7 @@ public:
     filters.insert( "removetags", new RemoveTagsFilter() );
     filters.insert( "rjust", new RJustFilter() );
     filters.insert( "safe", new SafeFilter() );
+    filters.insert( "safeseq", new SafeSequenceFilter() );
     filters.insert( "slice", new SliceFilter() );
     filters.insert( "stringformat", new StringFormatFilter() );
     filters.insert( "striptags", new StripTagsFilter() );

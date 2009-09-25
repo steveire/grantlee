@@ -269,23 +269,34 @@ public:
 
 class GRANTLEE_EXPORT WordWrapFilter : public Filter
 {
-  public:
-    QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+public:
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
-    bool isSafe() const {
-      return true;
-    }
+  bool isSafe() const {
+    return true;
+  }
 };
 
 class GRANTLEE_EXPORT FloatFormatFilter : public Filter
 {
-  public:
-    QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+public:
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
-    bool isSafe() const {
-      return true;
-    }
+  bool isSafe() const {
+    return true;
+  }
 };
+
+class GRANTLEE_EXPORT SafeSequenceFilter : public Filter
+{
+public:
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+
+  bool isSafe() const {
+    return true;
+  }
+};
+
 
 #endif
 

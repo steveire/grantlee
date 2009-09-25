@@ -363,3 +363,14 @@ QVariant FloatFormatFilter::doFilter( const QVariant& input, const QVariant& arg
   return QString::number( _input, 'f', precision );
 }
 
+
+QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+{
+  QVariantList list;
+  if ( input.type() == QVariant::List )
+    foreach(const QVariant &item, input.toList() )
+      list << Util::markSafe( Util::getSafeString( item ) );
+  return list;
+}
+
+

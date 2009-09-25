@@ -628,12 +628,11 @@ void TestFilters::testStringFilters_data()
   QTest::newRow( "filter-safe01" ) << "{{ a }} -- {{ a|safe }}" << dict << "&lt;b&gt;hello&lt;/b&gt; -- <b>hello</b>" << NoError;
   QTest::newRow( "filter-safe02" ) << "{% autoescape off %}{{ a }} -- {{ a|safe }}{% endautoescape %}" << dict << "<b>hello</b> -- <b>hello</b>" << NoError;
 
-//   //  , {"a": ["&", "<"]
-//   QTest::newRow( "filter-safeseq01") << "{{ a|join:\", \" }} -- {{ a|safeseq|join:\", \" }}" << dict << "&amp;, &lt; -- &, <" << NoError;
-//
-//   //  , {"a": ["&", "<"]
-//   QTest::newRow( "filter-safeseq02") << "{% autoescape off %}{{ a|join:\", \" }} -- {{ a|safeseq|join:\", \" }}{% endautoescape %}" << dict << "&, < -- &, <" << NoError;
-//
+  dict.clear();
+  dict.insert( "a", QVariantList() << "&" << "<" );
+
+  QTest::newRow( "filter-safeseq01") << "{{ a|join:\", \" }} -- {{ a|safeseq|join:\", \" }}" << dict << "&amp;, &lt; -- &, <" << NoError;
+  QTest::newRow( "filter-safeseq02") << "{% autoescape off %}{{ a|join:\", \" }} -- {{ a|safeseq|join:\", \" }}{% endautoescape %}" << dict << "&, < -- &, <" << NoError;
 
   dict.clear();
   dict.insert( "a", "<a>x</a> <p><b>y</b></p>" );
