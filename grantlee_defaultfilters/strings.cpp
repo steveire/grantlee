@@ -165,7 +165,13 @@ StringFormatFilter::StringFormatFilter()
 
 QVariant StringFormatFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  SafeString a = Util::getSafeString( input );
+  SafeString a;
+  if ( Util::isSafeString( input ) )
+    a = Util::getSafeString( input );
+  else if ( input.type() == QVariant::List ) {
+    a = Util::toString( input.toList() );
+  }
+
   return SafeString( Util::getSafeString( argument ).arg( a ), Util::getSafeString( input ).isSafe() );
 }
 
@@ -345,7 +351,7 @@ QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argume
   return output;
 }
 
-QVariant FloatFormatFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant FloatFormatFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
   double _input = Util::getSafeString( input ).toDouble();
   int precision;
