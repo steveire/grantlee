@@ -57,6 +57,8 @@ public:
 
   static bool equals( const QVariant &lhs, const QVariant &rhs );
 
+  static Grantlee::SafeString toString( const QVariantList &list );
+
 };
 
 #endif

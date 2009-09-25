@@ -181,3 +181,30 @@ bool Util::equals( const QVariant &lhs, const QVariant &rhs )
   return equal;
 }
 
+Grantlee::SafeString Util::toString( const QVariantList &list )
+{
+  QString output = "[";
+  QVariantList::const_iterator it = list.constBegin();
+  const QVariantList::const_iterator end = list.constEnd();
+  while ( it != end )
+  {
+    QVariant item = *it;
+    if ( isSafeString( item ) )
+    {
+      output.append("u\'");
+      output.append( getSafeString( item ) );
+      output.append('\'');
+      if ( ( it + 1 ) != end )
+        output.append( ", " );
+    }
+    if ( item.type() == QVariant::List )
+    {
+      output.append( toString( item.toList() ) );
+      output.append( ", " );
+    }
+    ++it;
+  }
+
+  return output.append("]");
+}
+
