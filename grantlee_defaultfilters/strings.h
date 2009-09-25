@@ -117,19 +117,6 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-// class MakeListFilter : public Filter
-// {//
-// public:
-//   MakeListFilter();
-//
-//   bool isSafe() {
-//     return false;
-//   }
-//
-//   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
-//
-// };
-
 class StringFormatFilter : public Filter
 {
 public:

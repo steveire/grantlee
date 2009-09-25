@@ -412,18 +412,14 @@ void TestFilters::testStringFilters_data()
   //  The make_list filter can destroy existing escaping, so the results are
   //  escaped.
 
-//
-//   //  {"a": mark_safe("&")
-//   QTest::newRow( "filter-make_list01") << "{% autoescape off %}{{ a|make_list }}{% endautoescape %}" << dict << "[u\'&\']" << NoError;
-//
-//   //  {"a": mark_safe("&")
-//   QTest::newRow( "filter-make_list02") << "{{ a|make_list }}" << dict << "[u&#39;&amp;&#39;]" << NoError;
-//
-//   //  {"a": mark_safe("&")
-//   QTest::newRow( "filter-make_list03") << "{% autoescape off %}{{ a|make_list|stringformat:"s"|safe }}{% endautoescape %}" << dict << "[u\'&\']" << NoError;
-//
-//   //  {"a": mark_safe("&")
-//   QTest::newRow( "filter-make_list04") << "{{ a|make_list|stringformat:\"s\"|safe }}" << dict << "[u\'&\']" << NoError;
+  dict.clear();
+  dict.insert( "a", Util::markSafe( QString( "&" ) ) );
+
+  QTest::newRow( "filter-make_list01") << "{% autoescape off %}{{ a|make_list }}{% endautoescape %}" << dict << "[u\'&\']" << NoError;
+  QTest::newRow( "filter-make_list02") << "{{ a|make_list }}" << dict << "[u&#39;&amp;&#39;]" << NoError;
+
+  QTest::newRow( "filter-make_list03") << "{% autoescape off %}{{ a|make_list|stringformat:\"%1\"|safe }}{% endautoescape %}" << dict << "[u\'&\']" << NoError;
+  QTest::newRow( "filter-make_list04") << "{{ a|make_list|stringformat:\"%1\"|safe }}" << dict << "[u\'&\']" << NoError;
 //
 //   //  Running slugify on a pre-escaped string leads to odd behaviour,
 //

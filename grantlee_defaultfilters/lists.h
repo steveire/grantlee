@@ -106,5 +106,16 @@ public:
   }
 };
 
+class GRANTLEE_EXPORT MakeListFilter : public Filter
+{
+public:
+
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+
+  bool isSafe() const {
+    return true;
+  }
+};
+
 #endif
 

@@ -150,3 +150,23 @@ QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument,
   }
 }
 
+QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argument, bool autoescape ) const
+{
+  if ( _input.type() == QVariant::List )
+    return _input;
+
+  QVariant input = _input;
+
+  if ( input.type() == QVariant::Int )
+    input.convert( QVariant::String );
+
+  if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
+  {
+    QVariantList list;
+    foreach ( const QVariant &var, Util::getSafeString( input ).split( QString(), QString::SkipEmptyParts ) )
+      list << var;
+    return list;
+  }
+
+}
+

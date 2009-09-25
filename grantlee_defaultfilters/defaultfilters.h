@@ -77,6 +77,7 @@ public:
     filters.insert( "linenumbers", new LineNumbersFilter() );
     filters.insert( "ljust", new LJustFilter() );
     filters.insert( "lower", new LowerFilter() );
+    filters.insert( "make_list", new MakeListFilter() );
     filters.insert( "random", new RandomFilter() );
     filters.insert( "removetags", new RemoveTagsFilter() );
     filters.insert( "rjust", new RJustFilter() );

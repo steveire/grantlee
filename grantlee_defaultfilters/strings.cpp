@@ -144,19 +144,6 @@ QVariant LowerFilter::doFilter( const QVariant& input, const QVariant &argument,
   return Util::getSafeString( input ).toLower();
 }
 
-//TODO: consider making doFilter return a QVariant.
-// MakeListFilter::MakeListFilter()
-//     : Filter(parent)
-// {
-//
-// }
-//
-// SafeString MakeListFilter::doFilter(const QVariant& input, const QVariant &argument, bool autoescape) const
-// {
-//   return Util::getSafeString( input ).split();
-// }
-
-
 StringFormatFilter::StringFormatFilter()
 {
 
