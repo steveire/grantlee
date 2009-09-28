@@ -420,16 +420,16 @@ void TestFilters::testStringFilters_data()
 
   QTest::newRow( "filter-make_list03") << "{% autoescape off %}{{ a|make_list|stringformat:\"%1\"|safe }}{% endautoescape %}" << dict << "[u\'&\']" << NoError;
   QTest::newRow( "filter-make_list04") << "{{ a|make_list|stringformat:\"%1\"|safe }}" << dict << "[u\'&\']" << NoError;
-//
-//   //  Running slugify on a pre-escaped string leads to odd behaviour,
-//
-//   //  but the result is still safe.
-//
-//   //  {"a": "a & b", "b": mark_safe("a &amp; b")
-//   QTest::newRow( "filter-slugify01") << "{% autoescape off %}{{ a|slugify }} {{ b|slugify }}{% endautoescape %}" << dict << "a-b a-amp-b" << NoError;
-//
-//   //  {"a": "a & b", "b": mark_safe("a &amp; b")
-//   QTest::newRow( "filter-slugify02") << "{{ a|slugify }} {{ b|slugify }}" << dict << "a-b a-amp-b" << NoError;
+
+  //  Running slugify on a pre-escaped string leads to odd behaviour,
+  //  but the result is still safe.
+
+  dict.clear();
+  dict.insert( "a", "a & b" );
+  dict.insert( "b", Util::markSafe( QString( "a &amp; b" ) ) );
+
+  QTest::newRow( "filter-slugify01") << "{% autoescape off %}{{ a|slugify }} {{ b|slugify }}{% endautoescape %}" << dict << "a-b a-amp-b" << NoError;
+  QTest::newRow( "filter-slugify02") << "{{ a|slugify }} {{ b|slugify }}" << dict << "a-b a-amp-b" << NoError;
 
 
   dict.clear();

@@ -86,6 +86,7 @@ public:
     filters.insert( "safe", new SafeFilter() );
     filters.insert( "safeseq", new SafeSequenceFilter() );
     filters.insert( "slice", new SliceFilter() );
+    filters.insert( "slugify", new SlugifyFilter() );
     filters.insert( "stringformat", new StringFormatFilter() );
     filters.insert( "striptags", new StripTagsFilter() );
     filters.insert( "time", new TimeFilter() );

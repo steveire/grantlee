@@ -398,3 +398,12 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
   return Util::markSafe( inputString.replace( "\n", "<br />" ) );
 }
 
+QVariant SlugifyFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+{
+  QString inputString = Util::getSafeString( input );
+  inputString = inputString.normalized( QString::NormalizationForm_KD ).toAscii();
+  inputString = inputString.replace( QRegExp( "[^\\w\\s-]" ), QString() ).trimmed().toLower();
+  return Util::markSafe( inputString.replace( QRegExp( "[-\\s]+" ), "-" ) );
+}
+
+
