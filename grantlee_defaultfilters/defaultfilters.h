@@ -90,6 +90,7 @@ public:
     filters.insert( "timesince", new TimeSinceFilter() );
     filters.insert( "timeuntil", new TimeUntilFilter() );
     filters.insert( "truncatewords", new TruncateWordsFilter() );
+    filters.insert( "unordered_list", new UnorderedListFilter() );
     filters.insert( "upper", new UpperFilter() );
     filters.insert( "wordcount", new WordCountFilter() );
     filters.insert( "wordwrap", new WordWrapFilter() );

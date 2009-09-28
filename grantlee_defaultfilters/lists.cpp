@@ -170,3 +170,50 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
 
 }
 
+QVariant UnorderedListFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+{
+  return Util::markSafe( processList( input.toList(), 1, autoescape ) );
+}
+
+SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs, bool autoescape ) const
+{
+  QString indent;
+  for ( int i = 0; i < tabs; ++i )
+    indent.append( "\t" );
+  QStringList output;
+
+  int i = 0;
+  int listSize = list.size();
+  while (i < listSize)
+  {
+    QVariant titleObject = list.at( i );
+    SafeString title = Util::getSafeString( titleObject );;
+    QString sublist;
+    QVariant sublistItem;
+
+    if ( titleObject.type() == QVariant::List )
+    {
+      sublistItem = titleObject;
+      title.clear();
+    } else if ( i < listSize - 1 )
+    {
+      QVariant nextItem = list.at( i + 1 );
+      if ( nextItem.type() == QVariant::List )
+      {
+        sublistItem = nextItem;
+      }
+      ++i;
+    }
+    if ( sublistItem.isValid() )
+    {
+      sublist = processList( sublistItem.toList(), tabs + 1, autoescape );
+      sublist = QString( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent ).arg( sublist ).arg( indent ).arg( indent );
+    }
+    output.append( QString( "%1<li>%2%3</li>" ).arg( indent )
+                                               .arg( autoescape ? Util::conditionalEscape( title ) : title )
+                                               .arg( sublist ) );
+    ++i;
+  }
+
+  return output.join( "\n" );
+}

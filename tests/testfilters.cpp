@@ -676,21 +676,28 @@ void TestFilters::testListFilters_data()
   QTest::newRow( "filter-slice01" ) << "{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}" << dict << "&amp;b &b" << NoError;
   QTest::newRow( "filter-slice02" ) << "{% autoescape off %}{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}{% endautoescape %}" << dict << "&b &b" << NoError;
 
-//   //  {"a": ["x>", [["<y", []]]]
-//   QTest::newRow( "filter-unordered_list01") << "{{ a|unordered_list }}" << dict << "\t<li>x&gt;\n\t<ul>\n\t\t<li>&lt;y</li>\n\t</ul>\n\t</li>" << NoError;
-//
-//   //  {"a": ["x>", [["<y", []]]]
-//   QTest::newRow( "filter-unordered_list02") << "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
-//
-//   //  {"a": ["x>", [[mark_safe("<y"), []]]]
-//   QTest::newRow( "filter-unordered_list03") << "{{ a|unordered_list }}" << dict << "\t<li>x&gt;\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
-//
-//   //  {"a": ["x>", [[mark_safe("<y"), []]]]
-//   QTest::newRow( "filter-unordered_list04") << "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
-//
-//   //  {"a": ["x>", [["<y", []]]]
-//   QTest::newRow( "filter-unordered_list05") << "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
-//
+  dict.clear();
+  QVariantList sublist;
+  sublist << QVariant( "<y" );
+  dict.insert("a", QVariantList() << "x>" << QVariant( sublist ) );
+
+  QTest::newRow( "filter-unordered_list01") << "{{ a|unordered_list }}" << dict << "\t<li>x&gt;\n\t<ul>\n\t\t<li>&lt;y</li>\n\t</ul>\n\t</li>" << NoError;
+  QTest::newRow( "filter-unordered_list02") << "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
+
+  dict.clear();
+  sublist.clear();
+  sublist << Util::markSafe( QString( "<y" ) );
+  dict.insert("a", QVariantList() << "x>" << QVariant( sublist ) );
+
+  QTest::newRow( "filter-unordered_list03") << "{{ a|unordered_list }}" << dict << "\t<li>x&gt;\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
+  QTest::newRow( "filter-unordered_list04") << "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
+
+  dict.clear();
+  sublist.clear();
+  sublist << QVariant( "<y" );
+  dict.insert("a", QVariantList() << "x>" << QVariant( sublist ) );
+
+  QTest::newRow( "filter-unordered_list05") << "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
 
   //  length filter.
   dict.clear();

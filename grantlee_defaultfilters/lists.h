@@ -117,5 +117,24 @@ public:
   }
 };
 
+class GRANTLEE_EXPORT UnorderedListFilter : public Filter
+{
+public:
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+
+  bool isSafe() const {
+    return true;
+  }
+
+  bool needsAutoescape() const
+  {
+    return true;
+  }
+protected:
+  SafeString processList( const QVariantList &list, int tabs, bool autoescape ) const;
+
+};
+
+
 #endif
 
