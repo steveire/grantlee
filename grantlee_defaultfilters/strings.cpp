@@ -361,3 +361,30 @@ QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& ar
 }
 
 
+QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+{
+  SafeString inputString = Util::getSafeString( input );
+  QRegExp re( "\n{2,}" );
+  QStringList output;
+
+  foreach( const QString &bit, inputString.split( re ) )
+  {
+    SafeString _bit = SafeString( bit, inputString.isSafe() );
+    if ( autoescape )
+      _bit = Util::conditionalEscape( _bit );
+    _bit.replace( "\n", "<br />" );
+    output.append( QString( "<p>%1</p>" ).arg( _bit ) );
+  }
+  return Util::markSafe( output.join( "\n\n" ) );
+}
+
+QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+{
+  SafeString inputString = Util::getSafeString( input );
+  if ( autoescape && Util::isSafeString( input ) )
+  {
+    inputString = Util::conditionalEscape( inputString );
+  }
+  return Util::markSafe( inputString.replace( "\n", "<br />" ) );
+}
+

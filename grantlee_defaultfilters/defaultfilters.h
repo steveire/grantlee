@@ -74,6 +74,8 @@ public:
     filters.insert( "last", new LastFilter() );
     filters.insert( "length", new LengthFilter() );
     filters.insert( "length_is", new LengthIsFilter() );
+    filters.insert( "linebreaks", new LineBreaksFilter() );
+    filters.insert( "linebreaksbr", new LineBreaksBrFilter() );
     filters.insert( "linenumbers", new LineNumbersFilter() );
     filters.insert( "ljust", new LJustFilter() );
     filters.insert( "lower", new LowerFilter() );

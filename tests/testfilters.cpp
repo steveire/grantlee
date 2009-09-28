@@ -605,18 +605,15 @@ void TestFilters::testStringFilters_data()
 
   //  The contents in "linebreaks" and "linebreaksbr" are escaped
   //  according to the current autoescape setting.
-//
-//   //  {"a": "x&\ny", "b": mark_safe("x&\ny")
-//   QTest::newRow( "filter-linebreaks01") << "{{ a|linebreaks }} {{ b|linebreaks }}" << dict << "<p>x&amp;<br />y</p> <p>x&<br />y</p>" << NoError;
-//
-//   //  {"a": "x&\ny", "b": mark_safe("x&\ny")
-//   QTest::newRow( "filter-linebreaks02") << "{% autoescape off %}{{ a|linebreaks }} {{ b|linebreaks }}{% endautoescape %}" << dict << "<p>x&<br />y</p> <p>x&<br />y</p>" << NoError;
-//
-//   //  {"a": "x&\ny", "b": mark_safe("x&\ny")
-//   QTest::newRow( "filter-linebreaksbr01") << "{{ a|linebreaksbr }} {{ b|linebreaksbr }}" << dict << "x&amp;<br />y x&<br />y" << NoError;
-//
-//   //  {"a": "x&\ny", "b": mark_safe("x&\ny")
-//   QTest::newRow( "filter-linebreaksbr02") << "{% autoescape off %}{{ a|linebreaksbr }} {{ b|linebreaksbr }}{% endautoescape %}" << dict << "x&<br />y x&<br />y" << NoError;
+
+  dict.clear();
+  dict.insert( "a", "x&\ny" );
+  dict.insert( "b", Util::markSafe( QString( "x&\ny" ) ) );
+
+  QTest::newRow( "filter-linebreaks01") << "{{ a|linebreaks }} {{ b|linebreaks }}" << dict << "<p>x&amp;<br />y</p> <p>x&<br />y</p>" << NoError;
+  QTest::newRow( "filter-linebreaks02") << "{% autoescape off %}{{ a|linebreaks }} {{ b|linebreaks }}{% endautoescape %}" << dict << "<p>x&<br />y</p> <p>x&<br />y</p>" << NoError;
+  QTest::newRow( "filter-linebreaksbr01") << "{{ a|linebreaksbr }} {{ b|linebreaksbr }}" << dict << "x&amp;<br />y x&<br />y" << NoError;
+  QTest::newRow( "filter-linebreaksbr02") << "{% autoescape off %}{{ a|linebreaksbr }} {{ b|linebreaksbr }}{% endautoescape %}" << dict << "x&<br />y x&<br />y" << NoError;
 
   dict.clear();
   dict.insert( "a", "<b>hello</b>" );
