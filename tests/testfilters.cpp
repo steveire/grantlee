@@ -430,14 +430,12 @@ void TestFilters::testStringFilters_data()
 //
 //   //  {"a": "a & b", "b": mark_safe("a &amp; b")
 //   QTest::newRow( "filter-slugify02") << "{{ a|slugify }} {{ b|slugify }}" << dict << "a-b a-amp-b" << NoError;
-//
-//   //  {"a": "testing\r\njavascript \'string\" <b>escaping</b>"
-//   QTest::newRow( "escapejs01") << "{{ a|escapejs }}" << dict << "testing\\x0D\\x0Ajavascript \\x27string\\x22 \\x3Cb\\x3Eescaping\\x3C/b\\x3E" << NoError;
-//
-//   //  {"a": "testing\r\njavascript \\\"string\" <b>escaping</b>"
-//   QTest::newRow( "escapejs02") << "{% autoescape off %}{{ a|escapejs }}{% endautoescape %}" << dict << "testing\\x0D\\x0Ajavascript \\x27string\\x22 \\x3Cb\\x3Eescaping\\x3C/b\\x3E" << NoError;
-//
 
+
+  dict.clear();
+  dict.insert( "a", "testing\r\njavascript \'string\" <b>escaping</b>" );
+  QTest::newRow( "escapejs01") << "{{ a|escapejs }}" << dict << "testing\\x0D\\x0Ajavascript \\x27string\\x22 \\x3Cb\\x3Eescaping\\x3C/b\\x3E" << NoError;
+  QTest::newRow( "escapejs02") << "{% autoescape off %}{{ a|escapejs }}{% endautoescape %}" << dict << "testing\\x0D\\x0Ajavascript \\x27string\\x22 \\x3Cb\\x3Eescaping\\x3C/b\\x3E" << NoError;
 
   //  Notice that escaping is applied *after* any filters, so the string
   //  formatting here only needs to deal with pre-escaped characters.

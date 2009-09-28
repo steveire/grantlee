@@ -54,6 +54,9 @@ public:
   EscapeJsFilter();
 
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+
+private:
+  QList<QPair<QString, QString> > m_jsEscapes;
 };
 
 class GRANTLEE_EXPORT FixAmpersandsFilter : public Filter

@@ -52,23 +52,33 @@ QVariant CapFirstFilter::doFilter( const QVariant& input, const QVariant &argume
 
 EscapeJsFilter::EscapeJsFilter()
 {
+  m_jsEscapes << QPair<QString, QString>( "\\", "\\x5C" )
+              << QPair<QString, QString>( "\'",  "\\x27" )
+              << QPair<QString, QString>( "\"",  "\\x22" )
+              << QPair<QString, QString>( ">", "\\x3E" )
+              << QPair<QString, QString>( "<", "\\x3C" )
+              << QPair<QString, QString>( "&", "\\x26" )
+              << QPair<QString, QString>( "=", "\\x3D" )
+              << QPair<QString, QString>( "-", "\\x2D" )
+              << QPair<QString, QString>( ";", "\\x3B" )
+              << QPair<QString, QString>( QChar( 0x2028 ), "\\u2028" )
+              << QPair<QString, QString>( QChar( 0x2029 ), "\\u2029" );
+
+  for( int i = 0; i < 32; ++i )
+  {
+    m_jsEscapes << QPair<QString, QString>( QChar( i ), "\\x" + QString( "%1" ).arg( i, 2, 16, QChar('0') ).toUpper() );
+  }
 }
-
-
 
 QVariant EscapeJsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QString retString = Util::getSafeString( input );
 
-  QList<QPair<QString, QString> > jsEscapes;
-
-  jsEscapes << QPair<QString, QString>( "\\", "\\x5C" );
-
-  QListIterator<QPair<QString, QString> > it( jsEscapes );
+  QListIterator<QPair<QString, QString> > it( m_jsEscapes );
 
   while ( it.hasNext() ) {
     QPair<QString, QString> escape = it.next();
-    retString.replace( escape.first, escape.second );
+    retString = retString.replace( escape.first, escape.second );
   }
   return retString;
 }
