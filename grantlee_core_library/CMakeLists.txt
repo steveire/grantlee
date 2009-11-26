@@ -36,6 +36,7 @@ target_link_libraries(grantlee_core_library
 set_target_properties(grantlee_core_library PROPERTIES
   VERSION    ${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}.${GRANTLEE_VERSION_PATCH}
   SOVERSION  ${GRANTLEE_CORE_LIB_SOVERSION}
+  DEFINE_SYMBOL GRANTLEE_CORE_LIB_MAKEDLL
 )
 
 install(TARGETS grantlee_core_library
@@ -66,3 +67,4 @@ install(FILES
     interfaces/taglibraryinterface.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee/interfaces COMPONENT Devel
 )
+
