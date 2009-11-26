@@ -6,7 +6,7 @@ find_package(Qt4 REQUIRED)
 find_package(Automoc4 REQUIRED)
 
 set(GRANTLEE_VERSION_MAJOR 0)
-set(GRANTLEE_VERSION_MINOR 0)
+set(GRANTLEE_VERSION_MINOR 1)
 set(GRANTLEE_VERSION_PATCH 0)
 
 set(GRANTLEE_MAJOR_MINOR_VERSION_STRING "${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}" )
@@ -39,3 +39,4 @@ add_subdirectory(grantlee_mutabletags)
 add_subdirectory(grantlee_scriptabletags)
 
 add_subdirectory(tests)
+
