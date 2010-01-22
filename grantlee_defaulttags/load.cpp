@@ -56,6 +56,7 @@ LoadNode::LoadNode( QObject *parent )
 
 QString LoadNode::render( Context *c )
 {
+  Q_UNUSED( c )
   return QString();
 }
 

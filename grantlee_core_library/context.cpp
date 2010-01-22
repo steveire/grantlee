@@ -32,13 +32,12 @@ class ContextPrivate
     m_variantHashStack.append( variantHash );
   }
 
-  QList<QVariantHash> m_variantHashStack;
-  bool m_autoescape;
-  bool m_mutating;
-
   Q_DECLARE_PUBLIC( Context )
   Context *q_ptr;
 
+  QList<QVariantHash> m_variantHashStack;
+  bool m_autoescape;
+  bool m_mutating;
 };
 
 }

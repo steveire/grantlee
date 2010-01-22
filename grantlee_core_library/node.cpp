@@ -70,7 +70,7 @@ QString Node::renderValueInContext( const QVariant& input, Context* c )
     inputString = Util::getSafeString( input );
   }
 
-  if ( c->autoescape() && !inputString.isSafe() || inputString.needsEscape() )
+  if ( ( c->autoescape() && !inputString.isSafe() ) || inputString.needsEscape() )
     return Util::escape( inputString );
   return inputString;
 }

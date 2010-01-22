@@ -45,7 +45,7 @@ SafeString::~SafeString()
 
 void SafeString::setNeedsEscape( bool needsEscape )
 {
-  m_needsescape = true;
+  m_needsescape = needsEscape;
 }
 
 bool SafeString::needsEscape() const

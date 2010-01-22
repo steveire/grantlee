@@ -183,6 +183,7 @@ MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name )
 
 QString InMemoryTemplateLoader::getMediaUri( const QString& fileName ) const
 {
+  Q_UNUSED( fileName )
   // This loader doesn't make any media available yet.
   return QString();
 }

@@ -84,6 +84,7 @@ QList<AbstractTemplateLoader::Ptr> Engine::templateLoaders( const EngineState &_
 {
   Q_D( Engine );
   EngineState state = _state ? _state : d->m_currentState;
+
   return state->d_ptr->m_loaders;
 }
 

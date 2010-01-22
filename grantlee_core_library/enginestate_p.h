@@ -9,7 +9,7 @@ namespace Grantlee {
 
 class EngineStateImplPrivate
 {
-  Q_DECLARE_PUBLIC( EngineStateImpl );
+  Q_DECLARE_PUBLIC( EngineStateImpl )
   EngineStateImpl *q_ptr;
 
 

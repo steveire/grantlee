@@ -23,6 +23,7 @@
 
 #include "parser.h"
 #include "grantlee.h"
+#include "grantlee_tags_p.h"
 
 
 static QHash<QString, QString> s_map;
@@ -34,8 +35,8 @@ TemplateTagNodeFactory::TemplateTagNodeFactory()
   s_map.insert( "closeblock", BLOCK_TAG_END );
   s_map.insert( "openvariable", VARIABLE_TAG_START );
   s_map.insert( "closevariable", VARIABLE_TAG_END );
-  s_map.insert( "openbrace", SINGLE_BRACE_START );
-  s_map.insert( "closebrace", SINGLE_BRACE_END );
+  s_map.insert( "openbrace", "{" );
+  s_map.insert( "closebrace", "}" );
   s_map.insert( "opencomment", COMMENT_TAG_START );
   s_map.insert( "closecomment", COMMENT_TAG_END );
 }
@@ -72,6 +73,7 @@ bool TemplateTagNode::isKeyword( const QString &name )
 
 QString TemplateTagNode::render( Context *c )
 {
+  Q_UNUSED( c )
   return s_map.value( m_name );
 }
 

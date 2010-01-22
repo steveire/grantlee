@@ -31,6 +31,8 @@ AddSlashesFilter::AddSlashesFilter()
 
 QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   SafeString safeString = Util::getSafeString( input );
   safeString.replace( "\\", "\\\\" ).replace( "\"", "\\\"" ).replace( "\'", "\\\'" );
   return safeString;
@@ -42,6 +44,8 @@ CapFirstFilter::CapFirstFilter()
 
 QVariant CapFirstFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   SafeString safeString = Util::getSafeString( input );
   if ( safeString.isEmpty() )
     return QString();
@@ -72,6 +76,8 @@ EscapeJsFilter::EscapeJsFilter()
 
 QVariant EscapeJsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   QString retString = Util::getSafeString( input );
 
   QListIterator<QPair<QString, QString> > it( m_jsEscapes );
@@ -89,6 +95,8 @@ FixAmpersandsFilter::FixAmpersandsFilter()
 
 QVariant FixAmpersandsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   SafeString safeString = Util::getSafeString( input );
 
   QRegExp fixAmpersandsRegexp( "&(?!(\\w+|#\\d+);)" );
@@ -104,6 +112,7 @@ CutFilter::CutFilter()
 
 QVariant CutFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   SafeString retString = Util::getSafeString( input );
   SafeString argString = Util::getSafeString( argument );
 
@@ -121,6 +130,8 @@ SafeFilter::SafeFilter()
 
 QVariant SafeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   return Util::markSafe( Util::getSafeString( input ) );
 }
 
@@ -131,6 +142,7 @@ LineNumbersFilter::LineNumbersFilter()
 
 QVariant LineNumbersFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
   SafeString safeString = Util::getSafeString( input );
   QStringList lines = safeString.split( '\n' );
   int width = QString::number( lines.size() ).size();
@@ -151,6 +163,8 @@ LowerFilter::LowerFilter()
 
 QVariant LowerFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   return Util::getSafeString( input ).toLower();
 }
 
@@ -162,6 +176,7 @@ StringFormatFilter::StringFormatFilter()
 
 QVariant StringFormatFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   SafeString a;
   if ( Util::isSafeString( input ) )
     a = Util::getSafeString( input );
@@ -178,6 +193,8 @@ TitleFilter::TitleFilter()
 
 QVariant TitleFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
 //   QRegExp re( "\b([a-z])" );
 
   QRegExp re( "([a-z])'([A-Z])" );
@@ -195,6 +212,7 @@ TruncateWordsFilter::TruncateWordsFilter()
 
 QVariant TruncateWordsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   QVariant v( Util::getSafeString( argument ) );
   if ( !v.convert( QVariant::Int ) ) {
     return input.toString();
@@ -220,6 +238,8 @@ UpperFilter::UpperFilter()
 
 QVariant UpperFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   return Util::getSafeString( input ).toUpper();
 }
 
@@ -229,6 +249,8 @@ WordCountFilter::WordCountFilter()
 
 QVariant WordCountFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   return QString::number( Util::getSafeString( input ).split( " " ).size() );
 }
 
@@ -238,6 +260,7 @@ LJustFilter::LJustFilter()
 
 QVariant LJustFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   return Util::getSafeString( input ).leftJustified( QVariant( Util::getSafeString( argument ) ).toInt() );
 }
 
@@ -248,6 +271,7 @@ RJustFilter::RJustFilter()
 
 QVariant RJustFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   return Util::getSafeString( input ).rightJustified( QVariant( Util::getSafeString( argument ) ).toInt() );
 }
 
@@ -257,6 +281,7 @@ CenterFilter::CenterFilter()
 
 QVariant CenterFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   QString value = Util::getSafeString( input );
   const int valueWidth = value.size();
   const int width = QVariant( Util::getSafeString( argument ) ).toInt();
@@ -273,6 +298,8 @@ EscapeFilter::EscapeFilter()
 
 QVariant EscapeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   return Util::markForEscaping( Util::getSafeString( input ) );
 }
 
@@ -282,6 +309,8 @@ ForceEscapeFilter::ForceEscapeFilter()
 
 QVariant ForceEscapeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   return Util::markSafe( Util::escape( Util::getSafeString( input ) ) );
 }
 
@@ -291,6 +320,7 @@ RemoveTagsFilter::RemoveTagsFilter()
 
 QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   QStringList tags = Util::getSafeString( argument ).split( " " );
   QString tagRe = QString( "(%1)" ).arg( tags.join( "|" ) );
   QRegExp startTag( QString( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
@@ -308,6 +338,8 @@ StripTagsFilter::StripTagsFilter()
 
 QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   QRegExp tagRe( "<[^>]*>" );
   tagRe.setMinimal( true );
 
@@ -319,6 +351,7 @@ QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argum
 
 QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   QString _input = Util::getSafeString( input );
   int width = argument.toInt();
   QStringList partList = _input.split( " ", QString::SkipEmptyParts );
@@ -350,6 +383,7 @@ QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argume
 
 QVariant FloatFormatFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   double _input = Util::getSafeString( input ).toDouble();
   int precision;
   if (argument.isValid())
@@ -363,6 +397,8 @@ QVariant FloatFormatFilter::doFilter( const QVariant& input, const QVariant& arg
 
 QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   QVariantList list;
   if ( input.type() == QVariant::List )
     foreach(const QVariant &item, input.toList() )
@@ -373,6 +409,7 @@ QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& ar
 
 QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
   SafeString inputString = Util::getSafeString( input );
   QRegExp re( "\n{2,}" );
   QStringList output;
@@ -390,6 +427,7 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
 
 QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
   SafeString inputString = Util::getSafeString( input );
   if ( autoescape && Util::isSafeString( input ) )
   {
@@ -400,6 +438,8 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
 
 QVariant SlugifyFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
 {
+  Q_UNUSED( argument )
+  Q_UNUSED( autoescape )
   QString inputString = Util::getSafeString( input );
   inputString = inputString.normalized( QString::NormalizationForm_KD ).toAscii();
   inputString = inputString.replace( QRegExp( "[^\\w\\s-]" ), QString() ).trimmed().toLower();

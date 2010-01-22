@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,42 +17,26 @@
 
 */
 
-#ifndef TEMPLATE_P_H
-#define TEMPLATE_P_H
+#ifndef GRANTLEE_TAGS_P_H
+#define GRANTLEE_TAGS_P_H
 
-#include "template.h"
+#include <exception>
 
-#include "enginestate_p.h"
+#include <QDebug>
 
 namespace Grantlee
 {
 
-class Engine;
-
-class TemplatePrivate
-{
-  TemplatePrivate( TemplateImpl *t )
-      : q_ptr( t ), m_error( NoError ) {
-
-  }
-
-  void parse();
-  NodeList compileString( const QString &str );
-  void setError( Error type, const QString &message );
-
-  Q_DECLARE_PUBLIC( TemplateImpl )
-  TemplateImpl *q_ptr;
-
-  qint64 m_settingsToken;
-  Error m_error;
-  QString m_errorString;
-  NodeList m_nodeList;
-  EngineState m_state;
-
-  friend class Grantlee::Engine;
-
-};
+static const char * BLOCK_TAG_START = "{%";
+static const char * BLOCK_TAG_END = "%}";
+static const char * VARIABLE_TAG_START = "{{";
+static const char * VARIABLE_TAG_END = "}}";
+static const char * COMMENT_TAG_START = "{#";
+static const char * COMMENT_TAG_END = "#}";
+//static const char * SINGLE_BRACE_START = "{";
+//static const char * SINGLE_BRACE_END = "}";
 
 }
 
 #endif
+

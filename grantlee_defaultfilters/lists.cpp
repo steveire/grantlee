@@ -52,6 +52,8 @@ LengthFilter::LengthFilter()
 
 QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
+  Q_UNUSED( argument )
   if (input.type() == QVariant::List)
     return input.toList().size();
 
@@ -67,6 +69,7 @@ LengthIsFilter::LengthIsFilter()
 
 QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   if (!input.isValid() || (input.type() == QVariant::Int) || (input.type() == QVariant::DateTime))
     return QVariant();
 
@@ -92,6 +95,8 @@ FirstFilter::FirstFilter()
 
 QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
+  Q_UNUSED( argument )
   QVariantList varList = Util::variantToList( input );
 
   if ( varList.isEmpty() )
@@ -107,6 +112,8 @@ LastFilter::LastFilter()
 
 QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
+  Q_UNUSED( argument )
   QVariantList varList = Util::variantToList( input );
 
   if ( varList.isEmpty() )
@@ -122,6 +129,8 @@ RandomFilter::RandomFilter()
 
 QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
+  Q_UNUSED( argument )
   QVariantList varList = Util::variantToList( input );
 
   qsrand( QDateTime::currentDateTime().toTime_t() );
@@ -135,6 +144,7 @@ SliceFilter::SliceFilter()
 
 QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   SafeString argString = Util::getSafeString( argument );
   int splitterIndex = argString.indexOf( ":" );
   QString inputString = Util::getSafeString( input );
@@ -152,6 +162,8 @@ QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument,
 
 QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
+  Q_UNUSED( argument )
   if ( _input.type() == QVariant::List )
     return _input;
 
@@ -167,11 +179,12 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
       list << var;
     return list;
   }
-
+  return QVariant();
 }
 
 QVariant UnorderedListFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( argument )
   return Util::markSafe( processList( input.toList(), 1, autoescape ) );
 }
 

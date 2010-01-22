@@ -22,8 +22,6 @@
 #include <QStringList>
 #include "parser.h"
 
-
-
 SpacelessNodeFactory::SpacelessNodeFactory()
 {
 
@@ -31,6 +29,7 @@ SpacelessNodeFactory::SpacelessNodeFactory()
 
 Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
+  Q_UNUSED( tagContent )
   SpacelessNode *n = new SpacelessNode( p );
   NodeList list = p->parse( n, QStringList() << "endspaceless" );
   n->setList( list );

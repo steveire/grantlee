@@ -31,6 +31,7 @@ DebugNodeFactory::DebugNodeFactory()
 
 Node* DebugNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
+  Q_UNUSED( tagContent )
   return new DebugNode( p );
 }
 

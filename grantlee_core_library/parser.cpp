@@ -52,22 +52,21 @@ public:
   NodeList parse( QObject *parent, const QStringList &stopAt = QStringList() );
 
   void openLibrary( TagLibraryInterface * library );
+  Q_DECLARE_PUBLIC( Parser )
+  Parser *q_ptr;
+
   QList<Token> m_tokenList;
 
   QHash<QString, AbstractNodeFactory*> m_nodeFactories;
   QHash<QString, Filter::Ptr> m_filters;
 
   NodeList m_nodeList;
-
-  Q_DECLARE_PUBLIC( Parser )
-  Parser *q_ptr;
 };
 
 }
 
 void ParserPrivate::openLibrary( TagLibraryInterface *library )
 {
-  Q_Q( Parser );
   QHashIterator<QString, AbstractNodeFactory*> nodeIt( library->nodeFactories() );
   while ( nodeIt.hasNext() ) {
     nodeIt.next();
@@ -123,7 +122,6 @@ void Parser::loadLib( const QString &name )
 
 NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 {
-  Q_Q( Parser );
   if ( node->mustBeFirst() && list.containsNonText() ) {
     throw Grantlee::Exception( TagSyntaxError, QString(
         "Node appeared twice in template: %1" ).arg( node->metaObject()->className() ) );

@@ -44,10 +44,9 @@ class FilterExpressionPrivate
 
 static const char * FILTER_SEPARATOR = "|";
 static const char * FILTER_ARGUMENT_SEPARATOR = ":";
-static const char * VARIABLE_ATTRIBUTE_SEPARATOR = ".";
 static const char * ALLOWED_VARIABLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\\.";
 
-static const char * varChars = "\\w\\." ;
+static const char * varChars = "\\w\\.";
 static const char * numChars = "[-+\\.]?\\d[\\d\\.e]*";
 static const QString filterSep( QRegExp::escape( FILTER_SEPARATOR ) );
 static const QString argSep( QRegExp::escape( FILTER_ARGUMENT_SEPARATOR ) );
@@ -157,7 +156,6 @@ FilterExpression::FilterExpression( const FilterExpression &other )
 FilterExpression::FilterExpression()
     : d_ptr( new FilterExpressionPrivate( this ) )
 {
-  Q_D( FilterExpression );
 }
 
 bool FilterExpression::isValid() const

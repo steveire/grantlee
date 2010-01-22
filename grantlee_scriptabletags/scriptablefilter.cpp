@@ -45,6 +45,7 @@ bool ScriptableFilter::isSafe() const
 
 QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   QScriptValueList args;
   if ( input.type() == QVariant::List ) {
     QVariantList inputList = input.toList();

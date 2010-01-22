@@ -95,6 +95,7 @@ QVariantList Util::variantToList( const QVariant &var )
   } else {
     return QVariantList() << var;
   }
+  return QVariantList();
 }
 
 Grantlee::SafeString Util::conditionalEscape( const Grantlee::SafeString &input )

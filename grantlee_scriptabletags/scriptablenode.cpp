@@ -129,9 +129,7 @@ Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) con
 
   Node* node = qscriptvalue_cast<Node*>( scriptNode );
   node->setParent( p );
-  ScriptableNode *sn = qobject_cast<ScriptableNode *>( node );
   return node;
-
 }
 
 QScriptEngine* ScriptableNode::engine()

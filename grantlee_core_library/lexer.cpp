@@ -24,6 +24,7 @@
 #include <QStringList>
 
 #include "grantlee.h"
+#include "grantlee_tags_p.h"
 
 using namespace Grantlee;
 

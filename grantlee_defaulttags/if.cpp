@@ -41,7 +41,6 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   int linkType = IfNode::OrLink;
 
-  bool isAnd = false;
   QString exprString = expr.join( " " );
 
   QStringList boolPairs = exprString.split( " and " );

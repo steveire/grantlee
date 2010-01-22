@@ -29,6 +29,7 @@ RawNodeFactory::RawNodeFactory()
 
 Node* RawNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
+  Q_UNUSED( tagContent )
   RawNode *n = new RawNode( p );
   NodeList nodeList = p->parse( n, "endraw" );
   n->setNodeList( nodeList );

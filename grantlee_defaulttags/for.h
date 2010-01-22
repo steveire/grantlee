@@ -60,8 +60,8 @@ private:
   QString renderLoop( Context *c );
   QString handleHashItem( Context *c, QString key, QVariant value, int listSize, int i, bool unpack );
 
-  FilterExpression m_filterExpression;
   QStringList m_loopVars;
+  FilterExpression m_filterExpression;
   NodeList m_loopNodeList;
   NodeList m_emptyNodeList;
   int m_isReversed;

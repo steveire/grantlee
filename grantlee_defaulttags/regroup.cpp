@@ -79,7 +79,6 @@ QString RegroupNode::render( Context *c )
   QVariantList list;
   QVariantHash objHash;
   QVariantList contextList;
-  int contextListSize = 0;
   QString hashKey;
   QString lastKey;
   QString keyName = Util::getSafeString( m_expression.resolve( c ) );

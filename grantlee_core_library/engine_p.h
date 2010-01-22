@@ -36,14 +36,14 @@ class EnginePrivate
   TagLibraryInterface* loadScriptableLibrary( const QString &name, const EngineState &state = EngineState() );
   TagLibraryInterface* loadCppLibrary( const QString& name, const EngineState &state = EngineState() );
 
+  Q_DECLARE_PUBLIC( Engine )
+  Engine *q_ptr;
+
   EngineState m_currentState;
 
   TagLibraryInterface *m_scriptableTagLibrary;
   QHash<QString, TagLibraryInterface*> m_libraries;
   QList<TagLibraryInterface*> m_scriptableLibraries;
-
-  Q_DECLARE_PUBLIC( Engine )
-  Engine *q_ptr;
 
   friend class EngineStateImpl;
 };

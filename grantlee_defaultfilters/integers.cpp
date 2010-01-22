@@ -27,6 +27,7 @@ AddFilter::AddFilter()
 
 QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   return Util::getSafeString( input ).toInt() + Util::getSafeString( argument ).toInt();
 }
 
@@ -36,6 +37,7 @@ GetDigitFilter::GetDigitFilter()
 
 QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
+  Q_UNUSED( autoescape )
   QVariant variant = QVariant( Util::getSafeString( input ) );
 
   if ( !variant.canConvert( QVariant::Int ) || !variant.convert( QVariant::Int ) )
