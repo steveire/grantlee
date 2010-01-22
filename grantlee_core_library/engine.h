@@ -37,43 +37,50 @@ public:
 
   ~Engine();
 
-  QList<AbstractTemplateLoader::Ptr> templateLoaders( qint64 settingsToken = 0 );
-  void addTemplateLoader( AbstractTemplateLoader::Ptr loader, qint64 settingsToken = 0 );
-  void removeTemplateLoader( int index, qint64 settingsToken = 0 );
+  QList<AbstractTemplateLoader::Ptr> templateLoaders( const EngineState &state = EngineState() );
+  void addTemplateLoader( AbstractTemplateLoader::Ptr loader, const EngineState &state = EngineState() );
+  void removeTemplateLoader( int index, const EngineState &state = EngineState() );
 
-  void setPluginDirs( const QStringList &dirs, qint64 settingsToken = 0 );
-  QStringList pluginDirs( qint64 settingsToken = 0 );
+  void setPluginDirs( const QStringList &dirs, const EngineState &state = EngineState() );
+  QStringList pluginDirs( const EngineState &state = EngineState() );
 
-  QString mediaUri( const QString &fileName, qint64 settingsToken = 0 ) const;
+  QString mediaUri( const QString &fileName, const EngineState &state = EngineState() ) const;
 
-  /**
-  Causes a state transition if settingsToken is 0.
-  */
-  Template loadByName( const QString &name, qint64 settingsToken = 0 ) const;
+  void resetState();
 
   /**
   Causes a state transition if settingsToken is 0.
   */
-  Template newTemplate( const QString &content, const QString &name, qint64 settingsToken = 0 );
+  Template loadByName( const QString &name, const EngineState &state = EngineState() ) const;
 
   /**
   Causes a state transition if settingsToken is 0.
   */
-  MutableTemplate loadMutableByName( const QString &name, qint64 settingsToken = 0 ) const;
+  Template newTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() );
 
   /**
   Causes a state transition if settingsToken is 0.
   */
-  MutableTemplate newMutableTemplate( const QString &content, const QString &name, qint64 settingsToken = 0 );
+  MutableTemplate loadMutableByName( const QString &name, const EngineState &state = EngineState() ) const;
 
-  QStringList defaultLibraries( qint64 settingsToken = 0 ) const;
-  void setDefaultLibraries( const QStringList &list, qint64 settingsToken = 0 );
-  void addDefaultLibrary( const QString &libName, qint64 settingsToken = 0 );
-  void removeDefaultLibrary( const QString &libName, qint64 settingsToken = 0 );
+  /**
+  Causes a state transition if settingsToken is 0.
+  */
+  MutableTemplate newMutableTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() );
 
-  QList<TagLibraryInterface*> loadDefaultLibraries( qint64 settingsToken = 0 );
+  QStringList defaultLibraries( const EngineState &state = EngineState() ) const;
+  void setDefaultLibraries( const QStringList &list, const EngineState &state = EngineState() );
+  void addDefaultLibrary( const QString &libName, const EngineState &state = EngineState() );
+  void removeDefaultLibrary( const QString &libName, const EngineState &state = EngineState() );
 
-  TagLibraryInterface* loadLibrary( const QString &name, qint64 settingsToken = 0 );
+  QList<TagLibraryInterface*> loadDefaultLibraries( const EngineState &state = EngineState() );
+
+  TagLibraryInterface* loadLibrary( const QString &name, const EngineState &state = EngineState() );
+
+  /**
+    Returns the current state of the Engine.
+  */
+  EngineState state();
 
 private:
   Engine();
@@ -82,7 +89,6 @@ private:
   EnginePrivate *d_ptr;
 
   static Engine* m_instance;
-  friend class EngineStateImpl;
 };
 
 }

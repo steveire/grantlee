@@ -113,9 +113,10 @@ Template ExtendsNode::getParent( Context *c )
     parentName = m_name;
   }
   Engine *engine = Engine::instance();
-  qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
 
-  Template t = engine->loadByName( parentName, settingsToken );
+  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
+
+  Template t = engine->loadByName( parentName, ti->state() );
 
   return t;
 }

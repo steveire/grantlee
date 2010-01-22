@@ -76,8 +76,8 @@ QString SsiNode::render( Context *c )
   }
 
   if ( m_parse ) {
-    qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
-    Template t = Engine::instance()->newTemplate( content, m_filename, settingsToken );
+    TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
+    Template t = Engine::instance()->newTemplate( content, m_filename, ti->state() );
     return t->render( c );
   }
   return content;

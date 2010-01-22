@@ -80,379 +80,265 @@ Engine::~Engine()
   m_instance = 0;
 }
 
-QList<AbstractTemplateLoader::Ptr> Engine::templateLoaders( qint64 settingsToken )
+QList<AbstractTemplateLoader::Ptr> Engine::templateLoaders( const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    return p->m_loaders;
-  }
-  return QList<AbstractTemplateLoader::Ptr>();
+  EngineState state = _state ? _state : d->m_currentState;
+  return state->d_ptr->m_loaders;
 }
 
-void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader, qint64 settingsToken )
+void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader, const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    p->m_loaders << loader;
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+  state->d_ptr->m_loaders << loader;
 }
 
-void Engine::removeTemplateLoader( int index, qint64 settingsToken )
+void Engine::removeTemplateLoader( int index, const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    p->m_loaders.removeAt( index );
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+  state->d_ptr->m_loaders.removeAt( index );
 }
 
-QString Engine::mediaUri( const QString &fileName, qint64 settingsToken ) const
+QString Engine::mediaUri( const QString &fileName, const EngineState &_state ) const
 {
   Q_D( const Engine );
+  EngineState state = _state ? _state : d->m_currentState;
+  QListIterator<AbstractTemplateLoader::Ptr> it( state->d_ptr->m_loaders );
 
-  if ( !settingsToken ) {
-    settingsToken  = d->m_mostRecentState;
+  QString uri;
+  while ( it.hasNext() ) {
+    AbstractTemplateLoader::Ptr loader = it.next();
+    uri = loader->getMediaUri( fileName );
+    if ( !uri.isEmpty() )
+      break;
   }
-
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    QListIterator<AbstractTemplateLoader::Ptr> it( p->m_loaders );
-
-    QString uri;
-    while ( it.hasNext() ) {
-      AbstractTemplateLoader::Ptr loader = it.next();
-      uri = loader->getMediaUri( fileName );
-      if ( !uri.isEmpty() )
-        break;
-    }
-    return uri;
-  }
-  return QString();
+  return uri;
 }
 
-void Engine::setPluginDirs( const QStringList &dirs, qint64 settingsToken )
+void Engine::setPluginDirs( const QStringList &dirs, const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    p->m_pluginDirs = dirs;
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+  state->d_ptr->m_pluginDirs = dirs;
 }
 
-QStringList Engine::pluginDirs( qint64 settingsToken )
+QStringList Engine::pluginDirs( const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    return p->m_pluginDirs;
-  }
-  return QStringList();
+  EngineState state = _state ? _state : d->m_currentState;
+  return state->d_ptr->m_pluginDirs;
 }
 
-QStringList Engine::defaultLibraries( qint64 settingsToken ) const
+QStringList Engine::defaultLibraries( const EngineState &_state ) const
 {
   Q_D( const Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    return p->m_defaultLibraries;
-  }
-  return QStringList();
+  EngineState state = _state ? _state : d->m_currentState;
+  return state->d_ptr->m_defaultLibraries;
 }
 
-void Engine::setDefaultLibraries( const QStringList &list, qint64 settingsToken )
+void Engine::setDefaultLibraries( const QStringList &list, const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    p->m_defaultLibraries = list;
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+  state->d_ptr->m_defaultLibraries = list;
 }
 
-void Engine::addDefaultLibrary( const QString &libName, qint64 settingsToken )
+void Engine::addDefaultLibrary( const QString &libName, const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    p->m_defaultLibraries << libName;
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+  state->d_ptr->m_defaultLibraries << libName;
 }
 
-void Engine::removeDefaultLibrary( const QString &libName, qint64 settingsToken )
+void Engine::removeDefaultLibrary( const QString &libName, const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
-
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    p->m_defaultLibraries.removeAll( libName );
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+  state->d_ptr->m_defaultLibraries.removeAll( libName );
 }
 
-QList<TagLibraryInterface*> Engine::loadDefaultLibraries( qint64 settingsToken )
+QList<TagLibraryInterface*> Engine::loadDefaultLibraries( const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
+  EngineState state = _state ? _state : d->m_currentState;
   QList<TagLibraryInterface*> list;
+  // Make sure we can load default scriptable libraries if we're supposed to.
+  if ( state->d_ptr->m_defaultLibraries.contains( __scriptableLibName ) && !d->m_scriptableTagLibrary ) {
+    d->m_scriptableTagLibrary = loadLibrary( __scriptableLibName, state );
+  }
 
-  if ( EngineState p = d->m_states.value( settingsToken ).toStrongRef() )
-  {
-    // Make sure we can load default scriptable libraries if we're supposed to.
-    if ( p->m_defaultLibraries.contains( __scriptableLibName ) && !d->m_scriptableTagLibrary ) {
-      d->m_scriptableTagLibrary = loadLibrary( __scriptableLibName, settingsToken );
-    }
+  foreach( const QString &libName, state->d_ptr->m_defaultLibraries ) {
+    if ( libName == __scriptableLibName )
+      continue;
 
-    foreach( const QString &libName, p->m_defaultLibraries ) {
-      if ( libName == __scriptableLibName )
-        continue;
+    TagLibraryInterface *library = loadLibrary( libName, state );
+    if ( !library )
+      continue;
 
-      TagLibraryInterface *library = loadLibrary( libName, settingsToken );
-      if ( !library )
-        continue;
-
-      d->m_libraries.insert( libName, library );
-      list << library;
-    }
+    d->m_libraries.insert( libName, library );
+    list << library;
   }
   return list;
 }
 
-TagLibraryInterface* Engine::loadLibrary( const QString &name, qint64 settingsToken )
+TagLibraryInterface* Engine::loadLibrary( const QString &name, const EngineState &_state )
 {
   Q_D( Engine );
-  if ( !settingsToken )
-    settingsToken = d->m_mostRecentState;
+  EngineState state = _state ? _state : d->m_currentState;
 
   // already loaded by the engine.
   if ( d->m_libraries.contains( name ) )
     return d->m_libraries.value( name );
 
-  TagLibraryInterface* scriptableLibrary = d->loadScriptableLibrary( name, settingsToken );
+  TagLibraryInterface* scriptableLibrary = d->loadScriptableLibrary( name, state );
 
   if ( scriptableLibrary )
     return scriptableLibrary;
 
   // else this is not a scriptable library.
 
-  return d->loadCppLibrary( name, settingsToken );
+  return d->loadCppLibrary( name, state );
 }
 
 EnginePrivate::EnginePrivate( Engine *engine )
     : q_ptr( engine ),
-    m_mostRecentState( 0 ),
     m_scriptableTagLibrary( 0 )
 {
-  m_defaultStatePtr = EngineStateImpl::getPtr();
-  m_defaultStatePtr->id = m_mostRecentState;
-  m_states.insert( m_mostRecentState, m_defaultStatePtr.toWeakRef() );
+  m_currentState = staticEmptyState();
 }
 
-TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, qint64 settingsToken )
+TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, const EngineState &_state )
 {
+  EngineState state = _state ? _state : m_currentState;
+
   int pluginIndex = 0;
-  if ( !settingsToken )
-    settingsToken = m_mostRecentState;
   QString libFileName;
-
-  if ( EngineState p = m_states.value( settingsToken ).toStrongRef() )
-  {
-    if ( m_scriptableTagLibrary ) {
-      while ( p->m_pluginDirs.size() > pluginIndex ) {
-        QString nextDir = p->m_pluginDirs.at( pluginIndex++ );
-        libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + name + ".qs";
-        QFile file( libFileName );
-        if ( !file.exists() )
-          continue;
-
-        QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
-        QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
-
-        TagLibraryInterface *library = new ScriptableLibraryContainer( factories, filters );
-        m_scriptableLibraries << library;
-        return library;
-      }
-    }
-  }
-  return 0;
-}
-
-TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, qint64 settingsToken )
-{
-  if ( !settingsToken )
-    settingsToken = m_mostRecentState;
-
-  if ( EngineState p = m_states.value( settingsToken ).toStrongRef() )
-  {
-    int pluginIndex = 0;
-    QString libFileName;
-
-    QObject *plugin = 0;
-    while ( p->m_pluginDirs.size() > pluginIndex ) {
-      QString nextDir = p->m_pluginDirs.at( pluginIndex++ );
-      libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + "lib" + name + ".so";
+  if ( m_scriptableTagLibrary ) {
+    while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
+      QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
+      libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + name + ".qs";
       QFile file( libFileName );
       if ( !file.exists() )
         continue;
 
-      QPluginLoader loader( libFileName );
+      QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
+      QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
 
-      plugin = loader.instance();
-      if ( plugin )
-        break;
+      TagLibraryInterface *library = new ScriptableLibraryContainer( factories, filters );
+      m_scriptableLibraries << library;
+      return library;
     }
-    if ( !plugin )
-      return 0;
-
-    return qobject_cast<TagLibraryInterface*>( plugin );
   }
+
   return 0;
 }
 
-Template Engine::loadByName( const QString &name, qint64 settingsToken ) const
+TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, const EngineState &_state )
+{
+  EngineState state = _state ? _state : m_currentState;
+
+  int pluginIndex = 0;
+  QString libFileName;
+
+  QObject *plugin = 0;
+  while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
+    QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
+    libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + "lib" + name + ".so";
+    QFile file( libFileName );
+    if ( !file.exists() )
+      continue;
+
+    QPluginLoader loader( libFileName );
+
+    plugin = loader.instance();
+    if ( plugin )
+      break;
+  }
+  if ( !plugin )
+    return 0;
+
+  return qobject_cast<TagLibraryInterface*>( plugin );
+}
+
+Template Engine::loadByName( const QString &name, const EngineState &_state ) const
 {
   Q_D( const Engine );
-  qint64 currentSettingsToken = d->m_mostRecentState;
-  if ( settingsToken ) {
-    d->m_mostRecentState = settingsToken;
-  }
 
-  if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
-  {
-    QListIterator<AbstractTemplateLoader::Ptr> it( p->m_loaders );
-    while ( it.hasNext() ) {
-      AbstractTemplateLoader::Ptr loader = it.next();
+  EngineState state = _state ? _state : d->m_currentState;
 
-      if ( !loader->canLoadTemplate( name ) )
-        continue;
+  QListIterator<AbstractTemplateLoader::Ptr> it( state->d_ptr->m_loaders );
+  while ( it.hasNext() ) {
+    AbstractTemplateLoader::Ptr loader = it.next();
 
-      Template t = loader->loadByName( name );
+    if ( !loader->canLoadTemplate( name ) )
+      continue;
 
-      if ( t ) {
-        if ( !settingsToken ) {
-          d->m_mostRecentState = t->settingsToken();
-        } else
-          t->setSettingsToken( settingsToken );
-        if ( settingsToken )
-          d->m_mostRecentState = currentSettingsToken;
-        return t;
-      }
+    Template t = loader->loadByName( name );
+
+    if ( t ) {
+      t->d_ptr->m_state = state;
+      return t;
     }
   }
-  if ( settingsToken )
-    d->m_mostRecentState = currentSettingsToken;
   throw Grantlee::Exception( TagSyntaxError, QString( "Most recent state is invalid." ) );
 }
 
-MutableTemplate Engine::loadMutableByName( const QString &name, qint64 settingsToken ) const
+MutableTemplate Engine::loadMutableByName( const QString &name, const EngineState &_state ) const
 {
   Q_D( const Engine );
-  qint64 currentSettingsToken = d->m_mostRecentState;
-  if ( settingsToken ) {
-    d->m_mostRecentState = settingsToken;
-  }
 
-  if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
-  {
-    QListIterator<AbstractTemplateLoader::Ptr> it( p->m_loaders );
+  EngineState state = _state ? _state : d->m_currentState;
 
-    while ( it.hasNext() ) {
-      AbstractTemplateLoader::Ptr loader = it.next();
-      MutableTemplate t = loader->loadMutableByName( name );
-      if ( t ) {
-        if ( !settingsToken ) {
-          d->m_mostRecentState = t->settingsToken();
-        } else
-          t->setSettingsToken( settingsToken );
-        if ( settingsToken )
-          d->m_mostRecentState = currentSettingsToken;
-        return t;
-      }
+  QListIterator<AbstractTemplateLoader::Ptr> it( state->d_ptr->m_loaders );
+
+  while ( it.hasNext() ) {
+    AbstractTemplateLoader::Ptr loader = it.next();
+    MutableTemplate t = loader->loadMutableByName( name );
+    if ( t ) {
+      t->d_ptr->m_state = state;
+      return t;
     }
   }
-  if ( settingsToken )
-    d->m_mostRecentState = currentSettingsToken;
   throw Grantlee::Exception( TagSyntaxError, QString( "Most recent state is invalid." ) );
 }
 
-MutableTemplate Engine::newMutableTemplate( const QString &content, const QString &name, qint64 settingsToken )
+MutableTemplate Engine::newMutableTemplate( const QString &content, const QString &name, const EngineState &_state )
 {
   Q_D( Engine );
-  qint64 currentSettingsToken = d->m_mostRecentState;
-  if ( settingsToken ) {
-    d->m_mostRecentState = settingsToken;
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+
   MutableTemplate t = MutableTemplate( new MutableTemplateImpl() );
   t->setObjectName( name );
-  if ( !settingsToken ) {
-    if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
-    {
-      EngineState statePtr = p->clone();
-      statePtr->id = t->settingsToken();
-      t->d_ptr->m_state = statePtr;
-      d->m_mostRecentState = t->settingsToken();
-      d->m_states.insert( d->m_mostRecentState, statePtr.toWeakRef() );
-    } else {
-      Q_ASSERT(false); // state for this template no longer exists.
-    }
-
-  } else {
-    t->setSettingsToken( settingsToken );
-  }
+  t->d_ptr->m_state = state;
   t->setContent( content );
-  if ( settingsToken ) {
-    d->m_mostRecentState = currentSettingsToken;
-  }
   return t;
 }
 
-Template Engine::newTemplate( const QString &content, const QString &name, qint64 settingsToken )
+Template Engine::newTemplate( const QString &content, const QString &name, const EngineState &_state )
 {
   Q_D( Engine );
-  qint64 currentSettingsToken = d->m_mostRecentState;
-  if ( settingsToken ) {
-    d->m_mostRecentState = settingsToken;
-  }
+  EngineState state = _state ? _state : d->m_currentState;
+
   Template t = Template( new TemplateImpl() );
 
   t->setObjectName( name );
-  if ( !settingsToken ) {
-    if ( EngineState p = d->m_states.value( d->m_mostRecentState ).toStrongRef() )
-    {
-      EngineState statePtr = p->clone();
-      statePtr->id = t->settingsToken();
-      t->d_ptr->m_state = statePtr;
-      d->m_mostRecentState = t->settingsToken();
-      d->m_states.insert( d->m_mostRecentState, statePtr.toWeakRef() );
-    } else {
-      Q_ASSERT(false); // state for this template no longer exists.
-    }
-  } else {
-    t->setSettingsToken( settingsToken );
-  }
+  t->d_ptr->m_state = state;
   t->setContent( content );
-  if ( settingsToken ) {
-    d->m_mostRecentState = currentSettingsToken;
-  }
   return t;
 }
+
+void Engine::resetState()
+{
+  Q_D( Engine );
+  // set the default empty state.
+  d->m_currentState = d->staticEmptyState();
+}
+
+EngineState EnginePrivate::staticEmptyState()
+{
+  static EngineState state = EngineState( new EngineStateImpl() );
+  return state;
+}
+

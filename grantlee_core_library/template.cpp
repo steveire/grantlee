@@ -89,19 +89,6 @@ void TemplateImpl::setNodeList( const NodeList &list )
   d->m_nodeList = list;
 }
 
-
-void TemplateImpl::setSettingsToken( qint64 settingsToken )
-{
-  Q_D( Template );
-  d->m_settingsToken = settingsToken;
-}
-
-qint64 TemplateImpl::settingsToken() const
-{
-  Q_D( const Template );
-  return d->m_settingsToken;
-}
-
 void TemplatePrivate::setError( Error type, const QString &message )
 {
   m_error = type;
@@ -119,4 +106,11 @@ QString TemplateImpl::errorString()
   Q_D( Template );
   return d->m_errorString;
 }
+
+EngineState TemplateImpl::state() const
+{
+  Q_D( const Template );
+  return d->m_state;
+}
+
 

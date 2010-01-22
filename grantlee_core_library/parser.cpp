@@ -88,8 +88,9 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
 
   Engine *engine = Engine::instance();
 
-  qint64 settingsToken = parent->property( "settingsToken" ).toULongLong();
-  foreach( TagLibraryInterface *library, engine->loadDefaultLibraries( settingsToken ) ) {
+  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent );
+
+  foreach( TagLibraryInterface *library, engine->loadDefaultLibraries( ti->state() ) ) {
     d->openLibrary( library );
   }
 }
@@ -113,8 +114,8 @@ void Parser::setTokens( const QList< Token >& tokenList )
 void Parser::loadLib( const QString &name )
 {
   Q_D( Parser );
-  qint64 settingsToken = parent()->property( "settingsToken" ).toULongLong();
-  TagLibraryInterface *library = Engine::instance()->loadLibrary( name, settingsToken );
+  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
+  TagLibraryInterface *library = Engine::instance()->loadLibrary( name, ti->state() );
   if ( !library )
     return;
   d->openLibrary( library );

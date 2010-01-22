@@ -17,57 +17,32 @@
 
 */
 
-#ifndef TEMPLATE_H
-#define TEMPLATE_H
+#ifndef ENGINE_STATE_H
+#define ENGINE_STATE_H
 
-#include <QStringList>
 #include <QSharedPointer>
 
-#include "node.h"
 #include "grantlee_export.h"
-#include "grantlee.h"
-#include "enginestate.h"
 
 namespace Grantlee
 {
-class Context;
-class TemplateImpl;
 
-typedef QWeakPointer<TemplateImpl> TemplateWeakPtr;
-typedef QSharedPointer<TemplateImpl> Template;
+class EngineStateImplPrivate;
 
-class TemplatePrivate;
-
-class GRANTLEE_EXPORT TemplateImpl : public QObject
+class GRANTLEE_EXPORT EngineStateImpl
 {
-  Q_OBJECT
-public:
-  ~TemplateImpl();
-  virtual QString render( Context *c );
-
-  NodeList nodeList() const;
-
-  void setNodeList( const NodeList &list );
-
-  Error error();
-  QString errorString();
-
-  EngineState state() const;
-
-protected:
-  TemplateImpl( QObject *parent = 0 );
-
-  void setContent( const QString &templateString );
-
-private:
-  Q_DECLARE_PRIVATE( Template )
-  TemplatePrivate *d_ptr;
   friend class Engine;
+  friend class EnginePrivate;
+
+  Q_DECLARE_PRIVATE( EngineStateImpl )
+  EngineStateImplPrivate *d_ptr;
+
+  EngineStateImpl();
 };
+
+typedef QWeakPointer<EngineStateImpl> EngineStateWeakPtr;
+typedef QSharedPointer<EngineStateImpl> EngineState;
 
 }
 
-Q_DECLARE_METATYPE(Grantlee::Template)
-
 #endif
-

@@ -31,12 +31,12 @@ class EnginePrivate
 {
   EnginePrivate( Engine *engine );
 
-  TagLibraryInterface* loadScriptableLibrary( const QString &name, qint64 settingsToken );
-  TagLibraryInterface* loadCppLibrary( const QString& name, qint64 settingsToken );
+  static EngineState staticEmptyState();
 
-  mutable qint64 m_mostRecentState;
-  mutable QHash<qint64, EngineStateWeakPtr> m_states;
-  EngineState m_defaultStatePtr;
+  TagLibraryInterface* loadScriptableLibrary( const QString &name, const EngineState &state = EngineState() );
+  TagLibraryInterface* loadCppLibrary( const QString& name, const EngineState &state = EngineState() );
+
+  EngineState m_currentState;
 
   TagLibraryInterface *m_scriptableTagLibrary;
   QHash<QString, TagLibraryInterface*> m_libraries;

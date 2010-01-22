@@ -17,43 +17,22 @@
 
 */
 
-#ifndef TEMPLATE_P_H
-#define TEMPLATE_P_H
+#include "enginestate.h"
 
-#include "template.h"
+#include <QSharedPointer>
 
+#include "engine.h"
+#include "engine_p.h"
 #include "enginestate_p.h"
 
-namespace Grantlee
+using namespace Grantlee;
+
+EngineStateImpl::EngineStateImpl()
+  : d_ptr( new EngineStateImplPrivate() )
 {
-
-class Engine;
-
-class TemplatePrivate
-{
-  TemplatePrivate( TemplateImpl *t )
-      : q_ptr( t ), m_error( NoError ) {
-
-  }
-
-  void parse();
-  NodeList compileString( const QString &str );
-  void setError( Error type, const QString &message );
-
-  qint64 m_settingsToken;
-  Error m_error;
-  QString m_errorString;
-  NodeList m_nodeList;
-
-  EngineState m_state;
-
-  Q_DECLARE_PUBLIC( TemplateImpl )
-  TemplateImpl *q_ptr;
-
-  friend class Grantlee::Engine;
-
-};
-
+  Q_D( EngineStateImpl );
+  d->m_defaultLibraries << "grantlee_defaulttags_library"
+                        << "grantlee_loadertags_library"
+                        << "grantlee_defaultfilters_library"
+                        << "grantlee_scriptabletags_library";
 }
-
-#endif
