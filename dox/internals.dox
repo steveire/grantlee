@@ -19,14 +19,11 @@ A Template is rendered with a Context object. During rendering, each node in the
 
 Plugins can return Filters as well as AbstractNodeFactories. Filters can manipulate Variables in some way before rendering them to the output.
 
-Grantlee::Engine is a Singleton. Internally it uses a State pattern to manage plugins, loaders and other templates available (for extension/ inclusion etc) when rendering a Template. Each time a new Template is created either using the newTemplate method a snapshot of the 'current' state is taken, and a reference to it is stored with a unique token (settingsToken). This snapshot can later be used when the template is rendered. While rendering, the template will need to retrieve filters from the Engine, load other templates in include or extends tags etc.
+Grantlee::Engine is a Singleton. Internally it uses a State pattern to manage plugins, loaders and other templates available (for extension/ inclusion etc) when rendering a Template. A new Template may be created either using the newTemplate or the newMutableTemplate method on Grantlee::Engine with an optional state parameter. While rendering, the template will need to retrieve filters from the Engine, load other templates in include or extends tags. States may also be persisted and used in factories to create multiple Templates with different plugin loaders and template data available.
 
-\image html grantlee_state_simple.png "Simple description of state transitions."
-
-Loading templates to include or entend is accomplished using the load{Mutable,}ByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins. The load{Mutable,}ByName methods take an optional settingsToken which can be used to specify an engine state to use instead of the 'current' engine state. If the settingsToken is omitted, the 'current' engine state is used. Only the load{Mutable,}ByName and new{Mutable,}Template can cause a permanent retrievable state transition in the Engine. All other methods will either use the most recent state, or use the state specified by the settingsToken.
-
-\image html grantlee_state_reuse.png "Reusing an existing state to load secondary templates."
+Loading templates to include or extend is accomplished using the load{Mutable,}ByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins. 
 
 */
 
 }
+

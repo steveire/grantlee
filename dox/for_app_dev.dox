@@ -66,6 +66,62 @@ QVariant objVar = QVariant::fromValue(obj);
 mapping.insert("myobject", objVar); // Can insert QObject*
 @endcode
 
+@section template_factories Template Factories
+
+If your application renders multiple different types of templates with multiple different available templates and plugins, you will need to somehow keep separation of state between different templates. As the Grantlee::Engine is a singleton, there can only be one instance of it, so one engine per template configuration is not an option. This is solved by maintaining a set of states for different templates in a factory:
+
+@code
+class MyAppTemplateFactory
+{
+public:
+  // Consider making these methods virtual or defining an interface for better testability
+  Template newExportTemplate()
+  {
+    if (!m_exportTemplateState)
+      configureExportState();
+
+    return Engine::instance()->newTemplate(m_exportTemplateState);
+  }
+
+  Template newSimpleRenderTemplate()
+  {
+    if (!m_simpleRenderTemplateState)
+      configureSimpleRenderState();
+
+    return Engine::instance()->newTemplate(m_simpleRenderTemplateState);
+  }
+
+private:
+  void configureExportState()
+  {
+    Engine *engine = Engine::instance();
+    engine->resetState();
+
+    engine->setDefaultPlugins(QStringList() << engine->defaultPlugins() << "additional_export_plugins");
+    engine->setPluginDirs(QStringList() << "app/export_available_plugins");
+    engine->setTemplateDirs(QStringList() << "app/export_templates");
+
+    m_exportTemplateState = engine->state();
+  }
+
+  void configureSimpleRenderState()
+  {
+    Engine *engine = Engine::instance();
+    engine->resetState();
+
+    engine->setDefaultPlugins(QStringList() << engine->defaultPlugins() << "additional_simple_rendering_plugins");
+    engine->setPluginDirs(QStringList() << "app/simple_rendering_plugins");
+    engine->setTemplateDirs(QStringList() << "app/simple_rendering_templates");
+
+    m_simpleRenderTemplateState = Engine::instance()->state();
+  }
+
+private:
+  EngineState m_exportTemplateState;
+  EngineState m_simpleRenderTemplateState;
+};
+@endcode
+
 @section extending_grantlee Extending Grantlee
 
 %Grantlee has 4 extension points.
@@ -136,3 +192,4 @@ For most uses of %Grantlee, this is enough to get make an application themable e
 */
 
 }
+
