@@ -12,12 +12,9 @@ class EngineStateImplPrivate
   Q_DECLARE_PUBLIC( EngineStateImpl )
   EngineStateImpl *q_ptr;
 
-
   QList<AbstractTemplateLoader::Ptr> m_loaders;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
-
-  qint64 id;
 
   friend class Engine;
   friend class EnginePrivate;
