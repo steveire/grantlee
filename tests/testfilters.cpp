@@ -790,29 +790,30 @@ void TestFilters::testListFilters_data()
   QTest::newRow( "join03" ) << "{{ a|join:\" &amp; \" }}" << dict << "alpha &amp; beta &amp; me" << NoError;
   QTest::newRow( "join04" ) << "{% autoescape off %}{{ a|join:\" &amp; \" }}{% endautoescape %}" << dict << "alpha &amp; beta & me" << NoError;
 
-  dict.clear();
-  dict.insert( "a", QVariantList() << "alpha" << "beta & me" );
-  dict.insert( "var", " & " );
-
-  QTest::newRow( "join05" ) << "{{ a|join:var }}" << dict << "alpha &amp; beta &amp; me" << NoError;
-
-  dict.clear();
-  dict.insert( "a", QVariantList() << "alpha" << "beta & me" );
-  dict.insert( "var", QVariant::fromValue( Util::markSafe( QString( " & " ) ) ) );
-
-  QTest::newRow( "join06" ) << "{{ a|join:var }}" << dict << "alpha & beta &amp; me" << NoError;
-
-  dict.clear();
-  dict.insert( "a", QVariantList() << "Alpha" << "Beta & me" );
-  dict.insert( "var", " & " );
-
-  QTest::newRow( "join07" ) << "{{ a|join:var|lower }}" << dict << "alpha &amp; beta &amp; me" << NoError;
-
-  dict.clear();
-  dict.insert( "a", QVariantList() << "Alpha" << "Beta & me" );
-  dict.insert( "var", QVariant::fromValue( Util::markSafe( QString( " & " ) ) ) );
-
-  QTest::newRow( "join08" ) << "{{ a|join:var|lower }}" << dict << "alpha & beta &amp; me" << NoError;
+  // arguments to filters are intended to be used unescaped.
+//   dict.clear();
+//   dict.insert( "a", QVariantList() << "alpha" << "beta & me" );
+//   dict.insert( "var", " & " );
+//
+//   QTest::newRow( "join05" ) << "{{ a|join:var }}" << dict << "alpha &amp; beta &amp; me" << NoError;
+//
+//   dict.clear();
+//   dict.insert( "a", QVariantList() << "alpha" << "beta & me" );
+//   dict.insert( "var", QVariant::fromValue( Util::markSafe( QString( " & " ) ) ) );
+//
+//   QTest::newRow( "join06" ) << "{{ a|join:var }}" << dict << "alpha & beta &amp; me" << NoError;
+//
+//   dict.clear();
+//   dict.insert( "a", QVariantList() << "Alpha" << "Beta & me" );
+//   dict.insert( "var", " & " );
+//
+//   QTest::newRow( "join07" ) << "{{ a|join:var|lower }}" << dict << "alpha &amp; beta &amp; me" << NoError;
+//
+//   dict.clear();
+//   dict.insert( "a", QVariantList() << "Alpha" << "Beta & me" );
+//   dict.insert( "var", QVariant::fromValue( Util::markSafe( QString( " & " ) ) ) );
+//
+//   QTest::newRow( "join08" ) << "{{ a|join:var|lower }}" << dict << "alpha & beta &amp; me" << NoError;
 }
 
 void TestFilters::testLogicFilters_data()
