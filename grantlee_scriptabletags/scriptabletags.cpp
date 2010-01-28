@@ -30,6 +30,7 @@
 #include "scriptablefilter.h"
 #include "scriptabletemplate.h"
 #include "scriptablesafestring.h"
+#include "exception.h"
 
 #include "token.h"
 

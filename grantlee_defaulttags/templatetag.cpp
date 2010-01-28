@@ -22,8 +22,8 @@
 #include <QStringList>
 
 #include "parser.h"
-#include "grantlee.h"
 #include "grantlee_tags_p.h"
+#include "exception.h"
 
 
 static QHash<QString, QString> s_map;

@@ -25,7 +25,7 @@
 
 #include "node.h"
 #include "grantlee_export.h"
-#include "grantlee.h"
+#include "global.h"
 #include "enginestate.h"
 
 namespace Grantlee

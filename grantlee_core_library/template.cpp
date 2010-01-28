@@ -23,8 +23,8 @@
 #include "lexer_p.h"
 #include "parser.h"
 #include "context.h"
-#include "grantlee.h"
 #include "engine.h"
+#include "exception.h"
 
 using namespace Grantlee;
 

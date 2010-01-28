@@ -20,6 +20,7 @@
 #include "filtertag.h"
 #include "parser.h"
 #include "filterexpression.h"
+#include "exception.h"
 
 #include "util_p.h"
 

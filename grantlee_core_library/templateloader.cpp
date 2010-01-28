@@ -19,6 +19,7 @@
 
 #include "templateloader.h"
 #include "engine.h"
+#include "exception.h"
 
 #include <QFile>
 #include <QFileInfo>

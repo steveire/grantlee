@@ -27,7 +27,6 @@
 #include "template.h"
 #include "engine.h"
 #include "context.h"
-#include "grantlee.h"
 #include <util_p.h>
 
 

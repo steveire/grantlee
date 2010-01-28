@@ -28,7 +28,6 @@
 #include "template.h"
 #include "engine.h"
 #include "context.h"
-#include "grantlee.h"
 #include "filterexpression.h"
 #include "parser.h"
 

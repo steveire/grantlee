@@ -24,6 +24,7 @@
 #include "context.h"
 #include "scriptablecontext.h"
 #include "scriptableparser.h"
+#include "exception.h"
 #include "parser.h"
 
 

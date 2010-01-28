@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,24 +17,32 @@
 
 */
 
-#ifndef GRANTLEE_H
-#define GRANTLEE_H
+#ifndef GRANTLEE_GLOBAL_H
+#define GRANTLEE_GLOBAL_H
 
-#include "grantlee/context.h"
-#include "grantlee/engine.h"
-#include "grantlee/enginestate.h"
-#include "grantlee/exception.h"
-#include "grantlee/filter.h"
-#include "grantlee/filterexpression.h"
-#include "grantlee/global.h"
-#include "grantlee/grantlee_export.h"
-#include "grantlee/mutabletemplate.h"
-#include "grantlee/node.h"
-#include "grantlee/parser.h"
-#include "grantlee/safestring.h"
-#include "grantlee/template.h"
-#include "grantlee/templateloader.h"
-#include "grantlee/token.h"
-#include "grantlee/variable.h"
+namespace Grantlee
+{
+
+enum LoopDirection {
+  ForwardLoop,
+  ReversedLoop
+};
+
+enum Error {
+  NoError,
+  EmptyVariableError,
+  EmptyBlockTagError,
+  InvalidBlockTagError,
+  UnclosedBlockTagError,
+  UnknownFilterError,
+  TagSyntaxError,
+//   VariableSyntaxError,
+
+  VariableNotInContext,
+  ObjectReturnTypeInvalid,
+  CompileFunctionError
+};
+
+}
 
 #endif

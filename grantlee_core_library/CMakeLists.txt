@@ -50,9 +50,10 @@ install(FILES
   context.h
   engine.h
   enginestate.h
+  exception.h
   filter.h
   filterexpression.h
-  grantlee.h
+  global.h
   grantlee_export.h
   mutabletemplate.h
   node.h
@@ -60,9 +61,16 @@ install(FILES
   safestring.h
   template.h
   templateloader.h
+  token.h
   variable.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )
+
+install(FILES
+  grantlee.h
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+)
+
 
 install(FILES
     interfaces/taglibraryinterface.h

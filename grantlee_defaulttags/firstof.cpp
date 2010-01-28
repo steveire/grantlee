@@ -22,7 +22,7 @@
 #include <QStringList>
 #include "parser.h"
 
-#include "grantlee.h"
+#include "exception.h"
 
 #include "util_p.h"
 

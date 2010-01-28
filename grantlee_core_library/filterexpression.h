@@ -21,7 +21,6 @@
 #define FILTEREXPRESSION_H
 
 #include "variable.h"
-#include "grantlee.h"
 
 #include "grantlee_export.h"
 #include "filter.h"

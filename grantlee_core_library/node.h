@@ -26,8 +26,6 @@
 #include "filterexpression.h"
 #include "safestring.h"
 
-#include "grantlee.h"
-
 #include "grantlee_export.h"
 
 namespace Grantlee

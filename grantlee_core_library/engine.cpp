@@ -30,6 +30,7 @@
 #include "template_p.h"
 #include "templateloader.h"
 #include "grantlee_version.h"
+#include "exception.h"
 
 static const char * __scriptableLibName = "grantlee_scriptabletags_library";
 

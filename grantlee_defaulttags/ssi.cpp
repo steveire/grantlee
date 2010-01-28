@@ -27,6 +27,7 @@
 #include "template.h"
 #include "engine.h"
 
+#include "exception.h"
 
 
 SsiNodeFactory::SsiNodeFactory()

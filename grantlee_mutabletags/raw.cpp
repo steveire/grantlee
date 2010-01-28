@@ -20,7 +20,6 @@
 #include "raw.h"
 #include <QStringList>
 #include "parser.h"
-#include "grantlee.h"
 
 RawNodeFactory::RawNodeFactory()
 {

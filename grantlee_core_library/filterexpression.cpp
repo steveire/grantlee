@@ -20,9 +20,9 @@
 #include "filterexpression.h"
 
 #include "parser.h"
-#include "grantlee.h"
 #include "filter.h"
 #include "util_p.h"
+#include "exception.h"
 
 namespace Grantlee
 {

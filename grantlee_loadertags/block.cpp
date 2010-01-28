@@ -23,7 +23,7 @@
 
 #include "parser.h"
 #include "template.h"
-#include "grantlee.h"
+#include "exception.h"
 #include <util_p.h>
 
 

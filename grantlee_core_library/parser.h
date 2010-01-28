@@ -24,7 +24,6 @@
 
 #include "token.h"
 #include "node.h"
-#include "grantlee.h"
 #include "filter.h"
 
 namespace Grantlee

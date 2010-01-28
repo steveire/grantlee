@@ -21,8 +21,6 @@
 
 #include <QStringList>
 #include "parser.h"
-#include "grantlee.h"
-
 
 DebugNodeFactory::DebugNodeFactory()
 {

@@ -27,7 +27,6 @@
 #include "mutabletemplate.h"
 #include "engine.h"
 #include "context.h"
-#include "grantlee.h"
 
 typedef QHash<QString, QVariant> Dict;
 

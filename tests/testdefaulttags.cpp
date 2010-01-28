@@ -29,8 +29,6 @@
 #include "context.h"
 #include "util_p.h"
 
-#include "grantlee.h"
-
 typedef QHash<QString, QVariant> Dict;
 
 Q_DECLARE_METATYPE( Dict )

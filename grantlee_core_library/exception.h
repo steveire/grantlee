@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2009 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,24 +17,39 @@
 
 */
 
-#ifndef GRANTLEE_H
-#define GRANTLEE_H
+#ifndef GRANTLEE_EXCEPTION_H
+#define GRANTLEE_EXCEPTION_H
 
-#include "grantlee/context.h"
-#include "grantlee/engine.h"
-#include "grantlee/enginestate.h"
-#include "grantlee/exception.h"
-#include "grantlee/filter.h"
-#include "grantlee/filterexpression.h"
-#include "grantlee/global.h"
-#include "grantlee/grantlee_export.h"
-#include "grantlee/mutabletemplate.h"
-#include "grantlee/node.h"
-#include "grantlee/parser.h"
-#include "grantlee/safestring.h"
-#include "grantlee/template.h"
-#include "grantlee/templateloader.h"
-#include "grantlee/token.h"
-#include "grantlee/variable.h"
+#include <QString>
+
+#include <exception>
+
+#include "global.h"
+
+namespace Grantlee
+{
+
+class Exception
+{
+public:
+  Exception( Error errorCode, const QString &what )
+      : m_errorCode( errorCode ), m_what( what ) {}
+
+  virtual ~Exception() throw() {}
+
+  virtual const QString what() const throw() {
+    return m_what;
+  }
+
+  Error errorCode() const {
+    return m_errorCode;
+  }
+
+private:
+  Error m_errorCode;
+  QString m_what;
+};
+
+}
 
 #endif

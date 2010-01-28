@@ -21,7 +21,7 @@
 
 #include <QStringList>
 #include "parser.h"
-#include "grantlee.h"
+#include "exception.h"
 
 
 WithNodeFactory::WithNodeFactory()

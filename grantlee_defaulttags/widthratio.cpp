@@ -22,6 +22,7 @@
 #include <QStringList>
 #include "parser.h"
 
+#include "exception.h"
 
 
 WidthRatioNodeFactory::WidthRatioNodeFactory()

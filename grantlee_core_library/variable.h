@@ -22,8 +22,6 @@
 
 #include <QVariant>
 
-#include "grantlee.h"
-
 namespace Grantlee
 {
 class Context;

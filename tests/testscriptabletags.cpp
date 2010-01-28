@@ -27,7 +27,6 @@
 #include "template.h"
 #include "engine.h"
 #include "context.h"
-#include "grantlee.h"
 #include "filterexpression.h"
 
 typedef QHash<QString, QVariant> Dict;

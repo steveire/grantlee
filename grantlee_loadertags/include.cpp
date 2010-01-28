@@ -25,6 +25,7 @@
 #include "parser.h"
 #include "template.h"
 #include "engine.h"
+#include "exception.h"
 
 #include <QDebug>
 #include <util_p.h>

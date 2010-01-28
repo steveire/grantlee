@@ -115,7 +115,7 @@ include(${QT_USE_FILE})
 
 # Include dir
 find_path(Grantlee_INCLUDE_DIR
-  NAMES grantlee/grantlee.h
+  NAMES grantlee/template.h
   PATHS ${CMAKE_INCLUDE_PATH}
     ${GRANTLEE_INCLUDE_PATH}
 )
@@ -136,5 +136,5 @@ libfind_process(Grantlee)
 if (Grantlee_FOUND)
   string(REGEX REPLACE "/[^/]*$" "/grantlee/" GRANTLEE_PLUGIN_PATH ${Grantlee_LIBRARY} )
 endif(Grantlee_FOUND)
-       
+
 

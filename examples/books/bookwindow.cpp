@@ -47,9 +47,7 @@
 
 #include <QtSql>
 
-#include <grantlee/context.h>
-#include <grantlee/engine.h>
-#include <grantlee/template.h>
+#include <grantlee.h>
 
 BookWindow::BookWindow()
 {

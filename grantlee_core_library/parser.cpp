@@ -22,10 +22,10 @@
 #include <QFile>
 
 #include "interfaces/taglibraryinterface.h"
-#include "grantlee.h"
 #include "template.h"
 #include "engine.h"
 #include "filter.h"
+#include "exception.h"
 
 #include "grantlee_version.h"
 

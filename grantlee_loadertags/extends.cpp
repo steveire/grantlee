@@ -26,7 +26,7 @@
 #include "parser.h"
 #include "template.h"
 #include "engine.h"
-#include "grantlee.h"
+#include "exception.h"
 
 #include <QListIterator>
 #include <util_p.h>
