@@ -91,8 +91,7 @@ ChatMainWindow::ChatMainWindow()
     m_engine->addTemplateLoader(loader);
     m_engine->setPluginDirs(QStringList() << GRANTLEE_PLUGIN_PATH );
 
-    m_engine->setDefaultLibraries( QStringList() << m_engine->defaultLibraries()
-                                                 << "grantlee_mutabletags_library" );
+    m_engine->addDefaultLibrary( "grantlee_mutabletags_library" );
 
     changeTheme("plain");
 

@@ -81,26 +81,16 @@ Engine::~Engine()
   m_instance = 0;
 }
 
-QList<AbstractTemplateLoader::Ptr> Engine::templateLoaders( const EngineState &_state )
+QList<AbstractTemplateLoader::Ptr> Engine::templateLoaders()
 {
   Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-
-  return state->d_ptr->m_loaders;
+  return d->m_currentState->d_ptr->m_loaders;
 }
 
-void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader, const EngineState &_state )
+void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader )
 {
   Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  state->d_ptr->m_loaders << loader;
-}
-
-void Engine::removeTemplateLoader( int index, const EngineState &_state )
-{
-  Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  state->d_ptr->m_loaders.removeAt( index );
+  d->m_currentState->d_ptr->m_loaders << loader;
 }
 
 QString Engine::mediaUri( const QString &fileName, const EngineState &_state ) const
@@ -119,46 +109,28 @@ QString Engine::mediaUri( const QString &fileName, const EngineState &_state ) c
   return uri;
 }
 
-void Engine::setPluginDirs( const QStringList &dirs, const EngineState &_state )
+void Engine::setPluginDirs( const QStringList &dirs )
 {
   Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  state->d_ptr->m_pluginDirs = dirs;
+  d->m_currentState->d_ptr->m_pluginDirs = dirs;
 }
 
-QStringList Engine::pluginDirs( const EngineState &_state )
-{
-  Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  return state->d_ptr->m_pluginDirs;
-}
-
-QStringList Engine::defaultLibraries( const EngineState &_state ) const
+QStringList Engine::defaultLibraries() const
 {
   Q_D( const Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  return state->d_ptr->m_defaultLibraries;
+  return d->m_currentState->d_ptr->m_defaultLibraries;
 }
 
-void Engine::setDefaultLibraries( const QStringList &list, const EngineState &_state )
+void Engine::addDefaultLibrary( const QString &libName )
 {
   Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  state->d_ptr->m_defaultLibraries = list;
+  d->m_currentState->d_ptr->m_defaultLibraries << libName;
 }
 
-void Engine::addDefaultLibrary( const QString &libName, const EngineState &_state )
+void Engine::removeDefaultLibrary( const QString &libName )
 {
   Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  state->d_ptr->m_defaultLibraries << libName;
-}
-
-void Engine::removeDefaultLibrary( const QString &libName, const EngineState &_state )
-{
-  Q_D( Engine );
-  EngineState state = _state ? _state : d->m_currentState;
-  state->d_ptr->m_defaultLibraries.removeAll( libName );
+  d->m_currentState->d_ptr->m_defaultLibraries.removeAll( libName );
 }
 
 QList<TagLibraryInterface*> Engine::loadDefaultLibraries( const EngineState &_state )
@@ -306,9 +278,9 @@ MutableTemplate Engine::loadMutableByName( const QString &name, const EngineStat
   throw Grantlee::Exception( TagSyntaxError, QString( "Most recent state is invalid." ) );
 }
 
-MutableTemplate Engine::newMutableTemplate( const QString &content, const QString &name, const EngineState &_state )
+MutableTemplate Engine::newMutableTemplate( const QString &content, const QString &name, const EngineState &_state ) const
 {
-  Q_D( Engine );
+  Q_D( const Engine );
   EngineState state = _state ? _state : d->m_currentState;
 
   MutableTemplate t = MutableTemplate( new MutableTemplateImpl() );
@@ -318,9 +290,9 @@ MutableTemplate Engine::newMutableTemplate( const QString &content, const QStrin
   return t;
 }
 
-Template Engine::newTemplate( const QString &content, const QString &name, const EngineState &_state )
+Template Engine::newTemplate( const QString &content, const QString &name, const EngineState &_state ) const
 {
-  Q_D( Engine );
+  Q_D( const Engine );
   EngineState state = _state ? _state : d->m_currentState;
 
   Template t = Template( new TemplateImpl() );

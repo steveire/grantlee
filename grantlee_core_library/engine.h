@@ -37,12 +37,10 @@ public:
 
   ~Engine();
 
-  QList<AbstractTemplateLoader::Ptr> templateLoaders( const EngineState &state = EngineState() );
-  void addTemplateLoader( AbstractTemplateLoader::Ptr loader, const EngineState &state = EngineState() );
-  void removeTemplateLoader( int index, const EngineState &state = EngineState() );
+  QList<AbstractTemplateLoader::Ptr> templateLoaders();
+  void addTemplateLoader( AbstractTemplateLoader::Ptr loader );
 
-  void setPluginDirs( const QStringList &dirs, const EngineState &state = EngineState() );
-  QStringList pluginDirs( const EngineState &state = EngineState() );
+  void setPluginDirs( const QStringList &dirs );
 
   QString mediaUri( const QString &fileName, const EngineState &state = EngineState() ) const;
 
@@ -56,7 +54,7 @@ public:
   /**
   Causes a state transition if settingsToken is 0.
   */
-  Template newTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() );
+  Template newTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() ) const;
 
   /**
   Causes a state transition if settingsToken is 0.
@@ -66,12 +64,11 @@ public:
   /**
   Causes a state transition if settingsToken is 0.
   */
-  MutableTemplate newMutableTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() );
+  MutableTemplate newMutableTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() ) const;
 
-  QStringList defaultLibraries( const EngineState &state = EngineState() ) const;
-  void setDefaultLibraries( const QStringList &list, const EngineState &state = EngineState() );
-  void addDefaultLibrary( const QString &libName, const EngineState &state = EngineState() );
-  void removeDefaultLibrary( const QString &libName, const EngineState &state = EngineState() );
+  QStringList defaultLibraries() const;
+  void addDefaultLibrary( const QString &libName );
+  void removeDefaultLibrary( const QString &libName );
 
   QList<TagLibraryInterface*> loadDefaultLibraries( const EngineState &state = EngineState() );
 

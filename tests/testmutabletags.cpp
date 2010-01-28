@@ -65,8 +65,7 @@ void TestMutableTagsSyntax::initTestCase()
   m_engine->setPluginDirs( QStringList() << appDirPath + "/grantlee_defaulttags/"
                            << appDirPath + "/grantlee_mutabletags/" );
 
-  m_engine->setDefaultLibraries( QStringList() << m_engine->defaultLibraries()
-                                 << "grantlee_mutabletags_library" );
+  m_engine->addDefaultLibrary( "grantlee_mutabletags_library" );
 }
 
 void TestMutableTagsSyntax::cleanupTestCase()
