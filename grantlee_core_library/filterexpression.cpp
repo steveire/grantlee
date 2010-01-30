@@ -46,9 +46,8 @@ using namespace Grantlee;
 
 static const QChar FILTER_SEPARATOR = '|';
 static const QChar FILTER_ARGUMENT_SEPARATOR = ':';
-static const char * ALLOWED_VARIABLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\\.";
 
-static const char * varChars = "\\w\\.";
+static const char * varChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.";
 static const char * numChars = "[-+\\.]?\\d[\\d\\.e]*";
 static const QString filterSep( QRegExp::escape( FILTER_SEPARATOR ) );
 static const QString argSep( QRegExp::escape( FILTER_ARGUMENT_SEPARATOR ) );
