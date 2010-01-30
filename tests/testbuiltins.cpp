@@ -123,6 +123,12 @@ private slots:
 
   void testMultipleStates();
 
+  void testTemplatePathSafety_data();
+  void testTemplatePathSafety();
+
+  void testMediaPathSafety_data();
+  void testMediaPathSafety();
+
   void cleanupTestCase();
 
 private:
@@ -606,9 +612,82 @@ void TestBuiltinSyntax::testMultipleStates()
 
 }
 
+void TestBuiltinSyntax::testTemplatePathSafety_data()
+{
+  QTest::addColumn<QString>("inputPath");
+  QTest::addColumn<QString>("output");
+
+  QTest::newRow("template-path-safety01") << "visible_file" << "visible_file";
+  QTest::newRow("template-path-safety02") << "../invisible_file" << "";
+}
+
+void TestBuiltinSyntax::testTemplatePathSafety()
+{
+  QFETCH(QString, inputPath);
+  QFETCH(QString, output);
+
+  Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
+
+  loader->setTemplateDirs( QStringList() << "." );
+
+  QFile f( inputPath );
+  bool opened = f.open( QFile::WriteOnly | QFile::Text );
+  QVERIFY( opened );
+  f.write( inputPath.toUtf8() );
+  f.close();
+
+  Template t = loader->loadByName( inputPath );
+  Context c;
+  if ( output.isEmpty())
+    QVERIFY( !t );
+  else
+    QCOMPARE( t->render( &c ), inputPath );
+
+  MutableTemplate mt = loader->loadMutableByName( inputPath );
+  if ( output.isEmpty())
+    QVERIFY( !mt );
+  else
+    QCOMPARE( mt->render( &c ), inputPath );
+
+  delete loader;
+  f.remove();
+}
+
+void TestBuiltinSyntax::testMediaPathSafety_data()
+{
+  QTest::addColumn<QString>("inputPath");
+  QTest::addColumn<QString>("output");
+
+  QTest::newRow("media-path-safety01") << "visible_file" << "./visible_file";
+  QTest::newRow("media-path-safety02") << "../invisible_file" << "";
+}
+
+void TestBuiltinSyntax::testMediaPathSafety()
+{
+  QFETCH(QString, inputPath);
+  QFETCH(QString, output);
+
+  Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
+
+  loader->setTemplateDirs( QStringList() << "." );
+
+  QFile f( inputPath );
+  bool opened = f.open( QFile::WriteOnly | QFile::Text );
+  QVERIFY( opened );
+  f.write( inputPath.toUtf8() );
+  f.close();
+
+  QString uri = loader->getMediaUri( inputPath );
+  if ( output.isEmpty() )
+    QVERIFY( uri.isEmpty() );
+  else
+    QCOMPARE( QFileInfo( uri ).absoluteFilePath(), QFileInfo( output ).absoluteFilePath() );
+
+  delete loader;
+  f.remove();
+}
 
 QTEST_MAIN( TestBuiltinSyntax )
 #include "testbuiltins.moc"
 
 #endif
-

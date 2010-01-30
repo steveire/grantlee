@@ -23,6 +23,7 @@
 
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 
 using namespace Grantlee;
 
@@ -99,6 +100,10 @@ MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &file
       break;
 
     file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+
+    QFileInfo fi( file );
+    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
+      return MutableTemplate();
     ++i;
   }
 
@@ -123,6 +128,9 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName ) const
       break;
 
     file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+    QFileInfo fi( file );
+    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
+      return Template();
     ++i;
   }
 
@@ -145,6 +153,10 @@ QString FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
       break;
 
     file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+
+    QFileInfo fi( file );
+    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
+      return QString();
 
     if ( file.exists() ) {
       QFileInfo fi( file );
