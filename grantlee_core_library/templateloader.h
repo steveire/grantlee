@@ -20,10 +20,10 @@
 #ifndef GRANTLEE_TEMPLATELOADER_H
 #define GRANTLEE_TEMPLATELOADER_H
 
-#include <QSharedPointer>
+#include <QtCore/QSharedPointer>
 
-#include "template.h"
 #include "mutabletemplate.h"
+#include "template.h"
 
 namespace Grantlee
 {

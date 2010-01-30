@@ -20,7 +20,7 @@
 #ifndef GRANTLEE_ENGINE_STATE_H
 #define GRANTLEE_ENGINE_STATE_H
 
-#include <QSharedPointer>
+#include <QtCore/QSharedPointer>
 
 #include "grantlee_export.h"
 

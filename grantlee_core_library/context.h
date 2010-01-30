@@ -20,7 +20,7 @@
 #ifndef GRANTLEE_CONTEXT_H
 #define GRANTLEE_CONTEXT_H
 
-#include <QVariantHash>
+#include <QtCore/QVariantHash>
 
 #include "grantlee_export.h"
 

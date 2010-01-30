@@ -20,7 +20,7 @@
 #ifndef GRANTLEE_VARIABLE_H
 #define GRANTLEE_VARIABLE_H
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 namespace Grantlee
 {

@@ -20,8 +20,8 @@
 #ifndef GRANTLEE_STRING_H
 #define GRANTLEE_STRING_H
 
-#include <QString>
-#include <QVariant>
+#include <QtCore/QString>
+#include <QtCore/QVariant>
 
 namespace Grantlee
 {

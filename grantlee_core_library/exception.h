@@ -20,7 +20,7 @@
 #ifndef GRANTLEE_EXCEPTION_H
 #define GRANTLEE_EXCEPTION_H
 
-#include <QString>
+#include <QtCore/QString>
 
 #include <exception>
 

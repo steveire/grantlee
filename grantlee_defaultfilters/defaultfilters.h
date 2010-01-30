@@ -31,8 +31,6 @@
 #include "misc.h"
 #include "strings.h"
 
-#include "grantlee_export.h"
-
 namespace Grantlee
 {
 class Parser;

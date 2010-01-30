@@ -20,10 +20,6 @@
 #ifndef GRANTLEE_TAGS_P_H
 #define GRANTLEE_TAGS_P_H
 
-#include <exception>
-
-#include <QDebug>
-
 namespace Grantlee
 {
 

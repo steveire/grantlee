@@ -20,8 +20,8 @@
 #ifndef GRANTLEE_LEXER_H
 #define GRANTLEE_LEXER_H
 
-#include <QList>
-#include <QString>
+#include <QtCore/QList>
+#include <QtCore/QString>
 
 #include "token.h"
 

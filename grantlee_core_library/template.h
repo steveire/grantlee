@@ -20,13 +20,14 @@
 #ifndef GRANTLEE_TEMPLATE_H
 #define GRANTLEE_TEMPLATE_H
 
-#include <QStringList>
-#include <QSharedPointer>
+#include <QtCore/QStringList>
+#include <QtCore/QSharedPointer>
 
-#include "node.h"
-#include "grantlee_export.h"
-#include "global.h"
 #include "enginestate.h"
+#include "node.h"
+
+#include "global.h"
+#include "grantlee_export.h"
 
 namespace Grantlee
 {

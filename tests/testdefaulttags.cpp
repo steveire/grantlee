@@ -21,7 +21,6 @@
 #define DEFAULTTAGSTEST_H
 
 #include <QtTest>
-#include <QtCore>
 #include <QObject>
 
 #include "template.h"

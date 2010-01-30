@@ -20,10 +20,10 @@
 #ifndef GRANTLEE_UTIL_H
 #define GRANTLEE_UTIL_H
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
-#include "safestring.h"
 #include "context.h"
+#include "safestring.h"
 
 class Util
 {

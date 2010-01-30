@@ -20,7 +20,7 @@
 #ifndef GRANTLEE_TOKEN_H
 #define GRANTLEE_TOKEN_H
 
-#include <QString>
+#include <QtCore/QString>
 
 namespace Grantlee
 {

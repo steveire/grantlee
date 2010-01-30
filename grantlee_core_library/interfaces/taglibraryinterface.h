@@ -20,7 +20,7 @@
 #ifndef TAGLIBRARYINTERFACE_H
 #define TAGLIBRARYINTERFACE_H
 
-#include <QHash>
+#include <QtCore/QHash>
 
 namespace Grantlee
 {

@@ -20,10 +20,10 @@
 #ifndef GRANTLEE_FILTEREXPRESSION_H
 #define GRANTLEE_FILTEREXPRESSION_H
 
+#include "filter.h"
 #include "variable.h"
 
 #include "grantlee_export.h"
-#include "filter.h"
 
 namespace Grantlee
 {

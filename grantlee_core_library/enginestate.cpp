@@ -18,12 +18,10 @@
 */
 
 #include "enginestate.h"
-
-#include <QSharedPointer>
+#include "enginestate_p.h"
 
 #include "engine.h"
 #include "engine_p.h"
-#include "enginestate_p.h"
 
 using namespace Grantlee;
 

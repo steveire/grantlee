@@ -22,9 +22,9 @@
 
 // krazy:excludeall=dpointer
 
-#include "context.h"
+#include <QtCore/QStringList>
 
-#include <QStringList>
+#include "context.h"
 #include "filterexpression.h"
 #include "safestring.h"
 

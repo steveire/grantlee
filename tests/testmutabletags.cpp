@@ -21,7 +21,6 @@
 #define MUTABLETAGSTEST_H
 
 #include <QtTest>
-#include <QtCore>
 #include <QObject>
 
 #include "mutabletemplate.h"
