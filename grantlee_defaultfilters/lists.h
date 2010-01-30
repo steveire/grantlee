@@ -26,7 +26,7 @@
 
 using namespace Grantlee;
 
-class GRANTLEE_EXPORT JoinFilter : public Filter
+class JoinFilter : public Filter
 {
 public:
   JoinFilter();
@@ -42,7 +42,7 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT LengthFilter : public Filter
+class LengthFilter : public Filter
 {
 public:
   LengthFilter();
@@ -54,8 +54,7 @@ public:
   }
 };
 
-
-class GRANTLEE_EXPORT LengthIsFilter : public Filter
+class LengthIsFilter : public Filter
 {
 public:
   LengthIsFilter();
@@ -67,7 +66,7 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT FirstFilter : public Filter
+class FirstFilter : public Filter
 {
 public:
   FirstFilter();
@@ -75,7 +74,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT LastFilter : public Filter
+class LastFilter : public Filter
 {
 public:
   LastFilter();
@@ -83,7 +82,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT RandomFilter : public Filter
+class RandomFilter : public Filter
 {
 public:
   RandomFilter();
@@ -95,8 +94,7 @@ public:
   }
 };
 
-
-class GRANTLEE_EXPORT SliceFilter : public Filter
+class SliceFilter : public Filter
 {
 public:
   SliceFilter();
@@ -108,7 +106,7 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT MakeListFilter : public Filter
+class MakeListFilter : public Filter
 {
 public:
 
@@ -119,7 +117,7 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT UnorderedListFilter : public Filter
+class UnorderedListFilter : public Filter
 {
 public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
@@ -137,6 +135,4 @@ protected:
 
 };
 
-
 #endif
-

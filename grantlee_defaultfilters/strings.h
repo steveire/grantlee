@@ -26,7 +26,7 @@
 
 using namespace Grantlee;
 
-class GRANTLEE_EXPORT AddSlashesFilter : public Filter
+class AddSlashesFilter : public Filter
 {
 public:
   AddSlashesFilter();
@@ -38,7 +38,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT CapFirstFilter : public Filter
+class CapFirstFilter : public Filter
 {
 public:
   CapFirstFilter();
@@ -50,7 +50,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT EscapeJsFilter : public Filter
+class EscapeJsFilter : public Filter
 {
 public:
   EscapeJsFilter();
@@ -61,7 +61,7 @@ private:
   QList<QPair<QString, QString> > m_jsEscapes;
 };
 
-class GRANTLEE_EXPORT FixAmpersandsFilter : public Filter
+class FixAmpersandsFilter : public Filter
 {
 public:
   FixAmpersandsFilter();
@@ -74,7 +74,7 @@ public:
 };
 
 
-class GRANTLEE_EXPORT CutFilter : public Filter
+class CutFilter : public Filter
 {
 public:
   CutFilter();
@@ -82,7 +82,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT SafeFilter : public Filter
+class SafeFilter : public Filter
 {
 public:
   SafeFilter();
@@ -94,7 +94,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT LineNumbersFilter : public Filter
+class LineNumbersFilter : public Filter
 {
 public:
   LineNumbersFilter();
@@ -146,7 +146,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT TruncateWordsFilter : public Filter
+class TruncateWordsFilter : public Filter
 {
 public:
   TruncateWordsFilter();
@@ -158,7 +158,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT UpperFilter : public Filter
+class UpperFilter : public Filter
 {
 public:
   UpperFilter();
@@ -171,7 +171,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT WordCountFilter : public Filter
+class WordCountFilter : public Filter
 {
 public:
   WordCountFilter();
@@ -183,7 +183,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT LJustFilter : public Filter
+class LJustFilter : public Filter
 {
 public:
   LJustFilter();
@@ -195,7 +195,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT RJustFilter : public Filter
+class RJustFilter : public Filter
 {
 public:
   RJustFilter();
@@ -207,7 +207,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT CenterFilter : public Filter
+class CenterFilter : public Filter
 {
 public:
   CenterFilter();
@@ -219,7 +219,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT EscapeFilter : public Filter
+class EscapeFilter : public Filter
 {
 public:
   EscapeFilter();
@@ -231,7 +231,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT ForceEscapeFilter : public Filter
+class ForceEscapeFilter : public Filter
 {
 public:
   ForceEscapeFilter();
@@ -243,7 +243,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT RemoveTagsFilter : public Filter
+class RemoveTagsFilter : public Filter
 {
 public:
   RemoveTagsFilter();
@@ -251,7 +251,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT StripTagsFilter : public Filter
+class StripTagsFilter : public Filter
 {
 public:
   StripTagsFilter();
@@ -259,7 +259,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT WordWrapFilter : public Filter
+class WordWrapFilter : public Filter
 {
 public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
@@ -269,7 +269,7 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT FloatFormatFilter : public Filter
+class FloatFormatFilter : public Filter
 {
 public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
@@ -279,7 +279,7 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT SafeSequenceFilter : public Filter
+class SafeSequenceFilter : public Filter
 {
 public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
@@ -289,21 +289,7 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT LineBreaksFilter : public Filter
-{
-public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
-
-  bool isSafe() const {
-    return true;
-  }
-
-  bool needsAutoescape() const {
-    return true;
-  }
-};
-
-class GRANTLEE_EXPORT LineBreaksBrFilter : public Filter
+class LineBreaksFilter : public Filter
 {
 public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
@@ -317,7 +303,21 @@ public:
   }
 };
 
-class GRANTLEE_EXPORT SlugifyFilter : public Filter
+class LineBreaksBrFilter : public Filter
+{
+public:
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+
+  bool isSafe() const {
+    return true;
+  }
+
+  bool needsAutoescape() const {
+    return true;
+  }
+};
+
+class SlugifyFilter : public Filter
 {
 public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
@@ -328,4 +328,3 @@ public:
 };
 
 #endif
-

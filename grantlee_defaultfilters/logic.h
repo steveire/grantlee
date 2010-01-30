@@ -24,7 +24,7 @@
 
 using namespace Grantlee;
 
-class GRANTLEE_EXPORT DefaultFilter : public Filter
+class DefaultFilter : public Filter
 {
 public:
   DefaultFilter();
@@ -32,7 +32,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT DefaultIfNoneFilter : public Filter
+class DefaultIfNoneFilter : public Filter
 {
 public:
   DefaultIfNoneFilter();
@@ -40,7 +40,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT DivisibleByFilter : public Filter
+class DivisibleByFilter : public Filter
 {
 public:
   DivisibleByFilter();
@@ -48,7 +48,7 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
-class GRANTLEE_EXPORT YesNoFilter : public Filter
+class YesNoFilter : public Filter
 {
 public:
   YesNoFilter();

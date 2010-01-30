@@ -22,14 +22,12 @@
 
 #include "interfaces/taglibraryinterface.h"
 
-#include "grantlee_export.h"
-
 #include "raw.h"
 #include "repeater.h"
 
 using namespace Grantlee;
 
-class GRANTLEE_EXPORT MutableTagsLibrary : public QObject, public TagLibraryInterface
+class MutableTagsLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
   Q_INTERFACES( Grantlee::TagLibraryInterface )
@@ -48,4 +46,3 @@ public:
 };
 
 #endif
-
