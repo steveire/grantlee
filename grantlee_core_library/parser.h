@@ -29,10 +29,6 @@
 namespace Grantlee
 {
 class TemplateImpl;
-}
-
-namespace Grantlee
-{
 
 class ParserPrivate;
 

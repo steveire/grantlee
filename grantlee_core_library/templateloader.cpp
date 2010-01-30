@@ -24,6 +24,8 @@
 #include <QFile>
 #include <QFileInfo>
 
+using namespace Grantlee;
+
 AbstractTemplateLoader::~AbstractTemplateLoader()
 {
 

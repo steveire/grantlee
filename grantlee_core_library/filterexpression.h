@@ -29,16 +29,9 @@ namespace Grantlee
 {
 class Parser;
 class Filter;
-}
-
-using namespace Grantlee;
-
-typedef QPair<Filter::Ptr, Variable > ArgFilter;
-
 class Token;
 
-namespace Grantlee
-{
+typedef QPair<Filter::Ptr, Variable > ArgFilter;
 
 class FilterExpressionPrivate;
 

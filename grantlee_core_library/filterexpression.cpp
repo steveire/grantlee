@@ -42,6 +42,8 @@ class FilterExpressionPrivate
 
 }
 
+using namespace Grantlee;
+
 static const char * FILTER_SEPARATOR = "|";
 static const char * FILTER_ARGUMENT_SEPARATOR = ":";
 static const char * ALLOWED_VARIABLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\\.";

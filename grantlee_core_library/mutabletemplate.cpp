@@ -19,6 +19,7 @@
 
 #include "mutabletemplate.h"
 
+using namespace Grantlee;
 
 MutableTemplateImpl::MutableTemplateImpl( QObject *parent )
     : TemplateImpl( parent )

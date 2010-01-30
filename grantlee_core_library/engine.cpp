@@ -32,6 +32,8 @@
 #include "grantlee_version.h"
 #include "exception.h"
 
+using namespace Grantlee;
+
 static const char * __scriptableLibName = "grantlee_scriptabletags_library";
 
 class ScriptableLibraryContainer : public TagLibraryInterface

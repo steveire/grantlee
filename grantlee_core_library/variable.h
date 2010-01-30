@@ -25,10 +25,6 @@
 namespace Grantlee
 {
 class Context;
-}
-
-namespace Grantlee
-{
 
 class VariablePrivate;
 

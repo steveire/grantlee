@@ -40,7 +40,7 @@ class ScriptableFilterExpression : public QObject
 public:
   ScriptableFilterExpression( QObject *parent = 0 );
 
-  void init( const QString &content, Parser *parser );
+  void init( const QString &content, Grantlee::Parser *parser );
 
 public slots:
   QVariant resolve( ScriptableContext *c );
@@ -52,7 +52,7 @@ public slots:
   // list? QScriptValueList? Make this a ScriptClass?
 
 private:
-  FilterExpression m_filterExpression;
+  Grantlee::FilterExpression m_filterExpression;
 };
 
 #endif

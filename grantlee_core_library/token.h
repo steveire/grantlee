@@ -22,6 +22,9 @@
 
 #include <QString>
 
+namespace Grantlee
+{
+
 enum TokenType {
   TextToken,
   VariableToken,
@@ -34,6 +37,7 @@ struct Token {
   QString content;
 };
 
+}
 
 #endif
 

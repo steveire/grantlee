@@ -25,6 +25,7 @@
 #include "scriptablecontext.h"
 #include "util_p.h"
 
+using namespace Grantlee;
 
 Q_SCRIPT_DECLARE_QMETAOBJECT( ScriptableFilterExpression, QObject* )
 

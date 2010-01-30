@@ -26,12 +26,8 @@ namespace Grantlee
 {
 class AbstractNodeFactory;
 class Filter;
-}
 
-// class QString;
 
-namespace Grantlee
-{
 
 class TagLibraryInterface
 {
