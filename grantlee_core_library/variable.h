@@ -61,7 +61,7 @@ public:
 
 private:
   Q_DECLARE_PRIVATE( Variable )
-  VariablePrivate *d_ptr;
+  VariablePrivate * const d_ptr;
 };
 
 }

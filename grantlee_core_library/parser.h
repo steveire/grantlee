@@ -128,7 +128,7 @@ protected:
 
 private:
   Q_DECLARE_PRIVATE( Parser )
-  ParserPrivate *d_ptr;
+  ParserPrivate * const d_ptr;
 
 };
 

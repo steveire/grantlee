@@ -105,7 +105,7 @@ public:
 
 private:
   Q_DECLARE_PRIVATE( FilterExpression )
-  FilterExpressionPrivate *d_ptr;
+  FilterExpressionPrivate * const d_ptr;
 };
 
 }

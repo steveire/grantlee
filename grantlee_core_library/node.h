@@ -96,7 +96,7 @@ protected:
 
 private:
   Q_DECLARE_PRIVATE( Node )
-  NodePrivate *d_ptr;
+  NodePrivate * const d_ptr;
 };
 
 /**
@@ -236,7 +236,7 @@ protected:
 
 private:
   Q_DECLARE_PRIVATE( AbstractNodeFactory )
-  AbstractNodeFactoryPrivate *d_ptr;
+  AbstractNodeFactoryPrivate * const d_ptr;
 };
 
 /**

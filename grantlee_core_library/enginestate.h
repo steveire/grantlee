@@ -44,7 +44,7 @@ private:
   friend class EnginePrivate;
 
   Q_DECLARE_PRIVATE( EngineStateImpl )
-  EngineStateImplPrivate *d_ptr;
+  EngineStateImplPrivate * const d_ptr;
 
   EngineStateImpl();
 };

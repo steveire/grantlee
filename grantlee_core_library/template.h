@@ -92,7 +92,7 @@ protected:
 
 private:
   Q_DECLARE_PRIVATE( Template )
-  TemplatePrivate *d_ptr;
+  TemplatePrivate * const d_ptr;
   friend class Engine;
 };
 

@@ -173,7 +173,7 @@ public:
 
 private:
   Q_DECLARE_PRIVATE( Context )
-  ContextPrivate *d_ptr;
+  ContextPrivate * const d_ptr;
 };
 
 }
