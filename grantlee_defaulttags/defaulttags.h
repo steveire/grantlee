@@ -39,7 +39,7 @@
 #include "range.h"
 #include "regroup.h"
 #include "spaceless.h"
-#include "ssi.h"
+// #include "ssi.h"
 #include "templatetag.h"
 #include "widthratio.h"
 #include "with.h"
@@ -83,7 +83,8 @@ public:
     nodeFactories.insert( "range", new RangeNodeFactory() );
     nodeFactories.insert( "regroup", new RegroupNodeFactory() );
     nodeFactories.insert( "spaceless", new SpacelessNodeFactory() );
-    nodeFactories.insert( "ssi", new SsiNodeFactory() );
+    // Disabled for security reasons.
+//     nodeFactories.insert( "ssi", new SsiNodeFactory() );
     nodeFactories.insert( "templatetag", new TemplateTagNodeFactory() );
     nodeFactories.insert( "widthratio", new WidthRatioNodeFactory() );
     nodeFactories.insert( "with", new WithNodeFactory() );
