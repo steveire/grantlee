@@ -17,8 +17,8 @@
 
 */
 
-#ifndef VARIABLE_H
-#define VARIABLE_H
+#ifndef GRANTLEE_VARIABLE_H
+#define GRANTLEE_VARIABLE_H
 
 #include <QVariant>
 

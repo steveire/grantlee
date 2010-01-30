@@ -17,8 +17,8 @@
 
 */
 
-#ifndef FILTEREXPRESSION_H
-#define FILTEREXPRESSION_H
+#ifndef GRANTLEE_FILTEREXPRESSION_H
+#define GRANTLEE_FILTEREXPRESSION_H
 
 #include "variable.h"
 

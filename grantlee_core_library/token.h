@@ -17,8 +17,8 @@
 
 */
 
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef GRANTLEE_TOKEN_H
+#define GRANTLEE_TOKEN_H
 
 #include <QString>
 

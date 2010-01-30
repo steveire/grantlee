@@ -17,8 +17,8 @@
 
 */
 
-#ifndef TEMPLATELOADER_H
-#define TEMPLATELOADER_H
+#ifndef GRANTLEE_TEMPLATELOADER_H
+#define GRANTLEE_TEMPLATELOADER_H
 
 #include <QSharedPointer>
 

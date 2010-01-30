@@ -17,8 +17,8 @@
 
 */
 
-#ifndef FILTER_H
-#define FILTER_H
+#ifndef GRANTLEE_FILTER_H
+#define GRANTLEE_FILTER_H
 
 #include <QStringList>
 #include <QVariant>

@@ -17,8 +17,8 @@
 
 */
 
-#ifndef ENGINE_STATE_P_H
-#define ENGINE_STATE_P_H
+#ifndef GRANTLEE_ENGINE_STATE_P_H
+#define GRANTLEE_ENGINE_STATE_P_H
 
 #include "enginestate.h"
 #include "templateloader.h"

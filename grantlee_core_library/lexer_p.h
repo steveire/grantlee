@@ -17,8 +17,8 @@
 
 */
 
-#ifndef LEXER_H
-#define LEXER_H
+#ifndef GRANTLEE_LEXER_H
+#define GRANTLEE_LEXER_H
 
 #include <QList>
 #include <QString>

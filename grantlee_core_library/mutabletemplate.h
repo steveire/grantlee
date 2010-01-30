@@ -17,8 +17,8 @@
 
 */
 
-#ifndef MUTABLE_TEMPLATE_H
-#define MUTABLE_TEMPLATE_H
+#ifndef GRANTLEE_MUTABLE_TEMPLATE_H
+#define GRANTLEE_MUTABLE_TEMPLATE_H
 
 #include "template.h"
 

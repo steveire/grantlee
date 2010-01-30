@@ -18,8 +18,8 @@
 
 */
 
-#ifndef ENGINE_P_H
-#define ENGINE_P_H
+#ifndef GRANTLEE_ENGINE_P_H
+#define GRANTLEE_ENGINE_P_H
 
 #include "engine.h"
 #include "enginestate_p.h"

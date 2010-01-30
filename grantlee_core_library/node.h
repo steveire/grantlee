@@ -17,8 +17,8 @@
 
 */
 
-#ifndef NODE_H
-#define NODE_H
+#ifndef GRANTLEE_NODE_H
+#define GRANTLEE_NODE_H
 
 #include "context.h"
 

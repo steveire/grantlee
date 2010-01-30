@@ -17,8 +17,8 @@
 
 */
 
-#ifndef TEMPLATE_P_H
-#define TEMPLATE_P_H
+#ifndef GRANTLEE_TEMPLATE_P_H
+#define GRANTLEE_TEMPLATE_P_H
 
 #include "template.h"
 

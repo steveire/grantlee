@@ -17,8 +17,8 @@
 
 */
 
-#ifndef ENGINE_STATE_H
-#define ENGINE_STATE_H
+#ifndef GRANTLEE_ENGINE_STATE_H
+#define GRANTLEE_ENGINE_STATE_H
 
 #include <QSharedPointer>
 

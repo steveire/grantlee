@@ -17,8 +17,8 @@
 
 */
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef GRANTLEE_ENGINE_H
+#define GRANTLEE_ENGINE_H
 
 #include "template.h"
 #include "mutabletemplate.h"

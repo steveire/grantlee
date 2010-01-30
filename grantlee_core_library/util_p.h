@@ -17,8 +17,8 @@
 
 */
 
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef GRANTLEE_UTIL_H
+#define GRANTLEE_UTIL_H
 
 #include <QVariant>
 

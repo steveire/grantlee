@@ -17,8 +17,8 @@
 
 */
 
-#ifndef TEMPLATE_H
-#define TEMPLATE_H
+#ifndef GRANTLEE_TEMPLATE_H
+#define GRANTLEE_TEMPLATE_H
 
 #include <QStringList>
 #include <QSharedPointer>

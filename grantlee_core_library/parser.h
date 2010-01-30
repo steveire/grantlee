@@ -17,8 +17,8 @@
 
 */
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef GRANTLEE_PARSER_H
+#define GRANTLEE_PARSER_H
 
 #include <QStringList>
 

@@ -17,8 +17,8 @@
 
 */
 
-#ifndef CONTEXT_H
-#define CONTEXT_H
+#ifndef GRANTLEE_CONTEXT_H
+#define GRANTLEE_CONTEXT_H
 
 #include <QVariantHash>
 
