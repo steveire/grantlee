@@ -40,7 +40,7 @@ class IfChangedNode : public Node
 {
   Q_OBJECT
 public:
-  IfChangedNode( QList<FilterExpression> feList, QObject *parent = 0 );
+  explicit IfChangedNode( QList<FilterExpression> feList, QObject *parent = 0 );
 
   void setTrueList( NodeList trueList );
   void setFalseList( NodeList falseList );

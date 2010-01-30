@@ -38,7 +38,7 @@ class ScriptableParser : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableParser( Parser *p, QObject* parent = 0 );
+  explicit ScriptableParser( Parser *p, QObject* parent = 0 );
 
   Parser* parser() {
     return m_p;

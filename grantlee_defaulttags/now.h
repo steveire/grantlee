@@ -40,7 +40,7 @@ class NowNode : public Node
 {
   Q_OBJECT
 public:
-  NowNode( const QString &formatString, QObject *parent = 0 );
+  explicit NowNode( const QString &formatString, QObject *parent = 0 );
 
   QString render( Context *c );
 

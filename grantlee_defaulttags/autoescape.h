@@ -46,7 +46,7 @@ public:
     Off
   };
 
-  AutoescapeNode( int state, QObject *parent = 0 );
+  explicit AutoescapeNode( int state, QObject *parent = 0 );
 
   void setList( NodeList list );
 

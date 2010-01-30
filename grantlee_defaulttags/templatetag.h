@@ -48,7 +48,7 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  TemplateTagNode( const QString &tagName, QObject *parent = 0 );
+  explicit TemplateTagNode( const QString &tagName, QObject *parent = 0 );
 
   QString render( Context *c );
 

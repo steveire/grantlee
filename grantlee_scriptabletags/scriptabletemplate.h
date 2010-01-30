@@ -45,7 +45,7 @@ class ScriptableTemplate : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableTemplate( Template t, QObject* parent = 0 );
+  explicit ScriptableTemplate( Template t, QObject* parent = 0 );
 
 public slots:
   QString render( ScriptableContext *c );

@@ -37,7 +37,7 @@ class MediaFinderNode : public Node
 {
   Q_OBJECT
 public:
-  MediaFinderNode( QList<FilterExpression> mediaExpressionList, QObject *parent = 0 );
+  explicit MediaFinderNode( QList<FilterExpression> mediaExpressionList, QObject *parent = 0 );
 
   QString render( Context *c );
 

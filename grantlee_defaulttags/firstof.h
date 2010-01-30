@@ -37,7 +37,7 @@ class FirstOfNode : public Node
 {
   Q_OBJECT
 public:
-  FirstOfNode( QList<FilterExpression> list, QObject *parent = 0 );
+  explicit FirstOfNode( QList<FilterExpression> list, QObject *parent = 0 );
 
   QString render( Context *c );
 

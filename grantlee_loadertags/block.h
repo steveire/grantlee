@@ -35,7 +35,7 @@ class BlockNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  BlockNodeFactory( QObject *parent = 0 );
+  explicit BlockNodeFactory( QObject *parent = 0 );
 
   Node* getNode( const QString &tagContent, Parser *p ) const;
 

@@ -46,7 +46,7 @@ class IncludeNode : public Node
 {
   Q_OBJECT
 public:
-  IncludeNode( const FilterExpression &fe, QObject *parent = 0 );
+  explicit IncludeNode( const FilterExpression &fe, QObject *parent = 0 );
   QString render( Context *c );
 
 private:
