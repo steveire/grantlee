@@ -53,7 +53,7 @@ MediaFinderNode::MediaFinderNode( QList<FilterExpression> mediaExpressionList, Q
 QString MediaFinderNode::render( Context* c )
 {
   Grantlee::Engine *engine = Grantlee::Engine::instance();
-  foreach( FilterExpression fe, m_mediaExpressionList ) {
+  foreach( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
       TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
 

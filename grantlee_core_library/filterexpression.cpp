@@ -189,7 +189,7 @@ QVariant FilterExpression::resolve( Context *c ) const
   Q_D( const FilterExpression );
   QVariant var = d->m_variable.resolve( c );
 
-  foreach( ArgFilter argfilter, d->m_filters ) {
+  foreach( const ArgFilter &argfilter, d->m_filters ) {
     Filter::Ptr filter = argfilter.first;
     Variable argVar = argfilter.second;
     QVariant arg = argVar.resolve( c );

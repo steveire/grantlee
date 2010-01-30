@@ -52,7 +52,7 @@ FirstOfNode::FirstOfNode( QList<FilterExpression> list, QObject *parent )
 
 QString FirstOfNode::render( Context *c )
 {
-  foreach( FilterExpression fe, m_variableList ) {
+  foreach( const FilterExpression &fe, m_variableList ) {
     if ( fe.isTrue( c ) ) {
       return Util::getSafeString( fe.resolve( c ) );
     }

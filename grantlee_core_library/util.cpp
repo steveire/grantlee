@@ -82,8 +82,11 @@ QVariantList Util::variantToList( const QVariant &var )
   if ( var.type() == QVariant::Hash ) {
     QVariantHash varHash = var.toHash();
     QVariantList list;
-    foreach( QString key, varHash.keys() )
-      list << key;
+
+    QVariantHash::const_iterator it = varHash.constBegin();
+    for ( ; it != varHash.constEnd(); ++it )
+      list << it.key();
+
     return list;
   }
 
