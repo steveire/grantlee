@@ -357,18 +357,15 @@ QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argume
   QStringList partList = _input.split( ' ', QString::SkipEmptyParts );
   QString output = partList.takeFirst();
   int pos = output.size() - output.lastIndexOf( '\n' ) - 1;
-  foreach( const QString &part, partList )
-  {
+  foreach( const QString &part, partList ) {
     QStringList lines;
-    if ( part.contains( '\n' ) )
-    {
+    if ( part.contains( '\n' ) ) {
       lines = part.split( '\n' );
     } else {
       lines.append( part );
     }
     pos += lines.first().size() + 1;
-    if ( pos > width )
-    {
+    if ( pos > width ) {
       output.append( '\n' );
       pos += lines.last().size();
     } else {
@@ -386,7 +383,7 @@ QVariant FloatFormatFilter::doFilter( const QVariant& input, const QVariant& arg
   Q_UNUSED( autoescape )
   double _input = Util::getSafeString( input ).toDouble();
   int precision;
-  if (argument.isValid())
+  if ( argument.isValid() )
     precision = Util::getSafeString( argument ).toInt();
   else
     precision = 1;
@@ -414,8 +411,7 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
   QRegExp re( "\n{2,}" );
   QStringList output;
 
-  foreach( const QString &bit, inputString.split( re ) )
-  {
+  foreach( const QString &bit, inputString.split( re ) ) {
     SafeString _bit = SafeString( bit, inputString.isSafe() );
     if ( autoescape )
       _bit = Util::conditionalEscape( _bit );
@@ -429,14 +425,13 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
 {
   Q_UNUSED( argument )
   SafeString inputString = Util::getSafeString( input );
-  if ( autoescape && Util::isSafeString( input ) )
-  {
+  if ( autoescape && Util::isSafeString( input ) ) {
     inputString = Util::conditionalEscape( inputString );
   }
   return Util::markSafe( inputString.replace( '\n', "<br />" ) );
 }
 
-QVariant SlugifyFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )

@@ -579,7 +579,7 @@ void TestBuiltinSyntax::testMultipleStates()
 
   Template t1 = engine->newTemplate( "{% include \"template1\" %}", "\"template1\"" );
 
-  InMemoryTemplateLoader::Ptr loader2 = InMemoryTemplateLoader::Ptr(new InMemoryTemplateLoader() );
+  InMemoryTemplateLoader::Ptr loader2 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
   loader2->setTemplate( "template2", "Template 2" );
 
@@ -613,17 +613,17 @@ void TestBuiltinSyntax::testMultipleStates()
 
 void TestBuiltinSyntax::testTemplatePathSafety_data()
 {
-  QTest::addColumn<QString>("inputPath");
-  QTest::addColumn<QString>("output");
+  QTest::addColumn<QString>( "inputPath" );
+  QTest::addColumn<QString>( "output" );
 
-  QTest::newRow("template-path-safety01") << "visible_file" << "visible_file";
-  QTest::newRow("template-path-safety02") << "../invisible_file" << "";
+  QTest::newRow( "template-path-safety01" ) << "visible_file" << "visible_file";
+  QTest::newRow( "template-path-safety02" ) << "../invisible_file" << "";
 }
 
 void TestBuiltinSyntax::testTemplatePathSafety()
 {
-  QFETCH(QString, inputPath);
-  QFETCH(QString, output);
+  QFETCH( QString, inputPath );
+  QFETCH( QString, output );
 
   Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
 
@@ -637,13 +637,13 @@ void TestBuiltinSyntax::testTemplatePathSafety()
 
   Template t = loader->loadByName( inputPath );
   Context c;
-  if ( output.isEmpty())
+  if ( output.isEmpty() )
     QVERIFY( !t );
   else
     QCOMPARE( t->render( &c ), inputPath );
 
   MutableTemplate mt = loader->loadMutableByName( inputPath );
-  if ( output.isEmpty())
+  if ( output.isEmpty() )
     QVERIFY( !mt );
   else
     QCOMPARE( mt->render( &c ), inputPath );
@@ -654,17 +654,17 @@ void TestBuiltinSyntax::testTemplatePathSafety()
 
 void TestBuiltinSyntax::testMediaPathSafety_data()
 {
-  QTest::addColumn<QString>("inputPath");
-  QTest::addColumn<QString>("output");
+  QTest::addColumn<QString>( "inputPath" );
+  QTest::addColumn<QString>( "output" );
 
-  QTest::newRow("media-path-safety01") << "visible_file" << "./visible_file";
-  QTest::newRow("media-path-safety02") << "../invisible_file" << "";
+  QTest::newRow( "media-path-safety01" ) << "visible_file" << "./visible_file";
+  QTest::newRow( "media-path-safety02" ) << "../invisible_file" << "";
 }
 
 void TestBuiltinSyntax::testMediaPathSafety()
 {
-  QFETCH(QString, inputPath);
-  QFETCH(QString, output);
+  QFETCH( QString, inputPath );
+  QFETCH( QString, output );
 
   Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
 

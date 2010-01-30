@@ -37,8 +37,7 @@ QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, 
       s = Util::conditionalEscape( s );
 
     ret.append( s );
-    if ( i.hasNext() )
-    {
+    if ( i.hasNext() ) {
       SafeString argString = Util::getSafeString( argument );
       ret.append( argString );
     }
@@ -54,10 +53,10 @@ QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  if (input.type() == QVariant::List)
+  if ( input.type() == QVariant::List )
     return input.toList().size();
 
-  if (input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String)
+  if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
     return Util::getSafeString( input ).size();
 
   return QVariant();
@@ -70,20 +69,20 @@ LengthIsFilter::LengthIsFilter()
 QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  if (!input.isValid() || (input.type() == QVariant::Int) || (input.type() == QVariant::DateTime))
+  if ( !input.isValid() || ( input.type() == QVariant::Int ) || ( input.type() == QVariant::DateTime ) )
     return QVariant();
 
   int size = 0;
-  if (input.type() == QVariant::List)
+  if ( input.type() == QVariant::List )
     size = input.toList().size();
 
-  if (input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String)
+  if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
     size = Util::getSafeString( input ).size();
 
   bool ok;
-  int argInt = Util::getSafeString( argument ).toInt(&ok);
+  int argInt = Util::getSafeString( argument ).toInt( &ok );
 
-  if (!ok)
+  if ( !ok )
     return QVariant();
 
   return size == argInt;
@@ -172,8 +171,7 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
   if ( input.type() == QVariant::Int )
     input.convert( QVariant::String );
 
-  if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
-  {
+  if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String ) {
     QVariantList list;
     foreach ( const QVariant &var, Util::getSafeString( input ).split( QString(), QString::SkipEmptyParts ) )
       list << var;
@@ -197,28 +195,23 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
 
   int i = 0;
   int listSize = list.size();
-  while (i < listSize)
-  {
+  while ( i < listSize ) {
     QVariant titleObject = list.at( i );
     SafeString title = Util::getSafeString( titleObject );;
     QString sublist;
     QVariant sublistItem;
 
-    if ( titleObject.type() == QVariant::List )
-    {
+    if ( titleObject.type() == QVariant::List ) {
       sublistItem = titleObject;
       title.clear();
-    } else if ( i < listSize - 1 )
-    {
+    } else if ( i < listSize - 1 ) {
       QVariant nextItem = list.at( i + 1 );
-      if ( nextItem.type() == QVariant::List )
-      {
+      if ( nextItem.type() == QVariant::List ) {
         sublistItem = nextItem;
       }
       ++i;
     }
-    if ( sublistItem.isValid() )
-    {
+    if ( sublistItem.isValid() ) {
       sublist = processList( sublistItem.toList(), tabs + 1, autoescape );
       sublist = QString( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent ).arg( sublist ).arg( indent ).arg( indent );
     }

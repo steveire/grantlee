@@ -108,7 +108,7 @@ MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &file
   }
 
   if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist.").arg( fileName ) );
+    throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist." ).arg( fileName ) );
   }
 
   QString content;
@@ -135,7 +135,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName ) const
   }
 
   if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist.").arg( fileName ) );
+    throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist." ).arg( fileName ) );
   }
 
   QString content;
@@ -184,7 +184,7 @@ Template InMemoryTemplateLoader::loadByName( const QString& name ) const
     Template t = Engine::instance()->newTemplate( m_namedTemplates.value( name ), name );
     return t;
   }
-  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist.").arg( name ) );
+  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }
 
 MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name ) const
@@ -193,7 +193,7 @@ MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name )
     MutableTemplate t = Engine::instance()->newMutableTemplate( m_namedTemplates.value( name ), name );
     return t;
   }
-  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist.").arg( name ) );
+  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }
 
 QString InMemoryTemplateLoader::getMediaUri( const QString& fileName ) const

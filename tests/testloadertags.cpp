@@ -289,7 +289,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Inheritance from a template with a space in its name should work.
   QTest::newRow( "inheritance29" ) << "{% extends 'inheritance 28' %}" << dict << "!" << NoError;
 
-  dict.insert("list", QVariantList() << "One" << "Two" << "Three");
+  dict.insert( "list", QVariantList() << "One" << "Two" << "Three" );
 
   // Tags that affect rendering have no afftect outside of a block in an extension template
   // (and therefore "i" is undefined here)

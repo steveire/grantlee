@@ -27,7 +27,7 @@ SafeString::SafeString()
 
 }
 
-SafeString::SafeString( const QString &str, bool safe)
+SafeString::SafeString( const QString &str, bool safe )
     : QString( str ), m_safety( safe ), m_needsescape( false )
 {
 
@@ -65,14 +65,14 @@ bool SafeString::isSafe() const
 
 SafeString SafeString::operator+( const QString &str )
 {
-  return SafeString( static_cast<QString>(*this) + str, IsNotSafe );
+  return SafeString( static_cast<QString>( *this ) + str, IsNotSafe );
 }
 
 SafeString SafeString::operator+( const SafeString &str )
 {
   if ( !str.isSafe() )
-    return SafeString( static_cast<QString>(*this) + static_cast<QString>( str ), IsNotSafe );
-  return SafeString( static_cast<QString>(*this) + static_cast<QString>( str ), m_safety );
+    return SafeString( static_cast<QString>( *this ) + static_cast<QString>( str ), IsNotSafe );
+  return SafeString( static_cast<QString>( *this ) + static_cast<QString>( str ), m_safety );
 }
 
 SafeString &SafeString::operator+=( const QString & str )

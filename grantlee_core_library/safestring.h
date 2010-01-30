@@ -127,8 +127,7 @@ public:
   */
   SafeString &operator=( const QString &s );
 
-  operator QVariant()
-  {
+  operator QVariant() {
     return QVariant::fromValue( *this );
   }
 

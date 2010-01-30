@@ -140,8 +140,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
       throw Grantlee::Exception( TagSyntaxError,
           QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
     }
-  } catch (...)
-  {
+  } catch ( ... ) {
     delete d_ptr;
     throw;
   }
@@ -194,8 +193,7 @@ QVariant FilterExpression::resolve( Context *c ) const
     Variable argVar = argfilter.second;
     QVariant arg = argVar.resolve( c );
 
-    if (arg.isValid())
-    {
+    if ( arg.isValid() ) {
       Grantlee::SafeString argString;
       if ( arg.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
         argString = arg.value<Grantlee::SafeString>();
@@ -205,8 +203,7 @@ QVariant FilterExpression::resolve( Context *c ) const
       if ( argVar.isConstant() ) {
         argString = Util::markSafe( argString );
       }
-      if (!argString.isEmpty())
-      {
+      if ( !argString.isEmpty() ) {
         arg = argString;
       }
     }
@@ -217,8 +214,7 @@ QVariant FilterExpression::resolve( Context *c ) const
     } else {
       var = filter->doFilter( var, arg );
     }
-    if ( var.userType() == qMetaTypeId<Grantlee::SafeString>() || var.type() == QVariant::String )
-    {
+    if ( var.userType() == qMetaTypeId<Grantlee::SafeString>() || var.type() == QVariant::String ) {
       if ( filter->isSafe() && varString.isSafe() ) {
         var = Util::markSafe( Util::getSafeString( var ) );
       } else if ( varString.needsEscape() ) {

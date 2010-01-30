@@ -126,8 +126,7 @@ public:
     return true;
   }
 
-  bool needsAutoescape() const
-  {
+  bool needsAutoescape() const {
     return true;
   }
 protected:

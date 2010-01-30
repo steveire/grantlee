@@ -36,10 +36,10 @@ public:
 class RangeNode : public Node
 {
   Q_OBJECT
-  public:
-    RangeNode( const QString &name, FilterExpression StopExpression, QObject *parent = 0 );
-    RangeNode( const QString &name, FilterExpression startExpression, FilterExpression stopExpression = FilterExpression(), QObject *parent = 0 );
-    RangeNode( const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression = FilterExpression(), FilterExpression stepExpression = FilterExpression(), QObject *parent = 0 );
+public:
+  RangeNode( const QString &name, FilterExpression StopExpression, QObject *parent = 0 );
+  RangeNode( const QString &name, FilterExpression startExpression, FilterExpression stopExpression = FilterExpression(), QObject *parent = 0 );
+  RangeNode( const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression = FilterExpression(), FilterExpression stepExpression = FilterExpression(), QObject *parent = 0 );
 
 
 

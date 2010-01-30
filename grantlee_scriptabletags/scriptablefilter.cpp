@@ -64,8 +64,7 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
     }
   }
 
-  if (argument.userType() == qMetaTypeId<SafeString>())
-  {
+  if ( argument.userType() == qMetaTypeId<SafeString>() ) {
     ScriptableSafeString *ssObj = new ScriptableSafeString( m_scriptEngine );
     ssObj->setContent( Util::getSafeString( argument ) );
     args << m_scriptEngine->newQObject( ssObj );
@@ -84,8 +83,7 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
       return QVariant();
     SafeString returnedString = returnedStringObject->wrappedString();
     return returnedString;
-  } else if ( returnValue.isVariant() )
-  {
+  } else if ( returnValue.isVariant() ) {
     return qscriptvalue_cast<QVariant>( returnValue );
   }
   return QVariant();

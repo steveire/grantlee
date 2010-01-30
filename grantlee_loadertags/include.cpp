@@ -71,8 +71,7 @@ QString IncludeNode::render( Context *c )
       return QString();
 
     return t->render( c );
-  } catch (Grantlee::Exception e)
-  {
+  } catch ( Grantlee::Exception e ) {
     return QString();
   }
 
@@ -96,8 +95,7 @@ QString ConstantIncludeNode::render( Context *c )
       return QString();
 
     return t->render( c );
-  } catch (Grantlee::Exception e)
-  {
+  } catch ( Grantlee::Exception e ) {
     return QString();
   }
 }

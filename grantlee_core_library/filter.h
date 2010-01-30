@@ -55,9 +55,9 @@ public:
    @returns The input string filtered.
   */
   virtual QVariant doFilter( const QVariant &input,
-                               const QVariant &argument = QVariant(),
-                               bool autoescape = false
-                             ) const = 0;
+                             const QVariant &argument = QVariant(),
+                             bool autoescape = false
+                           ) const = 0;
 
   /**
     Reimplement to return whether this filter is safe.

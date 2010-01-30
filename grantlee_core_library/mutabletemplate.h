@@ -50,6 +50,6 @@ public:
 
 }
 
-Q_DECLARE_METATYPE(Grantlee::MutableTemplate)
+Q_DECLARE_METATYPE( Grantlee::MutableTemplate )
 
 #endif

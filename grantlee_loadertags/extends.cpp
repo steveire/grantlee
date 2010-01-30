@@ -97,14 +97,12 @@ Template ExtendsNode::getParent( Context *c )
   QString parentName;
   if ( m_name.isEmpty() ) {
     QVariant parentVar = m_filterExpression.resolve( c );
-    if ( parentVar.userType() == qMetaTypeId<Grantlee::Template>() )
-    {
+    if ( parentVar.userType() == qMetaTypeId<Grantlee::Template>() ) {
       Template parentTemplate = parentVar.value<Template>();
       return parentTemplate;
     }
 
-    if ( parentVar.userType() == qMetaTypeId<Grantlee::MutableTemplate>() )
-    {
+    if ( parentVar.userType() == qMetaTypeId<Grantlee::MutableTemplate>() ) {
       Template parentTemplate = parentVar.value<Template>();
       return parentTemplate;
     }

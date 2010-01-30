@@ -190,19 +190,16 @@ Grantlee::SafeString Util::toString( const QVariantList &list )
   QString output( '[' );
   QVariantList::const_iterator it = list.constBegin();
   const QVariantList::const_iterator end = list.constEnd();
-  while ( it != end )
-  {
+  while ( it != end ) {
     QVariant item = *it;
-    if ( isSafeString( item ) )
-    {
-      output.append("u\'");
+    if ( isSafeString( item ) ) {
+      output.append( "u\'" );
       output.append( getSafeString( item ) );
-      output.append('\'');
-      if ( ( it + 1 ) != end )
+      output.append( '\'' );
+      if (( it + 1 ) != end )
         output.append( ", " );
     }
-    if ( item.type() == QVariant::List )
-    {
+    if ( item.type() == QVariant::List ) {
       output.append( toString( item.toList() ) );
       output.append( ", " );
     }
