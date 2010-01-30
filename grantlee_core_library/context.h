@@ -103,6 +103,11 @@ class ContextPrivate;
 class GRANTLEE_EXPORT Context
 {
 public:
+
+  /**
+    Creates an empty context
+  */
+  Context();
   /**
     Sets every key in the hash as a property name with the variant as the value.
   */

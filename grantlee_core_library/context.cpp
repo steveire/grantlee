@@ -42,6 +42,12 @@ class ContextPrivate
 
 }
 
+Context::Context()
+    : d_ptr( new ContextPrivate( this, QVariantHash() ) )
+{
+}
+
+
 Context::Context( const QVariantHash &variantHash )
     : d_ptr( new ContextPrivate( this, variantHash ) )
 {
