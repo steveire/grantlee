@@ -17,8 +17,8 @@
 
 */
 
-#ifndef GRANTLEE_UTIL_H
-#define GRANTLEE_UTIL_H
+#ifndef GRANTLEE_UTIL_P_H
+#define GRANTLEE_UTIL_P_H
 
 #include <QtCore/QVariant>
 

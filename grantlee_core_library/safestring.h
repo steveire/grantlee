@@ -17,8 +17,8 @@
 
 */
 
-#ifndef GRANTLEE_STRING_H
-#define GRANTLEE_STRING_H
+#ifndef GRANTLEE_SAFESTRING_H
+#define GRANTLEE_SAFESTRING_H
 
 #include <QtCore/QString>
 #include <QtCore/QVariant>

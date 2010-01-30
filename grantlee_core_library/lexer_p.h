@@ -17,8 +17,8 @@
 
 */
 
-#ifndef GRANTLEE_LEXER_H
-#define GRANTLEE_LEXER_H
+#ifndef GRANTLEE_LEXER_P_H
+#define GRANTLEE_LEXER_P_H
 
 #include <QtCore/QList>
 #include <QtCore/QString>
