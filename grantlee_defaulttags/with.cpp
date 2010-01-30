@@ -33,7 +33,7 @@ Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
-  if ( expr.size() != 4 or expr.at( 2 ) != "as" ) {
+  if ( expr.size() != 4 || expr.at( 2 ) != "as" ) {
     throw Grantlee::Exception( TagSyntaxError, QString( "%1 expected format is 'value as name'" ).arg( expr.at( 0 ) ) );
   }
 
