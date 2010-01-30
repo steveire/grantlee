@@ -39,6 +39,8 @@
 **
 ****************************************************************************/
 
+// krazy:excludeall=qclasses
+
 #include "bookwindow.h"
 #include "bookwrapper.h"
 #include "bookdelegate.h"
@@ -177,5 +179,3 @@ void BookWindow::renderBooks()
     file.close();
 
 }
-
-

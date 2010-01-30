@@ -17,6 +17,8 @@
 
 */
 
+// krazy:excludeall=dpointer
+
 #ifndef GRANTLEE_FILTER_H
 #define GRANTLEE_FILTER_H
 
@@ -61,17 +63,16 @@ public:
   /**
     Reimplement to return whether this filter is safe.
   */
-  virtual bool isSafe() const {
+  virtual bool isSafe() const { // krazy:exclude:inline
     return false;
   }
 
   /**
     Reimplement to return whether this filter requires an autoescape argument to its doFilter method.
   */
-  virtual bool needsAutoescape() const {
+  virtual bool needsAutoescape() const { // krazy:exclude:inline
     return false;
   }
-
 };
 
 }

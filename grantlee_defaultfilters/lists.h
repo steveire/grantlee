@@ -20,6 +20,8 @@
 #ifndef LISTFILTERS_H
 #define LISTFILTERS_H
 
+//krazy:excludeall=includes
+
 #include "filter.h"
 
 using namespace Grantlee;

@@ -53,7 +53,7 @@ public:
   /**
     Constructs a SafeString with the content @p str whose safety is given by @p safety.
   */
-  /* implicit */ SafeString( const QString &str, Safety safety = IsNotSafe );
+  /* implicit */ SafeString( const QString &str, Safety safety = IsNotSafe ); // krazy:exclude=explicit
 
   /**
     Destructor

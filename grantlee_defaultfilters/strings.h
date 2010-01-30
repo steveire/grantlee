@@ -20,6 +20,8 @@
 #ifndef STRINGFILTERS_H
 #define STRINGFILTERS_H
 
+//krazy:excludeall=includes
+
 #include "filter.h"
 
 using namespace Grantlee;

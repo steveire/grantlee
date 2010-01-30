@@ -20,6 +20,8 @@
 #ifndef INTEGERFILTERS_H
 #define INTEGERFILTERS_H
 
+//krazy:excludeall=includes
+
 #include "filter.h"
 
 using namespace Grantlee;

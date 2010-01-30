@@ -39,6 +39,8 @@
 **
 ****************************************************************************/
 
+// krazy:excludeall=qclasses
+
 #include "chat.h"
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>

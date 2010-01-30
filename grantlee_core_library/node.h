@@ -20,6 +20,8 @@
 #ifndef GRANTLEE_NODE_H
 #define GRANTLEE_NODE_H
 
+// krazy:excludeall=dpointer
+
 #include "context.h"
 
 #include <QStringList>
@@ -66,7 +68,7 @@ public:
     Reimplement this to return whether the node is persistent.
     @see mutable_templates
   */
-  virtual bool isPersistent() {
+  virtual bool isPersistent() { // krazy:exclude:inline
     return isRepeatable();
   }
 
@@ -74,14 +76,14 @@ public:
     Reimplement this to return whether the node is repeatable.
     @see mutable_templates
   */
-  virtual bool isRepeatable() {
+  virtual bool isRepeatable() { // krazy:exclude:inline
     return false;
   }
 
   /**
     @internal
   */
-  virtual bool mustBeFirst() {
+  virtual bool mustBeFirst() { // krazy:exclude:inline
     return false;
   }
 
@@ -250,12 +252,12 @@ class GRANTLEE_EXPORT TextNode : public Node
 public:
   explicit TextNode( const QString &content, QObject *parent = 0 );
 
-  /* reimp */ QString render( Context *c ) {
+  /* reimp */ QString render( Context *c ) { // krazy:exclude:inline
     Q_UNUSED( c );
     return m_content;
   }
 
-  void appendContent( const QString &content ) {
+  void appendContent( const QString &content ) { // krazy:exclude:inline
     m_content += content;
   }
 
@@ -278,7 +280,6 @@ public:
 
 private:
   FilterExpression m_filterExpression;
-
 };
 
 }
