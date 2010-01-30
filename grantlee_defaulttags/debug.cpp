@@ -54,7 +54,7 @@ QString DebugNode::render( Context *c )
       ret += "key " + it.key() + ", ";
       ret += "type ";
       ret.append( it.value().typeName() );
-      ret += "\n";
+      ret += '\n';
     }
     h = c->stackHash( i++ );
   }

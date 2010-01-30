@@ -33,7 +33,7 @@ IfChangedNodeFactory::IfChangedNodeFactory()
 
 Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
 
   expr.takeAt( 0 );
   IfChangedNode *n =  new IfChangedNode( getFilterExpressionList( expr, p ), p );

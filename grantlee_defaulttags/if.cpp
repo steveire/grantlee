@@ -41,7 +41,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   int linkType = IfNode::OrLink;
 
-  QString exprString = expr.join( " " );
+  QString exprString = expr.join( QChar( ' ' ) );
 
   QStringList boolPairs = exprString.split( " and " );
 
@@ -57,8 +57,8 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QList<QPair<bool, FilterExpression > > boolVars;
   foreach( const QString &boolStr, boolPairs ) {
     QPair<bool, FilterExpression> pair;
-    if ( boolStr.contains( " " ) ) {
-      QStringList bits = boolStr.split( " " );
+    if ( boolStr.contains( ' ' ) ) {
+      QStringList bits = boolStr.split( ' ' );
       if ( bits.size() != 2 ) {
         throw Grantlee::Exception( TagSyntaxError, "'if' statement improperly formatted" );
       }

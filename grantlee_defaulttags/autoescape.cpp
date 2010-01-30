@@ -37,7 +37,7 @@ AutoescapeNodeFactory::AutoescapeNodeFactory()
 
 Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
 
   if ( expr.size() != 2 ) {
     throw Grantlee::Exception( TagSyntaxError, "autoescape takes two arguments." );

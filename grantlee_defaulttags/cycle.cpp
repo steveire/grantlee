@@ -40,11 +40,11 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     throw Grantlee::Exception( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( expr.at( 0 ) ) );
   }
 
-  if ( expr.at( 1 ).contains( "," ) ) {
-    QStringList csvlist = expr.at( 1 ).split( "," );
+  if ( expr.at( 1 ).contains( ',' ) ) {
+    QStringList csvlist = expr.at( 1 ).split( ',' );
     expr.removeAt( 1 );
     for ( int i = 0; i < csvlist.size() ; ++i ) {
-      expr.insert( i + 1, "\"" + csvlist.at( i ) + "\"" );
+      expr.insert( i + 1, '"' + csvlist.at( i ) + '"' );
     }
   }
 

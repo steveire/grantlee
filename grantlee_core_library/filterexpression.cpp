@@ -44,8 +44,8 @@ class FilterExpressionPrivate
 
 using namespace Grantlee;
 
-static const char * FILTER_SEPARATOR = "|";
-static const char * FILTER_ARGUMENT_SEPARATOR = ":";
+static const QChar FILTER_SEPARATOR = '|';
+static const QChar FILTER_ARGUMENT_SEPARATOR = ':';
 static const char * ALLOWED_VARIABLE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_\\.";
 
 static const char * varChars = "\\w\\.";
@@ -123,7 +123,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
         d->m_filters[lastFilter -1].second = Variable( subString );
       } else {
-        if ( subString.contains( "._" ) || ( subString.startsWith( "_" ) && !subString.startsWith( "_(" ) ) ) {
+        if ( subString.contains( "._" ) || ( subString.startsWith( QLatin1Char( '_' ) ) && !subString.startsWith( QLatin1String( "_(" ) ) ) ) {
           throw Grantlee::Exception( TagSyntaxError,
               QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
         }

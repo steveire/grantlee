@@ -31,7 +31,7 @@ FilterNodeFactory::FilterNodeFactory()
 
 Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee::Parser* p ) const
 {
-  QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
 
   expr.removeFirst();
 

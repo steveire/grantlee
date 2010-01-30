@@ -78,7 +78,7 @@ bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
     if ( i >= m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + name );
+    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + name );
     ++i;
   }
 
@@ -99,7 +99,7 @@ MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &file
     if ( i >= m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
 
     QFileInfo fi( file );
     if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
@@ -127,7 +127,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName ) const
     if ( i >= m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
     QFileInfo fi( file );
     if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
       return Template();
@@ -152,7 +152,7 @@ QString FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
     if ( i >= m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + "/" + m_themeName + "/" + fileName );
+    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
 
     QFileInfo fi( file );
     if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )

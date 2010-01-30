@@ -73,7 +73,7 @@ QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument,
     no = "no";
     maybe = "maybe";
   } else {
-    QStringList argList = arg.split( "," );
+    QStringList argList = arg.split( ',' );
     int numArgs = argList.size();
     if (( numArgs < 2 ) || ( numArgs > 3 ) ) {
       return input.toString();

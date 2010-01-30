@@ -88,8 +88,8 @@ Variable::Variable( const QString &var )
   QVariant v( var );
   if ( v.convert( QVariant::Double ) ) {
     d->m_literal = v;
-    if ( !var.contains( "." ) && !var.contains( "e" ) ) {
-      if ( var.endsWith( "." ) ) {
+    if ( !var.contains( '.' ) && !var.contains( 'e' ) ) {
+      if ( var.endsWith( '.' ) ) {
 //         throw Grantlee::Exception( VariableSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( v.toString() ) );
       }
 
@@ -97,17 +97,17 @@ Variable::Variable( const QString &var )
     }
   } else {
     QString localVar = var;
-    if ( var.startsWith( "_(" ) && var.endsWith( ")" ) ) {
+    if ( var.startsWith( QLatin1String( "_(" ) ) && var.endsWith( QLatin1Char( ')' ) ) ) {
       d->m_translate = true;
       localVar = var.mid( 2, var.size() - 3 );
     }
-    if (( localVar.startsWith( "\"" ) && localVar.endsWith( "\"" ) )
-        || ( localVar.startsWith( "'" ) && localVar.endsWith( "'" ) ) ) {
+    if (( localVar.startsWith( '"' ) && localVar.endsWith( '"' ) )
+        || ( localVar.startsWith( '\'' ) && localVar.endsWith( '\'' ) ) ) {
       QString unesc = Util::unescapeStringLiteral( localVar );
       Grantlee::SafeString ss = Util::markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
-      d->m_lookups = localVar.split( "." );
+      d->m_lookups = localVar.split( '.' );
     }
   }
 }

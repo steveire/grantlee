@@ -27,9 +27,9 @@ Util::Util()
 QString Util::unescapeStringLiteral( const QString &input )
 {
   return input.mid( 1, input.size() - 2 )
-         .replace( "\\\'", "'" )
-         .replace( "\\\"", "\"" )
-         .replace( "\\\\", "\\" );
+         .replace( "\\\'", QChar( '\'' ) )
+         .replace( "\\\"", QChar( '"' ) )
+         .replace( "\\\\", QChar( '\\' ) );
 }
 
 bool Util::variantIsTrue( const QVariant &variant )
@@ -127,10 +127,10 @@ Grantlee::SafeString Util::markForEscaping( const Grantlee::SafeString &input )
 Grantlee::SafeString Util::escape( const Grantlee::SafeString &input )
 {
   QString temp = input;
-  temp.replace( "&", "&amp;" );
-  temp.replace( "<", "&lt;" );
-  temp.replace( ">", "&gt;" );
-  temp.replace( "'", "&#39;" );
+  temp.replace( '&', "&amp;" );
+  temp.replace( '<', "&lt;" );
+  temp.replace( '>', "&gt;" );
+  temp.replace( '\'', "&#39;" );
   return temp;
 
 }
@@ -184,7 +184,7 @@ bool Util::equals( const QVariant &lhs, const QVariant &rhs )
 
 Grantlee::SafeString Util::toString( const QVariantList &list )
 {
-  QString output = "[";
+  QString output( '[' );
   QVariantList::const_iterator it = list.constBegin();
   const QVariantList::const_iterator end = list.constEnd();
   while ( it != end )
@@ -206,6 +206,6 @@ Grantlee::SafeString Util::toString( const QVariantList &list )
     ++it;
   }
 
-  return output.append("]");
+  return output.append( ']' );
 }
 

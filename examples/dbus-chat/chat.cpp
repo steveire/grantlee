@@ -169,7 +169,7 @@ void ChatMainWindow::textChangedSlot(const QString &newText)
 void ChatMainWindow::sendClickedSlot()
 {
     QString content = messageLineEdit->text();
-    if (content.startsWith("/me "))
+    if (content.startsWith(QLatin1String("/me ")))
     {
       content.remove(0, 4);
       action(m_nickname, content);

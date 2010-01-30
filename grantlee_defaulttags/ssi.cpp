@@ -37,7 +37,7 @@ SsiNodeFactory::SsiNodeFactory()
 
 Node* SsiNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( " ", QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
 
   int exprSize = expr.size();
 

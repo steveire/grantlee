@@ -999,7 +999,7 @@ void TestDefaultTags::testNowTag_data()
 
   QDate today = QDateTime::currentDateTime().date();
 
-  QTest::newRow( "now01" ) << "{% now \"d M yyyy\"%}" << dict << ( QString::number( today.day() ) + " " +  QString::number( today.month() ) + " " + QString::number( today.year() ) ) << NoError;
+  QTest::newRow( "now01" ) << "{% now \"d M yyyy\"%}" << dict << ( QString::number( today.day() ) + ' ' +  QString::number( today.month() ) + ' ' + QString::number( today.year() ) ) << NoError;
 
   QTest::newRow( "now02" ) << "{% now \"d \"M\" yyyy\"%}" << dict << "" << TagSyntaxError;
 

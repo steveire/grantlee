@@ -50,12 +50,12 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   FilterExpression fe;
   int size = parentName.size();
 
-  if (( parentName.startsWith( "\"" ) && parentName.endsWith( "\"" ) )
-      || ( parentName.startsWith( "'" ) && parentName.endsWith( "'" ) ) ) {
+  if (( parentName.startsWith( QLatin1Char( '"' ) ) && parentName.endsWith( QLatin1Char( '\"' ) ) )
+      || ( parentName.startsWith( QLatin1Char( '\'' ) ) && parentName.endsWith( QLatin1Char( '\'' ) ) ) ) {
     parentName = parentName.mid( 1, size - 2 );
   } else {
     fe = FilterExpression( parentName, p );
-    parentName = QString();
+    parentName.clear();
   }
 
   ExtendsNode *n = new ExtendsNode( parentName, fe, p );

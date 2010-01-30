@@ -45,8 +45,8 @@ Node* IncludeNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QString includeName = expr.at( 1 );
   int size = includeName.size();
 
-  if (( includeName.startsWith( "\"" ) && includeName.endsWith( "\"" ) )
-      || ( includeName.startsWith( "'" ) && includeName.endsWith( "'" ) ) ) {
+  if (( includeName.startsWith( QLatin1Char( '"' ) ) && includeName.endsWith( QLatin1Char( '"' ) ) )
+      || ( includeName.startsWith( QLatin1Char( '\'' ) ) && includeName.endsWith( QLatin1Char( '\'' ) ) ) ) {
     return new ConstantIncludeNode( includeName.mid( 1, size - 2 ) );
   }
   return new IncludeNode( FilterExpression( includeName, p ), p );

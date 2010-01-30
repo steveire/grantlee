@@ -194,7 +194,7 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
   if ( m_scriptableTagLibrary ) {
     while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
       QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
-      libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + name + ".qs";
+      libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' + name + ".qs";
       QFile file( libFileName );
       if ( !file.exists() )
         continue;
@@ -221,7 +221,7 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, const E
   QObject *plugin = 0;
   while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
     QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
-    libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + "/" + "lib" + name + ".so";
+    libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' + "lib" + name + ".so";
     QFile file( libFileName );
     if ( !file.exists() )
       continue;

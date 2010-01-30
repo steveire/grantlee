@@ -32,7 +32,7 @@ RegroupNodeFactory::RegroupNodeFactory()
 
 Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( " " );
+  QStringList expr = tagContent.split( ' ' );
 
   if ( expr.size() != 6 ) {
     throw Grantlee::Exception( TagSyntaxError, "widthratio takes five arguments" );

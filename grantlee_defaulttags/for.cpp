@@ -54,7 +54,7 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   }
 
   foreach( const QString &arg, expr.mid( 0, expr.size() - 2 ) ) {
-    vars << arg.split( ",", QString::SkipEmptyParts );
+    vars << arg.split( ',', QString::SkipEmptyParts );
   }
 
   foreach( const QString &var, vars ) {

@@ -197,7 +197,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         return nodeList;
       }
 
-      QStringList tagContents = token.content.split( " " );
+      QStringList tagContents = token.content.split( ' ' );
       if ( tagContents.size() == 0 ) {
         QString message;
         if ( q->hasNextToken() )
