@@ -29,7 +29,7 @@ namespace Grantlee
 {
 class Parser;
 class Filter;
-class Token;
+struct Token;
 
 typedef QPair<Filter::Ptr, Variable > ArgFilter;
 
