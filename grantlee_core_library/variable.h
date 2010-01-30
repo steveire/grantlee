@@ -22,6 +22,8 @@
 
 #include <QtCore/QVariant>
 
+#include "grantlee_export.h"
+
 namespace Grantlee
 {
 class Context;
@@ -40,7 +42,7 @@ class VariablePrivate;
   Arguments to the tag can be used to construct Variables, which may then be resolved into the objects they
   represent in the given Context in the render stage.
 */
-class Variable
+class GRANTLEE_EXPORT Variable
 {
 public:
   Variable();

@@ -25,7 +25,9 @@
 #include "context.h"
 #include "safestring.h"
 
-class Util
+#include "grantlee_export.h"
+
+class GRANTLEE_EXPORT Util
 {
 public:
   Util();

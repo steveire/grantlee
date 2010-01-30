@@ -23,6 +23,8 @@
 #include <QtCore/QString>
 #include <QtCore/QVariant>
 
+#include "grantlee_export.h"
+
 namespace Grantlee
 {
 
@@ -32,7 +34,7 @@ namespace Grantlee
   This allows lazy escaping of strings. Otherwise a string may be escaped multiple times where it
   should only be escaped once.
 */
-class SafeString : public QString
+class GRANTLEE_EXPORT SafeString : public QString
 {
 public:
   enum Safety {

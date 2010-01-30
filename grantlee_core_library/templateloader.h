@@ -25,6 +25,8 @@
 #include "mutabletemplate.h"
 #include "template.h"
 
+#include "grantlee_export.h"
+
 namespace Grantlee
 {
 
@@ -36,7 +38,7 @@ namespace Grantlee
   The interface of this class should not be called directly from applications. TemplateLoaders will typically
   be created, configured and added to the Grantlee::Engine which will call the appropriate API.
 */
-class AbstractTemplateLoader
+class GRANTLEE_EXPORT AbstractTemplateLoader
 {
 public:
   typedef QSharedPointer<AbstractTemplateLoader> Ptr;
@@ -109,7 +111,7 @@ public:
   @endcode
 
 */
-class FileSystemTemplateLoader : public AbstractTemplateLoader
+class GRANTLEE_EXPORT FileSystemTemplateLoader : public AbstractTemplateLoader
 {
 public:
   typedef QSharedPointer<FileSystemTemplateLoader> Ptr;
@@ -148,7 +150,7 @@ private:
 
   Templates can be made available using the setTemplate method, and will then be retrieved by the Grantlee::Engine as appropriate.
 */
-class InMemoryTemplateLoader : public AbstractTemplateLoader
+class GRANTLEE_EXPORT InMemoryTemplateLoader : public AbstractTemplateLoader
 {
 public:
   typedef QSharedPointer<InMemoryTemplateLoader> Ptr;
