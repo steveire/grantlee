@@ -90,7 +90,7 @@ public:
 protected:
   /**
     Renders the value @p input in the Context @p c. This will involve escaping @p input
-    if neccessary.
+    if necessary.
 
     This is only relevant to developing template tags.
   */

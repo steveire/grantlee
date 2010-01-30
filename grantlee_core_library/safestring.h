@@ -111,14 +111,14 @@ public:
   /**
     Returns true if the content of @p other matches the content of this.
 
-    Safeness and needing escaping are not accounted for in the comparision.
+    Safeness and needing escaping are not accounted for in the comparison.
   */
   bool operator==( const SafeString &other ) const;
 
   /**
     Returns true if the content of @p other matches the content of this.
 
-    Safeness and needing escaping are not accounted for in the comparision.
+    Safeness and needing escaping are not accounted for in the comparison.
   */
   bool operator==( const QString &other ) const;
 

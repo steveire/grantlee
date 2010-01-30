@@ -375,11 +375,11 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow( "inheritance47" ) << "{% extends 'inheritance43' %}"
       "{% block second %}2{{ block.super }}3{% endblock %}" << dict << "AB2C3DE" << NoError;
 
-  // Although block second is overriden, it is not rendered because first is overridden excluding it.
+  // Although block second is overridden, it is not rendered because first is overridden excluding it.
   QTest::newRow( "inheritance48" ) << "{% extends 'inheritance43' %}"
       "{% block first %}1{% endblock %}{% block second %}2{% endblock %}" << dict << "A1E" << NoError;
 
-  // Block.super, which uses block second, renders the overriden block second.
+  // Block.super, which uses block second, renders the overridden block second.
   QTest::newRow( "inheritance49" ) << "{% extends 'inheritance43' %}"
       "{% block first %}{{ block.super }}{% endblock %}{% block second %}2{% endblock %}" << dict << "AB2DE" << NoError;
 

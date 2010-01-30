@@ -70,7 +70,7 @@ BookWindow::BookWindow()
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     model->setTable("books");
 
-    // Remeber the indexes of the columns
+    // Rememeber the indexes of the columns
     authorIdx = model->fieldIndex("author");
     genreIdx = model->fieldIndex("genre");
 

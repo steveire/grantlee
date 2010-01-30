@@ -67,7 +67,7 @@ public:
 
 // slots
   /**
-  Returns the block overriden by this one rendered in context.
+  Returns the block overridden by this one rendered in context.
   */
   SafeString getSuper() const;
 

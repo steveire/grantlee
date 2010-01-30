@@ -37,7 +37,7 @@ class ParserPrivate;
 
   For application developers, this class is internal.
 
-  For template tag authors it may be neccessary to advance the parser and process contained tags if
+  For template tag authors it may be necessary to advance the parser and process contained tags if
   the tag works in a tag -- endtag fashion.
 */
 class GRANTLEE_EXPORT Parser : public QObject
