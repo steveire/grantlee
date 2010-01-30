@@ -27,8 +27,44 @@ namespace Grantlee
 class AbstractNodeFactory;
 class Filter;
 
+/**
+  @brief The TagLibraryInterface returns available tags and filters from libraries.
 
+  This interface must be implemented in tag and filter libraries.
 
+  The implementation will usually be very simple.
+
+  @code
+    class MyTagLibrary : public QObject, public TagLibraryInterface
+    {
+      Q_OBJECT
+      Q_INTERFACES( Grantlee::TagLibraryInterface )
+    public:
+      MyTagLibrary( QObject *parent = 0 )
+          : QObject( parent ) {
+      }
+
+      QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
+        Q_UNUSED( name );
+        QHash<QString, AbstractNodeFactory*> nodeFactories;
+        nodeFactories.insert( "mytag1", new MyTag1() );
+        nodeFactories.insert( "mytag2", new MyTag2() );
+        return nodeFactories;
+      }
+
+      QHash<QString, Filter*> filters( const QString &name = QString() ) {
+        Q_UNUSED( name );
+
+        QHash<QString, Filter*> filters;
+
+        filters.insert( "myfilter1", new MyFilter1() );
+        filters.insert( "myfilter2", new MyFilter2() );
+
+        return filters;
+      }
+    };
+  @endcode
+*/
 class TagLibraryInterface
 {
 public:

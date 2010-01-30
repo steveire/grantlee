@@ -38,20 +38,51 @@ typedef QSharedPointer<TemplateImpl> Template;
 
 class TemplatePrivate;
 
+/**
+  @brief The Template class is a tree of nodes which may be rendered.
+
+  All Templates are created through the Grantlee::Engine class.
+  A template is created by parsing some text markup passed into the Engine, or by
+  reading it from a file.
+
+  The result of parsing is a Template object which can be rendered multiple times with multiple different Contexts.
+
+  If there is an error in parsing or rendering, the error and errorString methods can be used to check the source of the error.
+*/
 class GRANTLEE_EXPORT TemplateImpl : public QObject
 {
   Q_OBJECT
 public:
   ~TemplateImpl();
+
+  /**
+    Renders the template to a string given the Context @p c.
+  */
   virtual QString render( Context *c );
 
+  /**
+    @internal
+  */
   NodeList nodeList() const;
 
+  /**
+    @internal
+  */
   void setNodeList( const NodeList &list );
 
+  /**
+    Returns an error code for the error encountered.
+  */
   Error error();
+
+  /**
+    Returns more information to developers in the form of a string.
+  */
   QString errorString();
 
+  /**
+    The state used and accessed while parsing and rendering the Template.
+  */
   EngineState state() const;
 
 protected:
@@ -70,4 +101,3 @@ private:
 Q_DECLARE_METATYPE(Grantlee::Template)
 
 #endif
-

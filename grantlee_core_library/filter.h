@@ -33,28 +33,41 @@ namespace Grantlee
 {
 
 /**
-Abstract base class for filters.
+  @brief Base class for all filters
+
+  The Filter class can be implemented in plugin libraries to make additional functionality available to templates.
+
 */
 class GRANTLEE_EXPORT Filter
 {
 public:
   typedef QSharedPointer<Filter> Ptr;
 
+  /**
+    Destructor.
+  */
   virtual ~Filter() {}
 
   /**
-   * Reimplement to filter @p input.
-   * @returns The input string filtered.
-   */
+   Reimplement to filter @p input given @p argument.
+   The autoescape argument amy also need to be taken into account, depending on the purpose of the filter.
+   @returns The input string filtered.
+  */
   virtual QVariant doFilter( const QVariant &input,
                                const QVariant &argument = QVariant(),
                                bool autoescape = false
                              ) const = 0;
 
-
+  /**
+    Reimplement to return whether this filter is safe.
+  */
   virtual bool isSafe() const {
     return false;
   }
+
+  /**
+    Reimplement to return whether this filter requires an autoescape argument to its doFilter method.
+  */
   virtual bool needsAutoescape() const {
     return false;
   }
@@ -64,4 +77,3 @@ public:
 }
 
 #endif
-

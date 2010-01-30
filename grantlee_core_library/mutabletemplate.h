@@ -29,13 +29,22 @@ class MutableTemplateImpl;
 typedef QWeakPointer<MutableTemplateImpl> MutableTemplateWeakPtr;
 typedef QSharedPointer<MutableTemplateImpl> MutableTemplate;
 
+/**
+  A Template which is mutated each time it is rendered.
+*/
 class MutableTemplateImpl : public TemplateImpl
 {
   Q_OBJECT
 public:
-  MutableTemplateImpl( QObject *parent = 0 );
+  /**
+    Constructor.
+  */
+  explicit MutableTemplateImpl( QObject *parent = 0 );
 
-  QString render( Context *c );
+  /**
+    Renders the Template, possibly mutating it.
+  */
+  /* reimp */ QString render( Context *c );
 
 };
 
@@ -44,4 +53,3 @@ public:
 Q_DECLARE_METATYPE(Grantlee::MutableTemplate)
 
 #endif
-

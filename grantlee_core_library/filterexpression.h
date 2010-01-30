@@ -35,33 +35,72 @@ typedef QPair<Filter::Ptr, Variable > ArgFilter;
 
 class FilterExpressionPrivate;
 
+/**
+  @brief A FilterExpression object represents a filter expression in a template.
+
+  This class is only relevant if implementing custom tags or filters. Most of the API here is internal.
+  Usually when implementing tags or filters, filter expressions will just be created and resolved.
+*/
 class GRANTLEE_EXPORT FilterExpression
 {
 public:
-  enum Reversed {
-    IsNotReversed,
-    IsReversed
-  };
-
+  /**
+    Constructs an invalid FilterExpression.
+  */
   FilterExpression();
+
+  /**
+    Constructs a filter expression from the string @p varString. The Parser @p parser is used to retrieve filters.
+  */
   FilterExpression( const QString &varString, Grantlee::Parser *parser );
+
+  /**
+    Copy constructor.
+  */
   FilterExpression( const FilterExpression &other );
+
+  /**
+    Destructor.
+  */
   ~FilterExpression();
 
+  /**
+    Returns whether a filter expression is valid.
+
+    A FilterExpression is valid if all filters in the expression exist and the initial variable being filtered is valid.
+  */
   bool isValid() const;
 
+  /**
+    Assignment operator.
+  */
   FilterExpression &operator=( const FilterExpression &other );
 
+  /**
+    Returns the initial variable in the FilterExpression.
+  */
   Variable variable() const;
 
+  /**
+    Resolves the FilterExpression in the Context @p c.
+  */
   QVariant resolve( Context *c ) const;
 
+  /**
+    Returns whether the Filter resolves to true in the Context @p c.
+    @see truthiness
+  */
   bool isTrue( Context *c ) const;
 
+  /**
+    Returns a list for the FilterExpression.
+    If the FilterExpression can not be resolved to a list, an empty list will be returned.
+  */
   QVariantList toList( Context *c ) const;
 
-  bool isConstant() const;
-
+  /**
+    Returns the list of filters in the FilterExpression.
+  */
   QStringList filters() const;
 
 private:
@@ -72,4 +111,3 @@ private:
 }
 
 #endif
-

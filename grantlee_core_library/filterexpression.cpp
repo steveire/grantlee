@@ -243,12 +243,6 @@ bool FilterExpression::isTrue( Context *c ) const
   return Util::variantIsTrue( resolve( c ) );
 }
 
-bool FilterExpression::isConstant() const
-{
-  Q_D( const FilterExpression );
-  return d->m_variable.isConstant();
-}
-
 QStringList FilterExpression::filters() const
 {
   Q_D( const FilterExpression );

@@ -1,5 +1,9 @@
 
 // Put this in the Grantlee namespace so that autolinks to classes work without needing a Grantlee:: prefix.
+
+/**
+  The Grantlee namespace holds all public %Grantlee API.
+*/
 namespace Grantlee
 {
 

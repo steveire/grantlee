@@ -191,17 +191,6 @@ AbstractNodeFactory::~AbstractNodeFactory()
   delete d_ptr;
 }
 
-QList< Variable > AbstractNodeFactory::getVariableList( const QStringList &list ) const
-{
-  QList<Variable> variables;
-  QListIterator<QString> it( list );
-  while ( it.hasNext() ) {
-    QString varString = it.next();
-    variables << Variable( varString );
-  }
-  return variables;
-}
-
 QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QStringList &list, Parser *p ) const
 {
   QList<FilterExpression> fes;

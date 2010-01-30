@@ -29,6 +29,14 @@ namespace Grantlee
 
 class EngineStateImplPrivate;
 
+/**
+  @brief The EngineStateImpl class stores a particular configuration for an Engine.
+
+  This class deliberately does not have any public API. All EngineStates should be configured and retrieved using API
+  on the Engine class.
+
+  @see template_factories
+*/
 class GRANTLEE_EXPORT EngineStateImpl
 {
 private:

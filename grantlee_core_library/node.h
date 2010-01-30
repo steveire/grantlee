@@ -36,30 +36,62 @@ class NodeList;
 class NodePrivate;
 
 /**
-Abstract base class for nodes.
+  @brief Base class for all nodes.
+
+  The Node class can be implemented to make additional functionality available to Templates.
 */
 class GRANTLEE_EXPORT Node : public QObject
 {
   Q_OBJECT
 public:
-  Node( QObject *parent = 0 );
+  /**
+    Constructor.
+  */
+  explicit Node( QObject *parent = 0 );
+
+  /**
+    Destructor.
+  */
   virtual ~Node();
 
+  /**
+    Reimplement this to render the template in the Context @p c.
+
+    This will also involve calling render on and child nodes.
+  */
   // This can't be const because CycleNode needs to change on each render.
   virtual QString render( Context *c ) = 0;
 
+  /**
+    Reimplement this to return whether the node is persistent.
+    @see mutable_templates
+  */
   virtual bool isPersistent() {
     return isRepeatable();
   }
+
+  /**
+    Reimplement this to return whether the node is repeatable.
+    @see mutable_templates
+  */
   virtual bool isRepeatable() {
     return false;
   }
 
+  /**
+    @internal
+  */
   virtual bool mustBeFirst() {
     return false;
   }
 
 protected:
+  /**
+    Renders the value @p input in the Context @p c. This will involve escaping @p input
+    if neccessary.
+
+    This is only relevant to developing template tags.
+  */
   QString renderValueInContext( const QVariant &input, Grantlee::Context *c );
 
 private:
@@ -67,19 +99,53 @@ private:
   NodePrivate *d_ptr;
 };
 
+/**
+  @brief A list of Nodes with some convenience API for rendering them.
+
+*/
 class GRANTLEE_EXPORT NodeList : public QList<Grantlee::Node*>
 {
 public:
+  /**
+    Creates an empty NodeList.
+  */
   NodeList();
+
+  /**
+    Copy constructor.
+  */
   NodeList( const NodeList &list );
-  NodeList( const QList<Grantlee::Node *> &list );
+
+  /**
+    Convenience constructor
+  */
+  /* implicit */ NodeList( const QList<Grantlee::Node *> &list );
+
+  /**
+    Destructor.
+  */
   ~NodeList();
 
+  /**
+    Appends @p node to the end of this NodeList.
+  */
   void append( Grantlee::Node* node );
+
+  /**
+    Appends @p nodeList to the end of this NodeList.
+  */
   void append( QList<Grantlee::Node*> nodeList );
+
+  /**
+    Returns true if this NodeList contains non-text nodes.
+  */
   bool containsNonText() const;
 
-  template <typename T> QList<T> findChildren() {
+  /**
+    A recursive listing of nodes in this tree of type @p T.
+  */
+  template <typename T>
+  QList<T> findChildren() {
     QList<T> children;
     QList<Grantlee::Node*>::const_iterator it;
     const QList<Grantlee::Node*>::const_iterator first = constBegin();
@@ -94,9 +160,15 @@ public:
     return children;
   }
 
+  /**
+    Renders the list of Nodes in the Context @p c.
+  */
   QString render( Context *c );
 
 protected:
+  /**
+    Renders the list of Nodes in the Context @p c, possibly mutating the nodes contained in it.
+  */
   QString mutableRender( Context *c );
 
 private:
@@ -106,34 +178,60 @@ private:
 class AbstractNodeFactoryPrivate;
 
 /**
-Base class for tags. Downstreams can use this to create custom tags.
-This can also be inherited by qtscript objects to define tags in script.
+  @brief Base class for all NodeFactories
 
-Each tag is essentially a factory class for the type of node it creates.
+  This class can be used to make custom tags available to templates.
+  The getNode method should be implemented to return a Node to be rendered.
 
-Maybe this should be AbstractNodeFactory ... IfNodeFactory.
-
-Users implement AbstractNodeFactory to create new Nodes. and register their factory with the library?
-
-Alternatively I could use a prototype pattern?
 */
 class GRANTLEE_EXPORT AbstractNodeFactory : public QObject
 {
   Q_OBJECT
 public:
-  AbstractNodeFactory( QObject* parent = 0 );
+  /**
+    Constructor.
+  */
+  explicit AbstractNodeFactory( QObject* parent = 0 );
+
+  /**
+    Destructor.
+  */
   virtual ~AbstractNodeFactory();
 
   /**
-  Advances the parser as needed for block style tags.
+    This method should be reimplemented to return a Node which can be rendered.
+
+    @p tagContent is the content of the tag including the tag name and arguments. For example,
+    if the template content is "{% my_tag arg1 arg2 %}", the tagContent will be "my_tag arg1 arg2".
+
+    The Parser @p p is available and can be advanced if appropriate. For example, if the tag has an
+    end tag, the parser can be advanced to the end tag.
+    @see tags
   */
   virtual Node* getNode( const QString &tagContent, Parser *p ) const = 0;
 
 protected:
+  /**
+    Splits @p str into a list, taking quote marks into account.
+
+    This is typically used in the implementation of getNode with the tagContent.
+
+    If @p str is 'one "two three" four 'five " six' seven', the returned list will contain the following strings:
+
+    - one
+    - "two three"
+    - four
+    - five " six
+    - seven
+  */
   Q_INVOKABLE QStringList smartSplit( const QString &str ) const;
 
 protected:
-  QList<Variable> getVariableList( const QStringList &list ) const;
+  /**
+    Returns a list of FilterExpression objects as described by the content of @p list.
+
+    This is used for convenience when handling the arguments to a tag.
+  */
   QList<FilterExpression> getFilterExpressionList( const QStringList &list, Parser *p ) const;
 
 private:
@@ -141,13 +239,18 @@ private:
   AbstractNodeFactoryPrivate *d_ptr;
 };
 
+/**
+  @internal
+
+  A Node for plain text. Plain text is everything between variables, comments and template tags.
+*/
 class GRANTLEE_EXPORT TextNode : public Node
 {
   Q_OBJECT
 public:
-  TextNode( const QString &content, QObject *parent = 0 );
+  explicit TextNode( const QString &content, QObject *parent = 0 );
 
-  QString render( Context *c ) {
+  /* reimp */ QString render( Context *c ) {
     Q_UNUSED( c );
     return m_content;
   }
@@ -160,23 +263,24 @@ private:
   QString m_content;
 };
 
+/**
+  @internal
+
+  A node for a variable or filter expression substitution.
+*/
 class GRANTLEE_EXPORT VariableNode : public Node
 {
   Q_OBJECT
 public:
-  VariableNode( const FilterExpression &fe, QObject *parent = 0 );
+  explicit VariableNode( const FilterExpression &fe, QObject *parent = 0 );
 
-  QString render( Context *c );
+  /* reimp */ QString render( Context *c );
 
 private:
   FilterExpression m_filterExpression;
 
 };
 
-// TODO: figure out if I can use the same QMetaType tricks described in qt:qtscript for QPoint.
-// Define a macro to wrap non-qobject cpp classes.
-
 }
 
 #endif
-

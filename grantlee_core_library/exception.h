@@ -29,18 +29,30 @@
 namespace Grantlee
 {
 
+/**
+  An exception for use when implementing template tags.
+*/
 class Exception
 {
 public:
+  /**
+    Creates an exception for the error @P errorCode and the verbose message @p what
+  */
   Exception( Error errorCode, const QString &what )
       : m_errorCode( errorCode ), m_what( what ) {}
 
   virtual ~Exception() throw() {}
 
+  /**
+    Returns the verbose message for the exception.
+  */
   virtual const QString what() const throw() {
     return m_what;
   }
 
+  /**
+    Returns the error code for the exception.
+  */
   Error errorCode() const {
     return m_errorCode;
   }

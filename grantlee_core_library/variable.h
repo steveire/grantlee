@@ -28,6 +28,18 @@ class Context;
 
 class VariablePrivate;
 
+/**
+  @brief A container for static variables defined in Templates.
+
+  This class is only relevant to Template tag authors.
+
+  When processing a template tag in a AbstractNodeFactory implementation, it will sometimes make sense
+  to process arguments to the tag as Grantlee::Variables. Note that usually they should be processed as
+  FilterExpression objects instead.
+
+  Arguments to the tag can be used to construct Variables, which may then be resolved into the objects they
+  represent in the given Context in the render stage.
+*/
 class Variable
 {
 public:
@@ -55,4 +67,3 @@ private:
 }
 
 #endif
-

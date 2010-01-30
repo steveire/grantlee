@@ -25,6 +25,11 @@
 namespace Grantlee
 {
 
+/**
+  @internal
+
+  The available token types.
+*/
 enum TokenType {
   TextToken,
   VariableToken,
@@ -32,6 +37,11 @@ enum TokenType {
   CommentToken
 };
 
+/**
+  A token in a parse stream for a template.
+
+  This class is only relevant for template tag implementations.
+*/
 struct Token {
   int tokenType;
   QString content;
