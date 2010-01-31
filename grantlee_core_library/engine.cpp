@@ -221,8 +221,13 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, const E
   QObject *plugin = 0;
   while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
     QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
+#ifdef Q_CC_MSVC
+    libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' + name + ".dll";
+#else
     libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' + "lib" + name + ".so";
+#endif
     QFile file( libFileName );
+    Q_ASSERT( QLibrary::isLibrary( libFileName ) );
     if ( !file.exists() )
       continue;
 
