@@ -22,19 +22,19 @@
 using namespace Grantlee;
 
 SafeString::SafeString()
-    : QString(), m_safety( false ), m_needsescape( false )
+    : m_nestedString( this ), m_safety( false ), m_needsescape( false )
 {
 
 }
 
 SafeString::SafeString( const QString &str, bool safe )
-    : QString( str ), m_safety( safe ), m_needsescape( false )
+    : m_nestedString( str, this ), m_safety( safe ), m_needsescape( false )
 {
 
 }
 
 SafeString::SafeString( const QString &str, Safety safety )
-    : QString( str ), m_safety( safety == IsSafe ), m_needsescape( false )
+    : m_nestedString( str, this ), m_safety( safety == IsSafe ), m_needsescape( false )
 {
 
 }
@@ -63,23 +63,36 @@ bool SafeString::isSafe() const
   return m_safety;
 }
 
+SafeString::NestedString::NestedString(SafeString* safeString)
+  : m_safeString(safeString)
+{
+
+}
+
+SafeString::NestedString::NestedString(const QString& content, SafeString* safeString)
+  : QString(content),
+    m_safeString(safeString)
+{
+
+}
+
 SafeString SafeString::operator+( const QString &str )
 {
-  return SafeString( static_cast<QString>( *this ) + str, IsNotSafe );
+  return SafeString( m_nestedString + str, IsNotSafe );
 }
 
 SafeString SafeString::operator+( const SafeString &str )
 {
   if ( !str.isSafe() )
-    return SafeString( static_cast<QString>( *this ) + static_cast<QString>( str ), IsNotSafe );
-  return SafeString( static_cast<QString>( *this ) + static_cast<QString>( str ), m_safety );
+    return SafeString( m_nestedString + (*str), IsNotSafe );
+  return SafeString( m_nestedString + *str, m_safety );
 }
 
 SafeString &SafeString::operator+=( const QString & str )
 {
   m_safety = IsNotSafe;
 
-  *this = operator+=( str );
+  m_nestedString += str;
   return *this;
 }
 
@@ -88,15 +101,7 @@ SafeString &SafeString::operator+=( const SafeString & str )
   if ( !str.isSafe() )
     m_safety = IsNotSafe;
 
-  *this = operator+=( static_cast<QString>( str ) );
-  return *this;
-}
-
-SafeString &SafeString::operator=( const QString & str )
-{
-  m_safety = IsNotSafe;
-
-  *this = operator=( str );
+  m_nestedString += *str;
   return *this;
 }
 
@@ -104,11 +109,10 @@ bool SafeString::operator==( const Grantlee::SafeString &other ) const
 {
   // Don't compare safety or account for future escaping here.
   // See TestBuiltins testEscaping
-  return operator==( static_cast<QString>( other ) );
+  return m_nestedString == *other;
 }
 
 bool SafeString::operator==( const QString &other ) const
 {
-  return QString::operator==( other );
+  return m_nestedString == other;
 }
-

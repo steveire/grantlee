@@ -34,7 +34,7 @@ namespace Grantlee
   This allows lazy escaping of strings. Otherwise a string may be escaped multiple times where it
   should only be escaped once.
 */
-class GRANTLEE_EXPORT SafeString : public QString
+class GRANTLEE_EXPORT SafeString
 {
 public:
   enum Safety {
@@ -82,6 +82,26 @@ public:
   */
   void setSafety( Safety safety );
 
+  class NestedString : public QString
+  {
+    friend class SafeString;
+    SafeString *m_safeString;
+  public:
+    NestedString( SafeString *safeString );
+    NestedString( const QString &content, SafeString *safeString );
+
+  };
+
+  NestedString* operator->()
+  {
+    return &m_nestedString;
+  }
+
+  operator QString() const
+  {
+    return m_nestedString;
+  }
+
   /**
     Returns a concatenation of this with @p str.
 
@@ -124,17 +144,18 @@ public:
   */
   bool operator==( const QString &other ) const;
 
-  /**
-    Assignment operator. The resulting SafeString is not safe.
-  */
-  SafeString &operator=( const QString &s );
-
-  operator QVariant() {
+  operator QVariant() const {
     return QVariant::fromValue( *this );
   }
 
 private:
-  QString m_string;
+  const QString& operator*() const
+  {
+    return m_nestedString;
+  }
+
+private:
+  NestedString m_nestedString;
   bool m_safety;
   bool m_needsescape;
 
