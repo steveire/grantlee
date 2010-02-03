@@ -88,7 +88,7 @@ ChatMainWindow::ChatMainWindow()
 
     m_engine = Grantlee::Engine::instance();
 
-    Grantlee::FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
+    Grantlee::FileSystemTemplateLoader::Ptr loader = Grantlee::FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
     loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH );
     m_engine->addTemplateLoader(loader);
     m_engine->setPluginDirs(QStringList() << GRANTLEE_PLUGIN_PATH );
@@ -115,7 +115,7 @@ void ChatMainWindow::addColour(const QString &nickname, const QString &colour)
     m_nameColours.insert( nickname, QVariant(innerPair));
 
     h.insert("name_colours", nameColours);
-    Context c(h);
+    Grantlee::Context c(h);
     QString content = m_template->render(&c);
 }
 
@@ -125,7 +125,7 @@ void ChatMainWindow::addItem(ChatItem *item)
     QVariant chatVariant = QVariant::fromValue(static_cast<QObject*>(item));
     m_chatItems.append(chatVariant);
     h.insert("chat_items", QVariantList() << chatVariant);
-    Context c(h);
+    Grantlee::Context c(h);
     QString content = m_template->render(&c);
     chatHistory->setHtml(content);
     QScrollBar *sb = chatHistory->verticalScrollBar();
@@ -138,7 +138,7 @@ void ChatMainWindow::rebuildHistory()
     h.insert("chat_items", m_chatItems);
     h.insert("mynickname", m_nickname);
     h.insert("name_colours", m_nameColours.values());
-    Context c(h);
+    Grantlee::Context c(h);
     QString content = m_template->render(&c);
     chatHistory->setHtml(content);
     QScrollBar *sb = chatHistory->verticalScrollBar();

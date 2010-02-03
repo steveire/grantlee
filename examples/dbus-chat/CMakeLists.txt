@@ -44,6 +44,7 @@ automoc4_add_executable(dbus_chat
 
 target_link_libraries(
   dbus_chat
+  ${QT_QTCORE_LIBRARIES}
   ${QT_QTGUI_LIBRARIES}
   ${QT_QTDBUS_LIBRARIES}
   ${Grantlee_LIBRARY}
