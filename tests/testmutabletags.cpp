@@ -26,6 +26,7 @@
 #include "mutabletemplate.h"
 #include "engine.h"
 #include "context.h"
+#include "grantlee_paths.h"
 
 typedef QHash<QString, QVariant> Dict;
 
@@ -59,10 +60,7 @@ private:
 void TestMutableTagsSyntax::initTestCase()
 {
   m_engine = Engine::instance();
-
-  QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_engine->setPluginDirs( QStringList() << appDirPath + "/grantlee_defaulttags/"
-                           << appDirPath + "/grantlee_mutabletags/" );
+  m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
 
   m_engine->addDefaultLibrary( "grantlee_mutabletags_library" );
 }

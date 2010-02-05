@@ -27,6 +27,7 @@
 #include "engine.h"
 #include "context.h"
 #include "filterexpression.h"
+#include "grantlee_paths.h"
 
 typedef QHash<QString, QVariant> Dict;
 
@@ -60,10 +61,10 @@ private:
 void TestScriptableTagsSyntax::initTestCase()
 {
   m_engine = Engine::instance();
-
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_engine->setPluginDirs( QStringList() << appDirPath + "/grantlee_defaulttags/"
-                           << appDirPath + "/grantlee_scriptabletags/" );
+  m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH
+                           << appDirPath + "/grantlee_scriptabletags/" // For scripteddefaults.qs
+                         );
 }
 
 void TestScriptableTagsSyntax::cleanupTestCase()
