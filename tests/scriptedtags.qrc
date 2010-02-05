@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>scripteddefaults.qs</file>
+    <file>testtags.qs</file>
+</qresource>
+</RCC>
+
