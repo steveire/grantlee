@@ -164,12 +164,14 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name, const EngineState
   Q_D( Engine );
   EngineState state = _state ? _state : d->m_currentState;
 
+  if ( name == __scriptableLibName )
+    return 0;
+
   // already loaded by the engine.
   if ( d->m_libraries.contains( name ) )
     return d->m_libraries.value( name );
 
   TagLibraryInterface* scriptableLibrary = d->loadScriptableLibrary( name, state );
-
   if ( scriptableLibrary )
     return scriptableLibrary;
 
