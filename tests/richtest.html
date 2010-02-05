@@ -1,0 +1,325 @@
+<html>
+<h1>Easy stuff</h1>
+<h2>One format</h2>
+<p>A <b>bold</b> part.
+</p>
+<p>An <i>italic</i> part.
+</p>
+<p>An <u>underlined</u> part.
+</p>
+<p>A <s>striked out</s> part.
+</p>
+
+<p><span style="color:blue;">the color blue</span>.</p>
+
+<p><span style="background-color:red;">the backbround color red</span>.</p>
+
+<p><span style="font-family:courier;">the courier font</span>.</p>
+
+<p><span style="font-size:xx-large;">Very large text</span>
+
+<h2>Two formats</h2>
+<p>A <b><i>bold/italic</i></b> part.
+</p>
+<p>A <b><u>bold/underlined</u></b> part.
+</p>
+<p>An <u><s>underlined/striked</s></u> part.
+</p>
+<p>A <s><b>Bold/striked out</b></s> part.
+</p>
+
+<h2>Two formats at edges</h2>
+<p><b><i>A bold/italic</i></b> part.
+</p>
+<p>A bold/underlined <b><u>part.</u></b>
+</p>
+
+<h2>Format boundaries</h2>
+<p>An adjacent <b>bold</b><u>underlined</u> part.
+</p>
+<p>An overlapping <b>bold <u>and </u></b><u>underlined</u> part.
+</p>
+<p>Bold inside <u>un<b>derl</b>ined</u> part.
+</p>
+
+<h2>Lists</h2>
+<h3>Unordered lists</h3>
+Disc:
+<ul>
+<li>this</li>
+<li>that</li>
+<li>these</li>
+<li>those</li>
+</ul>
+
+Circle:
+<ul style="list-style-type: circle;">
+<li>this</li>
+<li>that</li>
+<li>these</li>
+<li>those</li>
+</ul>
+
+Square:
+<ul style="list-style-type: square;">
+<li>this</li>
+<li>that</li>
+<li>these</li>
+<li>those</li>
+</ul>
+
+<h3>Ordered lists</h3>
+
+Decimal:
+<ol style="list-style-type: decimal;">
+<li>this</li>
+<li>that</li>
+<li>these</li>
+<li>those</li>
+</ol>
+
+Alpha lowercase:
+<ol style="list-style-type: lower-alpha;">
+<li>this</li>
+<li>that</li>
+<li>these</li>
+<li>those</li>
+</ol>
+
+Alpha uppercase:
+<ol style="list-style-type: upper-alpha;">
+<li>this</li>
+<li>that</li>
+<li>these</li>
+<li>those</li>
+</ol>
+
+<h3>Nested lists</h3>
+
+<ol>
+<li>this</li>
+<li>
+    <ul>
+    <li>Fizz</li>
+    <li>Bang</li>
+    <li>Crash</li>
+    <li>Wallop</li>
+    </ul>
+</li>
+<li>these</li>
+    <ul>
+    <li>nest</li>
+        <ul>
+        <li>nested</li>
+            <ul>
+            <li>dumb</li>
+                <ul>
+                <li>dumber</li>
+                </ul>
+            </ul>
+        </ul>
+    </ul>
+<li>those</li>
+</ol>
+
+<h3>Images</h3>
+
+A local image:
+
+A remote image:
+
+<h3>Links</h3>
+A named link to <a href="http://www.google.com">google</a>.
+
+A raw link to <a href="http://pim.google.com">http://pim.google.com</a>.
+
+An image link to <a href="http://google.com/"><img src="http://www.google.com/logo.png" /></a>.
+
+Another named <a href="http://contact.google.com">link</a>.
+
+Another link to <a href="http://www.google.com">The google homepage</a>.
+
+A formatted <a href="http://office.google.com"><s>link</s></a>.
+
+<h3>Tables</h3>
+
+<h4>Tables with no defined width attributes</h4>
+Simple grid:
+<table border="1">
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Simple grid with colspan:
+<table border="1">
+<tr><td colspan="2">one-one and one-two</td><td>one-three</td></tr>
+<tr><td>two-one</td><td>two-two</td><td>two-three</td></tr>
+</table>
+
+Simple grid with rowspan:
+<table border="1">
+<tr><td rowspan="2">one-one and two-one</td><td>one-three</td></tr>
+<tr><td>two-two</td></tr>
+<tr><td>three-one</td><td>three-two</td></tr>
+</table>
+
+Simple grid with missing bottom right cell.
+<table border="1">
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td></tr>
+</table>
+
+Table with header:
+<table border="1">
+<tr><th>Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with wide content:
+<table border="1">
+<tr><td>one-one</td><td>one-two</td><td>Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td><td>Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td></tr>
+<tr><td>two-one</td><td>two-two</td><td>Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td><td>Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td></tr>
+</table>
+
+
+Table with formatted contents:
+<table border="1">
+<tr><td><b>bold</b></td><td>a <a href="http://google.com">link</a>.</td></tr>
+<tr><td><span style="font-size:xx-large;">big text</span></td><td><span style="font-family:courier;">another font</span></td></tr>
+</table>
+
+Table with nested table:
+<table border="1">
+<tr><th>Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>
+<table border="1">
+<tr><th>Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+</td></tr>
+</table>
+
+<h4>Tables with widths defined</h4>
+Table with 50 percent width
+<table border="1" width="50%">
+<tr><th>Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 50 percent width and 70% first column width
+<table border="1" width="50%">
+<tr><th width="70%">Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 50 percent width and 100px first column width
+<table border="1" width="50%">
+<tr><th width="100">Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 100px first column width:
+<table border="1">
+<tr><th width="100">Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 10% first column width (makes second column 9 times wider):
+<table border="1">
+<tr><th width="10%">Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 10% first column width on the first row and 20% width on the next row:
+<table border="1">
+<tr><th width="10%">Col1</th><th>Col2</th></tr>
+<tr><td width="20%">one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 300px width:
+<table border="1" width="300">
+<tr><th>Col1</th><th>Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 300px width, first column width 100px, second column width 200px:
+<table border="1" width="300">
+<tr><th width="100">Col1</th><th width="200">Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+<h4>Tables with non matching fixed widths</h4>
+
+Table with 300px width, first column width 100px, second column width 100px:
+<table border="1" width="300">
+<tr><th width="100">Col1</th><th width="100">Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 300px width, first column width 75px, second column width 225px:
+<table border="1" width="300">
+<tr><th width="75">Col1</th><th width="225">Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+Table with 300px width, first column width 75px, second column width 150px:
+<table border="1" width="300">
+<tr><th width="75">Col1</th><th width="150">Col2</th></tr>
+<tr><td>one-one</td><td>one-two</td></tr>
+<tr><td>two-one</td><td>two-two</td></tr>
+</table>
+
+
+<h3>Paragraph formatting</h3>
+
+<h4>Left aligned paragraph. (Reversed in RTL).</h4>
+<p align="left">
+Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+
+<h4>Right aligned paragraph. (Reversed in RTL).</h4>
+<p align="right">
+Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+
+<h4>Center aligned paragraph.</h4>
+<p align="center">
+Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+
+<h4>Justified paragraph.</h4>
+<p align="justify">
+Lorem Ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+
+<p>lorem ipsum</p>
+<p style="margin-top:10px;margin-bottom:0px;">
+Margin above this paragraph. No margin below.
+</p>
+<p style="margin-top:0px;margin-bottom:10px;">
+Margin below this paragraph. No margin above.
+</p>
+<p>lorem ipsum</p>
+
+<h3>Other document formatting</h3>
+
+A horizontal line:
+<hr />
+<p>
+A line with<sup>superscript</sup> and<sub>subscript</sub>.
+</p>
+
+</html>

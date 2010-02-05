@@ -6,6 +6,7 @@ include(${QT_USE_FILE})
 include_directories( ${QT_INCLUDES}
   ${CMAKE_CURRENT_BINARY_DIR}
   ${PROJECT_SOURCE_DIR}/../corelib
+  ${PROJECT_SOURCE_DIR}/../gui
 )
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
@@ -24,7 +25,7 @@ macro(GRANTLEE_UNIT_TESTS)
     qt4_generate_moc(${_testname}.cpp ${moc_output_file})
     add_executable(${_testname}_exec ${_testSrcs} ${moc_output_file} ${_scripted_rcc_src} ${CMAKE_SOURCE_DIR}/corelib/lexer.cpp)
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${Grantlee_CORE_LIBRARIES} )
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${Grantlee_CORE_LIBRARIES} ${Grantlee_GUI_LIBRARY} )
   endforeach(_testname)
 endmacro(GRANTLEE_UNIT_TESTS)
 
@@ -36,6 +37,8 @@ grantlee_unit_tests(
   testmutabletags
   benchmarks
   testfilters
+  htmlbuildertest
+  plainmarkupbuildertest
 )
 
 add_subdirectory(pluginpointertest)

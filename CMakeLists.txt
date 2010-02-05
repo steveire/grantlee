@@ -37,6 +37,7 @@ set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
 set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 
 add_subdirectory(corelib)
+add_subdirectory(gui)
 
 add_subdirectory(loadertags)
 add_subdirectory(defaulttags)
