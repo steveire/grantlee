@@ -141,7 +141,7 @@ void Engine::loadDefaultLibraries( const EngineState &_state )
   EngineState state = _state ? _state : d->m_currentState;
   // Make sure we can load default scriptable libraries if we're supposed to.
   if ( state->d_ptr->m_defaultLibraries.contains( __scriptableLibName ) && !d->m_scriptableTagLibrary ) {
-    d->m_scriptableTagLibrary = d->loadCppLibrary( __scriptableLibName, state );
+    d->m_scriptableTagLibrary = d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR, state );
   }
 
   foreach( const QString &libName, state->d_ptr->m_defaultLibraries ) {
@@ -166,13 +166,25 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name, const EngineState
   if ( d->m_libraries.contains( name ) )
     return d->m_libraries.value( name );
 
-  TagLibraryInterface* scriptableLibrary = d->loadScriptableLibrary( name, state );
+  uint minorVersion = GRANTLEE_VERSION_MINOR;
+  while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION )
+  {
+    TagLibraryInterface* library = d->loadLibrary( name, state, minorVersion-- );
+    if ( library )
+      return library;
+  }
+  return 0;
+}
+
+TagLibraryInterface* EnginePrivate::loadLibrary( const QString &name, const EngineState &state, uint minorVersion )
+{
+  TagLibraryInterface* scriptableLibrary = loadScriptableLibrary( name, minorVersion, state );
   if ( scriptableLibrary )
     return scriptableLibrary;
 
   // else this is not a scriptable library.
 
-  return d->loadCppLibrary( name, state );
+  return loadCppLibrary( name, minorVersion, state );
 }
 
 EnginePrivate::EnginePrivate( Engine *engine )
@@ -182,7 +194,7 @@ EnginePrivate::EnginePrivate( Engine *engine )
   m_currentState = staticEmptyState();
 }
 
-TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, const EngineState &_state )
+TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion, const EngineState &_state )
 {
   EngineState state = _state ? _state : m_currentState;
 
@@ -191,7 +203,7 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
   if ( m_scriptableTagLibrary ) {
     while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
       QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
-      libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' + name + ".qs";
+      libFileName = nextDir + QString( "%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
       QFile file( libFileName );
       if ( !file.exists() )
         continue;
@@ -208,7 +220,7 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
   return 0;
 }
 
-TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, const EngineState &_state )
+TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion, const EngineState &_state )
 {
   EngineState state = _state ? _state : m_currentState;
 
@@ -218,7 +230,7 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, const E
   QObject *plugin = 0;
   while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
     QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
-    QDir pluginDir( nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' );
+    QDir pluginDir( nextDir + QString( "%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
 
     if ( !pluginDir.exists() )
       continue;

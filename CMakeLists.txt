@@ -12,6 +12,7 @@ endif()
 set(GRANTLEE_VERSION_MAJOR 0)
 set(GRANTLEE_VERSION_MINOR 1)
 set(GRANTLEE_VERSION_PATCH 0)
+set(GRANTLEE_MIN_PLUGIN_VERSION 1)
 
 set(GRANTLEE_MAJOR_MINOR_VERSION_STRING "${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}" )
 set(GRANTLEE_VERSION_STRING "${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}.${GRANTLEE_VERSION_PATCH}" )
@@ -40,7 +41,7 @@ endmacro(GRANTLEE_ADD_PLUGIN)
 install(FILES
     cmake/Modules/FindGrantlee.cmake
     DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
-    
+
 add_subdirectory(grantlee_core_library)
 
 add_subdirectory(grantlee_loadertags)

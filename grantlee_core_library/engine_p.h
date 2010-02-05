@@ -33,8 +33,9 @@ class EnginePrivate
 
   static EngineState staticEmptyState();
 
-  TagLibraryInterface* loadScriptableLibrary( const QString &name, const EngineState &state = EngineState() );
-  TagLibraryInterface* loadCppLibrary( const QString& name, const EngineState &state = EngineState() );
+  TagLibraryInterface* loadLibrary( const QString &name, const EngineState &state, uint minorVersion );
+  TagLibraryInterface* loadScriptableLibrary( const QString &name, uint minorVersion, const EngineState &state = EngineState() );
+  TagLibraryInterface* loadCppLibrary( const QString& name, uint minorVersion, const EngineState &state = EngineState() );
 
   Q_DECLARE_PUBLIC( Engine )
   Engine *q_ptr;
