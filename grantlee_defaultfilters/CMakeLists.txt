@@ -6,21 +6,15 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-set (grantlee_defaultfilters_library_SRCS
-  defaultfilters.cpp
+grantlee_add_plugin(grantlee_defaultfilters_library
+  defaultfilters
 
-  datetime.cpp
-  integers.cpp
-  lists.cpp
-  logic.cpp
-  misc.cpp
-  strings.cpp
-)
-
-set(GRANTLEE_DEFAULTFILTERS_LIB_SOVERSION 0)
-
-automoc4_add_library(grantlee_defaultfilters_library SHARED
-  ${grantlee_defaultfilters_library_SRCS}
+  datetime
+  integers
+  lists
+  logic
+  misc
+  strings
 )
 
 target_link_libraries(grantlee_defaultfilters_library

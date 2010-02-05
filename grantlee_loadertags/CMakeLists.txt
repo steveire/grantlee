@@ -6,17 +6,12 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-set (grantlee_loadertags_library_SRCS
-  loadertags.cpp
-  block.cpp
-  extends.cpp
-  include.cpp
-)
+grantlee_add_plugin(grantlee_loadertags_library
+  loadertags
 
-set(GRANTLEE_LOADERTAGS_LIB_SOVERSION 0)
-
-automoc4_add_library(grantlee_loadertags_library SHARED
-  ${grantlee_loadertags_library_SRCS}
+  block
+  extends
+  include
 )
 
 target_link_libraries(grantlee_loadertags_library

@@ -113,4 +113,5 @@ EngineState TemplateImpl::state() const
   return d->m_state;
 }
 
+#include "template.moc"
 

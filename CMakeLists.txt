@@ -3,7 +3,6 @@ project(grantlee)
 cmake_minimum_required(VERSION 2.6)
 
 find_package(Qt4 REQUIRED)
-find_package(Automoc4 REQUIRED)
 
 if (UNIX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
@@ -26,12 +25,21 @@ set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
 set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
 set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
+macro(GRANTLEE_ADD_PLUGIN pluginname )
+  foreach(_filename ${ARGN})
+    set(_headers ${_headers} ${_filename}.h)
+    set(_sources ${_sources} ${_filename}.cpp)
+  endforeach(_filename ${ARGN})
+  qt4_wrap_cpp(_plugin_moc_srcs ${_headers})
+  add_library(${pluginname} SHARED ${_sources} ${_plugin_moc_srcs})
+endmacro(GRANTLEE_ADD_PLUGIN)
+
+
 # Install FindGrantlee.cmake
 install(FILES
     cmake/Modules/FindGrantlee.cmake
     DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
     
-# Next target
 add_subdirectory(grantlee_core_library)
 
 add_subdirectory(grantlee_loadertags)

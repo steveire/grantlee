@@ -5,6 +5,8 @@ include_directories(
   ${PROJECT_BINARY_DIR}
 )
 
+include(${QT_USE_FILE})
+
 configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
 
 set (grantlee_core_library_SRCS
@@ -25,7 +27,9 @@ set (grantlee_core_library_SRCS
 
 set(GRANTLEE_CORE_LIB_SOVERSION 0)
 
-automoc4_add_library(grantlee_core_library SHARED
+qt4_automoc(${grantlee_core_library_SRCS})
+
+add_library(grantlee_core_library SHARED
   ${grantlee_core_library_SRCS}
 )
 

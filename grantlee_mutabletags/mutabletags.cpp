@@ -24,5 +24,3 @@
 
 Q_EXPORT_PLUGIN2( grantlee_mutabletags_library, MutableTagsLibrary )
 
-#include "mutabletags.moc"
-

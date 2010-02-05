@@ -6,14 +6,11 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-set (grantlee_mutabletags_SRCS
-  mutabletags.cpp
-  raw.cpp
-  repeater.cpp
-)
+grantlee_add_plugin(grantlee_mutabletags_library
+  mutabletags
 
-automoc4_add_library(grantlee_mutabletags_library SHARED
-  ${grantlee_mutabletags_SRCS}
+  raw
+  repeater
 )
 
 target_link_libraries(grantlee_mutabletags_library

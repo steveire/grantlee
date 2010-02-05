@@ -6,39 +6,32 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-set (grantlee_defaulttags_library_SRCS
-  defaulttags.cpp
-  autoescape.cpp
-  comment.cpp
-  cycle.cpp
-  debug.cpp
-  filtertag.cpp
-  firstof.cpp
-  for.cpp
-  if.cpp
-  ifchanged.cpp
-  ifequal.cpp
-  load.cpp
-  mediafinder.cpp
-  now.cpp
-  range.cpp
-  regroup.cpp
-  spaceless.cpp
-  ssi.cpp
-  templatetag.cpp
-  widthratio.cpp
-  with.cpp
+grantlee_add_plugin ( grantlee_defaulttags_library
+  defaulttags
+
+  autoescape
+  comment
+  cycle
+  debug
+  filtertag
+  firstof
+  for
+  if
+  ifchanged
+  ifequal
+  load
+  mediafinder
+  now
+  range
+  regroup
+  spaceless
+  ssi
+  templatetag
+  widthratio
+  with
 )
 
-set(GRANTLEE_DEFAULTTAGS_LIB_SOVERSION 0)
-
-automoc4_add_library(grantlee_defaulttags_library SHARED
-  ${grantlee_defaulttags_library_SRCS}
-)
-
-target_link_libraries(grantlee_defaulttags_library
-  grantlee_core_library
-)
+target_link_libraries(grantlee_defaulttags_library grantlee_core_library)
 
 install(TARGETS grantlee_defaulttags_library
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}

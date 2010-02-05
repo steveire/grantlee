@@ -236,3 +236,5 @@ QString VariableNode::render( Context *c )
   return renderValueInContext( v, c );
 }
 
+#include "node.moc"
+

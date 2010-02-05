@@ -6,22 +6,16 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-set (grantlee_scriptabletags_library_SRCS
-  scriptablecontext.cpp
-  scriptablefilter.cpp
-  scriptablefilterexpression.cpp
-  scriptablenode.cpp
-  scriptableparser.cpp
-  scriptablesafestring.cpp
-  scriptabletags.cpp
-  scriptabletemplate.cpp
-  scriptablevariable.cpp
-)
-
-set(GRANTLEE_SCRIPTABLETAGS_LIB_SOVERSION 0)
-
-automoc4_add_library(grantlee_scriptabletags_library SHARED
-    ${grantlee_scriptabletags_library_SRCS}
+grantlee_add_plugin(grantlee_scriptabletags_library
+  scriptablecontext
+  scriptablefilter
+  scriptablefilterexpression
+  scriptablenode
+  scriptableparser
+  scriptablesafestring
+  scriptabletags
+  scriptabletemplate
+  scriptablevariable
 )
 
 target_link_libraries(grantlee_scriptabletags_library

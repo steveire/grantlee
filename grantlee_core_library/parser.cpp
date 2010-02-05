@@ -262,3 +262,5 @@ void Parser::prependToken( const Token &token )
   d->m_tokenList.prepend( token );
 }
 
+#include "parser.moc"
+

@@ -34,3 +34,5 @@ QString MutableTemplateImpl::render( Context* c )
 
 }
 
+#include "mutabletemplate.moc"
+

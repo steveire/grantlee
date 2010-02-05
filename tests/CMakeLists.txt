@@ -1,6 +1,7 @@
 project(grantleetests)
 
 enable_testing()
+include(${QT_USE_FILE})
 
 include_directories( ${QT_INCLUDES}
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -11,9 +12,13 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 macro(GRANTLEE_UNIT_TESTS)
   foreach(_testname ${ARGN})
-    automoc4_add_executable(${_testname}_exec ${_testname}.cpp )
+    set(_testSrcs ${_testname}.cpp)
+    set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
+    qt4_generate_moc(${_testname}.cpp ${moc_output_file})
+    set (_testSrcs ${_testSrcs} ${moc_output_file})
+    add_executable(${_testname}_exec ${_testSrcs} )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_core_library)
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} grantlee_core_library)
   endforeach(_testname)
 endmacro(GRANTLEE_UNIT_TESTS)
 
