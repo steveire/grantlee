@@ -34,3 +34,8 @@ EngineStateImpl::EngineStateImpl()
                         << "grantlee_defaultfilters"
                         << "grantlee_scriptabletags";
 }
+
+Grantlee::EngineStateImpl::~EngineStateImpl()
+{
+  delete d_ptr;
+}

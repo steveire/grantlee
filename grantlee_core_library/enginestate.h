@@ -39,6 +39,8 @@ class EngineStateImplPrivate;
 */
 class GRANTLEE_EXPORT EngineStateImpl
 {
+public:
+  ~EngineStateImpl();
 private:
   friend class Engine;
   friend class EnginePrivate;
