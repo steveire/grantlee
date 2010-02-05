@@ -158,7 +158,7 @@ public:
 
     Loads and returns the libraries specified in defaultLibraries or @p state.
   */
-  QList<TagLibraryInterface*> loadDefaultLibraries( const EngineState &state = EngineState() );
+  void loadDefaultLibraries( const EngineState &state = EngineState() );
 
   /**
     @internal

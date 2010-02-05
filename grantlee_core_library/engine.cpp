@@ -135,14 +135,13 @@ void Engine::removeDefaultLibrary( const QString &libName )
   d->m_currentState->d_ptr->m_defaultLibraries.removeAll( libName );
 }
 
-QList<TagLibraryInterface*> Engine::loadDefaultLibraries( const EngineState &_state )
+void Engine::loadDefaultLibraries( const EngineState &_state )
 {
   Q_D( Engine );
   EngineState state = _state ? _state : d->m_currentState;
-  QList<TagLibraryInterface*> list;
   // Make sure we can load default scriptable libraries if we're supposed to.
   if ( state->d_ptr->m_defaultLibraries.contains( __scriptableLibName ) && !d->m_scriptableTagLibrary ) {
-    d->m_scriptableTagLibrary = loadLibrary( __scriptableLibName, state );
+    d->m_scriptableTagLibrary = d->loadCppLibrary( __scriptableLibName, state );
   }
 
   foreach( const QString &libName, state->d_ptr->m_defaultLibraries ) {
@@ -152,11 +151,7 @@ QList<TagLibraryInterface*> Engine::loadDefaultLibraries( const EngineState &_st
     TagLibraryInterface *library = loadLibrary( libName, state );
     if ( !library )
       continue;
-
-    d->m_libraries.insert( libName, library );
-    list << library;
   }
-  return list;
 }
 
 TagLibraryInterface* Engine::loadLibrary( const QString &name, const EngineState &_state )
@@ -165,7 +160,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name, const EngineState
   EngineState state = _state ? _state : d->m_currentState;
 
   if ( name == __scriptableLibName )
-    return 0;
+    return d->m_scriptableTagLibrary;
 
   // already loaded by the engine.
   if ( d->m_libraries.contains( name ) )
@@ -242,7 +237,10 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, const E
   if ( !plugin )
     return 0;
 
-  return qobject_cast<TagLibraryInterface*>( plugin );
+  TagLibraryInterface *library = qobject_cast<TagLibraryInterface*>( plugin );
+  if ( name != __scriptableLibName )
+    m_libraries.insert( name, library );
+  return library;
 }
 
 Template Engine::loadByName( const QString &name, const EngineState &_state ) const

@@ -89,7 +89,9 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
 
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent );
 
-  foreach( TagLibraryInterface *library, engine->loadDefaultLibraries( ti->state() ) ) {
+  engine->loadDefaultLibraries( ti->state() );
+  foreach( const QString &libraryName, engine->defaultLibraries()) {
+    TagLibraryInterface *library = engine->loadLibrary( libraryName, ti->state() );
     d->openLibrary( library );
   }
 }
