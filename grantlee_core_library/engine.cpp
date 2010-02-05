@@ -34,7 +34,7 @@
 
 using namespace Grantlee;
 
-static const char * __scriptableLibName = "grantlee_scriptabletags_library";
+static const char * __scriptableLibName = "grantlee_scriptabletags";
 
 class ScriptableLibraryContainer : public TagLibraryInterface
 {
@@ -221,17 +221,17 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, const E
   QObject *plugin = 0;
   while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
     QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
-#ifdef Q_CC_MSVC
-    libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' + name + ".dll";
-#else
-    libFileName = nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' + "lib" + name + ".so";
-#endif
-    QFile file( libFileName );
-    Q_ASSERT( QLibrary::isLibrary( libFileName ) );
-    if ( !file.exists() )
+    QDir pluginDir( nextDir + GRANTLEE_MAJOR_MINOR_VERSION_STRING + '/' );
+
+    if ( !pluginDir.exists() )
       continue;
 
-    QPluginLoader loader( libFileName );
+    QStringList list = pluginDir.entryList( QStringList( name + "*" ) );
+
+    if (list.isEmpty())
+      continue;
+
+    QPluginLoader loader( pluginDir.absoluteFilePath( list.first() ) );
 
     plugin = loader.instance();
     if ( plugin )

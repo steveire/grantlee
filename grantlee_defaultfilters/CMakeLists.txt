@@ -6,7 +6,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-grantlee_add_plugin(grantlee_defaultfilters_library
+grantlee_add_plugin(grantlee_defaultfilters
   defaultfilters
 
   datetime
@@ -17,11 +17,11 @@ grantlee_add_plugin(grantlee_defaultfilters_library
   strings
 )
 
-target_link_libraries(grantlee_defaultfilters_library
+target_link_libraries(grantlee_defaultfilters
   grantlee_core_library
 )
 
-install(TARGETS grantlee_defaultfilters_library
+install(TARGETS grantlee_defaultfilters
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR}

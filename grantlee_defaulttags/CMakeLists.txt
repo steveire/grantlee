@@ -6,7 +6,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-grantlee_add_plugin ( grantlee_defaulttags_library
+grantlee_add_plugin ( grantlee_defaulttags
   defaulttags
 
   autoescape
@@ -31,9 +31,9 @@ grantlee_add_plugin ( grantlee_defaulttags_library
   with
 )
 
-target_link_libraries(grantlee_defaulttags_library grantlee_core_library)
+target_link_libraries(grantlee_defaulttags grantlee_core_library)
 
-install(TARGETS grantlee_defaulttags_library
+install(TARGETS grantlee_defaulttags
         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}

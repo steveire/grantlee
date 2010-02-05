@@ -29,8 +29,8 @@ EngineStateImpl::EngineStateImpl()
   : d_ptr( new EngineStateImplPrivate() )
 {
   Q_D( EngineStateImpl );
-  d->m_defaultLibraries << "grantlee_defaulttags_library"
-                        << "grantlee_loadertags_library"
-                        << "grantlee_defaultfilters_library"
-                        << "grantlee_scriptabletags_library";
+  d->m_defaultLibraries << "grantlee_defaulttags"
+                        << "grantlee_loadertags"
+                        << "grantlee_defaultfilters"
+                        << "grantlee_scriptabletags";
 }
