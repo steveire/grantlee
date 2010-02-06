@@ -62,7 +62,7 @@ void TestMutableTagsSyntax::initTestCase()
   m_engine = Engine::instance();
   m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
 
-  m_engine->addDefaultLibrary( "grantlee_mutabletags_library" );
+  m_engine->addDefaultLibrary( "grantlee_mutabletags" );
 }
 
 void TestMutableTagsSyntax::cleanupTestCase()
