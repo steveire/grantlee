@@ -92,6 +92,8 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
   engine->loadDefaultLibraries( ti->state() );
   foreach( const QString &libraryName, engine->defaultLibraries()) {
     TagLibraryInterface *library = engine->loadLibrary( libraryName, ti->state() );
+    if(!library)
+      continue;
     d->openLibrary( library );
   }
 }
