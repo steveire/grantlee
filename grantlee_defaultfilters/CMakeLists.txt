@@ -6,16 +6,23 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-grantlee_add_plugin(grantlee_defaultfilters
-  defaultfilters
+set(grantlee_defaultfilters_sources
+  defaultfilters.cpp
 
-  datetime
-  integers
-  lists
-  logic
-  misc
-  strings
+  datetime.cpp
+  integers.cpp
+  lists.cpp
+  logic.cpp
+  misc.cpp
+  strings.cpp
 )
+
+qt4_wrap_cpp(grantlee_defaultfilters_moc_sources defaultfilters.h)
+
+add_library(grantlee_defaultfilters SHARED ${grantlee_defaultfilters_sources} ${grantlee_defaultfilters_moc_sources} )
+
+set_target_properties(grantlee_defaultfilters PROPERTIES PREFIX "")
+
 
 target_link_libraries(grantlee_defaultfilters
   grantlee_core_library
