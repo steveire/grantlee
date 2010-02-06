@@ -29,7 +29,7 @@
 #    endif
 #  endif
 #else
-#  define GRANTLEE_EXPORT
+#  define GRANTLEE_EXPORT __attribute__((visibility("default")))
 #endif
 
 #endif

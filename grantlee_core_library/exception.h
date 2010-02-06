@@ -32,7 +32,7 @@ namespace Grantlee
 /**
   An exception for use when implementing template tags.
 */
-class Exception
+class GRANTLEE_EXPORT Exception
 {
 public:
   /**
