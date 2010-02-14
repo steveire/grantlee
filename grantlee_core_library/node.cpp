@@ -20,6 +20,7 @@
 #include "node.h"
 
 #include "util_p.h"
+#include "template.h"
 
 using namespace Grantlee;
 
@@ -74,6 +75,20 @@ QString Node::renderValueInContext( const QVariant& input, Context* c )
     return Util::escape( inputString );
   return inputString;
 }
+
+TemplateImpl* Node::containerTemplate() const
+{
+  QObject *_parent = parent();
+  TemplateImpl *ti = qobject_cast<TemplateImpl *>( _parent );
+  while ( _parent && !ti )
+  {
+    _parent = _parent->parent();
+    ti = qobject_cast<TemplateImpl *>( _parent );
+  }
+  Q_ASSERT( ti );
+  return ti;
+}
+
 
 NodeList::NodeList()
     : QList<Grantlee::Node*>(), m_containsNonText( false )

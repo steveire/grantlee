@@ -139,6 +139,10 @@ void TestLoaderTags::testIncludeTag_data()
 
   QTest::newRow( "include06" ) << "{% include \"include 05\" %}" << dict << "template with a space" << NoError;
 
+  dict.clear();
+  dict.insert("list", QVariantList() << QVariant() << QVariant());
+  QTest::newRow( "include07" ) << "{% for i in list %}{% include \"include 05\" %}{% endfor %}" << dict << "template with a spacetemplate with a space" << NoError;
+
 }
 
 

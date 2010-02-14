@@ -77,7 +77,7 @@ QString SsiNode::render( Context *c )
   }
 
   if ( m_parse ) {
-    TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
+    TemplateImpl *ti = containerTemplate();
     Template t = Engine::instance()->newTemplate( content, m_filename, ti->state() );
     return t->render( c );
   }

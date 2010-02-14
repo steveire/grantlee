@@ -112,7 +112,7 @@ Template ExtendsNode::getParent( Context *c )
   }
   Engine *engine = Engine::instance();
 
-  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
+  TemplateImpl *ti = containerTemplate();
 
   Template t = engine->loadByName( parentName, ti->state() );
 

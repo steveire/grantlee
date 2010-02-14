@@ -39,6 +39,7 @@ namespace Grantlee
 {
 
 class NodeList;
+class TemplateImpl;
 
 class NodePrivate;
 
@@ -100,6 +101,8 @@ protected:
     This is only relevant to developing template tags.
   */
   QString renderValueInContext( const QVariant &input, Grantlee::Context *c );
+
+  TemplateImpl* containerTemplate() const;
 
 private:
   Q_DECLARE_PRIVATE( Node )

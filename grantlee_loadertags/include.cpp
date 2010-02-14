@@ -63,7 +63,7 @@ QString IncludeNode::render( Context *c )
 
   Engine *engine = Engine::instance();
 
-  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
+  TemplateImpl *ti = containerTemplate();
   try {
     Template t = engine->loadByName( filename, ti->state() );
 
@@ -87,7 +87,7 @@ QString ConstantIncludeNode::render( Context *c )
 {
   Engine *engine = Engine::instance();
 
-  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
+  TemplateImpl *ti = containerTemplate();
 
   try {
     Template t = engine->loadByName( m_name, ti->state() );
