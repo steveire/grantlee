@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 2.6)
 
 find_package(Qt4 REQUIRED)
 
+set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
+
 if (UNIX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic -fvisibility=hidden")
@@ -27,7 +29,7 @@ set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
 set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
 set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
-macro(GRANTLEE_ADD_PLUGIN pluginname )
+macro(GRANTLEE_ADD_PLUGIN pluginname)
   foreach(_filename ${ARGN})
     set(_headers ${_headers} ${_filename}.h)
     set(_sources ${_sources} ${_filename}.cpp)
@@ -36,12 +38,6 @@ macro(GRANTLEE_ADD_PLUGIN pluginname )
   add_library(${pluginname} SHARED ${_sources} ${_plugin_moc_srcs})
   set_target_properties(${pluginname} PROPERTIES PREFIX "")
 endmacro(GRANTLEE_ADD_PLUGIN)
-
-
-# Install FindGrantlee.cmake
-install(FILES
-    cmake/Modules/FindGrantlee.cmake
-    DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
 
 add_subdirectory(grantlee_core_library)
 
@@ -55,4 +51,34 @@ add_subdirectory(grantlee_mutabletags)
 add_subdirectory(grantlee_scriptabletags)
 
 add_subdirectory(tests)
+
+configure_file(
+  "${CMAKE_MODULE_PATH}/GrantleeConfig.cmake.in"
+  "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
+  IMMEDIATE @ONLY
+)
+
+configure_file(
+  "${CMAKE_MODULE_PATH}/GrantleeConfigVersion.cmake.in"
+  "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
+  IMMEDIATE @ONLY
+)
+
+install(FILES
+  "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
+  "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
+  DESTINATION "${LIB_INSTALL_DIR}/grantlee")
+
+# Install the configuration files to help find Avogadro
+install(FILES
+  "${CMAKE_MODULE_PATH}/GrantleeUse.cmake"
+  "${Grantlee_BINARY_DIR}/GrantleeBuildSettings.cmake"
+  "${Grantlee_BINARY_DIR}/GrantleeLibraryDeps.cmake"
+  DESTINATION "${PLUGIN_INSTALL_DIR}")
+
+
+# Export our build settings and library dependencies
+include(CMakeExportBuildSettings)
+cmake_export_build_settings("${Grantlee_BINARY_DIR}/GrantleeBuildSettings.cmake")
+export_library_dependencies("${Grantlee_BINARY_DIR}/GrantleeLibraryDeps.cmake")
 

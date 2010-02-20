@@ -1,0 +1,17 @@
+# Grantlee CMake configuration file - http://www.grantlee.org/
+
+# If this file was found, then Avogadro has been found
+set(Grantlee_FOUND 1)
+
+set(Grantlee_VERSION_MAJOR "@Grantlee_VERSION_MAJOR@")
+set(Grantlee_VERSION_MINOR "@Grantlee_VERSION_MINOR@")
+set(Grantlee_VERSION_PATCH "@Grantlee_VERSION_PATCH@")
+
+set(Grantlee_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
+set(Grantlee_INCLUDE_DIRS   "@CMAKE_INSTALL_PREFIX@"/include)
+set(Grantlee_LIBRARY_DIRS   "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@")
+set(Grantlee_PLUGIN_PATH    "@LIB_INSTALL_DIR@/grantlee/")
+
+# Now for the use file, which contains useful functions, sets up the project
+set(Grantlee_USE_FILE "${Grantlee_PLUGIN_PATH}/GrantleeUse.cmake")
+
