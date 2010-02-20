@@ -15,7 +15,7 @@ set( GRANTLEE_PLUGIN_PATH "${LIB_INSTALL_DIR}/grantlee/" )
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 set (_rcc_file "scriptedtags.qrc")
-qt4_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/grantlee/${GRANTLEE_MAJOR_MINOR_VERSION_STRING}" )
+qt4_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING}" )
 
 macro(GRANTLEE_UNIT_TESTS)
   foreach(_testname ${ARGN})

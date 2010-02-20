@@ -1,4 +1,4 @@
-project(grantlee)
+project(Grantlee)
 
 cmake_minimum_required(VERSION 2.6)
 
@@ -9,18 +9,19 @@ if (UNIX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic -fvisibility=hidden")
 endif()
 
-set(GRANTLEE_VERSION_MAJOR 0)
-set(GRANTLEE_VERSION_MINOR 1)
-set(GRANTLEE_VERSION_PATCH 0)
-set(GRANTLEE_MIN_PLUGIN_VERSION 1)
 
-set(GRANTLEE_MAJOR_MINOR_VERSION_STRING "${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}" )
-set(GRANTLEE_VERSION_STRING "${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}.${GRANTLEE_VERSION_PATCH}" )
+set(Grantlee_VERSION_MAJOR 0)
+set(Grantlee_VERSION_MINOR 1)
+set(Grantlee_VERSION_PATCH 0)
+set(Grantlee_MIN_PLUGIN_VERSION 1)
+
+set(Grantlee_MAJOR_MINOR_VERSION_STRING "${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}" )
+set(Grantlee_VERSION_STRING "${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}" )
 
 set (LIB_SUFFIX "" CACHE STRING "Define suffix of library directory name (eg. '64')")
 
 set( LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
-set( PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/grantlee/${GRANTLEE_MAJOR_MINOR_VERSION_STRING} )
+set( PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING} )
 set( BIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/bin )
 set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
 set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )

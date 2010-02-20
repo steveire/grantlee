@@ -25,7 +25,7 @@ set (grantlee_core_library_SRCS
   variable.cpp
 )
 
-set(GRANTLEE_CORE_LIB_SOVERSION 0)
+set(Grantlee_CORE_LIB_SOVERSION 0)
 
 qt4_automoc(${grantlee_core_library_SRCS})
 
@@ -38,8 +38,8 @@ target_link_libraries(grantlee_core_library
 )
 
 set_target_properties(grantlee_core_library PROPERTIES
-  VERSION    ${GRANTLEE_VERSION_MAJOR}.${GRANTLEE_VERSION_MINOR}.${GRANTLEE_VERSION_PATCH}
-  SOVERSION  ${GRANTLEE_CORE_LIB_SOVERSION}
+  VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
+  SOVERSION  ${Grantlee_CORE_LIB_SOVERSION}
   DEFINE_SYMBOL GRANTLEE_CORE_LIB_MAKEDLL
 )
 
