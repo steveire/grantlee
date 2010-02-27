@@ -10,7 +10,7 @@ include_directories( ${QT_INCLUDES}
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-set( GRANTLEE_PLUGIN_PATH "${LIB_INSTALL_DIR}/grantlee/" )
+set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/grantlee/" )
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 

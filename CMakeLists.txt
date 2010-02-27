@@ -35,7 +35,11 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
   endforeach(_filename ${ARGN})
   qt4_wrap_cpp(_plugin_moc_srcs ${_headers})
   add_library(${pluginname} SHARED ${_sources} ${_plugin_moc_srcs})
-  set_target_properties(${pluginname} PROPERTIES PREFIX "")
+  set_target_properties(${pluginname}
+    PROPERTIES PREFIX ""
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}"
+  )
+
 endmacro(GRANTLEE_ADD_PLUGIN)
 
 add_subdirectory(grantlee_core_library)

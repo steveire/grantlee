@@ -21,7 +21,9 @@ qt4_wrap_cpp(grantlee_defaultfilters_moc_sources defaultfilters.h)
 
 add_library(grantlee_defaultfilters SHARED ${grantlee_defaultfilters_sources} ${grantlee_defaultfilters_moc_sources} )
 
-set_target_properties(grantlee_defaultfilters PROPERTIES PREFIX "")
+set_target_properties(grantlee_defaultfilters  PROPERTIES PREFIX ""
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}"
+)
 
 
 target_link_libraries(grantlee_defaultfilters
