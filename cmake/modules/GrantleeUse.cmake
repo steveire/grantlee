@@ -1,8 +1,4 @@
 
-# The use file for Grantlee, distributed along with Grantlee
-include(CMakeImportBuildSettings)
-cmake_import_build_settings(${Grantlee_BUILD_SETTINGS_FILE})
-
 # Set up the include directories and link directories
 include_directories(${Grantlee_INCLUDE_DIRS})
 link_directories(${Grantlee_LIBRARY_DIRS})

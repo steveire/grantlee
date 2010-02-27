@@ -1,5 +1,7 @@
 project(grantlee_defaulttags)
 
+include(${Grantlee_USE_FILE})
+
 include_directories(
   ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}

@@ -28,19 +28,7 @@ set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
 set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
 set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
-macro(GRANTLEE_ADD_PLUGIN pluginname)
-  foreach(_filename ${ARGN})
-    set(_headers ${_headers} ${_filename}.h)
-    set(_sources ${_sources} ${_filename}.cpp)
-  endforeach(_filename ${ARGN})
-  qt4_wrap_cpp(_plugin_moc_srcs ${_headers})
-  add_library(${pluginname} SHARED ${_sources} ${_plugin_moc_srcs})
-  set_target_properties(${pluginname}
-    PROPERTIES PREFIX ""
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}"
-  )
-
-endmacro(GRANTLEE_ADD_PLUGIN)
+set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 
 add_subdirectory(grantlee_core_library)
 
@@ -71,16 +59,4 @@ install(FILES
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
   DESTINATION "${LIB_INSTALL_DIR}/grantlee")
-
-# Install the configuration files to help find Avogadro
-install(FILES
-  "${CMAKE_MODULE_PATH}/GrantleeUse.cmake"
-  "${Grantlee_BINARY_DIR}/GrantleeBuildSettings.cmake"
-  "${Grantlee_BINARY_DIR}/GrantleeLibraryDeps.cmake"
-  DESTINATION "${PLUGIN_INSTALL_DIR}")
-
-# Export our build settings and library dependencies
-include(CMakeExportBuildSettings)
-cmake_export_build_settings("${Grantlee_BINARY_DIR}/GrantleeBuildSettings.cmake")
-export_library_dependencies("${Grantlee_BINARY_DIR}/GrantleeLibraryDeps.cmake")
 
