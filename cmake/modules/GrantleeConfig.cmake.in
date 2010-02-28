@@ -13,11 +13,14 @@ set(Grantlee_PLUGIN_PATH    "${Grantlee_LIBRARY_DIR}/grantlee")
 
 if (UNIX)
   set(Grantlee_CORE_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_core.so")
+  set(Grantlee_GUI_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_gui.so")
 else (UNIX)
   set(Grantlee_CORE_LIBRARY "${Grantlee_LIBRARY_DIR}/grantlee_core.dll")
+  set(Grantlee_GUI_LIBRARY "${Grantlee_LIBRARY_DIR}/grantlee_gui.dll")
 endif (UNIX)
 
 set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
+set(Grantlee_GUI_LIBRARIES ${Grantlee_GUI_LIBRARY} ${QT_QTCORE_LIBRARIES} )
 
 # Now for the use file, which contains useful functions, sets up the project
 set(Grantlee_USE_FILE "${Grantlee_PLUGIN_PATH}/@Grantlee_VERSION_MAJOR@.@Grantlee_VERSION_MINOR@/GrantleeUse.cmake")

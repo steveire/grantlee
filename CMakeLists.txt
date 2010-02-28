@@ -32,7 +32,9 @@ set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
 set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
 set(Grantlee_CORE_LIBRARY "grantlee_core")
+set(Grantlee_GUI_LIBRARY "grantlee_gui")
 set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
+set(Grantlee_GUI_LIBRARIES ${Grantlee_GUI_LIBRARY} ${QT_QTGUI_LIBRARIES} )
 
 set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 

@@ -30,6 +30,8 @@
 #include <QTextList>
 #include <QTextDocument>
 
+#include "grantlee_gui_export.h"
+
 /**
 @brief The KAbstractMarkupBuilder class serves as a base class for creating marked up plain text output.
 
@@ -57,7 +59,7 @@ builder->endExtraElement(KAbstractMarkupBuilder::DivTag);
 @author Stephen Kelly <steveire@gmail.com>
 @since 4.2
 */
-class KAbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT KAbstractMarkupBuilder
 {
 public:
 

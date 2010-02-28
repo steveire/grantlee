@@ -24,6 +24,8 @@
 
 #include "kabstractmarkupbuilder.h"
 
+#include "grantlee_gui_export.h"
+
 class KTextHTMLBuilderPrivate;
 
 /**
@@ -80,7 +82,7 @@ instead of
 @since 4.2
 
 */
-class KTextHTMLBuilder : public KAbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT KTextHTMLBuilder : public KAbstractMarkupBuilder
 {
 public:
 

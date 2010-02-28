@@ -26,6 +26,9 @@
 
 #include "kabstractmarkupbuilder.h"
 #include <QTextDocument>
+
+#include "grantlee_gui_export.h"
+
 class QTextFrame;
 class QTextTable;
 class QTextTableCell;
@@ -65,7 +68,7 @@ Or with a different builder:
 @since 4.2
 
 */
-class KMarkupDirector
+class GRANTLEE_GUI_EXPORT KMarkupDirector
 {
 public:
     /**

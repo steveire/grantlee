@@ -27,6 +27,8 @@
 
 #include "kabstractmarkupbuilder.h"
 
+#include "grantlee_gui_export.h"
+
 class KPlainTextMarkupBuilderPrivate;
 
 /**
@@ -84,7 +86,7 @@ becomes:
 @since 4.2
 
 */
-class KPlainTextMarkupBuilder : public KAbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT KPlainTextMarkupBuilder : public KAbstractMarkupBuilder
 {
 public:
     /** Construct a new KPlainTextMarkupBuilder. */
