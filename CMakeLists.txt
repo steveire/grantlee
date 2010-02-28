@@ -70,3 +70,16 @@ add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
+# Add support for a docs target
+configure_file(
+  "${CMAKE_MODULE_PATH}/Doxyfile.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+  IMMEDIATE @ONLY)
+
+find_package(Doxygen)
+if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
+  message (STATUS "Doxygen and dot found. make docs target is available")
+  add_custom_target(docs
+    ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
+  )
+endif()
