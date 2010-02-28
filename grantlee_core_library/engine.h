@@ -20,13 +20,13 @@
 #ifndef GRANTLEE_ENGINE_H
 #define GRANTLEE_ENGINE_H
 
-#include "interfaces/taglibraryinterface.h"
 #include "mutabletemplate.h"
 #include "template.h"
 #include "templateloader.h"
 
 namespace Grantlee
 {
+class TagLibraryInterface;
 
 class EnginePrivate;
 

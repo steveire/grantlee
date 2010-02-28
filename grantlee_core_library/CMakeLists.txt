@@ -63,6 +63,7 @@ install(FILES
   node.h
   parser.h
   safestring.h
+  taglibraryinterface.h
   template.h
   templateloader.h
   token.h
@@ -73,11 +74,5 @@ install(FILES
 install(FILES
   grantlee.h
   DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
-)
-
-
-install(FILES
-    interfaces/taglibraryinterface.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee/interfaces COMPONENT Devel
 )
 

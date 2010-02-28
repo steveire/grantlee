@@ -21,7 +21,7 @@
 #define DEFAULTTAGS_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
+#include "taglibraryinterface.h"
 
 #include "autoescape.h"
 #include "comment.h"

@@ -21,11 +21,8 @@
 #define CYCLENODE_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
-
 
 using namespace Grantlee;
-
 
 class CycleNodeFactory : public AbstractNodeFactory
 {

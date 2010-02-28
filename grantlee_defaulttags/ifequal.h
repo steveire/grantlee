@@ -21,11 +21,8 @@
 #define IFEQUALNODE_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
-
 
 using namespace Grantlee;
-
 
 class IfEqualNodeFactory : public AbstractNodeFactory
 {

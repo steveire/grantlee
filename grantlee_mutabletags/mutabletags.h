@@ -20,7 +20,7 @@
 #ifndef MUTABLE_TAGS_H
 #define MUTABLE_TAGS_H
 
-#include "interfaces/taglibraryinterface.h"
+#include "taglibraryinterface.h"
 
 #include "raw.h"
 #include "repeater.h"

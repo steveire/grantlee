@@ -21,14 +21,11 @@
 #define INCLUDENODE_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
-
 
 namespace Grantlee
 {
 class Parser;
 }
-
 
 using namespace Grantlee;
 

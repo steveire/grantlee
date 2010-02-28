@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QPluginLoader>
 
-#include "interfaces/taglibraryinterface.h"
+#include "taglibraryinterface.h"
 #include "enginestate_p.h"
 #include "template_p.h"
 #include "templateloader.h"

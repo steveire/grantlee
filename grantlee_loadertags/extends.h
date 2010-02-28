@@ -21,7 +21,6 @@
 #define EXTENDSNODE_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
 #include "template.h"
 
 namespace Grantlee

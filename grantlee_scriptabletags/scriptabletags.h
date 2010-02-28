@@ -21,7 +21,7 @@
 #define SCRIPTABLETAGS_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
+#include "taglibraryinterface.h"
 
 // #include <QScriptEngine>
 

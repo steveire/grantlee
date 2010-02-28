@@ -21,7 +21,7 @@
 #define LOADERTAGS_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
+#include "taglibraryinterface.h"
 
 #include "block.h"
 #include "extends.h"

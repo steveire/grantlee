@@ -22,7 +22,7 @@
 
 #include "node.h"
 #include "filter.h"
-#include "interfaces/taglibraryinterface.h"
+#include "taglibraryinterface.h"
 
 #include "datetime.h"
 #include "integers.h"

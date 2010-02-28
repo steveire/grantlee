@@ -21,13 +21,10 @@
 #define TEMPLATETAGNODE_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
-
 #include "grantlee_export.h"
 
 
 using namespace Grantlee;
-
 
 class TemplateTagNodeFactory : public AbstractNodeFactory
 {

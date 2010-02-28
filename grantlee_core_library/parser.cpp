@@ -21,7 +21,7 @@
 
 #include <QFile>
 
-#include "interfaces/taglibraryinterface.h"
+#include "taglibraryinterface.h"
 #include "template.h"
 #include "engine.h"
 #include "filter.h"

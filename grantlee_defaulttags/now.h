@@ -21,8 +21,6 @@
 #define NOWNODE_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
-
 
 using namespace Grantlee;
 

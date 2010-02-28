@@ -21,8 +21,6 @@
 #define BLOCKNODE_H
 
 #include "node.h"
-#include "interfaces/taglibraryinterface.h"
-
 
 namespace Grantlee
 {
