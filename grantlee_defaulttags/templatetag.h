@@ -21,8 +21,6 @@
 #define TEMPLATETAGNODE_H
 
 #include "node.h"
-#include "grantlee_export.h"
-
 
 using namespace Grantlee;
 

@@ -27,7 +27,7 @@
 #include "node.h"
 
 #include "global.h"
-#include "grantlee_export.h"
+#include "grantlee_core_export.h"
 
 namespace Grantlee
 {
@@ -50,7 +50,7 @@ class TemplatePrivate;
 
   If there is an error in parsing or rendering, the error and errorString methods can be used to check the source of the error.
 */
-class GRANTLEE_EXPORT TemplateImpl : public QObject
+class GRANTLEE_CORE_EXPORT TemplateImpl : public QObject
 {
   Q_OBJECT
 public:

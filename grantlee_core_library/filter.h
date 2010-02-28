@@ -28,7 +28,7 @@
 
 #include "safestring.h"
 
-#include "grantlee_export.h"
+#include "grantlee_core_export.h"
 
 namespace Grantlee
 {
@@ -39,7 +39,7 @@ namespace Grantlee
   The Filter class can be implemented in plugin libraries to make additional functionality available to templates.
 
 */
-class GRANTLEE_EXPORT Filter
+class GRANTLEE_CORE_EXPORT Filter
 {
 public:
   typedef QSharedPointer<Filter> Ptr;

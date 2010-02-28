@@ -23,7 +23,7 @@
 #include "filter.h"
 #include "variable.h"
 
-#include "grantlee_export.h"
+#include "grantlee_core_export.h"
 
 namespace Grantlee
 {
@@ -41,7 +41,7 @@ class FilterExpressionPrivate;
   This class is only relevant if implementing custom tags or filters. Most of the API here is internal.
   Usually when implementing tags or filters, filter expressions will just be created and resolved.
 */
-class GRANTLEE_EXPORT FilterExpression
+class GRANTLEE_CORE_EXPORT FilterExpression
 {
 public:
   /**

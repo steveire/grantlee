@@ -33,7 +33,7 @@
 #include "filterexpression.h"
 #include "safestring.h"
 
-#include "grantlee_export.h"
+#include "grantlee_core_export.h"
 
 namespace Grantlee
 {
@@ -48,7 +48,7 @@ class NodePrivate;
 
   The Node class can be implemented to make additional functionality available to Templates.
 */
-class GRANTLEE_EXPORT Node : public QObject
+class GRANTLEE_CORE_EXPORT Node : public QObject
 {
   Q_OBJECT
 public:
@@ -113,7 +113,7 @@ private:
   @brief A list of Nodes with some convenience API for rendering them.
 
 */
-class GRANTLEE_EXPORT NodeList : public QList<Grantlee::Node*>
+class GRANTLEE_CORE_EXPORT NodeList : public QList<Grantlee::Node*>
 {
 public:
   /**
@@ -194,7 +194,7 @@ class AbstractNodeFactoryPrivate;
   The getNode method should be implemented to return a Node to be rendered.
 
 */
-class GRANTLEE_EXPORT AbstractNodeFactory : public QObject
+class GRANTLEE_CORE_EXPORT AbstractNodeFactory : public QObject
 {
   Q_OBJECT
 public:
@@ -254,7 +254,7 @@ private:
 
   A Node for plain text. Plain text is everything between variables, comments and template tags.
 */
-class GRANTLEE_EXPORT TextNode : public Node
+class GRANTLEE_CORE_EXPORT TextNode : public Node
 {
   Q_OBJECT
 public:
@@ -278,7 +278,7 @@ private:
 
   A node for a variable or filter expression substitution.
 */
-class GRANTLEE_EXPORT VariableNode : public Node
+class GRANTLEE_CORE_EXPORT VariableNode : public Node
 {
   Q_OBJECT
 public:

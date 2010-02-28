@@ -22,7 +22,7 @@
 
 #include <QtCore/QSharedPointer>
 
-#include "grantlee_export.h"
+#include "grantlee_core_export.h"
 
 namespace Grantlee
 {
@@ -37,7 +37,7 @@ class EngineStateImplPrivate;
 
   @see template_factories
 */
-class GRANTLEE_EXPORT EngineStateImpl
+class GRANTLEE_CORE_EXPORT EngineStateImpl
 {
 public:
   ~EngineStateImpl();

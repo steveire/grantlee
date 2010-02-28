@@ -22,7 +22,7 @@
 
 #include <QtCore/QVariantHash>
 
-#include "grantlee_export.h"
+#include "grantlee_core_export.h"
 
 namespace Grantlee
 {
@@ -100,7 +100,7 @@ class ContextPrivate;
   @endcode
 
 */
-class GRANTLEE_EXPORT Context
+class GRANTLEE_CORE_EXPORT Context
 {
 public:
 

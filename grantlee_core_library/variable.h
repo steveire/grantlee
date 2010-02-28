@@ -22,7 +22,7 @@
 
 #include <QtCore/QVariant>
 
-#include "grantlee_export.h"
+#include "grantlee_core_export.h"
 
 namespace Grantlee
 {
@@ -42,7 +42,7 @@ class VariablePrivate;
   Arguments to the tag can be used to construct Variables, which may then be resolved into the objects they
   represent in the given Context in the render stage.
 */
-class GRANTLEE_EXPORT Variable
+class GRANTLEE_CORE_EXPORT Variable
 {
 public:
   Variable();

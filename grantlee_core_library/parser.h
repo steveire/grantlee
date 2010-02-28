@@ -40,7 +40,7 @@ class ParserPrivate;
   For template tag authors it may be necessary to advance the parser and process contained tags if
   the tag works in a tag -- endtag fashion.
 */
-class GRANTLEE_EXPORT Parser : public QObject
+class GRANTLEE_CORE_EXPORT Parser : public QObject
 {
   Q_OBJECT
 public:

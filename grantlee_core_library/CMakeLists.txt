@@ -58,7 +58,7 @@ install(FILES
   filter.h
   filterexpression.h
   global.h
-  grantlee_export.h
+  grantlee_core_export.h
   mutabletemplate.h
   node.h
   parser.h

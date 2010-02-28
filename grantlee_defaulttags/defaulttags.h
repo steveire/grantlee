@@ -43,7 +43,6 @@
 #include "templatetag.h"
 #include "widthratio.h"
 #include "with.h"
-#include "grantlee_export.h"
 
 namespace Grantlee
 {
