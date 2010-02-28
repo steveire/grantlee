@@ -30,7 +30,7 @@ set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
 set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 
-add_subdirectory(grantlee_core_library)
+add_subdirectory(grantlee_core)
 
 add_subdirectory(grantlee_loadertags)
 add_subdirectory(grantlee_defaulttags)

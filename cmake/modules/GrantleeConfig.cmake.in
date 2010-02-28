@@ -13,9 +13,9 @@ set(Grantlee_LIBRARY_DIRS   "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@")
 set(Grantlee_PLUGIN_PATH    "@LIB_INSTALL_DIR@/grantlee/")
 
 if (UNIX)
-  set(Grantlee_CORE_LIBRARY "@LIB_INSTALL_DIR@/libgrantlee_core_library.so")
+  set(Grantlee_CORE_LIBRARY "@LIB_INSTALL_DIR@/libgrantlee_core.so")
 else (UNIX)
-  set(Grantlee_CORE_LIBRARY "@LIB_INSTALL_DIR@/grantlee_core_library.dll")
+  set(Grantlee_CORE_LIBRARY "@LIB_INSTALL_DIR@/grantlee_core.dll")
 endif (UNIX)
 
 set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )

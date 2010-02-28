@@ -3,7 +3,7 @@ project(grantlee_scriptabletags)
 include_directories(
   ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/../grantlee_core_library
+  ${PROJECT_SOURCE_DIR}/../grantlee_core
 )
 
 grantlee_add_plugin(grantlee_scriptabletags
