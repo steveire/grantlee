@@ -15,6 +15,7 @@ grantlee_add_plugin(grantlee_defaultfilters
     lists
     logic
     misc
+    strings
 )
 
 install(TARGETS grantlee_defaultfilters
