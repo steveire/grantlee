@@ -21,8 +21,6 @@
 
 #include "kplaintextmarkupbuilder.h"
 
-#include <KLocale>
-
 class KPlainTextMarkupBuilderPrivate
 {
 public:
@@ -84,8 +82,7 @@ QString KPlainTextMarkupBuilderPrivate::getReferences()
 {
     QString refs;
     if (!m_urls.isEmpty()) {
-        refs.append(i18nc("Beginning of the references section, which lists all external references",
-                          "\n---- References ----\n"));
+        refs.append("\n--------\n");
 
         int index = 1;
         while (!m_urls.isEmpty()) {

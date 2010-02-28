@@ -23,7 +23,6 @@
 #define BBCODEBUILDER_H
 
 #include "kabstractmarkupbuilder.h"
-#include <kdebug.h>
 
 /**
 Creates BBCode from a QTextDocument

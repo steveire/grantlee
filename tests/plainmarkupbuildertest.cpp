@@ -28,10 +28,9 @@
 #include <QTextDocument>
 #include <QTextEdit>
 
-#include <kdebug.h>
-#include "../kmarkupdirector.h"
-#include "../kplaintextmarkupbuilder.h"
-#include "../khtmlbuilder.h"
+#include "grantlee/kmarkupdirector.h"
+#include "grantlee/kplaintextmarkupbuilder.h"
+#include "grantlee/ktexthtmlbuilder.h"
 
 class TestPlainMarkupOutput: public QObject
 {
@@ -583,5 +582,5 @@ void TestPlainMarkupOutput:: testBrInsideParagraph()
 }
 
 
-QTEST_KDEMAIN(TestPlainMarkupOutput, GUI)
+QTEST_MAIN(TestPlainMarkupOutput)
 #include "plainmarkupbuildertest.moc"

@@ -25,8 +25,6 @@
 #define LETTERSINALPHABET 26
 #define DIGITSOFFSET 10
 
-#include <kdebug.h>
-
 #include "kabstractmarkupbuilder.h"
 
 class KPlainTextMarkupBuilderPrivate;

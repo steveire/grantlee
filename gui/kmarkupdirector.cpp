@@ -23,8 +23,6 @@
 #include "kmarkupdirector.h"
 #include "kmarkupdirector_p.h"
 
-#include <kdebug.h>
-
 #include <QFlags>
 #include <QTextDocument>
 #include <QTextDocumentFragment>

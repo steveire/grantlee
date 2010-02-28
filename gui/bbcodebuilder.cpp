@@ -22,7 +22,6 @@
 
 
 #include "bbcodebuilder.h"
-#include <kdebug.h>
 
 BBCodeBuilder::BBCodeBuilder()
 {

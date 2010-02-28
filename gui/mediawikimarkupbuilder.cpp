@@ -20,7 +20,6 @@
 */
 
 #include "mediawikimarkupbuilder.h"
-#include <kdebug.h>
 
 MediaWikiMarkupBuilder::MediaWikiMarkupBuilder() {}
 MediaWikiMarkupBuilder::~MediaWikiMarkupBuilder() {}

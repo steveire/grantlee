@@ -22,9 +22,7 @@
 #ifndef MEDIAWIKIMARKUPBUILDER_H
 #define MEDIAWIKIMARKUPBUILDER_H
 
-
 #include "kabstractmarkupbuilder.h"
-#include <kdebug.h>
 
 
 /**
