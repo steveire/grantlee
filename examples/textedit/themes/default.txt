@@ -1,0 +1,10 @@
+
+= My document =
+
+== Abstract ==
+
+{{ abstract|to_plain_text }}
+
+== Content ==
+
+{{ content|to_plain_text }}

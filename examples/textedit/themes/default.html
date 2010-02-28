@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>My title</head>
+<style>
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+</style>
+</head>
+<body>
+  <h1>My document</h1>
+
+<h2>Abstract</h2>
+
+{{ abstract|to_clean_html }}
+
+<h2>Content</h2>
+
+{{ content|to_clean_html }}
+</body>
+</html>
+

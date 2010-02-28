@@ -59,6 +59,7 @@ target_link_libraries(
   textedit
   ${QT_QTCORE_LIBRARIES}
   ${QT_QTGUI_LIBRARIES}
+  ${Grantlee_CORE_LIBRARIES}
 )
 
 

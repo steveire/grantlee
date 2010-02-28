@@ -55,6 +55,7 @@
 #include <QMenuBar>
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QSplitter>
 #include <QTextCodec>
 #include <QTextEdit>
 #include <QToolBar>
@@ -65,6 +66,10 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QPrintPreviewDialog>
+
+#include <grantlee/engine.h>
+#include <grantlee/context.h>
+#include "grantlee_paths.h"
 
 #ifdef Q_WS_MAC
 const QString rsrcPath = ":/images/mac";
@@ -87,13 +92,19 @@ TextEdit::TextEdit(QWidget *parent)
         helpMenu->addAction(tr("About &Qt"), qApp, SLOT(aboutQt()));
     }
 
+    abstractTextEdit = new QTextEdit(this);
+
     textEdit = new QTextEdit(this);
     connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(currentCharFormatChanged(QTextCharFormat)));
     connect(textEdit, SIGNAL(cursorPositionChanged()),
             this, SLOT(cursorPositionChanged()));
 
-    setCentralWidget(textEdit);
+    QSplitter *splitter = new QSplitter(Qt::Vertical, this);
+    splitter->addWidget(abstractTextEdit);
+    splitter->addWidget(textEdit);
+
+    setCentralWidget(splitter);
     textEdit->setFocus();
     setCurrentFileName(QString());
 
@@ -215,6 +226,24 @@ void TextEdit::setupFileActions()
 
     menu->addSeparator();
 #endif
+
+    a = new QAction(QIcon::fromTheme("export_themed_html"),
+    tr("&Export Themed HTML..."), this);
+    a->setPriority(QAction::LowPriority);
+    connect(a, SIGNAL(triggered()), this, SLOT(exportThemedHtml()));
+    tb->addAction(a);
+    menu->addAction(a);
+
+    menu->addSeparator();
+
+    a = new QAction(QIcon::fromTheme("export_plain_text"),
+    tr("&Export Plain Text"), this);
+    a->setPriority(QAction::LowPriority);
+    connect(a, SIGNAL(triggered()), this, SLOT(exportPlainText()));
+    tb->addAction(a);
+    menu->addAction(a);
+
+    menu->addSeparator();
 
     a = new QAction(tr("&Quit"), this);
     a->setShortcut(Qt::CTRL + Qt::Key_Q);
@@ -542,6 +571,52 @@ void TextEdit::filePrintPdf()
     }
 //! [0]
 #endif
+}
+
+Q_DECLARE_METATYPE(QTextDocument*)
+
+void TextEdit::exportThemedHtml()
+{
+    Grantlee::Engine *engine = new Grantlee::Engine();
+    engine->addDefaultLibrary( "customtags" );
+
+    Grantlee::FileSystemTemplateLoader::Ptr loader(new Grantlee::FileSystemTemplateLoader());
+    loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH);
+    engine->addTemplateLoader(loader);
+
+    engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH << QApplication::applicationDirPath() + "/" );
+
+    QString themeName = "default.html";
+    Grantlee::Template t = engine->loadByName(themeName);
+    Grantlee::Context c;
+    c.insert("abstract", QVariant::fromValue( abstractTextEdit->document() ) );
+    c.insert("content", QVariant::fromValue( textEdit->document() ) );
+    QString result = t->render(&c);
+    qDebug() << result;
+
+}
+
+void TextEdit::exportPlainText()
+{
+    Grantlee::Engine *engine = new Grantlee::Engine();
+    engine->addDefaultLibrary( "customtags" );
+
+    Grantlee::FileSystemTemplateLoader::Ptr loader(new Grantlee::FileSystemTemplateLoader());
+    loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH);
+    engine->addTemplateLoader(loader);
+
+    engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH << QApplication::applicationDirPath() + "/" );
+
+    QString themeName = "default.txt";
+    Grantlee::Template t = engine->loadByName(themeName);
+    Grantlee::Context c;
+
+    c.insert("abstract", QVariant::fromValue( abstractTextEdit->document() ) );
+    c.insert("content", QVariant::fromValue( textEdit->document() ) );
+
+    QString result = t->render(&c);
+
+    webView->setContent(result.toUtf8(), "text/plain");
 }
 
 void TextEdit::textBold()

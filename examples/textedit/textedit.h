@@ -80,6 +80,9 @@ private Q_SLOTS:
     void filePrintPreview();
     void filePrintPdf();
 
+    void exportThemedHtml();
+    void exportPlainText();
+
     void textBold();
     void textUnderline();
     void textItalic();
@@ -123,6 +126,7 @@ private:
 
     QToolBar *tb;
     QString fileName;
+    QTextEdit *abstractTextEdit;
     QTextEdit *textEdit;
 };
 
