@@ -36,7 +36,7 @@ class GRANTLEE_CORE_EXPORT Exception
 {
 public:
   /**
-    Creates an exception for the error @P errorCode and the verbose message @p what
+    Creates an exception for the error @p errorCode and the verbose message @p what
   */
   Exception( Error errorCode, const QString &what )
       : m_errorCode( errorCode ), m_what( what ) {}

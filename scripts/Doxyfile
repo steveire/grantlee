@@ -143,19 +143,24 @@ FILE_PATTERNS          = *.c \
                          *.F \
                          *.VHD \
                          *.VHDL \
-                         .dox
+
 RECURSIVE              = YES
-EXCLUDE                = *.git* \
-                         scripts
+EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = 
-EXCLUDE_SYMBOLS        = 
-EXAMPLE_PATH           = 
+EXCLUDE_PATTERNS       = .* \
+                         scripts* \
+                         examples* \
+                         cmake \
+                         tests \
+                         *_p* \
+
+EXCLUDE_SYMBOLS        =
+EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
-IMAGE_PATH             = 
-INPUT_FILTER           = 
-FILTER_PATTERNS        = 
+IMAGE_PATH             = dox
+INPUT_FILTER           =
+FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
 #---------------------------------------------------------------------------
 # configuration options related to source browsing

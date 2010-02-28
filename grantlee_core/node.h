@@ -212,7 +212,7 @@ public:
     This method should be reimplemented to return a Node which can be rendered.
 
     @p tagContent is the content of the tag including the tag name and arguments. For example,
-    if the template content is "{% my_tag arg1 arg2 %}", the tagContent will be "my_tag arg1 arg2".
+    if the template content is &quot;{% my_tag arg1 arg2 %}&quot;, the tagContent will be &quot;my_tag arg1 arg2&quot;.
 
     The Parser @p p is available and can be advanced if appropriate. For example, if the tag has an
     end tag, the parser can be advanced to the end tag.
@@ -226,12 +226,12 @@ protected:
 
     This is typically used in the implementation of getNode with the tagContent.
 
-    If @p str is 'one "two three" four 'five " six' seven', the returned list will contain the following strings:
+    If @p str is 'one &quot;two three&quot; four 'five &quot; six' seven', the returned list will contain the following strings:
 
     - one
-    - "two three"
+    - &quot;two three&quot;
     - four
-    - five " six
+    - five &quot; six
     - seven
   */
   Q_INVOKABLE QStringList smartSplit( const QString &str ) const;

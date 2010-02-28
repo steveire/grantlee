@@ -11,8 +11,8 @@ namespace Grantlee
 The Books application from Qt Demos is modified to export the available data to a rendered html file. The example shows a use of the extends tag to override some parts of a base template. The templates can be edited to change the exported content without any recompiling. The themer has broad control over how the data os rendered and can even alter the structure of the presented data.
 
 @image html grantlee_book_simple.png "A simple export of the data"
-@image html grantlee_book_coloured.png "A coloured export of the data showing the use of the {% cycle %} tag."
-@image html grantlee_book_coloured_grouped.png "A restructured export of the data showing the use of the {% ifchanged %} tag."
+@image html grantlee_book_coloured.png "A coloured export of the data showing the use of the &quot;cycle&quot; tag."
+@image html grantlee_book_coloured_grouped.png "A restructured export of the data showing the use of the &quot;ifchanged&quot; tag."
 
 @section dbus_chat Chat
 
