@@ -203,7 +203,7 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
   if ( m_scriptableTagLibrary ) {
     while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
       QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
-      libFileName = nextDir + QString( "%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
+      libFileName = nextDir + QString( "/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
       QFile file( libFileName );
       if ( !file.exists() )
         continue;
@@ -230,7 +230,7 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, uint mi
   QObject *plugin = 0;
   while ( state->d_ptr->m_pluginDirs.size() > pluginIndex ) {
     QString nextDir = state->d_ptr->m_pluginDirs.at( pluginIndex++ );
-    QDir pluginDir( nextDir + QString( "%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
+    QDir pluginDir( nextDir + QString( "/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
 
     if ( !pluginDir.exists() )
       continue;
