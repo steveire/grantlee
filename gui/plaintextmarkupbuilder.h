@@ -19,20 +19,22 @@
     02110-1301, USA.
 */
 
-#ifndef KPLAINTEXTMARKUPBUILDER_H
-#define KPLAINTEXTMARKUPBUILDER_H
+#ifndef GRANTLEE_PLAINTEXTMARKUPBUILDER_H
+#define GRANTLEE_PLAINTEXTMARKUPBUILDER_H
 
 #define LETTERSINALPHABET 26
 #define DIGITSOFFSET 10
 
-#include "kabstractmarkupbuilder.h"
+#include "abstractmarkupbuilder.h"
 
 #include "grantlee_gui_export.h"
 
-class KPlainTextMarkupBuilderPrivate;
+namespace Grantlee {
+
+class PlainTextMarkupBuilderPrivate;
 
 /**
-@brief The KPlainTextMarkupBuilder creates a simple marked up plain text document.
+@brief The PlainTextHTMLMarkupBuilder creates a simple marked up plain text document.
 
 This class creates a simple plain text markup.
 
@@ -86,11 +88,11 @@ becomes:
 @since 4.2
 
 */
-class GRANTLEE_GUI_EXPORT KPlainTextMarkupBuilder : public KAbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT PlainTextMarkupBuilder : public AbstractMarkupBuilder
 {
 public:
-    /** Construct a new KPlainTextMarkupBuilder. */
-    KPlainTextMarkupBuilder();
+    /** Construct a new PlainTextHTMLMarkupBuilder. */
+    PlainTextMarkupBuilder();
 
     virtual void beginStrong();
     virtual void endStrong();
@@ -138,10 +140,12 @@ public:
     virtual QString& getResult();
 
 private:
-    KPlainTextMarkupBuilderPrivate *d_ptr;
-    Q_DECLARE_PRIVATE(KPlainTextMarkupBuilder)
+    PlainTextMarkupBuilderPrivate *d_ptr;
+    Q_DECLARE_PRIVATE(PlainTextMarkupBuilder)
 
 
 };
+
+}
 
 #endif

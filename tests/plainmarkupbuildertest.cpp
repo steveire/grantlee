@@ -28,9 +28,11 @@
 #include <QTextDocument>
 #include <QTextEdit>
 
-#include "grantlee/kmarkupdirector.h"
-#include "grantlee/kplaintextmarkupbuilder.h"
-#include "grantlee/ktexthtmlbuilder.h"
+#include "markupdirector.h"
+#include "plaintextmarkupbuilder.h"
+#include "texthtmlbuilder.h"
+
+using namespace Grantlee;
 
 class TestPlainMarkupOutput: public QObject
 {
@@ -72,8 +74,8 @@ void TestPlainMarkupOutput::testSingleFormat()
     // One format
     doc->setHtml("This <b>text</b> is bold.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
     QRegExp regex(QString("^This \\*text\\* is bold.\\n$"));
@@ -89,8 +91,8 @@ void TestPlainMarkupOutput::testDoubleFormat()
     // One format
     doc->setHtml("Some <b><i>formatted</i></b> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
     QRegExp regex(QString("^Some (\\*/|/\\*)formatted(\\*/|/\\*) text.\\n$"));
@@ -104,8 +106,8 @@ void TestPlainMarkupOutput::testAnchor()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("A <a href=\"http://www.kde.org\">link</a> to KDE.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -124,8 +126,8 @@ void TestPlainMarkupOutput::testAnchorWithFormattedContent()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("A <a href=\"http://www.kde.org\"><b>formatted</b> link</a> to KDE.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -141,8 +143,8 @@ void TestPlainMarkupOutput::testAdjacentAnchors()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Two <a href=\"http://www.kde.org\">links</a><a href=\"http://www.google.com\">next</a> to eachother.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -156,8 +158,8 @@ void TestPlainMarkupOutput::testNestedFormatting()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("This <b>text is <i>italic</i> and</b> bold.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -171,8 +173,8 @@ void TestPlainMarkupOutput::testSpan()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Some <span style=\"color:#ff0000;\">formatted</span> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -186,8 +188,8 @@ void TestPlainMarkupOutput::testDoubleSpan()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Some <span style=\"color:#ff0000;background-color:#00ff00;\">formatted</span> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -203,8 +205,8 @@ void TestPlainMarkupOutput::testSpanNesting()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph <span style=\"background-color:#00ff00;\">with some <span style=\"color:#ff0000;\">formatted</span> nested</span> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -218,8 +220,8 @@ void TestPlainMarkupOutput::testDoubleStartDifferentFinish()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph <i><b>with</b> some formatted</i> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -233,8 +235,8 @@ void TestPlainMarkupOutput::testDoubleStartDifferentFinishReverseOrder()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph <b><i>with</i> some formatted</b> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -249,8 +251,8 @@ void TestPlainMarkupOutput::testDifferentStartDoubleFinish()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph <i>with some <b>formatted<b></i> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -264,8 +266,8 @@ void TestPlainMarkupOutput::testDifferentStartDoubleFinishReverseOrder()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph <b>with some <i>formatted</i></b> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -281,8 +283,8 @@ void TestPlainMarkupOutput::testOverlap()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph <b>with <i>some</i></b><i> formatted</i> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -298,8 +300,8 @@ void TestPlainMarkupOutput::testEdgeCaseLeft()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph <b>with some formatted text.</b>");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -313,8 +315,8 @@ void TestPlainMarkupOutput::testEdgeCaseRight()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("<b>Paragraph with some formatted</b> text.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -328,8 +330,8 @@ void TestPlainMarkupOutput::testImage()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" /> image.");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -342,15 +344,15 @@ void TestPlainMarkupOutput::testImageResized()
 {
     QString result;
     QRegExp regex;
-    KPlainTextMarkupBuilder *hb;
-    KMarkupDirector *md;
+    PlainTextMarkupBuilder *hb;
+    MarkupDirector *md;
     QTextDocument *doc = new QTextDocument();
 
     // width
     doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" /> image.");
 
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -361,8 +363,8 @@ void TestPlainMarkupOutput::testImageResized()
     // height
     doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" /> image.");
 
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -372,8 +374,8 @@ void TestPlainMarkupOutput::testImageResized()
     // height and width
     doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" width=\"10\" /> image.");
 
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -386,15 +388,15 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 {
     QString result;
     QRegExp regex;
-    KPlainTextMarkupBuilder *hb;
-    KMarkupDirector *md;
+    PlainTextMarkupBuilder *hb;
+    MarkupDirector *md;
     QTextDocument *doc = new QTextDocument();
 
 
     // Test bold
     doc->setHtml("Some <b>formatted</b> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -404,8 +406,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Italic
     doc->setHtml("Some <i>formatted</i> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -414,8 +416,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Underline
     doc->setHtml("Some <u>formatted</u> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -424,8 +426,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Strikeout
     doc->setHtml("Some <s>formatted</s> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -434,8 +436,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Superscript
     doc->setHtml("Some <sup>formatted</sup> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -444,8 +446,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Subscript
     doc->setHtml("Some <sub>formatted</sub> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -454,8 +456,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Foreground
     doc->setHtml("Some <span style=\"color:#ff0000;\">formatted</span> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -465,8 +467,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Background
     doc->setHtml("Some <span style=\"background-color:#ff0000;\">formatted</span> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -475,8 +477,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Font Family
     doc->setHtml("Some <span style=\"font-family:courier;\">formatted</span> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -485,8 +487,8 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
     // Test Font Size
     doc->setHtml("Some <span style=\"font-size:20pt;\">formatted</span> text.");
-    hb = new KPlainTextMarkupBuilder();
-    md = new KMarkupDirector(hb);
+    hb = new PlainTextMarkupBuilder();
+    md = new MarkupDirector(hb);
     md->constructContent(doc);
     result = hb->getResult();
 
@@ -500,8 +502,8 @@ void TestPlainMarkupOutput::testHorizontalRule()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr /><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -516,8 +518,8 @@ void TestPlainMarkupOutput::testNewlines()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("<p>Foo</p>\n<br /><br />\n<p>Bar</p>");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -531,8 +533,8 @@ void TestPlainMarkupOutput::testEmptyParagraphs()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("<p>Foo</p>\n<br /><br />\n<p>Bar</p>");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 
@@ -553,8 +555,8 @@ void TestPlainMarkupOutput::testNewlinesThroughQTextEdit()
     cursor.insertText("\n");
     cursor.insertText("Bar");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(te->document());
     QString result = hb->getResult();
 
@@ -569,8 +571,8 @@ void TestPlainMarkupOutput:: testBrInsideParagraph()
     QTextDocument *doc = new QTextDocument();
     doc->setHtml("<p>Foo<br /><br /><br />Bar</p>");
 
-    KPlainTextMarkupBuilder *hb = new KPlainTextMarkupBuilder();
-    KMarkupDirector *md = new KMarkupDirector(hb);
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
     md->constructContent(doc);
     QString result = hb->getResult();
 

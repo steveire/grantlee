@@ -23,6 +23,8 @@
 
 #include "bbcodebuilder.h"
 
+using namespace Grantlee;
+
 BBCodeBuilder::BBCodeBuilder()
 {
 

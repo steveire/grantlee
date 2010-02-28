@@ -21,8 +21,8 @@
 
 // Any class for which you cannot create instances is an abstract class.
 
-#ifndef KABSTRACTMARKUPBUILDER_H
-#define KABSTRACTMARKUPBUILDER_H
+#ifndef GRANTLEE_ABSTRACTMARKUPBUILDER_H
+#define GRANTLEE_ABSTRACTMARKUPBUILDER_H
 
 
 #include <QString>
@@ -32,10 +32,13 @@
 
 #include "grantlee_gui_export.h"
 
-/**
-@brief The KAbstractMarkupBuilder class serves as a base class for creating marked up plain text output.
+namespace Grantlee
+{
 
-The KAbstractMarkupBuilder is used by the MarkupDirector to create marked up output such as html or markdown.
+/**
+@brief The AbstractMarkupBuilder class serves as a base class for creating marked up plain text output.
+
+The AbstractMarkupBuilder is used by the MarkupDirector to create marked up output such as html or markdown.
 
 Subclasses can reimplement whichever methods they choose. None of the methods are pure virtual and all default to an empty function
 to allow a clean fall-through. The exception is appendLiteralText, which appends its argument to the text being built.
@@ -48,18 +51,15 @@ eg,
 
 @code
 
-builder->beginExtraElement(KAbstractMarkupBuilder::DivTag);
+builder->beginExtraElement(AbstractMarkupBuilder::DivTag);
 // ...
-builder->endExtraElement(KAbstractMarkupBuilder::DivTag);
+builder->endExtraElement(AbstractMarkupBuilder::DivTag);
 
 @endcode
 
-@todo Move this to kdelibs when tested.
-
 @author Stephen Kelly <steveire@gmail.com>
-@since 4.2
 */
-class GRANTLEE_GUI_EXPORT KAbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT AbstractMarkupBuilder
 {
 public:
 
@@ -68,7 +68,7 @@ public:
     enum ExtraElement { UserElement = 100 };
 
     /** Destructor */
-    virtual ~KAbstractMarkupBuilder() {}
+    virtual ~AbstractMarkupBuilder() {}
 
     /** Begin a bold element in the markup */
     virtual void beginStrong() { }
@@ -316,5 +316,7 @@ public:
     virtual QString& getResult() = 0;
 
 };
+
+}
 
 #endif

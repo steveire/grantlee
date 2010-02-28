@@ -20,8 +20,8 @@
 */
 
 
-#include "kmarkupdirector.h"
-#include "kmarkupdirector_p.h"
+#include "markupdirector.h"
+#include "markupdirector_p.h"
 
 #include <QFlags>
 #include <QTextDocument>
@@ -37,20 +37,22 @@
 #include <QColor>
 #include <QBrush>
 
-#include "kabstractmarkupbuilder.h"
+#include "abstractmarkupbuilder.h"
 
-KMarkupDirector::KMarkupDirector(KAbstractMarkupBuilder* builder) :
+using namespace Grantlee;
+
+MarkupDirector::MarkupDirector(AbstractMarkupBuilder* builder) :
         d(new Private(this))
 {
     d->builder = builder;
 }
 
-KMarkupDirector::~KMarkupDirector()
+MarkupDirector::~MarkupDirector()
 {
     delete d;
 }
 
-void KMarkupDirector::processDocumentContents(QTextFrame::iterator start, QTextFrame::iterator end)
+void MarkupDirector::processDocumentContents(QTextFrame::iterator start, QTextFrame::iterator end)
 {
     for (QTextFrame::iterator it = start; ((!it.atEnd()) && (it != end)); ++it) {
         QTextFrame *frame = it.currentFrame();
@@ -67,12 +69,12 @@ void KMarkupDirector::processDocumentContents(QTextFrame::iterator start, QTextF
     }
 }
 
-void KMarkupDirector::processFrame(QTextFrame* frame)
+void MarkupDirector::processFrame(QTextFrame* frame)
 {
     processDocumentContents(frame->begin(), frame->end());
 }
 
-void KMarkupDirector::processBlock(const QTextBlock &block)
+void MarkupDirector::processBlock(const QTextBlock &block)
 {
     if (block.isValid()) {
         QTextList *list = block.textList();
@@ -88,7 +90,7 @@ void KMarkupDirector::processBlock(const QTextBlock &block)
     }
 }
 
-void KMarkupDirector::processTable(QTextTable *table)
+void MarkupDirector::processTable(QTextTable *table)
 {
     QTextTableFormat format = table->format();
     QVector<QTextLength> colLengths = format.columnWidthConstraints();
@@ -170,12 +172,12 @@ void KMarkupDirector::processTable(QTextTable *table)
     d->builder->endTable();
 }
 
-void KMarkupDirector::processTableCell(const QTextTableCell &cell)
+void MarkupDirector::processTableCell(const QTextTableCell &cell)
 {
     processDocumentContents(cell.begin(), cell.end());
 }
 
-void KMarkupDirector::processList(const QTextBlock &ablock)
+void MarkupDirector::processList(const QTextBlock &ablock)
 {
     QTextBlock block(ablock);
 
@@ -239,7 +241,7 @@ void KMarkupDirector::processList(const QTextBlock &ablock)
     }
 }
 
-void KMarkupDirector::processBlockContents(const QTextBlock &block)
+void MarkupDirector::processBlockContents(const QTextBlock &block)
 {
     QTextBlockFormat blockFormat = block.blockFormat();
     Qt::Alignment blockAlignment = blockFormat.alignment();
@@ -369,7 +371,7 @@ void KMarkupDirector::processBlockContents(const QTextBlock &block)
 
 }
 
-void KMarkupDirector::constructContent(QTextDocument* doc)
+void MarkupDirector::constructContent(QTextDocument* doc)
 {
     QTextFrame *rootFrame = doc->rootFrame();
     processFrame(rootFrame);

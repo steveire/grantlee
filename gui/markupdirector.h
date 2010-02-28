@@ -20,11 +20,10 @@
 */
 
 
-#ifndef KMARKUPDIRECTOR_H
-#define KMARKUPDIRECTOR_H
+#ifndef GRANTLEE_MARKUPDIRECTOR_H
+#define GRANTLEE_MARKUPDIRECTOR_H
 
-
-#include "kabstractmarkupbuilder.h"
+#include "abstractmarkupbuilder.h"
 #include <QTextDocument>
 
 #include "grantlee_gui_export.h"
@@ -35,10 +34,13 @@ class QTextTableCell;
 class QTextList;
 class QTextCharFormat;
 
+namespace Grantlee
+{
+
 /**
 @brief The Markupdirector class controls and instructs a builder object to create markup output.
 
-The KMarkupDirector is used with a subclass of AbstractMarkupBuilder to create a marked up document output.
+The MarkupDirector is used with a subclass of AbstractMarkupBuilder to create a marked up document output.
 
 Usage can be quite simple.
 
@@ -47,7 +49,7 @@ Usage can be quite simple.
     QTextDocument *doc = editor->document(); // editor is a QTextEdit
 
     AbstractMarkupBuilder *builder = new HTMLBuilder();
-    KMarkupDirector *md = new MarkupDirector(builder);
+    MarkupDirector *md = new MarkupDirector(builder);
     md->constructContent(doc);
     browser.setHtml(builder->getResult()); // browser is a QTextBrowser.
 
@@ -57,27 +59,23 @@ Or with a different builder:
 
 @code
     AbstractMarkupBuilder *builder = new PlainTextMarkupBuilder();
-    KMarkupDirector *md = new MarkupDirector(builder);
+    MarkupDirector *md = new MarkupDirector(builder);
     md->constructContent(doc);
     browser.setPlainText(builder->getResult());
 @endcode
 
-@todo Move this to kdelibs when tested and prooven.
-
 @author Stephen Kelly <steveire@gmail.com>
-@since 4.2
-
 */
-class GRANTLEE_GUI_EXPORT KMarkupDirector
+class GRANTLEE_GUI_EXPORT MarkupDirector
 {
 public:
     /**
     Construct a new KMarkupDirector
     */
-    KMarkupDirector(KAbstractMarkupBuilder* builder);
+    MarkupDirector(Grantlee::AbstractMarkupBuilder* builder);
 
     /** Destructor */
-    virtual ~KMarkupDirector();
+    virtual ~MarkupDirector();
 
     /**
     Constructs the output by directing the builder to create the markup.
@@ -157,5 +155,7 @@ private:
     friend class Private;
     Private *const d;
 };
+
+}
 
 #endif

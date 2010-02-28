@@ -19,16 +19,18 @@
     02110-1301, USA.
 */
 
-#ifndef MEDIAWIKIMARKUPBUILDER_H
-#define MEDIAWIKIMARKUPBUILDER_H
+#ifndef GRANTLEE_MEDIAWIKIMARKUPBUILDER_H
+#define GRANTLEE_MEDIAWIKIMARKUPBUILDER_H
 
-#include "kabstractmarkupbuilder.h"
+#include "abstractmarkupbuilder.h"
 
+namespace Grantlee
+{
 
 /**
     @brief Creates MediaWiki markup from a QTextDocument
 */
-class MediaWikiMarkupBuilder : public KAbstractMarkupBuilder
+class MediaWikiMarkupBuilder : public AbstractMarkupBuilder
 {
 public:
 
@@ -78,5 +80,7 @@ private:
 
     QString m_text;
 };
+
+}
 
 #endif

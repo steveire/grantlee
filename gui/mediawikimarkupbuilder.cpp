@@ -21,6 +21,8 @@
 
 #include "mediawikimarkupbuilder.h"
 
+using namespace Grantlee;
+
 MediaWikiMarkupBuilder::MediaWikiMarkupBuilder() {}
 MediaWikiMarkupBuilder::~MediaWikiMarkupBuilder() {}
 

@@ -9,10 +9,10 @@ include(${QT_USE_FILE})
 
 set (grantlee_gui_SRCS
   bbcodebuilder.cpp
-  kmarkupdirector.cpp
-  kmarkupdirector_p.cpp
-  kplaintextmarkupbuilder.cpp
-  ktexthtmlbuilder.cpp
+  markupdirector.cpp
+  markupdirector_p.cpp
+  plaintextmarkupbuilder.cpp
+  texthtmlbuilder.cpp
   mediawikimarkupbuilder.cpp
 )
 
@@ -45,9 +45,9 @@ install(TARGETS grantlee_gui
 install(FILES
   abstractmarkupbuilder.h
   bbcodebuilder.h
-  kmarkupdirector.h
-  kplaintextmarkupbuilder.h
-  ktexthtmlbuilder.h
+  markupdirector.h
+  plaintextmarkupbuilder.h
+  texthtmlbuilder.h
   mediawikimarkupbuilder.h
   grantlee_gui_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel

@@ -19,23 +19,26 @@
     02110-1301, USA.
 */
 
-#ifndef KMARKUPDIRECTOR_P_H
-#define KMARKUPDIRECTOR_P_H
+#ifndef GRANTLEE_MARKUPDIRECTOR_P_H
+#define GRANTLEE_MARKUPDIRECTOR_P_H
 
-#include "kmarkupdirector.h"
+#include "markupdirector.h"
 
 #include <QSet>
 
 //@cond PRIVATE
 
+namespace Grantlee
+{
+
 /**
  * @internal
  * Maintainability class for KMarkupDirector
  */
-class KMarkupDirector::Private
+class MarkupDirector::Private
 {
 public:
-    Private(KMarkupDirector *md)
+    Private(MarkupDirector *md)
             : q(md) {
     }
 
@@ -45,8 +48,8 @@ public:
     QList< int > getElementsToOpen(QTextBlock::iterator it);
     QList< int > sortOpeningOrder(QSet< int > openingOrder, QTextBlock::iterator it);
 
-    KMarkupDirector *q;
-    KAbstractMarkupBuilder *builder;
+    MarkupDirector *q;
+    AbstractMarkupBuilder *builder;
 
     enum OpenElementValues {
         None = 0x0,
@@ -85,6 +88,8 @@ public:
 
 };
 // Q_DECLARE_OPERATORS_FOR_FLAGS(KMarkupDirector::Private::OpenElements)
+
+}
 
 #endif
 //@endcond

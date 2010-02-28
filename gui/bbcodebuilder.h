@@ -19,15 +19,18 @@
     02110-1301, USA.
 */
 
-#ifndef BBCODEBUILDER_H
-#define BBCODEBUILDER_H
+#ifndef GRANTLEE_BBCODEBUILDER_H
+#define GRANTLEE_BBCODEBUILDER_H
 
-#include "kabstractmarkupbuilder.h"
+#include "abstractmarkupbuilder.h"
+
+namespace Grantlee
+{
 
 /**
 Creates BBCode from a QTextDocument
 */
-class BBCodeBuilder : public KAbstractMarkupBuilder
+class BBCodeBuilder : public AbstractMarkupBuilder
 {
 public:
 
@@ -104,6 +107,8 @@ private:
     Qt::Alignment currentAlignment;
 
 };
+
+}
 
 #endif
 

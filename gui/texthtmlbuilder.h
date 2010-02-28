@@ -19,17 +19,20 @@
     02110-1301, USA.
 */
 
-#ifndef KTEXTHTMLBUILDER_H
-#define KTEXTHTMLBUILDER_H
+#ifndef GRANTLEE_TEXTHTMLBUILDER_H
+#define GRANTLEE_TEXTHTMLBUILDER_H
 
-#include "kabstractmarkupbuilder.h"
+#include "abstractmarkupbuilder.h"
 
 #include "grantlee_gui_export.h"
 
-class KTextHTMLBuilderPrivate;
+namespace Grantlee
+{
+
+class TextHTMLBuilderPrivate;
 
 /**
-@brief The KTextHTMLBuilder creates a clean html markup output.
+@brief The TextHTMLBuilder creates a clean html markup output.
 
 This class creates html output which is as minimal as possible and restricted to the rich text features supported in Qt. (http://doc.trolltech.com/4.4/richtext-html-subset.htm)
 
@@ -56,7 +59,7 @@ p, li { white-space: pre-wrap; }
 Such tags should be created separately. For example:
 
 @code
-        AbstractMarkupBuilder *b = new KTextHTMLBuilder();
+        AbstractMarkupBuilder *b = new TextHTMLBuilder();
         KMarkupDirector *md = new KMarkupDirector(b);
         md->constructContent();
         QString cleanHtml("<head>\n<title>%1</title>\n</head>\n<body>%2</body>\n</html>")
@@ -82,15 +85,15 @@ instead of
 @since 4.2
 
 */
-class GRANTLEE_GUI_EXPORT KTextHTMLBuilder : public KAbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT TextHTMLBuilder : public AbstractMarkupBuilder
 {
 public:
 
     /**
-    Creates a new KTextHTMLBuilder.
+    Creates a new TextHTMLBuilder.
     */
-    KTextHTMLBuilder();
-    virtual ~KTextHTMLBuilder();
+    TextHTMLBuilder();
+    virtual ~TextHTMLBuilder();
 
     virtual void beginStrong();
     virtual void endStrong();
@@ -198,9 +201,11 @@ public:
     virtual QString& getResult();
 
 private:
-    KTextHTMLBuilderPrivate *d_ptr;
-    Q_DECLARE_PRIVATE(KTextHTMLBuilder)
+    TextHTMLBuilderPrivate *d_ptr;
+    Q_DECLARE_PRIVATE(TextHTMLBuilder)
 
 };
+
+}
 
 #endif

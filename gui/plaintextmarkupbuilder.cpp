@@ -19,12 +19,15 @@
     02110-1301, USA.
 */
 
-#include "kplaintextmarkupbuilder.h"
+#include "plaintextmarkupbuilder.h"
 
-class KPlainTextMarkupBuilderPrivate
+namespace Grantlee
+{
+
+class PlainTextMarkupBuilderPrivate
 {
 public:
-    KPlainTextMarkupBuilderPrivate(KPlainTextMarkupBuilder *b) : q_ptr(b) {
+    PlainTextMarkupBuilderPrivate(PlainTextMarkupBuilder *b) : q_ptr(b) {
 
     }
 
@@ -52,13 +55,17 @@ public:
 
     QString m_text;
 
-    KPlainTextMarkupBuilder *q_ptr;
+    PlainTextMarkupBuilder *q_ptr;
 
-    Q_DECLARE_PUBLIC(KPlainTextMarkupBuilder)
+    Q_DECLARE_PUBLIC(PlainTextMarkupBuilder)
 
 };
 
-QString KPlainTextMarkupBuilderPrivate::getLetterString(int itemNumber)
+}
+
+using namespace Grantlee;
+
+QString PlainTextMarkupBuilderPrivate::getLetterString(int itemNumber)
 {
     QString letterString;
     while (true) {
@@ -78,7 +85,7 @@ QString KPlainTextMarkupBuilderPrivate::getLetterString(int itemNumber)
     return letterString;
 }
 
-QString KPlainTextMarkupBuilderPrivate::getReferences()
+QString PlainTextMarkupBuilderPrivate::getReferences()
 {
     QString refs;
     if (!m_urls.isEmpty()) {
@@ -92,56 +99,56 @@ QString KPlainTextMarkupBuilderPrivate::getReferences()
     return refs;
 }
 
-KPlainTextMarkupBuilder::KPlainTextMarkupBuilder() : d_ptr(new KPlainTextMarkupBuilderPrivate(this))
+PlainTextMarkupBuilder::PlainTextMarkupBuilder() : d_ptr(new PlainTextMarkupBuilderPrivate(this))
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_urls = QStringList();
 }
 
-void KPlainTextMarkupBuilder::beginStrong()
+void PlainTextMarkupBuilder::beginStrong()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("*");
 }
-void KPlainTextMarkupBuilder::endStrong()
+void PlainTextMarkupBuilder::endStrong()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("*");
 }
-void KPlainTextMarkupBuilder::beginEmph()
+void PlainTextMarkupBuilder::beginEmph()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("/");
 }
-void KPlainTextMarkupBuilder::endEmph()
+void PlainTextMarkupBuilder::endEmph()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("/");
 }
-void KPlainTextMarkupBuilder::beginUnderline()
+void PlainTextMarkupBuilder::beginUnderline()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("_");
 }
-void KPlainTextMarkupBuilder::endUnderline()
+void PlainTextMarkupBuilder::endUnderline()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("_");
 }
-void KPlainTextMarkupBuilder::beginStrikeout()
+void PlainTextMarkupBuilder::beginStrikeout()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("-");
 }
-void KPlainTextMarkupBuilder::endStrikeout()
+void PlainTextMarkupBuilder::endStrikeout()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("-");
 }
 
-void KPlainTextMarkupBuilder::beginAnchor(const QString &href, const QString &name)
+void PlainTextMarkupBuilder::beginAnchor(const QString &href, const QString &name)
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     Q_UNUSED(name);
     if (!d->m_urls.contains(href)) {
 
@@ -150,35 +157,35 @@ void KPlainTextMarkupBuilder::beginAnchor(const QString &href, const QString &na
     d->activeLink = href;
 }
 
-void KPlainTextMarkupBuilder::endAnchor()
+void PlainTextMarkupBuilder::endAnchor()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append(QString("[%1]").arg(d->m_urls.indexOf(d->activeLink) + 1));
 }
 
-void KPlainTextMarkupBuilder::endParagraph()
+void PlainTextMarkupBuilder::endParagraph()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("\n");
 }
 
-void KPlainTextMarkupBuilder::addNewline()
+void PlainTextMarkupBuilder::addNewline()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("\n");
 }
 
-void KPlainTextMarkupBuilder::insertHorizontalRule(int width)
+void PlainTextMarkupBuilder::insertHorizontalRule(int width)
 {
     Q_UNUSED(width)
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
 
     d->m_text.append("--------------------\n");
 }
 
-void KPlainTextMarkupBuilder::insertImage(const QString &src, qreal width, qreal height)
+void PlainTextMarkupBuilder::insertImage(const QString &src, qreal width, qreal height)
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     Q_UNUSED(width)
     Q_UNUSED(height)
 
@@ -189,24 +196,24 @@ void KPlainTextMarkupBuilder::insertImage(const QString &src, qreal width, qreal
 }
 
 
-void KPlainTextMarkupBuilder::beginList(QTextListFormat::Style style)
+void PlainTextMarkupBuilder::beginList(QTextListFormat::Style style)
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->currentListItemStyles.append(style);
     d->currentListItemNumbers.append(0);
 }
 
-void KPlainTextMarkupBuilder::endList()
+void PlainTextMarkupBuilder::endList()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     if (!d->currentListItemNumbers.isEmpty()) {
         d->currentListItemStyles.removeLast();
         d->currentListItemNumbers.removeLast();
     }
 }
-void KPlainTextMarkupBuilder::beginListItem()
+void PlainTextMarkupBuilder::beginListItem()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     for (int i = 0; i < d->currentListItemNumbers.size(); i++) {
         d->m_text.append("    ");
     }
@@ -238,46 +245,46 @@ void KPlainTextMarkupBuilder::beginListItem()
     }
 }
 
-void KPlainTextMarkupBuilder::endListItem()
+void PlainTextMarkupBuilder::endListItem()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->currentListItemNumbers.last() = d->currentListItemNumbers.last() + 1;
 }
 
 
-void KPlainTextMarkupBuilder::beginSuperscript()
+void PlainTextMarkupBuilder::beginSuperscript()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("^{");
 }
 
-void KPlainTextMarkupBuilder::endSuperscript()
+void PlainTextMarkupBuilder::endSuperscript()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("}");
 }
 
-void KPlainTextMarkupBuilder::beginSubscript()
+void PlainTextMarkupBuilder::beginSubscript()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("_{");
 }
 
-void KPlainTextMarkupBuilder::endSubscript()
+void PlainTextMarkupBuilder::endSubscript()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append("}");
 }
 
-void KPlainTextMarkupBuilder::appendLiteralText(const QString &text)
+void PlainTextMarkupBuilder::appendLiteralText(const QString &text)
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     d->m_text.append(text);
 }
 
-QString& KPlainTextMarkupBuilder::getResult()
+QString& PlainTextMarkupBuilder::getResult()
 {
-    Q_D(KPlainTextMarkupBuilder);
+    Q_D(PlainTextMarkupBuilder);
     QString &ret = d->m_text;
     ret.append(d->getReferences());
     return ret;
