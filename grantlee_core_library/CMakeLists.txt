@@ -72,7 +72,7 @@ install(FILES
 )
 
 install(FILES
-  grantlee.h
+  grantlee_core.h
   DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )
 
