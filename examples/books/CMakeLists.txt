@@ -52,7 +52,7 @@ target_link_libraries(
   books
   ${QT_QTGUI_LIBRARIES}
   ${QT_QTSQL_LIBRARIES}
-  ${Grantlee_LIBRARIES}
+  ${Grantlee_CORE_LIBRARIES}
 )
 
 

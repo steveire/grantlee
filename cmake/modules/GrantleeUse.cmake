@@ -38,6 +38,6 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}"
   )
   target_link_libraries(${pluginname}
-    grantlee_core_library
+    ${Grantlee_CORE_LIBRARIES}
   )
 endmacro(GRANTLEE_ADD_PLUGIN)
