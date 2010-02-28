@@ -21,5 +21,5 @@ endif (UNIX)
 set(Grantlee_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
 
 # Now for the use file, which contains useful functions, sets up the project
-set(Grantlee_USE_FILE "${Grantlee_PLUGIN_PATH}/GrantleeUse.cmake")
+set(Grantlee_USE_FILE "${Grantlee_PLUGIN_PATH}/@Grantlee_VERSION_MAJOR@.@Grantlee_VERSION_MINOR@/GrantleeUse.cmake")
 
