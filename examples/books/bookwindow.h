@@ -54,7 +54,7 @@ class BookWindow: public QMainWindow
 public:
     BookWindow();
 
-protected slots:
+protected Q_SLOTS:
     void renderBooks();
 
 private:
