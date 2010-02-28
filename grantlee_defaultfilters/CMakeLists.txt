@@ -6,28 +6,15 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../grantlee_core_library
 )
 
-set(grantlee_defaultfilters_sources
-  defaultfilters.cpp
+grantlee_add_plugin(grantlee_defaultfilters
+  defaultfilters
 
-  datetime.cpp
-  integers.cpp
-  lists.cpp
-  logic.cpp
-  misc.cpp
-  strings.cpp
-)
-
-qt4_wrap_cpp(grantlee_defaultfilters_moc_sources defaultfilters.h)
-
-add_library(grantlee_defaultfilters SHARED ${grantlee_defaultfilters_sources} ${grantlee_defaultfilters_moc_sources} )
-
-set_target_properties(grantlee_defaultfilters  PROPERTIES PREFIX ""
-  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}"
-)
-
-
-target_link_libraries(grantlee_defaultfilters
-  grantlee_core_library
+  FILTERS
+    datetime
+    integers
+    lists
+    logic
+    misc
 )
 
 install(TARGETS grantlee_defaultfilters

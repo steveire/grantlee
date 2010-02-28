@@ -11,13 +11,10 @@ include_directories(
 grantlee_add_plugin(grantlee_loadertags
   loadertags
 
-  block
-  extends
-  include
-)
-
-target_link_libraries(grantlee_loadertags
-  grantlee_core_library
+  TAGS
+    block
+    extends
+    include
 )
 
 install(TARGETS grantlee_loadertags

@@ -8,7 +8,6 @@ include_directories(
 
 grantlee_add_plugin(grantlee_scriptabletags
   scriptablecontext
-  scriptablefilter
   scriptablefilterexpression
   scriptablenode
   scriptableparser
@@ -16,10 +15,12 @@ grantlee_add_plugin(grantlee_scriptabletags
   scriptabletags
   scriptabletemplate
   scriptablevariable
+
+  FILTERS
+    scriptablefilter
 )
 
 target_link_libraries(grantlee_scriptabletags
-  grantlee_core_library
   ${QT_QTSCRIPT_LIBRARY}
 )
 

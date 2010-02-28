@@ -11,29 +11,28 @@ include_directories(
 grantlee_add_plugin ( grantlee_defaulttags
   defaulttags
 
-  autoescape
-  comment
-  cycle
-  debug
-  filtertag
-  firstof
-  for
-  if
-  ifchanged
-  ifequal
-  load
-  mediafinder
-  now
-  range
-  regroup
-  spaceless
-  ssi
-  templatetag
-  widthratio
-  with
+  TAGS
+    autoescape
+    comment
+    cycle
+    debug
+    filtertag
+    firstof
+    for
+    if
+    ifchanged
+    ifequal
+    load
+    mediafinder
+    now
+    range
+    regroup
+    spaceless
+    ssi
+    templatetag
+    widthratio
+    with
 )
-
-target_link_libraries(grantlee_defaulttags grantlee_core_library)
 
 install(TARGETS grantlee_defaulttags
         RUNTIME DESTINATION ${PLUGIN_INSTALL_DIR}
