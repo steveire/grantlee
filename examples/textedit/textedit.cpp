@@ -66,6 +66,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QPrintPreviewDialog>
+#include <QWebView>
 
 #include <grantlee/engine.h>
 #include <grantlee/context.h>
@@ -100,11 +101,17 @@ TextEdit::TextEdit(QWidget *parent)
     connect(textEdit, SIGNAL(cursorPositionChanged()),
             this, SLOT(cursorPositionChanged()));
 
-    QSplitter *splitter = new QSplitter(Qt::Vertical, this);
+
+    QSplitter *hSplitter = new QSplitter(this);
+
+    QSplitter *splitter = new QSplitter(Qt::Vertical, hSplitter);
     splitter->addWidget(abstractTextEdit);
     splitter->addWidget(textEdit);
 
-    setCentralWidget(splitter);
+    webView = new QWebView(this);
+    hSplitter->addWidget(webView);
+
+    setCentralWidget(hSplitter);
     textEdit->setFocus();
     setCurrentFileName(QString());
 
@@ -581,6 +588,7 @@ void TextEdit::exportThemedHtml()
     engine->addDefaultLibrary( "customtags" );
 
     Grantlee::FileSystemTemplateLoader::Ptr loader(new Grantlee::FileSystemTemplateLoader());
+    qDebug() << GRANTLEE_TEMPLATE_PATH;
     loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH);
     engine->addTemplateLoader(loader);
 
@@ -589,11 +597,13 @@ void TextEdit::exportThemedHtml()
     QString themeName = "default.html";
     Grantlee::Template t = engine->loadByName(themeName);
     Grantlee::Context c;
+
     c.insert("abstract", QVariant::fromValue( abstractTextEdit->document() ) );
     c.insert("content", QVariant::fromValue( textEdit->document() ) );
-    QString result = t->render(&c);
-    qDebug() << result;
 
+    QString result = t->render(&c);
+
+    webView->setHtml(result);
 }
 
 void TextEdit::exportPlainText()
