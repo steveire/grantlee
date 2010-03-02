@@ -82,11 +82,6 @@ QVariant timeUntil( QDateTime dt, QDateTime now = QDateTime() )
   return timeSince( now, dt );
 }
 
-
-DateFilter::DateFilter()
-{
-}
-
 QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
@@ -100,20 +95,11 @@ QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, 
   return d.toString( "MMM. d, yyyy" );
 }
 
-TimeFilter::TimeFilter()
-{
-}
-
 QVariant TimeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
   SafeString argString = Util::getSafeString( argument );
   return QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" ).toString( argString );
-}
-
-
-TimeSinceFilter::TimeSinceFilter()
-{
 }
 
 QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -126,11 +112,6 @@ QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argum
     late = argument.toDateTime();
 
   return timeSince( input.toDateTime(), late );
-}
-
-
-TimeUntilFilter::TimeUntilFilter()
-{
 }
 
 QVariant TimeUntilFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const

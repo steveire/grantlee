@@ -27,34 +27,25 @@ using namespace Grantlee;
 class DateFilter : public Filter
 {
 public:
-  DateFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class TimeFilter : public Filter
 {
 public:
-  TimeFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class TimeSinceFilter : public Filter
 {
 public:
-  TimeSinceFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class TimeUntilFilter : public Filter
 {
 public:
-  TimeUntilFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
-
 
 #endif

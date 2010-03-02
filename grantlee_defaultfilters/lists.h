@@ -29,8 +29,6 @@ using namespace Grantlee;
 class JoinFilter : public Filter
 {
 public:
-  JoinFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
@@ -45,8 +43,6 @@ public:
 class LengthFilter : public Filter
 {
 public:
-  LengthFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
@@ -57,8 +53,6 @@ public:
 class LengthIsFilter : public Filter
 {
 public:
-  LengthIsFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
@@ -69,24 +63,18 @@ public:
 class FirstFilter : public Filter
 {
 public:
-  FirstFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class LastFilter : public Filter
 {
 public:
-  LastFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class RandomFilter : public Filter
 {
 public:
-  RandomFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
@@ -97,8 +85,6 @@ public:
 class SliceFilter : public Filter
 {
 public:
-  SliceFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
@@ -109,7 +95,6 @@ public:
 class MakeListFilter : public Filter
 {
 public:
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {

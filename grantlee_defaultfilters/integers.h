@@ -29,16 +29,12 @@ using namespace Grantlee;
 class AddFilter : public Filter
 {
 public:
-  AddFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class GetDigitFilter : public Filter
 {
 public:
-  GetDigitFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 

@@ -27,34 +27,25 @@ using namespace Grantlee;
 class DefaultFilter : public Filter
 {
 public:
-  DefaultFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class DefaultIfNoneFilter : public Filter
 {
 public:
-  DefaultIfNoneFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class DivisibleByFilter : public Filter
 {
 public:
-  DivisibleByFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class YesNoFilter : public Filter
 {
 public:
-  YesNoFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 #endif
-

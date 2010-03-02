@@ -29,8 +29,6 @@ using namespace Grantlee;
 class AddSlashesFilter : public Filter
 {
 public:
-  AddSlashesFilter();
-
   virtual bool isSafe() const {
     return true;
   }
@@ -41,8 +39,6 @@ public:
 class CapFirstFilter : public Filter
 {
 public:
-  CapFirstFilter();
-
   virtual bool isSafe() const {
     return true;
   }
@@ -64,8 +60,6 @@ private:
 class FixAmpersandsFilter : public Filter
 {
 public:
-  FixAmpersandsFilter();
-
   virtual bool isSafe() const {
     return true;
   }
@@ -77,16 +71,12 @@ public:
 class CutFilter : public Filter
 {
 public:
-  CutFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class SafeFilter : public Filter
 {
 public:
-  SafeFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -97,8 +87,6 @@ public:
 class LineNumbersFilter : public Filter
 {
 public:
-  LineNumbersFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -113,8 +101,6 @@ public:
 class LowerFilter : public Filter
 {
 public:
-  LowerFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -125,8 +111,6 @@ public:
 class StringFormatFilter : public Filter
 {
 public:
-  StringFormatFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -137,8 +121,6 @@ public:
 class TitleFilter : public Filter
 {
 public:
-  TitleFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -149,8 +131,6 @@ public:
 class TruncateWordsFilter : public Filter
 {
 public:
-  TruncateWordsFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -161,8 +141,6 @@ public:
 class UpperFilter : public Filter
 {
 public:
-  UpperFilter();
-
   // &amp; may be safe, but it will be changed to &AMP; which is not safe.
   bool isSafe() const {
     return false;
@@ -174,8 +152,6 @@ public:
 class WordCountFilter : public Filter
 {
 public:
-  WordCountFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -186,8 +162,6 @@ public:
 class LJustFilter : public Filter
 {
 public:
-  LJustFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -198,8 +172,6 @@ public:
 class RJustFilter : public Filter
 {
 public:
-  RJustFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -210,8 +182,6 @@ public:
 class CenterFilter : public Filter
 {
 public:
-  CenterFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -222,8 +192,6 @@ public:
 class EscapeFilter : public Filter
 {
 public:
-  EscapeFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -234,8 +202,6 @@ public:
 class ForceEscapeFilter : public Filter
 {
 public:
-  ForceEscapeFilter();
-
   bool isSafe() const {
     return true;
   }
@@ -246,16 +212,12 @@ public:
 class RemoveTagsFilter : public Filter
 {
 public:
-  RemoveTagsFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
 class StripTagsFilter : public Filter
 {
 public:
-  StripTagsFilter();
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 

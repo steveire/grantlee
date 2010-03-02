@@ -23,12 +23,6 @@
 
 #include "util_p.h"
 
-
-AddSlashesFilter::AddSlashesFilter()
-{
-}
-
-
 QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
@@ -36,10 +30,6 @@ QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argu
   SafeString safeString = Util::getSafeString( input );
   safeString->replace( '\\', "\\\\" ).replace( '\"', "\\\"" ).replace( '\'', "\\\'" );
   return safeString;
-}
-
-CapFirstFilter::CapFirstFilter()
-{
 }
 
 QVariant CapFirstFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -89,10 +79,6 @@ QVariant EscapeJsFilter::doFilter( const QVariant& input, const QVariant &argume
   return retString;
 }
 
-FixAmpersandsFilter::FixAmpersandsFilter()
-{
-}
-
 QVariant FixAmpersandsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
@@ -104,10 +90,6 @@ QVariant FixAmpersandsFilter::doFilter( const QVariant& input, const QVariant &a
   safeString->replace( fixAmpersandsRegexp, "&amp;" );
 
   return safeString;
-}
-
-CutFilter::CutFilter()
-{
 }
 
 QVariant CutFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -124,21 +106,12 @@ QVariant CutFilter::doFilter( const QVariant& input, const QVariant &argument, b
   return retString;
 }
 
-SafeFilter::SafeFilter()
-{
-}
-
 QVariant SafeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   return Util::markSafe( Util::getSafeString( input ) );
 }
-
-LineNumbersFilter::LineNumbersFilter()
-{
-}
-
 
 QVariant LineNumbersFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
@@ -157,22 +130,12 @@ QVariant LineNumbersFilter::doFilter( const QVariant& input, const QVariant &arg
   return Util::markSafe( lines.join( QString( '\n' ) ) );
 }
 
-LowerFilter::LowerFilter()
-{
-}
-
 QVariant LowerFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   return Util::getSafeString( input )->toLower();
 }
-
-StringFormatFilter::StringFormatFilter()
-{
-
-}
-
 
 QVariant StringFormatFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
@@ -185,10 +148,6 @@ QVariant StringFormatFilter::doFilter( const QVariant& input, const QVariant &ar
   }
 
   return SafeString( Util::getSafeString( argument )->arg( a ), Util::getSafeString( input ).isSafe() );
-}
-
-TitleFilter::TitleFilter()
-{
 }
 
 QVariant TitleFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -204,10 +163,6 @@ QVariant TitleFilter::doFilter( const QVariant& input, const QVariant &argument,
   str.replace( re, QString( "\\1" ).toUpper() );
 
   return str;
-}
-
-TruncateWordsFilter::TruncateWordsFilter()
-{
 }
 
 QVariant TruncateWordsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -235,19 +190,11 @@ QVariant TruncateWordsFilter::doFilter( const QVariant& input, const QVariant &a
 
 }
 
-UpperFilter::UpperFilter()
-{
-}
-
 QVariant UpperFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   return Util::getSafeString( input )->toUpper();
-}
-
-WordCountFilter::WordCountFilter()
-{
 }
 
 QVariant WordCountFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -257,29 +204,16 @@ QVariant WordCountFilter::doFilter( const QVariant& input, const QVariant &argum
   return QString::number( Util::getSafeString( input )->split( ' ' ).size() );
 }
 
-LJustFilter::LJustFilter()
-{
-}
-
 QVariant LJustFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
   return Util::getSafeString( input )->leftJustified( Util::getSafeString( argument )->toInt() );
 }
 
-
-RJustFilter::RJustFilter()
-{
-}
-
 QVariant RJustFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
   return Util::getSafeString( input )->rightJustified( Util::getSafeString( argument )->toInt() );
-}
-
-CenterFilter::CenterFilter()
-{
 }
 
 QVariant CenterFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -294,11 +228,6 @@ QVariant CenterFilter::doFilter( const QVariant& input, const QVariant &argument
   return value.leftJustified( valueWidth + rightPadding ).rightJustified( width );
 }
 
-
-EscapeFilter::EscapeFilter()
-{
-}
-
 QVariant EscapeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
@@ -306,19 +235,11 @@ QVariant EscapeFilter::doFilter( const QVariant& input, const QVariant &argument
   return Util::markForEscaping( Util::getSafeString( input ) );
 }
 
-ForceEscapeFilter::ForceEscapeFilter()
-{
-}
-
 QVariant ForceEscapeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   return Util::markSafe( Util::escape( Util::getSafeString( input ) ) );
-}
-
-RemoveTagsFilter::RemoveTagsFilter()
-{
 }
 
 QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -335,10 +256,6 @@ QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argu
   return value;
 }
 
-StripTagsFilter::StripTagsFilter()
-{
-}
-
 QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
@@ -350,7 +267,6 @@ QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argum
   value.remove( tagRe );
   return value;
 }
-
 
 QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
@@ -394,7 +310,6 @@ QVariant FloatFormatFilter::doFilter( const QVariant& input, const QVariant& arg
   return QString::number( _input, 'f', precision );
 }
 
-
 QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
@@ -405,7 +320,6 @@ QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& ar
       list << Util::markSafe( Util::getSafeString( item ) );
   return list;
 }
-
 
 QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
@@ -443,5 +357,3 @@ QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argumen
   inputString = inputString.remove( QRegExp( "[^\\w\\s-]" ) ).trimmed().toLower();
   return Util::markSafe( inputString.replace( QRegExp( "[-\\s]+" ), QChar( '-' ) ) );
 }
-
-

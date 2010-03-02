@@ -20,21 +20,12 @@
 #include "logic.h"
 #include "util_p.h"
 
-
-DefaultFilter::DefaultFilter()
-{
-}
-
 QVariant DefaultFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
   if ( !input.isValid() || Util::getSafeString( input )->isEmpty() )
     return argument;
   return Util::getSafeString( input );
-}
-
-DefaultIfNoneFilter::DefaultIfNoneFilter()
-{
 }
 
 QVariant DefaultIfNoneFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -45,20 +36,12 @@ QVariant DefaultIfNoneFilter::doFilter( const QVariant& input, const QVariant &a
   return Util::getSafeString( input );
 }
 
-DivisibleByFilter::DivisibleByFilter()
-{
-}
-
 QVariant DivisibleByFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
   return ( Util::getSafeString( input )->toInt()
            % QVariant( argument ).toInt() == 0 )
          ? QString( "true" ) : QString();
-}
-
-YesNoFilter::YesNoFilter()
-{
 }
 
 QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const

@@ -21,10 +21,6 @@
 #include <util_p.h>
 #include <QDateTime>
 
-JoinFilter::JoinFilter()
-{
-}
-
 QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   QVariantList varList = Util::variantToList( input );
@@ -45,10 +41,6 @@ QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, 
   return Util::markSafe( ret );
 }
 
-LengthFilter::LengthFilter()
-{
-}
-
 QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
@@ -60,10 +52,6 @@ QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument
     return Util::getSafeString( input )->size();
 
   return QVariant();
-}
-
-LengthIsFilter::LengthIsFilter()
-{
 }
 
 QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -88,10 +76,6 @@ QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argume
   return size == argInt;
 }
 
-FirstFilter::FirstFilter()
-{
-}
-
 QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
@@ -102,11 +86,6 @@ QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument,
     return QString();
 
   return varList.at( 0 );
-}
-
-
-LastFilter::LastFilter()
-{
 }
 
 QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -121,11 +100,6 @@ QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, 
   return varList.at( varList.size() - 1 );
 }
 
-
-RandomFilter::RandomFilter()
-{
-}
-
 QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
@@ -135,10 +109,6 @@ QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument
   qsrand( QDateTime::currentDateTime().toTime_t() );
   int rnd = qrand() % varList.size();
   return varList.at( rnd );
-}
-
-SliceFilter::SliceFilter()
-{
 }
 
 QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
