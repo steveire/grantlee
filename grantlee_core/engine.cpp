@@ -226,6 +226,7 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
 
 TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion, const EngineState &_state )
 {
+  Q_Q( Engine );
   EngineState state = _state ? _state : m_currentState;
 
   int pluginIndex = 0;
@@ -255,6 +256,7 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, uint mi
     return 0;
 
   TagLibraryInterface *library = qobject_cast<TagLibraryInterface*>( plugin );
+  library->setEngine( q );
   m_libraries.insert( name, library );
   return library;
 }
