@@ -42,7 +42,6 @@ class EnginePrivate
 
   EngineState m_currentState;
 
-  TagLibraryInterface *m_scriptableTagLibrary;
   QHash<QString, TagLibraryInterface*> m_libraries;
   QList<TagLibraryInterface*> m_scriptableLibraries;
 
