@@ -59,7 +59,7 @@ private:
 
 void TestMutableTagsSyntax::initTestCase()
 {
-  m_engine = Engine::instance();
+  m_engine = new Engine( this );
   m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
 
   m_engine->addDefaultLibrary( "grantlee_mutabletags" );
@@ -81,7 +81,7 @@ void TestMutableTagsSyntax::testRawTag0()
   QString content = "Begin"
                     "{% raw %} Stuff {% endraw %}"
                     "Afters.";
-  Template t = Engine::instance()->newMutableTemplate( content, "t1" );
+  Template t = m_engine->newMutableTemplate( content, "t1" );
 
   Context c1( dict );
   QString result = t->render( &c1 );
@@ -110,7 +110,7 @@ void TestMutableTagsSyntax::testRawTag()
   QString content = "Begin {% for name in nameList %}{{ name }},{% endfor %}"
                     "{% raw %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endraw %}"
                     "Afters.";
-  Template t = Engine::instance()->newMutableTemplate( content, "t" );
+  Template t = m_engine->newMutableTemplate( content, "t" );
 
   Context c1( dict );
   QString result = t->render( &c1 );
@@ -148,7 +148,7 @@ void TestMutableTagsSyntax::testRepeaterTag()
                     "{% repeater %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endrepeater %}"
                     "Afters";
 
-  Template t = Engine::instance()->newMutableTemplate( content, "t" );
+  Template t = m_engine->newMutableTemplate( content, "t" );
 
   Context c1( dict );
   QString result = t->render( &c1 );
@@ -196,7 +196,7 @@ void TestMutableTagsSyntax::testMultiRepeater()
                     "{% endrepeater %}"
                     "After.";
 
-  Template t = Engine::instance()->newMutableTemplate( content, "t" );
+  Template t = m_engine->newMutableTemplate( content, "t" );
 
   QVariantHash h;
   Context c( h );
@@ -213,7 +213,7 @@ void TestMutableTagsSyntax::testMultiRepeater()
             "Bar."
             "{% endrepeater %}"
             "After.";
-  Template t2 = Engine::instance()->newMutableTemplate( content, "t2" );
+  Template t2 = m_engine->newMutableTemplate( content, "t2" );
 
   h.insert( "var", "String" );
   Context c2( h );

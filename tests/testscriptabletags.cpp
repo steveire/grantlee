@@ -60,7 +60,7 @@ private:
 
 void TestScriptableTagsSyntax::initTestCase()
 {
-  m_engine = Engine::instance();
+  m_engine = new Engine( this );
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH
                                          << ":/grantlee/" // For scripteddefaults.qs
@@ -79,7 +79,7 @@ void TestScriptableTagsSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
+  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 

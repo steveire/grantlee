@@ -21,8 +21,8 @@
 
 using namespace Grantlee;
 
-MutableTemplateImpl::MutableTemplateImpl( QObject *parent )
-    : TemplateImpl( parent )
+MutableTemplateImpl::MutableTemplateImpl( Engine const *engine, QObject *parent )
+    : TemplateImpl( engine, parent )
 {
 
 }

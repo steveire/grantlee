@@ -22,7 +22,8 @@
 #define GRANTLEE_ENGINE_P_H
 
 #include "engine.h"
-#include "enginestate_p.h"
+
+class QPluginLoader;
 
 class QPluginLoader;
 
@@ -33,22 +34,21 @@ class EnginePrivate
 {
   EnginePrivate( Engine *engine );
 
-  static EngineState staticEmptyState();
-
-  TagLibraryInterface* loadLibrary( const QString &name, const EngineState &state, uint minorVersion );
-  TagLibraryInterface* loadScriptableLibrary( const QString &name, uint minorVersion, const EngineState &state = EngineState() );
-  TagLibraryInterface* loadCppLibrary( const QString& name, uint minorVersion, const EngineState &state = EngineState() );
+  TagLibraryInterface* loadLibrary( const QString &name, uint minorVersion );
+  TagLibraryInterface* loadScriptableLibrary( const QString &name, uint minorVersion );
+  TagLibraryInterface* loadCppLibrary( const QString& name, uint minorVersion );
 
   Q_DECLARE_PUBLIC( Engine )
   Engine *q_ptr;
 
-  EngineState m_currentState;
-
   QList<QPluginLoader*> m_pluginLoaders;
+
   QHash<QString, TagLibraryInterface*> m_libraries;
   QList<TagLibraryInterface*> m_scriptableLibraries;
 
-  friend class EngineStateImpl;
+  QList<AbstractTemplateLoader::Ptr> m_loaders;
+  QStringList m_pluginDirs;
+  QStringList m_defaultLibraries;
 };
 
 }

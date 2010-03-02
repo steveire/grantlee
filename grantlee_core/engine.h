@@ -62,13 +62,14 @@ class EnginePrivate;
   @author Stephen Kelly <steveire@gmail.com>
   @since 0.1
 */
-class GRANTLEE_CORE_EXPORT Engine
+class GRANTLEE_CORE_EXPORT Engine : public QObject
 {
+  Q_OBJECT
 public:
   /**
     Retrieve an instance of an Engine.
   */
-  static Engine* instance();
+  Engine( QObject *parent = 0 );
 
   /**
     Destructor.
@@ -100,7 +101,7 @@ public:
     This method will not usually be called by application code.
     To load media in a template, use the {% media_finder %} template tag.
   */
-  QString mediaUri( const QString &fileName, const EngineState &state = EngineState() ) const;
+  QString mediaUri( const QString &fileName ) const;
 
   /**
     Resets the state of the Engine to the default.
@@ -115,28 +116,28 @@ public:
 
     The Templates and plugins loaded and will be determined by the Engine or the EngineState @p state.
   */
-  Template loadByName( const QString &name, const EngineState &state = EngineState() ) const;
+  Template loadByName( const QString &name ) const;
 
   /**
     Create a new Template with the content @p content identified by @p name with the optionally supplied EngineState.
 
     The secondary Templates and plugins loaded will be determined by the Engine or the EngineState @p state.
   */
-  Template newTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() ) const;
+  Template newTemplate( const QString &content, const QString &name ) const;
 
   /**
     Load the MutableTemplate identified by @p name with the optionally supplied EngineState.
 
     The Templates and plugins loaded and will be determined by the Engine or the EngineState @p state.
   */
-  MutableTemplate loadMutableByName( const QString &name, const EngineState &state = EngineState() ) const;
+  MutableTemplate loadMutableByName( const QString &name ) const;
 
   /**
     Create a new MutableTemplate with the content @p content identified by @p name with the optionally supplied EngineState.
 
     The secondary Templates and plugins loaded will be determined by the Engine or the EngineState @p state.
   */
-  MutableTemplate newMutableTemplate( const QString &content, const QString &name, const EngineState &state = EngineState() ) const;
+  MutableTemplate newMutableTemplate( const QString &content, const QString &name ) const;
 
   /**
     Returns the libraries available by default to new Templates.
@@ -158,7 +159,7 @@ public:
 
     Loads and returns the libraries specified in defaultLibraries or @p state.
   */
-  void loadDefaultLibraries( const EngineState &state = EngineState() );
+  void loadDefaultLibraries();
 
   /**
     @internal
@@ -167,21 +168,10 @@ public:
 
     Templates wishing to load a library should use the "{% load %}" tag.
   */
-  TagLibraryInterface* loadLibrary( const QString &name, const EngineState &state = EngineState() );
-
-  /**
-    Returns the current state of the Engine.
-    @see template_factories
-  */
-  EngineState state();
-
-private:
-  Engine();
+  TagLibraryInterface* loadLibrary( const QString &name );
 
   Q_DECLARE_PRIVATE( Engine )
   EnginePrivate * const d_ptr;
-
-  static Engine* m_instance;
 };
 
 }

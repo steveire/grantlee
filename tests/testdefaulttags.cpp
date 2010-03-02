@@ -134,7 +134,7 @@ private:
 
 void TestDefaultTags::initTestCase()
 {
-  m_engine = Engine::instance();
+  m_engine = new Engine( this );
   m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
 }
 
@@ -150,7 +150,7 @@ void TestDefaultTags::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
+  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 

@@ -61,11 +61,10 @@ QString IncludeNode::render( Context *c )
 {
   QString filename = Util::getSafeString( m_filterExpression.resolve( c ) );
 
-  Engine *engine = Engine::instance();
-
   TemplateImpl *ti = containerTemplate();
+
   try {
-    Template t = engine->loadByName( filename, ti->state() );
+    Template t = ti->engine()->loadByName( filename );
 
     if ( !t )
       return QString();
@@ -85,12 +84,10 @@ ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
 
 QString ConstantIncludeNode::render( Context *c )
 {
-  Engine *engine = Engine::instance();
-
   TemplateImpl *ti = containerTemplate();
 
   try {
-    Template t = engine->loadByName( m_name, ti->state() );
+    Template t = ti->engine()->loadByName( m_name );
     if ( !t )
       return QString();
 

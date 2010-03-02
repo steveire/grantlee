@@ -51,12 +51,12 @@ public:
   /**
     Load a MutableTemplate called @p name. Return an invalid Template if no content by that name exists.
   */
-  virtual MutableTemplate loadMutableByName( const QString &name ) const = 0;
+  virtual MutableTemplate loadMutableByName( const QString &name, Engine const *engine ) const = 0;
 
   /**
     Load a Template called @p name. Return an invalid Template if no content by that name exists.
   */
-  virtual Template loadByName( const QString &name ) const = 0;
+  virtual Template loadByName( const QString &name, Engine const *engine ) const = 0;
 
   /**
     Return a complete URI for media identified by fileName.
@@ -126,9 +126,9 @@ public:
   */
   virtual ~FileSystemTemplateLoader();
 
-  /* reimp */ MutableTemplate loadMutableByName( const QString &name ) const;
+  /* reimp */ MutableTemplate loadMutableByName( const QString &name, Engine const *engine ) const;
 
-  /* reimp */ Template loadByName( const QString &name ) const;
+  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const;
 
   /* reimp */ bool canLoadTemplate( const QString &name ) const;
 
@@ -158,9 +158,9 @@ public:
   InMemoryTemplateLoader();
   virtual ~InMemoryTemplateLoader();
 
-  /* reimp */ MutableTemplate loadMutableByName( const QString &name ) const;
+  /* reimp */ MutableTemplate loadMutableByName( const QString &name, Engine const *engine ) const;
 
-  /* reimp */ Template loadByName( const QString &name ) const;
+  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const;
 
   /* reimp */ bool canLoadTemplate( const QString &name ) const;
 

@@ -22,7 +22,7 @@
 
 #include "template.h"
 
-#include "enginestate_p.h"
+#include "engine.h"
 
 namespace Grantlee
 {
@@ -31,8 +31,9 @@ class Engine;
 
 class TemplatePrivate
 {
-  TemplatePrivate( TemplateImpl *t )
-      : q_ptr( t ), m_error( NoError ) {
+  TemplatePrivate( Engine const *engine, TemplateImpl *t )
+      : q_ptr( t ), m_error( NoError ), m_engine( engine )
+  {
 
   }
 
@@ -47,9 +48,10 @@ class TemplatePrivate
   Error m_error;
   QString m_errorString;
   NodeList m_nodeList;
-  EngineState m_state;
+  QWeakPointer<Engine const> m_engine;
 
   friend class Grantlee::Engine;
+  friend class Parser;
 
 };
 

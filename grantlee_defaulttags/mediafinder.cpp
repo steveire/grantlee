@@ -52,12 +52,11 @@ MediaFinderNode::MediaFinderNode( QList<FilterExpression> mediaExpressionList, Q
 
 QString MediaFinderNode::render( Context* c )
 {
-  Grantlee::Engine *engine = Grantlee::Engine::instance();
   foreach( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
       TemplateImpl *ti = containerTemplate();
 
-      return engine->mediaUri( Util::getSafeString( fe.resolve( c ) ), ti->state() );
+      return ti->engine()->mediaUri( Util::getSafeString( fe.resolve( c ) ) );
     }
   }
   return QString();

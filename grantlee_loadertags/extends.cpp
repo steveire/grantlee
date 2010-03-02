@@ -110,11 +110,10 @@ Template ExtendsNode::getParent( Context *c )
   } else {
     parentName = m_name;
   }
-  Engine *engine = Engine::instance();
 
   TemplateImpl *ti = containerTemplate();
 
-  Template t = engine->loadByName( parentName, ti->state() );
+  Template t = ti->engine()->loadByName( parentName );
 
   return t;
 }

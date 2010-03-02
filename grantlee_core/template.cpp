@@ -37,8 +37,8 @@ NodeList TemplatePrivate::compileString( const QString &str )
   return p.parse( q );
 }
 
-TemplateImpl::TemplateImpl( QObject *parent )
-    : QObject( parent ), d_ptr( new TemplatePrivate( this ) )
+TemplateImpl::TemplateImpl( Engine const *engine, QObject *parent )
+    : QObject( parent ), d_ptr( new TemplatePrivate( engine, this ) )
 {
   Q_D( Template );
   d->m_settingsToken = reinterpret_cast<qint64>( this );
@@ -107,10 +107,10 @@ QString TemplateImpl::errorString()
   return d->m_errorString;
 }
 
-EngineState TemplateImpl::state() const
+Engine const * TemplateImpl::engine() const
 {
   Q_D( const Template );
-  return d->m_state;
+  return d->m_engine.data();
 }
 
 #include "template.moc"

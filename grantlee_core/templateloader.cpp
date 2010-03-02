@@ -90,7 +90,7 @@ bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
 }
 
 // TODO Refactor these two.
-MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &fileName ) const
+MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &fileName, Engine const *engine ) const
 {
   int i = 0;
   QFile file;
@@ -114,11 +114,11 @@ MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &file
   QString content;
   content = file.readAll();
 
-  MutableTemplate t = Engine::instance()->newMutableTemplate( content, fileName );
+  MutableTemplate t = engine->newMutableTemplate( content, fileName );
   return t;
 }
 
-Template FileSystemTemplateLoader::loadByName( const QString &fileName ) const
+Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine const *engine ) const
 {
   int i = 0;
   QFile file;
@@ -140,7 +140,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName ) const
 
   QString content;
   content = file.readAll();
-  Template t = Engine::instance()->newTemplate( content, fileName );
+  Template t = engine->newTemplate( content, fileName );
   return t;
 }
 
@@ -178,19 +178,19 @@ bool InMemoryTemplateLoader::canLoadTemplate( const QString &name ) const
   return m_namedTemplates.contains( name );
 }
 
-Template InMemoryTemplateLoader::loadByName( const QString& name ) const
+Template InMemoryTemplateLoader::loadByName( const QString& name, Engine const *engine ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
-    Template t = Engine::instance()->newTemplate( m_namedTemplates.value( name ), name );
+    Template t = engine->newTemplate( m_namedTemplates.value( name ), name );
     return t;
   }
   throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }
 
-MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name ) const
+MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name, Engine const *engine ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
-    MutableTemplate t = Engine::instance()->newMutableTemplate( m_namedTemplates.value( name ), name );
+    MutableTemplate t = engine->newMutableTemplate( m_namedTemplates.value( name ), name );
     return t;
   }
   throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );

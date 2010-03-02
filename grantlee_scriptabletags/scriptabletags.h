@@ -32,6 +32,7 @@ class QScriptEngine;
 
 namespace Grantlee
 {
+class Engine;
 class Parser;
 }
 
@@ -47,6 +48,8 @@ public:
   virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() );
 
   virtual QHash<QString, Filter*> filters( const QString &name = QString() );
+
+  /* reimp */ void setEngine( Grantlee::Engine *engine );
 
 public slots:
   void addFactory( const QString &factoryName, const QString &tagname );

@@ -39,7 +39,7 @@ public:
   /**
     Constructor.
   */
-  explicit MutableTemplateImpl( QObject *parent = 0 );
+  explicit MutableTemplateImpl( Engine const *engine, QObject *parent = 0 );
 
   /**
     Renders the Template, possibly mutating it.

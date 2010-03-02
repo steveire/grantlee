@@ -87,7 +87,7 @@ private:
 
 void TestFilters::initTestCase()
 {
-  m_engine = Engine::instance();
+  m_engine = new Engine( this );
 
   loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
   m_engine->addTemplateLoader( loader );
@@ -110,7 +110,7 @@ void TestFilters::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, errorNumber );
 
-  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
+  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 

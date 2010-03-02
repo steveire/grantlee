@@ -12,7 +12,6 @@ configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h
 set (grantlee_core_SRCS
   context.cpp
   engine.cpp
-  enginestate.cpp
   filterexpression.cpp
   lexer.cpp
   mutabletemplate.cpp
@@ -53,7 +52,6 @@ install(TARGETS grantlee_core
 install(FILES
   context.h
   engine.h
-  enginestate.h
   exception.h
   filter.h
   filterexpression.h

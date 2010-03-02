@@ -27,6 +27,8 @@
 #include "node.h"
 #include "scriptablecontext.h"
 
+Q_DECLARE_METATYPE( Engine* )
+
 
 QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
     QScriptEngine *engine )
@@ -34,8 +36,12 @@ QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
   QString content = context->argument( 0 ).toString();
   QString name = context->argument( 1 ).toString();
   QObject *parent = context->argument( 2 ).toQObject();
+  Engine *templateEngine = engine->property("templateEngine").value<Engine *>();
 
-  Template t = Engine::instance()->newTemplate( content, name );
+  if ( !templateEngine )
+    return QScriptValue();
+
+  Template t = templateEngine->newTemplate( content, name );
 
   ScriptableTemplate *object = new ScriptableTemplate( t, parent );
   return engine->newQObject( object );

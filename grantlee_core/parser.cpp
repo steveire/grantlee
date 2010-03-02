@@ -23,6 +23,7 @@
 
 #include "taglibraryinterface.h"
 #include "template.h"
+#include "template_p.h"
 #include "engine.h"
 #include "filter.h"
 #include "exception.h"
@@ -85,13 +86,15 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
 {
   Q_D( Parser );
 
-  Engine *engine = Engine::instance();
-
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent );
 
-  engine->loadDefaultLibraries( ti->state() );
-  foreach( const QString &libraryName, engine->defaultLibraries()) {
-    TagLibraryInterface *library = engine->loadLibrary( libraryName, ti->state() );
+  Engine const *cengine = ti->engine();
+  if (!cengine)
+    return;
+  Engine *engine = const_cast<Engine *>( cengine );
+  engine->loadDefaultLibraries();
+  foreach( const QString &libraryName, engine->defaultLibraries() ) {
+    TagLibraryInterface *library = engine->loadLibrary( libraryName );
     if(!library)
       continue;
     d->openLibrary( library );
@@ -118,7 +121,11 @@ void Parser::loadLib( const QString &name )
 {
   Q_D( Parser );
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
-  TagLibraryInterface *library = Engine::instance()->loadLibrary( name, ti->state() );
+  Engine const *cengine = ti->engine();
+  if (!cengine)
+    return;
+  Engine *engine = const_cast<Engine *>( cengine );
+  TagLibraryInterface *library = engine->loadLibrary( name );
   if ( !library )
     return;
   d->openLibrary( library );

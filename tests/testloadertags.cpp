@@ -65,7 +65,7 @@ private:
 
 void TestLoaderTags::initTestCase()
 {
-  m_engine = Engine::instance();
+  m_engine = new Engine( this );
 
   loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
   m_engine->addTemplateLoader( loader );
@@ -88,7 +88,7 @@ void TestLoaderTags::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, errorNumber );
 
-  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
+  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 
@@ -256,7 +256,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Inheritance from local context without use of template loader
 
-  Template t = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template" );
+  Template t = m_engine->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template" );
   dict.insert( "context_template", QVariant::fromValue( t ) );
 
   QTest::newRow( "inheritance24" ) << "{% extends context_template %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" << dict << "1234" << NoError;
@@ -264,8 +264,8 @@ void TestLoaderTags::testExtendsTag_data()
   dict.clear();
   QVariantList list;
 
-  Template t1 = Engine::instance()->newTemplate( "Wrong", "context_template_1" );
-  Template t2 = Engine::instance()->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template_2" );
+  Template t1 = m_engine->newTemplate( "Wrong", "context_template_1" );
+  Template t2 = m_engine->newTemplate( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}", "context_template_2" );
   list << QVariant::fromValue( t1 );
   list << QVariant::fromValue( t2 );
 

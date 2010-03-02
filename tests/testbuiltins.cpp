@@ -134,14 +134,22 @@ private slots:
 private:
   Engine *m_engine;
 
+  Engine* getEngine();
+
   void doTest();
 
 };
 
 void TestBuiltinSyntax::initTestCase()
 {
-  m_engine = Engine::instance();
-  m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+  m_engine = getEngine();
+}
+
+Engine* TestBuiltinSyntax::getEngine()
+{
+  Engine *engine = new Engine( this );
+  engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+  return engine;
 }
 
 void TestBuiltinSyntax::cleanupTestCase()
@@ -156,7 +164,7 @@ void TestBuiltinSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = Engine::instance()->newTemplate( input, QTest::currentDataTag() );
+  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
 
   Context context( dict );
 
@@ -567,37 +575,39 @@ void TestBuiltinSyntax::testEscaping_data()
 
 void TestBuiltinSyntax::testMultipleStates()
 {
-  Engine *engine = Engine::instance();
+  Engine *engine1 = getEngine();
 
   InMemoryTemplateLoader::Ptr loader1 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
   loader1->setTemplate( "template1", "Template 1" );
-  engine->addTemplateLoader( loader1 );
+  engine1->addTemplateLoader( loader1 );
 
-  Template t1 = engine->newTemplate( "{% include \"template1\" %}", "\"template1\"" );
+  Template t1 = engine1->newTemplate( "{% include \"template1\" %}", "\"template1\"" );
+
+  Engine *engine2 = getEngine();
 
   InMemoryTemplateLoader::Ptr loader2 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
   loader2->setTemplate( "template2", "Template 2" );
 
-  engine->addTemplateLoader( loader2 );
+  engine2->addTemplateLoader( loader2 );
 
-  Template t2 = engine->newTemplate( "{% include \"template2\" %}", "\"template2\"" );
+  Template t2 = engine2->newTemplate( "{% include \"template2\" %}", "\"template2\"" );
+
+  Engine *engine3 = getEngine();
 
   InMemoryTemplateLoader::Ptr loader3 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
   loader3->setTemplate( "template3", "Template 3" );
 
-  engine->addTemplateLoader( loader3 );
+  engine3->addTemplateLoader( loader3 );
 
-  Template t3 = engine->newTemplate( "{% include var %}", "var" );
-
-  // Cause Engine to change to a new state.
-  Template t4 = engine->newTemplate( "", "Dummy template" );
+  Template t3 = engine3->newTemplate( "{% include var %}", "var" );
 
   QVariantHash h;
   h.insert( "var", "template3" );
   Context c( h );
+  t1->render( &c );
 
   QString expected1 = "Template 1";
   QString expected2 = "Template 2";
@@ -605,7 +615,6 @@ void TestBuiltinSyntax::testMultipleStates()
   QCOMPARE( t1->render( &c ), expected1 );
   QCOMPARE( t2->render( &c ), expected2 );
   QCOMPARE( t3->render( &c ), expected3 );
-
 }
 
 void TestBuiltinSyntax::testTemplatePathSafety_data()
@@ -632,14 +641,14 @@ void TestBuiltinSyntax::testTemplatePathSafety()
   f.write( inputPath.toUtf8() );
   f.close();
 
-  Template t = loader->loadByName( inputPath );
+  Template t = loader->loadByName( inputPath, m_engine );
   Context c;
   if ( output.isEmpty() )
     QVERIFY( !t );
   else
     QCOMPARE( t->render( &c ), inputPath );
 
-  MutableTemplate mt = loader->loadMutableByName( inputPath );
+  MutableTemplate mt = loader->loadMutableByName( inputPath, m_engine );
   if ( output.isEmpty() )
     QVERIFY( !mt );
   else

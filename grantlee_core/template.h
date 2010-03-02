@@ -23,7 +23,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QSharedPointer>
 
-#include "enginestate.h"
 #include "node.h"
 
 #include "global.h"
@@ -32,6 +31,7 @@
 namespace Grantlee
 {
 class Context;
+class Engine;
 class TemplateImpl;
 
 typedef QWeakPointer<TemplateImpl> TemplateWeakPtr;
@@ -81,13 +81,10 @@ public:
   */
   QString errorString();
 
-  /**
-    The state used and accessed while parsing and rendering the Template.
-  */
-  EngineState state() const;
+  Engine const * engine() const;
 
 protected:
-  TemplateImpl( QObject *parent = 0 );
+  TemplateImpl( Engine const *engine, QObject *parent = 0 );
 
   void setContent( const QString &templateString );
 
@@ -95,6 +92,7 @@ private:
   Q_DECLARE_PRIVATE( Template )
   TemplatePrivate * const d_ptr;
   friend class Engine;
+  friend class Parser;
 };
 
 }
