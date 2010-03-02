@@ -24,6 +24,8 @@
 #include "engine.h"
 #include "enginestate_p.h"
 
+class QPluginLoader;
+
 namespace Grantlee
 {
 
@@ -42,6 +44,7 @@ class EnginePrivate
 
   EngineState m_currentState;
 
+  QList<QPluginLoader*> m_pluginLoaders;
   QHash<QString, TagLibraryInterface*> m_libraries;
   QList<TagLibraryInterface*> m_scriptableLibraries;
 

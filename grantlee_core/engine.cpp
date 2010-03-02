@@ -77,7 +77,10 @@ Engine::Engine()
 Engine::~Engine()
 {
   qDeleteAll( d_ptr->m_scriptableLibraries );
-  qDeleteAll( d_ptr->m_libraries );
+  d_ptr->m_libraries.clear();
+  foreach(QPluginLoader *pluginLoader, d_ptr->m_pluginLoaders)
+    pluginLoader->unload();
+  qDeleteAll(d_ptr->m_pluginLoaders);
   delete d_ptr;
   m_instance = 0;
 }
@@ -241,9 +244,10 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, uint mi
     if (list.isEmpty())
       continue;
 
-    QPluginLoader loader( pluginDir.absoluteFilePath( list.first() ) );
+    QPluginLoader *loader = new QPluginLoader( pluginDir.absoluteFilePath( list.first() ) );
 
-    plugin = loader.instance();
+    plugin = loader->instance();
+    m_pluginLoaders.append( loader );
     if ( plugin )
       break;
   }
