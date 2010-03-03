@@ -47,6 +47,10 @@
 
 #include "ui_bookwindow.h"
 
+namespace Grantlee
+{
+class Engine;
+}
 
 class BookWindow: public QMainWindow
 {
@@ -62,6 +66,7 @@ private:
     Ui::BookWindow ui;
     QSqlRelationalTableModel *model;
     int authorIdx, genreIdx;
+    Grantlee::Engine *m_engine;
 };
 
 #endif

@@ -122,12 +122,12 @@ BookWindow::BookWindow()
 
     connect(ui.exportButton, SIGNAL(pressed()), SLOT(renderBooks()));
 
-    Grantlee::Engine *engine = Grantlee::Engine::instance();
+    m_engine = new Grantlee::Engine();
     Grantlee::FileSystemTemplateLoader::Ptr loader = Grantlee::FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
     loader->setTemplateDirs( QStringList() << GRANTLEE_TEMPLATE_PATH );
-    engine->addTemplateLoader(loader);
+    m_engine->addTemplateLoader(loader);
 
-    engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+    m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
 }
 
 void BookWindow::showError(const QSqlError &err)
@@ -156,8 +156,8 @@ void BookWindow::renderBooks()
     QString themeName = ui.exportTheme->currentText();
 
     Grantlee::Context c(mapping);
-    Grantlee::Engine *engine = Grantlee::Engine::instance();
-    Grantlee::Template t = engine->loadByName( themeName + ".html" );
+
+    Grantlee::Template t = m_engine->loadByName( themeName + ".html" );
     if (!t)
     {
       return;
