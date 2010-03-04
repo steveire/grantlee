@@ -20,6 +20,8 @@
 
 #include "context.h"
 
+#include <QStringList>
+
 #include "util_p.h"
 
 using namespace Grantlee;
@@ -39,6 +41,7 @@ class ContextPrivate
   QList<QVariantHash> m_variantHashStack;
   bool m_autoescape;
   bool m_mutating;
+  QStringList m_externalMedia;
 };
 
 }
@@ -132,4 +135,17 @@ void Context::setMutating( bool mutating )
   Q_D( Context );
   d->m_mutating = mutating;
 }
+
+void Context::addExternalMedia(const QString& uri)
+{
+  Q_D( Context );
+  d->m_externalMedia.append( uri );
+}
+
+QStringList Context::externalMedia() const
+{
+  Q_D( const Context );
+  return d->m_externalMedia;
+}
+
 

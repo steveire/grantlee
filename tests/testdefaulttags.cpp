@@ -29,11 +29,35 @@
 #include "context.h"
 #include "util_p.h"
 #include "grantlee_paths.h"
+#include "global.h"
 
 typedef QHash<QString, QVariant> Dict;
 
 Q_DECLARE_METATYPE( Dict )
 Q_DECLARE_METATYPE( Grantlee::Error )
+
+class FakeTemplateLoader : public Grantlee::InMemoryTemplateLoader
+{
+public:
+
+  typedef QSharedPointer<FakeTemplateLoader> Ptr;
+
+  FakeTemplateLoader()
+    : Grantlee::InMemoryTemplateLoader()
+  {
+    m_existingMedia << "existing_image.png";
+  }
+
+  /* reimp */ QString getMediaUri( const QString &fileName ) const
+  {
+    if ( m_existingMedia.contains( fileName ) )
+      return "/path/to/" + fileName;
+    return QString();
+  }
+
+private:
+  QStringList m_existingMedia;
+};
 
 using namespace Grantlee;
 
@@ -125,6 +149,13 @@ private slots:
     doTest();
   }
 
+  void testMediaFinderTag_data();
+  void testMediaFinderTag()
+  {
+    doTest();
+  }
+
+
 private:
 
   void doTest();
@@ -137,6 +168,10 @@ void TestDefaultTags::initTestCase()
 {
   m_engine = new Engine( this );
   m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+
+  FakeTemplateLoader::Ptr loader1 = FakeTemplateLoader::Ptr( new FakeTemplateLoader() );
+
+  m_engine->addTemplateLoader( loader1 );
 }
 
 void TestDefaultTags::cleanupTestCase()
@@ -1288,6 +1323,29 @@ void TestDefaultTags::testAutoescapeTag_data()
   QTest::newRow( "autoescape-filtertag01" ) << "{{ first }}{% filter safe %}{{ first }} x<y{% endfilter %}" << dict << "" << TagSyntaxError;
 }
 
+
+void TestDefaultTags::testMediaFinderTag_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+  QTest::newRow( "media_finder-tag01" ) << "{% media_finder \"existing_image.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag02" ) << "{% media_finder \"does_not_exist.png\" %}" << dict << "" << NoError;
+  QTest::newRow( "media_finder-tag03" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag04" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
+
+  dict.insert("existing_img", "existing_image.png");
+  dict.insert("nonexisting_img", "does_not_exist.png");
+
+  QTest::newRow( "media_finder-tag05" ) << "{% media_finder %}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "media_finder-tag05" ) << "{% media_finder existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag06" ) << "{% media_finder nonexisting_img %}" << dict << "" << NoError;
+  QTest::newRow( "media_finder-tag07" ) << "{% media_finder \"does_not_exist.png\" existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag08" ) << "{% media_finder nonexisting_img existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
+}
 
 QTEST_MAIN( TestDefaultTags )
 #include "testdefaulttags.moc"

@@ -38,10 +38,10 @@ Grantlee::Node* MediaFinderNodeFactory::getNode( const QString& tagContent, Pars
 {
   QStringList expr = smartSplit( tagContent );
 
-  expr.takeAt( 0 );
-  if ( expr.size() <= 0 ) {
+  if ( expr.size() <= 1 ) {
     throw Grantlee::Exception( TagSyntaxError, "'media_finder' tag requires at least one argument" );
   }
+  expr.takeAt( 0 );
 
   return new MediaFinderNode( getFilterExpressionList( expr, p ), p );
 }
@@ -53,13 +53,17 @@ MediaFinderNode::MediaFinderNode( QList<FilterExpression> mediaExpressionList, Q
 
 QString MediaFinderNode::render( Context* c )
 {
+  TemplateImpl *t = containerTemplate();
+  Engine const *engine = t->engine();
+
   foreach( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
-      TemplateImpl *ti = containerTemplate();
-
-      return ti->engine()->mediaUri( Util::getSafeString( fe.resolve( c ) ) );
+      QString uri = engine->mediaUri( Util::getSafeString( fe.resolve( c ) ) );
+      if ( uri.isEmpty() )
+        continue;
+      c->addExternalMedia( uri );
+      return uri;
     }
   }
   return QString();
 }
-

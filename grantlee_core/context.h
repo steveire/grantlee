@@ -172,6 +172,10 @@ public:
   */
   void setMutating( bool mutating );
 
+  QStringList externalMedia() const;
+
+  void addExternalMedia( const QString &uri);
+
 private:
   Q_DECLARE_PRIVATE( Context )
   ContextPrivate * const d_ptr;
