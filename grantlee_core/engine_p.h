@@ -22,6 +22,7 @@
 #define GRANTLEE_ENGINE_P_H
 
 #include "engine.h"
+#include "pluginpointer_p.h"
 
 class QPluginLoader;
 
@@ -36,14 +37,12 @@ class EnginePrivate
 
   TagLibraryInterface* loadLibrary( const QString &name, uint minorVersion );
   TagLibraryInterface* loadScriptableLibrary( const QString &name, uint minorVersion );
-  TagLibraryInterface* loadCppLibrary( const QString& name, uint minorVersion );
+  PluginPointer<TagLibraryInterface> loadCppLibrary( const QString& name, uint minorVersion );
 
   Q_DECLARE_PUBLIC( Engine )
   Engine *q_ptr;
 
-  QList<QPluginLoader*> m_pluginLoaders;
-
-  QHash<QString, TagLibraryInterface*> m_libraries;
+  QHash<QString, PluginPointer<TagLibraryInterface> > m_libraries;
   QList<TagLibraryInterface*> m_scriptableLibraries;
 
   QList<AbstractTemplateLoader::Ptr> m_loaders;

@@ -73,9 +73,6 @@ Engine::~Engine()
 {
   qDeleteAll( d_ptr->m_scriptableLibraries );
   d_ptr->m_libraries.clear();
-  foreach(QPluginLoader *pluginLoader, d_ptr->m_pluginLoaders)
-    pluginLoader->unload();
-  qDeleteAll(d_ptr->m_pluginLoaders);
   delete d_ptr;
 }
 
@@ -135,11 +132,7 @@ void Engine::loadDefaultLibraries()
   Q_D( Engine );
   // Make sure we can load default scriptable libraries if we're supposed to.
   if ( d->m_defaultLibraries.contains( __scriptableLibName ) ) {
-    TagLibraryInterface *library = d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
-    if ( library )
-    {
-      library->setEngine( this );
-    }
+    PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
   }
 
   foreach( const QString &libName, d->m_defaultLibraries ) {
@@ -161,7 +154,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 
   // already loaded by the engine.
   if ( d->m_libraries.contains( name ) )
-    return d->m_libraries.value( name );
+    return d->m_libraries.value( name ).data();
 
   uint minorVersion = GRANTLEE_VERSION_MINOR;
   while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION )
@@ -181,7 +174,7 @@ TagLibraryInterface* EnginePrivate::loadLibrary( const QString &name, uint minor
 
   // else this is not a scriptable library.
 
-  return loadCppLibrary( name, minorVersion );
+  return loadCppLibrary( name, minorVersion ).data();
 }
 
 EnginePrivate::EnginePrivate( Engine *engine )
@@ -203,7 +196,7 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     if ( !file.exists() )
       continue;
 
-    TagLibraryInterface *scriptableTagLibrary = m_libraries.value( __scriptableLibName );
+    PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
 
     QHash<QString, AbstractNodeFactory*> factories = scriptableTagLibrary->nodeFactories( libFileName );
     QHash<QString, Filter*> filters = scriptableTagLibrary->filters( libFileName );
@@ -215,13 +208,12 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
   return 0;
 }
 
-TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion )
+PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion )
 {
   Q_Q( Engine );
   int pluginIndex = 0;
   QString libFileName;
 
-  QObject *plugin = 0;
   while ( m_pluginDirs.size() > pluginIndex ) {
     QString nextDir = m_pluginDirs.at( pluginIndex++ );
     QDir pluginDir( nextDir + QString( "/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
@@ -234,20 +226,16 @@ TagLibraryInterface* EnginePrivate::loadCppLibrary( const QString &name, uint mi
     if (list.isEmpty())
       continue;
 
-    QPluginLoader *loader = new QPluginLoader( pluginDir.absoluteFilePath( list.first() ) );
+    PluginPointer<TagLibraryInterface> plugin = PluginPointer<TagLibraryInterface>( pluginDir.absoluteFilePath( list.first() ) );
 
-    plugin = loader->instance();
-    m_pluginLoaders.append( loader );
     if ( plugin )
-      break;
+    {
+      plugin->setEngine( q );
+      m_libraries.insert( name, plugin );
+      return plugin;
+    }
   }
-  if ( !plugin )
-    return 0;
-
-  TagLibraryInterface *library = qobject_cast<TagLibraryInterface*>( plugin );
-  library->setEngine( q );
-  m_libraries.insert( name, library );
-  return library;
+  return 0;
 }
 
 Template Engine::loadByName( const QString &name ) const
