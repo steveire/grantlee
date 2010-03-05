@@ -52,15 +52,25 @@ public:
   }
 
   PluginPointer( const QString &fileName )
-    : m_plugin( 0 )
+    : m_object( 0 ), m_plugin( 0 )
   {
     m_pluginLoader = QSharedPointer<QPluginLoader>( new QPluginLoader( fileName ), _deleter );
 
-    QObject *plugin = m_pluginLoader->instance();
-    if ( !plugin )
+    m_object = m_pluginLoader->instance();
+    if ( !m_object )
         return;
 
-    m_plugin = qobject_cast<PluginType*>( plugin );
+    m_plugin = qobject_cast<PluginType*>( m_object );
+  }
+
+  QString errorString()
+  {
+    return m_pluginLoader->errorString();
+  }
+
+  QObject* object()
+  {
+    return m_object;
   }
 
   PluginType* operator->()
@@ -79,6 +89,7 @@ public:
   }
 
 private:
+  QObject *m_object;
   PluginType *m_plugin;
   QSharedPointer<QPluginLoader> m_pluginLoader;
 };
