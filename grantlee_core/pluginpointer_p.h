@@ -27,8 +27,6 @@
 namespace Grantlee
 {
 
-class _Dummy;
-
 void _deleter( QPluginLoader *loader )
 {
   loader->unload();
@@ -38,6 +36,7 @@ void _deleter( QPluginLoader *loader )
 template <typename PluginType>
 class PluginPointer
 {
+  class _Dummy;
 public:
   PluginPointer()
     : m_plugin( 0 )
