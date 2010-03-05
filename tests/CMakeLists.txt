@@ -38,3 +38,5 @@ grantlee_unit_tests(
   testfilters
 )
 
+add_subdirectory(pluginpointertest)
+
