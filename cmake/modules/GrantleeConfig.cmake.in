@@ -1,21 +1,20 @@
 # Grantlee CMake configuration file - http://www.grantlee.org/
 
-# If this file was found, then Avogadro has been found
-set(Grantlee_FOUND 1)
+# Any changes in this file will be overwritten by CMake.
 
 set(Grantlee_VERSION_MAJOR "@Grantlee_VERSION_MAJOR@")
 set(Grantlee_VERSION_MINOR "@Grantlee_VERSION_MINOR@")
 set(Grantlee_VERSION_PATCH "@Grantlee_VERSION_PATCH@")
 
 set(Grantlee_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
-set(Grantlee_INCLUDE_DIRS   "@CMAKE_INSTALL_PREFIX@"/include)
-set(Grantlee_LIBRARY_DIRS   "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@")
-set(Grantlee_PLUGIN_PATH    "@LIB_INSTALL_DIR@/grantlee/")
+set(Grantlee_INCLUDE_DIR   "@CMAKE_INSTALL_PREFIX@"/include)
+set(Grantlee_LIBRARY_DIR   "@CMAKE_INSTALL_PREFIX@/lib@LIB_SUFFIX@")
+set(Grantlee_PLUGIN_PATH    "${Grantlee_LIBRARY_DIR}/grantlee")
 
 if (UNIX)
-  set(Grantlee_CORE_LIBRARY "@LIB_INSTALL_DIR@/libgrantlee_core.so")
+  set(Grantlee_CORE_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_core.so")
 else (UNIX)
-  set(Grantlee_CORE_LIBRARY "@LIB_INSTALL_DIR@/grantlee_core.dll")
+  set(Grantlee_CORE_LIBRARY "${Grantlee_LIBRARY_DIR}/grantlee_core.dll")
 endif (UNIX)
 
 set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
