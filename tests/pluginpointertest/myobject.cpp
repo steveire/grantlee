@@ -4,13 +4,14 @@
 #include <QtPlugin>
 
 
-MyObject::MyObject(int stop, QObject *parent)
-  : QObject(parent)
+MyObject::MyObject( int stop, QObject *parent )
+  : QObject( parent )
 {
-  m_data.fill('o', 2000000);
+  m_data.fill( 'o', 2000000 );
 
-  if (stop > 0)
-    MyObject *o = new MyObject(--stop, this);
+  if ( stop > 0 )
+    ( void ) new MyObject( --stop, this );
+
 }
 
 int MyObject::double_it( int input )
