@@ -90,7 +90,7 @@ QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, 
 
   SafeString argString = Util::getSafeString( argument );
 
-  if ( !argString->isEmpty() )
+  if ( !argString.get().isEmpty() )
     return d.toString( argString );
 
   return d.toString( "MMM. d, yyyy" );

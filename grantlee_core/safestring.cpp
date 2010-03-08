@@ -85,8 +85,8 @@ SafeString SafeString::operator+( const QString &str )
 SafeString SafeString::operator+( const SafeString &str )
 {
   if ( !str.isSafe() )
-    return SafeString( m_nestedString + (*str), IsNotSafe );
-  return SafeString( m_nestedString + *str, m_safety );
+    return SafeString( m_nestedString + str.get(), IsNotSafe );
+  return SafeString( m_nestedString + str.get(), m_safety );
 }
 
 SafeString &SafeString::operator+=( const QString & str )
@@ -102,7 +102,7 @@ SafeString &SafeString::operator+=( const SafeString & str )
   if ( !str.isSafe() )
     m_safety = IsNotSafe;
 
-  m_nestedString += *str;
+  m_nestedString += str.get();
   return *this;
 }
 
@@ -110,7 +110,7 @@ bool SafeString::operator==( const Grantlee::SafeString &other ) const
 {
   // Don't compare safety or account for future escaping here.
   // See TestBuiltins testEscaping
-  return m_nestedString == *other;
+  return m_nestedString == other.get();
 }
 
 bool SafeString::operator==( const QString &other ) const

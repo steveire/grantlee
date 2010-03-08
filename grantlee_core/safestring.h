@@ -93,9 +93,14 @@ public:
 
   };
 
-  NestedString* operator->()
+  const NestedString& get() const
   {
-    return &m_nestedString;
+    return m_nestedString;
+  }
+
+  NestedString& get()
+  {
+    return m_nestedString;
   }
 
   operator QString() const
@@ -147,12 +152,6 @@ public:
 
   operator QVariant() const {
     return QVariant::fromValue( *this );
-  }
-
-private:
-  const QString& operator*() const
-  {
-    return m_nestedString;
   }
 
 private:

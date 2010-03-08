@@ -67,7 +67,7 @@ bool Util::variantIsTrue( const QVariant &variant )
   }
 
   Grantlee::SafeString str = getSafeString( variant );
-  return !str->isEmpty();
+  return !str.get().isEmpty();
 }
 
 QVariantList Util::variantToList( const QVariant &var )

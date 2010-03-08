@@ -203,7 +203,7 @@ QVariant FilterExpression::resolve( Context *c ) const
       if ( argVar.isConstant() ) {
         argString = Util::markSafe( argString );
       }
-      if ( !argString->isEmpty() ) {
+      if ( !argString.get().isEmpty() ) {
         arg = argString;
       }
     }

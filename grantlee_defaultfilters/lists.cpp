@@ -50,7 +50,7 @@ QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument
     return input.toList().size();
 
   if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
-    return Util::getSafeString( input )->size();
+    return Util::getSafeString( input ).get().size();
 
   return QVariant();
 }
@@ -66,10 +66,10 @@ QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argume
     size = input.toList().size();
 
   if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
-    size = Util::getSafeString( input )->size();
+    size = Util::getSafeString( input ).get().size();
 
   bool ok;
-  int argInt = Util::getSafeString( argument )->toInt( &ok );
+  int argInt = Util::getSafeString( argument ).get().toInt( &ok );
 
   if ( !ok )
     return QVariant();
@@ -116,11 +116,11 @@ QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument,
 {
   Q_UNUSED( autoescape )
   SafeString argString = Util::getSafeString( argument );
-  int splitterIndex = argString->indexOf( ":" );
+  int splitterIndex = argString.get().indexOf( ":" );
   QString inputString = Util::getSafeString( input );
   if ( splitterIndex >= 0 ) {
-    int left = QVariant( argString->left( splitterIndex ) ).toInt();
-    int right = QVariant( argString->right( splitterIndex ) ).toInt();
+    int left = QVariant( argString.get().left( splitterIndex ) ).toInt();
+    int right = QVariant( argString.get().right( splitterIndex ) ).toInt();
     if ( right < 0 ) {
       right = inputString.size() + right;
     }
@@ -144,7 +144,7 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
 
   if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String ) {
     QVariantList list;
-    foreach ( const QVariant &var, Util::getSafeString( input )->split( QString(), QString::SkipEmptyParts ) )
+    foreach ( const QVariant &var, Util::getSafeString( input ).get().split( QString(), QString::SkipEmptyParts ) )
       list << var;
     return list;
   }
@@ -168,13 +168,14 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
   int listSize = list.size();
   while ( i < listSize ) {
     QVariant titleObject = list.at( i );
-    SafeString title = Util::getSafeString( titleObject );;
+    SafeString title = Util::getSafeString( titleObject );
     QString sublist;
     QVariant sublistItem;
 
+    QString _title = title.get();
     if ( titleObject.type() == QVariant::List ) {
       sublistItem = titleObject;
-      title->clear();
+      _title.clear();
     } else if ( i < listSize - 1 ) {
       QVariant nextItem = list.at( i + 1 );
       if ( nextItem.type() == QVariant::List ) {
