@@ -95,9 +95,9 @@ QString IfChangedNode::render( Context *c )
 
   // At first glance it looks like m_last_seen will always be invalid,
   // But it will change because render is called multiple times by the parent
-  // for loop.
+  // {% for %} loop in the template.
   if (( watchedVars != m_lastSeen.toList() )
-      || ( !watchedString.isNull() && ( watchedString != m_lastSeen.toString() ) ) ) {
+      || ( !watchedString.isEmpty() && ( watchedString != m_lastSeen.toString() ) ) ) {
     bool firstLoop = !m_lastSeen.isValid();
     if ( !watchedString.isNull() )
       m_lastSeen = watchedString;

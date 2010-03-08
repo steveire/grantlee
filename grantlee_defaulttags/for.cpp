@@ -194,8 +194,6 @@ QString ForNode::render( Context *c )
 
   bool unpack = m_loopVars.size() > 1;
 
-  QVariant var = m_filterExpression.resolve( c );
-
   c->push();
 
 //   if ( var.type() == QVariant::Hash ) {
