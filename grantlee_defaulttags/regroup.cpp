@@ -60,12 +60,13 @@ RegroupNode::RegroupNode( FilterExpression target, FilterExpression expression, 
 
 }
 
-QString RegroupNode::render( Context *c )
+void RegroupNode::render( OutputStream *stream, Context *c )
 {
+  Q_UNUSED( stream )
   QVariantList objList = m_target.resolve( c ).toList();
   if ( objList.isEmpty() ) {
     c->insert( m_varName, QVariantHash() );
-    return QString( "" );
+    return;
   }
 
   // What's going on?
@@ -109,6 +110,5 @@ QString RegroupNode::render( Context *c )
     contextList[contextList.size() - 1] = hash;
   }
   c->insert( m_varName, contextList );
-  return QString();
 }
 

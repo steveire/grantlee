@@ -54,9 +54,9 @@ LoadNode::LoadNode( QObject *parent )
 {
 }
 
-QString LoadNode::render( Context *c )
+void LoadNode::render( OutputStream *stream, Context *c )
 {
+  Q_UNUSED( stream )
   Q_UNUSED( c )
-  return QString();
 }
 

@@ -20,6 +20,8 @@
 
 #include "filterexpression.h"
 
+#include <QBuffer>
+
 #include "parser.h"
 #include "filter.h"
 #include "util_p.h"
@@ -27,6 +29,7 @@
 
 namespace Grantlee
 {
+
 class FilterExpressionPrivate
 {
   FilterExpressionPrivate( FilterExpression *fe )
@@ -82,7 +85,7 @@ static const QString filterRawString = QString(
 static const QRegExp sFilterRe( filterRawString );
 
 FilterExpression::FilterExpression( const QString &varString, Parser *parser )
-    : d_ptr( new FilterExpressionPrivate( this ) )
+  : d_ptr( new FilterExpressionPrivate( this ) )
 {
   Q_D( FilterExpression );
 
@@ -183,13 +186,14 @@ FilterExpression &FilterExpression::operator=( const FilterExpression & other )
   return *this;
 }
 
-QVariant FilterExpression::resolve( Context *c ) const
+QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
 {
   Q_D( const FilterExpression );
   QVariant var = d->m_variable.resolve( c );
 
   foreach( const ArgFilter &argfilter, d->m_filters ) {
     Filter::Ptr filter = argfilter.first;
+    filter->setStream( stream );
     Variable argVar = argfilter.second;
     QVariant arg = argVar.resolve( c );
 
@@ -222,8 +226,14 @@ QVariant FilterExpression::resolve( Context *c ) const
       }
     }
   }
-
+  ( *stream ) << Util::getSafeString( var ).get();
   return var;
+}
+
+QVariant FilterExpression::resolve( Context *c ) const
+{
+  OutputStream _dummy;
+  return resolve( &_dummy, c );
 }
 
 QVariantList FilterExpression::toList( Context *c ) const

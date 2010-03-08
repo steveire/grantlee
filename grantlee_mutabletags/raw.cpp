@@ -49,11 +49,10 @@ void RawNode::setNodeList( NodeList nodeList )
   m_nodeList = nodeList;
 }
 
-QString RawNode::render( Context* c )
+void RawNode::render( OutputStream *stream, Context* c )
 {
   c->setMutating( false );
-  QString result = m_nodeList.render( c );
+  m_nodeList.render( stream, c );
   c->setMutating( true );
-  return result;
 }
 

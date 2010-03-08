@@ -85,6 +85,7 @@ public:
   /**
     Resolves the FilterExpression in the Context @p c.
   */
+  QVariant resolve( OutputStream *stream, Context *c ) const;
   QVariant resolve( Context *c ) const;
 
   /**

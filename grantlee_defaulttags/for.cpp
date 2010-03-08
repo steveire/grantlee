@@ -127,16 +127,14 @@ void ForNode::insertLoopVariables( Context *c, int listSize, int i )
   c->insert( forloop, forloopHash );
 }
 
-QString ForNode::renderLoop( Context *c )
+void ForNode::renderLoop( OutputStream *stream, Context *c )
 {
-  QString result;
   for ( int j = 0; j < m_loopNodeList.size();j++ ) {
-    result += m_loopNodeList[j]->render( c );
+    m_loopNodeList[j]->render( stream, c );
   }
-  return result;
 }
 
-QString ForNode::handleHashItem( Context *c, QString key, QVariant value, int listSize, int i, bool unpack )
+void ForNode::handleHashItem( OutputStream *stream, Context *c, QString key, QVariant value, int listSize, int i, bool unpack )
 {
   QVariantList list;
   insertLoopVariables( c, listSize, i );
@@ -151,13 +149,11 @@ QString ForNode::handleHashItem( Context *c, QString key, QVariant value, int li
     c->insert( m_loopVars.at( 0 ), key );
     c->insert( m_loopVars.at( 1 ), value );
   }
-  return renderLoop( c );
+  renderLoop( stream, c );
 }
 
-QString ForNode::iterateHash( Context *c, QVariantHash varHash, bool unpack )
+void ForNode::iterateHash( OutputStream *stream, Context *c, QVariantHash varHash, bool unpack )
 {
-  QString result;
-
   int listSize = varHash.size();
   int i = 0;
   QVariantList list;
@@ -166,22 +162,20 @@ QString ForNode::iterateHash( Context *c, QVariantHash varHash, bool unpack )
   if ( m_isReversed == IsReversed ) {
     while ( it.hasPrevious() ) {
       it.previous();
-      result += handleHashItem( c, it.key(), it.value(), listSize, i, unpack );
+      handleHashItem( stream, c, it.key(), it.value(), listSize, i, unpack );
       ++i;
     }
   } else {
     while ( it.hasNext() ) {
       it.next();
-      result += handleHashItem( c, it.key(), it.value(), listSize, i, unpack );
+      handleHashItem( stream, c, it.key(), it.value(), listSize, i, unpack );
       ++i;
     }
   }
-  return result;
 }
 
-QString ForNode::render( Context *c )
+void ForNode::render( OutputStream *stream, Context *c )
 {
-  QString result;
   QVariantHash forloopHash;
 
   QVariant parentLoopVariant = c->lookup( forloop );
@@ -210,7 +204,7 @@ QString ForNode::render( Context *c )
 
   if ( listSize < 1 ) {
     c->pop();
-    return m_emptyNodeList.render( c );
+    return m_emptyNodeList.render( stream, c );
   }
 
   for ( int i = 0; i < listSize; i++ ) {
@@ -250,9 +244,8 @@ QString ForNode::render( Context *c )
     } else {
       c->insert( m_loopVars[0], varList[index] );
     }
-    result += renderLoop( c );
+    renderLoop( stream, c );
   }
   c->pop();
-  return result;
 }
 

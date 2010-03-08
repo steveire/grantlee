@@ -119,7 +119,7 @@ Template ExtendsNode::getParent( Context *c )
   return t;
 }
 
-QString ExtendsNode::render( Context *c )
+void ExtendsNode::render( OutputStream *stream, Context *c )
 {
   m_parentTemplate = getParent( c );
 
@@ -162,8 +162,7 @@ QString ExtendsNode::render( Context *c )
     }
   }
 
-  QString res = m_parentTemplate->render( c );
-  return res;
+  m_parentTemplate->render( stream, c );
 }
 
 void ExtendsNode::appendNode( Node *node )

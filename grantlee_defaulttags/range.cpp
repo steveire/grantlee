@@ -102,7 +102,7 @@ void RangeNode::setNodeList( NodeList list )
   m_list = list;
 }
 
-QString RangeNode::render( Context* c )
+void RangeNode::render( OutputStream *stream, Context* c )
 {
   int start;
   int stop;
@@ -132,10 +132,9 @@ QString RangeNode::render( Context* c )
       c->push();
       c->insert( m_name, i );
     }
-    ret += m_list.render( c );
+    m_list.render( stream, c );
     if ( insertContext )
       c->pop();
   }
-  return ret;
 }
 

@@ -64,13 +64,15 @@ void FilterNode::setNodeList( NodeList filterList )
   m_filterList = filterList;
 }
 
-QString FilterNode::render( Context* c )
+void FilterNode::render( OutputStream *stream, Context* c )
 {
-  QString output = m_filterList.render( c );
+  QString output;
+  QTextStream textStream( &output );
+  OutputStream temp( &textStream );
+  m_filterList.render( &temp, c );
   c->push();
   c->insert( "var", output );
-  QString filtered = Util::getSafeString( m_fe.resolve( c ) );
+  m_fe.resolve( stream, c );
   c->pop();
-  return filtered;
 }
 

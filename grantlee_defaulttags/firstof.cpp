@@ -51,13 +51,13 @@ FirstOfNode::FirstOfNode( QList<FilterExpression> list, QObject *parent )
 {
 }
 
-QString FirstOfNode::render( Context *c )
+void FirstOfNode::render( OutputStream *stream, Context *c )
 {
   foreach( const FilterExpression &fe, m_variableList ) {
     if ( fe.isTrue( c ) ) {
-      return Util::getSafeString( fe.resolve( c ) );
+      fe.resolve( stream, c );
+      return;
     }
   }
-  return QString();
 }
 

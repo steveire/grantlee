@@ -70,7 +70,7 @@ class CycleNode : public Node
 public:
   CycleNode( QList<FilterExpression> list, const QString &name, QObject *parent = 0 );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   RingIterator<FilterExpression> m_variableIterator;

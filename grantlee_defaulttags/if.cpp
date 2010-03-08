@@ -109,7 +109,7 @@ void IfNode::setFalseList( NodeList falseList )
   m_falseList = falseList;
 }
 
-QString IfNode::render( Context *c )
+void IfNode::render( OutputStream *stream, Context *c )
 {
   // Evaluate the expression. rendering variables with the context as needed. and processing nodes recursively
   // in either trueList or falseList as determined by booleanExpression.
@@ -122,7 +122,8 @@ QString IfNode::render( Context *c )
       bool isTrue = pair.second.isTrue( c );
 
       if ( isTrue != negate ) {
-        return renderTrueList( c );
+        renderTrueList( stream, c );
+        return;
       }
     }
 //     return renderFalseList(c);
@@ -147,19 +148,22 @@ QString IfNode::render( Context *c )
       }
     }
     if ( renderTrue )
-      return renderTrueList( c );
+    {
+      renderTrueList( stream, c );
+      return;
+    }
   }
 
-  return renderFalseList( c );
+  renderFalseList( stream, c );
 }
 
-QString IfNode::renderTrueList( Context *c )
+void IfNode::renderTrueList( OutputStream *stream, Context *c )
 {
-  return m_trueList.render( c );
+  return m_trueList.render( stream, c );
 }
 
-QString IfNode::renderFalseList( Context *c )
+void IfNode::renderFalseList( OutputStream *stream, Context *c )
 {
-  return m_falseList.render( c );
+  return m_falseList.render( stream, c );
 }
 

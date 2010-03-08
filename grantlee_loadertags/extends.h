@@ -50,7 +50,7 @@ public:
 
   void setNodeList( NodeList list );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
   void appendNode( Node* node );
 

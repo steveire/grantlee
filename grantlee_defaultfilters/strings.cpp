@@ -124,7 +124,7 @@ QVariant LineNumbersFilter::doFilter( const QVariant& input, const QVariant &arg
   const bool shouldEscape = ( autoescape && !safeString.isSafe() );
   for ( int i = 0; i < lines.size(); ++i ) {
     lines[ i ] = QString( "%1. %2" ).arg( i + 1, width ).arg(
-                   shouldEscape ? QString( Util::escape( lines.at( i ) ) ) : lines.at( i )
+                   shouldEscape ? QString( escape( lines.at( i ) ) ) : lines.at( i )
                  );
   }
 
@@ -240,7 +240,7 @@ QVariant ForceEscapeFilter::doFilter( const QVariant& input, const QVariant &arg
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
-  return Util::markSafe( Util::escape( Util::getSafeString( input ) ) );
+  return Util::markSafe( escape( Util::getSafeString( input ) ) );
 }
 
 QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -332,7 +332,7 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
   foreach( const QString &bit, inputString.get().split( re ) ) {
     SafeString _bit = SafeString( bit, inputString.isSafe() );
     if ( autoescape )
-      _bit = Util::conditionalEscape( _bit );
+      _bit = conditionalEscape( _bit );
     _bit.get().replace( '\n', "<br />" );
     output.append( QString( "<p>%1</p>" ).arg( _bit ) );
   }
@@ -344,7 +344,7 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
   Q_UNUSED( argument )
   SafeString inputString = Util::getSafeString( input );
   if ( autoescape && Util::isSafeString( input ) ) {
-    inputString = Util::conditionalEscape( inputString );
+    inputString = conditionalEscape( inputString );
   }
   return Util::markSafe( inputString.get().replace( '\n', "<br />" ) );
 }

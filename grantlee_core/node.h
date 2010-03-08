@@ -32,6 +32,7 @@
 
 #include "context.h"
 #include "filterexpression.h"
+#include "outputstream.h"
 #include "safestring.h"
 
 #include "grantlee_core_export.h"
@@ -69,7 +70,8 @@ public:
     This will also involve calling render on and child nodes.
   */
   // This can't be const because CycleNode needs to change on each render.
-  virtual QString render( Context *c ) = 0;
+
+  virtual void render( OutputStream *stream, Context *c ) = 0;
 
   /**
     Reimplement this to return whether the node is persistent.
@@ -101,7 +103,7 @@ protected:
 
     This is only relevant to developing template tags.
   */
-  QString renderValueInContext( const QVariant &input, Grantlee::Context *c );
+  void streamValueInContext( OutputStream *stream, const QVariant &input, Grantlee::Context *c );
 
   TemplateImpl* containerTemplate() const;
 
@@ -174,13 +176,13 @@ public:
   /**
     Renders the list of Nodes in the Context @p c.
   */
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 protected:
   /**
     Renders the list of Nodes in the Context @p c, possibly mutating the nodes contained in it.
   */
-  QString mutableRender( Context *c );
+  void mutableRender( OutputStream *stream, Context *c );
 
 private:
   bool m_containsNonText;
@@ -261,9 +263,9 @@ class GRANTLEE_CORE_EXPORT TextNode : public Node
 public:
   explicit TextNode( const QString &content, QObject *parent = 0 );
 
-  /* reimp */ QString render( Context *c ) { // krazy:exclude:inline
+  /* reimp */ void render( OutputStream *stream, Context *c ) { // krazy:exclude:inline
     Q_UNUSED( c );
-    return m_content;
+    ( *stream ) << m_content;
   }
 
   void appendContent( const QString &content ) { // krazy:exclude:inline
@@ -285,7 +287,7 @@ class GRANTLEE_CORE_EXPORT VariableNode : public Node
 public:
   explicit VariableNode( const FilterExpression &fe, QObject *parent = 0 );
 
-  /* reimp */ QString render( Context *c );
+  /* reimp */ void render( OutputStream *stream, Context *c );
 
 private:
   FilterExpression m_filterExpression;

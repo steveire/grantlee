@@ -64,25 +64,24 @@ SsiNode::SsiNode( const QString &filename, bool parse, QObject *parent )
 {
 }
 
-QString SsiNode::render( Context *c )
+void SsiNode::render( OutputStream *stream, Context *c )
 {
   QFile file( m_filename );
 
   if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
-    return QString();
+    return;
 
   QTextStream in( &file );
-  QString content;
-  while ( !in.atEnd() ) {
-    content += in.readLine();
-  }
-
   if ( m_parse ) {
+    QString content;
+    while ( !in.atEnd() ) {
+      content += in.readLine();
+    }
     TemplateImpl *ti = containerTemplate();
     Template t = ti->engine()->newTemplate( content, m_filename );
-    return t->render( c );
+    t->render( stream, c );
   }
-  return content;
 
+  ( *stream ) << &in;
 }
 

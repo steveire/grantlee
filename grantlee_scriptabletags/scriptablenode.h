@@ -60,7 +60,7 @@ public:
 
   QScriptEngine* engine();
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   QScriptEngine* m_scriptEngine;

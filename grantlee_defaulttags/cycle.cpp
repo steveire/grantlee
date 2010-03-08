@@ -100,12 +100,16 @@ CycleNode::CycleNode( QList<FilterExpression> list, const QString &name, QObject
   m_name = name;
 }
 
-QString CycleNode::render( Context *c )
+void CycleNode::render( OutputStream *stream, Context *c )
 {
-  QString value = Util::getSafeString( m_variableIterator.next().resolve( c ) );
+  QString value;
+  QTextStream textStream( &value );
+  OutputStream temp( &textStream );
+
+  m_variableIterator.next().resolve( &temp, c );
   if ( !m_name.isEmpty() ) {
     c->insert( m_name, value );
   }
-  return value;
+  ( *stream ) << value;
 }
 

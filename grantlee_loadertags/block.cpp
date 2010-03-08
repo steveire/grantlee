@@ -92,14 +92,13 @@ void BlockNode::setNodeList( NodeList list )
   m_list = list;
 }
 
-QString BlockNode::render( Context *c )
+void BlockNode::render( OutputStream *stream, Context *c )
 {
   c->push();
   m_context = c;
   c->insert( "block", QVariant::fromValue( static_cast<QObject *>( this ) ) );
-  QString result = m_list.render( c );
+  m_list.render( stream, c );
   c->pop();
-  return result;
 }
 
 SafeString BlockNode::getSuper() const
@@ -110,7 +109,11 @@ SafeString BlockNode::getSuper() const
   if ( !m_nodeParent )
     return SafeString();
 
-  return Util::markSafe( m_nodeParent->render( m_context ) );
+  QString superContent;
+  QTextStream superTextStream( &superContent );
+  OutputStream superStream( &superTextStream );
+  m_nodeParent->render( &superStream, m_context );
+  return Util::markSafe( superContent );
 }
 
 QString BlockNode::blockName()

@@ -41,7 +41,7 @@ class SsiNode : public Node
 public:
   SsiNode( const QString &filename, bool parse, QObject *parent = 0 );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   QString m_filename;

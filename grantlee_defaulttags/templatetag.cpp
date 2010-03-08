@@ -72,9 +72,9 @@ bool TemplateTagNode::isKeyword( const QString &name )
   return s_map.contains( name );
 }
 
-QString TemplateTagNode::render( Context *c )
+void TemplateTagNode::render( OutputStream *stream, Context *c )
 {
   Q_UNUSED( c )
-  return s_map.value( m_name );
+  ( *stream ) << s_map.value( m_name );
 }
 

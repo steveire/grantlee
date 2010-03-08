@@ -16,6 +16,7 @@ set (grantlee_core_SRCS
   lexer.cpp
   mutabletemplate.cpp
   node.cpp
+  outputstream.cpp
   parser.cpp
   safestring.cpp
   template.cpp

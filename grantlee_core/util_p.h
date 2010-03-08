@@ -40,13 +40,9 @@ public:
 
   static QString unescapeStringLiteral( const QString &input );
 
-  static Grantlee::SafeString conditionalEscape( const Grantlee::SafeString &input );
-
   static Grantlee::SafeString markSafe( const Grantlee::SafeString &input );
 
   static Grantlee::SafeString markForEscaping( const Grantlee::SafeString& arg1 );
-
-  static Grantlee::SafeString escape( const Grantlee::SafeString &input );
 
   static Grantlee::SafeString getSafeString( const QVariant &input );
 

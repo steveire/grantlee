@@ -51,13 +51,13 @@ public:
   void setLoopList( NodeList loopNodeList );
   void setEmptyList( NodeList emptyList );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   void insertLoopVariables( Context *c, int listSize, int i );
-  QString iterateHash( Context* c, QVariantHash varHash, bool unpack );
-  QString renderLoop( Context *c );
-  QString handleHashItem( Context *c, QString key, QVariant value, int listSize, int i, bool unpack );
+  void iterateHash( OutputStream *stream, Context* c, QVariantHash varHash, bool unpack );
+  void renderLoop( OutputStream *stream, Context *c );
+  void handleHashItem( OutputStream *stream, Context *c, QString key, QVariant value, int listSize, int i, bool unpack );
 
   QStringList m_loopVars;
   FilterExpression m_filterExpression;

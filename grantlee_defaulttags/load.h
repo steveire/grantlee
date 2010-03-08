@@ -40,7 +40,7 @@ class LoadNode : public Node
 public:
   LoadNode( QObject *parent = 0 );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 };
 
 #endif

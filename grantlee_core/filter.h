@@ -27,6 +27,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
+#include "outputstream.h"
 #include "safestring.h"
 
 #include "grantlee_core_export.h"
@@ -50,6 +51,25 @@ public:
   */
   virtual ~Filter() {}
 
+  void setStream( OutputStream *stream )
+  {
+    m_stream = stream;
+  }
+
+  QString escape( const QString &input ) const {
+    return m_stream->escape( input );
+  }
+
+  QString escape( const SafeString &input ) const {
+    return m_stream->escape( input );
+  }
+
+  QString conditionalEscape( const SafeString &input ) const {
+    if ( !input.isSafe() )
+      return m_stream->escape( input );
+    return input;
+  }
+
   /**
    Reimplement to filter @p input given @p argument.
    The autoescape argument amy also need to be taken into account, depending on the purpose of the filter.
@@ -66,6 +86,8 @@ public:
   virtual bool isSafe() const { // krazy:exclude:inline
     return false;
   }
+private:
+  OutputStream *m_stream;
 };
 
 }

@@ -42,7 +42,7 @@ public:
 
   void setNodeList( NodeList filterList );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   FilterExpression m_fe;

@@ -58,7 +58,7 @@ IncludeNode::IncludeNode( const FilterExpression &fe, QObject *parent )
 {
 }
 
-QString IncludeNode::render( Context *c )
+void IncludeNode::render( OutputStream *stream, Context *c )
 {
   QString filename = Util::getSafeString( m_filterExpression.resolve( c ) );
 
@@ -68,13 +68,11 @@ QString IncludeNode::render( Context *c )
     Template t = ti->engine()->loadByName( filename );
 
     if ( !t )
-      return QString();
+      return;
 
-    return t->render( c );
+    t->render( stream, c );
   } catch ( Grantlee::Exception e ) {
-    return QString();
   }
-
 }
 
 ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
@@ -83,18 +81,17 @@ ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
   m_name = name;
 }
 
-QString ConstantIncludeNode::render( Context *c )
+void ConstantIncludeNode::render( OutputStream *stream, Context *c )
 {
   TemplateImpl *ti = containerTemplate();
 
   try {
     Template t = ti->engine()->loadByName( m_name );
     if ( !t )
-      return QString();
+      return;
 
-    return t->render( c );
+    t->render( stream, c );
   } catch ( Grantlee::Exception e ) {
-    return QString();
   }
 }
 

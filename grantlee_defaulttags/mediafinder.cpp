@@ -51,7 +51,7 @@ MediaFinderNode::MediaFinderNode( QList<FilterExpression> mediaExpressionList, Q
 {
 }
 
-QString MediaFinderNode::render( Context* c )
+void MediaFinderNode::render( OutputStream *stream, Context* c )
 {
   TemplateImpl *t = containerTemplate();
   Engine const *engine = t->engine();
@@ -62,8 +62,7 @@ QString MediaFinderNode::render( Context* c )
       if ( uri.isEmpty() )
         continue;
       c->addExternalMedia( uri );
-      return uri;
+      ( *stream ) << uri;
     }
   }
-  return QString();
 }

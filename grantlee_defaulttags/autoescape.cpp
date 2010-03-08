@@ -75,15 +75,11 @@ void AutoescapeNode::setList( NodeList list )
   m_list = list;
 }
 
-QString AutoescapeNode::render( Context *c )
+void AutoescapeNode::render( OutputStream *stream, Context *c )
 {
-  bool old_setting = c->autoEscape();
+  const bool old_setting = c->autoEscape();
   c->setAutoEscape( m_state == On );
-  QString output = m_list.render( c );
+  m_list.render( stream, c );
   c->setAutoEscape( old_setting );
-  if ( m_state == On ) {
-    return Util::markSafe( output );
-  }
-  return output;
 }
 

@@ -69,7 +69,7 @@ void IfChangedNode::setFalseList( NodeList falseList )
   m_falseList = falseList;
 }
 
-QString IfChangedNode::render( Context *c )
+void IfChangedNode::render( OutputStream *stream, Context *c )
 {
   if ( c->lookup( "forloop" ).isValid() && ( !c->lookup( "forloop" ).toHash().contains( m_id ) ) ) {
     m_lastSeen = QVariant();
@@ -79,8 +79,10 @@ QString IfChangedNode::render( Context *c )
   }
 
   QString watchedString;
+  QTextStream watchedTextStream( &watchedString );
+  OutputStream watchedStream( &watchedTextStream );
   if ( m_filterExpressions.size() == 0 ) {
-    watchedString = m_trueList.render( c );
+    m_trueList.render( &watchedStream, c );
   }
   QListIterator<FilterExpression> i( m_filterExpressions );
   QVariantList watchedVars;
@@ -88,9 +90,9 @@ QString IfChangedNode::render( Context *c )
     QVariant var = i.next().resolve( c );
     if ( !var.isValid() ) {
       // silent error
-      return QString();
+      return;
     }
-    watchedVars << var;
+    watchedVars.append( var );
   }
 
   // At first glance it looks like m_last_seen will always be invalid,
@@ -108,14 +110,10 @@ QString IfChangedNode::render( Context *c )
     // TODO: Document this.
     hash.insert( "firstloop", firstLoop );
     c->insert( "ifchanged", hash );
-    QString content = m_trueList.render( c );
+    m_trueList.render( stream, c );
     c->pop();
-    return content;
   } else if ( !m_falseList.isEmpty() ) {
-    return m_falseList.render( c );
+    m_falseList.render( stream, c );
   }
-
-
-  return QString();
 }
 

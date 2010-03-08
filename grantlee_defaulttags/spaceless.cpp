@@ -44,12 +44,10 @@ SpacelessNode::SpacelessNode( QObject *parent )
 
 }
 
-
 void SpacelessNode::setList( NodeList nodeList )
 {
   m_nodeList = nodeList;
 }
-
 
 QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 {
@@ -61,8 +59,12 @@ QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 }
 
 
-QString SpacelessNode::render( Context *c )
+void SpacelessNode::render( OutputStream *stream, Context *c )
 {
-  return stripSpacesBetweenTags( m_nodeList.render( c ).trimmed() );
+  QString output;
+  QTextStream textStream( &output );
+  OutputStream temp( &textStream );
+  m_nodeList.render( &temp, c );
+  ( *stream ) << stripSpacesBetweenTags( output.trimmed() );
 }
 

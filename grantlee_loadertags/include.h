@@ -45,7 +45,7 @@ class IncludeNode : public Node
   Q_OBJECT
 public:
   explicit IncludeNode( const FilterExpression &fe, QObject *parent = 0 );
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   FilterExpression m_filterExpression;
@@ -57,7 +57,7 @@ class ConstantIncludeNode : public Node
   Q_OBJECT
 public:
   ConstantIncludeNode( const QString &filename, QObject *parent = 0 );
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   QString m_name;

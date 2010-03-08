@@ -48,7 +48,7 @@ public:
 
   void setList( NodeList list );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   NodeList m_list;

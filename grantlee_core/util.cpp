@@ -102,14 +102,6 @@ QVariantList Util::variantToList( const QVariant &var )
   return QVariantList();
 }
 
-Grantlee::SafeString Util::conditionalEscape( const Grantlee::SafeString &input )
-{
-  Grantlee::SafeString temp = input;
-  if ( !temp.isSafe() )
-    return escape( temp );
-  return temp;
-}
-
 Grantlee::SafeString Util::markSafe( const Grantlee::SafeString &input )
 {
   Grantlee::SafeString sret = input;
@@ -125,18 +117,6 @@ Grantlee::SafeString Util::markForEscaping( const Grantlee::SafeString &input )
 
   temp.setNeedsEscape( true );
   return temp;
-}
-
-// This should probably take a QString instead.
-Grantlee::SafeString Util::escape( const Grantlee::SafeString &input )
-{
-  QString temp = input;
-  temp.replace( '&', "&amp;" );
-  temp.replace( '<', "&lt;" );
-  temp.replace( '>', "&gt;" );
-  temp.replace( '\'', "&#39;" );
-  return temp;
-
 }
 
 Grantlee::SafeString Util::getSafeString( const QVariant &input )

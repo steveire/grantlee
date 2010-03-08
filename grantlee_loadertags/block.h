@@ -52,7 +52,7 @@ public:
 
   QString blockName();
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
   BlockNode* takeNodeParent();
 

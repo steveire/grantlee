@@ -44,7 +44,7 @@ public:
 
   void setNodeList( NodeList nodeList );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
   bool isPersistent() {
     return true;

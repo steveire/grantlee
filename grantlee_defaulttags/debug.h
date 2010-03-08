@@ -41,7 +41,7 @@ class DebugNode : public Node
 public:
   DebugNode( QObject *parent = 0 );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   FilterExpression m_filterExpression;

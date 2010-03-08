@@ -23,6 +23,8 @@
 
 #include <QtCore/QHash>
 
+#include "outputstream.h"
+
 namespace Grantlee
 {
 class AbstractNodeFactory;

@@ -62,7 +62,7 @@ Node::~Node()
   delete d_ptr;
 }
 
-QString Node::renderValueInContext( const QVariant& input, Context* c )
+void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Context* c )
 {
   Grantlee::SafeString inputString;
   if ( input.type() == QVariant::List )
@@ -71,10 +71,10 @@ QString Node::renderValueInContext( const QVariant& input, Context* c )
   } else {
     inputString = Util::getSafeString( input );
   }
+  if ( c->autoEscape() && !inputString.isSafe() )
+    inputString.setNeedsEscape( true );
 
-  if ( ( c->autoEscape() && !inputString.isSafe() ) || inputString.needsEscape() )
-    return Util::escape( inputString );
-  return inputString;
+  ( *stream ) << inputString;
 }
 
 TemplateImpl* Node::containerTemplate() const
@@ -151,30 +151,34 @@ bool NodeList::containsNonText() const
   return m_containsNonText;
 }
 
-QString NodeList::render( Context *c )
+void NodeList::render( OutputStream *stream, Context *c )
 {
   if ( c->isMutating() )
-    return mutableRender( c );
+    return mutableRender( stream, c );
 
-  QString ret;
   for ( int i = 0; i < this->size(); ++i ) {
-    ret += this->at( i )->render( c );
+    this->at( i )->render( stream, c );
   }
 
-  return ret;
+  return;
 }
 
-QString NodeList::mutableRender( Context *c )
+void NodeList::mutableRender( OutputStream *stream, Context *c )
 {
   QString renderedTemplate;
   QString renderedNode;
 
+  QTextStream textStream( &renderedNode );
+  OutputStream nodeStream( &textStream );
+
   QList<Grantlee::Node*>::iterator it;
   QList<Grantlee::Node*>::iterator first = begin();
   QList<Grantlee::Node*>::iterator last = end();
+
   for ( it = first; it != last; ++it ) {
+    renderedNode.clear();
     Grantlee::Node *node = *it;
-    QString renderedNode = node->render( c );
+    node->render( &nodeStream, c );
     renderedTemplate += renderedNode;
     bool isPersistent = node->isPersistent();
     if ( it != first ) {
@@ -193,7 +197,7 @@ QString NodeList::mutableRender( Context *c )
       }
     }
   }
-  return renderedTemplate;
+  ( *stream ) << renderedTemplate;
 }
 
 AbstractNodeFactory::AbstractNodeFactory( QObject *parent )
@@ -244,12 +248,12 @@ VariableNode::VariableNode( const FilterExpression &fe, QObject *parent )
 {
 }
 
-QString VariableNode::render( Context *c )
+void VariableNode::render( OutputStream *stream, Context *c )
 {
   QVariant v = m_filterExpression.resolve( c );
   if ( !v.isValid() )
-    return QString();
-  return renderValueInContext( v, c );
+    return;
+  streamValueInContext( stream, v, c );
 }
 
 #include "node.moc"

@@ -41,7 +41,7 @@ class WidthRatioNode : public Node
 public:
   WidthRatioNode( FilterExpression valExpr, FilterExpression maxExpr, FilterExpression maxWidth, QObject *parent = 0 );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   int round( qreal );

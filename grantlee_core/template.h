@@ -34,6 +34,7 @@ namespace Grantlee
 class Context;
 class Engine;
 class TemplateImpl;
+class OutputStream;
 
 typedef QWeakPointer<TemplateImpl> TemplateWeakPtr;
 typedef QSharedPointer<TemplateImpl> Template;
@@ -61,6 +62,8 @@ public:
     Renders the template to a string given the Context @p c.
   */
   virtual QString render( Context *c );
+
+  virtual OutputStream& render( OutputStream *stream, Context *c );
 
   /**
     @internal

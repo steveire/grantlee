@@ -62,12 +62,11 @@ void WithNode::setNodeList( NodeList nodeList )
   m_list = nodeList;
 }
 
-QString WithNode::render( Context *c )
+void WithNode::render( OutputStream *stream, Context *c )
 {
   c->push();
   c->insert( m_name, m_filterExpression.resolve( c ) );
-  QString ret = m_list.render( c );
+  m_list.render( stream, c );
   c->pop();
-  return ret;
 }
 

@@ -43,7 +43,7 @@ public:
 
   void setNodeList( NodeList nodeList );
 
-  QString render( Context* c );
+  void render( OutputStream *stream, Context* c );
 
   bool isRepeatable() {
     return true;

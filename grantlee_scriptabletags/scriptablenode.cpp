@@ -83,7 +83,7 @@ void ScriptableNode::init( const QScriptValue &concreteNode,
   m_renderMethod = renderMethod;
 }
 
-QString ScriptableNode::render( Context *c )
+void ScriptableNode::render( OutputStream *stream, Context *c )
 {
   ScriptableContext sc( c );
   QScriptValue contextObject = m_scriptEngine->newQObject( &sc );
@@ -92,7 +92,7 @@ QString ScriptableNode::render( Context *c )
   args << contextObject;
 
   // Call the render method in the context of the concreteNode
-  return m_renderMethod.call( m_concreteNode, args ).toString();
+  ( *stream ) << m_renderMethod.call( m_concreteNode, args ).toString();
 }
 
 ScriptableNodeFactory::ScriptableNodeFactory( QObject* parent )

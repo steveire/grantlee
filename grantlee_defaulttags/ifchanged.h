@@ -44,7 +44,7 @@ public:
   void setTrueList( NodeList trueList );
   void setFalseList( NodeList falseList );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   NodeList m_trueList;

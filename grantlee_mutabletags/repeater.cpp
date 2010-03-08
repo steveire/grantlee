@@ -49,11 +49,10 @@ void RepeaterNode::setNodeList( NodeList nodeList )
   m_nodeList = nodeList;
 }
 
-QString RepeaterNode::render( Context* c )
+void RepeaterNode::render( OutputStream *stream, Context* c )
 {
   c->setMutating( false );
-  QString result = m_nodeList.render( c );
+  m_nodeList.render( stream, c );
   c->setMutating( true );
-  return result;
 }
 

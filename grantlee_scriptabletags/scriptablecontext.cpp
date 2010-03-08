@@ -60,6 +60,10 @@ QString ScriptableContext::render( const QObjectList &list )
     if ( node )
       nodeList << node;
   }
-  return nodeList.render( m_c );
+  QString ret;
+  QTextStream t(&ret);
+  OutputStream stream(&t);
+  nodeList.render( &stream, m_c );
+  return ret;
 }
 

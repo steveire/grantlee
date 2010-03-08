@@ -41,7 +41,7 @@ DebugNode::DebugNode( QObject *parent )
 
 }
 
-QString DebugNode::render( Context *c )
+void DebugNode::render( OutputStream *stream, Context *c )
 {
   QString ret;
   int i = 0;
@@ -62,6 +62,6 @@ QString DebugNode::render( Context *c )
 
   ret += "End context:\n\n";
 
-  return ret;
+  ( *stream ) << ret;
 }
 

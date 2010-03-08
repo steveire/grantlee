@@ -41,7 +41,7 @@ class NowNode : public Node
 public:
   explicit NowNode( const QString &formatString, QObject *parent = 0 );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   QString m_formatString;

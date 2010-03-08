@@ -62,18 +62,18 @@ int WidthRatioNode::round( qreal number )
   return intPart + 1;
 }
 
-QString WidthRatioNode::render( Context *c )
+void WidthRatioNode::render( OutputStream *stream, Context *c )
 {
   QVariant thisVal = m_valExpr.resolve( c );
   QVariant maxVal = m_maxExpr.resolve( c );
   if ( !thisVal.isValid() || !maxVal.isValid() )
-    return QString();
+    return;
 
   qreal tv = thisVal.toDouble();
   qreal mv = maxVal.toDouble();
 
   if ( mv == 0 )
-    return QString();
+    return;
 
   int maxWidth = m_maxWidth.resolve( c ).toInt();
 
@@ -81,6 +81,7 @@ QString WidthRatioNode::render( Context *c )
 
   result = round( result );
 
-  return QString::number( result );
+  // TODO put integral streamers in OutputStream?
+  ( *stream ) << QString::number( result );
 }
 

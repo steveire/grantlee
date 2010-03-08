@@ -31,7 +31,7 @@ QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, 
     QVariant var = i.next();
     Grantlee::SafeString s = Util::getSafeString( var );
     if ( autoescape )
-      s = Util::conditionalEscape( s );
+      s = conditionalEscape( s );
 
     ret.append( s );
     if ( i.hasNext() ) {
@@ -188,7 +188,7 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
       sublist = QString( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent ).arg( sublist ).arg( indent ).arg( indent );
     }
     output.append( QString( "%1<li>%2%3</li>" ).arg( indent )
-                                               .arg( autoescape ? Util::conditionalEscape( title ) : title )
+                                               .arg( autoescape ? conditionalEscape( title ) : _title )
                                                .arg( sublist ) );
     ++i;
   }

@@ -65,17 +65,24 @@ void TemplateImpl::setContent( const QString &templateString )
 
 QString TemplateImpl::render( Context *c )
 {
+  QString output;
+  QTextStream textStream( &output );
+  OutputStream outputStream( &textStream );
+  render( &outputStream, c );
+  return output;
+}
+
+OutputStream& TemplateImpl::render( OutputStream *stream, Context *c )
+{
   Q_D( Template );
 
-  QString result;
   try {
-    result = d->m_nodeList.render( c );
+    d->m_nodeList.render( stream, c );
   } catch ( Grantlee::Exception &e ) {
     d->setError( e.errorCode(), e.what() );
-    return QString();
   }
 
-  return result;
+  return *stream;
 }
 
 NodeList TemplateImpl::nodeList() const

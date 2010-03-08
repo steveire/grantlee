@@ -44,7 +44,7 @@ public:
 
   void setList( NodeList nodeList );
 
-  QString render( Context *c );
+  void render( OutputStream *stream, Context *c );
 
 private:
   QString stripSpacesBetweenTags( const QString &input );

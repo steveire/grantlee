@@ -96,7 +96,7 @@ void IfEqualNode::setFalseList( NodeList falseList )
   m_falseList = falseList;
 }
 
-QString IfEqualNode::render( Context *c )
+void IfEqualNode::render( OutputStream *stream, Context *c )
 {
   QVariant var1 = m_var1.resolve( c );
   QVariant var2 = m_var2.resolve( c );
@@ -104,8 +104,9 @@ QString IfEqualNode::render( Context *c )
   bool equal = Util::equals( var1, var2 );
 
   if ((( m_negate && !equal ) || ( !m_negate && equal ) ) )
-    return m_trueList.render( c );
-  return m_falseList.render( c );
+    m_trueList.render( stream, c );
+  else
+    m_falseList.render( stream, c );
 
 }
 
