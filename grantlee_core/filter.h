@@ -66,13 +66,6 @@ public:
   virtual bool isSafe() const { // krazy:exclude:inline
     return false;
   }
-
-  /**
-    Reimplement to return whether this filter requires an autoescape argument to its doFilter method.
-  */
-  virtual bool needsAutoescape() const { // krazy:exclude:inline
-    return false;
-  }
 };
 
 }

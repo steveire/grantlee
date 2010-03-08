@@ -35,10 +35,6 @@ public:
   bool isSafe() const {
     return true;
   }
-
-  bool needsAutoescape() const {
-    return true;
-  }
 };
 
 class LengthFilter : public Filter
@@ -109,10 +105,6 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
-    return true;
-  }
-
-  bool needsAutoescape() const {
     return true;
   }
 protected:

@@ -92,10 +92,6 @@ public:
     return true;
   }
 
-  bool needsAutoescape() const {
-    return true;
-  }
-
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 };
 
@@ -260,10 +256,6 @@ public:
   bool isSafe() const {
     return true;
   }
-
-  bool needsAutoescape() const {
-    return true;
-  }
 };
 
 class LineBreaksBrFilter : public Filter
@@ -272,10 +264,6 @@ public:
   QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
 
   bool isSafe() const {
-    return true;
-  }
-
-  bool needsAutoescape() const {
     return true;
   }
 };

@@ -209,11 +209,9 @@ QVariant FilterExpression::resolve( Context *c ) const
     }
 
     SafeString varString = Util::getSafeString( var );
-    if ( filter->needsAutoescape() ) {
-      var = filter->doFilter( var, arg, c->autoescape() );
-    } else {
-      var = filter->doFilter( var, arg );
-    }
+
+    var = filter->doFilter( var, arg, c->autoEscape() );
+
     if ( var.userType() == qMetaTypeId<Grantlee::SafeString>() || var.type() == QVariant::String ) {
       if ( filter->isSafe() && varString.isSafe() ) {
         var = Util::markSafe( Util::getSafeString( var ) );
