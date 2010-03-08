@@ -62,13 +62,13 @@ Context::~Context()
   delete d_ptr;
 }
 
-bool Context::autoescape() const
+bool Context::autoEscape() const
 {
   Q_D( const Context );
   return d->m_autoescape;
 }
 
-void Context::setAutoescape( bool autoescape )
+void Context::setAutoEscape( bool autoescape )
 {
   Q_D( Context );
   d->m_autoescape = autoescape;

@@ -119,14 +119,14 @@ public:
 
     Whether to automatically escape all context content. This is not usually used directly. Use the "{% autoescape %}" tag instead.
   */
-  bool autoescape() const;
+  bool autoEscape() const;
 
   /**
     @internal
 
     Sets whether to automatically escape all context content. This is not usually used directly. Use the "{% autoescape %}" tag instead.
   */
-  void setAutoescape( bool autoescape );
+  void setAutoEscape( bool autoescape );
 
   /**
     Destructor

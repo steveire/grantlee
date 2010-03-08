@@ -77,10 +77,10 @@ void AutoescapeNode::setList( NodeList list )
 
 QString AutoescapeNode::render( Context *c )
 {
-  bool old_setting = c->autoescape();
-  c->setAutoescape( m_state == On );
+  bool old_setting = c->autoEscape();
+  c->setAutoEscape( m_state == On );
   QString output = m_list.render( c );
-  c->setAutoescape( old_setting );
+  c->setAutoEscape( old_setting );
   if ( m_state == On ) {
     return Util::markSafe( output );
   }
