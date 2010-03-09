@@ -45,7 +45,7 @@ public:
   FakeTemplateLoader()
     : Grantlee::InMemoryTemplateLoader()
   {
-    m_existingMedia << "existing_image.png";
+    m_existingMedia << "existing_image.png" << "another_existing_image.png";
   }
 
   /* reimp */ QString getMediaUri( const QString &fileName ) const
@@ -1345,6 +1345,8 @@ void TestDefaultTags::testMediaFinderTag_data()
   QTest::newRow( "media_finder-tag06" ) << "{% media_finder nonexisting_img %}" << dict << "" << NoError;
   QTest::newRow( "media_finder-tag07" ) << "{% media_finder \"does_not_exist.png\" existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
   QTest::newRow( "media_finder-tag08" ) << "{% media_finder nonexisting_img existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag09" ) << "{% media_finder \"existing_image.png\" \"another_existing_image.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag10" ) << "{% media_finder \"another_existing_image.png\" \"existing_image.png\" %}" << dict << "/path/to/another_existing_image.png" << NoError;
 }
 
 QTEST_MAIN( TestDefaultTags )

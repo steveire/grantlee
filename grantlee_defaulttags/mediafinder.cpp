@@ -63,6 +63,7 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
         continue;
       c->addExternalMedia( uri );
       ( *stream ) << uri;
+      return;
     }
   }
 }
