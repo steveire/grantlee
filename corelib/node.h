@@ -49,6 +49,8 @@ class NodePrivate;
   @brief Base class for all nodes.
 
   The Node class can be implemented to make additional functionality available to Templates.
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT Node : public QObject
 {

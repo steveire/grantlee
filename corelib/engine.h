@@ -61,7 +61,6 @@ class EnginePrivate;
   @see template_factories
 
   @author Stephen Kelly <steveire@gmail.com>
-  @since 0.1
 */
 class GRANTLEE_CORE_EXPORT Engine : public QObject
 {

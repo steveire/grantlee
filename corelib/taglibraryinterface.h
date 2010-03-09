@@ -68,6 +68,8 @@ class Filter;
       }
     };
   @endcode
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class TagLibraryInterface
 {

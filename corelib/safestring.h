@@ -34,6 +34,8 @@ namespace Grantlee
 
   This allows lazy escaping of strings. Otherwise a string may be escaped multiple times where it
   should only be escaped once.
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT SafeString
 {

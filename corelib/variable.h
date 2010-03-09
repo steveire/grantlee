@@ -42,6 +42,8 @@ class VariablePrivate;
 
   Arguments to the tag can be used to construct Variables, which may then be resolved into the objects they
   represent in the given Context in the render stage.
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT Variable
 {

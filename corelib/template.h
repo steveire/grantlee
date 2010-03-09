@@ -51,6 +51,8 @@ class TemplatePrivate;
   The result of parsing is a Template object which can be rendered multiple times with multiple different Contexts.
 
   If there is an error in parsing or rendering, the error and errorString methods can be used to check the source of the error.
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT TemplateImpl : public QObject
 {

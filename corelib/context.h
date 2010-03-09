@@ -100,6 +100,7 @@ class ContextPrivate;
     {% endwith %}
   @endcode
 
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT Context
 {

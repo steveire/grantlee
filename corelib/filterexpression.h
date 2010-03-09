@@ -41,6 +41,8 @@ class FilterExpressionPrivate;
 
   This class is only relevant if implementing custom tags or filters. Most of the API here is internal.
   Usually when implementing tags or filters, filter expressions will just be created and resolved.
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT FilterExpression
 {

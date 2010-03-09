@@ -38,6 +38,8 @@ namespace Grantlee
 
   The interface of this class should not be called directly from applications. TemplateLoaders will typically
   be created, configured and added to the Grantlee::Engine which will call the appropriate API.
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT AbstractTemplateLoader
 {

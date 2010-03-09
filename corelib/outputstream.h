@@ -46,6 +46,7 @@ class SafeString;
     t->render( &os, &context );
   @endcode
 
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT OutputStream
 {
