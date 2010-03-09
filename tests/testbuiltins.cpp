@@ -85,6 +85,84 @@ private:
 
 };
 
+class NoEscapeOutputStream : public OutputStream
+{
+public:
+  NoEscapeOutputStream()
+    : OutputStream()
+  {
+
+  }
+
+  NoEscapeOutputStream(QTextStream* stream)
+    : OutputStream( stream )
+  {
+
+  }
+
+  virtual QSharedPointer< OutputStream > clone() const
+  {
+    return QSharedPointer<OutputStream>( new NoEscapeOutputStream );
+  }
+
+  virtual QString escape(const QString& input) const
+  {
+    return input;
+  }
+};
+
+class JSOutputStream : public OutputStream
+{
+public:
+  JSOutputStream()
+    : OutputStream()
+  {
+
+  }
+
+  JSOutputStream(QTextStream* stream)
+    : OutputStream( stream )
+  {
+
+  }
+
+  virtual QSharedPointer< OutputStream > clone() const
+  {
+    return QSharedPointer<OutputStream>( new JSOutputStream );
+  }
+
+  virtual QString escape(const QString& input) const
+  {
+    QList<QPair<QString, QString> > jsEscapes;
+    jsEscapes << QPair<QString, QString>( "\\", "\\x5C" )
+              << QPair<QString, QString>( "\'",  "\\x27" )
+              << QPair<QString, QString>( "\"",  "\\x22" )
+              << QPair<QString, QString>( ">", "\\x3E" )
+              << QPair<QString, QString>( "<", "\\x3C" )
+              << QPair<QString, QString>( "&", "\\x26" )
+              << QPair<QString, QString>( "=", "\\x3D" )
+              << QPair<QString, QString>( "-", "\\x2D" )
+              << QPair<QString, QString>( ";", "\\x3B" )
+              << QPair<QString, QString>( QChar( 0x2028 ), "\\u2028" )
+              << QPair<QString, QString>( QChar( 0x2029 ), "\\u2029" );
+
+    for( int i = 0; i < 32; ++i )
+    {
+      jsEscapes << QPair<QString, QString>( QChar( i ), "\\x" + QString( "%1" ).arg( i, 2, 16, QChar('0') ).toUpper() );
+    }
+
+    QListIterator<QPair<QString, QString> > it( jsEscapes );
+    QString retString = input;
+    while ( it.hasNext() ) {
+      QPair<QString, QString> escape = it.next();
+      retString = retString.replace( escape.first, escape.second );
+    }
+    return retString;
+
+
+  }
+};
+
 class TestBuiltinSyntax : public QObject
 {
   Q_OBJECT
@@ -123,6 +201,7 @@ private slots:
   }
 
   void testMultipleStates();
+  void testAlternativeEscaping();
 
   void testTemplatePathSafety_data();
   void testTemplatePathSafety();
@@ -617,6 +696,37 @@ void TestBuiltinSyntax::testMultipleStates()
   QCOMPARE( t2->render( &c ), expected2 );
   QCOMPARE( t3->render( &c ), expected3 );
 }
+
+void TestBuiltinSyntax::testAlternativeEscaping()
+{
+  Engine *engine1 = getEngine();
+
+  Template t1 = engine1->newTemplate( "{{ var }}", "\"template1\"" );
+
+  QString input = "< > \r\n & \" \' # = % $";
+
+  QVariantHash h;
+  h.insert( "var", input );
+  Context c( h );
+
+  QString output;
+  QTextStream ts(&output);
+  QSharedPointer<OutputStream> noEscapeOs = QSharedPointer<OutputStream>( new NoEscapeOutputStream( &ts ) );
+
+  t1->render( noEscapeOs.data(), &c );
+
+  QCOMPARE( output, input );
+  output.clear();
+
+  QSharedPointer<OutputStream> jsOs = QSharedPointer<OutputStream>( new JSOutputStream( &ts ) );
+
+  t1->render( jsOs.data(), &c );
+
+  QString jsOutput("\\x3C \\x3E \\x0D\\x0A \\x26 \\x22 \\x27 # \\x3D % $");
+
+  QCOMPARE( output, jsOutput );
+}
+
 
 void TestBuiltinSyntax::testTemplatePathSafety_data()
 {

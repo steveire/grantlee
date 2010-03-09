@@ -75,7 +75,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 BlockNode::BlockNode( const QString &name, QObject *parent )
-    : Node( parent ), m_nodeParent( 0 )
+    : Node( parent ), m_nodeParent( 0 ), m_stream( 0 )
 {
   m_name = name;
 
@@ -96,8 +96,10 @@ void BlockNode::render( OutputStream *stream, Context *c )
 {
   c->push();
   m_context = c;
+  m_stream = stream;
   c->insert( "block", QVariant::fromValue( static_cast<QObject *>( this ) ) );
   m_list.render( stream, c );
+  m_stream = 0;
   c->pop();
 }
 
@@ -111,8 +113,8 @@ SafeString BlockNode::getSuper() const
 
   QString superContent;
   QTextStream superTextStream( &superContent );
-  OutputStream superStream( &superTextStream );
-  m_nodeParent->render( &superStream, m_context );
+  QSharedPointer<OutputStream> superStream = m_stream->clone( &superTextStream );
+  m_nodeParent->render( superStream.data(), m_context );
   return Util::markSafe( superContent );
 }
 

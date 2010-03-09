@@ -169,7 +169,7 @@ void NodeList::mutableRender( OutputStream *stream, Context *c )
   QString renderedNode;
 
   QTextStream textStream( &renderedNode );
-  OutputStream nodeStream( &textStream );
+  QSharedPointer<OutputStream> nodeStream = stream->clone( &textStream );
 
   QList<Grantlee::Node*>::iterator it;
   QList<Grantlee::Node*>::iterator first = begin();
@@ -178,7 +178,7 @@ void NodeList::mutableRender( OutputStream *stream, Context *c )
   for ( it = first; it != last; ++it ) {
     renderedNode.clear();
     Grantlee::Node *node = *it;
-    node->render( &nodeStream, c );
+    node->render( nodeStream.data(), c );
     renderedTemplate += renderedNode;
     bool isPersistent = node->isPersistent();
     if ( it != first ) {

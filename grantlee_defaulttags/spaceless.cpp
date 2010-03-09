@@ -63,8 +63,8 @@ void SpacelessNode::render( OutputStream *stream, Context *c )
 {
   QString output;
   QTextStream textStream( &output );
-  OutputStream temp( &textStream );
-  m_nodeList.render( &temp, c );
+  QSharedPointer<OutputStream> temp = stream->clone( &textStream );
+  m_nodeList.render( temp.data(), c );
   ( *stream ) << stripSpacesBetweenTags( output.trimmed() );
 }
 

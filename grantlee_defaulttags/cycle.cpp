@@ -104,9 +104,9 @@ void CycleNode::render( OutputStream *stream, Context *c )
 {
   QString value;
   QTextStream textStream( &value );
-  OutputStream temp( &textStream );
+  QSharedPointer<OutputStream> temp = stream->clone( &textStream );
 
-  m_variableIterator.next().resolve( &temp, c );
+  m_variableIterator.next().resolve( temp.data(), c );
   if ( !m_name.isEmpty() ) {
     c->insert( m_name, value );
   }

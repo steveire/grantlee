@@ -63,7 +63,7 @@ public:
   */
   virtual QString render( Context *c );
 
-  virtual OutputStream& render( OutputStream *stream, Context *c );
+  virtual OutputStream* render( OutputStream *stream, Context *c );
 
   /**
     @internal

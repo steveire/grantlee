@@ -68,8 +68,8 @@ void FilterNode::render( OutputStream *stream, Context* c )
 {
   QString output;
   QTextStream textStream( &output );
-  OutputStream temp( &textStream );
-  m_filterList.render( &temp, c );
+  QSharedPointer<OutputStream> temp = stream->clone( &textStream );
+  m_filterList.render( temp.data(), c );
   c->push();
   c->insert( "var", output );
   m_fe.resolve( stream, c );

@@ -75,6 +75,7 @@ private:
   NodeList m_list;
   Context *m_context;
   BlockNode *m_nodeParent;
+  OutputStream *m_stream;
 
 };
 

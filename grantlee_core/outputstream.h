@@ -22,6 +22,7 @@
 #define GRANTLEE_OUTPUTSTREAM_H
 
 #include <QtCore/QTextStream>
+#include <QtCore/QSharedPointer>
 
 #include "grantlee_core_export.h"
 
@@ -30,6 +31,22 @@ namespace Grantlee
 
 class SafeString;
 
+/**
+  @brief The OutputStream class is used to render templates to a QTextStream
+
+  A OutputStream instance may be passed to the render method of a Template to render
+  the template to a stream.
+
+  @code
+    QFile outputFile("./output");
+    outputFile.open(QFile::WriteOnly);
+    QTextStream tstream( &outputFile );
+
+    OutputStream os(&tstream);
+    t->render( &os, &context );
+  @endcode
+
+*/
 class GRANTLEE_CORE_EXPORT OutputStream
 {
 public:
@@ -37,29 +54,17 @@ public:
   explicit OutputStream( QTextStream *stream );
   virtual ~OutputStream();
 
-  /*
-  class Escape
-  {
-  public:
-    Escape( const QString &input );
-    Escape( const Grantlee::SafeString &input );
-  private:
-    bool m_safe;
-    QString m_content;
-    friend class OutputStream;
-  };*/
-
   virtual QString escape( const QString &input ) const;
   QString escape( const SafeString &input ) const;
+
+  virtual QSharedPointer<OutputStream> clone( QTextStream *stream ) const;
 
   QString conditionalEscape( const Grantlee::SafeString &input ) const;
 
   OutputStream& operator<<( const QString &input );
 
   OutputStream& operator<<( const SafeString &input );
-/*
-  OutputStream& operator<<( const Escape &e );
-*/
+
   OutputStream& operator<<( QTextStream *stream );
 
 protected:

@@ -72,7 +72,7 @@ QString TemplateImpl::render( Context *c )
   return output;
 }
 
-OutputStream& TemplateImpl::render( OutputStream *stream, Context *c )
+OutputStream* TemplateImpl::render( OutputStream *stream, Context *c )
 {
   Q_D( Template );
 
@@ -82,7 +82,7 @@ OutputStream& TemplateImpl::render( OutputStream *stream, Context *c )
     d->setError( e.errorCode(), e.what() );
   }
 
-  return *stream;
+  return stream;
 }
 
 NodeList TemplateImpl::nodeList() const

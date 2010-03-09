@@ -80,9 +80,9 @@ void IfChangedNode::render( OutputStream *stream, Context *c )
 
   QString watchedString;
   QTextStream watchedTextStream( &watchedString );
-  OutputStream watchedStream( &watchedTextStream );
+  QSharedPointer<OutputStream> watchedStream = stream->clone( &watchedTextStream );
   if ( m_filterExpressions.size() == 0 ) {
-    m_trueList.render( &watchedStream, c );
+    m_trueList.render( watchedStream.data(), c );
   }
   QListIterator<FilterExpression> i( m_filterExpressions );
   QVariantList watchedVars;
