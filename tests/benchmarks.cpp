@@ -140,9 +140,9 @@ void Benchmarking::testRendering()
   outputFile.open(QFile::WriteOnly);
   QTextStream tstream( &outputFile );
 
-  QString output;
-  QBENCHMARK( output = t->render( &context ) );
-  tstream << output;
+  OutputStream os(&tstream);
+
+  QBENCHMARK( t->render( &os, &context ) );
 }
 
 void Benchmarking::getData()
