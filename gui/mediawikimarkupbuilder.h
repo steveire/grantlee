@@ -27,60 +27,55 @@ namespace Grantlee
 {
 
 /**
-    @brief Creates MediaWiki markup from a QTextDocument
+  @brief Creates MediaWiki markup from a QTextDocument
 */
 class MediaWikiMarkupBuilder : public AbstractMarkupBuilder
 {
 public:
 
-    /**
+  /**
     Creates a new MediaWikiMarkupBuilder
-    */
-    MediaWikiMarkupBuilder();
-    virtual ~MediaWikiMarkupBuilder();
+  */
+  MediaWikiMarkupBuilder();
+  virtual ~MediaWikiMarkupBuilder();
 
-    virtual void beginStrong();
-    virtual void endStrong();
-    virtual void beginEmph();
-    virtual void endEmph();
-    virtual void beginUnderline();
-    virtual void endUnderline();
-    virtual void beginStrikeout();
-    virtual void endStrikeout();
+  /* reimp */ void beginStrong();
+  /* reimp */ void endStrong();
+  /* reimp */ void beginEmph();
+  /* reimp */ void endEmph();
+  /* reimp */ void beginUnderline();
+  /* reimp */ void endUnderline();
+  /* reimp */ void beginStrikeout();
+  /* reimp */ void endStrikeout();
 
-    virtual void endParagraph();
-    virtual void addNewline();
+  /* reimp */ void endParagraph();
+  /* reimp */ void addNewline();
 
-    virtual void beginAnchor(const QString &href = QString(), const QString &name = QString());
-    virtual void endAnchor();
+  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
+  /* reimp */ void endAnchor();
 
-    virtual void beginHeader(int level);
-    virtual void endHeader(int level);
+  /* reimp */ void beginHeader( int level );
+  /* reimp */ void endHeader( int level );
 
-    virtual void beginList(QTextListFormat::Style type);
+  /* reimp */ void beginList( QTextListFormat::Style type );
 
+  /* reimp */ void endList();
 
+  /* reimp */ void beginListItem();
+  /* reimp */ void endListItem();
 
-    virtual void endList();
+  /* reimp */ void appendLiteralText( const QString &text );
 
+  const QString escape( const QString &s );
 
-    virtual void beginListItem();
-    virtual void endListItem();
-
-
-    virtual void appendLiteralText(const QString &text);
-
-    const QString escape(const QString &s);
-
-    virtual QString& getResult();
+  /* reimp */ QString& getResult();
 
 private:
-    QList<QTextListFormat::Style> currentListItemStyles;
+  QList<QTextListFormat::Style> currentListItemStyles;
 
-    QString m_text;
+  QString m_text;
 };
 
 }
 
 #endif
-

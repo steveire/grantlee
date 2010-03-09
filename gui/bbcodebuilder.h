@@ -27,87 +27,88 @@ namespace Grantlee
 {
 
 /**
-Creates BBCode from a QTextDocument
+  @brief Builder to create BBCode from a QTextDocument
 */
 class BBCodeBuilder : public AbstractMarkupBuilder
 {
 public:
 
-    /**
+  /**
     Creates a new BBCodeBuilder.
-    */
-    BBCodeBuilder();
+  */
+  BBCodeBuilder();
 
-    virtual void beginStrong();
-    virtual void endStrong();
-    virtual void beginEmph();
-    virtual void endEmph();
-    virtual void beginUnderline();
-    virtual void endUnderline();
-    virtual void beginStrikeout();
-    virtual void endStrikeout();
-    virtual void beginForeground(const QBrush &brush);
-    virtual void endForeground();
+  virtual ~BBCodeBuilder();
 
-    // Background colour not supported by BBCode.
+  /* reimp */ void beginStrong();
+  /* reimp */ void endStrong();
+  /* reimp */ void beginEmph();
+  /* reimp */ void endEmph();
+  /* reimp */ void beginUnderline();
+  /* reimp */ void endUnderline();
+  /* reimp */ void beginStrikeout();
+  /* reimp */ void endStrikeout();
+  /* reimp */ void beginForeground( const QBrush &brush );
+  /* reimp */ void endForeground();
 
-    virtual void beginAnchor(const QString &href = QString(), const QString &name = QString());
-    virtual void endAnchor();
+  // Background colour not supported by BBCode.
 
-    // Font family not supported by BBCode.
+  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
+  /* reimp */ void endAnchor();
 
-    /**
+  // Font family not supported by BBCode.
+
+  /**
     Begin an element of font size @p size. Note that this size is in pixels, and must be converted before
     it is suitable for use in BBCode.
     @param size The size of font to begin.
-    */
-    virtual void beginFontPointSize(int size);
-    virtual void endFontPointSize();
+  */
+  /* reimp */ void beginFontPointSize( int size );
+  /* reimp */ void endFontPointSize();
 
-    virtual void beginParagraph(Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0);
+  /* reimp */ void beginParagraph( Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0 );
 
-    virtual void endParagraph();
-    virtual void addNewline();
+  /* reimp */ void endParagraph();
+  /* reimp */ void addNewline();
 
-    virtual void insertImage(const QString &src, qreal width, qreal height);
+  /* reimp */ void insertImage( const QString &src, qreal width, qreal height );
 
-    virtual void beginList(QTextListFormat::Style type);
+  /* reimp */ void beginList( QTextListFormat::Style type );
 
-    virtual void endList();
-
-
-    virtual void beginListItem();
-
-    virtual void beginSuperscript();
-
-    virtual void endSuperscript();
-
-    virtual void beginSubscript();
-
-    virtual void endSubscript();
+  /* reimp */ void endList();
 
 
-    virtual void beginTable(qreal, qreal, const QString &);
+  /* reimp */ void beginListItem();
 
-    virtual void beginTableRow();
+  /* reimp */ void beginSuperscript();
+
+  /* reimp */ void endSuperscript();
+
+  /* reimp */ void beginSubscript();
+
+  /* reimp */ void endSubscript();
 
 
-    virtual void appendLiteralText(const QString &text);
+  /* reimp */ void beginTable( qreal, qreal, const QString & );
 
-    const QString escape(const QString &s);
+  /* reimp */ void beginTableRow();
 
-    virtual QString& getResult();
+
+  /* reimp */ void appendLiteralText( const QString &text );
+
+  const QString escape( const QString &s );
+
+  /* reimp */ QString& getResult();
 
 private:
-    QList<QTextListFormat::Style> currentListItemStyles;
+  QList<QTextListFormat::Style> m_currentListItemStyles;
 
-    QString m_text;
+  QString m_text;
 
-    Qt::Alignment currentAlignment;
+  Qt::Alignment m_currentAlignment;
 
 };
 
 }
 
 #endif
-

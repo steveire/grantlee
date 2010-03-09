@@ -31,59 +31,60 @@ namespace Grantlee
 {
 
 /**
- * @internal
- * Maintainability class for KMarkupDirector
- */
+  @internal
+  Maintainability class for KMarkupDirector
+*/
 class MarkupDirector::Private
 {
 public:
-    Private(MarkupDirector *md)
-            : q(md) {
-    }
+  Private( MarkupDirector *md, AbstractMarkupBuilder *builder )
+    : q( md ), m_builder( builder )
+  {
+  }
 
-    void processClosingElements(QTextBlock::iterator it);
-    void processOpeningElements(QTextBlock::iterator it);
-    QSet< int > getElementsToClose(QTextBlock::iterator it);
-    QList< int > getElementsToOpen(QTextBlock::iterator it);
-    QList< int > sortOpeningOrder(QSet< int > openingOrder, QTextBlock::iterator it);
+  void processClosingElements( QTextBlock::iterator it );
+  void processOpeningElements( QTextBlock::iterator it );
+  QSet< int > getElementsToClose( QTextBlock::iterator it );
+  QList< int > getElementsToOpen( QTextBlock::iterator it );
+  QList< int > sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it );
 
-    MarkupDirector *q;
-    AbstractMarkupBuilder *builder;
+  MarkupDirector *q;
+  AbstractMarkupBuilder *m_builder;
 
-    enum OpenElementValues {
-        None = 0x0,
-        SuperScript = 0x01,
-        SubScript = 0x02,
-        Anchor = 0x04,
-        SpanForeground = 0x08,
-        SpanBackground = 0x10,
-        SpanFontFamily = 0x20,
-        SpanFontPointSize = 0x40,
-        Strong = 0x80,
-        Emph = 0x100,
-        Underline = 0x200,
-        StrikeOut = 0x400
-    };
+  enum OpenElementValues {
+    None = 0x0,
+    SuperScript = 0x01,
+    SubScript = 0x02,
+    Anchor = 0x04,
+    SpanForeground = 0x08,
+    SpanBackground = 0x10,
+    SpanFontFamily = 0x20,
+    SpanFontPointSize = 0x40,
+    Strong = 0x80,
+    Emph = 0x100,
+    Underline = 0x200,
+    StrikeOut = 0x400
+  };
 //     Q_DECLARE_FLAGS(OpenElements, OpenElementValues)
 
-    QString openAnchorHref;
-    QString anchorHrefToOpen;
-    QString openAnchorName;
+  QString openAnchorHref;
+  QString anchorHrefToOpen;
+  QString openAnchorName;
 
-    QBrush openForeground;
-    QBrush foregroundToOpen;
-    QBrush openBackground;
-    QBrush backgroundToOpen;
-    int openFontPointSize;
-    int fontPointSizeToOpen;
-    QString openFontFamily;
-    QString fontFamilyToOpen;
+  QBrush openForeground;
+  QBrush foregroundToOpen;
+  QBrush openBackground;
+  QBrush backgroundToOpen;
+  int openFontPointSize;
+  int fontPointSizeToOpen;
+  QString openFontFamily;
+  QString fontFamilyToOpen;
 
-    // An ordered list containing the order elements were opened in.
-    QList< int > openElements;
+  // An ordered list containing the order elements were opened in.
+  QList< int > openElements;
 
-    // Elements that have yet to be opened. Used while determine the order to open them.
-    QSet< int > elementsToOpen;
+  // Elements that have yet to be opened. Used while determine the order to open them.
+  QSet< int > elementsToOpen;
 
 };
 // Q_DECLARE_OPERATORS_FOR_FLAGS(KMarkupDirector::Private::OpenElements)
@@ -92,4 +93,3 @@ public:
 
 #endif
 //@endcond
-

@@ -37,13 +37,13 @@ namespace Grantlee
 {
 
 /**
-@brief The Markupdirector class controls and instructs a builder object to create markup output.
+  @brief The Markupdirector class controls and instructs a builder object to create markup output.
 
-The MarkupDirector is used with a subclass of AbstractMarkupBuilder to create a marked up document output.
+  The MarkupDirector is used with a subclass of AbstractMarkupBuilder to create a marked up document output.
 
-Usage can be quite simple.
+  Usage can be quite simple.
 
-@code
+  @code
 
     QTextDocument *doc = editor->document(); // editor is a QTextEdit
 
@@ -52,59 +52,61 @@ Usage can be quite simple.
     md->constructContent(doc);
     browser.setHtml(builder->getResult()); // browser is a QTextBrowser.
 
-@endcode
+  @endcode
 
-Or with a different builder:
+  Or with a different builder:
 
-@code
+  @code
     AbstractMarkupBuilder *builder = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(builder);
     md->constructContent(doc);
     browser.setPlainText(builder->getResult());
-@endcode
+  @endcode
 
-@author Stephen Kelly <steveire@gmail.com>
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_GUI_EXPORT MarkupDirector
 {
 public:
-    /**
-    Construct a new KMarkupDirector
-    */
-    MarkupDirector(Grantlee::AbstractMarkupBuilder* builder);
+  /**
+    Construct a new MarkupDirector
+  */
+  MarkupDirector( Grantlee::AbstractMarkupBuilder* builder );
 
-    /** Destructor */
-    virtual ~MarkupDirector();
+  /**
+    Destructor
+  */
+  virtual ~MarkupDirector();
 
-    /**
+  /**
     Constructs the output by directing the builder to create the markup.
-    */
-    virtual void constructContent(QTextDocument* doc);
+  */
+  virtual void constructContent( QTextDocument* doc );
 
 protected:
 
-    /**
+  /**
     Processes the frame by iterating over its child frames and blocks and processing them as needed.
-    */
-    void processFrame(QTextFrame *frame);
+  */
+  void processFrame( QTextFrame *frame );
 
-    /**
+  /**
     Processes the table by iterating over its rows and columns, processing their contents.
-    */
-    void processTable(QTextTable *table);
+  */
+  void processTable( QTextTable *table );
 
-    /**
+  /**
     Processes the table cell by iterating over its contents. May contain another table, nested list etc.
-     */
-    void processTableCell(const QTextTableCell &cell);
+   */
+  void processTableCell( const QTextTableCell &cell );
 
-    /**
-        Processes a list by iterating over it. Nested lists are processed by a recursive call.
-        @param block The first block in a list.
-    */
-    void processList(const QTextBlock &block);
+  /**
+    Processes a list by iterating over it. Nested lists are processed by a recursive call.
+    @param block The first block in a list.
+  */
+  void processList( const QTextBlock &block );
 
-    /**
+  /**
     Processes the contents of a QTextBlock. The block is traversed and each QTextFragment is processed individually.
 
     A QTextFragment is a fragment of continuous text with continuous formatting.
@@ -112,7 +114,7 @@ protected:
     Eg, a block of text represented by
 
     @code
-        Some long <b>formatted paragraph</b> of several pieces <b><i>of decorated</i> text</b> .
+      Some long <b>formatted paragraph</b> of several pieces <b><i>of decorated</i> text</b> .
     @endcode
 
     would contain the fragments
@@ -124,38 +126,37 @@ protected:
     @li text
 
     @param block The block to process.
-    */
-    void processBlockContents(const QTextBlock &block);
+  */
+  void processBlockContents( const QTextBlock &block );
 
-    /**
+  /**
     Processes the document between the iterators @p start and @p end inclusive.
-    */
-    void processDocumentContents(QTextFrame::iterator start, QTextFrame::iterator end);
+  */
+  void processDocumentContents( QTextFrame::iterator start, QTextFrame::iterator end );
 
-    /**
-        Process a block.
+  /**
+    Process a block.
 
-        Note: If block is the first item in a list, the entire (maybe nested) list will be processed.
-        If block is part of a nested list, but is not the first item, it is ignored.
-        @param block The block to process.
-    */
+    Note: If block is the first item in a list, the entire (maybe nested) list will be processed.
+    If block is part of a nested list, but is not the first item, it is ignored.
+    @param block The block to process.
+  */
 
-    void processBlock(const QTextBlock &block);
+  void processBlock( const QTextBlock &block );
 
-    /**
+  /**
     Processes a QTextFragment.
 
     @param fragment The fragment to process.
-    */
-    void processFragment(const QTextFragment &fragment);
+  */
+  void processFragment( const QTextFragment &fragment );
 
 private:
-    class Private;
-    friend class Private;
-    Private *const d;
+  class Private;
+  friend class Private;
+  Private *const d;
 };
 
 }
 
 #endif
-

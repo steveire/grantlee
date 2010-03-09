@@ -28,124 +28,121 @@
 
 #include "grantlee_gui_export.h"
 
-namespace Grantlee {
+namespace Grantlee
+{
 
 class PlainTextMarkupBuilderPrivate;
 
 /**
-@brief The PlainTextHTMLMarkupBuilder creates a simple marked up plain text document.
+  @brief The PlainTextHTMLMarkupBuilder creates a simple marked up plain text document.
 
-This class creates a simple plain text markup.
+  This class creates a simple plain text markup.
 
-Text that may be represented as
+  Text that may be represented as
 
-@code
+  @code
     A paragraph with <b>bold</b> text, <i>italic</i> text, and <u>underlined</u> text.
-@endcode
+  @endcode
 
-would be output as
+  would be output as
 
-@code
+  @code
     A paragraph with *bold* text /italic/ text, and _underlined_ text.
-@endcode
+  @endcode
 
-The markup is intended to be simple, plain and easily human readable. No markup is created for different font-familiy, font-size, foreground or background colors.
+  The markup is intended to be simple, plain and easily human readable. No markup is created for different font-familiy, font-size, foreground or background colors.
 
-Lists are marked up by preceding the list element with '*' for disc, 'o' for circle, 'X' for square, or a letter or number. Lists are also indented if nested.
-eg:
+  Lists are marked up by preceding the list element with '*' for disc, 'o' for circle, 'X' for square, or a letter or number. Lists are also indented if nested.
+  eg:
 
-@code
+  @code
     A. One
     B. Two
-        o Three
-        o Four
-            \* Five
-            \* Six
+      o Three
+      o Four
+        \* Five
+        \* Six
     C. Seven
-@endcode
+  @endcode
 
-External references such as external urls and images are represented in the body text as a reference, and references are maintained at the bottom of the output.
+  External references such as external urls and images are represented in the body text as a reference, and references are maintained at the bottom of the output.
 
-Eg,
-@code
-        Here is a link to <a href="http://www.kde.org">KDE</a> and the <a href="http://pim.kde.org">KDEPIM project</a>.
-@endcode
+  Eg,
+  @code
+    Here is a link to <a href="http://www.kde.org">KDE</a> and the <a href="http://pim.kde.org">KDEPIM project</a>.
+  @endcode
 
-becomes:
+  becomes:
 
-@code
+  @code
     Here is a link to KDE[1], and the KDEPIM project[2].
 
     ---- References ----
     [1] http://www.kde.org
     [2] http://pim.kde.org
-@endcode
+  @endcode
 
-@todo Move this to kdelibs when tested and in use.
-
-@author Stephen Kelly <steveire@gmail.com>
-@since 4.2
-
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_GUI_EXPORT PlainTextMarkupBuilder : public AbstractMarkupBuilder
 {
 public:
-    /** Construct a new PlainTextHTMLMarkupBuilder. */
-    PlainTextMarkupBuilder();
+  /** Construct a new PlainTextHTMLMarkupBuilder. */
+  PlainTextMarkupBuilder();
 
-    virtual void beginStrong();
-    virtual void endStrong();
-    virtual void beginEmph();
-    virtual void endEmph();
-    virtual void beginUnderline();
-    virtual void endUnderline();
-    virtual void beginStrikeout();
-    virtual void endStrikeout();
+  virtual ~PlainTextMarkupBuilder();
 
-    virtual void beginAnchor(const QString &href = QString(), const QString &name = QString());
+  /* reimp */ void beginStrong();
+  /* reimp */ void endStrong();
+  /* reimp */ void beginEmph();
+  /* reimp */ void endEmph();
+  /* reimp */ void beginUnderline();
+  /* reimp */ void endUnderline();
+  /* reimp */ void beginStrikeout();
+  /* reimp */ void endStrikeout();
 
-    virtual void endAnchor();
+  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
 
-    virtual void endParagraph();
-    virtual void addNewline();
+  /* reimp */ void endAnchor();
 
-    virtual void insertHorizontalRule(int width = -1);
+  /* reimp */ void endParagraph();
+  /* reimp */ void addNewline();
 
-    virtual void insertImage(const QString &src, qreal width, qreal height);
+  /* reimp */ void insertHorizontalRule( int width = -1 );
 
-
-    virtual void beginList(QTextListFormat::Style style);
-
-    virtual void endList();
-
-    virtual void beginListItem();
-
-    virtual void endListItem();
+  /* reimp */ void insertImage( const QString &src, qreal width, qreal height );
 
 
-    virtual void beginSuperscript();
+  /* reimp */ void beginList( QTextListFormat::Style style );
 
-    virtual void endSuperscript();
+  /* reimp */ void endList();
 
-    virtual void beginSubscript();
+  /* reimp */ void beginListItem();
 
-    virtual void endSubscript();
+  /* reimp */ void endListItem();
 
-    virtual void appendLiteralText(const QString &text);
 
-    /**
-    Returns the finalised plain text markup, including references at the end.
-    */
-    virtual QString& getResult();
+  /* reimp */ void beginSuperscript();
+
+  /* reimp */ void endSuperscript();
+
+  /* reimp */ void beginSubscript();
+
+  /* reimp */ void endSubscript();
+
+  /* reimp */ void appendLiteralText( const QString &text );
+
+  /**
+  Returns the finalised plain text markup, including references at the end.
+  */
+  /* reimp */ QString& getResult();
 
 private:
-    PlainTextMarkupBuilderPrivate *d_ptr;
-    Q_DECLARE_PRIVATE(PlainTextMarkupBuilder)
-
+  PlainTextMarkupBuilderPrivate *d_ptr;
+  Q_DECLARE_PRIVATE( PlainTextMarkupBuilder )
 
 };
 
 }
 
 #endif
-
