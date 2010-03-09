@@ -22,7 +22,7 @@ macro(GRANTLEE_UNIT_TESTS)
     set(_testSrcs ${_testname}.cpp)
     set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
     qt4_generate_moc(${_testname}.cpp ${moc_output_file})
-    add_executable(${_testname}_exec ${_testSrcs} ${moc_output_file} ${_scripted_rcc_src})
+    add_executable(${_testname}_exec ${_testSrcs} ${moc_output_file} ${_scripted_rcc_src} ${CMAKE_SOURCE_DIR}/grantlee_core/lexer.cpp)
     add_test(${_testname} ${_testname}_exec )
     target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} grantlee_core)
   endforeach(_testname)
@@ -34,7 +34,7 @@ grantlee_unit_tests(
   testdefaulttags
   testscriptabletags
   testmutabletags
-#   benchmarks
+  benchmarks
   testfilters
 )
 

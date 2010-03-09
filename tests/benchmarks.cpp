@@ -31,6 +31,7 @@
 #include "context.h"
 #include "filterexpression.h"
 #include "parser.h"
+#include "grantlee_paths.h"
 
 typedef QHash<QString, QVariant> Dict;
 
@@ -70,18 +71,17 @@ private:
   QString getTemplate( int size );
   Engine *m_engine;
   QString m_templateGeneratorString;
-  TemplateImpl *m_templateGenerator;
+  Template m_templateGenerator;
 
 };
 
 void Benchmarking::initTestCase()
 {
-  m_engine = Engine::instance();
+  m_engine = new Engine( this );
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_engine->setPluginDirs( QStringList() << appDirPath + "/grantlee_defaulttags/"
-                           << appDirPath + "/grantlee_defaultfilters/"
-                           << appDirPath + "/grantlee_scriptabletags/" );
+
+  m_engine->setPluginDirs( QStringList( GRANTLEE_PLUGIN_PATH ) );
 
   m_templateGeneratorString =
     "Lorem {% for i in items %}"
@@ -90,13 +90,12 @@ void Benchmarking::initTestCase()
     " {% templatetag openblock %} endif {% templatetag closeblock %} sit."
     "{% endfor %} amet.\n";
 
-  m_templateGenerator = Engine::instance()->newTemplate( m_templateGeneratorString, this );
+  m_templateGenerator = m_engine->newTemplate( m_templateGeneratorString, "generator" );
 
 }
 
 void Benchmarking::cleanupTestCase()
 {
-  delete m_engine;
 }
 
 void Benchmarking::testTokenizing()
@@ -120,11 +119,12 @@ void Benchmarking::testParsing()
   QList<Token> tokens;
   tokens = l.tokenize();
 
-  Parser p( tokens, 0 );
+  Template t = m_engine->newTemplate("", "");
+
+  Parser p( tokens, t.data() );
   NodeList list;
 
-  QBENCHMARK { p.setTokens( tokens ); list = p.parse(); }
-
+  QBENCHMARK { p.setTokens( tokens ); list = p.parse( t.data() ); }
 }
 
 void Benchmarking::testRendering()
@@ -132,22 +132,17 @@ void Benchmarking::testRendering()
   QFETCH( QString, input );
   QFETCH( Dict, dict );
 
-  Lexer l( input );
-
-  QList<Token> tokens;
-  tokens = l.tokenize();
-
-  Parser p( tokens, 0 );
-  NodeList list;
-
-  list = p.parse();
+  Template t = m_engine->newTemplate( input, "testtemplate");
 
   Context context( dict );
 
+  QFile outputFile("./output");
+  outputFile.open(QFile::WriteOnly);
+  QTextStream tstream( &outputFile );
+
   QString output;
-
-  QBENCHMARK( output = list.render( &context ) );
-
+  QBENCHMARK( output = t->render( &context ) );
+  tstream << output;
 }
 
 void Benchmarking::getData()
@@ -205,7 +200,7 @@ QString Benchmarking::getTemplate( int size )
 
 
 QTEST_MAIN( Benchmarking )
-#include "benchmarktokenizing.moc"
+#include "benchmarks.moc"
 
 #endif
 
