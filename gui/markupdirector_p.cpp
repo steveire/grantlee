@@ -28,66 +28,67 @@ void MarkupDirector::Private::processClosingElements( QTextBlock::iterator it )
   // The order of opened elements is in the openElements member list.
   // see testDifferentStartDoubleFinish and testDifferentStartDoubleFinishReverseOrder
 
+  if ( openElements.isEmpty() )
+    return;
+
   QSet<int> elementsToClose = getElementsToClose( it );
 
   int previousSize;
   int remainingSize = elementsToClose.size();
   while ( !elementsToClose.isEmpty() ) {
-    if ( !openElements.isEmpty() ) {
-      int tag = openElements.last();
-      if ( elementsToClose.contains( tag ) ) {
-        switch ( tag ) {
-        case Strong:
-          m_builder->endStrong();
-          break;
-        case Emph:
-          m_builder->endEmph();
-          break;
-        case Underline:
-          m_builder->endUnderline();
-          break;
-        case StrikeOut:
-          m_builder->endStrikeout();
-          break;
-        case SpanFontPointSize:
-          m_builder->endFontPointSize();
-          break;
-        case SpanFontFamily:
-          m_builder->endFontFamily();
-          break;
-        case SpanBackground:
-          m_builder->endBackground();
-          break;
-        case SpanForeground:
-          m_builder->endForeground();
-          break;
-        case Anchor:
-          m_builder->endAnchor();
-          break;
-        case SubScript:
-          m_builder->endSubscript();
-          break;
-        case SuperScript:
-          m_builder->endSuperscript();
-          break;
+    int tag = openElements.last();
+    if ( elementsToClose.contains( tag ) ) {
+      switch ( tag ) {
+      case Strong:
+        m_builder->endStrong();
+        break;
+      case Emph:
+        m_builder->endEmph();
+        break;
+      case Underline:
+        m_builder->endUnderline();
+        break;
+      case StrikeOut:
+        m_builder->endStrikeout();
+        break;
+      case SpanFontPointSize:
+        m_builder->endFontPointSize();
+        break;
+      case SpanFontFamily:
+        m_builder->endFontFamily();
+        break;
+      case SpanBackground:
+        m_builder->endBackground();
+        break;
+      case SpanForeground:
+        m_builder->endForeground();
+        break;
+      case Anchor:
+        m_builder->endAnchor();
+        break;
+      case SubScript:
+        m_builder->endSubscript();
+        break;
+      case SuperScript:
+        m_builder->endSuperscript();
+        break;
 
-        default:
-          break;
-        }
-        openElements.removeLast();
-        elementsToClose.remove( tag );
+      default:
+        break;
       }
-      previousSize = remainingSize;
-      remainingSize = elementsToClose.size();
+      openElements.removeLast();
+      elementsToClose.remove( tag );
+    }
+    previousSize = remainingSize;
+    remainingSize = elementsToClose.size();
 
-      if ( previousSize == remainingSize ) {
-        // Iterated once through without closing any tags.
-        // This means that there's overlap in the tags, such as
-        // 'text with <b>some <i>formatting</i></b><i> tags</i>'
-        // See testOverlap.
-        // The top element in openElements must be a blocker, so close it on next iteration.
-        elementsToClose.insert( openElements.last() );
-      }
+    if ( previousSize == remainingSize ) {
+      // Iterated once through without closing any tags.
+      // This means that there's overlap in the tags, such as
+      // 'text with <b>some <i>formatting</i></b><i> tags</i>'
+      // See testOverlap.
+      // The top element in openElements must be a blocker, so close it on next iteration.
+      elementsToClose.insert( openElements.last() );
     }
   }
 }
@@ -96,103 +97,102 @@ QSet< int > MarkupDirector::Private::getElementsToClose( QTextBlock::iterator it
 {
   QSet<int> closedElements;
 
-  if ( !it.atEnd() ) {
-
-    QTextFragment fragment = it.fragment();
-    if ( fragment.isValid() ) {
-      QTextCharFormat fragmentFormat = fragment.charFormat();
-
-      int fontWeight = fragmentFormat.fontWeight();
-      bool fontItalic = fragmentFormat.fontItalic();
-      bool fontUnderline = fragmentFormat.fontUnderline();
-      bool fontStrikeout = fragmentFormat.fontStrikeOut();
-
-      QBrush fontForeground = fragmentFormat.foreground();
-      QBrush fontBackground = fragmentFormat.background();
-
-      QString fontFamily = fragmentFormat.fontFamily();
-      int fontPointSize = fragmentFormat.font().pointSize();
-      QString anchorHref = fragmentFormat.anchorHref();
-
-      QTextCharFormat::VerticalAlignment vAlign = fragmentFormat.verticalAlignment();
-      bool superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
-      bool subscript = ( vAlign == QTextCharFormat::AlignSubScript );
-
-
-      if ( !fontStrikeout &&
-           ( openElements.contains( StrikeOut )
-             || elementsToOpen.contains( StrikeOut ) ) ) {
-        closedElements.insert( StrikeOut );
-      }
-
-      if ( !fontUnderline &&
-           ( openElements.contains( Underline )
-             || elementsToOpen.contains( Underline ) )
-           && !( openElements.contains( Anchor )
-                 || elementsToOpen.contains( Anchor ) )
-         ) {
-        closedElements.insert( Underline );
-      }
-
-      if ( !fontItalic &&
-           ( openElements.contains( Emph )
-             || elementsToOpen.contains( Emph ) ) ) {
-        closedElements.insert( Emph );
-      }
-
-      if ( fontWeight != QFont::Bold &&
-           ( openElements.contains( Strong )
-             || elementsToOpen.contains( Strong ) ) ) {
-        closedElements.insert( Strong );
-      }
-
-      if (( openElements.contains( SpanFontPointSize )
-            || elementsToOpen.contains( SpanFontPointSize ) )
-          && ( openFontPointSize != fontPointSize )
-         ) {
-        closedElements.insert( SpanFontPointSize );
-      }
-
-      if (( openElements.contains( SpanFontFamily )
-            || elementsToOpen.contains( SpanFontFamily ) )
-          && ( openFontFamily != fontFamily )
-         ) {
-        closedElements.insert( SpanFontFamily );
-      }
-
-      if (( openElements.contains( SpanBackground ) && ( openBackground != fontBackground ) )
-          || ( elementsToOpen.contains( SpanBackground ) && ( backgroundToOpen != fontBackground ) ) ) {
-        closedElements.insert( SpanBackground );
-      }
-
-      if (( openElements.contains( SpanForeground ) && ( openForeground != fontForeground ) )
-          || ( elementsToOpen.contains( SpanForeground ) && ( foregroundToOpen != fontForeground ) ) ) {
-        closedElements.insert( SpanForeground );
-      }
-
-      if (( openElements.contains( Anchor ) && ( openAnchorHref != anchorHref ) )
-          || ( elementsToOpen.contains( Anchor ) && ( anchorHrefToOpen != anchorHref ) ) ) {
-        closedElements.insert( Anchor );
-      }
-
-
-      if ( !subscript &&
-           ( openElements.contains( SubScript )
-             || elementsToOpen.contains( SubScript ) ) ) {
-        closedElements.insert( SubScript );
-      }
-
-      if ( !superscript &&
-           ( openElements.contains( SuperScript )
-             || elementsToOpen.contains( SuperScript ) ) ) {
-        closedElements.insert( SuperScript );
-      }
-
-    }
-  } else {
+  if ( it.atEnd() ) {
     // End of block?. Close all open tags.
     QSet< int > elementsToClose = openElements.toSet();
-    closedElements = elementsToClose.unite( elementsToOpen );
+    return elementsToClose.unite( elementsToOpen );
+  }
+
+  QTextFragment fragment = it.fragment();
+
+  if ( !fragment.isValid() )
+    return closedElements;
+
+  QTextCharFormat fragmentFormat = fragment.charFormat();
+
+  int fontWeight = fragmentFormat.fontWeight();
+  bool fontItalic = fragmentFormat.fontItalic();
+  bool fontUnderline = fragmentFormat.fontUnderline();
+  bool fontStrikeout = fragmentFormat.fontStrikeOut();
+
+  QBrush fontForeground = fragmentFormat.foreground();
+  QBrush fontBackground = fragmentFormat.background();
+
+  QString fontFamily = fragmentFormat.fontFamily();
+  int fontPointSize = fragmentFormat.font().pointSize();
+  QString anchorHref = fragmentFormat.anchorHref();
+
+  QTextCharFormat::VerticalAlignment vAlign = fragmentFormat.verticalAlignment();
+  bool superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
+  bool subscript = ( vAlign == QTextCharFormat::AlignSubScript );
+
+
+  if ( !fontStrikeout &&
+        ( openElements.contains( StrikeOut )
+          || elementsToOpen.contains( StrikeOut ) ) ) {
+    closedElements.insert( StrikeOut );
+  }
+
+  if ( !fontUnderline &&
+        ( openElements.contains( Underline )
+          || elementsToOpen.contains( Underline ) )
+        && !( openElements.contains( Anchor )
+              || elementsToOpen.contains( Anchor ) )
+      ) {
+    closedElements.insert( Underline );
+  }
+
+  if ( !fontItalic &&
+        ( openElements.contains( Emph )
+          || elementsToOpen.contains( Emph ) ) ) {
+    closedElements.insert( Emph );
+  }
+
+  if ( fontWeight != QFont::Bold &&
+        ( openElements.contains( Strong )
+          || elementsToOpen.contains( Strong ) ) ) {
+    closedElements.insert( Strong );
+  }
+
+  if (( openElements.contains( SpanFontPointSize )
+        || elementsToOpen.contains( SpanFontPointSize ) )
+      && ( openFontPointSize != fontPointSize )
+      ) {
+    closedElements.insert( SpanFontPointSize );
+  }
+
+  if (( openElements.contains( SpanFontFamily )
+        || elementsToOpen.contains( SpanFontFamily ) )
+      && ( openFontFamily != fontFamily )
+      ) {
+    closedElements.insert( SpanFontFamily );
+  }
+
+  if (( openElements.contains( SpanBackground ) && ( openBackground != fontBackground ) )
+      || ( elementsToOpen.contains( SpanBackground ) && ( backgroundToOpen != fontBackground ) ) ) {
+    closedElements.insert( SpanBackground );
+  }
+
+  if (( openElements.contains( SpanForeground ) && ( openForeground != fontForeground ) )
+      || ( elementsToOpen.contains( SpanForeground ) && ( foregroundToOpen != fontForeground ) ) ) {
+    closedElements.insert( SpanForeground );
+  }
+
+  if (( openElements.contains( Anchor ) && ( openAnchorHref != anchorHref ) )
+      || ( elementsToOpen.contains( Anchor ) && ( anchorHrefToOpen != anchorHref ) ) ) {
+    closedElements.insert( Anchor );
+  }
+
+  if ( !subscript &&
+        ( openElements.contains( SubScript )
+          || elementsToOpen.contains( SubScript ) ) ) {
+    closedElements.insert( SubScript );
+  }
+
+  if ( !superscript &&
+        ( openElements.contains( SuperScript )
+          || elementsToOpen.contains( SuperScript ) ) ) {
+    closedElements.insert( SuperScript );
   }
   return closedElements;
 }
@@ -335,7 +335,7 @@ QList< int > MarkupDirector::Private::getElementsToOpen( QTextBlock::iterator it
   if ( elementsToOpen.size() <= 1 ) {
     return elementsToOpen.toList();
   }
-  return sortOpeningOrder( elementsToOpen, QTextBlock::iterator( it ) );
+  return sortOpeningOrder( elementsToOpen, it );
 
 }
 
@@ -343,75 +343,76 @@ void MarkupDirector::Private::processOpeningElements( QTextBlock::iterator it )
 {
   QTextFragment fragment = it.fragment();
 
-  if ( fragment.isValid() ) {
-    QTextCharFormat fragmentFormat = fragment.charFormat();
-    QList<int> elementsToOpenList = getElementsToOpen( it );
+  if ( !fragment.isValid() )
+    return;
 
-    foreach( int tag, elementsToOpenList ) {
-      switch ( tag ) {
-      case Strong:
-        m_builder->beginStrong();
-        break;
-      case Emph:
-        m_builder->beginEmph();
-        break;
-      case Underline:
-        m_builder->beginUnderline();
-        break;
-      case StrikeOut:
-        m_builder->beginStrikeout();
-        break;
-      case SpanFontPointSize:
-        m_builder->beginFontPointSize( fragmentFormat.font().pointSize() );
-        openFontPointSize = fragmentFormat.font().pointSize();
-        break;
-      case SpanFontFamily:
-        m_builder->beginFontFamily( fragmentFormat.fontFamily() );
-        openFontFamily = fragmentFormat.fontFamily();
-        break;
-      case SpanBackground:
-        m_builder->beginBackground( fragmentFormat.background() );
-        openBackground = fragmentFormat.background();
-        break;
-      case SpanForeground:
-        m_builder->beginForeground( fragmentFormat.foreground() );
-        openForeground = fragmentFormat.foreground();
-        break;
-      case Anchor: {
-        // TODO: Multiple anchor names here.
-        QStringList anchorNames = fragmentFormat.anchorNames();
-        if ( !anchorNames.isEmpty() ) {
-          while ( !anchorNames.isEmpty() ) {
-            QString n = anchorNames.last();
-            anchorNames.removeLast();
-            if ( anchorNames.isEmpty() ) {
-              // Doesn't matter if anchorHref is empty.
-              m_builder->beginAnchor( fragmentFormat.anchorHref(), n );
-              break;
-            } else {
-              // Empty <a> tags allow multiple names for the same section.
-              m_builder->beginAnchor( QString(), n );
-              m_builder->endAnchor();
-            }
+  QTextCharFormat fragmentFormat = fragment.charFormat();
+  QList<int> elementsToOpenList = getElementsToOpen( it );
+
+  foreach( int tag, elementsToOpenList ) {
+    switch ( tag ) {
+    case Strong:
+      m_builder->beginStrong();
+      break;
+    case Emph:
+      m_builder->beginEmph();
+      break;
+    case Underline:
+      m_builder->beginUnderline();
+      break;
+    case StrikeOut:
+      m_builder->beginStrikeout();
+      break;
+    case SpanFontPointSize:
+      m_builder->beginFontPointSize( fragmentFormat.font().pointSize() );
+      openFontPointSize = fragmentFormat.font().pointSize();
+      break;
+    case SpanFontFamily:
+      m_builder->beginFontFamily( fragmentFormat.fontFamily() );
+      openFontFamily = fragmentFormat.fontFamily();
+      break;
+    case SpanBackground:
+      m_builder->beginBackground( fragmentFormat.background() );
+      openBackground = fragmentFormat.background();
+      break;
+    case SpanForeground:
+      m_builder->beginForeground( fragmentFormat.foreground() );
+      openForeground = fragmentFormat.foreground();
+      break;
+    case Anchor: {
+      // TODO: Multiple anchor names here.
+      QStringList anchorNames = fragmentFormat.anchorNames();
+      if ( !anchorNames.isEmpty() ) {
+        while ( !anchorNames.isEmpty() ) {
+          QString n = anchorNames.last();
+          anchorNames.removeLast();
+          if ( anchorNames.isEmpty() ) {
+            // Doesn't matter if anchorHref is empty.
+            m_builder->beginAnchor( fragmentFormat.anchorHref(), n );
+            break;
+          } else {
+            // Empty <a> tags allow multiple names for the same section.
+            m_builder->beginAnchor( QString(), n );
+            m_builder->endAnchor();
           }
-        } else {
-          m_builder->beginAnchor( fragmentFormat.anchorHref() );
         }
-        openAnchorHref = fragmentFormat.anchorHref();
-        break;
+      } else {
+        m_builder->beginAnchor( fragmentFormat.anchorHref() );
       }
-      case SuperScript:
-        m_builder->beginSuperscript();
-        break;
-      case SubScript:
-        m_builder->beginSubscript();
-        break;
-      default:
-        break;
-      }
-      openElements.append( tag );
-      elementsToOpen.remove( tag );
+      openAnchorHref = fragmentFormat.anchorHref();
+      break;
     }
+    case SuperScript:
+      m_builder->beginSuperscript();
+      break;
+    case SubScript:
+      m_builder->beginSubscript();
+      break;
+    default:
+      break;
+    }
+    openElements.append( tag );
+    elementsToOpen.remove( tag );
   }
 }
 
