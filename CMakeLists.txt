@@ -66,6 +66,11 @@ install(FILES
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
   DESTINATION "${LIB_INSTALL_DIR}/grantlee")
 
+install(FILES
+  "${CMAKE_MODULE_PATH}/GrantleeUse.cmake"
+  DESTINATION "${PLUGIN_INSTALL_DIR}"
+)
+
 # Add support for an uninstall target
 configure_file(
   "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
