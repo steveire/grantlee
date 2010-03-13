@@ -60,6 +60,7 @@ install(FILES
   grantlee_core_export.h
   mutabletemplate.h
   node.h
+  outputstream.h
   parser.h
   safestring.h
   taglibraryinterface.h
