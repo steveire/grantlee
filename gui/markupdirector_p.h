@@ -67,24 +67,24 @@ public:
   };
 //     Q_DECLARE_FLAGS(OpenElements, OpenElementValues)
 
-  QString openAnchorHref;
-  QString anchorHrefToOpen;
-  QString openAnchorName;
+  QString m_openAnchorHref;
+  QString m_anchorHrefToOpen;
+  QString m_openAnchorName;
 
-  QBrush openForeground;
-  QBrush foregroundToOpen;
-  QBrush openBackground;
-  QBrush backgroundToOpen;
-  int openFontPointSize;
-  int fontPointSizeToOpen;
-  QString openFontFamily;
-  QString fontFamilyToOpen;
+  QBrush m_openForeground;
+  QBrush m_foregroundToOpen;
+  QBrush m_openBackground;
+  QBrush m_backgroundToOpen;
+  int m_openFontPointSize;
+  int m_fontPointSizeToOpen;
+  QString m_openFontFamily;
+  QString m_fontFamilyToOpen;
 
   // An ordered list containing the order elements were opened in.
-  QList< int > openElements;
+  QList< int > m_openElements;
 
   // Elements that have yet to be opened. Used while determine the order to open them.
-  QSet< int > elementsToOpen;
+  QSet< int > m_elementsToOpen;
 
 };
 // Q_DECLARE_OPERATORS_FOR_FLAGS(KMarkupDirector::Private::OpenElements)
