@@ -79,10 +79,12 @@ OutputStream& OutputStream::operator<<(const QString& input)
 OutputStream& OutputStream::operator<<(const Grantlee::SafeString& input)
 {
   if ( m_stream )
+  {
     if ( input.needsEscape() )
       ( *m_stream ) << escape( input.get() );
     else
       ( *m_stream ) << input.get();
+  }
   return *this;
 }
 /*
