@@ -21,6 +21,10 @@
 #ifndef GRANTLEE_TEXTHTMLBUILDER_H
 #define GRANTLEE_TEXTHTMLBUILDER_H
 
+#ifdef Q_CC_MSVC
+#pragma warning( disable : 4250 )
+#endif
+
 #include "abstractmarkupbuilder.h"
 #include "markupdirector.h"
 
@@ -207,7 +211,15 @@ private:
 
 };
 
+#ifdef Q_OS_WIN
+class GRANTLEE_GUI_EXPORT TextHtmlOutputter : public MarkupDirector, protected TextHTMLBuilder
+{
+public:
+  using TextHTMLBuilder::getResult;
+};
+#else
 typedef DocumentOutputter<MarkupDirector, TextHTMLBuilder> TextHtmlOutputter;
+#endif
 
 }
 

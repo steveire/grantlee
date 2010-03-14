@@ -21,6 +21,11 @@
 #ifndef GRANTLEE_PLAINTEXTMARKUPBUILDER_H
 #define GRANTLEE_PLAINTEXTMARKUPBUILDER_H
 
+
+#ifdef Q_OS_WIN
+#pragma warning( disable : 4250 )
+#endif
+
 #define LETTERSINALPHABET 26
 #define DIGITSOFFSET 10
 
@@ -182,7 +187,15 @@ private:
 
 };
 
-typedef DocumentOutputter<MarkupDirector, PlainTextMarkupBuilder> PlainTextMarkupOutputter;
+#ifdef Q_OS_WIN
+class GRANTLEE_GUI_EXPORT PlainTextMarkupOutputter : public MarkupDirector, protected PlainTextMarkupBuilder
+{
+public:
+  using PlainTextMarkupBuilder::getResult;
+};
+#else
+typedef DocumentOutputter<MarkupDirector, PlainTextMarkupBuilder> PlainTextMarkupOutputter
+#endif
 
 }
 

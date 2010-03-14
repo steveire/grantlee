@@ -21,7 +21,6 @@
 
 #include <QtTest>
 #include <QtCore>
-#include <qtest_kde.h>
 #include <qtestevent.h>
 #include <QRegExp>
 #include <QTextCursor>
