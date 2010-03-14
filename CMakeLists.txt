@@ -2,7 +2,7 @@ project(Grantlee)
 
 cmake_minimum_required(VERSION 2.6)
 
-find_package(Qt4 4.6.0 REQUIRED)
+find_package(Qt4 4.5.0 REQUIRED)
 
 set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
 
