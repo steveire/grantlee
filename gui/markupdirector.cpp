@@ -363,7 +363,7 @@ void MarkupDirector::processBlockContents( const QTextBlock &block )
 
 }
 
-void MarkupDirector::constructContent( QTextDocument* doc )
+void MarkupDirector::processDocument( QTextDocument* doc )
 {
   QTextFrame *rootFrame = doc->rootFrame();
   processFrame( rootFrame );

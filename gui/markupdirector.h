@@ -81,7 +81,7 @@ public:
   /**
     Constructs the output by directing the builder to create the markup.
   */
-  virtual void constructContent( QTextDocument* doc );
+  virtual void processDocument( QTextDocument* doc );
 
 protected:
 

@@ -75,7 +75,7 @@ void TestHtmlOutput::testSingleFormat()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
     QRegExp regex(QString("^<p>This <strong>text</strong> is bold.</p>\\n$"));
 
@@ -92,7 +92,7 @@ void TestHtmlOutput::testDoubleFormat()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
     QRegExp regex(QString("^<p>Some (<strong><em>|<em><strong>)formatted(</em></strong>|</strong></em>) text.</p>\\n$"));
 
@@ -107,7 +107,7 @@ void TestHtmlOutput::testAnchor()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex(QString("^<p>A <a href=\"http://www.kde.org\">link</a> to KDE.</p>\\n$"));
@@ -123,7 +123,7 @@ void TestHtmlOutput::testAnchorWithFormattedContent()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
 //     kDebug() << result;
@@ -141,7 +141,7 @@ void TestHtmlOutput::testAdjacentAnchors()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex(QString("^<p>Two <a href=\"http://www.kde.org\">links</a><a href=\"http://www.google.com\">next</a> to eachother.</p>\\n$"));
@@ -156,7 +156,7 @@ void TestHtmlOutput::testNestedFormatting()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex(QString("^<p>This <strong>text is <em>italic</em> and</strong> bold.</p>\\n$"));
@@ -171,7 +171,7 @@ void TestHtmlOutput::testSpan()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Some <span style=\"color:#ff0000;\">formatted</span> text.</p>\\n$");
@@ -186,7 +186,7 @@ void TestHtmlOutput::testDoubleSpan()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Some <span style=\"(color:#ff0000|background-color:#00ff00);\"><span style=\"(color:#ff0000|background-color:#00ff00);\">formatted</span></span> text.</p>\\n$");
@@ -202,7 +202,7 @@ void TestHtmlOutput::testSpanNesting()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph <span style=\"background-color:#00ff00;\">with some <span style=\"color:#ff0000;\">formatted</span> nested</span> text.</p>\\n$");
@@ -217,7 +217,7 @@ void TestHtmlOutput::testDoubleStartDifferentFinish()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph <em><strong>with</strong> some formatted</em> text.</p>\\n$");
@@ -232,7 +232,7 @@ void TestHtmlOutput::testDoubleStartDifferentFinishReverseOrder()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph <strong><em>with</em> some formatted</strong> text.</p>\\n$");
@@ -248,7 +248,7 @@ void TestHtmlOutput::testDifferentStartDoubleFinish()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph <em>with some <strong>formatted</strong></em> text.</p>\\n$");
@@ -263,7 +263,7 @@ void TestHtmlOutput::testDifferentStartDoubleFinishReverseOrder()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph <strong>with some <em>formatted</em></strong> text.</p>\\n$");
@@ -279,7 +279,7 @@ void TestHtmlOutput::testOverlap()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph <strong>with <em>some</em></strong><em> formatted</em> text.</p>\\n$");
@@ -295,7 +295,7 @@ void TestHtmlOutput::testEdgeCaseLeft()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph <strong>with some formatted text.</strong></p>\\n$");
@@ -310,7 +310,7 @@ void TestHtmlOutput::testEdgeCaseRight()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p><strong>Paragraph with some formatted</strong> text.</p>\\n$");
@@ -325,7 +325,7 @@ void TestHtmlOutput::testImage()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" /> image.</p>\\n$");
@@ -346,7 +346,7 @@ void TestHtmlOutput::testImageResized()
 
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" /> image.</p>\\n$");
@@ -357,7 +357,7 @@ void TestHtmlOutput::testImageResized()
 
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" /> image.</p>\\n$");
@@ -368,7 +368,7 @@ void TestHtmlOutput::testImageResized()
 
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" height=\"10\" /> image.</p>\\n$");
@@ -389,7 +389,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <b>formatted</b> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <strong>formatted</strong> text.</p>\\n$");
@@ -400,7 +400,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <i>formatted</i> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <em>formatted</em> text.</p>\\n$");
@@ -410,7 +410,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <u>formatted</u> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <u>formatted</u> text.</p>\\n$");
@@ -420,7 +420,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <s>formatted</s> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <s>formatted</s> text.</p>\\n$");
@@ -430,7 +430,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <sup>formatted</sup> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <sup>formatted</sup> text.</p>\\n$");
@@ -440,7 +440,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <sub>formatted</sub> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <sub>formatted</sub> text.</p>\\n$");
@@ -450,7 +450,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <span style=\"color:#ff0000;\">formatted</span> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <span style=\"color:#ff0000;\">formatted</span> text.</p>\\n$");
@@ -461,7 +461,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <span style=\"background-color:#ff0000;\">formatted</span> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <span style=\"background-color:#ff0000;\">formatted</span> text.</p>\\n$");
@@ -471,7 +471,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <span style=\"font-family:courier;\">formatted</span> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <span style=\"font-family:courier;\">formatted</span> text.</p>\\n$");
@@ -481,7 +481,7 @@ void TestHtmlOutput::testEachFormatTagSingly()
     doc->setHtml("Some <span style=\"font-size:20pt;\">formatted</span> text.");
     hb = new TextHTMLBuilder();
     md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     result = hb->getResult();
 
     regex = QRegExp("^<p>Some <span style=\"font-size:20pt;\">formatted</span> text.</p>\\n$");
@@ -496,7 +496,7 @@ void TestHtmlOutput::testHorizontalRule()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Foo</p>\\n<hr />\\n<p>Bar</p>\\n$");
@@ -511,7 +511,7 @@ void TestHtmlOutput::testNewlines()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Foo</p>\\n<br />\\n<br />\\n<p>Bar</p>\\n$");
@@ -526,7 +526,7 @@ void TestHtmlOutput::testEmptyParagraphs()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Foo</p>\\n<br />\\n<br />\\n<p>Bar</p>\\n$");
@@ -548,7 +548,7 @@ void TestHtmlOutput::testNewlinesThroughQTextEdit()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(te->document());
+    md->processDocument(te->document());
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp("^<p>Foo</p>\\n<br />\\n<br />\\n<p>Bar</p>\\n$");
@@ -564,7 +564,7 @@ void TestHtmlOutput:: testBrInsideParagraph()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->constructContent(doc);
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     // Two paragraphs separated by two line breaks
