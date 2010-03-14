@@ -195,5 +195,7 @@ const QString MediaWikiMarkupBuilder::escape( const QString &s )
 
 QString MediaWikiMarkupBuilder::getResult()
 {
-  return m_text;
+  QString ret = m_text;
+  m_text.clear();
+  return ret;
 }

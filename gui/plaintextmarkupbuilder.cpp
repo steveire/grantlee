@@ -297,6 +297,7 @@ QString PlainTextMarkupBuilder::getResult()
   Q_D( PlainTextMarkupBuilder );
   QString ret = d->m_text;
   ret.append( d->getReferences() );
+  d->m_text.clear();
   return ret;
 }
 

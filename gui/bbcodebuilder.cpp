@@ -213,6 +213,8 @@ const QString BBCodeBuilder::escape( const QString &s )
 
 QString BBCodeBuilder::getResult()
 {
-  return m_text;
+  QString ret = m_text;
+  m_text.clear();
+  return ret;
 }
 

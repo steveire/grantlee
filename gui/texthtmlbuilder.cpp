@@ -444,5 +444,7 @@ void TextHTMLBuilder::appendLiteralText( const QString &text )
 QString TextHTMLBuilder::getResult()
 {
   Q_D( TextHTMLBuilder );
-  return d->m_text;
+  QString ret = d->m_text;
+  d->m_text.clear();
+  return ret;
 }
