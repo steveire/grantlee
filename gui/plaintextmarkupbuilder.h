@@ -25,8 +25,11 @@
 #define DIGITSOFFSET 10
 
 #include "abstractmarkupbuilder.h"
+#include "markupdirector.h"
 
 #include "grantlee_gui_export.h"
+
+class QBrush;
 
 namespace Grantlee
 {
@@ -84,7 +87,7 @@ class PlainTextMarkupBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT PlainTextMarkupBuilder : public AbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT PlainTextMarkupBuilder : public virtual AbstractMarkupBuilder
 {
 public:
   /** Construct a new PlainTextHTMLMarkupBuilder. */
@@ -105,13 +108,30 @@ public:
 
   /* reimp */ void endAnchor();
 
+  /* reimp */ void beginForeground( const QBrush &brush );
+
+  /* reimp */ void endForeground();
+
+  /* reimp */ void beginBackground( const QBrush &brush );
+
+  /* reimp */ void endBackground();
+
+  /* reimp */ void beginFontFamily( const QString &family );
+
+  /* reimp */ void endFontFamily();
+
+  /* reimp */ void beginFontPointSize( int size );
+
+  /* reimp */ void endFontPointSize();
+
+  /* reimp */ void beginParagraph( Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0 );
+
   /* reimp */ void endParagraph();
   /* reimp */ void addNewline();
 
   /* reimp */ void insertHorizontalRule( int width = -1 );
 
   /* reimp */ void insertImage( const QString &src, qreal width, qreal height );
-
 
   /* reimp */ void beginList( QTextListFormat::Style style );
 
@@ -121,7 +141,6 @@ public:
 
   /* reimp */ void endListItem();
 
-
   /* reimp */ void beginSuperscript();
 
   /* reimp */ void endSuperscript();
@@ -129,6 +148,26 @@ public:
   /* reimp */ void beginSubscript();
 
   /* reimp */ void endSubscript();
+
+  /* reimp */ void beginTable( qreal cellpadding, qreal cellspacing, const QString &width );
+
+  /* reimp */ void beginTableRow();
+
+  /* reimp */ void beginTableHeaderCell( const QString &width, int colSpan, int rowSpan );
+
+  /* reimp */ void beginTableCell( const QString &width, int colSpan, int rowSpan );
+
+  /* reimp */ void endTable();
+
+  /* reimp */ void endTableRow();
+
+  /* reimp */ void endTableHeaderCell();
+
+  /* reimp */ void endTableCell();
+
+  /* reimp */ void beginHeader( int level );
+
+  /* reimp */ void endHeader( int level );
 
   /* reimp */ void appendLiteralText( const QString &text );
 
@@ -142,6 +181,8 @@ private:
   Q_DECLARE_PRIVATE( PlainTextMarkupBuilder )
 
 };
+
+typedef DocumentOutputter<MarkupDirector, PlainTextMarkupBuilder> PlainTextMarkupOutputter;
 
 }
 

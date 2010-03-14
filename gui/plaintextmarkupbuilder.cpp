@@ -301,3 +301,107 @@ QString PlainTextMarkupBuilder::getResult()
   return ret;
 }
 
+void PlainTextMarkupBuilder::beginBackground( const QBrush& brush )
+{
+  Q_UNUSED( brush );
+}
+
+void PlainTextMarkupBuilder::beginFontFamily( const QString& family )
+{
+  Q_UNUSED( family );
+}
+
+void PlainTextMarkupBuilder::beginFontPointSize( int size )
+{
+  Q_UNUSED( size );
+}
+
+void PlainTextMarkupBuilder::beginForeground( const QBrush& brush )
+{
+  Q_UNUSED( brush );
+}
+
+void PlainTextMarkupBuilder::beginHeader( int level )
+{
+  Q_UNUSED( level );
+}
+
+void PlainTextMarkupBuilder::beginParagraph(Qt::Alignment a, qreal top, qreal bottom, qreal left, qreal right)
+{
+  Q_UNUSED( a );
+  Q_UNUSED( top );
+  Q_UNUSED( bottom );
+  Q_UNUSED( left );
+  Q_UNUSED( right );
+}
+
+void PlainTextMarkupBuilder::beginTable(qreal cellpadding, qreal cellspacing, const QString& width)
+{
+  Q_UNUSED( cellpadding );
+  Q_UNUSED( cellspacing );
+  Q_UNUSED( width );
+}
+
+void PlainTextMarkupBuilder::beginTableCell(const QString& width, int colSpan, int rowSpan)
+{
+  Q_UNUSED( width );
+  Q_UNUSED( colSpan );
+  Q_UNUSED( rowSpan );
+}
+
+void PlainTextMarkupBuilder::beginTableHeaderCell(const QString& width, int colSpan, int rowSpan)
+{
+  Q_UNUSED( width );
+  Q_UNUSED( colSpan );
+  Q_UNUSED( rowSpan );
+}
+
+void PlainTextMarkupBuilder::beginTableRow()
+{
+
+}
+
+void PlainTextMarkupBuilder::endBackground()
+{
+
+}
+
+void PlainTextMarkupBuilder::endFontFamily()
+{
+
+}
+
+void PlainTextMarkupBuilder::endFontPointSize()
+{
+
+}
+
+void PlainTextMarkupBuilder::endForeground()
+{
+
+}
+
+void PlainTextMarkupBuilder::endHeader( int level )
+{
+  Q_UNUSED( level )
+}
+
+void PlainTextMarkupBuilder::endTable()
+{
+
+}
+
+void PlainTextMarkupBuilder::endTableCell()
+{
+
+}
+
+void PlainTextMarkupBuilder::endTableHeaderCell()
+{
+
+}
+
+void Grantlee::PlainTextMarkupBuilder::endTableRow()
+{
+
+}
