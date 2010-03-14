@@ -3,7 +3,7 @@ project(grantlee_defaultfilters)
 include_directories(
   ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/../grantlee_core
+  ${PROJECT_SOURCE_DIR}/../corelib
 )
 
 grantlee_add_plugin(grantlee_defaultfilters

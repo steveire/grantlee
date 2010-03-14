@@ -5,7 +5,7 @@ include(${Grantlee_USE_FILE})
 include_directories(
   ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/../grantlee_core
+  ${PROJECT_SOURCE_DIR}/../corelib
 )
 
 grantlee_add_plugin ( grantlee_defaulttags

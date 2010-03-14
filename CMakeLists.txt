@@ -36,16 +36,16 @@ set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
 
 set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 
-add_subdirectory(grantlee_core)
+add_subdirectory(corelib)
 
-add_subdirectory(grantlee_loadertags)
-add_subdirectory(grantlee_defaulttags)
+add_subdirectory(loadertags)
+add_subdirectory(defaulttags)
 
-add_subdirectory(grantlee_defaultfilters)
+add_subdirectory(defaultfilters)
 
-add_subdirectory(grantlee_mutabletags)
+add_subdirectory(mutabletags)
 
-add_subdirectory(grantlee_scriptabletags)
+add_subdirectory(scriptabletags)
 
 add_subdirectory(tests)
 
@@ -94,3 +94,4 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
     ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
   )
 endif()
+
