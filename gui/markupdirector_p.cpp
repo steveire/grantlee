@@ -207,7 +207,7 @@ QList< int > MarkupDirector::Private::sortOpeningOrder( QSet< int > openingOrder
     if ( !it.atEnd() ) {
       it++;
 
-      if ( it.fragment().isValid() ) {
+      if ( !it.atEnd() ) {
         // Because I've iterated, this returns the elements that will
         // be closed by the next fragment.
         QSet<int> elementsToClose = getElementsToClose( it );
