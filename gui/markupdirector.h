@@ -22,12 +22,12 @@
 #ifndef GRANTLEE_MARKUPDIRECTOR_H
 #define GRANTLEE_MARKUPDIRECTOR_H
 
-#include "abstractmarkupbuilder.h"
-#include <QTextDocument>
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextFrame>
 
+#include "abstractmarkupbuilder.h"
 #include "grantlee_gui_export.h"
 
-class QTextFrame;
 class QTextTable;
 class QTextTableCell;
 class QTextList;
@@ -84,74 +84,22 @@ public:
     Constructs the output by directing the builder to create the markup.
   */
   virtual void processDocument( QTextDocument* doc );
+  virtual QTextFrame::iterator processFrame( QTextFrame::iterator it, QTextFrame *frame );
+  virtual QTextFrame::iterator processBlock( QTextFrame::iterator it, const QTextBlock &block );
+  virtual QTextFrame::iterator processObject( QTextFrame::iterator it, const QTextBlock &block, QTextObject *textObject );
+  virtual QPair<QTextFrame::iterator, QTextBlock> processBlockGroup( QTextFrame::iterator it, const QTextBlock &block, QTextBlockGroup *textBlockGroup );
+  virtual QPair<QTextFrame::iterator, QTextBlock> processList( QTextFrame::iterator it, const QTextBlock &block, QTextList *textList );
+  virtual QTextFrame::iterator processBlockContents( QTextFrame::iterator it, const QTextBlock &block );
+  virtual QTextBlock::iterator processFragment( QTextBlock::iterator it, const QTextFragment &fragment, QTextDocument const *doc );
+  virtual QTextBlock::iterator processCharTextObject( QTextBlock::iterator it, const QTextFragment &fragment, QTextObject *textObject );
+  virtual QTextBlock::iterator processImage( QTextBlock::iterator it, const QTextImageFormat &imageFormat, QTextDocument *doc );
+  virtual QTextFrame::iterator processTable( QTextFrame::iterator it, QTextTable *table );
+  virtual void processTableCell( const QTextTableCell &tableCell, QTextTable *table );
 
 protected:
+  void processDocumentContents( QTextFrame::iterator begin, QTextFrame::iterator end );
 
-  /**
-    Processes the frame by iterating over its child frames and blocks and processing them as needed.
-  */
-  void processFrame( QTextFrame *frame );
-
-  /**
-    Processes the table by iterating over its rows and columns, processing their contents.
-  */
-  void processTable( QTextTable *table );
-
-  /**
-    Processes the table cell by iterating over its contents. May contain another table, nested list etc.
-   */
-  void processTableCell( const QTextTableCell &cell );
-
-  /**
-    Processes a list by iterating over it. Nested lists are processed by a recursive call.
-    @param block The first block in a list.
-  */
-  void processList( const QTextBlock &block );
-
-  /**
-    Processes the contents of a QTextBlock. The block is traversed and each QTextFragment is processed individually.
-
-    A QTextFragment is a fragment of continuous text with continuous formatting.
-
-    Eg, a block of text represented by
-
-    @code
-      Some long <b>formatted paragraph</b> of several pieces <b><i>of decorated</i> text</b> .
-    @endcode
-
-    would contain the fragments
-
-    @li Some long
-    @li formatted paragraph
-    @li of several pieces
-    @li of decorated
-    @li text
-
-    @param block The block to process.
-  */
-  void processBlockContents( const QTextBlock &block );
-
-  /**
-    Processes the document between the iterators @p start and @p end inclusive.
-  */
-  void processDocumentContents( QTextFrame::iterator start, QTextFrame::iterator end );
-
-  /**
-    Process a block.
-
-    Note: If block is the first item in a list, the entire (maybe nested) list will be processed.
-    If block is part of a nested list, but is not the first item, it is ignored.
-    @param block The block to process.
-  */
-
-  void processBlock( const QTextBlock &block );
-
-  /**
-    Processes a QTextFragment.
-
-    @param fragment The fragment to process.
-  */
-  void processFragment( const QTextFragment &fragment );
+  QPair<QTextFrame::iterator, QTextBlock> skipBlockGroup( QTextFrame::iterator it, const QTextBlock &_block, QTextBlockGroup *blockGroup );
 
 private:
   Q_DECLARE_PRIVATE( MarkupDirector )
