@@ -194,7 +194,7 @@ public:
   using PlainTextMarkupBuilder::getResult;
 };
 #else
-typedef DocumentOutputter<MarkupDirector, PlainTextMarkupBuilder> PlainTextMarkupOutputter
+typedef DocumentOutputter<MarkupDirector, PlainTextMarkupBuilder> PlainTextMarkupOutputter;
 #endif
 
 }
