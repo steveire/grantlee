@@ -49,7 +49,7 @@ public:
 using namespace Grantlee;
 
 TextHTMLBuilder::TextHTMLBuilder()
-  : d_ptr( new TextHTMLBuilderPrivate( this ) )
+  : AbstractMarkupBuilder(), d_ptr( new TextHTMLBuilderPrivate( this ) )
 {
 
 }
@@ -439,6 +439,12 @@ void TextHTMLBuilder::appendLiteralText( const QString &text )
 {
   Q_D( TextHTMLBuilder );
   d->m_text.append( Qt::escape( text ) );
+}
+
+void TextHTMLBuilder::appendRawText( const QString &text )
+{
+  Q_D( TextHTMLBuilder );
+  d->m_text.append( text );
 }
 
 QString TextHTMLBuilder::getResult()

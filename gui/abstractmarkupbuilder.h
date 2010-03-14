@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2008 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2008,2010 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,8 @@ class QBrush;
 namespace Grantlee
 {
 
+class AbstractMarkupBuilderPrivate;
+
 /**
   @brief The AbstractMarkupBuilder class serves as a base class for creating marked up plain text output.
 
@@ -41,28 +43,11 @@ namespace Grantlee
 
   See PlainTextMarkupBuilder and HTMLBuilder for example implementations.
 
-  @note For maintenance, if an extra tag is needed which is not provided by the virtual methods, the ExtraElement can be used.
-
-  eg,
-
-  @code
-
-    builder->beginExtraElement(AbstractMarkupBuilder::DivTag);
-    // ...
-    builder->endExtraElement(AbstractMarkupBuilder::DivTag);
-
-  @endcode
-
   @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_GUI_EXPORT AbstractMarkupBuilder
 {
 public:
-
-  /** For future compatibility.
-  This enum can be used to insert extra tags not supported by the virtual methods. */
-  enum ExtraElement { UserElement = 100 };
-
   /** Destructor */
   virtual ~AbstractMarkupBuilder() {}
 
@@ -244,22 +229,6 @@ public:
   virtual void endHeader( int level ) = 0;
 
   /**
-    Begin an extra identified element. Override this to support more elements
-    in the future in a BC way.
-
-    @param type The type of element to create
-    @param args Arguments for the element.
-  */
-  virtual void beginExtraElement( int type, const QVariantList &args ) = 0;
-
-  /**
-    End extra tag.
-
-    @param type The type of the tag to end.
-  */
-  virtual void endExtraElement( int type ) = 0;
-
-  /**
     Append the plain text @p text to the markup.
 
     @param The text to append.
@@ -272,7 +241,13 @@ public:
     @return The fully marked up text.
   */
   virtual QString getResult() = 0;
+};
 
+template <typename DocumentProcessor, typename ConcreteBuilder>
+class GRANTLEE_GUI_EXPORT DocumentOutputter : public DocumentProcessor, protected ConcreteBuilder
+{
+public:
+  using ConcreteBuilder::getResult;
 };
 
 }

@@ -22,6 +22,7 @@
 #define GRANTLEE_TEXTHTMLBUILDER_H
 
 #include "abstractmarkupbuilder.h"
+#include "markupdirector.h"
 
 #include "grantlee_gui_export.h"
 
@@ -80,7 +81,7 @@ class TextHTMLBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT TextHTMLBuilder : public AbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT TextHTMLBuilder : public virtual AbstractMarkupBuilder
 {
 public:
 
@@ -191,6 +192,13 @@ public:
   */
   /* reimp */ void appendLiteralText( const QString &text );
 
+  /**
+    Append @p text without escaping.
+
+    This is useful if extending MarkupDirector
+  */
+  void appendRawText( const QString &text );
+
   /* reimp */ QString getResult();
 
 private:
@@ -198,6 +206,8 @@ private:
   Q_DECLARE_PRIVATE( TextHTMLBuilder )
 
 };
+
+typedef DocumentOutputter<MarkupDirector, TextHTMLBuilder> TextHtmlOutputter;
 
 }
 

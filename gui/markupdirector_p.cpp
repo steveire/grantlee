@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2008 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2008,2010 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,6 +25,7 @@ using namespace Grantlee;
 
 void MarkupDirectorPrivate::processClosingElements( QTextBlock::iterator it )
 {
+  Q_Q( AbstractMarkupBuilder );
   // The order of closing elements is determined by the order they were opened in.
   // The order of opened elements is in the openElements member list.
   // see testDifferentStartDoubleFinish and testDifferentStartDoubleFinishReverseOrder
@@ -41,37 +42,37 @@ void MarkupDirectorPrivate::processClosingElements( QTextBlock::iterator it )
     if ( elementsToClose.contains( tag ) ) {
       switch ( tag ) {
       case Strong:
-        m_builder->endStrong();
+        q->endStrong();
         break;
       case Emph:
-        m_builder->endEmph();
+        q->endEmph();
         break;
       case Underline:
-        m_builder->endUnderline();
+        q->endUnderline();
         break;
       case StrikeOut:
-        m_builder->endStrikeout();
+        q->endStrikeout();
         break;
       case SpanFontPointSize:
-        m_builder->endFontPointSize();
+        q->endFontPointSize();
         break;
       case SpanFontFamily:
-        m_builder->endFontFamily();
+        q->endFontFamily();
         break;
       case SpanBackground:
-        m_builder->endBackground();
+        q->endBackground();
         break;
       case SpanForeground:
-        m_builder->endForeground();
+        q->endForeground();
         break;
       case Anchor:
-        m_builder->endAnchor();
+        q->endAnchor();
         break;
       case SubScript:
-        m_builder->endSubscript();
+        q->endSubscript();
         break;
       case SuperScript:
-        m_builder->endSuperscript();
+        q->endSuperscript();
         break;
 
       default:
@@ -342,6 +343,7 @@ QList< int > MarkupDirectorPrivate::getElementsToOpen( QTextBlock::iterator it )
 
 void MarkupDirectorPrivate::processOpeningElements( QTextBlock::iterator it )
 {
+  Q_Q( AbstractMarkupBuilder );
   QTextFragment fragment = it.fragment();
 
   if ( !fragment.isValid() )
@@ -353,31 +355,31 @@ void MarkupDirectorPrivate::processOpeningElements( QTextBlock::iterator it )
   foreach( int tag, elementsToOpenList ) {
     switch ( tag ) {
     case Strong:
-      m_builder->beginStrong();
+      q->beginStrong();
       break;
     case Emph:
-      m_builder->beginEmph();
+      q->beginEmph();
       break;
     case Underline:
-      m_builder->beginUnderline();
+      q->beginUnderline();
       break;
     case StrikeOut:
-      m_builder->beginStrikeout();
+      q->beginStrikeout();
       break;
     case SpanFontPointSize:
-      m_builder->beginFontPointSize( fragmentFormat.font().pointSize() );
+      q->beginFontPointSize( fragmentFormat.font().pointSize() );
       m_openFontPointSize = fragmentFormat.font().pointSize();
       break;
     case SpanFontFamily:
-      m_builder->beginFontFamily( fragmentFormat.fontFamily() );
+      q->beginFontFamily( fragmentFormat.fontFamily() );
       m_openFontFamily = fragmentFormat.fontFamily();
       break;
     case SpanBackground:
-      m_builder->beginBackground( fragmentFormat.background() );
+      q->beginBackground( fragmentFormat.background() );
       m_openBackground = fragmentFormat.background();
       break;
     case SpanForeground:
-      m_builder->beginForeground( fragmentFormat.foreground() );
+      q->beginForeground( fragmentFormat.foreground() );
       m_openForeground = fragmentFormat.foreground();
       break;
     case Anchor: {
@@ -389,25 +391,25 @@ void MarkupDirectorPrivate::processOpeningElements( QTextBlock::iterator it )
           anchorNames.removeLast();
           if ( anchorNames.isEmpty() ) {
             // Doesn't matter if anchorHref is empty.
-            m_builder->beginAnchor( fragmentFormat.anchorHref(), n );
+            q->beginAnchor( fragmentFormat.anchorHref(), n );
             break;
           } else {
             // Empty <a> tags allow multiple names for the same section.
-            m_builder->beginAnchor( QString(), n );
-            m_builder->endAnchor();
+            q->beginAnchor( QString(), n );
+            q->endAnchor();
           }
         }
       } else {
-        m_builder->beginAnchor( fragmentFormat.anchorHref() );
+        q->beginAnchor( fragmentFormat.anchorHref() );
       }
       m_openAnchorHref = fragmentFormat.anchorHref();
       break;
     }
     case SuperScript:
-      m_builder->beginSuperscript();
+      q->beginSuperscript();
       break;
     case SubScript:
-      m_builder->beginSubscript();
+      q->beginSubscript();
       break;
     default:
       break;

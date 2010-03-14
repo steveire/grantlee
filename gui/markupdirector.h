@@ -67,13 +67,13 @@ class MarkupDirectorPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT MarkupDirector
+class GRANTLEE_GUI_EXPORT MarkupDirector : public virtual AbstractMarkupBuilder
 {
 public:
   /**
     Construct a new MarkupDirector
   */
-  MarkupDirector( Grantlee::AbstractMarkupBuilder* builder );
+  MarkupDirector();
 
   /**
     Destructor

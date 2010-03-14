@@ -37,8 +37,8 @@ namespace Grantlee
 class MarkupDirectorPrivate
 {
 public:
-  MarkupDirectorPrivate( MarkupDirector *md, AbstractMarkupBuilder *builder )
-    : q_ptr( md ), m_builder( builder )
+  MarkupDirectorPrivate( MarkupDirector *md )
+    : q_ptr( md )
   {
   }
 
@@ -50,8 +50,6 @@ public:
   QSet< int > getElementsToClose( QTextBlock::iterator it ) const;
   QList< int > getElementsToOpen( QTextBlock::iterator it );
   QList< int > sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const;
-
-  AbstractMarkupBuilder *m_builder;
 
   enum OpenElementValues {
     None = 0x0,

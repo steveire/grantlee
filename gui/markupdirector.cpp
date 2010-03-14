@@ -40,8 +40,8 @@
 
 using namespace Grantlee;
 
-MarkupDirector::MarkupDirector( AbstractMarkupBuilder* builder )
-  : d_ptr( new MarkupDirectorPrivate( this, builder ) )
+MarkupDirector::MarkupDirector()
+  : AbstractMarkupBuilder(), d_ptr( new MarkupDirectorPrivate( this ) )
 {
 }
 
@@ -100,7 +100,6 @@ QTextFrame::iterator MarkupDirector::processBlock( QTextFrame::iterator it, cons
 
 QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTextTable* table )
 {
-  Q_D( MarkupDirector );
   QTextTableFormat format = table->format();
 
   QVector<QTextLength> colLengths = format.columnWidthConstraints();
@@ -116,7 +115,7 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
     sWidth = sWidth.arg( tableWidth.rawValue() );
   }
 
-  d->m_builder->beginTable( format.cellPadding(), format.cellSpacing(), sWidth );
+  beginTable( format.cellPadding(), format.cellSpacing(), sWidth );
 
   int headerRowCount = format.headerRowCount();
 
@@ -126,10 +125,10 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
     // Put a thead element around here somewhere?
     // if (row < headerRowCount)
     // {
-    // d->builder->beginTableHeader();
+    // beginTableHeader();
     // }
 
-    d->m_builder->beginTableRow();
+    beginTableRow();
 
     // Header attribute should really be on cells, not determined by number of rows.
     //http://www.webdesignfromscratch.com/html-tables.cfm
@@ -164,22 +163,23 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
 
       // TODO: Use THEAD instead
       if ( row < headerRowCount ) {
-        d->m_builder->beginTableHeaderCell( sCellWidth, columnSpan, rowSpan );
+        beginTableHeaderCell( sCellWidth, columnSpan, rowSpan );
       } else {
-        d->m_builder->beginTableCell( sCellWidth, columnSpan, rowSpan );
+        beginTableCell( sCellWidth, columnSpan, rowSpan );
       }
 
       processTableCell( tableCell, table );
 
       if ( row < headerRowCount ) {
-        d->m_builder->endTableHeaderCell();
+        endTableHeaderCell();
       } else {
-        d->m_builder->endTableCell();
+        endTableCell();
       }
     }
-    d->m_builder->endTableRow();
+    endTableRow();
   }
-  d->m_builder->endTable();
+  endTable();
+
 
   if ( !it.atEnd() )
     return ++it;
@@ -194,23 +194,20 @@ void MarkupDirector::processTableCell( const QTextTableCell &tableCell, QTextTab
 
 QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame::iterator it, const QTextBlock &_block, QTextList *list )
 {
-  Q_D( MarkupDirector );
-
   QList<QTextList*> lists;
 
   QTextListFormat::Style style = list->format().style();
-  d->m_builder->beginList( style );
+  beginList( style );
   QTextBlock block = _block;
   while ( block.isValid() && block.textList() )
   {
-    d->m_builder->beginListItem();
+    beginListItem();
     processBlockContents( it, block );
-    d->m_builder->endListItem();
+    endListItem();
 
     if ( !it.atEnd() )
       ++it;
     block = block.next();
-
     if ( block.isValid() ) {
       QTextObject *obj = block.document()->objectForFormat( block.blockFormat() );
       QTextBlockGroup *group = qobject_cast<QTextBlockGroup *>( obj );
@@ -222,20 +219,19 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame:
       }
     }
   }
-  d->m_builder->endList();
+  endList();
   return qMakePair( it, block );
 }
 
 QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator frameIt, const QTextBlock &block )
 {
-  Q_D( MarkupDirector );
   QTextBlockFormat blockFormat = block.blockFormat();
   Qt::Alignment blockAlignment = blockFormat.alignment();
 
   // TODO: decide when to use <h1> etc.
 
   if ( blockFormat.hasProperty( QTextFormat::BlockTrailingHorizontalRulerWidth ) ) {
-    d->m_builder->insertHorizontalRule();
+    insertHorizontalRule();
     if ( !frameIt.atEnd() )
       return ++frameIt;
     return frameIt;
@@ -245,7 +241,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
 
   // The beginning is the end. This is an empty block. Insert a newline and move on.
   if ( it.atEnd() ) {
-    d->m_builder->addNewline();
+    addNewline();
     if ( !frameIt.atEnd() )
       return ++frameIt;
     return frameIt;
@@ -255,7 +251,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
   if ( !block.textList() ) {
     // Don't instruct builders to use margins. The rich text widget doesn't have an action for them yet,
     // So users can't edit them. See bug http://bugs.kde.org/show_bug.cgi?id=160600
-    d->m_builder->beginParagraph( blockAlignment //,
+    beginParagraph( blockAlignment //,
 //                                blockFormat.topMargin(),
 //                                blockFormat.bottomMargin(),
 //                                blockFormat.leftMargin(),
@@ -269,7 +265,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
 
   // Don't have p tags inside li tags.
   if ( !block.textList() ) {
-    d->m_builder->endParagraph();
+    endParagraph();
   }
 
   if ( !frameIt.atEnd() )
@@ -287,7 +283,7 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
     return processCharTextObject( it, fragment, textObject );
 
   if ( fragment.text().at( 0 ).category() == QChar::Separator_Line ) {
-    d->m_builder->addNewline();
+    addNewline();
 
     if ( !it.atEnd() )
       return ++it;
@@ -324,16 +320,16 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
   QStringListIterator i( sl );
   bool paraClosed = false;
   while ( i.hasNext() ) {
-    d->m_builder->appendLiteralText( i.next() );
+    appendLiteralText( i.next() );
     if ( i.hasNext() ) {
       if ( i.peekNext().isEmpty() ) {
         if ( !paraClosed ) {
-          d->m_builder->endParagraph();
+          endParagraph();
           paraClosed = true;
         }
-        d->m_builder->addNewline();
+        addNewline();
       } else if ( paraClosed ) {
-        d->m_builder->beginParagraph( /* blockAlignment */ );
+        beginParagraph( /* blockAlignment */ );
         paraClosed = false;
       }
     }
@@ -426,10 +422,9 @@ QTextBlock::iterator MarkupDirector::processCharTextObject( QTextBlock::iterator
 
 QTextBlock::iterator MarkupDirector::processImage( QTextBlock::iterator it, const QTextImageFormat &imageFormat, QTextDocument *doc )
 {
-  Q_D( MarkupDirector );
   Q_UNUSED( doc )
   // TODO: Close any open format elements?
-  d->m_builder->insertImage( imageFormat.name(), imageFormat.width(), imageFormat.height() );
+  insertImage( imageFormat.name(), imageFormat.width(), imageFormat.height() );
   if ( !it.atEnd() )
     return ++it;
   return it;
