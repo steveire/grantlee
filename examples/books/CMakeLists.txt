@@ -3,9 +3,7 @@ project(books_grantlee)
 cmake_minimum_required(VERSION 2.6)
 
 find_package(Qt4 REQUIRED)
-find_package(Automoc4 REQUIRED)
 find_package(Grantlee REQUIRED)
-
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_GUI_LIB)
@@ -43,7 +41,7 @@ qt4_add_resources(
   ${books_example_RCSS}
 )
 
-automoc4_add_executable(books
+add_executable(books
   ${books_example_SRCS}
   ${books_example_RCS_SRCS}
   ${books_example_UI_SRCS}
