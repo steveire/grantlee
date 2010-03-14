@@ -135,7 +135,7 @@ public:
   /**
   Returns the finalised plain text markup, including references at the end.
   */
-  /* reimp */ QString& getResult();
+  /* reimp */ QString getResult();
 
 private:
   PlainTextMarkupBuilderPrivate *d_ptr;

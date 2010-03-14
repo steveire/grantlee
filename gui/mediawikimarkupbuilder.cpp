@@ -193,7 +193,7 @@ const QString MediaWikiMarkupBuilder::escape( const QString &s )
   return s;
 }
 
-QString& MediaWikiMarkupBuilder::getResult()
+QString MediaWikiMarkupBuilder::getResult()
 {
   return m_text;
 }

@@ -441,7 +441,7 @@ void TextHTMLBuilder::appendLiteralText( const QString &text )
   d->m_text.append( Qt::escape( text ) );
 }
 
-QString& TextHTMLBuilder::getResult()
+QString TextHTMLBuilder::getResult()
 {
   Q_D( TextHTMLBuilder );
   return d->m_text;

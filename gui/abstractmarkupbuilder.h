@@ -318,7 +318,7 @@ public:
 
     @return The fully marked up text.
   */
-  virtual QString& getResult() = 0;
+  virtual QString getResult() = 0;
 
 };
 

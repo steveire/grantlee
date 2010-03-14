@@ -98,7 +98,7 @@ public:
 
   const QString escape( const QString &s );
 
-  /* reimp */ QString& getResult();
+  /* reimp */ QString getResult();
 
 private:
   QList<QTextListFormat::Style> m_currentListItemStyles;

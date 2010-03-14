@@ -211,7 +211,7 @@ const QString BBCodeBuilder::escape( const QString &s )
   return s;
 }
 
-QString& BBCodeBuilder::getResult()
+QString BBCodeBuilder::getResult()
 {
   return m_text;
 }

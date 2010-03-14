@@ -292,10 +292,10 @@ void PlainTextMarkupBuilder::appendLiteralText( const QString &text )
   d->m_text.append( text );
 }
 
-QString& PlainTextMarkupBuilder::getResult()
+QString PlainTextMarkupBuilder::getResult()
 {
   Q_D( PlainTextMarkupBuilder );
-  QString &ret = d->m_text;
+  QString ret = d->m_text;
   ret.append( d->getReferences() );
   return ret;
 }

@@ -191,7 +191,7 @@ public:
   */
   /* reimp */ void appendLiteralText( const QString &text );
 
-  /* reimp */ QString& getResult();
+  /* reimp */ QString getResult();
 
 private:
   TextHTMLBuilderPrivate *d_ptr;
