@@ -44,9 +44,9 @@ public:
 
   void processClosingElements( QTextBlock::iterator it );
   void processOpeningElements( QTextBlock::iterator it );
-  QSet< int > getElementsToClose( QTextBlock::iterator it );
+  QSet< int > getElementsToClose( QTextBlock::iterator it ) const;
   QList< int > getElementsToOpen( QTextBlock::iterator it );
-  QList< int > sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it );
+  QList< int > sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const;
 
   MarkupDirector *q;
   AbstractMarkupBuilder *m_builder;

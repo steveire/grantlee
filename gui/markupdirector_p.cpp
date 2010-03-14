@@ -93,7 +93,7 @@ void MarkupDirector::Private::processClosingElements( QTextBlock::iterator it )
   }
 }
 
-QSet< int > MarkupDirector::Private::getElementsToClose( QTextBlock::iterator it )
+QSet< int > MarkupDirector::Private::getElementsToClose( QTextBlock::iterator it ) const
 {
   QSet<int> closedElements;
 
@@ -197,7 +197,7 @@ QSet< int > MarkupDirector::Private::getElementsToClose( QTextBlock::iterator it
   return closedElements;
 }
 
-QList< int > MarkupDirector::Private::sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it )
+QList< int > MarkupDirector::Private::sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const
 {
   QList< int > sortedOpenedElements;
 
