@@ -36,6 +36,8 @@ class QTextCharFormat;
 namespace Grantlee
 {
 
+class MarkupDirectorPrivate;
+
 /**
   @brief The Markupdirector class controls and instructs a builder object to create markup output.
 
@@ -152,9 +154,8 @@ protected:
   void processFragment( const QTextFragment &fragment );
 
 private:
-  class Private;
-  friend class Private;
-  Private *const d;
+  Q_DECLARE_PRIVATE( MarkupDirector )
+  MarkupDirectorPrivate * const d_ptr;
 };
 
 }

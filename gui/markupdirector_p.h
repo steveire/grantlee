@@ -34,13 +34,16 @@ namespace Grantlee
   @internal
   Maintainability class for KMarkupDirector
 */
-class MarkupDirector::Private
+class MarkupDirectorPrivate
 {
 public:
-  Private( MarkupDirector *md, AbstractMarkupBuilder *builder )
-    : q( md ), m_builder( builder )
+  MarkupDirectorPrivate( MarkupDirector *md, AbstractMarkupBuilder *builder )
+    : q_ptr( md ), m_builder( builder )
   {
   }
+
+  Q_DECLARE_PUBLIC( MarkupDirector )
+  MarkupDirector * q_ptr;
 
   void processClosingElements( QTextBlock::iterator it );
   void processOpeningElements( QTextBlock::iterator it );
@@ -48,7 +51,6 @@ public:
   QList< int > getElementsToOpen( QTextBlock::iterator it );
   QList< int > sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const;
 
-  MarkupDirector *q;
   AbstractMarkupBuilder *m_builder;
 
   enum OpenElementValues {

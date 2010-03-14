@@ -18,11 +18,12 @@
 
 */
 
+#include "markupdirector.h"
 #include "markupdirector_p.h"
 
 using namespace Grantlee;
 
-void MarkupDirector::Private::processClosingElements( QTextBlock::iterator it )
+void MarkupDirectorPrivate::processClosingElements( QTextBlock::iterator it )
 {
   // The order of closing elements is determined by the order they were opened in.
   // The order of opened elements is in the openElements member list.
@@ -93,7 +94,7 @@ void MarkupDirector::Private::processClosingElements( QTextBlock::iterator it )
   }
 }
 
-QSet< int > MarkupDirector::Private::getElementsToClose( QTextBlock::iterator it ) const
+QSet< int > MarkupDirectorPrivate::getElementsToClose( QTextBlock::iterator it ) const
 {
   QSet<int> closedElements;
 
@@ -197,7 +198,7 @@ QSet< int > MarkupDirector::Private::getElementsToClose( QTextBlock::iterator it
   return closedElements;
 }
 
-QList< int > MarkupDirector::Private::sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const
+QList< int > MarkupDirectorPrivate::sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const
 {
   QList< int > sortedOpenedElements;
 
@@ -232,7 +233,7 @@ QList< int > MarkupDirector::Private::sortOpeningOrder( QSet< int > openingOrder
   return sortedOpenedElements;
 }
 
-QList< int > MarkupDirector::Private::getElementsToOpen( QTextBlock::iterator it )
+QList< int > MarkupDirectorPrivate::getElementsToOpen( QTextBlock::iterator it )
 {
   QTextFragment fragment = it.fragment();
   if ( !fragment.isValid() ) {
@@ -339,7 +340,7 @@ QList< int > MarkupDirector::Private::getElementsToOpen( QTextBlock::iterator it
 
 }
 
-void MarkupDirector::Private::processOpeningElements( QTextBlock::iterator it )
+void MarkupDirectorPrivate::processOpeningElements( QTextBlock::iterator it )
 {
   QTextFragment fragment = it.fragment();
 

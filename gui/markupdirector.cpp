@@ -41,13 +41,13 @@
 using namespace Grantlee;
 
 MarkupDirector::MarkupDirector( AbstractMarkupBuilder* builder )
-  : d( new Private( this, builder ) )
+  : d_ptr( new MarkupDirectorPrivate( this, builder ) )
 {
 }
 
 MarkupDirector::~MarkupDirector()
 {
-  delete d;
+  delete d_ptr;
 }
 
 void MarkupDirector::processDocumentContents( QTextFrame::iterator start, QTextFrame::iterator end )
@@ -90,6 +90,7 @@ void MarkupDirector::processBlock( const QTextBlock &block )
 
 void MarkupDirector::processTable( QTextTable *table )
 {
+  Q_D( MarkupDirector );
   QTextTableFormat format = table->format();
   QVector<QTextLength> colLengths = format.columnWidthConstraints();
 
@@ -177,6 +178,7 @@ void MarkupDirector::processTableCell( const QTextTableCell &cell )
 
 void MarkupDirector::processList( const QTextBlock &ablock )
 {
+  Q_D( MarkupDirector );
   QTextBlock block( ablock );
 
   QTextList *list = block.textList();
@@ -241,6 +243,7 @@ void MarkupDirector::processList( const QTextBlock &ablock )
 
 void MarkupDirector::processBlockContents( const QTextBlock &block )
 {
+  Q_D( MarkupDirector );
   QTextBlockFormat blockFormat = block.blockFormat();
   Qt::Alignment blockAlignment = blockFormat.alignment();
 
