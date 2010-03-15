@@ -23,7 +23,6 @@
 
 #include "grantlee/context.h"
 #include "grantlee/engine.h"
-#include "grantlee/enginestate.h"
 #include "grantlee/exception.h"
 #include "grantlee/filter.h"
 #include "grantlee/filterexpression.h"
@@ -31,8 +30,10 @@
 #include "grantlee/grantlee_core_export.h"
 #include "grantlee/mutabletemplate.h"
 #include "grantlee/node.h"
+#include "grantlee/outputstream.h"
 #include "grantlee/parser.h"
 #include "grantlee/safestring.h"
+#include "grantlee/taglibraryinterface.h"
 #include "grantlee/template.h"
 #include "grantlee/templateloader.h"
 #include "grantlee/token.h"
