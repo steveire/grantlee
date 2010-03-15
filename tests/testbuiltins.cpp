@@ -200,6 +200,11 @@ private slots:
     doTest();
   }
 
+  void testTypeAccessors_data();
+  void testTypeAccessors() {
+    doTest();
+  }
+
   void testMultipleStates();
   void testAlternativeEscaping();
 
@@ -249,7 +254,6 @@ void TestBuiltinSyntax::doTest()
   Context context( dict );
 
   QString result = t->render( &context );
-
   if ( t->error() != NoError ) {
     QCOMPARE( t->error(), error );
     return;
@@ -802,6 +806,152 @@ void TestBuiltinSyntax::testMediaPathSafety()
   delete loader;
   f.remove();
 }
+
+void TestBuiltinSyntax::testTypeAccessors_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QVariantHash itemsHash;
+  itemsHash.insert("one", 1);
+  itemsHash.insert("two", 2);
+  itemsHash.insert("three", 3);
+
+  dict.insert( "hash", itemsHash );
+
+  QTest::newRow( "type-accessors-hash01" ) << "{{ hash.items|length }}" << dict << "3" << NoError;
+  QTest::newRow( "type-accessors-hash02" ) << "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}"
+                                      << dict << "one:1;two:2;three:3;" << NoError;
+  QTest::newRow( "type-accessors-hash03" ) << "{{ hash.keys|length }}" << dict << "3" << NoError;
+  QTest::newRow( "type-accessors-hash04" ) << "{% for key in hash.keys %}{{ key }};{% endfor %}"
+                                      << dict << "one;two;three;" << NoError;
+  QTest::newRow( "type-accessors-hash05" ) << "{{ hash.values|length }}" << dict << "3" << NoError;
+  QTest::newRow( "type-accessors-hash06" ) << "{% for value in hash.values %}{{ value }};{% endfor %}"
+                                      << dict << "1;2;3;" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "my string" );
+  dict.insert( "str2", "mystring" );
+
+  QTest::newRow( "type-accessors-string01" ) << "{{ str1.capitalize }}" << dict << "My string" << NoError;
+  QTest::newRow( "type-accessors-string02" ) << "{{ str2.capitalize }}" << dict << "Mystring" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "de24335fre" );
+  dict.insert( "str2", "de435f3.-5r" );
+
+  QTest::newRow( "type-accessors-string03" ) << "{{ str1.isalnum }}" << dict << "True" << NoError;
+  QTest::newRow( "type-accessors-string04" ) << "{{ str2.isalnum }}" << dict << "False" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "24335" );
+  dict.insert( "str2", "de435f35r" );
+  dict.insert( "str3", "de435f3.-5r" );
+
+  QTest::newRow( "type-accessors-string05" ) << "{{ str1.isdigit }}" << dict << "True" << NoError;
+  QTest::newRow( "type-accessors-string06" ) << "{{ str2.isdigit }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string07" ) << "{{ str3.isdigit }}" << dict << "False" << NoError;
+
+  dict.clear();
+  dict.insert( "str", "MyString" );
+  dict.insert( "lowerStr", "mystring" );
+
+  QTest::newRow( "type-accessors-string08" ) << "{{ str.islower }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string09" ) << "{{ lowerStr.islower }}" << dict << "True" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "        ");
+  dict.insert( "str2", "     r  ");
+  dict.insert( "str3", " \t\nr  ");
+  dict.insert( "str4", " \t\n   ");
+
+  QTest::newRow( "type-accessors-string10" ) << "{{ str1.isspace }}" << dict << "True" << NoError;
+  QTest::newRow( "type-accessors-string11" ) << "{{ str2.isspace }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string12" ) << "{{ str3.isspace }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string13" ) << "{{ str4.isspace }}" << dict << "True" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "My String" );
+  dict.insert( "str2", "Mystring" );
+  dict.insert( "str3", "My string" );
+  dict.insert( "str4", "my string" );
+
+  QTest::newRow( "type-accessors-string14" ) << "{{ str1.istitle }}" << dict << "True" << NoError;
+  QTest::newRow( "type-accessors-string15" ) << "{{ str2.istitle }}" << dict << "True" << NoError;
+  QTest::newRow( "type-accessors-string16" ) << "{{ str3.istitle }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string17" ) << "{{ str4.istitle }}" << dict << "False" << NoError;
+
+  dict.clear();
+  dict.insert( "str", "MyString" );
+  dict.insert( "upperStr", "MYSTRING" );
+
+  QTest::newRow( "type-accessors-string18" ) << "{{ str.isupper }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string19" ) << "{{ upperStr.isupper }}" << dict << "True" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "My String" );
+  dict.insert( "str2", "MYSTRING" );
+  dict.insert( "str3", "MY STRING" );
+
+  QTest::newRow( "type-accessors-string20" ) << "{{ str1.lower }}" << dict << "my string" << NoError;
+  QTest::newRow( "type-accessors-string21" ) << "{{ str2.lower }}" << dict << "mystring" << NoError;
+  QTest::newRow( "type-accessors-string22" ) << "{{ str3.lower }}" << dict << "my string" << NoError;
+
+  dict.clear();
+  dict.insert( "str", "one\ntwo three\nfour" );
+
+  QTest::newRow( "type-accessors-string23" ) << "{% for line in str.splitlines %}{{ line }};{% endfor %}" << dict << "one;two three;four;" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "          one" );
+  dict.insert( "str2", "     one     " );
+  dict.insert( "str3", "one          " );
+  dict.insert( "str4", "             " );
+  dict.insert( "str5", "" );
+
+  QTest::newRow( "type-accessors-string24" ) << "{{ str1.strip }}" << dict << "one" << NoError;
+  QTest::newRow( "type-accessors-string25" ) << "{{ str2.strip }}" << dict << "one" << NoError;
+  QTest::newRow( "type-accessors-string26" ) << "{{ str3.strip }}" << dict << "one" << NoError;
+  QTest::newRow( "type-accessors-string27" ) << "{{ str4.strip }}" << dict << "" << NoError;
+  QTest::newRow( "type-accessors-string28" ) << "{{ str5.strip }}" << dict << "" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "My String" );
+  dict.insert( "str2", "mY sTRING" );
+  dict.insert( "str3", "My StrInG" );
+  dict.insert( "str4", "my string" );
+  dict.insert( "str5", "MY STRING" );
+
+  // Yes, this really is a python built-in.
+  QTest::newRow( "type-accessors-string29" ) << "{{ str1.swapcase }}" << dict << "mY sTRING" << NoError;
+  QTest::newRow( "type-accessors-string30" ) << "{{ str2.swapcase }}" << dict << "My String" << NoError;
+  QTest::newRow( "type-accessors-string31" ) << "{{ str3.swapcase }}" << dict << "mY sTRiNg" << NoError;
+  QTest::newRow( "type-accessors-string32" ) << "{{ str4.swapcase }}" << dict << "MY STRING" << NoError;
+  QTest::newRow( "type-accessors-string33" ) << "{{ str5.swapcase }}" << dict << "my string" << NoError;
+
+  dict.clear();
+  dict.insert( "str1", "My String" );
+  dict.insert( "str2", "mystring" );
+  dict.insert( "str3", "my string" );
+  dict.insert( "str4", "my String" );
+  dict.insert( "str5", "My string" );
+
+  QTest::newRow( "type-accessors-string34" ) << "{{ str1.title }}" << dict << "My String" << NoError;
+  QTest::newRow( "type-accessors-string35" ) << "{{ str2.title }}" << dict << "Mystring" << NoError;
+  QTest::newRow( "type-accessors-string36" ) << "{{ str3.title }}" << dict << "My String" << NoError;
+  QTest::newRow( "type-accessors-string37" ) << "{{ str4.title }}" << dict << "My String" << NoError;
+  QTest::newRow( "type-accessors-string38" ) << "{{ str5.title }}" << dict << "My String" << NoError;
+
+  QTest::newRow( "type-accessors-string39" ) << "{{ str1.upper }}" << dict << "MY STRING" << NoError;
+  QTest::newRow( "type-accessors-string40" ) << "{{ str2.upper }}" << dict << "MYSTRING" << NoError;
+  QTest::newRow( "type-accessors-string41" ) << "{{ str3.upper }}" << dict << "MY STRING" << NoError;
+
+}
+
 
 QTEST_MAIN( TestBuiltinSyntax )
 #include "testbuiltins.moc"

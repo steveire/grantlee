@@ -20,8 +20,11 @@
 
 #include "variable.h"
 
+#include "typeaccessors_p.h"
+
 #include <QStringList>
 #include <QMetaEnum>
+#include <QDebug>
 
 #include "context.h"
 #include "util_p.h"
@@ -180,10 +183,14 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
 // * QVariantHash key lookup
 // * Property? (member in django)
 // * list index
-
   if ( QVariant::Hash == var.type() ) {
     QVariantHash hash = var.toHash();
-    return hash.value( nextPart );
+    if ( hash.contains( nextPart ) )
+      return hash.value( nextPart );
+    return TypeAccessor<QVariantHash>::lookUp( hash, nextPart );
+  } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() )
+  {
+    return TypeAccessor<SafeString>::lookUp( Util::getSafeString( var ), nextPart );
   } else if ( QMetaType::QObjectStar == var.userType() ) {
     // Can't be const because of invokeMethod.
     const QObject *obj = var.value<QObject *>();
