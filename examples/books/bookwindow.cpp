@@ -49,7 +49,7 @@
 
 #include <QtSql>
 
-#include <grantlee.h>
+#include <grantlee_core.h>
 
 BookWindow::BookWindow()
 {
@@ -179,3 +179,6 @@ void BookWindow::renderBooks()
     file.close();
 
 }
+
+#include "bookwindow.moc"
+

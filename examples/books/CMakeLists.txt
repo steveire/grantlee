@@ -34,6 +34,8 @@ set(books_example_UI
   bookwindow.ui
 )
 
+qt4_automoc( books_example_MOC_SRCS ${books_example_SRCS} )
+
 QT4_WRAP_UI(books_example_UI_SRCS ${books_example_UI})
 
 qt4_add_resources(
