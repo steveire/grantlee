@@ -93,6 +93,7 @@ public:
     NestedString( SafeString *safeString );
     NestedString( const QString &content, SafeString *safeString );
 
+    void chop( int n );
   };
 
   const NestedString& get() const

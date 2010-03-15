@@ -1,0 +1,97 @@
+/*
+  This file is part of the Grantlee template system.
+
+  Copyright (c) 2009,2010 Stephen Kelly <steveire@gmail.com>
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either version
+  2 of the Licence, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+#ifndef SAFESTRINGTEST_H
+#define SAFESTRINGTEST_H
+
+#include <QtTest>
+#include <QObject>
+
+#include "safestring.h"
+#include "outputstream.h"
+
+using namespace Grantlee;
+
+class TestSafeString : public QObject
+{
+  Q_OBJECT
+private slots:
+  void testCombining();
+  void testAppending();
+  void testChopping();
+};
+
+void TestSafeString::testCombining()
+{
+  QString string1 = "this & that";
+  QString string2 = " over & under";
+  SafeString safeString1unsafe( string1 );
+  SafeString safeString2unsafe( string2 );
+  SafeString safeString1safe( string1, SafeString::IsSafe );
+  SafeString safeString2safe( string2, SafeString::IsSafe );
+
+  SafeString combined;
+  combined = safeString1safe + safeString2safe;
+  QVERIFY(combined.isSafe());
+  combined = safeString1safe + safeString1unsafe;
+  QVERIFY(!combined.isSafe());
+  combined = safeString1safe + string1;
+  QVERIFY(!combined.isSafe());
+  combined = safeString1unsafe + safeString1safe;
+  QVERIFY(!combined.isSafe());
+  combined = safeString1unsafe + safeString2unsafe;
+  QVERIFY(!combined.isSafe());
+  combined = safeString1unsafe + string1;
+  QVERIFY(!combined.isSafe());
+}
+
+void TestSafeString::testAppending()
+{
+  QString string1 = "this & that";
+  SafeString safeString1unsafe( string1 );
+  SafeString safeString1safe( string1, SafeString::IsSafe );
+
+  SafeString result;
+  result = safeString1safe.get().append( string1 );
+  QVERIFY( safeString1safe.isSafe() );
+  result = safeString1unsafe.get().append( string1 );
+  QVERIFY( !safeString1unsafe.isSafe() );
+}
+
+void TestSafeString::testChopping()
+{
+  QString string1 = "this & that";
+  SafeString safeString1unsafe( string1 );
+  SafeString safeString1safe( string1, SafeString::IsSafe );
+
+  safeString1safe.get().chop( 4 );
+  QVERIFY( !safeString1safe.isSafe() );
+  QVERIFY( "this & " == safeString1safe.get() );
+  safeString1unsafe.get().chop( 4 );
+  QVERIFY( !safeString1unsafe.isSafe() );
+  QVERIFY( "this & " == safeString1unsafe.get() );
+}
+
+
+QTEST_MAIN( TestSafeString )
+#include "testsafestring.moc"
+
+#endif
+

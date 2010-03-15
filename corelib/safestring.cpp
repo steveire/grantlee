@@ -118,3 +118,10 @@ bool SafeString::operator==( const QString &other ) const
   return m_nestedString == other;
 }
 
+void SafeString::NestedString::chop(int n)
+{
+  QString::chop( n );
+  m_safeString->m_safety = false;
+}
+
+
