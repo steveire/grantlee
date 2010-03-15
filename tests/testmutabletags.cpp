@@ -51,9 +51,6 @@ private slots:
   void cleanupTestCase();
 
 private:
-
-  void doTest();
-
   Engine *m_engine;
 
 };
