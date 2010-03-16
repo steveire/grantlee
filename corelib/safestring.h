@@ -85,7 +85,7 @@ public:
   */
   void setSafety( Safety safety );
 
-  class NestedString : public QString
+  class GRANTLEE_CORE_EXPORT NestedString : public QString
   {
     friend class SafeString;
     SafeString *m_safeString;
