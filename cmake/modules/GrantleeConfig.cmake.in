@@ -7,7 +7,7 @@ set(Grantlee_VERSION_MINOR "@Grantlee_VERSION_MINOR@")
 set(Grantlee_VERSION_PATCH "@Grantlee_VERSION_PATCH@")
 
 set(Grantlee_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
-set(Grantlee_INCLUDE_DIR   "@CMAKE_INSTALL_PREFIX@"/include)
+set(Grantlee_INCLUDE_DIR   "@CMAKE_INSTALL_PREFIX@/include")
 set(Grantlee_LIBRARY_DIR   "@CMAKE_INSTALL_PREFIX@/lib@LIB_SUFFIX@")
 set(Grantlee_PLUGIN_PATH    "${Grantlee_LIBRARY_DIR}/grantlee")
 
