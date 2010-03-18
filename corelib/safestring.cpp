@@ -24,7 +24,7 @@ using namespace Grantlee;
 
 SafeString::SafeString()
   : m_nestedString( this ),
-    m_safety( false ),
+    m_safety( IsNotSafe ),
     m_needsescape( false )
 {
 
@@ -40,7 +40,7 @@ SafeString::SafeString( const Grantlee::SafeString& safeString )
 
 SafeString::SafeString( const QString &str, bool safe )
   : m_nestedString( str, this ),
-    m_safety( safe ),
+    m_safety( safe ? IsSafe : IsNotSafe ),
     m_needsescape( false )
 {
 
@@ -48,7 +48,7 @@ SafeString::SafeString( const QString &str, bool safe )
 
 SafeString::SafeString( const QString &str, Safety safety )
   : m_nestedString( str, this ),
-    m_safety( safety == IsSafe ),
+    m_safety( safety ),
     m_needsescape( false )
 {
 
@@ -70,12 +70,12 @@ bool SafeString::needsEscape() const
 
 void SafeString::setSafety( Grantlee::SafeString::Safety safety )
 {
-  m_safety = ( safety == IsSafe );
+  m_safety = safety;
 }
 
 bool SafeString::isSafe() const
 {
-  return m_safety;
+  return m_safety == IsSafe;
 }
 
 SafeString::NestedString::NestedString( SafeString *safeString )

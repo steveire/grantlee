@@ -160,9 +160,8 @@ public:
 
 private:
   NestedString m_nestedString;
-  bool m_safety;
+  Safety m_safety;
   bool m_needsescape;
-
 };
 
 }
