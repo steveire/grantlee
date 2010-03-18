@@ -30,6 +30,14 @@ SafeString::SafeString()
 
 }
 
+SafeString::SafeString( const Grantlee::SafeString& safeString )
+  : m_nestedString( safeString.get(), this ),
+    m_safety( safeString.m_safety ),
+    m_needsescape( safeString.m_needsescape )
+{
+
+}
+
 SafeString::SafeString( const QString &str, bool safe )
   : m_nestedString( str, this ),
     m_safety( safe ),
@@ -81,6 +89,15 @@ SafeString::NestedString::NestedString( const QString &content, SafeString *safe
     m_safeString( safeString )
 {
 
+}
+
+SafeString& SafeString::operator=( const SafeString &str )
+{
+  m_nestedString = str.m_nestedString;
+  m_nestedString.m_safeString = this;
+  m_safety = str.m_safety;
+  m_needsescape = str.m_needsescape;
+  return *this;
 }
 
 SafeString SafeString::operator+( const QString &str )

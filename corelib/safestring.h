@@ -50,6 +50,8 @@ public:
   */
   SafeString();
 
+  SafeString( const SafeString &safeString );
+
   /**
     Constructs a SafeString with the content @p str whose safety is given by @p safe.
   */
@@ -107,6 +109,8 @@ public:
   operator QString() const {
     return m_nestedString;
   }
+
+  SafeString &operator=( const SafeString &str );
 
   /**
     Returns a concatenation of this with @p str.
