@@ -55,15 +55,17 @@ public:
     m_stream = stream;
   }
 
-  QString escape( const QString &input ) const {
+  SafeString escape( const QString &input ) const {
     return m_stream->escape( input );
   }
 
-  QString escape( const SafeString &input ) const {
+  SafeString escape( const SafeString &input ) const {
+    if ( input.isSafe() )
+      return SafeString( m_stream->escape( input ), SafeString::IsSafe );
     return m_stream->escape( input );
   }
 
-  QString conditionalEscape( const SafeString &input ) const {
+  SafeString conditionalEscape( const SafeString &input ) const {
     if ( !input.isSafe() )
       return m_stream->escape( input );
     return input;

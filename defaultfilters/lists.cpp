@@ -172,10 +172,9 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
     QString sublist;
     QVariant sublistItem;
 
-    QString _title = title.get();
     if ( titleObject.type() == QVariant::List ) {
       sublistItem = titleObject;
-      _title.clear();
+      title.get().clear();
     } else if ( i < listSize - 1 ) {
       QVariant nextItem = list.at( i + 1 );
       if ( nextItem.type() == QVariant::List ) {
@@ -188,7 +187,7 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
       sublist = QString( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent ).arg( sublist ).arg( indent ).arg( indent );
     }
     output.append( QString( "%1<li>%2%3</li>" ).arg( indent )
-                                               .arg( autoescape ? conditionalEscape( title ) : _title )
+                                               .arg( autoescape ? conditionalEscape( title ) : title )
                                                .arg( sublist ) );
     ++i;
   }
