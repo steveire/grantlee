@@ -36,6 +36,7 @@ private slots:
   void testCombining();
   void testAppending();
   void testChopping();
+  void testReplacing();
 };
 
 void TestSafeString::testCombining()
@@ -67,12 +68,21 @@ void TestSafeString::testAppending()
   QString string1 = "this & that";
   SafeString safeString1unsafe( string1 );
   SafeString safeString1safe( string1, SafeString::IsSafe );
+  SafeString safeString2safe( string1, SafeString::IsSafe );
 
   SafeString result;
-  result = safeString1safe.get().append( string1 );
+  result = safeString1safe.get().append( safeString1safe );
   QVERIFY( safeString1safe.isSafe() );
+  QVERIFY( result.isSafe() );
+  QCOMPARE( result.get(), safeString1safe.get() );
+  result = safeString1safe.get().append( string1 );
+  QVERIFY( !safeString1safe.isSafe() );
+  QVERIFY( !result.isSafe() );
+  QCOMPARE( result.get(), safeString1safe.get() );
   result = safeString1unsafe.get().append( string1 );
   QVERIFY( !safeString1unsafe.isSafe() );
+  QVERIFY( !result.isSafe() );
+  QCOMPARE( result.get(), safeString1unsafe.get() );
 }
 
 void TestSafeString::testChopping()
@@ -87,6 +97,17 @@ void TestSafeString::testChopping()
   safeString1unsafe.get().chop( 4 );
   QVERIFY( !safeString1unsafe.isSafe() );
   QVERIFY( "this & " == safeString1unsafe.get() );
+}
+
+void TestSafeString::testReplacing()
+{
+  QString string1 = "x&\ny";
+  SafeString safeString1safe( string1, SafeString::IsSafe );
+
+  SafeString result = safeString1safe.get().replace( '\n', "<br />" );
+  QVERIFY( !result.isSafe() );
+  QVERIFY( !safeString1safe.isSafe() );
+  QCOMPARE( result.get(), safeString1safe.get() );
 }
 
 

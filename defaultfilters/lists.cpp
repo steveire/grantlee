@@ -119,8 +119,8 @@ QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument,
   int splitterIndex = argString.get().indexOf( ":" );
   QString inputString = Util::getSafeString( input );
   if ( splitterIndex >= 0 ) {
-    int left = QVariant( argString.get().left( splitterIndex ) ).toInt();
-    int right = QVariant( argString.get().right( splitterIndex ) ).toInt();
+    int left = argString.get().left( splitterIndex ).get().toInt();
+    int right = argString.get().right( splitterIndex ).get().toInt();
     if ( right < 0 ) {
       right = inputString.size() + right;
     }

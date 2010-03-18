@@ -29,7 +29,7 @@ QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argu
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   SafeString safeString = Util::getSafeString( input );
-  safeString.get().replace( '\\', "\\\\" ).replace( '\"', "\\\"" ).replace( '\'', "\\\'" );
+  safeString.get().replace( '\\', "\\\\" ).get().replace( '\"', "\\\"" ).get().replace( '\'', "\\\'" );
   return safeString;
 }
 
@@ -99,12 +99,14 @@ QVariant CutFilter::doFilter( const QVariant& input, const QVariant &argument, b
   SafeString retString = Util::getSafeString( input );
   SafeString argString = Util::getSafeString( argument );
 
+  bool inputSafe = retString.isSafe();
+
   retString.get().remove( argString );
 
-  if ( argString == ";" )
-    retString.setSafety( SafeString::IsNotSafe );
-
-  return retString;
+  if ( inputSafe && argString.get() != ";" )
+    return Util::markSafe( retString );
+  else
+    return retString;
 }
 
 QVariant SafeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -252,8 +254,11 @@ QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argu
   QRegExp endTag( QString( "</%1>" ).arg( tagRe ) );
 
   SafeString value = Util::getSafeString( input );
+  const bool safeInput = value.isSafe();
   value.get().remove( startTag );
   value.get().remove( endTag );
+  if ( safeInput )
+    return Util::markSafe( value );
   return value;
 }
 

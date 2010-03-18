@@ -95,6 +95,96 @@ public:
     NestedString( SafeString *safeString );
     NestedString( const QString &content, SafeString *safeString );
 
+    SafeString& append( const SafeString &str );
+    SafeString& append( const QString &str );
+    SafeString& append( const QStringRef &reference );
+    SafeString& append( const QLatin1String &str );
+    SafeString& append( const QByteArray &ba );
+    SafeString& append( const char *str );
+    SafeString& append( const QChar ch );
+
+    SafeString& fill( QChar ch, int size = -1 );
+
+    SafeString& insert( int position, const SafeString &str );
+    SafeString& insert( int position, const QString &str );
+    SafeString& insert( int position, const QLatin1String &str );
+    SafeString& insert( int position, const QChar *unicode, int size );
+    SafeString& insert( int position, QChar ch );
+
+    SafeString left( int n ) const;
+    SafeString leftJustified( int width, QChar fill = QLatin1Char( ' ' ), bool truncate = false ) const;
+    SafeString mid( int position, int n = -1 ) const;
+
+    SafeString normalized( NormalizationForm mode ) const;
+    SafeString normalized( NormalizationForm mode, QChar::UnicodeVersion version ) const;
+
+    SafeString& prepend( const SafeString &str );
+    SafeString& prepend( const QString &str );
+    SafeString& prepend( const QLatin1String &str );
+    SafeString& prepend( const QByteArray &ba );
+    SafeString& prepend( const char *str );
+    SafeString& prepend( QChar ch );
+
+    void push_back( const SafeString& other );
+    void push_front( const SafeString& other );
+
+    SafeString& remove( int position, int n );
+    SafeString& remove( QChar ch, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& remove( const SafeString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& remove( const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& remove( const QRegExp &rx );
+    SafeString repeated( int times ) const;
+    SafeString& replace( int position, int n, const SafeString &after );
+    SafeString& replace( int position, int n, const QString &after );
+    SafeString& replace( int position, int n, const QChar *unicode, int size );
+    SafeString& replace( int position, int n, QChar after );
+    SafeString& replace( const SafeString &before, const SafeString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QString &before, const SafeString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const SafeString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QChar *before, int blen, const QChar *after, int alen, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( QChar ch, const SafeString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( QChar ch, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( QChar before, QChar after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QLatin1String &before, const QLatin1String &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QLatin1String &before, const SafeString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QLatin1String &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const SafeString &before, const QLatin1String &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QString &before, const QLatin1String &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( QChar c, const QLatin1String &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
+    SafeString& replace( const QRegExp &rx, const SafeString &after );
+    SafeString& replace( const QRegExp &rx, const QString &after );
+
+    SafeString right( int n ) const;
+    SafeString rightJustified( int width, QChar fill = QLatin1Char( ' ' ), bool truncate = false ) const;
+
+    SafeString section( QChar sep, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
+    SafeString section( const SafeString& sep, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
+    SafeString section( const QString& sep, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
+    SafeString section( const QRegExp& reg, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
+    SafeString& setNum( int n, int base = 10 );
+    SafeString& setNum( uint n, int base = 10 );
+    SafeString& setNum( long n, int base = 10 );
+    SafeString& setNum( ulong n, int base = 10 );
+    SafeString& setNum( qlonglong n, int base = 10 );
+    SafeString& setNum( qulonglong n, int base = 10 );
+    SafeString& setNum( short n, int base = 10 );
+    SafeString& setNum( ushort n, int base = 10 );
+    SafeString& setNum( double n, char format = 'g', int precision = 6 );
+    SafeString& setNum( float n, char format = 'g', int precision = 6 );
+    SafeString& setUnicode( const QChar * unicode, int size );
+    SafeString& setUtf16( const ushort * unicode, int size );
+    SafeString simplified() const;
+
+    QStringList split( const SafeString& sep, SplitBehavior behavior = KeepEmptyParts, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const;
+    QStringList split( const QString& sep, SplitBehavior behavior = KeepEmptyParts, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const;
+    QStringList split( const QChar & sep, SplitBehavior behavior = KeepEmptyParts, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const;
+    QStringList split( const QRegExp & rx, SplitBehavior behavior = KeepEmptyParts ) const;
+
+    SafeString toLower() const;
+    SafeString toUpper() const;
+    SafeString trimmed() const;
+
     void chop( int n );
   };
 
