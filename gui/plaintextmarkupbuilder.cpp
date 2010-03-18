@@ -27,8 +27,7 @@ class PlainTextMarkupBuilderPrivate
 {
 public:
   PlainTextMarkupBuilderPrivate( PlainTextMarkupBuilder *b )
-    : q_ptr( b )
-  {
+      : q_ptr( b ) {
   }
 
   /**
@@ -326,7 +325,7 @@ void PlainTextMarkupBuilder::beginHeader( int level )
   Q_UNUSED( level );
 }
 
-void PlainTextMarkupBuilder::beginParagraph(Qt::Alignment a, qreal top, qreal bottom, qreal left, qreal right)
+void PlainTextMarkupBuilder::beginParagraph( Qt::Alignment a, qreal top, qreal bottom, qreal left, qreal right )
 {
   Q_UNUSED( a );
   Q_UNUSED( top );
@@ -335,21 +334,21 @@ void PlainTextMarkupBuilder::beginParagraph(Qt::Alignment a, qreal top, qreal bo
   Q_UNUSED( right );
 }
 
-void PlainTextMarkupBuilder::beginTable(qreal cellpadding, qreal cellspacing, const QString& width)
+void PlainTextMarkupBuilder::beginTable( qreal cellpadding, qreal cellspacing, const QString& width )
 {
   Q_UNUSED( cellpadding );
   Q_UNUSED( cellspacing );
   Q_UNUSED( width );
 }
 
-void PlainTextMarkupBuilder::beginTableCell(const QString& width, int colSpan, int rowSpan)
+void PlainTextMarkupBuilder::beginTableCell( const QString& width, int colSpan, int rowSpan )
 {
   Q_UNUSED( width );
   Q_UNUSED( colSpan );
   Q_UNUSED( rowSpan );
 }
 
-void PlainTextMarkupBuilder::beginTableHeaderCell(const QString& width, int colSpan, int rowSpan)
+void PlainTextMarkupBuilder::beginTableHeaderCell( const QString& width, int colSpan, int rowSpan )
 {
   Q_UNUSED( width );
   Q_UNUSED( colSpan );

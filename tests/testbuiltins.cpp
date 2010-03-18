@@ -100,13 +100,11 @@ public:
 
   }
 
-  virtual QSharedPointer< OutputStream > clone() const
-  {
+  virtual QSharedPointer< OutputStream > clone() const {
     return QSharedPointer<OutputStream>( new NoEscapeOutputStream );
   }
 
-  virtual QString escape(const QString& input) const
-  {
+  virtual QString escape( const QString& input ) const {
     return input;
   }
 };
@@ -126,13 +124,11 @@ public:
 
   }
 
-  virtual QSharedPointer< OutputStream > clone() const
-  {
+  virtual QSharedPointer< OutputStream > clone() const {
     return QSharedPointer<OutputStream>( new JSOutputStream );
   }
 
-  virtual QString escape(const QString& input) const
-  {
+  virtual QString escape( const QString& input ) const {
     QList<QPair<QString, QString> > jsEscapes;
     jsEscapes << QPair<QString, QString>( "\\", "\\x5C" )
               << QPair<QString, QString>( "\'",  "\\x27" )
@@ -714,7 +710,7 @@ void TestBuiltinSyntax::testAlternativeEscaping()
   Context c( h );
 
   QString output;
-  QTextStream ts(&output);
+  QTextStream ts( &output );
   QSharedPointer<OutputStream> noEscapeOs = QSharedPointer<OutputStream>( new NoEscapeOutputStream( &ts ) );
 
   t1->render( noEscapeOs.data(), &c );
@@ -726,7 +722,7 @@ void TestBuiltinSyntax::testAlternativeEscaping()
 
   t1->render( jsOs.data(), &c );
 
-  QString jsOutput("\\x3C \\x3E \\x0D\\x0A \\x26 \\x22 \\x27 # \\x3D % $");
+  QString jsOutput( "\\x3C \\x3E \\x0D\\x0A \\x26 \\x22 \\x27 # \\x3D % $" );
 
   QCOMPARE( output, jsOutput );
 }
@@ -817,9 +813,9 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   Dict dict;
 
   QVariantHash itemsHash;
-  itemsHash.insert("one", 1);
-  itemsHash.insert("two", 2);
-  itemsHash.insert("three", 3);
+  itemsHash.insert( "one", 1 );
+  itemsHash.insert( "two", 2 );
+  itemsHash.insert( "three", 3 );
 
   dict.insert( "hash", itemsHash );
 
@@ -864,10 +860,10 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   QTest::newRow( "type-accessors-string09" ) << "{{ lowerStr.islower }}" << dict << "True" << NoError;
 
   dict.clear();
-  dict.insert( "str1", "        ");
-  dict.insert( "str2", "     r  ");
-  dict.insert( "str3", " \t\nr  ");
-  dict.insert( "str4", " \t\n   ");
+  dict.insert( "str1", "        " );
+  dict.insert( "str2", "     r  " );
+  dict.insert( "str3", " \t\nr  " );
+  dict.insert( "str4", " \t\n   " );
 
   QTest::newRow( "type-accessors-string10" ) << "{{ str1.isspace }}" << dict << "True" << NoError;
   QTest::newRow( "type-accessors-string11" ) << "{{ str2.isspace }}" << dict << "False" << NoError;

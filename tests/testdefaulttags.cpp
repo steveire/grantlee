@@ -48,8 +48,7 @@ public:
     m_existingMedia << "existing_image.png" << "another_existing_image.png";
   }
 
-  /* reimp */ QString getMediaUri( const QString &fileName ) const
-  {
+  /* reimp */ QString getMediaUri( const QString &fileName ) const {
     if ( m_existingMedia.contains( fileName ) )
       return "/path/to/" + fileName;
     return QString();
@@ -150,8 +149,7 @@ private slots:
   }
 
   void testMediaFinderTag_data();
-  void testMediaFinderTag()
-  {
+  void testMediaFinderTag() {
     doTest();
   }
 
@@ -1337,8 +1335,8 @@ void TestDefaultTags::testMediaFinderTag_data()
   QTest::newRow( "media_finder-tag03" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
   QTest::newRow( "media_finder-tag04" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
 
-  dict.insert("existing_img", "existing_image.png");
-  dict.insert("nonexisting_img", "does_not_exist.png");
+  dict.insert( "existing_img", "existing_image.png" );
+  dict.insert( "nonexisting_img", "does_not_exist.png" );
 
   QTest::newRow( "media_finder-tag05" ) << "{% media_finder %}" << dict << "" << TagSyntaxError;
   QTest::newRow( "media_finder-tag05" ) << "{% media_finder existing_img %}" << dict << "/path/to/existing_image.png" << NoError;

@@ -65,8 +65,7 @@ Node::~Node()
 void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Context* c )
 {
   Grantlee::SafeString inputString;
-  if ( input.type() == QVariant::List )
-  {
+  if ( input.type() == QVariant::List ) {
     inputString = Util::toString( input.toList() );
   } else {
     inputString = Util::getSafeString( input );
@@ -81,8 +80,7 @@ TemplateImpl* Node::containerTemplate() const
 {
   QObject *_parent = parent();
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( _parent );
-  while ( _parent && !ti )
-  {
+  while ( _parent && !ti ) {
     _parent = _parent->parent();
     ti = qobject_cast<TemplateImpl *>( _parent );
   }

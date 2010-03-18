@@ -90,13 +90,13 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent );
 
   Engine const *cengine = ti->engine();
-  if (!cengine)
+  if ( !cengine )
     return;
   Engine *engine = const_cast<Engine *>( cengine );
   engine->loadDefaultLibraries();
   foreach( const QString &libraryName, engine->defaultLibraries() ) {
     TagLibraryInterface *library = engine->loadLibrary( libraryName );
-    if(!library)
+    if ( !library )
       continue;
     d->openLibrary( library );
   }
@@ -123,7 +123,7 @@ void Parser::loadLib( const QString &name )
   Q_D( Parser );
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
   Engine const *cengine = ti->engine();
-  if (!cengine)
+  if ( !cengine )
     return;
   Engine *engine = const_cast<Engine *>( cengine );
   TagLibraryInterface *library = engine->loadLibrary( name );

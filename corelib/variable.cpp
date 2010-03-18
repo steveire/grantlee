@@ -188,8 +188,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
     if ( hash.contains( nextPart ) )
       return hash.value( nextPart );
     return TypeAccessor<QVariantHash>::lookUp( hash, nextPart );
-  } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() )
-  {
+  } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() ) {
     return TypeAccessor<SafeString>::lookUp( Util::getSafeString( var ), nextPart );
   } else if ( QMetaType::QObjectStar == var.userType() ) {
     // Can't be const because of invokeMethod.

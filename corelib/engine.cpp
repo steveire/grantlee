@@ -157,8 +157,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
     return d->m_libraries.value( name ).data();
 
   uint minorVersion = GRANTLEE_VERSION_MINOR;
-  while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION )
-  {
+  while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION ) {
     TagLibraryInterface* library = d->loadLibrary( name, minorVersion-- );
     if ( library )
       return library;
@@ -223,13 +222,12 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
 
     QStringList list = pluginDir.entryList( QStringList( name + "*" ) );
 
-    if (list.isEmpty())
+    if ( list.isEmpty() )
       continue;
 
     PluginPointer<TagLibraryInterface> plugin = PluginPointer<TagLibraryInterface>( pluginDir.absoluteFilePath( list.first() ) );
 
-    if ( plugin )
-    {
+    if ( plugin ) {
       plugin->setEngine( q );
       m_libraries.insert( name, plugin );
       return plugin;

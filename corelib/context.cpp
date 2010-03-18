@@ -136,7 +136,7 @@ void Context::setMutating( bool mutating )
   d->m_mutating = mutating;
 }
 
-void Context::addExternalMedia(const QString& uri)
+void Context::addExternalMedia( const QString& uri )
 {
   Q_D( Context );
   d->m_externalMedia.append( uri );

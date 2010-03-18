@@ -29,14 +29,14 @@ using Grantlee::PluginPointer;
 
 // #define DONT_LEAK
 
-int main(int argc, char **argv)
+int main( int argc, char **argv )
 {
-  QCoreApplication app(argc, argv);
+  QCoreApplication app( argc, argv );
 
 #ifndef DONT_LEAK
   QPluginLoader loader( app.applicationDirPath() + "/myplugin.so" );
   QObject *raw_plugin = loader.instance();
-  MyInterface *if1 = qobject_cast<MyInterface*>(raw_plugin);
+  MyInterface *if1 = qobject_cast<MyInterface*>( raw_plugin );
 
   qDebug() << if1->double_it( 5 );
 #endif
@@ -44,8 +44,7 @@ int main(int argc, char **argv)
   PluginPointer<MyInterface> p1( app.applicationDirPath() + "/myplugin.so" );
   PluginPointer<MyInterface> p2;
 
-  if (true)
-  {
+  if ( true ) {
     PluginPointer<MyInterface> p3( app.applicationDirPath() + "/myplugin.so" );
     p1 = p3;
     PluginPointer<MyInterface> p4( p3 );

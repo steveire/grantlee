@@ -34,43 +34,43 @@ using namespace Grantlee;
 
 class TestHtmlOutput: public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 private slots:
 
 // Test paragraph contents:
-    void testSingleFormat();
-    void testDoubleFormat();
-    void testDoubleStartDifferentFinish();
-    void testDoubleStartDifferentFinishReverseOrder();
-    void testDifferentStartDoubleFinish();
-    void testDifferentStartDoubleFinishReverseOrder();
-    void testOverlap();
-    void testAnchor();
-    void testAnchorWithFormattedContent();
-    void testAdjacentAnchors();
-    void testNestedFormatting();
-    void testSpan();
-    void testDoubleSpan();
-    void testSpanNesting();
-    void testEdgeCaseLeft();
-    void testEdgeCaseRight();
-    void testImage();
-    void testImageResized();
-    void testEachFormatTagSingly();
-    void testHorizontalRule();
-    void testNewlines();
-    void testEmptyParagraphs();
-    void testNewlinesThroughQTextEdit();
-    void testBrInsideParagraph();
+  void testSingleFormat();
+  void testDoubleFormat();
+  void testDoubleStartDifferentFinish();
+  void testDoubleStartDifferentFinishReverseOrder();
+  void testDifferentStartDoubleFinish();
+  void testDifferentStartDoubleFinishReverseOrder();
+  void testOverlap();
+  void testAnchor();
+  void testAnchorWithFormattedContent();
+  void testAdjacentAnchors();
+  void testNestedFormatting();
+  void testSpan();
+  void testDoubleSpan();
+  void testSpanNesting();
+  void testEdgeCaseLeft();
+  void testEdgeCaseRight();
+  void testImage();
+  void testImageResized();
+  void testEachFormatTagSingly();
+  void testHorizontalRule();
+  void testNewlines();
+  void testEmptyParagraphs();
+  void testNewlinesThroughQTextEdit();
+  void testBrInsideParagraph();
 
 };
 
 void TestHtmlOutput::testSingleFormat()
 {
-    QTextDocument *doc = new QTextDocument();
+  QTextDocument *doc = new QTextDocument();
 
-    // One format
-    doc->setHtml("This <b>text</b> is bold.");
+  // One format
+  doc->setHtml( "This <b>text</b> is bold." );
 
     TextHtmlOutputter outputter;
     outputter.processDocument( doc );

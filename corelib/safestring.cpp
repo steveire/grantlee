@@ -23,19 +23,25 @@
 using namespace Grantlee;
 
 SafeString::SafeString()
-    : m_nestedString( this ), m_safety( false ), m_needsescape( false )
+  : m_nestedString( this ),
+    m_safety( false ),
+    m_needsescape( false )
 {
 
 }
 
 SafeString::SafeString( const QString &str, bool safe )
-    : m_nestedString( str, this ), m_safety( safe ), m_needsescape( false )
+  : m_nestedString( str, this ),
+    m_safety( safe ),
+    m_needsescape( false )
 {
 
 }
 
 SafeString::SafeString( const QString &str, Safety safety )
-    : m_nestedString( str, this ), m_safety( safety == IsSafe ), m_needsescape( false )
+  : m_nestedString( str, this ),
+    m_safety( safety == IsSafe ),
+    m_needsescape( false )
 {
 
 }
@@ -64,15 +70,15 @@ bool SafeString::isSafe() const
   return m_safety;
 }
 
-SafeString::NestedString::NestedString(SafeString* safeString)
-  : m_safeString(safeString)
+SafeString::NestedString::NestedString( SafeString *safeString )
+    : m_safeString( safeString )
 {
 
 }
 
-SafeString::NestedString::NestedString(const QString& content, SafeString* safeString)
-  : QString(content),
-    m_safeString(safeString)
+SafeString::NestedString::NestedString( const QString &content, SafeString *safeString )
+  : QString( content ),
+    m_safeString( safeString )
 {
 
 }
@@ -89,7 +95,7 @@ SafeString SafeString::operator+( const SafeString &str )
   return SafeString( m_nestedString + str.get(), m_safety );
 }
 
-SafeString &SafeString::operator+=( const QString & str )
+SafeString &SafeString::operator+=( const QString &str )
 {
   m_safety = IsNotSafe;
 
@@ -97,7 +103,7 @@ SafeString &SafeString::operator+=( const QString & str )
   return *this;
 }
 
-SafeString &SafeString::operator+=( const SafeString & str )
+SafeString &SafeString::operator+=( const SafeString &str )
 {
   if ( !str.isSafe() )
     m_safety = IsNotSafe;
@@ -118,7 +124,7 @@ bool SafeString::operator==( const QString &other ) const
   return m_nestedString == other;
 }
 
-void SafeString::NestedString::chop(int n)
+void SafeString::NestedString::chop( int n )
 {
   QString::chop( n );
   m_safeString->m_safety = false;

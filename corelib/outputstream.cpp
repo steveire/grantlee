@@ -51,12 +51,12 @@ QString OutputStream::escape( const QString &input ) const
   return temp;
 }
 
-QString OutputStream::escape(const Grantlee::SafeString& input) const
+QString OutputStream::escape( const Grantlee::SafeString& input ) const
 {
   return escape( input.get() );
 }
 
-QString OutputStream::conditionalEscape(const Grantlee::SafeString& input) const
+QString OutputStream::conditionalEscape( const Grantlee::SafeString& input ) const
 {
   if ( !input.isSafe() )
     return escape( input.get() );
@@ -69,17 +69,16 @@ QSharedPointer<OutputStream> OutputStream::clone( QTextStream *stream ) const
 }
 
 
-OutputStream& OutputStream::operator<<(const QString& input)
+OutputStream& OutputStream::operator<<( const QString& input )
 {
   if ( m_stream )
     ( *m_stream ) << input;
   return *this;
 }
 
-OutputStream& OutputStream::operator<<(const Grantlee::SafeString& input)
+OutputStream& OutputStream::operator<<( const Grantlee::SafeString& input )
 {
-  if ( m_stream )
-  {
+  if ( m_stream ) {
     if ( input.needsEscape() )
       ( *m_stream ) << escape( input.get() );
     else
@@ -94,7 +93,7 @@ OutputStream& OutputStream::operator<<(const Grantlee::OutputStream::Escape& e)
   return *this;
 }*/
 
-OutputStream& OutputStream::operator<<(QTextStream* stream)
+OutputStream& OutputStream::operator<<( QTextStream* stream )
 {
   if ( m_stream )
     ( *m_stream ) << stream->readAll();

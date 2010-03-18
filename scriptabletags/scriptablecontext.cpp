@@ -61,8 +61,8 @@ QString ScriptableContext::render( const QObjectList &list )
       nodeList << node;
   }
   QString ret;
-  QTextStream t(&ret);
-  OutputStream stream(&t);
+  QTextStream t( &ret );
+  OutputStream stream( &t );
   nodeList.render( &stream, m_c );
   return ret;
 }

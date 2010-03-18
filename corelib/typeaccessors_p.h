@@ -36,18 +36,15 @@ struct TypeAccessor
 template <>
 QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString& part )
 {
-  if ( part == QLatin1String( "items" ) )
-  {
+  if ( part == QLatin1String( "items" ) ) {
     QVariantList itemsList;
-    foreach (const QString &key, object.keys() )
-    {
+    foreach( const QString &key, object.keys() ) {
       itemsList.append( QVariant( QVariantList() << key << object.value( key ) ) );
     }
     return itemsList;
   }
 
-  if ( part == QLatin1String( "keys" ) )
-  {
+  if ( part == QLatin1String( "keys" ) ) {
     QStringList keys = object.keys();
     QVariantList list;
     foreach( const QString &key, keys )
@@ -55,8 +52,7 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
     return list;
   }
 
-  if ( part == QLatin1String( "values" ) )
-  {
+  if ( part == QLatin1String( "values" ) ) {
     return object.values();
   }
 
@@ -66,95 +62,79 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
 template <>
 QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object, const QString& part )
 {
-  if ( part == QLatin1String( "capitalize" ) )
-  {
+  if ( part == QLatin1String( "capitalize" ) ) {
     QString s = object.get();
     return s.at( 0 ).toUpper() + s.right( s.length() - 1 );
   }
-  if ( part == QLatin1String( "isalnum" ) )
-  {
+  if ( part == QLatin1String( "isalnum" ) ) {
     QString s = object.get();
     QString::const_iterator it = s.constBegin();
-    while ( it != s.constEnd() )
-    {
+    while ( it != s.constEnd() ) {
       if ( !it->isLetterOrNumber() )
         return "False";
       ++it;
     }
     return "True";
   }
-  if ( part == QLatin1String( "isalpha" ) )
-  {
+  if ( part == QLatin1String( "isalpha" ) ) {
     QString s = object.get();
     QString::const_iterator it = s.constBegin();
-    while ( it != s.constEnd() )
-    {
+    while ( it != s.constEnd() ) {
       if ( !it->isLetter() )
         return "False";
       ++it;
     }
     return "True";
   }
-  if ( part == QLatin1String( "isdigit" ) )
-  {
+  if ( part == QLatin1String( "isdigit" ) ) {
     QString s = object.get();
     QString::const_iterator it = s.constBegin();
-    while ( it != s.constEnd() )
-    {
+    while ( it != s.constEnd() ) {
       if ( !it->isNumber() )
         return "False";
       ++it;
     }
     return "True";
   }
-  if ( part == QLatin1String( "islower" ) )
-  {
+  if ( part == QLatin1String( "islower" ) ) {
     QString s = object.get().toLower();
     return ( s == object.get() ) ? "True" : "False";
   }
-  if ( part == QLatin1String( "isspace" ) )
-  {
+  if ( part == QLatin1String( "isspace" ) ) {
     QString s = object.get().trimmed();
     return ( s.isEmpty() ) ? "True" : "False";
   }
-  if ( part == QLatin1String( "istitle" ) )
-  {
+  if ( part == QLatin1String( "istitle" ) ) {
     QString s = object.get();
     QRegExp titleRe( "\\b[a-z]" );
     titleRe.setMinimal( true );
     return ( titleRe.indexIn( s ) < 0 ) ? "True" : "False";
   }
-  if ( part == QLatin1String( "isupper" ) )
-  {
+  if ( part == QLatin1String( "isupper" ) ) {
     QString s = object.get().toUpper();
     return ( s == object ) ? "True" : "False";
   }
-  if ( part == QLatin1String( "lower" ) )
-  {
+  if ( part == QLatin1String( "lower" ) ) {
     QString s = object.get().toLower();
     return s;
   }
-  if ( part == QLatin1String( "splitlines" ) )
-  {
+  if ( part == QLatin1String( "splitlines" ) ) {
     QStringList strings = object.get().split( QLatin1Char( '\n' ) );
     QVariantList list;
     foreach( const QString &string, strings )
       list << string;
     return list;
   }
-  if ( part == QLatin1String( "strip" ) )
-  {
+  if ( part == QLatin1String( "strip" ) ) {
     QString s = object.get().trimmed();
     return s;
   }
-  if ( part == QLatin1String( "swapcase" ) )
-  {
+  if ( part == QLatin1String( "swapcase" ) ) {
     QString inputString = object.get();
     QString s;
     s.reserve( inputString.size() );
     QString::const_iterator it = inputString.constBegin();
-    while ( it != inputString.constEnd() )
-    {
+    while ( it != inputString.constEnd() ) {
       if ( it->isUpper() )
         s += it->toLower();
       else if ( it->isLower() )
@@ -165,8 +145,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     }
     return s;
   }
-  if ( part == QLatin1String( "title" ) )
-  {
+  if ( part == QLatin1String( "title" ) ) {
     QRegExp titleRe( "\\b(.)" );
     titleRe.setMinimal( true );
 
@@ -188,8 +167,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     }
     return output;
   }
-  if ( part == QLatin1String( "upper" ) )
-  {
+  if ( part == QLatin1String( "upper" ) ) {
     QString s = object.get().toUpper();
     return s;
   }

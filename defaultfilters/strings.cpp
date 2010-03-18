@@ -172,7 +172,7 @@ QVariant TruncateWordsFilter::doFilter( const QVariant& input, const QVariant &a
   SafeString s = Util::getSafeString( argument );
 
   bool ok;
-  int numWords = s.get().toInt(&ok);
+  int numWords = s.get().toInt( &ok );
 
   if ( !ok ) {
     return input.toString();
@@ -317,7 +317,7 @@ QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& ar
   Q_UNUSED( autoescape )
   QVariantList list;
   if ( input.type() == QVariant::List )
-    foreach(const QVariant &item, input.toList() )
+    foreach( const QVariant &item, input.toList() )
       list << Util::markSafe( Util::getSafeString( item ) );
   return list;
 }

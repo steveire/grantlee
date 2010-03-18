@@ -175,7 +175,7 @@ public:
 
   QStringList externalMedia() const;
 
-  void addExternalMedia( const QString &uri);
+  void addExternalMedia( const QString &uri );
 
 private:
   Q_DECLARE_PRIVATE( Context )

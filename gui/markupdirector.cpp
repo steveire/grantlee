@@ -71,8 +71,7 @@ void MarkupDirector::processDocumentContents( QTextFrame::iterator start, QTextF
 
 QTextFrame::iterator MarkupDirector::processFrame( QTextFrame::iterator it, QTextFrame* frame )
 {
-  if ( frame )
-  {
+  if ( frame ) {
     processDocumentContents( frame->begin(), frame->end() );
   }
   if ( !it.atEnd() )
@@ -85,8 +84,7 @@ QTextFrame::iterator MarkupDirector::processBlock( QTextFrame::iterator it, cons
   if ( block.isValid() ) {
     QTextBlockFormat fmt = block.blockFormat();
     QTextObject *object = block.document()->objectForFormat( fmt );
-    if ( object )
-    {
+    if ( object ) {
       return processObject( it, block, object );
     } else {
       return processBlockContents( it, block );
@@ -199,8 +197,7 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame:
   QTextListFormat::Style style = list->format().style();
   beginList( style );
   QTextBlock block = _block;
-  while ( block.isValid() && block.textList() )
-  {
+  while ( block.isValid() && block.textList() ) {
     beginListItem();
     processBlockContents( it, block );
     endListItem();
@@ -211,8 +208,7 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame:
     if ( block.isValid() ) {
       QTextObject *obj = block.document()->objectForFormat( block.blockFormat() );
       QTextBlockGroup *group = qobject_cast<QTextBlockGroup *>( obj );
-      if ( group && group != list )
-      {
+      if ( group && group != list ) {
         QPair<QTextFrame::iterator, QTextBlock> pair = processBlockGroup( it, block, group );
         it = pair.first;
         block = pair.second;
@@ -345,8 +341,7 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
 QTextFrame::iterator MarkupDirector::processObject( QTextFrame::iterator it, const QTextBlock &block, QTextObject *object )
 {
   QTextBlockGroup *group = qobject_cast<QTextBlockGroup *>( object );
-  if ( group )
-  {
+  if ( group ) {
     return processBlockGroup( it, block, group ).first;
   }
   if ( !it.atEnd() )
@@ -383,8 +378,7 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::skipBlockGroup( QTextFra
 
     nextGroup = qobject_cast<QTextBlockGroup *>( obj );
 
-    if ( group == blockGroup || !nextGroup )
-    {
+    if ( group == blockGroup || !nextGroup ) {
       lastBlock = block;
       lastIt = it;
     }
@@ -396,8 +390,7 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::skipBlockGroup( QTextFra
 QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processBlockGroup( QTextFrame::iterator it, const QTextBlock &block, QTextBlockGroup *blockGroup )
 {
   QTextList *list = qobject_cast<QTextList *>( blockGroup );
-  if ( list )
-  {
+  if ( list ) {
     return processList( it, block, list );
   }
   return skipBlockGroup( it, block, blockGroup );

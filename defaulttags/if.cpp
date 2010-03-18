@@ -147,8 +147,7 @@ void IfNode::render( OutputStream *stream, Context *c )
         break;
       }
     }
-    if ( renderTrue )
-    {
+    if ( renderTrue ) {
       renderTrueList( stream, c );
       return;
     }

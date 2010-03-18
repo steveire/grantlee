@@ -51,8 +51,7 @@ public:
   */
   virtual ~Filter() {}
 
-  void setStream( OutputStream *stream )
-  {
+  void setStream( OutputStream *stream ) {
     m_stream = stream;
   }
 

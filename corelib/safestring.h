@@ -96,18 +96,15 @@ public:
     void chop( int n );
   };
 
-  const NestedString& get() const
-  {
+  const NestedString& get() const {
     return m_nestedString;
   }
 
-  NestedString& get()
-  {
+  NestedString& get() {
     return m_nestedString;
   }
 
-  operator QString() const
-  {
+  operator QString() const {
     return m_nestedString;
   }
 

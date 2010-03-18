@@ -34,7 +34,7 @@ QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argume
   SafeString value = Util::getSafeString( input );
 
   bool ok;
-  (void)value.get().toInt(&ok);
+  ( void )value.get().toInt( &ok );
   if ( !ok )
     return QString();
 

@@ -49,17 +49,17 @@ void TestSafeString::testCombining()
 
   SafeString combined;
   combined = safeString1safe + safeString2safe;
-  QVERIFY(combined.isSafe());
+  QVERIFY( combined.isSafe() );
   combined = safeString1safe + safeString1unsafe;
-  QVERIFY(!combined.isSafe());
+  QVERIFY( !combined.isSafe() );
   combined = safeString1safe + string1;
-  QVERIFY(!combined.isSafe());
+  QVERIFY( !combined.isSafe() );
   combined = safeString1unsafe + safeString1safe;
-  QVERIFY(!combined.isSafe());
+  QVERIFY( !combined.isSafe() );
   combined = safeString1unsafe + safeString2unsafe;
-  QVERIFY(!combined.isSafe());
+  QVERIFY( !combined.isSafe() );
   combined = safeString1unsafe + string1;
-  QVERIFY(!combined.isSafe());
+  QVERIFY( !combined.isSafe() );
 }
 
 void TestSafeString::testAppending()

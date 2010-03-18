@@ -72,7 +72,7 @@ protected:
   QTextStream *m_stream;
 
 private:
-  Q_DISABLE_COPY(OutputStream)
+  Q_DISABLE_COPY( OutputStream )
 };
 
 }

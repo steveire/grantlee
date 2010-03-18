@@ -88,8 +88,7 @@ public:
     return h;
   };
 
-  virtual void setEngine( Engine *engine )
-  {
+  virtual void setEngine( Engine *engine ) {
     Q_UNUSED( engine )
   }
 };

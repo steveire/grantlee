@@ -63,33 +63,28 @@ public:
 
     m_object = m_pluginLoader->instance();
     if ( !m_object )
-        return;
+      return;
 
     m_plugin = qobject_cast<PluginType*>( m_object );
   }
 
-  QString errorString()
-  {
+  QString errorString() {
     return m_pluginLoader->errorString();
   }
 
-  QObject* object()
-  {
+  QObject* object() {
     return m_object;
   }
 
-  PluginType* operator->()
-  {
+  PluginType* operator->() {
     return m_plugin;
   }
 
-  operator bool()
-  {
+  operator bool() {
     return m_plugin ? true : false;
   }
 
-  PluginType* data() const
-  {
+  PluginType* data() const {
     return m_plugin;
   }
 

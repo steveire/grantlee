@@ -38,8 +38,7 @@ class MarkupDirectorPrivate
 {
 public:
   MarkupDirectorPrivate( MarkupDirector *md )
-    : q_ptr( md )
-  {
+      : q_ptr( md ) {
   }
 
   Q_DECLARE_PUBLIC( MarkupDirector )

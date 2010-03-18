@@ -119,7 +119,7 @@ void Benchmarking::testParsing()
   QList<Token> tokens;
   tokens = l.tokenize();
 
-  Template t = m_engine->newTemplate("", "");
+  Template t = m_engine->newTemplate( "", "" );
 
   Parser p( tokens, t.data() );
   NodeList list;
@@ -132,15 +132,15 @@ void Benchmarking::testRendering()
   QFETCH( QString, input );
   QFETCH( Dict, dict );
 
-  Template t = m_engine->newTemplate( input, "testtemplate");
+  Template t = m_engine->newTemplate( input, "testtemplate" );
 
   Context context( dict );
 
-  QFile outputFile("./output");
-  outputFile.open(QFile::WriteOnly);
+  QFile outputFile( "./output" );
+  outputFile.open( QFile::WriteOnly );
   QTextStream tstream( &outputFile );
 
-  OutputStream os(&tstream);
+  OutputStream os( &tstream );
 
   QBENCHMARK( t->render( &os, &context ) );
 }
