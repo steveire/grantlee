@@ -20,6 +20,7 @@
 
 #include "mediafinder.h"
 
+#include <QUrl>
 
 #include "parser.h"
 
@@ -58,7 +59,7 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
 
   foreach( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
-      QString uri = engine->mediaUri( Util::getSafeString( fe.resolve( c ) ) );
+        QString uri = QUrl::fromLocalFile( engine->mediaUri( Util::getSafeString( fe.resolve( c ) ) ) ).toString();
       if ( uri.isEmpty() )
         continue;
       c->addExternalMedia( uri );
