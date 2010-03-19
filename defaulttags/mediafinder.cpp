@@ -59,9 +59,10 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
 
   foreach( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
-        QString uri = QUrl::fromLocalFile( engine->mediaUri( Util::getSafeString( fe.resolve( c ) ) ) ).toString();
-      if ( uri.isEmpty() )
+      QString fileUrl = engine->mediaUri( Util::getSafeString( fe.resolve( c ) ) );
+      if ( fileUrl.isEmpty() )
         continue;
+      QString uri = QUrl::fromLocalFile( fileUrl ).toString();
       c->addExternalMedia( uri );
       ( *stream ) << uri;
       return;

@@ -1330,21 +1330,21 @@ void TestDefaultTags::testMediaFinderTag_data()
   QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
-  QTest::newRow( "media_finder-tag01" ) << "{% media_finder \"existing_image.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag01" ) << "{% media_finder \"existing_image.png\" %}" << dict << "file:///path/to/existing_image.png" << NoError;
   QTest::newRow( "media_finder-tag02" ) << "{% media_finder \"does_not_exist.png\" %}" << dict << "" << NoError;
-  QTest::newRow( "media_finder-tag03" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
-  QTest::newRow( "media_finder-tag04" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag03" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "file:///path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag04" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << "file:///path/to/existing_image.png" << NoError;
 
   dict.insert( "existing_img", "existing_image.png" );
   dict.insert( "nonexisting_img", "does_not_exist.png" );
 
   QTest::newRow( "media_finder-tag05" ) << "{% media_finder %}" << dict << "" << TagSyntaxError;
-  QTest::newRow( "media_finder-tag05" ) << "{% media_finder existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag05" ) << "{% media_finder existing_img %}" << dict << "file:///path/to/existing_image.png" << NoError;
   QTest::newRow( "media_finder-tag06" ) << "{% media_finder nonexisting_img %}" << dict << "" << NoError;
-  QTest::newRow( "media_finder-tag07" ) << "{% media_finder \"does_not_exist.png\" existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
-  QTest::newRow( "media_finder-tag08" ) << "{% media_finder nonexisting_img existing_img %}" << dict << "/path/to/existing_image.png" << NoError;
-  QTest::newRow( "media_finder-tag09" ) << "{% media_finder \"existing_image.png\" \"another_existing_image.png\" %}" << dict << "/path/to/existing_image.png" << NoError;
-  QTest::newRow( "media_finder-tag10" ) << "{% media_finder \"another_existing_image.png\" \"existing_image.png\" %}" << dict << "/path/to/another_existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag07" ) << "{% media_finder \"does_not_exist.png\" existing_img %}" << dict << "file:///path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag08" ) << "{% media_finder nonexisting_img existing_img %}" << dict << "file:///path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag09" ) << "{% media_finder \"existing_image.png\" \"another_existing_image.png\" %}" << dict << "file:///path/to/existing_image.png" << NoError;
+  QTest::newRow( "media_finder-tag10" ) << "{% media_finder \"another_existing_image.png\" \"existing_image.png\" %}" << dict << "file:///path/to/another_existing_image.png" << NoError;
 }
 
 QTEST_MAIN( TestDefaultTags )
