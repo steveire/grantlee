@@ -46,7 +46,7 @@ Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
   if ( p->takeNextToken().content.trimmed() == "else" ) {
     falseList = p->parse( n, QStringList() << "endifchanged" );
     n->setFalseList( falseList );
-    p->deleteNextToken();
+    p->removeNextToken();
   }
 
   return n;

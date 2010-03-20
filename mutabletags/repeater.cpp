@@ -33,7 +33,7 @@ Node* RepeaterNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   Q_UNUSED( tagContent )
   RepeaterNode *n = new RepeaterNode( p );
   NodeList nodeList = p->parse( n, "endrepeater" );
-  p->deleteNextToken();
+  p->removeNextToken();
   n->setNodeList( nodeList );
   return n;
 }

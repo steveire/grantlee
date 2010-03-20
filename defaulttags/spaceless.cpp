@@ -34,7 +34,7 @@ Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
   SpacelessNode *n = new SpacelessNode( p );
   NodeList list = p->parse( n, QStringList() << "endspaceless" );
   n->setList( list );
-  p->deleteNextToken();
+  p->removeNextToken();
   return n;
 }
 

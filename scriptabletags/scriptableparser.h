@@ -53,7 +53,7 @@ public Q_SLOTS:
 
   Token takeNextToken();
   bool hasNextToken() const;
-  void deleteNextToken();
+  void removeNextToken();
 
   void loadLib( const QString &name );
 

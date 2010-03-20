@@ -47,7 +47,7 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
   FilterNode *n = new FilterNode( fe, p );
 
   NodeList filterNodes = p->parse( n, QStringList() << "endfilter" );
-  p->deleteNextToken();
+  p->removeNextToken();
 
   n->setNodeList( filterNodes );
   return n;

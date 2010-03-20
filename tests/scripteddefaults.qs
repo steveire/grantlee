@@ -30,7 +30,7 @@ function IfNodeFactory( tagContent, parser )
   {
     falseList =  parser.parse( node, "endif2" );
     node.setNodeList("falseList", falseList);
-    parser.deleteNextToken();
+    parser.removeNextToken();
   }
   return node;
 }
@@ -64,7 +64,7 @@ function IfEqualNodeFactory(tagContent, parser)
   {
     falseList = parser.parse(node, "endifequal2");
     node.setNodeList("falseList", falseList);
-    parser.deleteNextToken();
+    parser.removeNextToken();
   }
   return node;
 }

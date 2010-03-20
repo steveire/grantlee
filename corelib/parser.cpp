@@ -261,7 +261,7 @@ Token Parser::takeNextToken()
   return d->m_tokenList.takeAt( 0 );
 }
 
-void Parser::deleteNextToken()
+void Parser::removeNextToken()
 {
   Q_D( Parser );
   if ( !d->m_tokenList.isEmpty() )

@@ -29,9 +29,9 @@ ScriptableParser::ScriptableParser( Grantlee::Parser* p, QObject* parent )
 {
 }
 
-void ScriptableParser::deleteNextToken()
+void ScriptableParser::removeNextToken()
 {
-  m_p->deleteNextToken();
+  m_p->removeNextToken();
 }
 
 bool ScriptableParser::hasNextToken() const

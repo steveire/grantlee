@@ -114,7 +114,7 @@ public:
   /**
     Deletes the next token available to the parser.
   */
-  void deleteNextToken();
+  void removeNextToken();
 
   /**
     @internal

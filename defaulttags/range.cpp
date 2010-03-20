@@ -66,7 +66,7 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
   }
   Q_ASSERT( n );
   NodeList list = p->parse( n, "endrange" );
-  p->deleteNextToken();
+  p->removeNextToken();
 
   n->setNodeList( list );
   return n;

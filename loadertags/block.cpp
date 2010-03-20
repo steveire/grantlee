@@ -69,7 +69,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   NodeList list = p->parse( n, QStringList() << "endblock" << "endblock " + blockName );
 
   n->setNodeList( list );
-  p->deleteNextToken();
+  p->removeNextToken();
 
   return n;
 }
