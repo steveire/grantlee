@@ -51,7 +51,7 @@ public Q_SLOTS:
 
   void skipPast( const QString &tag );
 
-  Token nextToken();
+  Token takeNextToken();
   bool hasNextToken() const;
   void deleteNextToken();
 

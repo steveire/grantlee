@@ -26,7 +26,7 @@ function IfNodeFactory( tagContent, parser )
 
   var trueList = parser.parse( node, [ "else", "endif2" ] );
   node.setNodeList("trueList", trueList);
-  if (parser.nextToken().content == "else")
+  if (parser.takeNextToken().content == "else")
   {
     falseList =  parser.parse( node, "endif2" );
     node.setNodeList("falseList", falseList);
@@ -60,7 +60,7 @@ function IfEqualNodeFactory(tagContent, parser)
   var node = new Node("IfEqualNode", expression1, expression2 );
   var trueList = parser.parse(node, ["else", "endifequal2"]);
   node.setNodeList("trueList", trueList);
-  if (parser.nextToken().content == "else")
+  if (parser.takeNextToken().content == "else")
   {
     falseList = parser.parse(node, "endifequal2");
     node.setNodeList("falseList", falseList);

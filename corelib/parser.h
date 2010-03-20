@@ -104,7 +104,7 @@ public:
     For example, if the "{% if %}" tag, parsing may stop at an "else" tag, in which case parsing
     should be restarted, or it could stop at an "endif" tag, in which case parsing is finished for that node.
   */
-  Token nextToken();
+  Token takeNextToken();
 
   /**
     Returns whether the parser has another token to process.

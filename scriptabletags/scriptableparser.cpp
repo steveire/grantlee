@@ -44,9 +44,9 @@ void ScriptableParser::loadLib( const QString& name )
   m_p->loadLib( name );
 }
 
-Token ScriptableParser::nextToken()
+Token ScriptableParser::takeNextToken()
 {
-  return m_p->nextToken();
+  return m_p->takeNextToken();
 }
 
 void ScriptableParser::skipPast( const QString& tag )

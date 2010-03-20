@@ -52,7 +52,7 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
   NodeList trueList = p->parse( n, QStringList() << "else" << endTag );
   n->setTrueList( trueList );
   NodeList falseList;
-  if ( p->nextToken().content.trimmed() == "else" ) {
+  if ( p->takeNextToken().content.trimmed() == "else" ) {
     falseList = p->parse( n, QStringList() << endTag );
     n->setFalseList( falseList );
     p->deleteNextToken();

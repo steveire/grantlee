@@ -71,7 +71,7 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   n->setLoopList( loopNodes );
 
   NodeList emptyNodes;
-  if ( p->nextToken().content.trimmed() == "empty" ) {
+  if ( p->takeNextToken().content.trimmed() == "empty" ) {
     emptyNodes = p->parse( n, QStringList() << "endfor" );
     n->setEmptyList( emptyNodes );
     // skip past the endfor tag

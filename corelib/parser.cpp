@@ -146,7 +146,7 @@ NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 void Parser::skipPast( const QString &tag )
 {
   while ( hasNextToken() ) {
-    Token token = nextToken();
+    Token token = takeNextToken();
     if ( token.tokenType == BlockToken && token.content.trimmed() == tag )
       return;
   }
@@ -185,7 +185,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
   NodeList nodeList;
 
   while ( q->hasNextToken() ) {
-    Token token = q->nextToken();
+    Token token = q->takeNextToken();
     if ( token.tokenType == TextToken ) {
       nodeList = extendNodeList( nodeList, new TextNode( token.content, parent ) );
     } else if ( token.tokenType == VariableToken ) {
@@ -193,7 +193,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         // Error. Empty variable
         QString message;
         if ( q->hasNextToken() )
-          message = QString( "Empty variable before \"%1\"" ).arg( q->nextToken().content );
+          message = QString( "Empty variable before \"%1\"" ).arg( q->takeNextToken().content );
         else
           message = QString( "Empty variable at end of input." );
 
@@ -213,7 +213,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       if ( tagContents.size() == 0 ) {
         QString message;
         if ( q->hasNextToken() )
-          message = QString( "Empty block tag before \"%1\"" ).arg( q->nextToken().content );
+          message = QString( "Empty block tag before \"%1\"" ).arg( q->takeNextToken().content );
         else
           message = QString( "Empty block tag at end of input." );
 
@@ -255,7 +255,7 @@ bool Parser::hasNextToken() const
   return d->m_tokenList.size() > 0;
 }
 
-Token Parser::nextToken()
+Token Parser::takeNextToken()
 {
   Q_D( Parser );
   return d->m_tokenList.takeAt( 0 );
