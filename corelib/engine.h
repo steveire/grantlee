@@ -103,14 +103,6 @@ public:
   QString mediaUri( const QString &fileName ) const;
 
   /**
-    Resets the state of the Engine to the default.
-
-    This is used if an application requires multiple engine states for creating templates.
-    @see template_factories
-  */
-  void resetState();
-
-  /**
     Load the Template identified by @p name with the optionally supplied EngineState.
 
     The Templates and plugins loaded and will be determined by the Engine or the EngineState @p state.
