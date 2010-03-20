@@ -80,37 +80,37 @@ public:
   are checked in order, and the first match hit is parsed and returned.
 
   @code
-    loader.setTemplateDirs(QStringList() << "/home/user/app/templates" << "/usr/local/share/app/templates" );
-    Engine::instance()->setTemplateLoader( loader );
+    loader->setTemplateDirs(QStringList() << "/home/user/app/templates" << "/usr/local/share/app/templates" );
+    engine->setTemplateLoader( loader );
 
     // This will try /home/user/app/templates/mytemplate.html
     // followed by /usr/local/share/app/templates/mytemplate.html
-    Engine::instance()->loadByName( "mytemplate.html" );
+    engine->loadByName( "mytemplate.html" );
   @endcode
 
   Additionally, a themeName may be set on the template loader, which will be appended to search paths before the template name.
 
   @code
-    loader.setTemplateDirs(QStringList() << "/home/user/app/templates" << "/usr/local/share/app/templates" );
-    loader.setTheme( "simple_theme" );
-    Engine::instance()->setTemplateLoader( loader );
+    loader->setTemplateDirs(QStringList() << "/home/user/app/templates" << "/usr/local/share/app/templates" );
+    loader->setTheme( "simple_theme" );
+    engine->setTemplateLoader( loader );
 
     // This will try /home/user/app/templates/simple_theme/mytemplate.html
     // followed by /usr/local/share/app/templates/simple_theme/mytemplate.html
-    Engine::instance()->loadByName( "mytemplate.html" );
+    engine->loadByName( "mytemplate.html" );
   @endcode
 
   Media URIs may be retrieved for media relative to the directories searched queried for templates.
 
   @code
-    loader.setTemplateDirs(QStringList() << "/home/user/app/templates" << "/usr/local/share/app/templates" );
-    loader.setTheme( "simple_theme" );
-    Engine::instance()->setTemplateLoader( loader );
+    loader->setTemplateDirs(QStringList() << "/home/user/app/templates" << "/usr/local/share/app/templates" );
+    loader->setTheme( "simple_theme" );
+    engine->setTemplateLoader( loader );
 
     // This will try /home/user/app/templates/simple_theme/logo.png
     // followed by /usr/local/share/app/templates/simple_theme/logo.png
     // and return the first one that exists.
-    Engine::instance()->mediaUri( "logo.png" );
+    engine->mediaUri( "logo.png" );
   @endcode
 
 */
@@ -175,10 +175,10 @@ public:
     Example:
 
     @code
-      InMemoryTemplateLoader *loader = new InMemoryTemplateLoader();
+      InMemoryTemplateLoader::Ptr loader = InMemoryTemplateLoader( new InMemoryTemplateLoader() );
       loader->setTemplate( "name_template", "My name is {{ name }}" );
       loader->setTemplate( "age_template", "My age is {{ age }}" );
-      Engine::instance()->addTemplateLoader( loader );
+      engine->addTemplateLoader( loader );
 
       // Both templates may now be retrieved by calling Engine::loadByName.
     @endcode

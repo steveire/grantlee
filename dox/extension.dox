@@ -21,14 +21,14 @@ A filter takes an object and an optional argument and returns a string. To creat
 /// Outputs its input string twice.
 class TwiceFilter : public Grantlee::Filter
 {
-  SafeString dofilter(const QVariant &input, const SafeString &arg = QString(), bool autoescape = false)
+  /* reimp */ SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
   {
-    QString str = getSafeString(input).rawString();
+    SafeString str = getSafeString(input);
 
     return str + str;
   }
 
-  bool isSafe() { return true; } // see the Autoescaping section
+  /* reimp */ bool isSafe() const { return true; } // see the Autoescaping section
 };
 
 ...
@@ -39,29 +39,29 @@ Seeing double {{ name|twice }}?
 
 @endcode
 
-The argument to doFilter is a QString, so it may be necessary to convert it to an integer in your filter.
+The argument to doFilter is a QVariant, so it may contain any of the types supported by %Grantlee.
 
 @code
 
 /// Outputs its input n times.
 class RepeatFilter : public Grantlee::Filter
 {
-  SafeString dofilter(const QVariant &input, const SafeString &arg = QString(), bool autoescape = false)
+  SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
   {
-    QString str = getSafeString(input);
-    bool ok;
-    int times = arg.toInt(&ok);
-    if (!ok)
-      // Oops, the argument was not a number. Fail gracefully.
-      return str;
+    SafeString str = getSafeString(input);
+
+    if ( arg.type() != QMetaType::Int )
+      return str; // Fail gracefully.
+
+    int times = arg.toInt();
     for (int i = 0; i < times ++i)
     {
-      str.append(str);
+      str.get().append(str);
     }
     return str;
   }
 
-  bool isSafe() { return true; }
+  bool isSafe() const { return true; }
 };
 
 ...
@@ -89,9 +89,9 @@ Xss stuff.
 
 @subsection tags Tags
 
-A tag can really do anything with a template. To create your own tag, create a concrete subclass of Grantlee::NodeFactory and implement the getNote method, and create a concrete subclass of Grantlee::Node and implement the render method.
+A tag can really do anything with a template. To create your own tag, create a concrete subclass of Grantlee::NodeFactory and implement the getNode method, and create a concrete subclass of Grantlee::Node and implement the render method.
 
-@note If you are familiar with Django you will recognise that defining a tag in Django involves creating a Node subclass (like %Grantlee), and a factory function where %Grantlee requires a factory class. This is because functions in python are objects, just like classes are, and dynamic typing allows easy creation of lists of those factory functions. In %Grantlee with statically-typed c++, we need to group the factories by interface (i.e, the Grantlee::AbstractNodeFactory interface).
+@note If you are familiar with Django you will recognise that defining a tag in Django involves creating a Node subclass (like %Grantlee), and a factory function where %Grantlee requires a factory class. This is because functions in python are objects, just like classes are, and dynamic typing allows easy creation of lists of those factory functions. In %Grantlee with statically-typed C++, we need to group the factories by interface (i.e, the Grantlee::AbstractNodeFactory interface).
 
 Tags can take arguments, advance the parser, create nodes, and generally have broad control over the parsing and rendering stages.
 
@@ -101,7 +101,7 @@ Here is an example of a {% current_time %} tag which displays the current time.
 
 class CurrentTimeTag : public Grantlee::AbstractNodeFactory
 {
-  Node *getNode(const QString &tagContent, Parser *p)
+  Node *getNode(const QString &tagContent, Parser *p) const
   {
     // You almost always want to use smartSplit.
     QStringList content = smartSplit(tagContent);
@@ -127,20 +127,20 @@ public:
 
 @endcode
 
-Also, note that, nodeFactory may set an error at template compilation time, but like Filters, Nodes should handle errors gracefully in their render method, and should return an empty QString in most error cases.
+Also, note that, nodeFactory may throw an execption at template compilation time, but like Filters, Nodes should handle errors gracefully in their render method, and should return an empty QString in most error cases.
 
-@section cpp_libraries
+@section cpp_libraries C++ Libraries
 
-As already mentioned, it is neccessary to create a QtPlugin library to make your tags and filters available to %Grantlee. You need to implement interfaces/taglibraryinterface.h to return your custom node factories and filters. See the existing libraries in your %Grantlee distribution for full examples.
+As already mentioned, it is neccessary to create a QtPlugin library to make your tags and filters available to %Grantlee. You need to implement TagLibraryInterface to return your custom node factories and filters. See the existing libraries in your %Grantlee distribution for full examples.
 
 @code
 
-#include "interfaces/taglibraryinterface.h"
+#include <grantlee/taglibraryinterface.h>
 
 #include "mytag.h"
 #include "myfilter.h"
 
-class MyLibrary : public QObject, public TagLibraryInterface
+class MyLibrary : public QObject, public Grantlee::TagLibraryInterface
 {
   Q_OBJECT
   Q_INTERFACES( Grantlee::TagLibraryInterface )
@@ -153,13 +153,13 @@ public:
     m_filters.insert("myfilter", new MyFilter());
   }
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories(const QString &name = QString())
+  QHash<QString, Grantlee::AbstractNodeFactory*> nodeFactories(const QString &name = QString())
   {
     Q_UNUSED(name);
     return m_nodeFactories;
   }
 
-  QHash<QString, Filter*> filters(const QString &name = QString())
+  QHash<QString, Grantlee::Filter*> filters(const QString &name = QString())
   {
     Q_UNUSED(name);
     return m_filters;
@@ -172,7 +172,7 @@ public:
 
 If you configure your application to use the grantlee_scriptabletags_library, it will be possible for you and theme writers to write tags and filters in QtScript instead of C++. Themers would have as much control as a C++ plugin writer over those steps of processing and rendering the template.
 
-Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamicall loaded at runtime.
+Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamically loaded at runtime.
 
 Here is a complete QtScript library defining an {% echo %} tag which outputs its arguments:
 
@@ -207,9 +207,9 @@ Some things to note:
 
 @subsection loaders Loaders
 
-As noted in @ref creating_templates, you will usually not create a Template directly, but retrieve it from an Engine singleton. The Engine allows you to define where the templates are retrieved from when you request them by name.
+As noted in @ref creating_templates, you will usually not create a Template directly, but retrieve it from an Engine instance. The Engine allows you to define where the templates are retrieved from when you request them by name.
 
-You can redefine the order of places in the filesystem which are searched for templates, and even define new ways to retrieve templates (i.e, not from the filesystem) by subclassing Grantlee::AbstractTemplateResource and implementing the loadByName method. For existing loaders, see FileSystemTemplateResource, InMemoryTemplateResource, and AkonadiTemplateResource.
+You can redefine the order of places in the filesystem which are searched for templates, and even define new ways to retrieve templates (i.e, not from the filesystem) by subclassing Grantlee::AbstractTemplateLoader and implementing the loadByName method. For existing loaders, see FileSystemTemplateLoader, InMemoryTemplateLoader, and AkonadiTemplateLoader.
 
 */
 

@@ -39,7 +39,7 @@ class EnginePrivate;
   plugin directories will be set to enable finding template tags and filters.
 
   @code
-    Engine *engine = Engine::instance();
+    Engine *engine = new Engine();
 
     FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new FileSystemTemplateLoader() );
     loader->setTemplateDirs( QStringList() << "/usr/share/myapp/templates" );
@@ -57,8 +57,7 @@ class EnginePrivate;
   which defines its own tags and filters may want them to be always available, or it may be desirable to restrict the features
   available to template authors by removing built in libraries.
 
-  The engine may be used to create templates with differing configurations by persisting the EngineState after configuring it.
-  @see template_factories
+  Different Engine objects can be used to create templates with differing configurations.
 
   @author Stephen Kelly <steveire@gmail.com>
 */

@@ -22,15 +22,16 @@ If you are not already familiar with Django template syntax and structure, start
 Rendering templates is also very easy in application code. A single Template may be rendered multiple times with different Context objects.
 
 @code
-Template *t = Engine::instance()->newTemplate("My name is {{ name }}.", this);
+Grantlee::Engine *engine = new Grantlee::Engine( this );
+Grantlee::Template t = engine->newTemplate("My name is {{ name }}.", "my_template_name");
 QVariantHash mapping;
 mapping.insert("name", "Grainne");
-Context c(mapping);
+Grantlee::Context c(mapping);
 
 t->render(&c); // Returns "My name is Grainne."
 
 mapping.insert("name", "Henry");
-c = Context(mapping);
+c = Grantlee::Context(mapping);
 
 t.render(&c); // Returns "My name is Henry."
 @endcode
@@ -38,7 +39,7 @@ t.render(&c); // Returns "My name is Henry."
 Ususally, applications will not create a Template directly, but instead use a Grantlee::Engine to load external files. This allows artists to define the template without needing to recompile.
 
 @code
-Template *t = Engine::instance()->getTemplate("template.html", this);
+Grantlee::Template t = engine->loadByName("template.html");
 
 t->render(&c)
 @endcode
@@ -64,62 +65,6 @@ mapping.insert("myhash", myhash); // Can insert QVariantHash
 QObject *obj;
 QVariant objVar = QVariant::fromValue(obj);
 mapping.insert("myobject", objVar); // Can insert QObject*
-@endcode
-
-@section template_factories Template Factories
-
-If your application renders multiple different types of templates with multiple different available templates and plugins, you will need to somehow keep separation of state between different templates. As the Grantlee::Engine is a singleton, there can only be one instance of it, so one engine per template configuration is not an option. This is solved by maintaining a set of states for different templates in a factory:
-
-@code
-class MyAppTemplateFactory
-{
-public:
-  // Consider making these methods virtual or defining an interface for better testability
-  Template newExportTemplate()
-  {
-    if (!m_exportTemplateState)
-      configureExportState();
-
-    return Engine::instance()->newTemplate(m_exportTemplateState);
-  }
-
-  Template newSimpleRenderTemplate()
-  {
-    if (!m_simpleRenderTemplateState)
-      configureSimpleRenderState();
-
-    return Engine::instance()->newTemplate(m_simpleRenderTemplateState);
-  }
-
-private:
-  void configureExportState()
-  {
-    Engine *engine = Engine::instance();
-    engine->resetState();
-
-    engine->setDefaultPlugins(QStringList() << engine->defaultPlugins() << "additional_export_plugins");
-    engine->setPluginDirs(QStringList() << "app/export_available_plugins");
-    engine->setTemplateDirs(QStringList() << "app/export_templates");
-
-    m_exportTemplateState = engine->state();
-  }
-
-  void configureSimpleRenderState()
-  {
-    Engine *engine = Engine::instance();
-    engine->resetState();
-
-    engine->setDefaultPlugins(QStringList() << engine->defaultPlugins() << "additional_simple_rendering_plugins");
-    engine->setPluginDirs(QStringList() << "app/simple_rendering_plugins");
-    engine->setTemplateDirs(QStringList() << "app/simple_rendering_templates");
-
-    m_simpleRenderTemplateState = Engine::instance()->state();
-  }
-
-private:
-  EngineState m_exportTemplateState;
-  EngineState m_simpleRenderTemplateState;
-};
 @endcode
 
 @section extending_grantlee Extending Grantlee
@@ -185,9 +130,6 @@ If you already have QObjects in your application which would be suitable for use
 @note If you are familiar with Django you may be aware of the alters_data attribute for methods. This method of using wrappers and const is the equivalent to the alters_data attribute. You the wrapper writer choose the properties which will be accessible from the templates and makes them const, so there's no need to mark other methods as alters_data.
 
 For most uses of %Grantlee, this is enough to get make an application themable easily and quickly. For more advanced usage, see @ref extension. For some example uses of %Grantlee, see @ref examples.
-
-@todo example CMake code.
-
 
 */
 

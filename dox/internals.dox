@@ -19,9 +19,7 @@ A Template is rendered with a Context object. During rendering, each node in the
 
 Plugins can return Filters as well as AbstractNodeFactories. Filters can manipulate Variables in some way before rendering them to the output.
 
-Grantlee::Engine is a Singleton. Internally it uses a State pattern to manage plugins, loaders and other templates available (for extension/ inclusion etc) when rendering a Template. A new Template may be created either using the newTemplate or the newMutableTemplate method on Grantlee::Engine with an optional state parameter. While rendering, the template will need to retrieve filters from the Engine, load other templates in include or extends tags. States may also be persisted and used in factories to create multiple Templates with different plugin loaders and template data available.
-
-Loading templates to include or extend is accomplished using the load{Mutable,}ByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins. 
+Loading templates to include or extend is accomplished using the load{Mutable,}ByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins.
 
 */
 

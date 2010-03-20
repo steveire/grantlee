@@ -37,7 +37,7 @@ class ContextPrivate;
   values as appropriate for rendering a template using the insert method.
 
   @code
-    Template t = Engine::instance()->newTemplate( "Name is {% name %} and age is {% age %}.", "some_template" );
+    Template t = engine->newTemplate( "Name is {% name %} and age is {% age %}.", "some_template" );
 
     Context c1;
     c1.insert( "name", "Tom" );

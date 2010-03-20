@@ -163,7 +163,7 @@ caveats and XSS care for themers.
 
 // include and extends.
 
-@subsection extension Extending the syntax
+@subsection extending_syntax Extending the syntax
 
 It is also possible to extend the syntax of Granltee as you need it using javascript if the application developer chooses. See @ref qtscript_libraries for more. This is considered an advanced topic.
 
