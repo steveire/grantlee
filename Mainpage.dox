@@ -39,9 +39,11 @@ Report bugs in the KDE bug tracker under the component 'grantlee'.
 
 - @ref for_themers
 - @ref for_app_dev
+- @ref builtins
 - @ref extension
 - @ref examples
 - @ref differences_django
+- @ref using_and_deploying
 - @ref internals
 
 */

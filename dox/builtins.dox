@@ -1,0 +1,59 @@
+
+namespace Grantlee
+{
+/**
+  @page builtins Builtin tags and filters.
+
+  @section django_builtins Tags and filters ported from Django
+
+  See the <a href="http://docs.djangoproject.com/en/1.1/ref/templates/builtins/">Builtins documentation for Django 1.1</a> for an overview of the builtin tags and filters available in %Grantlee. Almost all tags and filter in django are available in %Grantlee. Exceptions are <a href="http://docs.djangoproject.com/en/1.1/ref/templates/builtins/#url">the url tag</a>, because %Grantlee does not have a views system. Additionally the ssi tag is disabled because of potential security risks. The dictdort, dictsortreversed, filesizeformat, iriencode, phone2numeric, pluralize, pprint, title, truncatewords_html, urlencode, urlize and urlizetrunc filters have not yet been ported due to time constraints.
+
+  @section grantlee_extras Additional tags available in Grantlee
+
+  %Grantlee also provides some extra tags not available in DJango.
+
+  @subsection media_finder_tag media_finder
+
+  Queries %Grantlee for a complete URL, given a target name.
+
+  This tag can typically be used to insert a URL for an image, external script or CSS file, or other external media.
+
+  @code
+    <img src="{% media_finder "someimage.png" %}" />
+  @endcode
+
+  The media_finder tag retrieves the result through Engine::mediaUri, which in turn queries the TemplateLoaders for the URL to return via the TemplateLoader::getMediaUri interface. This way it is possible to configure different TemplateLoaders to return different URLs, for example absolute or relative.
+
+  @subsection range_tag range
+
+  Loops over a range in a manner similar to the <a href="http://docs.python.org/library/functions.html#range">python builtin of the same name</a>.
+
+  Create a list from 0 to 5:
+  @code
+    <ul>
+    {% range 5 as num %}
+      <li>{{ num }}
+    {% endrange %}
+    </ul>
+  @endcode
+
+  Create a list from 5 to 10:
+  @code
+    <ul>
+    {% range 5 10 as num %}
+      <li>{{ num }}
+    {% endrange %}
+    </ul>
+  @endcode
+
+  Create a list from 5 to 50 with a step of 5:
+  @code
+    <ul>
+    {% range 5 50 5 as num %}
+      <li>{{ num }}
+    {% endrange %}
+    </ul>
+  @endcode
+
+*/
+}
