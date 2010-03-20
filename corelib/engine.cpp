@@ -135,7 +135,7 @@ void Engine::loadDefaultLibraries()
     PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
   }
 
-  foreach( const QString &libName, d->m_defaultLibraries ) {
+  Q_FOREACH( const QString &libName, d->m_defaultLibraries ) {
     if ( libName == __scriptableLibName )
       continue;
 

@@ -36,7 +36,7 @@ using namespace Grantlee;
 class TestPlainMarkupOutput: public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
 
 // Test paragraph contents:
     void testSingleFormat();

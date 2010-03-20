@@ -38,7 +38,7 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
 {
   if ( part == QLatin1String( "items" ) ) {
     QVariantList itemsList;
-    foreach( const QString &key, object.keys() ) {
+    Q_FOREACH( const QString &key, object.keys() ) {
       itemsList.append( QVariant( QVariantList() << key << object.value( key ) ) );
     }
     return itemsList;
@@ -47,7 +47,7 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
   if ( part == QLatin1String( "keys" ) ) {
     QStringList keys = object.keys();
     QVariantList list;
-    foreach( const QString &key, keys )
+    Q_FOREACH( const QString &key, keys )
       list << key;
     return list;
   }
@@ -121,7 +121,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
   if ( part == QLatin1String( "splitlines" ) ) {
     QStringList strings = object.get().split( QLatin1Char( '\n' ) );
     QVariantList list;
-    foreach( const QString &string, strings )
+    Q_FOREACH( const QString &string, strings )
       list << string;
     return list;
   }

@@ -57,7 +57,7 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
   TemplateImpl *t = containerTemplate();
   Engine const *engine = t->engine();
 
-  foreach( const FilterExpression &fe, m_mediaExpressionList ) {
+  Q_FOREACH( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
       QString fileUrl = engine->mediaUri( Util::getSafeString( fe.resolve( c ) ) );
       if ( fileUrl.isEmpty() )

@@ -42,7 +42,7 @@ public:
   void setContent( const SafeString &content );
   SafeString wrappedString() const;
 
-public slots:
+public Q_SLOTS:
   bool isSafe() const;
   void setSafety( bool safeness );
   QString rawString();

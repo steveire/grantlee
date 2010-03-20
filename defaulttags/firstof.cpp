@@ -53,7 +53,7 @@ FirstOfNode::FirstOfNode( QList<FilterExpression> list, QObject *parent )
 
 void FirstOfNode::render( OutputStream *stream, Context *c )
 {
-  foreach( const FilterExpression &fe, m_variableList ) {
+  Q_FOREACH( const FilterExpression &fe, m_variableList ) {
     if ( fe.isTrue( c ) ) {
       fe.resolve( stream, c );
       return;

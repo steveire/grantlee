@@ -73,11 +73,11 @@ public:
     void addItem(ChatItem *item);
     void addColour(const QString &nickname, const QString &colour);
 
-signals:
+Q_SIGNALS:
     void message(const QString &nickname, const QString &text);
     void action(const QString &nickname, const QString &text);
 
-private slots:
+private Q_SLOTS:
     void messageSlot(const QString &nickname, const QString &text);
     void actionSlot(const QString &nickname, const QString &text);
     void textChangedSlot(const QString &newText);

@@ -52,7 +52,7 @@ public:
 
   /* reimp */ void setEngine( Grantlee::Engine *engine );
 
-public slots:
+public Q_SLOTS:
   void addFactory( const QString &factoryName, const QString &tagname );
   void addFilter( const QString &filterName );
 

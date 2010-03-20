@@ -149,7 +149,7 @@ void ExtendsNode::render( OutputStream *stream, Context *c )
       pbn->addParent( pbn->nodeList() );
       pbn->setNodeList( bn->nodeList() );
     } else {
-      foreach( Node *node, m_parentTemplate->nodeList() ) {
+      Q_FOREACH( Node *node, m_parentTemplate->nodeList() ) {
         TextNode *tn = qobject_cast<TextNode*>( node );
         if ( !tn ) {
           ExtendsNode *en = qobject_cast<ExtendsNode*>( node );

@@ -104,7 +104,7 @@ NodeList::NodeList( const NodeList &list )
 NodeList::NodeList( const QList<Grantlee::Node *> &list )
     : QList<Grantlee::Node*>( list )
 {
-  foreach( Grantlee::Node *node, list ) {
+  Q_FOREACH( Grantlee::Node *node, list ) {
     TextNode *textNode = qobject_cast<TextNode *>( node );
     if ( !textNode ) {
       m_containsNonText = true;
@@ -132,7 +132,7 @@ void NodeList::append( Grantlee::Node *node )
 void NodeList::append( QList<Grantlee::Node*> nodeList )
 {
   if ( !m_containsNonText ) {
-    foreach( Grantlee::Node *node, nodeList ) {
+    Q_FOREACH( Grantlee::Node *node, nodeList ) {
       TextNode *textNode = qobject_cast<TextNode *>( node );
       if ( !textNode ) {
         m_containsNonText = true;

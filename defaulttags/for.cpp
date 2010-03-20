@@ -54,11 +54,11 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       QString( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
   }
 
-  foreach( const QString &arg, expr.mid( 0, expr.size() - 2 ) ) {
+  Q_FOREACH( const QString &arg, expr.mid( 0, expr.size() - 2 ) ) {
     vars << arg.split( ',', QString::SkipEmptyParts );
   }
 
-  foreach( const QString &var, vars ) {
+  Q_FOREACH( const QString &var, vars ) {
     if ( var.isNull() )
       throw Grantlee::Exception( TagSyntaxError, "'for' tag received invalid argument" );
   }
@@ -233,7 +233,7 @@ void ForNode::render( OutputStream *stream, Context *c )
         // We don't have a hash, but we have to unpack several values from each item
         // in the list. And each item in the list is not itself a list.
         // Probably have a list of objects that we're taking properties from.
-        foreach( const QString &loopVar, m_loopVars ) {
+        Q_FOREACH( const QString &loopVar, m_loopVars ) {
           c->push();
           c->insert( "var", varList[index] );
           QVariant v = FilterExpression( "var." + loopVar, 0 ).resolve( c );

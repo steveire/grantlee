@@ -64,7 +64,7 @@ public:
 
   NodeList nodeList();
 
-// slots
+// Q_SLOTS
   /**
   Returns the block overridden by this one rendered in context.
   */

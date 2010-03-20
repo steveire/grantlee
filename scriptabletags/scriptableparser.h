@@ -45,7 +45,7 @@ public:
     return m_p;
   }
 
-public slots:
+public Q_SLOTS:
   QObjectList parse( QObject *parent, const QString &stopAt );
   QObjectList parse( QObject *parent, const QStringList &stopAt = QStringList() );
 

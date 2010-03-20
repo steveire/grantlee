@@ -144,7 +144,7 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
 
   if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String ) {
     QVariantList list;
-    foreach( const QVariant &var, Util::getSafeString( input ).get().split( QString(), QString::SkipEmptyParts ) )
+    Q_FOREACH( const QVariant &var, Util::getSafeString( input ).get().split( QString(), QString::SkipEmptyParts ) )
       list << var;
     return list;
   }

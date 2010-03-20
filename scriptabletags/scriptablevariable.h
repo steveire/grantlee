@@ -43,7 +43,7 @@ public:
 
   void setContent( const QString &content );
 
-public slots:
+public Q_SLOTS:
   QVariant resolve( ScriptableContext *c );
 
   bool isTrue( ScriptableContext *c );

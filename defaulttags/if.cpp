@@ -56,7 +56,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   }
 
   QList<QPair<bool, FilterExpression > > boolVars;
-  foreach( const QString &boolStr, boolPairs ) {
+  Q_FOREACH( const QString &boolStr, boolPairs ) {
     QPair<bool, FilterExpression> pair;
     if ( boolStr.contains( ' ' ) ) {
       QStringList bits = boolStr.split( ' ' );

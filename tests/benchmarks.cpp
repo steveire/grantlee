@@ -44,7 +44,7 @@ class Benchmarking : public QObject
 {
   Q_OBJECT
 
-private slots:
+private Q_SLOTS:
   void initTestCase();
 
   void testTokenizing_data() {
@@ -161,7 +161,7 @@ void Benchmarking::getData()
 //   QList<int> repeatSizes;
 //   repeatSizes << 10 << 100 << 200 << 300 << 1000 << 1500 << 2000 << 3000 << 4000;
 
-//   foreach(int size, repeatSizes)
+//   Q_FOREACH(int size, repeatSizes)
 //   {
 //     const char * name = QString("growing-%1").arg( size ).toLatin1();
 //     QTest::newRow( name ) << getTemplate( size ) << dict;

@@ -216,7 +216,7 @@ QList< int > MarkupDirectorPrivate::sortOpeningOrder( QSet< int > openingOrder, 
 
         // The exact order these are opened in is irrelevant, as all will be closed on the same block.
         // See testDoubleFormat.
-        foreach( int tag, elementsToClose ) {
+        Q_FOREACH( int tag, elementsToClose ) {
           if ( openingOrder.remove( tag ) ) {
             sortedOpenedElements.prepend( tag );
           }
@@ -225,7 +225,7 @@ QList< int > MarkupDirectorPrivate::sortOpeningOrder( QSet< int > openingOrder, 
     } else {
       // End of block. Need to close all open elements.
       // Order irrelevant in this case.
-      foreach( int tag, openingOrder ) {
+      Q_FOREACH( int tag, openingOrder ) {
         sortedOpenedElements.prepend( tag );
       }
       break;
@@ -352,7 +352,7 @@ void MarkupDirectorPrivate::processOpeningElements( QTextBlock::iterator it )
   QTextCharFormat fragmentFormat = fragment.charFormat();
   QList<int> elementsToOpenList = getElementsToOpen( it );
 
-  foreach( int tag, elementsToOpenList ) {
+  Q_FOREACH( int tag, elementsToOpenList ) {
     switch ( tag ) {
     case Strong:
       q->beginStrong();

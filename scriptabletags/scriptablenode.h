@@ -67,7 +67,7 @@ private:
   QScriptValue m_concreteNode;
   QScriptValue m_renderMethod;
 
-public slots:
+public Q_SLOTS:
   void setNodeList( const QString &name, QObjectList );
 
 };

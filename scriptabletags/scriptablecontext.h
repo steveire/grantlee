@@ -41,7 +41,7 @@ public:
     return m_c;
   }
 
-public slots:
+public Q_SLOTS:
   QVariant lookup( const QString &name );
   void insert( const QString &name, const QVariant &variant );
   void push();

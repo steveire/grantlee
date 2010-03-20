@@ -191,7 +191,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
   Q_D( const FilterExpression );
   QVariant var = d->m_variable.resolve( c );
 
-  foreach( const ArgFilter &argfilter, d->m_filters ) {
+  Q_FOREACH( const ArgFilter &argfilter, d->m_filters ) {
     Filter::Ptr filter = argfilter.first;
     filter->setStream( stream );
     Variable argVar = argfilter.second;

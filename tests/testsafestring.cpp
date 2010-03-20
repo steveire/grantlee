@@ -32,7 +32,7 @@ using namespace Grantlee;
 class TestSafeString : public QObject
 {
   Q_OBJECT
-private slots:
+private Q_SLOTS:
   void testCombining();
   void testAppending();
   void testChopping();
