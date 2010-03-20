@@ -2,7 +2,7 @@
 // Put this in the Grantlee namespace so that autolinks to classes work without needing a Grantlee:: prefix.
 
 /**
-  The Grantlee namespace holds all public %Grantlee API.
+  @brief The Grantlee namespace holds all public %Grantlee API.
 */
 namespace Grantlee
 {
@@ -19,6 +19,44 @@ namespace Grantlee
 
   %Grantlee allows application developers to make it very easy to create themes for exported data by separating the data to export from the structure of how it is presented. As such, there are two separate roles to use %Grantlee. See @ref for_app_dev and @ref for_themers.
 
+  <table width="80%" style="margin-left:auto;margin-right:auto;">
+    <tr><th colspan="3">%Grantlee Core</th></tr>
+    <tr><th>Application API</th><th>Plugin API</th><th>Guides</th></tr>
+    <tr><td>
+      - Context
+      - Engine
+      - OutputStream
+      - Template
+      - AbstractTemplateLoader
+      - FileSystemTemplateLoader
+    </td><td>
+      - Exception
+      - Filter
+      - FilterExpression
+      - Node
+      - Parser
+      - SafeString
+      - TagLibraryInterface
+      - Variable
+    </td><td>
+      - @ref for_themers
+      - @ref for_app_dev
+      - @ref builtins
+      - @ref extension
+      - @ref examples
+      - @ref differences_django
+      - @ref using_and_deploying
+      - @ref internals
+    </td></tr>
+      <tr><th colspan="3">%Grantlee GUI</th></tr>
+    <tr><td colspan="3">
+      - AbstractMarkupBuilder
+      - MarkupDirector
+      - TextHTMLBuilder
+      - PlainTextMarkupBuilder
+    </td></tr>
+  </table>
+
   @section start_community Community
 
   The %Grantlee project mailing list is kde-pim@kde.org, and the IRC channel is \#grantlee on freenode.
@@ -26,25 +64,6 @@ namespace Grantlee
   The source repository is located at http://gitorious.org/grantlee.
 
   Report bugs in the KDE bug tracker under the component 'grantlee'.
-
-  @section todo Todo
-  - Finish %Grantlee
-  - Port KJots, KMail KNode, Akregator to %Grantlee
-  - Port Kopete to %Grantlee
-  - Create Akonadi::MailMerge agent based on %Grantlee.
-  - Finish Grantlee::Mime.
-  - Port Doxygen to %Grantlee
-
-  @section contents Contents
-
-  - @ref for_themers
-  - @ref for_app_dev
-  - @ref builtins
-  - @ref extension
-  - @ref examples
-  - @ref differences_django
-  - @ref using_and_deploying
-  - @ref internals
 
 */
 
