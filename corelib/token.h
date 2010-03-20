@@ -50,5 +50,7 @@ struct Token {
 
 }
 
+Q_DECLARE_TYPEINFO(Grantlee::Token, Q_PRIMITIVE_TYPE);
+
 #endif
 
