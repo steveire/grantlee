@@ -13,7 +13,7 @@ namespace Grantlee
 
 %Grantlee is a Free Software, Open Source string template system based on the <a href="http://docs.djangoproject.com/en/dev/topics/templates/">Django template system</a> from the <a href="http://www.djangoproject.com">Django project</a>. The syntax and design of %Grantlee is intended to be the same as the Django syntax, such that many Django templates should be source-compatible with %Grantlee templates.
 
-%Grantlee is covered by the GNU Lesser General Public Licence version 3.
+%Grantlee is covered by the GNU Lesser General Public Licence version 2.1 or, at your option, any later version.
 
 @section start_howto How to use Grantlee
 
