@@ -24,11 +24,6 @@
 namespace Grantlee
 {
 
-enum LoopDirection {
-  ForwardLoop,
-  ReversedLoop
-};
-
 enum Error {
   NoError,
   EmptyVariableError,
