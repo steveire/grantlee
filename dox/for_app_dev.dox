@@ -3,135 +3,133 @@ namespace Grantlee
 
 /**
 
-@page for_app_dev Grantlee for application developers
+  @page for_app_dev Grantlee for application developers
 
-Integrating %Grantlee into applications is very simple. This page describes
+  Integrating %Grantlee into applications is very simple. This page describes
 
-@li How to render a Template with a Context
-@li How to load Templates
-@li How to extend the syntax of %Grantlee
-@li Patterns of use of %Grantlee
-@li Differences between Django and %Grantlee
+  @li How to render a Template with a Context
+  @li How to load Templates
+  @li How to extend the syntax of %Grantlee
+  @li Patterns of use of %Grantlee
+  @li Differences between Django and %Grantlee
 
-If you are not already familiar with Django template syntax and structure, start with @ref for_themers. If you are already familiar with Django, you might find @ref differences_django informative.
+  If you are not already familiar with Django template syntax and structure, start with @ref for_themers. If you are already familiar with Django, you might find @ref differences_django informative.
 
-@section rendering_templates Rendering Templates
+  @section rendering_templates Rendering Templates
 
-@subsection creating_templates Creating Templates
+  @subsection creating_templates Creating Templates
 
-Rendering templates is also very easy in application code. A single Template may be rendered multiple times with different Context objects.
+  Rendering templates is also very easy in application code. A single Template may be rendered multiple times with different Context objects.
 
-@code
-Grantlee::Engine *engine = new Grantlee::Engine( this );
-Grantlee::Template t = engine->newTemplate("My name is {{ name }}.", "my_template_name");
-QVariantHash mapping;
-mapping.insert("name", "Grainne");
-Grantlee::Context c(mapping);
+  @code
+    Grantlee::Engine *engine = new Grantlee::Engine( this );
+    Grantlee::Template t = engine->newTemplate("My name is {{ name }}.", "my_template_name");
+    QVariantHash mapping;
+    mapping.insert("name", "Grainne");
+    Grantlee::Context c(mapping);
 
-t->render(&c); // Returns "My name is Grainne."
+    t->render(&c); // Returns "My name is Grainne."
 
-mapping.insert("name", "Henry");
-c = Grantlee::Context(mapping);
+    mapping.insert("name", "Henry");
+    c = Grantlee::Context(mapping);
 
-t.render(&c); // Returns "My name is Henry."
-@endcode
+    t.render(&c); // Returns "My name is Henry."
+  @endcode
 
-Ususally, applications will not create a Template directly, but instead use a Grantlee::Engine to load external files. This allows artists to define the template without needing to recompile.
+  Ususally, applications will not create a Template directly, but instead use a Grantlee::Engine to load external files. This allows artists to define the template without needing to recompile.
 
-@code
-Grantlee::Template t = engine->loadByName("template.html");
+  @code
+    Grantlee::Template t = engine->loadByName("template.html");
 
-t->render(&c)
-@endcode
+    t->render(&c)
+  @endcode
 
-@subsection variables Variables
+  @subsection variables Variables
 
-A Context object maps a string to another object for reference in the template. String keys in the Context object are available as variables in the Template, and can be used with the <tt>{{&nbsp;variable&nbsp;}}</tt> syntax or inside <tt>{%&nbsp;control&nbsp;tags&nbsp;%}</tt>. In the above example, we mapped the string <tt>"name"</tt> to the string <tt>"Grainne"</tt> and then to the string <tt>"Henry"</tt>. We can create more than just string mappings though.
+  A Context object maps a string to another object for reference in the template. String keys in the Context object are available as variables in the Template, and can be used with the <tt>{{&nbsp;variable&nbsp;}}</tt> syntax or inside <tt>{%&nbsp;control&nbsp;tags&nbsp;%}</tt>. In the above example, we mapped the string <tt>"name"</tt> to the string <tt>"Grainne"</tt> and then to the string <tt>"Henry"</tt>. We can create more than just string mappings though.
 
-@code
-mapping.insert("myint", 6); // Can insert ints
-mapping.insert("mydouble", 6.5); // Can insert doubles
-mapping.insert("mybool", false); // Can insert bools
+  @code
+    mapping.insert("myint", 6); // Can insert ints
+    mapping.insert("mydouble", 6.5); // Can insert doubles
+    mapping.insert("mybool", false); // Can insert bools
 
-QVariantList mylist;
-mylist << "Ingrid" << 3;
-mapping.insert("mylist", mylist); // Can insert QVariantList
+    QVariantList mylist;
+    mylist << "Ingrid" << 3;
+    mapping.insert("mylist", mylist); // Can insert QVariantList
 
-QVariantHash myhash;
-myhash.insert("James", "Artist");
-myhash.insert("Kiera", "Dreamer");
-mapping.insert("myhash", myhash); // Can insert QVariantHash
+    QVariantHash myhash;
+    myhash.insert("James", "Artist");
+    myhash.insert("Kiera", "Dreamer");
+    mapping.insert("myhash", myhash); // Can insert QVariantHash
 
-QObject *obj;
-QVariant objVar = QVariant::fromValue(obj);
-mapping.insert("myobject", objVar); // Can insert QObject*
-@endcode
+    QObject *obj;
+    QVariant objVar = QVariant::fromValue(obj);
+    mapping.insert("myobject", objVar); // Can insert QObject*
+  @endcode
 
-@section extending_grantlee Extending Grantlee
+  @section extending_grantlee Extending Grantlee
 
-%Grantlee has 4 extension points.
+  %Grantlee has 4 extension points.
 
-- Custom object variables
-- Filters
-- Tags
-- Loaders
+  - Custom object variables
+  - Filters
+  - Tags
+  - Loaders
 
-@subsection custom_objects Custom objects
+  @subsection custom_objects Custom objects
 
-As already noted, <tt>QObject*</tt> can be inserted into templates. The recommended way to insert custom objects into templates is to create QObject wrappers for your objects. As QObject is introspectable, this will allow lookups to work in a way you define.
+  As already noted, <tt>QObject*</tt> can be inserted into templates. The recommended way to insert custom objects into templates is to create QObject wrappers for your objects. As QObject is introspectable, this will allow lookups to work in a way you define.
 
-@note If you are already familiar with Django you will know that creating wrappers is not necessary in Django. That is because python objects are already fully introspectable.
+  @note If you are already familiar with Django you will know that creating wrappers is not necessary in Django. That is because python objects are already fully introspectable.
 
-@code
+  @code
+    #include "myperson.h"
 
-#include "myperson.h"
+    class MyPersonWrapper : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString name READ name)
+    public:
+      MyPersonWrapper(const QString &name, int age);
 
-class MyPersonWrapper : public QObject
-{
-  Q_OBJECT
-  Q_PROPERTY(QString name READ name)
-public:
-  MyPersonWrapper(const QString &name, int age);
+      QString name() const;
 
-  QString name() const;
+      int age() const;
 
-  int age() const;
+      QString clear();
 
-  QString clear();
+    };
 
-};
+    ...
 
-...
+    PersonWrapper *linda = new PersonWrapper("Linda", 21);
 
-PersonWrapper *linda = new PersonWrapper("Linda", 21);
+    QVariant lindaVar = QVariant::fromValue(linda);
 
-QVariant lindaVar = QVariant::fromValue(linda);
+    mapping.insert("person", lindaVar);
 
-mapping.insert("person", lindaVar);
+    ...
 
-...
+    The name is {{ person.name }} and age is {{ person.age }}.
 
-The name is {{ person.name }} and age is {{ person.age }}.
+    // Will be rendered as
+    // The name is Linda and age is .
+  @endcode
 
-// Will be rendered as
-// The name is Linda and age is .
-@endcode
+  Note that the 'name' of person is accessible in the template, but the 'age' is not. Note also that rendering fails silently if the method can not be found. Only methods which have a corresponding Q_PROPERTY declaration are accessible from templates. To make age accessible in the template, we would need to add
 
-Note that the 'name' of person is accessible in the template, but the 'age' is not. Note also that rendering fails silently if the method can not be found. Only methods which have a corresponding Q_PROPERTY declaration are accessible from templates. To make age accessible in the template, we would need to add
+  @verbatim
+    Q_PROPERTY(int age READ age)
+  @endverbatim
 
-@verbatim
- Q_PROPERTY(int age READ age)
-@endverbatim
+  to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects.
 
-to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects.
+  If you already have QObjects in your application which would be suitable for use in templates, you only need to add some Q_PROPERTY entries to the classes to make them accessible to %Grantlee.
 
-If you already have QObjects in your application which would be suitable for use in templates, you only need to add some Q_PROPERTY entries to the classes to make them accessible to %Grantlee.
+  @note If you are familiar with Django you may be aware of the alters_data attribute for methods. This method of using wrappers and const is the equivalent to the alters_data attribute. You the wrapper writer choose the properties which will be accessible from the templates and makes them const, so there's no need to mark other methods as alters_data.
 
-@note If you are familiar with Django you may be aware of the alters_data attribute for methods. This method of using wrappers and const is the equivalent to the alters_data attribute. You the wrapper writer choose the properties which will be accessible from the templates and makes them const, so there's no need to mark other methods as alters_data.
-
-For most uses of %Grantlee, this is enough to get make an application themable easily and quickly. For more advanced usage, see @ref extension. For some example uses of %Grantlee, see @ref examples.
+  For most uses of %Grantlee, this is enough to get make an application themable easily and quickly. For more advanced usage, see @ref extension. For some example uses of %Grantlee, see @ref examples.
 
 */
 
 }
-

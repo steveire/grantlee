@@ -4,212 +4,203 @@ namespace Grantlee
 
 /**
 
-@page extension Extending the template system
+  @page extension Extending the template system
 
-@section libraries Filter and tag Libraries
+  @section libraries Filter and tag Libraries
 
-As already noted, it is possible for application developers to create their own tags and filters. This feature is based on the QtPlugin system so that plugins can be loaded at run time.
+  As already noted, it is possible for application developers to create their own tags and filters. This feature is based on the QtPlugin system so that plugins can be loaded at run time.
 
-@note If you are already familiar with Django, you will know that this is not necessary on that system. That is because Django libraries are just python modules, which can behave like dynamically loaded plugins.
+  @note If you are already familiar with Django, you will know that this is not necessary on that system. That is because Django libraries are just python modules, which can behave like dynamically loaded plugins.
 
-@subsection filters Filters
+  @subsection filters Filters
 
-A filter takes an object and an optional argument and returns a string. To create your own filter, create a concrete subclass of Grantlee::Filter and implement the doFilter method.
+  A filter takes an object and an optional argument and returns a string. To create your own filter, create a concrete subclass of Grantlee::Filter and implement the doFilter method.
 
-@code
-
-/// Outputs its input string twice.
-class TwiceFilter : public Grantlee::Filter
-{
-  /* reimp */ SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
-  {
-    SafeString str = getSafeString(input);
-
-    return str + str;
-  }
-
-  /* reimp */ bool isSafe() const { return true; } // see the Autoescaping section
-};
-
-...
-
-Seeing double {{ name|twice }}?
-
-// Renders: Seeing double MikeMike?
-
-@endcode
-
-The argument to doFilter is a QVariant, so it may contain any of the types supported by %Grantlee.
-
-@code
-
-/// Outputs its input n times.
-class RepeatFilter : public Grantlee::Filter
-{
-  SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
-  {
-    SafeString str = getSafeString(input);
-
-    if ( arg.type() != QMetaType::Int )
-      return str; // Fail gracefully.
-
-    int times = arg.toInt();
-    for (int i = 0; i < times ++i)
+  @code
+    /// Outputs its input string twice.
+    class TwiceFilter : public Grantlee::Filter
     {
-      str.get().append(str);
-    }
-    return str;
-  }
+      /* reimp */ SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
+      {
+        SafeString str = getSafeString(input);
 
-  bool isSafe() const { return true; }
-};
+        return str + str;
+      }
 
-...
+      /* reimp */ bool isSafe() const { return true; } // see the Autoescaping section
+    };
 
-Seeing more {{ name|repeat:"3" }}?
+    ...
 
-// Renders: Seeing more NathalieNathalieNathalie?
+    Seeing double {{ name|twice }}?
 
-Seeing more {{ name|repeat:"four" }}?
+    // Renders: Seeing double MikeMike?
+  @endcode
 
-// Renders: Seeing more Otto? (failing gracefully)
+  The argument to doFilter is a QVariant, so it may contain any of the types supported by %Grantlee.
 
-@endcode
+  @code
+    /// Outputs its input n times.
+    class RepeatFilter : public Grantlee::Filter
+    {
+      SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
+      {
+        SafeString str = getSafeString(input);
 
-Note that the filter does not fail or throw an exception if the integer conversion fails. Filters should handle all errors gracefully. If an error occurs, return either the input, or an empty string. Whichever is more appropriate.
+        if ( arg.type() != QMetaType::Int )
+          return str; // Fail gracefully.
 
-@section autoescaping Autoescaping and safe-ness
+        int times = arg.toInt();
+        for (int i = 0; i < times ++i)
+        {
+          str.get().append(str);
+        }
+        return str;
+      }
 
-Xss stuff.
+      bool isSafe() const { return true; }
+    };
 
-- http://groups.google.com/group/django-users/browse_thread/thread/311f336d74e7b643
-- http://docs.djangoproject.com/en/dev/howto/custom-template-tags/#filters-and-auto-escaping
-- http://groups.google.com.tr/group/django-developers/browse_thread/thread/96e516d5915ee334
+    ...
+
+    Seeing more {{ name|repeat:"3" }}?
+
+    // Renders: Seeing more NathalieNathalieNathalie?
+
+    Seeing more {{ name|repeat:"four" }}?
+
+    // Renders: Seeing more Otto? (failing gracefully)
+  @endcode
+
+  Note that the filter does not fail or throw an exception if the integer conversion fails. Filters should handle all errors gracefully. If an error occurs, return either the input, or an empty string. Whichever is more appropriate.
+
+  @section autoescaping Autoescaping and safe-ness
+
+  Xss stuff.
+
+  - http://groups.google.com/group/django-users/browse_thread/thread/311f336d74e7b643
+  - http://docs.djangoproject.com/en/dev/howto/custom-template-tags/#filters-and-auto-escaping
+  - http://groups.google.com.tr/group/django-developers/browse_thread/thread/96e516d5915ee334
 
 
-@subsection tags Tags
+  @subsection tags Tags
 
-A tag can really do anything with a template. To create your own tag, create a concrete subclass of Grantlee::NodeFactory and implement the getNode method, and create a concrete subclass of Grantlee::Node and implement the render method.
+  A tag can really do anything with a template. To create your own tag, create a concrete subclass of Grantlee::NodeFactory and implement the getNode method, and create a concrete subclass of Grantlee::Node and implement the render method.
 
-@note If you are familiar with Django you will recognise that defining a tag in Django involves creating a Node subclass (like %Grantlee), and a factory function where %Grantlee requires a factory class. This is because functions in python are objects, just like classes are, and dynamic typing allows easy creation of lists of those factory functions. In %Grantlee with statically-typed C++, we need to group the factories by interface (i.e, the Grantlee::AbstractNodeFactory interface).
+  @note If you are familiar with Django you will recognise that defining a tag in Django involves creating a Node subclass (like %Grantlee), and a factory function where %Grantlee requires a factory class. This is because functions in python are objects, just like classes are, and dynamic typing allows easy creation of lists of those factory functions. In %Grantlee with statically-typed C++, we need to group the factories by interface (i.e, the Grantlee::AbstractNodeFactory interface).
 
-Tags can take arguments, advance the parser, create nodes, and generally have broad control over the parsing and rendering stages.
+  Tags can take arguments, advance the parser, create nodes, and generally have broad control over the parsing and rendering stages.
 
-Here is an example of a {% current_time %} tag which displays the current time.
+  Here is an example of a {% current_time %} tag which displays the current time.
 
-@code
+  @code
+    class CurrentTimeTag : public Grantlee::AbstractNodeFactory
+    {
+      Node *getNode(const QString &tagContent, Parser *p) const
+      {
+        // You almost always want to use smartSplit.
+        QStringList content = smartSplit(tagContent);
 
-class CurrentTimeTag : public Grantlee::AbstractNodeFactory
-{
-  Node *getNode(const QString &tagContent, Parser *p) const
-  {
-    // You almost always want to use smartSplit.
-    QStringList content = smartSplit(tagContent);
+      }
+    };
 
-  }
-};
+    class CurrentTimeNode : public Grantlee::Node
+    {
+      Q_OBJECT
+    public:
+      CurrentTimeNode(QObject *parent)
+        : QObject(parent)
+      {
 
-class CurrentTimeNode : public Grantlee::Node
-{
-  Q_OBJECT
-public:
-  CurrentTimeNode(QObject *parent)
-    : QObject(parent)
-  {
+      }
 
-  }
+      QString render(Context *c)
+      {
+        return ;
+      }
+    };
+  @endcode
 
-  QString render(Context *c)
-  {
-    return ;
-  }
-};
+  Also, note that, nodeFactory may throw an execption at template compilation time, but like Filters, Nodes should handle errors gracefully in their render method, and should return an empty QString in most error cases.
 
-@endcode
+  @section cpp_libraries C++ Libraries
 
-Also, note that, nodeFactory may throw an execption at template compilation time, but like Filters, Nodes should handle errors gracefully in their render method, and should return an empty QString in most error cases.
+  As already mentioned, it is neccessary to create a QtPlugin library to make your tags and filters available to %Grantlee. You need to implement TagLibraryInterface to return your custom node factories and filters. See the existing libraries in your %Grantlee distribution for full examples.
 
-@section cpp_libraries C++ Libraries
+  @code
+    #include <grantlee/taglibraryinterface.h>
 
-As already mentioned, it is neccessary to create a QtPlugin library to make your tags and filters available to %Grantlee. You need to implement TagLibraryInterface to return your custom node factories and filters. See the existing libraries in your %Grantlee distribution for full examples.
+    #include "mytag.h"
+    #include "myfilter.h"
 
-@code
+    class MyLibrary : public QObject, public Grantlee::TagLibraryInterface
+    {
+      Q_OBJECT
+      Q_INTERFACES( Grantlee::TagLibraryInterface )
+    public:
+      MyLibrary(QObject *parent = 0)
+        : QObject (parent)
+      {
+        m_nodeFactories.insert("mytag", new MyNodeFactory());
 
-#include <grantlee/taglibraryinterface.h>
+        m_filters.insert("myfilter", new MyFilter());
+      }
 
-#include "mytag.h"
-#include "myfilter.h"
+      QHash<QString, Grantlee::AbstractNodeFactory*> nodeFactories(const QString &name = QString())
+      {
+        Q_UNUSED(name);
+        return m_nodeFactories;
+      }
 
-class MyLibrary : public QObject, public Grantlee::TagLibraryInterface
-{
-  Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
-public:
-  MyLibrary(QObject *parent = 0)
-    : QObject (parent)
-  {
-    m_nodeFactories.insert("mytag", new MyNodeFactory());
+      QHash<QString, Grantlee::Filter*> filters(const QString &name = QString())
+      {
+        Q_UNUSED(name);
+        return m_filters;
+      }
+    };
+  @endcode
 
-    m_filters.insert("myfilter", new MyFilter());
-  }
+  @section qtscript_libraries QtScript Libraries
 
-  QHash<QString, Grantlee::AbstractNodeFactory*> nodeFactories(const QString &name = QString())
-  {
-    Q_UNUSED(name);
-    return m_nodeFactories;
-  }
+  If you configure your application to use the grantlee_scriptabletags_library, it will be possible for you and theme writers to write tags and filters in QtScript instead of C++. Themers would have as much control as a C++ plugin writer over those steps of processing and rendering the template.
 
-  QHash<QString, Grantlee::Filter*> filters(const QString &name = QString())
-  {
-    Q_UNUSED(name);
-    return m_filters;
-  }
-};
+  Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamically loaded at runtime.
 
-@endcode
+  Here is a complete QtScript library defining an {% echo %} tag which outputs its arguments:
 
-@section qtscript_libraries QtScript Libraries
+  @code
+    var EchoNode = function(content)
+    {
+      this.content = content;
+      this.render = function(context)
+      {
+        return content.join(" ");
+      };
+    };
 
-If you configure your application to use the grantlee_scriptabletags_library, it will be possible for you and theme writers to write tags and filters in QtScript instead of C++. Themers would have as much control as a C++ plugin writer over those steps of processing and rendering the template.
+    function EchoNodeFactory(tagContent, parser)
+    {
+      var content = tagContent.split(" ");
+      content = content.slice(1, content.length);
+      return new Node("EchoNode", content);
+    };
+    EchoNodeFactory.tagName = "echo";
+    Library.addFactory("EchoNodeFactory");
+  @endcode
 
-Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamically loaded at runtime.
+  Some things to note:
+  - Library is a globally accessible object used to register Factories.
+  - The addFactory method takes a string which is the name of an object, not the object itself.
+  - The script factory function returns a %Node. The first argument to %Node is the name of the QtScript object in the library which defines the node. All additional arguments will be passed to the constructor of that node.
+  - The %Node function must have a callable render property which takes a context argument.
 
-Here is a complete QtScript library defining an {% echo %} tag which outputs its arguments:
+  @todo \@section qtscript_diff Differences between C++ and QtScript library plugins.
 
-@code
-var EchoNode = function(content)
-{
-  this.content = content;
-  this.render = function(context)
-  {
-    return content.join(" ");
-  };
-};
+  @subsection loaders Loaders
 
-function EchoNodeFactory(tagContent, parser)
-{
-  var content = tagContent.split(" ");
-  content = content.slice(1, content.length);
-  return new Node("EchoNode", content);
-};
-EchoNodeFactory.tagName = "echo";
-Library.addFactory("EchoNodeFactory");
+  As noted in @ref creating_templates, you will usually not create a Template directly, but retrieve it from an Engine instance. The Engine allows you to define where the templates are retrieved from when you request them by name.
 
-@endcode
-
-Some things to note:
-- Library is a globally accessible object used to register Factories.
-- The addFactory method takes a string which is the name of an object, not the object itself.
-- The script factory function returns a %Node. The first argument to %Node is the name of the QtScript object in the library which defines the node. All additional arguments will be passed to the constructor of that node.
-- The %Node function must have a callable render property which takes a context argument.
-
-@todo \@section qtscript_diff Differences between C++ and QtScript library plugins.
-
-@subsection loaders Loaders
-
-As noted in @ref creating_templates, you will usually not create a Template directly, but retrieve it from an Engine instance. The Engine allows you to define where the templates are retrieved from when you request them by name.
-
-You can redefine the order of places in the filesystem which are searched for templates, and even define new ways to retrieve templates (i.e, not from the filesystem) by subclassing Grantlee::AbstractTemplateLoader and implementing the loadByName method. For existing loaders, see FileSystemTemplateLoader, InMemoryTemplateLoader, and AkonadiTemplateLoader.
+  You can redefine the order of places in the filesystem which are searched for templates, and even define new ways to retrieve templates (i.e, not from the filesystem) by subclassing Grantlee::AbstractTemplateLoader and implementing the loadByName method. For existing loaders, see FileSystemTemplateLoader, InMemoryTemplateLoader, and AkonadiTemplateLoader.
 
 */
 

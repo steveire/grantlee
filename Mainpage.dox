@@ -9,42 +9,42 @@ namespace Grantlee
 
 /** @mainpage The Grantlee Template System
 
-@section overview Overview
+  @section overview Overview
 
-%Grantlee is a Free Software, Open Source string template system based on the <a href="http://docs.djangoproject.com/en/dev/topics/templates/">Django template system</a> from the <a href="http://www.djangoproject.com">Django project</a>. The syntax and design of %Grantlee is intended to be the same as the Django syntax, such that many Django templates should be source-compatible with %Grantlee templates.
+  %Grantlee is a Free Software, Open Source string template system based on the <a href="http://docs.djangoproject.com/en/dev/topics/templates/">Django template system</a> from the <a href="http://www.djangoproject.com">Django project</a>. The syntax and design of %Grantlee is intended to be the same as the Django syntax, such that many Django templates should be source-compatible with %Grantlee templates.
 
-%Grantlee is covered by the GNU Lesser General Public Licence version 2.1 or, at your option, any later version.
+  %Grantlee is covered by the GNU Lesser General Public Licence version 2.1 or, at your option, any later version.
 
-@section start_howto How to use Grantlee
+  @section start_howto How to use Grantlee
 
-%Grantlee allows application developers to make it very easy to create themes for exported data by separating the data to export from the structure of how it is presented. As such, there are two separate roles to use %Grantlee. See @ref for_app_dev and @ref for_themers.
+  %Grantlee allows application developers to make it very easy to create themes for exported data by separating the data to export from the structure of how it is presented. As such, there are two separate roles to use %Grantlee. See @ref for_app_dev and @ref for_themers.
 
-@section start_community Community
+  @section start_community Community
 
-The %Grantlee project mailing list is kde-pim@kde.org, and the IRC channel is \#grantlee on freenode.
+  The %Grantlee project mailing list is kde-pim@kde.org, and the IRC channel is \#grantlee on freenode.
 
-The source repository is located at http://gitorious.org/grantlee.
+  The source repository is located at http://gitorious.org/grantlee.
 
-Report bugs in the KDE bug tracker under the component 'grantlee'.
+  Report bugs in the KDE bug tracker under the component 'grantlee'.
 
-@section todo Todo
-- Finish %Grantlee
-- Port KJots, KMail KNode, Akregator to %Grantlee
-- Port Kopete to %Grantlee
-- Create Akonadi::MailMerge agent based on %Grantlee.
-- Finish Grantlee::Mime.
-- Port Doxygen to %Grantlee
+  @section todo Todo
+  - Finish %Grantlee
+  - Port KJots, KMail KNode, Akregator to %Grantlee
+  - Port Kopete to %Grantlee
+  - Create Akonadi::MailMerge agent based on %Grantlee.
+  - Finish Grantlee::Mime.
+  - Port Doxygen to %Grantlee
 
-@section contents Contents
+  @section contents Contents
 
-- @ref for_themers
-- @ref for_app_dev
-- @ref builtins
-- @ref extension
-- @ref examples
-- @ref differences_django
-- @ref using_and_deploying
-- @ref internals
+  - @ref for_themers
+  - @ref for_app_dev
+  - @ref builtins
+  - @ref extension
+  - @ref examples
+  - @ref differences_django
+  - @ref using_and_deploying
+  - @ref internals
 
 */
 

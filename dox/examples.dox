@@ -4,34 +4,33 @@ namespace Grantlee
 
 /**
 
-@page examples Examples of Grantlee use
+  @page examples Examples of Grantlee use
 
-@section books Books
+  @section books Books
 
-The Books application from Qt Demos is modified to export the available data to a rendered html file. The example shows a use of the extends tag to override some parts of a base template. The templates can be edited to change the exported content without any recompiling. The themer has broad control over how the data os rendered and can even alter the structure of the presented data.
+  The Books application from Qt Demos is modified to export the available data to a rendered html file. The example shows a use of the extends tag to override some parts of a base template. The templates can be edited to change the exported content without any recompiling. The themer has broad control over how the data os rendered and can even alter the structure of the presented data.
 
-@image html grantlee_book_simple.png "A simple export of the data"
-@image html grantlee_book_coloured.png "A coloured export of the data showing the use of the &quot;cycle&quot; tag."
-@image html grantlee_book_coloured_grouped.png "A restructured export of the data showing the use of the &quot;ifchanged&quot; tag."
+  @image html grantlee_book_simple.png "A simple export of the data"
+  @image html grantlee_book_coloured.png "A coloured export of the data showing the use of the &quot;cycle&quot; tag."
+  @image html grantlee_book_coloured_grouped.png "A restructured export of the data showing the use of the &quot;ifchanged&quot; tag."
 
-@section dbus_chat Chat
+  @section dbus_chat Chat
 
-The D-Bus Chat example from Qt has been modified to show the use of the MutableTemplate to render a template multiple times, modifying it each time. In this case, a new chat item is added to the rendered template each time. Again, the themer has complete control over the rendering of the template.
+  The D-Bus Chat example from Qt has been modified to show the use of the MutableTemplate to render a template multiple times, modifying it each time. In this case, a new chat item is added to the rendered template each time. Again, the themer has complete control over the rendering of the template.
 
-@image html grantlee_chat_plain.png "Simple chat view. Mostly the same as the original Qt version."
-@image html grantlee_chat_coloured.png "Simple version with some colouring."
-@image html grantlee_chat_boxes.png "A version with content in boxes."
+  @image html grantlee_chat_plain.png "Simple chat view. Mostly the same as the original Qt version."
+  @image html grantlee_chat_coloured.png "Simple version with some colouring."
+  @image html grantlee_chat_boxes.png "A version with content in boxes."
 
-The idea for the Mutable Tags comes from <a href="http://simonwillison.net/2009/May/19/twophased/">this blog</a>.
+  The idea for the Mutable Tags comes from <a href="http://simonwillison.net/2009/May/19/twophased/">this blog</a>.
 
-@section kjots KJots Rewrite.
-(see playground/pim/akonadi)
-KJots shows a use of %Grantlee by retrieving items from a Model using a custom role, and allows arbitrary nesting by recursively including templates.
+  @section kjots KJots Rewrite.
+  (see playground/pim/akonadi)
+  KJots shows a use of %Grantlee by retrieving items from a Model using a custom role, and allows arbitrary nesting by recursively including templates.
 
-@section akonadi_mail Akonadi Mail
+  @section akonadi_mail Akonadi Mail
 
-The example_mail %Akonadi application demonstrates a custom written AkonadiTemplateLoader to retrieve Templates from %Akonadi. This allows, among other features, instant updates of the rendering in the application when the template is modified externally.
-
+  The example_mail %Akonadi application demonstrates a custom written AkonadiTemplateLoader to retrieve Templates from %Akonadi. This allows, among other features, instant updates of the rendering in the application when the template is modified externally.
 
 */
 
