@@ -277,9 +277,8 @@ QList< int > MarkupDirectorPrivate::getElementsToOpen( QTextBlock::iterator it )
   if ( fontForeground != Qt::NoBrush
        && !( m_openElements.contains( SpanForeground ) ) // Can only open one foreground element at a time.
        && ( fontForeground != m_openForeground )
-       && !(( m_openElements.contains( Anchor )       // If inside an anchor, only open a foreground span tag if
-              || m_elementsToOpen.contains( Anchor ) ) // it is not blue. Qt sort of enforces links being blue
-            && ( fontForeground == Qt::blue ) )  // and underlined. See qt bug 203510.
+       && !(( m_openElements.contains( Anchor )          // Links can't have a foreground color.
+              || m_elementsToOpen.contains( Anchor ) ) )
      ) {
     m_elementsToOpen.insert( SpanForeground );
     m_foregroundToOpen = fontForeground;
