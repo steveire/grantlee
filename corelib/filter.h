@@ -44,16 +44,23 @@ namespace Grantlee
 class GRANTLEE_CORE_EXPORT Filter
 {
 public:
+#ifndef Q_QDOC
   typedef QSharedPointer<Filter> Ptr;
+#endif
 
   /**
     Destructor.
   */
   virtual ~Filter() {}
 
+#ifndef Q_QDOC
+  /**
+    FilterExpression makes it possible to access stream methods like escape while resolving.
+  */
   void setStream( OutputStream *stream ) {
     m_stream = stream;
   }
+#endif
 
   SafeString escape( const QString &input ) const {
     return m_stream->escape( input );
@@ -87,8 +94,11 @@ public:
   virtual bool isSafe() const { // krazy:exclude:inline
     return false;
   }
+
 private:
+#ifndef Q_QDOC
   OutputStream *m_stream;
+#endif
 };
 
 }

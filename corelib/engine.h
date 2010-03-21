@@ -161,6 +161,7 @@ public:
   */
   TagLibraryInterface* loadLibrary( const QString &name );
 
+private:
   Q_DECLARE_PRIVATE( Engine )
   EnginePrivate * const d_ptr;
 };

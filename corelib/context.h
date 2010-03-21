@@ -115,6 +115,7 @@ public:
   */
   explicit Context( const QVariantHash &hash );
 
+#ifndef Q_QDOC
   /**
     @internal
 
@@ -128,7 +129,7 @@ public:
     Sets whether to automatically escape all context content. This is not usually used directly. Use the "{% autoescape %}" tag instead.
   */
   void setAutoEscape( bool autoescape );
-
+#endif
   /**
     Destructor
   */
@@ -156,6 +157,7 @@ public:
   */
   void pop();
 
+#ifndef Q_QDOC
   /**
     @internal Returns the context hash at depth @p depth.
   */
@@ -172,6 +174,7 @@ public:
     Sets whether template being rendered is being mutated to @p mutating.
   */
   void setMutating( bool mutating );
+#endif
 
   QStringList externalMedia() const;
 

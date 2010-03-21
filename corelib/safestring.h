@@ -67,10 +67,12 @@ public:
   */
   ~SafeString();
 
+#ifndef Q_QDOC
   /**
     Set whether the string should be escaped.
   */
   void setNeedsEscape( bool needsEscape );
+#endif
 
   /**
     Whether the string needs to be escaped.
@@ -82,13 +84,21 @@ public:
   */
   bool isSafe() const;
 
+#ifndef Q_QDOC
   /**
     Set whether the string is safe.
   */
   void setSafety( Safety safety );
+#endif
 
+  /**
+    @brief The NestedString is a QString whose methods always return a SafeString
+
+    This class is largely an implementation detail. See the SafeString documentation for details.
+  */
   class GRANTLEE_CORE_EXPORT NestedString : public QString
   {
+#ifndef Q_QDOC
     friend class SafeString;
     SafeString *m_safeString;
   public:
@@ -186,6 +196,7 @@ public:
     SafeString trimmed() const;
 
     void chop( int n );
+#endif
   };
 
   const NestedString& get() const {
@@ -249,7 +260,9 @@ public:
   }
 
 private:
+#ifndef Q_QDOC
   NestedString m_nestedString;
+#endif
   Safety m_safety;
   bool m_needsescape;
 };

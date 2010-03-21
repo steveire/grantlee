@@ -68,13 +68,6 @@ public:
   ~FilterExpression();
 
   /**
-    Returns whether a filter expression is valid.
-
-    A FilterExpression is valid if all filters in the expression exist and the initial variable being filtered is valid.
-  */
-  bool isValid() const;
-
-  /**
     Assignment operator.
   */
   FilterExpression &operator=( const FilterExpression &other );
@@ -101,6 +94,13 @@ public:
     If the FilterExpression can not be resolved to a list, an empty list will be returned.
   */
   QVariantList toList( Context *c ) const;
+
+  /**
+    Returns whether a filter expression is valid.
+
+    A FilterExpression is valid if all filters in the expression exist and the initial variable being filtered is valid.
+  */
+  bool isValid() const;
 
   /**
     Returns the list of filters in the FilterExpression.

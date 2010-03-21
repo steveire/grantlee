@@ -70,6 +70,7 @@ public:
 
   virtual OutputStream* render( OutputStream *stream, Context *c );
 
+#ifndef Q_QDOC
   /**
     @internal
   */
@@ -79,6 +80,7 @@ public:
     @internal
   */
   void setNodeList( const NodeList &list );
+#endif
 
   /**
     Returns an error code for the error encountered.
@@ -92,16 +94,20 @@ public:
 
   Engine const * engine() const;
 
+#ifndef Q_QDOC
 protected:
   TemplateImpl( Engine const *engine, QObject *parent = 0 );
 
   void setContent( const QString &templateString );
+#endif
 
 private:
   Q_DECLARE_PRIVATE( Template )
   TemplatePrivate * const d_ptr;
+#ifndef Q_QDOC
   friend class Engine;
   friend class Parser;
+#endif
 };
 
 }
