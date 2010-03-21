@@ -109,7 +109,7 @@ void TestPlainMarkupOutput::testAnchor()
     outputter.processDocument( doc );
     QString result = outputter.getResult();
 
-    QRegExp regex(QString("^A link\\[1\\] to KDE.\\n\\n---- References ----\\n\\[1\\] http://www.kde.org\\n$"));
+    QRegExp regex(QString("^A link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
 
     regex.exactMatch(result);
 
@@ -129,7 +129,7 @@ void TestPlainMarkupOutput::testAnchorWithFormattedContent()
     QString result = outputter.getResult();
 
 
-    QRegExp regex(QString("^A \\*formatted\\* link\\[1\\] to KDE.\\n\\n---- References ----\\n\\[1\\] http://www.kde.org\\n$"));
+    QRegExp regex(QString("^A \\*formatted\\* link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
 
     QVERIFY(regex.exactMatch(result));
 
@@ -144,7 +144,7 @@ void TestPlainMarkupOutput::testAdjacentAnchors()
     outputter.processDocument( doc );
     QString result = outputter.getResult();
 
-    QRegExp regex(QString("^Two links\\[1\\]next\\[2\\] to eachother.\\n\\n---- References ----\\n\\[1\\] http://www.kde.org\\n\\[2\\] http://www.google.com\\n$"));
+    QRegExp regex(QString("^Two links\\[1\\]next\\[2\\] to eachother.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n\\[2\\] http://www.google.com\\n$"));
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -318,7 +318,7 @@ void TestPlainMarkupOutput::testImage()
     outputter.processDocument( doc );
     QString result = outputter.getResult();
 
-    QRegExp regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n---- References ----\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    QRegExp regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -337,7 +337,7 @@ void TestPlainMarkupOutput::testImageResized()
     outputter.processDocument( doc );
     result = outputter.getResult();
 
-    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n---- References ----\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
     QVERIFY(regex.exactMatch(result));
 
     // height
@@ -346,7 +346,7 @@ void TestPlainMarkupOutput::testImageResized()
     outputter.processDocument( doc );
     result = outputter.getResult();
 
-    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n---- References ----\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
     QVERIFY(regex.exactMatch(result));
 
     // height and width
@@ -355,7 +355,7 @@ void TestPlainMarkupOutput::testImageResized()
     outputter.processDocument( doc );
     result = outputter.getResult();
 
-    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n---- References ----\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
 
     QVERIFY(regex.exactMatch(result));
 }

@@ -59,9 +59,7 @@ private Q_SLOTS:
   void testEachFormatTagSingly();
   void testHorizontalRule();
   void testNewlines();
-  void testEmptyParagraphs();
   void testNewlinesThroughQTextEdit();
-  void testBrInsideParagraph();
 
 };
 
@@ -120,8 +118,6 @@ void TestHtmlOutput::testAnchorWithFormattedContent()
     TextHtmlOutputter outputter;
     outputter.processDocument( doc );
     QString result = outputter.getResult();
-
-//     kDebug() << result;
 
     QRegExp regex(QString("^<p>A <a href=\"http://www.kde.org\"><strong>formatted</strong> link</a> to KDE.</p>\\n$"));
 
@@ -460,27 +456,13 @@ void TestHtmlOutput::testHorizontalRule()
 void TestHtmlOutput::testNewlines()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<p>Foo</p>\n<br /><br />\n<p>Bar</p>");
+    doc->setHtml("<p>Foo<br /><br />\n<p>Bar</p>");
 
     TextHtmlOutputter outputter;
     outputter.processDocument( doc );
     QString result = outputter.getResult();
 
-    QRegExp regex = QRegExp("^<p>Foo</p>\\n<br />\\n<br />\\n<p>Bar</p>\\n$");
-
-    QVERIFY(regex.exactMatch(result));
-}
-
-void TestHtmlOutput::testEmptyParagraphs()
-{
-    QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<p>Foo</p>\n<br /><br />\n<p>Bar</p>");
-
-    TextHtmlOutputter outputter;
-    outputter.processDocument( doc );
-    QString result = outputter.getResult();
-
-    QRegExp regex = QRegExp("^<p>Foo</p>\\n<br />\\n<br />\\n<p>Bar</p>\\n$");
+    QRegExp regex = QRegExp("^<p>Foo</p>\\n<p>&nbsp;<p>&nbsp;</p>\\n<p>Bar</p>\\n$");
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -501,28 +483,10 @@ void TestHtmlOutput::testNewlinesThroughQTextEdit()
     outputter.processDocument( te->document() );
     QString result = outputter.getResult();
 
-    QRegExp regex = QRegExp("^<p>Foo</p>\\n<br />\\n<br />\\n<p>Bar</p>\\n$");
+    QRegExp regex = QRegExp("^<p>Foo</p>\\n<p>&nbsp;<p>&nbsp;<p>Bar</p>\\n$");
 
     QVERIFY(regex.exactMatch(result));
 }
-
-void TestHtmlOutput:: testBrInsideParagraph()
-{
-
-    QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<p>Foo<br /><br /><br />Bar</p>");
-
-    TextHtmlOutputter outputter;
-    outputter.processDocument( doc );
-    QString result = outputter.getResult();
-
-    // Two paragraphs separated by two line breaks
-
-    QRegExp regex = QRegExp("^<p>Foo</p>\\n<br />\\n<br />\\n<p>Bar</p>\\n$");
-
-    QVERIFY(regex.exactMatch(result));
-}
-
 
 QTEST_MAIN(TestHtmlOutput)
 #include "htmlbuildertest.moc"
