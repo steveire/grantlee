@@ -7,7 +7,7 @@ find_package(Qt4 4.5.0 REQUIRED)
 option( BUILD_CORE "Build the Grantlee core library" TRUE )
 option( BUILD_GUI "Build the Grantlee gui library" TRUE )
 option( BUILD_PLUGINS "Build the Grantlee plugins" TRUE )
-option( BUILD_TESTS "Build the Grantlee tests" FALSE )
+option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 
 set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
 
