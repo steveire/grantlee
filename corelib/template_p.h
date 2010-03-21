@@ -22,7 +22,7 @@
 #define GRANTLEE_TEMPLATE_P_H
 
 #if QT_VERSION < 0x040600
-#include <QPointer>
+#include <QtCore/QPointer>
 #endif
 
 #include "template.h"

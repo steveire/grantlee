@@ -20,8 +20,8 @@
 
 #include "scriptabletemplate.h"
 
-#include <QScriptContext>
-#include <QScriptEngine>
+#include <QtScript/QScriptContext>
+#include <QtScript/QScriptEngine>
 
 #include "engine.h"
 #include "context.h"

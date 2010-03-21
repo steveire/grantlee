@@ -19,7 +19,7 @@
 */
 
 #include <QtCore>
-#include <QObject>
+#include <QtCore/QObject>
 
 #include "myinterface.h"
 #include "myobject.h"

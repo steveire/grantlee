@@ -20,7 +20,7 @@
 
 #include "mediafinder.h"
 
-#include <QUrl>
+#include <QtCore/QUrl>
 
 #include "parser.h"
 

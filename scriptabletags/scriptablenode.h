@@ -21,9 +21,9 @@
 #ifndef SCRIPTABLE_NODE_H
 #define SCRIPTABLE_NODE_H
 
-#include <QScriptValue>
+#include <QtScript/QScriptValue>
 
-#include <QSharedPointer>
+#include <QtCore/QSharedPointer>
 
 #include "node.h"
 

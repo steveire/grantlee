@@ -20,7 +20,7 @@
 
 #include "defaultfilters.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QtPlugin>
 
 #include "parser.h"

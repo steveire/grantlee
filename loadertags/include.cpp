@@ -20,7 +20,7 @@
 
 #include "include.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QtPlugin>
 
 #include "parser.h"
@@ -28,7 +28,7 @@
 #include "engine.h"
 #include "exception.h"
 
-#include <QDebug>
+#include <QtCore/QDebug>
 #include <util_p.h>
 
 IncludeNodeFactory::IncludeNodeFactory()

@@ -22,10 +22,10 @@
 #include <QtTest>
 #include <QtCore>
 #include <qtestevent.h>
-#include <QRegExp>
-#include <QTextCursor>
-#include <QTextDocument>
-#include <QTextEdit>
+#include <QtCore/QRegExp>
+#include <QtGui/QTextCursor>
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextEdit>
 
 #include "markupdirector.h"
 #include "texthtmlbuilder.h"

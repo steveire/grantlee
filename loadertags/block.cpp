@@ -20,7 +20,7 @@
 
 #include "block.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 #include "parser.h"
 #include "template.h"

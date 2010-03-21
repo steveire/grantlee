@@ -21,9 +21,9 @@
 #ifndef SCRIPTABLE_FILTEREXPRESSION_H
 #define SCRIPTABLE_FILTEREXPRESSION_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
-#include <QScriptValue>
+#include <QtScript/QScriptValue>
 
 #include "filterexpression.h"
 

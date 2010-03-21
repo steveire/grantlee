@@ -20,7 +20,7 @@
 
 #include "strings.h"
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 #include "util_p.h"
 

@@ -20,7 +20,7 @@
 
 #include "parser.h"
 
-#include <QFile>
+#include <QtCore/QFile>
 
 #include "taglibraryinterface.h"
 #include "template.h"

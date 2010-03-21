@@ -20,8 +20,8 @@
 
 #include "autoescape.h"
 
-#include <QStringList>
-#include <QFile>
+#include <QtCore/QStringList>
+#include <QtCore/QFile>
 
 #include "parser.h"
 #include "template.h"

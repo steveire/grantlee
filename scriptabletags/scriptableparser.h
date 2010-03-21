@@ -21,10 +21,10 @@
 #ifndef SCRIPTABLE_PARSER_H
 #define SCRIPTABLE_PARSER_H
 
-#include <QObject>
-#include <QScriptValue>
-#include <QStringList>
-#include <QVariant>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
+#include <QtScript/QScriptValue>
 
 #include "token.h"
 

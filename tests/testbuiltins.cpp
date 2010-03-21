@@ -22,7 +22,7 @@
 #define BUILTINSTEST_H
 
 #include <QtTest>
-#include <QObject>
+#include <QtCore/QObject>
 
 #include "template.h"
 #include "engine.h"

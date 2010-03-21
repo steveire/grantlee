@@ -22,19 +22,19 @@
 #include "markupdirector.h"
 #include "markupdirector_p.h"
 
-#include <QFlags>
-#include <QTextDocument>
-#include <QTextDocumentFragment>
-#include <QString>
-#include <QStack>
-#include <QTextFrame>
-#include <QTextTable>
-#include <QTextList>
-#include <QTextCursor>
-#include <QTextCharFormat>
-#include <QMap>
-#include <QColor>
-#include <QBrush>
+#include <QtCore/QFlags>
+#include <QtCore/QMap>
+#include <QtCore/QStack>
+#include <QtCore/QString>
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextDocumentFragment>
+#include <QtGui/QTextFrame>
+#include <QtGui/QTextTable>
+#include <QtGui/QTextList>
+#include <QtGui/QTextCursor>
+#include <QtGui/QTextCharFormat>
+#include <QtGui/QColor>
+#include <QtGui/QBrush>
 
 #include "abstractmarkupbuilder.h"
 

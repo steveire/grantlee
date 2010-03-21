@@ -20,8 +20,8 @@
 
 #include "now.h"
 
-#include <QStringList>
-#include <QDateTime>
+#include <QtCore/QStringList>
+#include <QtCore/QDateTime>
 
 #include "parser.h"
 #include "exception.h"

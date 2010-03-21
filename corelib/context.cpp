@@ -20,7 +20,7 @@
 
 #include "context.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 #include "util_p.h"
 

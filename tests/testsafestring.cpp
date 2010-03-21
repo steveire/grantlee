@@ -22,7 +22,7 @@
 #define SAFESTRINGTEST_H
 
 #include <QtTest>
-#include <QObject>
+#include <QtCore/QObject>
 
 #include "safestring.h"
 #include "outputstream.h"

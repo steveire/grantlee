@@ -21,8 +21,8 @@
 #ifndef SCRIPTABLE_VARIABLE_H
 #define SCRIPTABLE_VARIABLE_H
 
-#include <QObject>
-#include <QScriptValue>
+#include <QtCore/QObject>
+#include <QtScript/QScriptValue>
 
 #include "variable.h"
 

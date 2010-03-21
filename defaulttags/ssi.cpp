@@ -20,9 +20,9 @@
 
 #include "ssi.h"
 
-#include <QStringList>
-#include <QFile>
-#include <QTextStream>
+#include <QtCore/QStringList>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 
 #include "parser.h"
 #include "template.h"

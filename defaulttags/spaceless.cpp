@@ -20,7 +20,7 @@
 
 #include "spaceless.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include "parser.h"
 
 SpacelessNodeFactory::SpacelessNodeFactory()

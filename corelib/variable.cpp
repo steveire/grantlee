@@ -22,9 +22,9 @@
 
 #include "typeaccessors_p.h"
 
-#include <QStringList>
-#include <QMetaEnum>
-#include <QDebug>
+#include <QtCore/QStringList>
+#include <QtCore/QMetaEnum>
+#include <QtCore/QDebug>
 
 #include "context.h"
 #include "util_p.h"

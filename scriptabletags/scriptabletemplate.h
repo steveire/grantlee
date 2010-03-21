@@ -21,10 +21,10 @@
 #ifndef SCRIPTABLE_TEMPLATE_H
 #define SCRIPTABLE_TEMPLATE_H
 
-#include <QObject>
-#include <QVariant>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
-#include <QScriptValue>
+#include <QtScript/QScriptValue>
 
 #include "template.h"
 

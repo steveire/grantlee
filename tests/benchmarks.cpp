@@ -23,7 +23,7 @@
 
 #include <QtTest>
 #include <QtCore>
-#include <QObject>
+#include <QtCore/QObject>
 
 #include "lexer_p.h"
 #include "template.h"

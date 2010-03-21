@@ -20,7 +20,7 @@
 
 #include "debug.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include "parser.h"
 
 DebugNodeFactory::DebugNodeFactory()

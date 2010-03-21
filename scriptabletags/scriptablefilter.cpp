@@ -23,7 +23,7 @@
 
 #include "util_p.h"
 
-#include <QScriptEngine>
+#include <QtScript/QScriptEngine>
 
 ScriptableFilter::ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine )
     : m_filterObject( filterObject ), m_scriptEngine( engine )

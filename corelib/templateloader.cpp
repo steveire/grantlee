@@ -22,9 +22,9 @@
 #include "engine.h"
 #include "exception.h"
 
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 
 using namespace Grantlee;
 

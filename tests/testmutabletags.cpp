@@ -22,7 +22,7 @@
 #define MUTABLETAGSTEST_H
 
 #include <QtTest>
-#include <QObject>
+#include <QtCore/QObject>
 
 #include "mutabletemplate.h"
 #include "engine.h"

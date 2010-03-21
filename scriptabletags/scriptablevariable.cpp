@@ -20,7 +20,7 @@
 
 #include "scriptablevariable.h"
 
-#include <QScriptEngine>
+#include <QtScript/QScriptEngine>
 
 #include "scriptablecontext.h"
 

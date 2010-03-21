@@ -21,9 +21,9 @@
 #include "scriptabletags.h"
 
 #include <QtPlugin>
-#include <QFile>
+#include <QtCore/QFile>
 
-#include <QScriptEngine>
+#include <QtScript/QScriptEngine>
 
 #include "scriptablenode.h"
 #include "scriptablevariable.h"

@@ -20,7 +20,7 @@
 
 #include "filterexpression.h"
 
-#include <QBuffer>
+#include <QtCore/QBuffer>
 
 #include "parser.h"
 #include "filter.h"

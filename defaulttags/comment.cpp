@@ -20,7 +20,7 @@
 
 #include "comment.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QtPlugin>
 
 #include "parser.h"

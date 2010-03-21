@@ -21,11 +21,11 @@
 #ifndef GRANTLEE_TYPE_ACCESSORS_H
 #define GRANTLEE_TYPE_ACCESSORS_H
 
-#include <QVariant>
-#include <QStringList>
-#include <QDebug>
+#include <QtCore/QVariant>
+#include <QtCore/QStringList>
+#include <QtCore/QDebug>
 #include "safestring.h"
-#include <QRegExp>
+#include <QtCore/QRegExp>
 
 template <typename T>
 struct TypeAccessor

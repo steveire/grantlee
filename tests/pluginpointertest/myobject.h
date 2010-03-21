@@ -2,7 +2,7 @@
 #ifndef MYOBJECT_H
 #define MYOBJECT_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include "myinterface.h"
 
 class MyObject : public QObject, public MyInterface

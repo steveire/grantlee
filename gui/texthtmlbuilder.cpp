@@ -20,8 +20,8 @@
 
 #include "texthtmlbuilder.h"
 
-#include <QTextDocument>
-#include <QList>
+#include <QtCore/QList>
+#include <QtGui/QTextDocument>
 
 namespace Grantlee
 {

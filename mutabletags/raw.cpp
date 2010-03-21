@@ -19,7 +19,7 @@
 */
 
 #include "raw.h"
-#include <QStringList>
+#include <QtCore/QStringList>
 #include "parser.h"
 
 RawNodeFactory::RawNodeFactory()

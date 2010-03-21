@@ -24,9 +24,9 @@
 #include "node.h"
 #include "taglibraryinterface.h"
 
-// #include <QScriptEngine>
+// #include <QtScript/QScriptEngine>
 
-// #include <QSharedPointer>
+// #include <QtScript/QSharedPointer>
 // typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
 
 class QScriptEngine;

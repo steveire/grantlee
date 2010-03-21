@@ -21,10 +21,10 @@
 #include "engine.h"
 #include "engine_p.h"
 
-#include <QRegExp>
-#include <QTextStream>
-#include <QDir>
-#include <QPluginLoader>
+#include <QtCore/QRegExp>
+#include <QtCore/QTextStream>
+#include <QtCore/QDir>
+#include <QtCore/QPluginLoader>
 
 #include "taglibraryinterface.h"
 #include "template_p.h"

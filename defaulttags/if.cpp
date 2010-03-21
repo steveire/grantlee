@@ -20,7 +20,7 @@
 
 #include "if.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 #include "parser.h"
 #include "exception.h"
