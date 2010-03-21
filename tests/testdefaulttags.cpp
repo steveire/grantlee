@@ -153,6 +153,10 @@ private Q_SLOTS:
     doTest();
   }
 
+  void testRangeTag_data();
+  void testRangeTag() {
+    doTest();
+  }
 
 private:
 
@@ -1346,6 +1350,28 @@ void TestDefaultTags::testMediaFinderTag_data()
   QTest::newRow( "media_finder-tag09" ) << "{% media_finder \"existing_image.png\" \"another_existing_image.png\" %}" << dict << "file:///path/to/existing_image.png" << NoError;
   QTest::newRow( "media_finder-tag10" ) << "{% media_finder \"another_existing_image.png\" \"existing_image.png\" %}" << dict << "file:///path/to/another_existing_image.png" << NoError;
 }
+
+void TestDefaultTags::testRangeTag_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QTest::newRow( "range-tag01" ) << "{% range 5 as i %}{{ i }};{% endrange %}" << dict << "0;1;2;3;4;" << NoError;
+  QTest::newRow( "range-tag02" ) << "{% range 1 6 as i %}{{ i }};{% endrange %}" << dict << "1;2;3;4;5;" << NoError;
+  QTest::newRow( "range-tag03" ) << "{% range 5 26 5 as i %}{{ i }};{% endrange %}" << dict << "5;10;15;20;25;" << NoError;
+
+  QVariantList list;
+  list << 10 << 15 << 2;
+  dict.insert( "values", list );
+
+  QTest::newRow( "range-tag04" ) << "{% range values.0 values.1 values.2 as i %}{{ i }};{% endrange %}" << dict << "10;12;14;" << NoError;
+
+}
+
 
 QTEST_MAIN( TestDefaultTags )
 #include "testdefaulttags.moc"

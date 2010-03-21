@@ -39,21 +39,22 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
 
   expr.takeAt( 0 );
   int numArgs = expr.size();
-  if ( numArgs <= 0 ) {
-    throw Grantlee::Exception( TagSyntaxError, "'range' tag requires at least one argument" );
+  if ( numArgs <= 2 ) {
+    throw Grantlee::Exception( TagSyntaxError, "'range' tag requires at least three arguments" );
   }
 
-  QString name;
-  if ( numArgs >= 3 && expr.at( numArgs - 3 ) == "as" ) {
-    name = expr.at( numArgs - 2 );
-    numArgs -= 2;
+  if ( expr.at( numArgs - 2 ) != "as"  ) {
+    throw Grantlee::Exception( TagSyntaxError, "Invalid arguments to 'range' tag" );
   }
+
+  const QString name = expr.at( numArgs - 1 );
+  numArgs -= 2;
 
   RangeNode *n = 0;
 
   switch ( numArgs ) {
   case 1:
-    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), p );
+    n = new RangeNode( name, FilterExpression( "0", p ), FilterExpression( expr.at( 0 ), p ), p );
     break;
   case 2:
     n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ), p );
@@ -64,34 +65,26 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
   default:
     return 0;
   }
-  Q_ASSERT( n );
+
   NodeList list = p->parse( n, "endrange" );
   p->removeNextToken();
 
   n->setNodeList( list );
   return n;
-
 }
 
-RangeNode::RangeNode( const QString &name, FilterExpression stopExpression, QObject* parent )
-    : Node( parent ),
+RangeNode::RangeNode( const QString &name, const FilterExpression &startExpression, const FilterExpression &stopExpression, QObject* parent )
+  : Node( parent ),
     m_name( name ),
+    m_startExpression( startExpression ),
     m_stopExpression( stopExpression )
 {
 }
 
-RangeNode::RangeNode( const QString &name, FilterExpression startExpression, FilterExpression stopExpression, QObject* parent )
-    : Node( parent ),
+RangeNode::RangeNode( const QString &name, const FilterExpression &startExpression, const FilterExpression &stopExpression, const FilterExpression &stepExpression, QObject* parent )
+  : Node( parent ),
     m_name( name ),
-    m_startOrStopExpression( startExpression ),
-    m_stopExpression( stopExpression )
-{
-}
-
-RangeNode::RangeNode( const QString &name, FilterExpression startOrStopExpression, FilterExpression stopExpression, FilterExpression stepExpression, QObject* parent )
-    : Node( parent ),
-    m_name( name ),
-    m_startOrStopExpression( startOrStopExpression ),
+    m_startExpression( startExpression ),
     m_stopExpression( stopExpression ),
     m_stepExpression( stepExpression )
 {
@@ -108,13 +101,8 @@ void RangeNode::render( OutputStream *stream, Context* c )
   int stop;
   int step;
 
-  if ( m_stopExpression.isValid() ) {
-    start = m_startOrStopExpression.resolve( c ).toInt();
-    stop = m_stopExpression.resolve( c ).toInt();
-  } else {
-    start = 0;
-    stop = m_startOrStopExpression.resolve( c ).toInt();
-  }
+  start = m_startExpression.resolve( c ).toInt();
+  stop = m_stopExpression.resolve( c ).toInt();
 
   if ( m_stepExpression.isValid() ) {
     step = m_stepExpression.resolve( c ).toInt();
@@ -127,7 +115,7 @@ void RangeNode::render( OutputStream *stream, Context* c )
   Q_ASSERT( start < stop );
 
   QString ret;
-  for ( int i = start; start < stop; start += step ) {
+  for ( int i = start; i < stop; i += step ) {
     if ( insertContext ) {
       c->push();
       c->insert( m_name, i );
