@@ -36,7 +36,6 @@ class Engine;
 class TemplateImpl;
 class OutputStream;
 
-typedef QWeakPointer<TemplateImpl> TemplateWeakPtr;
 typedef QSharedPointer<TemplateImpl> Template;
 
 class TemplatePrivate;
