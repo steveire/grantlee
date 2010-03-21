@@ -4,6 +4,11 @@ cmake_minimum_required(VERSION 2.6)
 
 find_package(Qt4 4.5.0 REQUIRED)
 
+option( BUILD_CORE "Build the Grantlee core library" TRUE )
+option( BUILD_GUI "Build the Grantlee gui library" TRUE )
+option( BUILD_PLUGINS "Build the Grantlee plugins" TRUE )
+option( BUILD_TESTS "Build the Grantlee tests" FALSE )
+
 set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
@@ -38,26 +43,34 @@ set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
 set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
 set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 
-set(Grantlee_CORE_LIBRARY "grantlee_core")
-set(Grantlee_GUI_LIBRARY "grantlee_gui")
-set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
-set(Grantlee_GUI_LIBRARIES ${Grantlee_GUI_LIBRARY} ${QT_QTGUI_LIBRARIES} )
-
 set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 
-add_subdirectory(corelib)
-add_subdirectory(gui)
+if (BUILD_CORE)
+  set(Grantlee_CORE_LIBRARY "grantlee_core")
+  set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
+  add_subdirectory(corelib)
+endif()
 
-add_subdirectory(loadertags)
-add_subdirectory(defaulttags)
+if (BUILD_GUI)
+  set(Grantlee_GUI_LIBRARY "grantlee_gui")
+  set(Grantlee_GUI_LIBRARIES ${Grantlee_GUI_LIBRARY} ${QT_QTGUI_LIBRARIES} )
+  add_subdirectory(gui)
+endif()
 
-add_subdirectory(defaultfilters)
+if (BUILD_PLUGINS)
+  add_subdirectory(loadertags)
+  add_subdirectory(defaulttags)
 
-add_subdirectory(mutabletags)
+  add_subdirectory(defaultfilters)
 
-add_subdirectory(scriptabletags)
+  add_subdirectory(mutabletags)
 
-add_subdirectory(tests)
+  add_subdirectory(scriptabletags)
+endif()
+
+if (BUILD_TESTS)
+  add_subdirectory(tests)
+endif()
 
 configure_file(
   "${CMAKE_MODULE_PATH}/GrantleeConfig.cmake.in"
