@@ -36,7 +36,11 @@ class Engine;
 class TemplateImpl;
 class OutputStream;
 
+#ifdef Q_QDOC
+#define TemplateImpl Template
+#else
 typedef QSharedPointer<TemplateImpl> Template;
+#endif
 
 class TemplatePrivate;
 
