@@ -29,6 +29,8 @@
 namespace Grantlee
 {
 
+/// @headerfile safestring.h grantlee/safestring.h
+
 /**
   @brief A QString wrapper class for containing whether a string is safe or needs to be escaped.
 

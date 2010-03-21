@@ -45,6 +45,8 @@ class TemplateImpl;
 
 class NodePrivate;
 
+/// @headerfile node.h grantlee/node.h
+
 /**
   @brief Base class for all nodes.
 
@@ -113,6 +115,8 @@ private:
   Q_DECLARE_PRIVATE( Node )
   NodePrivate * const d_ptr;
 };
+
+/// @headerfile node.h grantlee/node.h
 
 /**
   @brief A list of Nodes with some convenience API for rendering them.
@@ -191,6 +195,8 @@ private:
 };
 
 class AbstractNodeFactoryPrivate;
+
+/// @headerfile node.h grantlee/node.h
 
 /**
   @brief Base class for all NodeFactories

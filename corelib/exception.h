@@ -30,6 +30,8 @@
 namespace Grantlee
 {
 
+/// @headerfile exception.h grantlee/exception.h
+
 /**
   An exception for use when implementing template tags.
 */

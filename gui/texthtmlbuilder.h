@@ -35,6 +35,8 @@ namespace Grantlee
 
 class TextHTMLBuilderPrivate;
 
+/// @headerfile texthtmlbuilder.h grantlee/texthtmlbuilder.h
+
 /**
   @brief The TextHTMLBuilder creates a clean html markup output.
 

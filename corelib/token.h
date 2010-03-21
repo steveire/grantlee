@@ -38,6 +38,8 @@ enum TokenType {
   CommentToken
 };
 
+/// @headerfile token.h grantlee/token.h
+
 /**
   A token in a parse stream for a template.
 

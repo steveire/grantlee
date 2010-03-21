@@ -41,6 +41,8 @@ namespace Grantlee
 
 class PlainTextMarkupBuilderPrivate;
 
+/// @headerfile plaintextmarkupbuilder.h grantlee/plaintextmarkupbuilder.h
+
 /**
   @brief The PlainTextHTMLMarkupBuilder creates a simple marked up plain text document.
 

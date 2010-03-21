@@ -31,6 +31,8 @@ namespace Grantlee
 
 class SafeString;
 
+/// @headerfile outputstream.h grantlee/outputstream.h
+
 /**
   @brief The OutputStream class is used to render templates to a QTextStream
 

@@ -36,6 +36,8 @@ typedef QPair<Filter::Ptr, Variable > ArgFilter;
 
 class FilterExpressionPrivate;
 
+/// @headerfile filterexpression.h grantlee/filterexpression.h
+
 /**
   @brief A FilterExpression object represents a filter expression in a template.
 

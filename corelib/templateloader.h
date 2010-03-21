@@ -31,6 +31,8 @@
 namespace Grantlee
 {
 
+/// @headerfile templateloader.h grantlee/templateloader.h
+
 /**
   @brief An retrieval interface to a storage location for Template objects.
 
@@ -72,6 +74,8 @@ public:
   virtual bool canLoadTemplate( const QString &name ) const = 0;
 
 };
+
+/// @headerfile templateloader.h grantlee/templateloader.h
 
 /**
   @brief The FileSystemTemplateLoader loads Templates from the file system.
@@ -145,6 +149,8 @@ private:
   QString m_themeName;
   QStringList m_templateDirs;
 };
+
+/// @headerfile templateloader.h grantlee/templateloader.h
 
 /**
   @brief The InMemoryTemplateLoader loads Templates set dynamically in memory

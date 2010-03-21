@@ -32,8 +32,11 @@
 
 #include "grantlee_core_export.h"
 
+
 namespace Grantlee
 {
+
+/// @headerfile filter.h grantlee/filter.h
 
 /**
   @brief Base class for all filters

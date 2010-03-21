@@ -31,6 +31,8 @@ class Context;
 
 class VariablePrivate;
 
+/// @headerfile variable.h grantlee/variable.h
+
 /**
   @brief A container for static variables defined in Templates.
 

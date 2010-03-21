@@ -33,6 +33,8 @@ namespace Grantlee
 
 class AbstractMarkupBuilderPrivate;
 
+/// @headerfile abstractmarkupbuilder.h grantlee/abstractmarkupbuilder.h
+
 /**
   @brief The AbstractMarkupBuilder class serves as a base class for creating marked up plain text output.
 
@@ -242,6 +244,8 @@ public:
   */
   virtual QString getResult() = 0;
 };
+
+/// @headerfile abstractmarkupbuilder.h grantlee/abstractmarkupbuilder.h
 
 template <typename DocumentProcessor, typename ConcreteBuilder>
 class GRANTLEE_GUI_EXPORT DocumentOutputter : public DocumentProcessor, protected ConcreteBuilder

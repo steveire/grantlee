@@ -38,6 +38,8 @@ namespace Grantlee
 
 class MarkupDirectorPrivate;
 
+/// @headerfile markupdirector.h grantlee/markupdirector.h
+
 /**
   @brief The Markupdirector class controls and instructs a builder object to create markup output.
 

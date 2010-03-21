@@ -30,6 +30,8 @@ class MutableTemplateImpl;
 typedef QWeakPointer<MutableTemplateImpl> MutableTemplateWeakPtr;
 typedef QSharedPointer<MutableTemplateImpl> MutableTemplate;
 
+/// @headerfile mutabletemplate.h grantlee/mutabletemplate.h
+
 /**
   A Template which is mutated each time it is rendered.
 */

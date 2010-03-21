@@ -30,6 +30,8 @@ namespace Grantlee
 
 class ContextPrivate;
 
+/// @headerfile context.h grantlee/context.h
+
 /**
   @brief The Context class holds the context to render a template with.
 

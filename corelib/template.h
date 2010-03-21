@@ -44,6 +44,8 @@ typedef QSharedPointer<TemplateImpl> Template;
 
 class TemplatePrivate;
 
+/// @headerfile template.h grantlee/template.h
+
 /**
   @brief The Template class is a tree of nodes which may be rendered.
 
