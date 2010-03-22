@@ -104,6 +104,10 @@ protected:
 #endif
 
 private:
+  //Don't allow setting the parent on a Template, which is memory managed as a QSharedPointer.
+  using QObject::setParent;
+
+private:
   Q_DECLARE_PRIVATE( Template )
   TemplatePrivate * const d_ptr;
 #ifndef Q_QDOC
