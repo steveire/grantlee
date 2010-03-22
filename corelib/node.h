@@ -354,47 +354,6 @@ private:
   AbstractNodeFactoryPrivate * const d_ptr;
 };
 
-/**
-  @internal
-
-  A Node for plain text. Plain text is everything between variables, comments and template tags.
-*/
-class GRANTLEE_CORE_EXPORT TextNode : public Node
-{
-  Q_OBJECT
-public:
-  explicit TextNode( const QString &content, QObject *parent = 0 );
-
-  /* reimp */ void render( OutputStream *stream, Context *c ) { // krazy:exclude:inline
-    Q_UNUSED( c );
-    ( *stream ) << m_content;
-  }
-
-  void appendContent( const QString &content ) { // krazy:exclude:inline
-    m_content += content;
-  }
-
-private:
-  QString m_content;
-};
-
-/**
-  @internal
-
-  A node for a variable or filter expression substitution.
-*/
-class GRANTLEE_CORE_EXPORT VariableNode : public Node
-{
-  Q_OBJECT
-public:
-  explicit VariableNode( const FilterExpression &fe, QObject *parent = 0 );
-
-  /* reimp */ void render( OutputStream *stream, Context *c );
-
-private:
-  FilterExpression m_filterExpression;
-};
-
 }
 
 #endif

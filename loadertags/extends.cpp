@@ -24,6 +24,7 @@
 
 #include <QtCore/QStringList>
 
+#include "nodebuiltins_p.h"
 #include "parser.h"
 #include "template.h"
 #include "engine.h"

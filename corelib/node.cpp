@@ -20,6 +20,7 @@
 
 #include "node.h"
 
+#include "nodebuiltins_p.h"
 #include "util_p.h"
 #include "template.h"
 
@@ -234,24 +235,6 @@ QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
   }
 
   return l;
-}
-
-TextNode::TextNode( const QString &content, QObject *parent )
-    : Node( parent ), m_content( content )
-{
-}
-
-VariableNode::VariableNode( const FilterExpression &fe, QObject *parent )
-    : Node( parent ), m_filterExpression( fe )
-{
-}
-
-void VariableNode::render( OutputStream *stream, Context *c )
-{
-  QVariant v = m_filterExpression.resolve( c );
-  if ( !v.isValid() )
-    return;
-  streamValueInContext( stream, v, c );
 }
 
 #include "node.moc"

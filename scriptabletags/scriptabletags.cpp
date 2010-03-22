@@ -25,6 +25,8 @@
 
 #include <QtScript/QScriptEngine>
 
+#include "nodebuiltins_p.h"
+
 #include "scriptablenode.h"
 #include "scriptablevariable.h"
 #include "scriptablefilterexpression.h"
