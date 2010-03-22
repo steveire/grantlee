@@ -20,7 +20,7 @@ namespace Grantlee
     /// Outputs its input string twice.
     class TwiceFilter : public Grantlee::Filter
     {
-      /* reimp */ SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
+      /* reimp */ QVariant dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
       {
         SafeString str = getSafeString(input);
 
@@ -43,7 +43,7 @@ namespace Grantlee
     /// Outputs its input n times.
     class RepeatFilter : public Grantlee::Filter
     {
-      SafeString dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
+      QVariant dofilter(const QVariant &input, const QVariant &arg = QVariant(), bool autoescape = false) const
       {
         SafeString str = getSafeString(input);
 
