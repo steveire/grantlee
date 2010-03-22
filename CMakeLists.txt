@@ -6,7 +6,8 @@ find_package(Qt4 4.5.0 REQUIRED)
 
 option( BUILD_CORE "Build the Grantlee core library" TRUE )
 option( BUILD_GUI "Build the Grantlee gui library" TRUE )
-option( BUILD_PLUGINS "Build the Grantlee plugins" TRUE )
+option( BUILD_MAIN_PLUGINS "Build the Grantlee plugins" TRUE )
+option( BUILD_SCRIPT_PLUGIN "Build the Grantlee scriptable tags plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 
 set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
@@ -57,14 +58,16 @@ if (BUILD_GUI)
   add_subdirectory(gui)
 endif()
 
-if (BUILD_PLUGINS)
+if (BUILD_MAIN_PLUGINS)
   add_subdirectory(loadertags)
   add_subdirectory(defaulttags)
 
   add_subdirectory(defaultfilters)
 
   add_subdirectory(mutabletags)
+endif()
 
+if (BUILD_SCRIPT_PLUGIN)
   add_subdirectory(scriptabletags)
 endif()
 
