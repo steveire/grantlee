@@ -120,7 +120,7 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
     IMMEDIATE @ONLY)
 
   # Add support for a Qt assistant docs target
-  # qttags.tag is too big to distribute with Granltee. Get it
+  # qttags.tag is too big to distribute with Grantlee. Get it
   # from http://api.kde.org/kdereview-api/kdereview.tar.gz for example.
   if(EXISTS ${CMAKE_SOURCE_DIR}/scripts/qttags.tag)
     set(DOCS_OUTPUT_DIRECTORY "@CMAKE_BINARY_DIR@/qtdocs")
