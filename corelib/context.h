@@ -176,11 +176,22 @@ public:
     Sets whether template being rendered is being mutated to @p mutating.
   */
   void setMutating( bool mutating );
+
+  /**
+    @internal
+  */
+  void addExternalMedia( const QString &uri );
+
+  /**
+    @internal
+  */
+  void clearExternalMedia();
 #endif
 
+  /**
+    Returns the external media encountered in the Template while rendering.
+  */
   QStringList externalMedia() const;
-
-  void addExternalMedia( const QString &uri );
 
 private:
   Q_DECLARE_PRIVATE( Context )

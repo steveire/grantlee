@@ -76,6 +76,7 @@ OutputStream* TemplateImpl::render( OutputStream *stream, Context *c )
 {
   Q_D( Template );
 
+  c->clearExternalMedia();
   try {
     d->m_nodeList.render( stream, c );
   } catch ( Grantlee::Exception &e ) {

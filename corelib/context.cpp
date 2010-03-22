@@ -148,4 +148,10 @@ QStringList Context::externalMedia() const
   return d->m_externalMedia;
 }
 
+void Context::clearExternalMedia()
+{
+  Q_D( Context );
+  d->m_externalMedia.clear();
+}
+
 
