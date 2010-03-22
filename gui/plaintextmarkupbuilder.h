@@ -179,12 +179,12 @@ public:
   /* reimp */ void appendLiteralText( const QString &text );
 
   /**
-  Returns the finalised plain text markup, including references at the end.
+    Returns the finalised plain text markup, including references at the end.
   */
   /* reimp */ QString getResult();
 
 private:
-  PlainTextMarkupBuilderPrivate *d_ptr;
+  PlainTextMarkupBuilderPrivate * const d_ptr;
   Q_DECLARE_PRIVATE( PlainTextMarkupBuilder )
 
 };

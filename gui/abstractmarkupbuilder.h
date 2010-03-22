@@ -110,7 +110,7 @@ public:
 
   /**
     Begin a new font point size element in the markup
-    @param int The point size to begin.
+    @param size The point size to begin.
   */
   virtual void beginFontPointSize( int size ) = 0;
 
@@ -233,7 +233,7 @@ public:
   /**
     Append the plain text @p text to the markup.
 
-    @param The text to append.
+    @param text The text to append.
   */
   virtual void appendLiteralText( const QString &text ) = 0;
 
@@ -247,6 +247,11 @@ public:
 
 /// @headerfile abstractmarkupbuilder.h grantlee/abstractmarkupbuilder.h
 
+/**
+  @brief The DocumentOutputter is an aggregation template class for combining a markup director with a builder
+
+
+*/
 template <typename DocumentProcessor, typename ConcreteBuilder>
 class GRANTLEE_GUI_EXPORT DocumentOutputter : public DocumentProcessor, protected ConcreteBuilder
 {
