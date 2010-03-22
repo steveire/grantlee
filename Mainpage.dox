@@ -32,10 +32,12 @@ namespace Grantlee
       - AbstractTemplateLoader
       - FileSystemTemplateLoader
     </td><td>
+      - AbstractNodeFactory
       - Exception
       - Filter
       - FilterExpression
       - Node
+      - NodeList
       - Parser
       - SafeString
       - TagLibraryInterface
