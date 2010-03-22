@@ -95,54 +95,8 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = @CMAKE_SOURCE_DIR@/Mainpage.dox @CMAKE_SOURCE_DIR@/corelib @CMAKE_SOURCE_DIR@/gui @CMAKE_SOURCE_DIR@/dox
 INPUT_ENCODING         = UTF-8
-FILE_PATTERNS          = *.c \
-                         *.cc \
-                         *.cxx \
-                         *.c++ \
-                         *.d \
-                         *.java \
-                         *.ii \
-                         *.ixx \
-                         *.ipp \
-                         *.i++ \
-                         *.inl \
-                         *.h \
-                         *.hh \
-                         *.hxx \
-                         *.hpp \
-                         *.h++ \
-                         *.idl \
-                         *.odl \
-                         *.cs \
-                         *.php \
-                         *.php3 \
-                         *.inc \
-                         *.m \
-                         *.mm \
+FILE_PATTERNS          = *.h \
                          *.dox \
-                         *.py \
-                         *.f90 \
-                         *.f \
-                         *.vhd \
-                         *.vhdl \
-                         *.C \
-                         *.CC \
-                         *.C++ \
-                         *.II \
-                         *.I++ \
-                         *.H \
-                         *.HH \
-                         *.H++ \
-                         *.CS \
-                         *.PHP \
-                         *.PHP3 \
-                         *.M \
-                         *.MM \
-                         *.PY \
-                         *.F90 \
-                         *.F \
-                         *.VHD \
-                         *.VHDL \
 
 RECURSIVE              = YES
 EXCLUDE                =
