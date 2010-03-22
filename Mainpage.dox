@@ -61,6 +61,8 @@ namespace Grantlee
     </td></tr>
   </table>
 
+  @image html grantlee_deps.png "Dependency Graph for Grantlee"
+
   @section start_community Community
 
   The %Grantlee project mailing list is kde-pim@kde.org, and the IRC channel is \#grantlee on freenode.

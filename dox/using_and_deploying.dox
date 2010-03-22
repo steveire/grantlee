@@ -180,5 +180,27 @@ namespace Grantlee
 
   Note again that when specifying the path in the virtual filesystem, the version is omitted. User defined filter written in QtScript can also be located similiarly to templates from either the filesystem or the Qt Resource virtual filesystem.
 
+  @section building_grantlee Building Grantlee
+
+  It is possible to build only parts of %Grantlee if your application is a QCoreApplication that depends only on QtCore
+
+  @image html grantlee_deps.png "Dependency Graph for Grantlee"
+
+  @image html plugin_deps.png "Dependency Graph for Grantlee plugins"
+
+  The appropriate options may be specified in the cmake gui, or on the command line.
+
+  @code
+    mkdir build && cd build
+    cmake .. -DBUILD_GUI:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_SCRIPT_PLUGIN:BOOL=OFF
+  @endcode
+
+  Similarly, it is possible to build only grantlee_gui standalone
+
+  @code
+    mkdir build && cd build
+    cmake .. -DBUILD_CORE:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_MAIN_PLUGINS:BOOL=OFF -DBUILD_SCRIPT_PLUGIN:BOOL=OFF
+  @endcode
+
 */
 }
