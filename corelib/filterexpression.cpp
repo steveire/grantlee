@@ -27,6 +27,9 @@
 #include "util_p.h"
 #include "exception.h"
 
+typedef QPair<Grantlee::Filter::Ptr, Grantlee::Variable > ArgFilter;
+
+
 namespace Grantlee
 {
 

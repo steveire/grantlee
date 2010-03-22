@@ -50,20 +50,54 @@ class VariablePrivate;
 class GRANTLEE_CORE_EXPORT Variable
 {
 public:
+  /**
+    Constructs an invalid Variable
+  */
   Variable();
+
+  /**
+    Creates a Variable represented by the given @p var
+  */
   explicit Variable( const QString &var );
+
+  /**
+    Copy constructor
+  */
   Variable( const Variable &other );
+
+  /**
+    Destructor
+  */
   ~Variable();
 
+  /**
+    Assignment operator.
+  */
   Variable &operator=( const Variable &other );
 
+  /**
+    Returns whether this Variable is valid.
+  */
   bool isValid() const;
 
-  QString toString() const;
+  /**
+    Returns whether this Variable evaluates to true with the Context @p c.
+  */
   bool isTrue( Context *c ) const;
 
+  /**
+    Resolves this Variable with the Context @p c.
+  */
   QVariant resolve( Context *c ) const;
 
+  /**
+    Returns whether this Variable is a constant in the Template. A constant is represented as a static string in the template
+
+    @code
+      Text content
+      {% some_tag "constant" variable %}
+    @endcode
+  */
   bool isConstant() const;
 
 private:

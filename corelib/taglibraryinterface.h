@@ -78,12 +78,18 @@ class TagLibraryInterface
 public:
   virtual ~TagLibraryInterface() {}
 
+  /**
+    Returns the AbstractNodeFactory implementations available in this library.
+  */
   virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
     Q_UNUSED( name );
     QHash<QString, AbstractNodeFactory*> h;
     return h;
   };
 
+  /**
+    Returns the Filter implementations available in this library.
+  */
   virtual QHash<QString, Filter*> filters( const QString &name = QString() ) {
     Q_UNUSED( name );
     QHash<QString, Filter*> h;

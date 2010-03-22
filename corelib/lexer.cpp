@@ -40,7 +40,7 @@ static QRegExp tagRe( QString( "(%1[^\\n]*%2|%3[^\\n]*%4|%5[^\\n]*%6)" )
                     );
 
 Lexer::Lexer( const QString &templateString )
-    : m_templateString( templateString )
+  : m_templateString( templateString )
 {
 
 }
@@ -48,7 +48,6 @@ Lexer::Lexer( const QString &templateString )
 Lexer::~Lexer()
 {
 }
-
 
 QList<Token> Lexer::tokenize() const
 {
@@ -58,7 +57,7 @@ QList<Token> Lexer::tokenize() const
 
   int pos = 0;
   int oldPosition = 0;
-  while (( pos = tagRe.indexIn( m_templateString, pos ) ) != -1 ) {
+  while ( ( pos = tagRe.indexIn( m_templateString, pos ) ) != -1 ) {
     tokenList << createToken( m_templateString.mid( oldPosition, pos - oldPosition ), NotInTag );
     tokenList << createToken( tagRe.cap( 1 ), InTag );
     pos += tagRe.matchedLength();
@@ -67,7 +66,6 @@ QList<Token> Lexer::tokenize() const
   tokenList << createToken( m_templateString.right( m_templateString.size() - oldPosition ), NotInTag );
 
   return tokenList;
-
 }
 
 Token Lexer::createToken( const QString &fragment, int inTag ) const
@@ -93,4 +91,3 @@ Token Lexer::createToken( const QString &fragment, int inTag ) const
   }
   return token;
 }
-

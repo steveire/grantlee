@@ -128,12 +128,6 @@ bool Variable::isConstant() const
   return !d->m_literal.isNull();
 }
 
-QString Variable::toString() const
-{
-  Q_D( const Variable );
-  return d->m_varString;
-}
-
 bool Variable::isTrue( Context *c ) const
 {
   return Util::variantIsTrue( resolve( c ) );

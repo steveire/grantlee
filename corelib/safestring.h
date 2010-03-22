@@ -37,11 +37,45 @@ namespace Grantlee
   This allows lazy escaping of strings. Otherwise a string may be escaped multiple times where it
   should only be escaped once.
 
+  The SafeString class itself provides information about whether a string is safe from further escaping through the isSafe method. The actual string content held by the SafeString instance is available through the get() method. The get() method returns a QString subclass which should be used like any other QString. The difference is that all methods on NestedString return a SafeString instead of a QString.
+
+  @code
+    SafeString s("this & that", SafeString::IsSafe);
+    s.get().replace( "this", "these" ).toUpper();
+
+    qDebug() << s.get() << s.isSafe(); // outputs "these & that" false
+  @endcode
+
+  Note that most operations on strings make the string unsafe. For example, while <tt>"K &amp; R"</tt> is safe, using replace("m", "n") will result in <tt>"K &anp; R"</tt>, which is unsafe. Likewise using upper() will return <tt>"K &AMP; R"</tt>, which is unsafe. Because the SafeString can not determine whether a method call with particular arguments will change a SafeString from being safe to being unsafe, any operation which can possibly make the string unsafe does cause the string to become unsafe. It is then up to the caller to restore safe-ness if needed.
+
+  NestedString has overloads for SafeStrings whereever appropriate so that strings remain marked as safe where possible.
+
+  For example:
+
+  @code
+    SafeString s1("this & that", SafeString::IsSafe);
+    s2 = s1;
+    s1.append( QString( " & the other" ) );
+    // s1 is now "this & that & the other" and is unsafe.
+
+    SafeString s3(" Wobl & Bob", SafeString::IsSafe);
+    s2.append(s3);
+    // Both s2 and s3 are safe, and append is a safe operation, so s2 is still safe
+  @endcode
+
+  @see @ref autoescaping
+  @see OutputStream::escape
+
+  SafeString has appropriate operator overloads to make it convenient to use in methods returning a QVariant, such as Filter::doFilter, or as a QString. Note that a raw QString is essentially the same as a SafeString which is marked as unsafe.
+
   @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT SafeString
 {
 public:
+  /**
+    Possible safety states of a SafeString
+  */
   enum Safety {
     IsSafe,    ///< The string is safe and requires no further escaping
     IsNotSafe  ///< The string is not safe. It will be escaped before being added to the output of rendering.
@@ -52,6 +86,9 @@ public:
   */
   SafeString();
 
+  /**
+    Copy constructor
+  */
   SafeString( const SafeString &safeString );
 
   /**
@@ -201,18 +238,30 @@ public:
 #endif
   };
 
+  /**
+    Returns the String held by this SafeString
+  */
   const NestedString& get() const {
     return m_nestedString;
   }
 
+  /**
+    Returns the String held by this SafeString
+  */
   NestedString& get() {
     return m_nestedString;
   }
 
+  /**
+    Convenience operator for treating a SafeString like a QString.
+  */
   operator QString() const {
     return m_nestedString;
   }
 
+  /**
+    Assignment operator.
+  */
   SafeString &operator=( const SafeString &str );
 
   /**
@@ -257,6 +306,9 @@ public:
   */
   bool operator==( const QString &other ) const;
 
+  /**
+    Convenience operator for storing a SafeString in a QVariant.
+  */
   operator QVariant() const {
     return QVariant::fromValue( *this );
   }

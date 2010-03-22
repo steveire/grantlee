@@ -74,7 +74,10 @@ public:
     Advance the parser, using @p parent as the parent of new Nodes. The parser will stop
     if it encounters a tag which is contained in the list @p stopAt.
 
-    For example, the "{% if %}" tag would stopAt both "endif" and "else" tags.
+    For example, the "{%&nbsp;if&nbsp;%}" tag would stopAt both "endif" and "else" tags.
+
+    @see AbstractNodeFactory::getNode
+
   */
   NodeList parse( Node *parent, const QStringList &stopAt = QStringList() );
 
@@ -120,12 +123,14 @@ public:
   */
   void removeNextToken();
 
+#ifndef Q_QDOC
   /**
     @internal
 
     Used by the "{% load %}" tag to load libraries.
   */
   void loadLib( const QString &name );
+#endif
 
 protected:
   /**

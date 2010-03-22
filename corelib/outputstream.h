@@ -48,32 +48,86 @@ class SafeString;
     t->render( &os, &context );
   @endcode
 
+  The OutputStream is used to escape the content streamed to it. By default, the escaping is html escaping, converting "&" to "&amp;" for example. If generating non-html output, the escape method may be overriden to perform a different escaping, or non at all.
+
+  If overriding the escape method, the clone method must also be overriden to return an OutputStream with the same escaping behaviour.
+
+  @code
+    class NoEscapeStream : public Grantlee::OutputStream
+    {
+    public:
+      // ...
+
+      QString escape( const QString &input ) const
+      {
+        return input;
+      }
+
+      QSharedPointer<OutputStream> clone( QTextStream *stream ) const
+      {
+        QSharedPointer<OutputStream> clonedStream = QSharedPointer<OutputStream>( new NoEscapeStream( stream ) );
+        return clonedStream;
+      }
+    };
+  @endcode
+
   @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT OutputStream
 {
 public:
+  /**
+    Creates a null OutputStream. Content streamed to this OutputStream is sent to /dev/null
+  */
   OutputStream();
+
+  /**
+    Creates an OutputStream which will stream content to @p stream with appropriate escaping.
+  */
   explicit OutputStream( QTextStream *stream );
+
+  /**
+    Destructor
+  */
   virtual ~OutputStream();
 
+  /**
+    Returns an escaped version of @p input. Does not write anything to the stream.
+  */
   virtual QString escape( const QString &input ) const;
+
+  /**
+    Returns an escaped version of @p input. Does not write anything to the stream.
+  */
   QString escape( const SafeString &input ) const;
 
+  /**
+    Returns an cloned OutputStream with the same filtering behaviour.
+  */
   virtual QSharedPointer<OutputStream> clone( QTextStream *stream ) const;
 
+  /**
+    Returns @p after escaping it, unless @p input is "safe", in which case, @p input is returned unmodified.
+  */
   QString conditionalEscape( const Grantlee::SafeString &input ) const;
 
+  /**
+    Writes @p input to the stream after escaping it.
+  */
   OutputStream& operator<<( const QString &input );
 
+  /**
+    Writes @p input to the stream after escaping it if necessary.
+  */
   OutputStream& operator<<( const SafeString &input );
 
+  /**
+    Reads the content of @p stream and writes it unmodified to the result stream.
+  */
   OutputStream& operator<<( QTextStream *stream );
 
-protected:
-  QTextStream *m_stream;
-
 private:
+  QTextStream *m_stream;
   Q_DISABLE_COPY( OutputStream )
 };
 

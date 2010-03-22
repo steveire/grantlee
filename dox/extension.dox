@@ -123,6 +123,69 @@ namespace Grantlee
 
   Also, note that, nodeFactory may throw an execption at template compilation time, but like Filters, Nodes should handle errors gracefully in their render method, and should return an empty QString in most error cases.
 
+  @subsection tags_with_end_tags Tags with end tags
+
+  Often, tags will be not just one token in a template, but a start and end token such as range, spaceless, with, or a start, middle and end tokens, such as if and for.
+
+  When constructing a Node, a NodeFactory can instruct the Parser to parse until any appropriate Token.
+
+  @code
+    text content
+    {% if foo %}
+      foo content
+    {% else %}
+      default content
+    {% endif %}
+    end content
+  @endcode
+
+  To implement such a tag the implementation of AbstractNodeFactory::getNode needs to parse until the optional intermediate tags and until the mandatory end tag, collecting the child nodes as it does so.
+
+  @code
+    Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
+    {
+      QStringList parts = smartSplit( tagContent );
+      parts.removeFirst(); // Remove "if"
+      // Error handling etc.
+      QList<FilterExpression> argsList = getFilterExpressionList( parts );
+      IfNode *node = new IfNode( argsList, p );
+
+      // Parse until an else or endif token
+      NodeList trueList = p->parse( node, QStringList() << "else" << "endif" );
+      node->setTrueList( trueList );
+      NodeList falseList;
+
+      Token nextToken = p->takeNextToken();
+      if ( nextToken.content == "else" )
+      {
+        falseList = p->parse( node, "endif" );
+        node->setFalseList( falseList );
+        // skip past the endif tag
+        p->removeNextToken();
+      } // else empty falseList.
+
+      return node;
+    }
+    @endcode
+
+  @endcode
+
+  There is no limit to the number of intermediate tokens you can use in your tags. For example, a better <tt>{%&nbsp;if&nbsp;%} tag might support multiple elif tags.
+
+  @code
+    text content
+    {% if foo %}
+      foo content
+    {% elif bar %}
+      bar content
+    {% elif bat %}
+      bat content
+    {% else %}
+      default content
+    {% endif %}
+    end content
+  @endcode
+
   @section cpp_libraries C++ Libraries
 
   As already mentioned, it is neccessary to create a QtPlugin library to make your tags and filters available to %Grantlee. You need to implement TagLibraryInterface to return your custom node factories and filters. See the existing libraries in your %Grantlee distribution for full examples.

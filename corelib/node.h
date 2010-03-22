@@ -52,6 +52,25 @@ class NodePrivate;
 
   The Node class can be implemented to make additional functionality available to Templates.
 
+  A node is represented in template markup as content surrounded by percent signed tokens.
+
+  @code
+    text content
+    {% some_tag arg1 arg2 %}
+      text content
+    {% some_other_tag arg1 arg2 %}
+      text content
+    {% end_some_other_tag %}
+    text content
+  @endcode
+
+  This is parsed into a tree of Node objects by an implementation of AbstractNodeFactory. The Node objects can then later be rendered by their render method.
+
+  Rendering a Node will usually mean writing some output to the stream. The content written to the stream could be determined by the arguments to the tag, or by the content of child nodes between a start and end tag, or both.
+
+  @see FilterExpression
+  @see @ref tags
+
   @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT Node : public QObject
@@ -74,7 +93,6 @@ public:
     This will also involve calling render on and child nodes.
   */
   // This can't be const because CycleNode needs to change on each render.
-
   virtual void render( OutputStream *stream, Context *c ) = 0;
 
   /**
@@ -93,12 +111,14 @@ public:
     return false;
   }
 
+#ifndef Q_QDOC
   /**
     @internal
   */
   virtual bool mustBeFirst() { // krazy:exclude:inline
     return false;
   }
+#endif
 
 protected:
   /**
@@ -109,6 +129,9 @@ protected:
   */
   void streamValueInContext( OutputStream *stream, const QVariant &input, Grantlee::Context *c );
 
+  /**
+    Returns a raw pointer to the Template this Node is in.
+  */
   TemplateImpl* containerTemplate() const;
 
 private:
@@ -121,6 +144,14 @@ private:
 /**
   @brief A list of Nodes with some convenience API for rendering them.
 
+  Typically, tags which have an end tag will create and later render a list of child nodes.
+
+  This class contains API such as append and render to make creating such list easily.
+
+  The findChildren method behaves similarly to the QObject::findChildren method, returning a list of nodes of
+  a particular type from the Node objects contained in the list (and their children).
+
+  @see @ref tags_with_end_tags
 */
 class GRANTLEE_CORE_EXPORT NodeList : public QList<Grantlee::Node*>
 {
@@ -204,6 +235,69 @@ class AbstractNodeFactoryPrivate;
   This class can be used to make custom tags available to templates.
   The getNode method should be implemented to return a Node to be rendered.
 
+  A node is represented in template markup as content surrounded by percent signed tokens.
+
+  @code
+    text content
+    {% some_tag arg1 arg2 %}
+      text content
+    {% some_other_tag arg1 arg2 %}
+      text content
+    {% end_some_other_tag %}
+    text content
+  @endcode
+
+  It is the responsibility of an AbstractNodeFactory implementation to process the contents of a tag and return a Node implementation from its getNode method.
+
+  The @ref getNode method would for example be called with the tagContent "some_tag arg1 arg2". That content could then be split up, the arguments processed and a Node created
+
+  @code
+    Node* SomeTagFactory::getNode(const QString &tagContent, Parser *p) {
+      QStringList parts = smartSplit( tagContent );
+
+      parts.removeFirst(); // Remove the "some_tag" part.
+
+      FilterExpression arg1( parts.at( 0 ), p );
+      FilterExpression arg2( parts.at( 1 ), p );
+
+      return new SomeTagNode( arg1, arg2, p );
+    }
+  @endcode
+
+  The @ref getNode implementation might also advance the parser. For example if we had a <tt>times</tt> tag which rendered content the amount of times it was given in its argument, it could be used like this:
+
+  @code
+    Some text content.
+    {% times 5 %}
+      the bit to be repeated
+    {% end_times %}
+    End text content
+  @endcode
+
+  The argument to <tt>times</tt> might not be a simple number, but could be a FilterExpression such as <tt>someobject.some_property|getDigit:1</tt>.
+
+  The implementation could look like
+
+  @code
+    Node* SomeOtherTagFactory::getNode(const QString &tagContent, Parser *p) {
+      QStringList parts = smartSplit( tagContent );
+
+      parts.removeFirst(); // Remove the "times" part.
+
+      FilterExpression arg( parts.at( 0 ), p );
+
+      SomeTagNode *node = new SomeTagNode( arg, p );
+      NodeList childNodes = p->parse( node, "end_times" );
+      node->setChildNodes( childNodes );
+      p->removeNextToken();
+
+      return node;
+    }
+  @endcode
+
+  Note that it is necessary to invoke the parser to create the child nodes only after creating the Node to return. That node must be passed to the Parser to perform as the parent QObject to the child nodes.
+
+  @see Parser::parse
 */
 class GRANTLEE_CORE_EXPORT AbstractNodeFactory : public QObject
 {

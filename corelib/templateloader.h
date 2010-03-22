@@ -46,6 +46,9 @@ namespace Grantlee
 class GRANTLEE_CORE_EXPORT AbstractTemplateLoader
 {
 public:
+  /**
+    A QSharedPointer to an AbstractTemplateLoader
+  */
   typedef QSharedPointer<AbstractTemplateLoader> Ptr;
 
   /**
@@ -117,11 +120,15 @@ public:
     engine->mediaUri( "logo.png" );
   @endcode
 
+  @see @ref deploying_templates
+
 */
 class GRANTLEE_CORE_EXPORT FileSystemTemplateLoader : public AbstractTemplateLoader
 {
 public:
+#ifndef Q_QDOC
   typedef QSharedPointer<FileSystemTemplateLoader> Ptr;
+#endif
 
   /**
     Constructor
@@ -141,8 +148,19 @@ public:
 
   /* reimp */ QString getMediaUri( const QString& fileName ) const;
 
+  /**
+    Sets the theme of this loader to @p themeName
+  */
   void setTheme( const QString &themeName );
+
+  /**
+    The themeName of this TemplateLoader
+  */
   QString themeName() const;
+
+  /**
+    Sets the directories to look for template files to @p dirs.
+  */
   void setTemplateDirs( const QStringList &dirs );
 
 private:
@@ -162,7 +180,9 @@ private:
 class GRANTLEE_CORE_EXPORT InMemoryTemplateLoader : public AbstractTemplateLoader
 {
 public:
+#ifndef Q_QDOC
   typedef QSharedPointer<InMemoryTemplateLoader> Ptr;
+#endif
 
   InMemoryTemplateLoader();
   virtual ~InMemoryTemplateLoader();

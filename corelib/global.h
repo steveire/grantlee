@@ -24,6 +24,9 @@
 namespace Grantlee
 {
 
+/**
+  Types of errors that can occur while using %Grantlee
+*/
 enum Error {
   NoError,
   EmptyVariableError,

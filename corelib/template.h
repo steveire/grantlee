@@ -53,7 +53,35 @@ class TemplatePrivate;
   A template is created by parsing some text markup passed into the Engine, or by
   reading it from a file.
 
+  Note that Template is actually a typedef for a QSharedPointer<TemplateImpl>, so all of its members should be accessed with operator->().
+
   The result of parsing is a Template object which can be rendered multiple times with multiple different Contexts.
+
+  @code
+    Engine *engine = getEngine();
+    Template t = engine->newTemplate( "{{ name }} is aged {{ age }}", "simple template" );
+    if ( t->error() )
+    {
+      // Tokenizing or parsing error, or couldn't find custom tags or filters.
+      qDebug() << t->errorString();
+      return;
+    }
+    QTextStream textStream( stdout );
+    OutputStream stream( textStream );
+
+    for ( ... )
+    {
+      Context c;
+      // ... c.insert
+      t->render( stream, c );
+
+      if (t->error())
+      {
+        // Rendering error.
+        qDebug() << t->errorString();
+      }
+    }
+  @endcode
 
   If there is an error in parsing or rendering, the error and errorString methods can be used to check the source of the error.
 
@@ -70,6 +98,9 @@ public:
   */
   virtual QString render( Context *c );
 
+  /**
+    Renders the Template to the OutputStream @p stream given the Context c.
+  */
   virtual OutputStream* render( OutputStream *stream, Context *c );
 
 #ifndef Q_QDOC
@@ -94,6 +125,9 @@ public:
   */
   QString errorString();
 
+  /**
+    Returns the Engine that created this Template.
+  */
   Engine const * engine() const;
 
 #ifndef Q_QDOC

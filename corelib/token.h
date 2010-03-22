@@ -46,8 +46,8 @@ enum TokenType {
   This class is only relevant for template tag implementations.
 */
 struct Token {
-  int tokenType;
-  QString content;
+  int tokenType;    ///< The Type of this Token
+  QString content;  ///< The content of this Token
 };
 
 }

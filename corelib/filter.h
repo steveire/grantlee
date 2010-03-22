@@ -43,6 +43,13 @@ namespace Grantlee
 
   The Filter class can be implemented in plugin libraries to make additional functionality available to templates.
 
+  Developers are required only to implement the doFilter method and integrate the filter as part of a custom plugin, but will never create or access filters directly in application code.
+
+  The FilterExpression class is the access interface to a chain of Filter objects.
+
+  The escape and conditionalEscape methods are available for escaping data where needed.
+
+  @see @ref filters
 */
 class GRANTLEE_CORE_EXPORT Filter
 {
@@ -65,16 +72,25 @@ public:
   }
 #endif
 
+  /**
+    Escapes and returns @p input. The OutputStream::escape method is used to escape @p input.
+  */
   SafeString escape( const QString &input ) const {
     return m_stream->escape( input );
   }
 
+  /**
+    Escapes and returns @p input. The OutputStream::escape method is used to escape @p input.
+  */
   SafeString escape( const SafeString &input ) const {
     if ( input.isSafe() )
       return SafeString( m_stream->escape( input ), SafeString::IsSafe );
     return m_stream->escape( input );
   }
 
+  /**
+    Escapes @p input if not already safe from further escaping and returns it. The OutputStream::escape method is used to escape @p input.
+  */
   SafeString conditionalEscape( const SafeString &input ) const {
     if ( !input.isSafe() )
       return m_stream->escape( input );
@@ -83,8 +99,8 @@ public:
 
   /**
    Reimplement to filter @p input given @p argument.
-   The autoescape argument amy also need to be taken into account, depending on the purpose of the filter.
-   @returns The input string filtered.
+   @p autoescape determines whether the autoescape feature is currently on or off. Most filters will not use this.
+
   */
   virtual QVariant doFilter( const QVariant &input,
                              const QVariant &argument = QVariant(),

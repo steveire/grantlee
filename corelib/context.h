@@ -55,7 +55,7 @@ class ContextPrivate;
 
   Note that one Template may be rendered multiple times with different contexts. Note also that any QVariant may be inserted
   into a Context object. Most commonly, QObjects will be used here.
-  @see custom_objects
+  @see @ref custom_objects
 
   @section context_stack Context Stack.
 
@@ -148,13 +148,13 @@ public:
 
   /**
     Pushes a new context.
-    @see context_stack
+    @see @ref context_stack
   */
   void push();
 
   /**
     Pops the context.
-    @see context_stack
+    @see @ref context_stack
   */
   void pop();
 
