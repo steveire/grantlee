@@ -77,14 +77,13 @@ class ContextPrivate;
   the "{% with %}" tag render method is:
 
   @code
-    QString WithNode::render( Context *c )
+    void WithNode::render( OutputStream *stream, Context *c )
     {
       c->push();
       // {% with m_filterExpression as m_name %}
       c->insert( m_name, m_filterExpression.resolve( c ) );
-      QString ret = m_list.render( c );
+      m_list.render( stream, c );
       c->pop(); // The section of context defining m_name is removed.
-      return ret;
     }
   @endcode
 

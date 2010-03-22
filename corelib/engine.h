@@ -36,7 +36,7 @@ class EnginePrivate;
 /**
   @brief Grantlee::Engine is the main entry point for creating %Grantlee Templates.
 
-  The Grantlee::Engine is a singleton responsible for configuring and creating Template and MutableTemplate objects.
+  The Grantlee::Engine is responsible for configuring and creating Template and MutableTemplate objects.
   In typical use, one or more TemplateLoader objects will be added to the Engine to load template objects, and
   plugin directories will be set to enable finding template tags and filters.
 
@@ -48,13 +48,16 @@ class EnginePrivate;
     engine->addTemplateLoader( loader );
 
     engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
-    Template template = engine->newTemplate( "Template content", "template name" );
+
+    Template template1 = engine->newTemplate( "Template content", "template name" );
+
+    Template template2 = engine->loadByName( "templatefile.html" );
   @endcode
 
   Once it is configured, the engine can be used to create new templates by name by loading the templates with the loadByName method,
   or by defining the content in the newTemplate method.
 
-  By default the builtin tags and filters distributed with grantlee are available in all templates without using the "{% load %}"
+  By default the builtin tags and filters distributed with %Grantlee are available in all templates without using the <tt>{%&nbsp;load&nbsp;%}</tt>
   tag in the template. These pre-loaded libraries may be configured if appropriate to the application. For example, an application
   which defines its own tags and filters may want them to be always available, or it may be desirable to restrict the features
   available to template authors by removing built in libraries.
@@ -68,7 +71,7 @@ class GRANTLEE_CORE_EXPORT Engine : public QObject
   Q_OBJECT
 public:
   /**
-    Retrieve an instance of an Engine.
+    Constructor
   */
   Engine( QObject *parent = 0 );
 
@@ -96,39 +99,39 @@ public:
     Returns a URI for a media item with the name @p name.
 
     Typically this will be used for images. For example the media URI for the image
-    "header_logo.png" may be "/home/user/common/header_logo.png" or "/home/user/some_theme/header_logo.png"
+    <tt>"header_logo.png"</tt> may be <tt>"/home/user/common/header_logo.png"</tt> or <tt>"/home/user/some_theme/header_logo.png"</tt>
     depending on the templateLoaders configured.
 
     This method will not usually be called by application code.
-    To load media in a template, use the {% media_finder %} template tag.
+    To load media in a template, use the <tt>{%&nbsp;media_finder&nbsp;%}</tt> template tag.
   */
   QString mediaUri( const QString &fileName ) const;
 
   /**
-    Load the Template identified by @p name with the optionally supplied EngineState.
+    Load the Template identified by @p name.
 
-    The Templates and plugins loaded and will be determined by the Engine or the EngineState @p state.
+    The Templates and plugins loaded will be determined by the Engine configuration.
   */
   Template loadByName( const QString &name ) const;
 
   /**
-    Create a new Template with the content @p content identified by @p name with the optionally supplied EngineState.
+    Create a new Template with the content @p content identified by @p name.
 
-    The secondary Templates and plugins loaded will be determined by the Engine or the EngineState @p state.
+    The secondary Templates and plugins loaded will be determined by the Engine configuration.
   */
   Template newTemplate( const QString &content, const QString &name ) const;
 
   /**
-    Load the MutableTemplate identified by @p name with the optionally supplied EngineState.
+    Load the MutableTemplate identified by @p name.
 
-    The Templates and plugins loaded and will be determined by the Engine or the EngineState @p state.
+    The Templates and plugins loaded and will be determined by the Engine configuration.
   */
   MutableTemplate loadMutableByName( const QString &name ) const;
 
   /**
-    Create a new MutableTemplate with the content @p content identified by @p name with the optionally supplied EngineState.
+    Create a new MutableTemplate with the content @p content identified by @p name.
 
-    The secondary Templates and plugins loaded will be determined by the Engine or the EngineState @p state.
+    The secondary Templates and plugins loaded will be determined by the Engine configuration.
   */
   MutableTemplate newMutableTemplate( const QString &content, const QString &name ) const;
 
@@ -147,6 +150,7 @@ public:
   */
   void removeDefaultLibrary( const QString &libName );
 
+#ifndef Q_QDOC
   /**
     @internal
 
@@ -159,9 +163,10 @@ public:
 
     Loads and returns the library specified by @p name in the current Engine configuration or @p state.
 
-    Templates wishing to load a library should use the "{% load %}" tag.
+    Templates wishing to load a library should use the {%&nbsp;load&nbsp;%} tag.
   */
   TagLibraryInterface* loadLibrary( const QString &name );
+#endif
 
 private:
   Q_DECLARE_PRIVATE( Engine )
