@@ -36,10 +36,10 @@ grantlee_unit_tests(
   testdefaulttags
   testscriptabletags
   testmutabletags
-  benchmarks
   testfilters
   htmlbuildertest
   plainmarkupbuildertest
+  benchmarks
 )
 
 add_subdirectory(pluginpointertest)
