@@ -19,4 +19,28 @@ FOREACH(file ${files})
   ELSE(EXISTS "${file}")
     MESSAGE(STATUS "File \"${file}\" does not exist.")
   ENDIF(EXISTS "${file}")
+  get_filename_component(path ${file} PATH )
+
+  # Remove include/grantlee lib/grantlee/${version} and lib/grantlee if no other
+  # versions are present.
+  while( ${path} MATCHES ".*grantlee.*" )
+    FILE(GLOB contents RELATIVE ${path} "${path}/*" )
+    if ( "${contents}" STREQUAL "" )
+      message(STATUS "Removing empty directory: ${path}")
+
+      exec_program(
+        "@CMAKE_COMMAND@" ARGS "-E remove_directory \"${path}\""
+        OUTPUT_VARIABLE rm_out
+        RETURN_VALUE rm_retval
+      )
+
+      if("${rm_retval}" STREQUAL 0)
+        get_filename_component(path ${path} PATH )
+      else()
+        message(FATAL_ERROR "Problem when removing \"${path}\"")
+      endif()
+    else()
+      break()
+    endif()
+  endwhile()
 ENDFOREACH(file)
