@@ -21,9 +21,9 @@ namespace Grantlee
 
   %Grantlee allows application developers to make it very easy to create themes for exported data by separating the data to export from the structure of how it is presented. As such, there are two separate roles to use %Grantlee. See @ref for_app_dev and @ref for_themers.
 
-  <table width="80%" style="margin-left:auto;margin-right:auto;">
-    <tr><th colspan="3">%Grantlee Core</th></tr>
-    <tr><th>Application API</th><th>Plugin API</th><th>Guides</th></tr>
+  <table class="main_api" >
+    <tr><th class="library" colspan="3">%Grantlee Core</th></tr>
+    <tr><th class="section" >Application API</th><th class="section">%Plugin API</th><th class="section">Guides</th></tr>
     <tr><td>
       - Context
       - Engine
@@ -52,7 +52,7 @@ namespace Grantlee
       - @ref using_and_deploying
       - @ref internals
     </td></tr>
-      <tr><th colspan="3">%Grantlee GUI</th></tr>
+      <tr><th class="library" colspan="3">%Grantlee GUI</th></tr>
     <tr><td colspan="3">
       - AbstractMarkupBuilder
       - MarkupDirector
