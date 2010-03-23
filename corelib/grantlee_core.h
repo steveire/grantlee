@@ -26,7 +26,6 @@
 #include "grantlee/exception.h"
 #include "grantlee/filter.h"
 #include "grantlee/filterexpression.h"
-#include "grantlee/global.h"
 #include "grantlee/grantlee_core_export.h"
 #include "grantlee/mutabletemplate.h"
 #include "grantlee/node.h"

@@ -29,7 +29,6 @@
 #include "context.h"
 #include "util_p.h"
 #include "grantlee_paths.h"
-#include "global.h"
 
 typedef QHash<QString, QVariant> Dict;
 

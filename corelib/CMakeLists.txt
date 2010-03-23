@@ -57,7 +57,6 @@ install(FILES
   exception.h
   filter.h
   filterexpression.h
-  global.h
   grantlee_core_export.h
   mutabletemplate.h
   node.h

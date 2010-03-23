@@ -25,10 +25,28 @@
 
 #include <exception>
 
-#include "global.h"
-
 namespace Grantlee
 {
+
+
+/**
+  Types of errors that can occur while using %Grantlee
+*/
+enum Error {
+  NoError,
+  EmptyVariableError,
+  EmptyBlockTagError,
+  InvalidBlockTagError,
+  UnclosedBlockTagError,
+  UnknownFilterError,
+  TagSyntaxError,
+//   VariableSyntaxError,
+
+  VariableNotInContext,
+  ObjectReturnTypeInvalid,
+  CompileFunctionError
+};
+
 
 /// @headerfile exception.h grantlee/exception.h
 

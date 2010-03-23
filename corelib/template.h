@@ -26,7 +26,7 @@
 
 #include "node.h"
 
-#include "global.h"
+#include "exception.h"
 #include "grantlee_core_export.h"
 
 namespace Grantlee
