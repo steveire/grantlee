@@ -94,7 +94,7 @@ void TestFilters::initTestCase()
   m_engine->addTemplateLoader( loader );
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH
+  m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH
                            << appDirPath + "/tests/" // For testtags.qs
                          );
 }

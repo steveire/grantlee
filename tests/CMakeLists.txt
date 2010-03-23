@@ -11,12 +11,12 @@ include_directories( ${QT_INCLUDES}
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/grantlee/" )
+set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/" )
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 set (_rcc_file "scriptedtags.qrc")
-qt4_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING}" )
+qt4_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/plugins/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING}" )
 
 macro(GRANTLEE_UNIT_TESTS)
   foreach(_testname ${ARGN})

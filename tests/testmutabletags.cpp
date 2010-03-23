@@ -58,7 +58,7 @@ private:
 void TestMutableTagsSyntax::initTestCase()
 {
   m_engine = new Engine( this );
-  m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+  m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH );
 
   m_engine->addDefaultLibrary( "grantlee_mutabletags" );
 }

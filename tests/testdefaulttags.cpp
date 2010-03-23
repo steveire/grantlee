@@ -168,7 +168,7 @@ private:
 void TestDefaultTags::initTestCase()
 {
   m_engine = new Engine( this );
-  m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+  m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH );
 
   FakeTemplateLoader::Ptr loader1 = FakeTemplateLoader::Ptr( new FakeTemplateLoader() );
 

@@ -127,7 +127,7 @@ BookWindow::BookWindow()
     loader->setTemplateDirs( QStringList() << GRANTLEE_TEMPLATE_PATH );
     m_engine->addTemplateLoader(loader);
 
-    m_engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+    m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH );
 }
 
 void BookWindow::showError(const QSqlError &err)

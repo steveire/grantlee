@@ -91,7 +91,7 @@ ChatMainWindow::ChatMainWindow()
     Grantlee::FileSystemTemplateLoader::Ptr loader = Grantlee::FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
     loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH );
     m_engine->addTemplateLoader(loader);
-    m_engine->setPluginDirs(QStringList() << GRANTLEE_PLUGIN_PATH );
+    m_engine->setPluginPaths(QStringList() << GRANTLEE_PLUGIN_PATH );
 
     m_engine->addDefaultLibrary( "grantlee_mutabletags_library" );
 

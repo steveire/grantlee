@@ -25,6 +25,7 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QDir>
 #include <QtCore/QPluginLoader>
+#include <QtCore/QCoreApplication>
 
 #include "taglibraryinterface.h"
 #include "template_p.h"
@@ -103,7 +104,7 @@ QString Engine::mediaUri( const QString &fileName ) const
   return uri;
 }
 
-void Engine::setPluginDirs( const QStringList &dirs )
+void Engine::setPluginPaths( const QStringList &dirs )
 {
   Q_D( Engine );
   d->m_pluginDirs = dirs;
@@ -188,9 +189,15 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
   if ( !m_libraries.contains( __scriptableLibName ) )
     return 0;
 
-  while ( m_pluginDirs.size() > pluginIndex ) {
-    QString nextDir = m_pluginDirs.at( pluginIndex++ );
-    libFileName = nextDir + QString( "/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
+  QStringList pluginDirs;
+  if ( m_pluginDirs.isEmpty() )
+    pluginDirs = QCoreApplication::instance()->libraryPaths();
+  else
+    pluginDirs = m_pluginDirs;
+
+  while ( pluginDirs.size() > pluginIndex ) {
+    QString nextDir = pluginDirs.at( pluginIndex++ );
+    libFileName = nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
     QFile file( libFileName );
     if ( !file.exists() )
       continue;
@@ -213,9 +220,15 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
   int pluginIndex = 0;
   QString libFileName;
 
-  while ( m_pluginDirs.size() > pluginIndex ) {
-    QString nextDir = m_pluginDirs.at( pluginIndex++ );
-    QDir pluginDir( nextDir + QString( "/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
+  QStringList pluginDirs;
+  if ( m_pluginDirs.isEmpty() )
+    pluginDirs = QCoreApplication::instance()->libraryPaths();
+  else
+    pluginDirs = m_pluginDirs;
+
+  while ( pluginDirs.size() > pluginIndex ) {
+    QString nextDir = pluginDirs.at( pluginIndex++ );
+    QDir pluginDir( nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
 
     if ( !pluginDir.exists() )
       continue;

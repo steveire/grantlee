@@ -86,13 +86,13 @@ namespace Grantlee
 
     # CMake code:
     set (_rcc_file "my_app_templates.qrc")
-    qt4_add_resources(_template_rcc_src ${_rcc_file} OPTIONS -root "/grantlee/" )
+    qt4_add_resources(_template_rcc_src ${_rcc_file} OPTIONS -root "/templates/" )
 
     add_executable(my_app, ${my_app_srcs} ${_template_rcc_src})
 
     # Application code:
     FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new FileSystemTemplateLoader() );
-    loader->setTemplateDirs( QStringList() << ":/grantlee/" );
+    loader->setTemplateDirs( QStringList() << ":/templates/" );
 
     engine->addTemplateLoader( loader );
   @endcode
@@ -116,6 +116,12 @@ namespace Grantlee
   @endcode
 
   Additionally, the <a href="http://qt.nokia.com/doc/4.5/resources.html#external-binary-resources">External binary resources</a> feature could be used to allow savvy users to share themes/templates in a package, or to deploy updated templates easily to existing deployed applications.
+
+  @section finding_plugins Finding tags and filters
+
+  By default, %Grantlee searches in the paths specified by QCoreApplication::libraryPaths() for %Grantlee plugins. Each specified path has <tt>&quot;grantlee/$version/&quot;</tt> appended to it, and the resulting directory is searched for plugins. For example, if the version of %Grantlee is 0.2 and QCoreApplication::libraryPaths() contains <tt>&quot;/usr/lib/plugins/&quot;</tt>, the path <tt>&quot;/usr/lib/plugins/grantlee/0.2&quot;</tt> would be searched for plugins.
+
+  The paths used to search for plugins can be overriden by using Engine::setPluginPaths. Again, <tt>&quot;grantlee/$version/&quot;</tt> is appended to the path before using it. Paths are searched in order for particular plugins, and the search stops when a plugin matching a particular name is found.
 
   @section deploying_custom_plugins Deploying custom tags and filters
 
@@ -153,14 +159,14 @@ namespace Grantlee
 
   <tt>custom_plugin_library.cpp</tt> is the C++ file where you implement the Grantlee::TagLibaryInterface to return custom tags and filters. The custom tags and filters files are given with the TAGS and FILTERS arguments to the macro. Note that moc is not run on the headers of files given in the FILTERS argument, and is run on the headers of files given in the TAGS argument (custom_tag1.h etc) and on the main library file, in this case custom_plugin_library.h.
 
-  Note that the PLUGIN_INSTALL_DIR given to the install command should contain the version number of %Grantlee used to create the custom library. For example, <tt>/usr/share/my_app/grantlee_plugins/0.1/</tt>.
+  Note that the PLUGIN_INSTALL_DIR given to the install command should contain the version number of %Grantlee used to create the custom library. For example, <tt>/usr/share/my_app/plugins/grantlee/0.1/</tt>.
 
-  In C++ code, it is necessary to instruct the Grantlee::Engine about the location of the plugins. Note that it is possible to define custom versions of built in tags and filters by putting your own plugin library in the path before the path to the default %Grantlee plugins.
+  In C++ code, it is necessary to either instruct the Grantlee::Engine about the location of the plugins or to configure your QCoreApplication::libraryPaths by another standard method. Note that it is possible to define custom versions of built in tags and filters by putting your own plugin library in the path before the path to the default %Grantlee plugins.
 
   For example, if your custom plugin library contained a custom implementation of the {%&nbsp;for&nbsp;%} tag:
   @code
     Engine *engine = new Engine( this );
-    engine->setPluginPaths( QStringList() << path_to_custom_libary << path_to_grantlee_defaults );
+    engine->setPluginPaths( QStringList() << path_to_custom_plugins << path_to_grantlee_defaults );
   @endcode
 
   Note that neither the path to the custom libarary nor the path to the %Grantlee default library should contain the version number when specified in C++ code with the Engine. The version is only specified when installing the plugin in CMake.
@@ -170,12 +176,12 @@ namespace Grantlee
   @code
     # CMake code:
     set (_rcc_file "my_qtscript_library.qrc")
-    qt4_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}" )
+    qt4_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/plugins/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}" )
 
     add_executable(my_app, ${my_app_srcs} ${_scripted_rcc_src})
 
     # C++ code:
-    engine->setPluginPaths( QStringList() << ":/grantlee/" );
+    engine->setPluginPaths( QStringList() << ":/plugins/" );
   @endcode
 
   Note again that when specifying the path in the virtual filesystem, the version is omitted. User defined filter written in QtScript can also be located similiarly to templates from either the filesystem or the Qt Resource virtual filesystem.

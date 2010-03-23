@@ -81,7 +81,7 @@ void Benchmarking::initTestCase()
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
 
-  m_engine->setPluginDirs( QStringList( GRANTLEE_PLUGIN_PATH ) );
+  m_engine->setPluginPaths( QStringList( GRANTLEE_PLUGIN_PATH ) );
 
   m_templateGeneratorString =
     "Lorem {% for i in items %}"

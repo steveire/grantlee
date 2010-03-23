@@ -229,7 +229,7 @@ void TestBuiltinSyntax::initTestCase()
 Engine* TestBuiltinSyntax::getEngine()
 {
   Engine *engine = new Engine( this );
-  engine->setPluginDirs( QStringList() << GRANTLEE_PLUGIN_PATH );
+  engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH );
   return engine;
 }
 
