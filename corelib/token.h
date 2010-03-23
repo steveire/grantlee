@@ -32,10 +32,10 @@ namespace Grantlee
   The available token types.
 */
 enum TokenType {
-  TextToken,
-  VariableToken,
-  BlockToken,
-  CommentToken
+  TextToken,       ///< The Token is a text fragment
+  VariableToken,   ///< The Token is a variable node
+  BlockToken,      ///< The Token is a block, ie, part of a tag
+  CommentToken     ///< The Token is a comment node.
 };
 
 /// @headerfile token.h grantlee/token.h

@@ -79,6 +79,8 @@ class GRANTLEE_CORE_EXPORT Node : public QObject
 public:
   /**
     Constructor.
+
+    @param parent The parent QObject
   */
   explicit Node( QObject *parent = 0 );
 
@@ -305,6 +307,8 @@ class GRANTLEE_CORE_EXPORT AbstractNodeFactory : public QObject
 public:
   /**
     Constructor.
+
+    @param parent The parent QObject
   */
   explicit AbstractNodeFactory( QObject* parent = 0 );
 
@@ -316,7 +320,7 @@ public:
   /**
     This method should be reimplemented to return a Node which can be rendered.
 
-    @p tagContent is the content of the tag including the tag name and arguments. For example,
+    The @p tagContent is the content of the tag including the tag name and arguments. For example,
     if the template content is &quot;{% my_tag arg1 arg2 %}&quot;, the tagContent will be &quot;my_tag arg1 arg2&quot;.
 
     The Parser @p p is available and can be advanced if appropriate. For example, if the tag has an
@@ -343,7 +347,7 @@ protected:
 
 protected:
   /**
-    Returns a list of FilterExpression objects as described by the content of @p list.
+    Returns a list of FilterExpression objects created with Parser @p p as described by the content of @p list.
 
     This is used for convenience when handling the arguments to a tag.
   */

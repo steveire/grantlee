@@ -77,13 +77,13 @@ public:
   /** Close the struck out element in the markup */
   virtual void endStrikeout() = 0;
 
-  /** Begin a decorarated foreground element in the markup (A text color) */
+  /** Begin a decorarated foreground element in the markup (A text color) using @p brush */
   virtual void beginForeground( const QBrush &brush ) = 0;
 
   /** Close the decorarated foreground element in the markup */
   virtual void endForeground() = 0;
 
-  /** Begin a decorarated background element in the markup (A text background color) */
+  /** Begin a decorarated background element in the markup (A text background color) using @p brush */
   virtual void beginBackground( const QBrush &brush ) = 0;
 
   /** Close the decorarated background element in the markup */

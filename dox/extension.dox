@@ -166,11 +166,9 @@ namespace Grantlee
 
       return node;
     }
-    @endcode
-
   @endcode
 
-  There is no limit to the number of intermediate tokens you can use in your tags. For example, a better <tt>{%&nbsp;if&nbsp;%} tag might support multiple elif tags.
+  There is no limit to the number of intermediate tokens you can use in your tags. For example, a better <tt>{%&nbsp;if&nbsp;%}</tt> tag might support multiple elif tags.
 
   @code
     text content
