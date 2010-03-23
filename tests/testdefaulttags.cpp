@@ -27,7 +27,7 @@
 #include "template.h"
 #include "engine.h"
 #include "context.h"
-#include "util_p.h"
+#include "util.h"
 #include "grantlee_paths.h"
 
 typedef QHash<QString, QVariant> Dict;
@@ -1301,7 +1301,7 @@ void TestDefaultTags::testAutoescapeTag_data()
   // Strings (ASCII or unicode) already marked as "safe" are not
   // auto-escaped
   SafeString safeString( "<b>first</b>" );
-  QVariant safeStringVar = QVariant::fromValue<SafeString>( Util::markSafe( safeString ) );
+  QVariant safeStringVar = QVariant::fromValue<SafeString>( markSafe( safeString ) );
   dict.insert( "first", safeStringVar );
 
   QTest::newRow( "autoescape-tag06" ) << "{{ first }}" << dict << "<b>first</b>" << NoError;

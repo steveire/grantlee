@@ -18,14 +18,9 @@
 
 */
 
-#include "util_p.h"
+#include "util.h"
 
-Util::Util()
-{
-
-}
-
-QString Util::unescapeStringLiteral( const QString &input )
+QString Grantlee::unescapeStringLiteral( const QString &input )
 {
   return input.mid( 1, input.size() - 2 )
          .replace( "\\\'", QChar( '\'' ) )
@@ -33,7 +28,7 @@ QString Util::unescapeStringLiteral( const QString &input )
          .replace( "\\\\", QChar( '\\' ) );
 }
 
-bool Util::variantIsTrue( const QVariant &variant )
+bool Grantlee::variantIsTrue( const QVariant &variant )
 {
 
   if ( !variant.isValid() )
@@ -70,7 +65,7 @@ bool Util::variantIsTrue( const QVariant &variant )
   return !str.get().isEmpty();
 }
 
-QVariantList Util::variantToList( const QVariant &var )
+QVariantList Grantlee::variantToList( const QVariant &var )
 {
 
   if ( !var.isValid() )
@@ -102,14 +97,14 @@ QVariantList Util::variantToList( const QVariant &var )
   return QVariantList();
 }
 
-Grantlee::SafeString Util::markSafe( const Grantlee::SafeString &input )
+Grantlee::SafeString Grantlee::markSafe( const Grantlee::SafeString &input )
 {
   Grantlee::SafeString sret = input;
   sret.setSafety( Grantlee::SafeString::IsSafe );
   return sret;
 }
 
-Grantlee::SafeString Util::markForEscaping( const Grantlee::SafeString &input )
+Grantlee::SafeString Grantlee::markForEscaping( const Grantlee::SafeString &input )
 {
   Grantlee::SafeString temp = input;
   if ( input.isSafe() || input.needsEscape() )
@@ -119,7 +114,7 @@ Grantlee::SafeString Util::markForEscaping( const Grantlee::SafeString &input )
   return temp;
 }
 
-Grantlee::SafeString Util::getSafeString( const QVariant &input )
+Grantlee::SafeString Grantlee::getSafeString( const QVariant &input )
 {
   if ( input.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
     return input.value<Grantlee::SafeString>();
@@ -128,14 +123,14 @@ Grantlee::SafeString Util::getSafeString( const QVariant &input )
   }
 }
 
-bool Util::isSafeString( const QVariant &input )
+bool Grantlee::isSafeString( const QVariant &input )
 {
   int type = input.userType();
   return (( type == qMetaTypeId<Grantlee::SafeString>() )
           || type == QVariant::String );
 }
 
-bool Util::supportedOutputType( const QVariant &input )
+bool Grantlee::supportedOutputType( const QVariant &input )
 {
   QList<int> primitives;
   primitives << qMetaTypeId<Grantlee::SafeString>()
@@ -147,7 +142,7 @@ bool Util::supportedOutputType( const QVariant &input )
 }
 
 
-bool Util::equals( const QVariant &lhs, const QVariant &rhs )
+bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
 {
 
   // QVariant doesn't use operator== to compare its held data, so we do it manually instead for SafeString.
@@ -166,7 +161,7 @@ bool Util::equals( const QVariant &lhs, const QVariant &rhs )
   return equal;
 }
 
-Grantlee::SafeString Util::toString( const QVariantList &list )
+Grantlee::SafeString Grantlee::toString( const QVariantList &list )
 {
   QString output( '[' );
   QVariantList::const_iterator it = list.constBegin();

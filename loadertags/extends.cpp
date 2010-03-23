@@ -31,7 +31,7 @@
 #include "exception.h"
 
 #include <QtCore/QListIterator>
-#include <util_p.h>
+#include <util.h>
 
 using namespace Grantlee;
 
@@ -108,7 +108,7 @@ Template ExtendsNode::getParent( Context *c )
       Template parentTemplate = parentVar.value<Template>();
       return parentTemplate;
     }
-    parentName = Util::getSafeString( parentVar );
+    parentName = getSafeString( parentVar );
   } else {
     parentName = m_name;
   }

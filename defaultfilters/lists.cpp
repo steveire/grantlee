@@ -19,27 +19,27 @@
 */
 
 #include "lists.h"
-#include <util_p.h>
+#include <util.h>
 #include <QtCore/QDateTime>
 
 QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  QVariantList varList = Util::variantToList( input );
+  QVariantList varList = variantToList( input );
   QListIterator<QVariant> i( varList );
   QString ret;
   while ( i.hasNext() ) {
     QVariant var = i.next();
-    Grantlee::SafeString s = Util::getSafeString( var );
+    Grantlee::SafeString s = getSafeString( var );
     if ( autoescape )
       s = conditionalEscape( s );
 
     ret.append( s );
     if ( i.hasNext() ) {
-      SafeString argString = Util::getSafeString( argument );
+      SafeString argString = getSafeString( argument );
       ret.append( argString );
     }
   }
-  return Util::markSafe( ret );
+  return markSafe( ret );
 }
 
 QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -50,7 +50,7 @@ QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument
     return input.toList().size();
 
   if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
-    return Util::getSafeString( input ).get().size();
+    return getSafeString( input ).get().size();
 
   return QVariant();
 }
@@ -66,10 +66,10 @@ QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argume
     size = input.toList().size();
 
   if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
-    size = Util::getSafeString( input ).get().size();
+    size = getSafeString( input ).get().size();
 
   bool ok;
-  int argInt = Util::getSafeString( argument ).get().toInt( &ok );
+  int argInt = getSafeString( argument ).get().toInt( &ok );
 
   if ( !ok )
     return QVariant();
@@ -81,7 +81,7 @@ QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument,
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = Util::variantToList( input );
+  QVariantList varList = variantToList( input );
 
   if ( varList.isEmpty() )
     return QString();
@@ -93,7 +93,7 @@ QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, 
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = Util::variantToList( input );
+  QVariantList varList = variantToList( input );
 
   if ( varList.isEmpty() )
     return QString();
@@ -105,7 +105,7 @@ QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = Util::variantToList( input );
+  QVariantList varList = variantToList( input );
 
   qsrand( QDateTime::currentDateTime().toTime_t() );
   int rnd = qrand() % varList.size();
@@ -115,9 +115,9 @@ QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument
 QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString argString = Util::getSafeString( argument );
+  SafeString argString = getSafeString( argument );
   int splitterIndex = argString.get().indexOf( ":" );
-  QString inputString = Util::getSafeString( input );
+  QString inputString = getSafeString( input );
   if ( splitterIndex >= 0 ) {
     int left = argString.get().left( splitterIndex ).get().toInt();
     int right = argString.get().right( splitterIndex ).get().toInt();
@@ -144,7 +144,7 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
 
   if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String ) {
     QVariantList list;
-    Q_FOREACH( const QVariant &var, Util::getSafeString( input ).get().split( QString(), QString::SkipEmptyParts ) )
+    Q_FOREACH( const QVariant &var, getSafeString( input ).get().split( QString(), QString::SkipEmptyParts ) )
       list << var;
     return list;
   }
@@ -154,7 +154,7 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
 QVariant UnorderedListFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
-  return Util::markSafe( processList( input.toList(), 1, autoescape ) );
+  return markSafe( processList( input.toList(), 1, autoescape ) );
 }
 
 SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs, bool autoescape ) const
@@ -168,7 +168,7 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
   int listSize = list.size();
   while ( i < listSize ) {
     QVariant titleObject = list.at( i );
-    SafeString title = Util::getSafeString( titleObject );
+    SafeString title = getSafeString( titleObject );
     QString sublist;
     QVariant sublistItem;
 

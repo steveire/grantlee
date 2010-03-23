@@ -29,7 +29,7 @@
 #include "exception.h"
 
 #include <QtCore/QDebug>
-#include <util_p.h>
+#include <util.h>
 
 IncludeNodeFactory::IncludeNodeFactory()
 {
@@ -60,7 +60,7 @@ IncludeNode::IncludeNode( const FilterExpression &fe, QObject *parent )
 
 void IncludeNode::render( OutputStream *stream, Context *c )
 {
-  QString filename = Util::getSafeString( m_filterExpression.resolve( c ) );
+  QString filename = getSafeString( m_filterExpression.resolve( c ) );
 
   TemplateImpl *ti = containerTemplate();
 

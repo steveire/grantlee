@@ -23,7 +23,7 @@
 #include "filterexpression.h"
 #include "exception.h"
 
-#include "util_p.h"
+#include "util.h"
 
 FilterNodeFactory::FilterNodeFactory()
 {

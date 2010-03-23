@@ -25,7 +25,7 @@
 #include "parser.h"
 #include "exception.h"
 
-#include "util_p.h"
+#include "util.h"
 
 
 IfEqualNodeFactory::IfEqualNodeFactory()
@@ -101,7 +101,7 @@ void IfEqualNode::render( OutputStream *stream, Context *c )
   QVariant var1 = m_var1.resolve( c );
   QVariant var2 = m_var2.resolve( c );
 
-  bool equal = Util::equals( var1, var2 );
+  bool equal = equals( var1, var2 );
 
   if ((( m_negate && !equal ) || ( !m_negate && equal ) ) )
     m_trueList.render( stream, c );

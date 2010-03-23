@@ -19,14 +19,14 @@
 */
 
 #include "logic.h"
-#include "util_p.h"
+#include "util.h"
 
 QVariant DefaultFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  if ( !input.isValid() || Util::getSafeString( input ).get().isEmpty() )
+  if ( !input.isValid() || getSafeString( input ).get().isEmpty() )
     return argument;
-  return Util::getSafeString( input );
+  return getSafeString( input );
 }
 
 QVariant DefaultIfNoneFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -34,13 +34,13 @@ QVariant DefaultIfNoneFilter::doFilter( const QVariant& input, const QVariant &a
   Q_UNUSED( autoescape )
   if ( !input.isValid() )
     return argument;
-  return Util::getSafeString( input );
+  return getSafeString( input );
 }
 
 QVariant DivisibleByFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  return ( Util::getSafeString( input ).get().toInt()
+  return ( getSafeString( input ).get().toInt()
            % QVariant( argument ).toInt() == 0 )
          ? QString( "true" ) : QString();
 }
@@ -48,7 +48,7 @@ QVariant DivisibleByFilter::doFilter( const QVariant& input, const QVariant &arg
 QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString arg = Util::getSafeString( argument );
+  SafeString arg = getSafeString( argument );
   QString yes;
   QString no;
   QString maybe;
@@ -73,7 +73,7 @@ QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument,
   }
   if ( !input.isValid() )
     return maybe;
-  if ( !Util::getSafeString( input ).get().isEmpty() )
+  if ( !getSafeString( input ).get().isEmpty() )
     return yes;
   return no;
 }

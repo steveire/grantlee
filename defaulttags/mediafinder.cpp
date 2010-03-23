@@ -26,7 +26,7 @@
 
 #include "exception.h"
 
-#include "util_p.h"
+#include "util.h"
 #include "engine.h"
 
 
@@ -59,7 +59,7 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
 
   Q_FOREACH( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
-      QString fileUrl = engine->mediaUri( Util::getSafeString( fe.resolve( c ) ) );
+      QString fileUrl = engine->mediaUri( getSafeString( fe.resolve( c ) ) );
       if ( fileUrl.isEmpty() )
         continue;
       QString uri = QUrl::fromLocalFile( fileUrl ).toString();

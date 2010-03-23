@@ -27,7 +27,7 @@
 #include "template.h"
 #include "engine.h"
 #include "context.h"
-#include <util_p.h>
+#include <util.h>
 #include "grantlee_paths.h"
 
 
@@ -331,25 +331,25 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", QString( "<a>\'" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "<a>\'" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "<a>\'" ) ) ) );
 
   QTest::newRow( "filter-addslash01" ) << "{% autoescape off %}{{ a|addslashes }} {{ b|addslashes }}{% endautoescape %}" << dict << "<a>\\\' <a>\\\'" << NoError;
 
   dict.clear();
   dict.insert( "a", QString( "<a>\'" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "<a>\'" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "<a>\'" ) ) ) );
 
   QTest::newRow( "filter-addslash02" ) << "{{ a|addslashes }} {{ b|addslashes }}" << dict << "&lt;a&gt;\\&#39; <a>\\\'" << NoError;
 
   dict.clear();
   dict.insert( "a", QString( "fred>" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "fred&gt;" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "fred&gt;" ) ) ) );
 
   QTest::newRow( "filter-capfirst01" ) << "{% autoescape off %}{{ a|capfirst }} {{ b|capfirst }}{% endautoescape %}" << dict << "Fred> Fred&gt;" << NoError;
 
   dict.clear();
   dict.insert( "a", QString( "fred>" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "fred&gt;" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "fred&gt;" ) ) ) );
 
   QTest::newRow( "filter-capfirst02" ) << "{{ a|capfirst }} {{ b|capfirst }}" << dict << "Fred&gt; Fred&gt;" << NoError;
 
@@ -358,25 +358,25 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", QString( "a&b" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a&b" ) ) ) );
 
   QTest::newRow( "filter-fix_ampersands01" ) << "{% autoescape off %}{{ a|fix_ampersands }} {{ b|fix_ampersands }}{% endautoescape %}" << dict << "a&amp;b a&amp;b" << NoError;
 
   dict.clear();
   dict.insert( "a", QString( "a&b" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a&b" ) ) ) );
 
   QTest::newRow( "filter-fix_ampersands02" ) << "{{ a|fix_ampersands }} {{ b|fix_ampersands }}" << dict << "a&amp;amp;b a&amp;b" << NoError;
 
   dict.clear();
   dict.insert( "a", QString( "1.42" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "1.42" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "1.42" ) ) ) );
 
   QTest::newRow( "filter-floatformat01" ) << "{% autoescape off %}{{ a|floatformat }} {{ b|floatformat }}{% endautoescape %}" << dict << "1.4 1.4" << NoError;
 
   dict.clear();
   dict.insert( "a", QString( "1.42" ) );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "1.42" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "1.42" ) ) ) );
 
   QTest::newRow( "filter-floatformat02" ) << "{{ a|floatformat }} {{ b|floatformat }}" << dict << "1.4 1.4" << NoError;
 
@@ -385,24 +385,24 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "one\n<two>\nthree" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "one\n&lt;two&gt;\nthree" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "one\n&lt;two&gt;\nthree" ) ) ) );
 
   QTest::newRow( "filter-linenumbers01" ) << "{{ a|linenumbers }} {{ b|linenumbers }}" << dict << "1. one\n2. &lt;two&gt;\n3. three 1. one\n2. &lt;two&gt;\n3. three" << NoError;
 
   dict.clear();
   dict.insert( "a", "one\n<two>\nthree" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "one\n&lt;two&gt;\nthree" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "one\n&lt;two&gt;\nthree" ) ) ) );
   QTest::newRow( "filter-linenumbers02" ) << "{% autoescape off %}{{ a|linenumbers }} {{ b|linenumbers }}{% endautoescape %}" << dict << "1. one\n2. <two>\n3. three 1. one\n2. &lt;two&gt;\n3. three" << NoError;
 
   dict.clear();
   dict.insert( "a", "Apple & banana" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "Apple &amp; banana" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "Apple &amp; banana" ) ) ) );
 
   QTest::newRow( "filter-lower01" ) << "{% autoescape off %}{{ a|lower }} {{ b|lower }}{% endautoescape %}" << dict << "apple & banana apple &amp; banana" << NoError;
 
   dict.clear();
   dict.insert( "a", "Apple & banana" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "Apple &amp; banana" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "Apple &amp; banana" ) ) ) );
 
   QTest::newRow( "filter-lower02" ) << "{{ a|lower }} {{ b|lower }}" << dict << "apple &amp; banana apple &amp; banana" << NoError;
 
@@ -410,7 +410,7 @@ void TestFilters::testStringFilters_data()
   //  escaped.
 
   dict.clear();
-  dict.insert( "a", Util::markSafe( QString( "&" ) ) );
+  dict.insert( "a", markSafe( QString( "&" ) ) );
 
   QTest::newRow( "filter-make_list01" ) << "{% autoescape off %}{{ a|make_list }}{% endautoescape %}" << dict << "[u\'&\']" << NoError;
   QTest::newRow( "filter-make_list02" ) << "{{ a|make_list }}" << dict << "[u&#39;&amp;&#39;]" << NoError;
@@ -423,7 +423,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "a & b" );
-  dict.insert( "b", Util::markSafe( QString( "a &amp; b" ) ) );
+  dict.insert( "b", markSafe( QString( "a &amp; b" ) ) );
 
   QTest::newRow( "filter-slugify01" ) << "{% autoescape off %}{{ a|slugify }} {{ b|slugify }}{% endautoescape %}" << dict << "a-b a-amp-b" << NoError;
   QTest::newRow( "filter-slugify02" ) << "{{ a|slugify }} {{ b|slugify }}" << dict << "a-b a-amp-b" << NoError;
@@ -439,7 +439,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "a<b" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a<b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a<b" ) ) ) );
 
   QTest::newRow( "filter-stringformat01" ) << "{% autoescape off %}.{{ a|stringformat:\"%1\" }}. .{{ b|stringformat:\"%2\" }}.{% endautoescape %}" << dict << ".a<b. .a<b." << NoError;
   QTest::newRow( "filter-stringformat02" ) << ".{{ a|stringformat:\"%1\" }}. .{{ b|stringformat:\"%2\" }}." << dict << ".a&lt;b. .a<b." << NoError;
@@ -450,7 +450,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "alpha & bravo" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "alpha &amp; bravo" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "alpha &amp; bravo" ) ) ) );
 
   QTest::newRow( "filter-truncatewords01" ) << "{% autoescape off %}{{ a|truncatewords:\"2\" }} {{ b|truncatewords:\"2\"}}{% endautoescape %}" << dict << "alpha & ... alpha &amp; ..." << NoError;
 
@@ -461,7 +461,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "a & b" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a &amp; b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a &amp; b" ) ) ) );
 
   QTest::newRow( "filter-upper01" ) << "{% autoescape off %}{{ a|upper }} {{ b|upper }}{% endautoescape %}" << dict << "A & B A &AMP; B" << NoError;
   QTest::newRow( "filter-upper02" ) << "{{ a|upper }} {{ b|upper }}" << dict << "A &amp; B A &amp;AMP; B" << NoError;
@@ -518,7 +518,7 @@ void TestFilters::testStringFilters_data()
 //
   dict.clear();
   dict.insert( "a", "a & b" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a &amp; b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a &amp; b" ) ) ) );
 
   QTest::newRow( "filter-wordcount01" ) << "{% autoescape off %}{{ a|wordcount }} {{ b|wordcount }}{% endautoescape %}" << dict << "3 3" << NoError;
 
@@ -526,7 +526,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "a & b" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a & b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a & b" ) ) ) );
 
   QTest::newRow( "filter-wordwrap01" ) << "{% autoescape off %}{{ a|wordwrap:3 }} {{ b|wordwrap:3 }}{% endautoescape %}" << dict << "a &\nb a &\nb" << NoError;
 
@@ -534,7 +534,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "a&b" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a&b" ) ) ) );
 
   QTest::newRow( "filter-ljust01" ) << "{% autoescape off %}.{{ a|ljust:\"5\" }}. .{{ b|ljust:\"5\" }}.{% endautoescape %}" << dict << ".a&b  . .a&b  ." << NoError;
 
@@ -550,7 +550,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "x&y" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "x&amp;y" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "x&amp;y" ) ) ) );
 
   QTest::newRow( "filter-cut01" ) << "{% autoescape off %}{{ a|cut:\"x\" }} {{ b|cut:\"x\" }}{% endautoescape %}" << dict << "&y &amp;y" << NoError;
   QTest::newRow( "filter-cut02" ) << "{{ a|cut:\"x\" }} {{ b|cut:\"x\" }}" << dict << "&amp;y &amp;y" << NoError;
@@ -568,7 +568,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "x&y" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "x&y" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "x&y" ) ) ) );
 
   QTest::newRow( "filter-escape01" ) << "{{ a|escape }} {{ b|escape }}" << dict << "x&amp;y x&y" << NoError;
   QTest::newRow( "filter-escape02" ) << "{% autoescape off %}{{ a|escape }} {{ b|escape }}{% endautoescape %}" << dict << "x&amp;y x&y" << NoError;
@@ -603,7 +603,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "x&\ny" );
-  dict.insert( "b", Util::markSafe( QString( "x&\ny" ) ) );
+  dict.insert( "b", markSafe( QString( "x&\ny" ) ) );
 
   QTest::newRow( "filter-linebreaks01" ) << "{{ a|linebreaks }} {{ b|linebreaks }}" << dict << "<p>x&amp;<br />y</p> <p>x&<br />y</p>" << NoError;
   QTest::newRow( "filter-linebreaks02" ) << "{% autoescape off %}{{ a|linebreaks }} {{ b|linebreaks }}{% endautoescape %}" << dict << "<p>x&<br />y</p> <p>x&<br />y</p>" << NoError;
@@ -624,7 +624,7 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( "a", "<a>x</a> <p><b>y</b></p>" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "<a>x</a> <p><b>y</b></p>" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "<a>x</a> <p><b>y</b></p>" ) ) ) );
 
   QTest::newRow( "filter-removetags01" ) << "{{ a|removetags:\"a b\" }} {{ b|removetags:\"a b\" }}" << dict << "x &lt;p&gt;y&lt;/p&gt; x <p>y</p>" << NoError;
   QTest::newRow( "filter-removetags02" ) << "{% autoescape off %}{{ a|removetags:\"a b\" }} {{ b|removetags:\"a b\" }}{% endautoescape %}" << dict << "x <p>y</p> x <p>y</p>" << NoError;
@@ -643,27 +643,27 @@ void TestFilters::testListFilters_data()
   Dict dict;
 
   dict.insert( "a", QVariantList() << "a&b" << "x" );
-  dict.insert( "b", QVariantList() << QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) << "x" );
+  dict.insert( "b", QVariantList() << QVariant::fromValue( markSafe( QString( "a&b" ) ) ) << "x" );
 
   QTest::newRow( "filter-first01" ) << "{{ a|first }} {{ b|first }}" << dict << "a&amp;b a&b" << NoError;
   QTest::newRow( "filter-first02" ) << "{% autoescape off %}{{ a|first }} {{ b|first }}{% endautoescape %}" << dict << "a&b a&b" << NoError;
 
   dict.clear();
   dict.insert( "a", QVariantList() << "x" << "a&b" );
-  dict.insert( "b", QVariantList() << "x" << QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) );
+  dict.insert( "b", QVariantList() << "x" << QVariant::fromValue( markSafe( QString( "a&b" ) ) ) );
 
   QTest::newRow( "filter-last01" ) << "{{ a|last }} {{ b|last }}" << dict << "a&amp;b a&b" << NoError;
   QTest::newRow( "filter-last02" ) << "{% autoescape off %}{{ a|last }} {{ b|last }}{% endautoescape %}" << dict << "a&b a&b" << NoError;
 
   dict.clear();
   dict.insert( "a", QVariantList() << "a&b" << "a&b" );
-  dict.insert( "b", QVariantList() << QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) << QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) );
+  dict.insert( "b", QVariantList() << QVariant::fromValue( markSafe( QString( "a&b" ) ) ) << QVariant::fromValue( markSafe( QString( "a&b" ) ) ) );
   QTest::newRow( "filter-random01" ) << "{{ a|random }} {{ b|random }}" << dict << "a&amp;b a&b" << NoError;
   QTest::newRow( "filter-random02" ) << "{% autoescape off %}{{ a|random }} {{ b|random }}{% endautoescape %}" << dict << "a&b a&b" << NoError;
 
   dict.clear();
   dict.insert( "a", "a&b" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a&b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a&b" ) ) ) );
 
   QTest::newRow( "filter-slice01" ) << "{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}" << dict << "&amp;b &b" << NoError;
   QTest::newRow( "filter-slice02" ) << "{% autoescape off %}{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}{% endautoescape %}" << dict << "&b &b" << NoError;
@@ -678,7 +678,7 @@ void TestFilters::testListFilters_data()
 
   dict.clear();
   sublist.clear();
-  sublist << Util::markSafe( QString( "<y" ) );
+  sublist << markSafe( QString( "<y" ) );
   dict.insert( "a", QVariantList() << "x>" << QVariant( sublist ) );
 
   QTest::newRow( "filter-unordered_list03" ) << "{{ a|unordered_list }}" << dict << "\t<li>x&gt;\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
@@ -796,7 +796,7 @@ void TestFilters::testListFilters_data()
 //
 //   dict.clear();
 //   dict.insert( "a", QVariantList() << "alpha" << "beta & me" );
-//   dict.insert( "var", QVariant::fromValue( Util::markSafe( QString( " & " ) ) ) );
+//   dict.insert( "var", QVariant::fromValue( markSafe( QString( " & " ) ) ) );
 //
 //   QTest::newRow( "join06" ) << "{{ a|join:var }}" << dict << "alpha & beta &amp; me" << NoError;
 //
@@ -808,7 +808,7 @@ void TestFilters::testListFilters_data()
 //
 //   dict.clear();
 //   dict.insert( "a", QVariantList() << "Alpha" << "Beta & me" );
-//   dict.insert( "var", QVariant::fromValue( Util::markSafe( QString( " & " ) ) ) );
+//   dict.insert( "var", QVariant::fromValue( markSafe( QString( " & " ) ) ) );
 //
 //   QTest::newRow( "join08" ) << "{{ a|join:var|lower }}" << dict << "alpha & beta &amp; me" << NoError;
 }
@@ -834,7 +834,7 @@ void TestFilters::testLogicFilters_data()
   QTest::newRow( "filter-default02" ) << "{% autoescape off %}{{ a|default:\"x<\" }}{% endautoescape %}" << dict << "x<" << NoError;
 
   dict.clear();
-  dict.insert( "a", QVariant::fromValue( Util::markSafe( QString( "x>" ) ) ) );
+  dict.insert( "a", QVariant::fromValue( markSafe( QString( "x>" ) ) ) );
 
   QTest::newRow( "filter-default03" ) << "{{ a|default:\"x<\" }}" << dict << "x>" << NoError;
   QTest::newRow( "filter-default04" ) << "{% autoescape off %}{{ a|default:\"x<\" }}{% endautoescape %}" << dict << "x>" << NoError;
@@ -868,7 +868,7 @@ void TestFilters::testMiscFilters_data()
   //  the safe status either way.
 
   dict.insert( "a", "a < b" );
-  dict.insert( "b", QVariant::fromValue( Util::markSafe( QString( "a < b" ) ) ) );
+  dict.insert( "b", QVariant::fromValue( markSafe( QString( "a < b" ) ) ) );
 
   QTest::newRow( "chaining01" ) << "{{ a|capfirst|center:\"7\" }}.{{ b|capfirst|center:\"7\" }}" << dict << " A &lt; b . A < b " << NoError;
   QTest::newRow( "chaining02" ) << "{% autoescape off %}{{ a|capfirst|center:\"7\" }}.{{ b|capfirst|center:\"7\" }}{% endautoescape %}" << dict << " A < b . A < b " << NoError;

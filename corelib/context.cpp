@@ -22,7 +22,7 @@
 
 #include <QtCore/QStringList>
 
-#include "util_p.h"
+#include "util.h"
 
 using namespace Grantlee;
 
@@ -86,7 +86,7 @@ QVariant Context::lookup( const QString &str ) const
       QVariant var = h.value( str );
       // If the user passed a string into the context, turn it into a Grantlee::SafeString.
       if ( var.type() == QVariant::String ) {
-        var = QVariant::fromValue<Grantlee::SafeString>( Util::getSafeString( var.toString() ) );
+        var = QVariant::fromValue<Grantlee::SafeString>( getSafeString( var.toString() ) );
       }
       return var;
     }

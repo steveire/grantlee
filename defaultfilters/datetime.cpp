@@ -22,7 +22,7 @@
 
 #include <QtCore/QDateTime>
 
-#include "util_p.h"
+#include "util.h"
 
 QVariant timeSince( QDateTime early, QDateTime late )
 {
@@ -86,9 +86,9 @@ QVariant timeUntil( QDateTime dt, QDateTime now = QDateTime() )
 QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  QDateTime d = QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
+  QDateTime d = QDateTime::fromString( getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
 
-  SafeString argString = Util::getSafeString( argument );
+  SafeString argString = getSafeString( argument );
 
   if ( !argString.get().isEmpty() )
     return d.toString( argString );
@@ -99,8 +99,8 @@ QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, 
 QVariant TimeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString argString = Util::getSafeString( argument );
-  return QDateTime::fromString( Util::getSafeString( input ), "yyyy-MM-ddThh:mm:ss" ).toString( argString );
+  SafeString argString = getSafeString( argument );
+  return QDateTime::fromString( getSafeString( input ), "yyyy-MM-ddThh:mm:ss" ).toString( argString );
 }
 
 QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const

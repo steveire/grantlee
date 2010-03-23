@@ -25,7 +25,7 @@
 
 #include "exception.h"
 
-#include "util_p.h"
+#include "util.h"
 
 
 FirstOfNodeFactory::FirstOfNodeFactory()

@@ -27,7 +27,7 @@
 #include <QtCore/QDebug>
 
 #include "context.h"
-#include "util_p.h"
+#include "util.h"
 
 using namespace Grantlee;
 
@@ -107,8 +107,8 @@ Variable::Variable( const QString &var )
     }
     if (( localVar.startsWith( '"' ) && localVar.endsWith( '"' ) )
         || ( localVar.startsWith( '\'' ) && localVar.endsWith( '\'' ) ) ) {
-      QString unesc = Util::unescapeStringLiteral( localVar );
-      Grantlee::SafeString ss = Util::markSafe( unesc );
+      QString unesc = unescapeStringLiteral( localVar );
+      Grantlee::SafeString ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
       d->m_lookups = localVar.split( '.' );
@@ -130,7 +130,7 @@ bool Variable::isConstant() const
 
 bool Variable::isTrue( Context *c ) const
 {
-  return Util::variantIsTrue( resolve( c ) );
+  return variantIsTrue( resolve( c ) );
 }
 
 QVariant Variable::resolve( Context *c ) const
@@ -146,8 +146,8 @@ QVariant Variable::resolve( Context *c ) const
         return var;
     }
   } else {
-    if ( Util::isSafeString( var ) )
-      var = QVariant::fromValue( Util::getSafeString( d->m_literal ) );
+    if ( isSafeString( var ) )
+      var = QVariant::fromValue( getSafeString( d->m_literal ) );
     else
       var = d->m_literal;
   }
@@ -157,7 +157,7 @@ QVariant Variable::resolve( Context *c ) const
   }
 
 
-  if ( Util::supportedOutputType( var ) ) {
+  if ( supportedOutputType( var ) ) {
     return var;
   }
   if ( var.canConvert( QVariant::String ) ) {
@@ -183,7 +183,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
       return hash.value( nextPart );
     return TypeAccessor<QVariantHash>::lookUp( hash, nextPart );
   } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() ) {
-    return TypeAccessor<SafeString>::lookUp( Util::getSafeString( var ), nextPart );
+    return TypeAccessor<SafeString>::lookUp( getSafeString( var ), nextPart );
   } else if ( QMetaType::QObjectStar == var.userType() ) {
     // Can't be const because of invokeMethod.
     const QObject *obj = var.value<QObject *>();
@@ -209,7 +209,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
     int listIndex = nextPart.toInt( &ok );
     if ( !ok )
       return QVariant();
-    QVariantList varList = Util::variantToList( var );
+    QVariantList varList = variantToList( var );
 
     if ( listIndex >= varList.size() )
       return QVariant();

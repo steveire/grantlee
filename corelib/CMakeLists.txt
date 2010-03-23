@@ -67,6 +67,7 @@ install(FILES
   template.h
   templateloader.h
   token.h
+  util.h
   variable.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )

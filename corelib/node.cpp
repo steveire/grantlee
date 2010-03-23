@@ -21,7 +21,7 @@
 #include "node.h"
 
 #include "nodebuiltins_p.h"
-#include "util_p.h"
+#include "util.h"
 #include "template.h"
 
 using namespace Grantlee;
@@ -67,9 +67,9 @@ void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Co
 {
   Grantlee::SafeString inputString;
   if ( input.type() == QVariant::List ) {
-    inputString = Util::toString( input.toList() );
+    inputString = toString( input.toList() );
   } else {
-    inputString = Util::getSafeString( input );
+    inputString = getSafeString( input );
   }
   if ( c->autoEscape() && !inputString.isSafe() )
     inputString.setNeedsEscape( true );

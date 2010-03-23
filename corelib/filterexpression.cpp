@@ -24,7 +24,7 @@
 
 #include "parser.h"
 #include "filter.h"
-#include "util_p.h"
+#include "util.h"
 #include "exception.h"
 
 typedef QPair<Grantlee::Filter::Ptr, Grantlee::Variable > ArgFilter;
@@ -208,28 +208,28 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
         argString = Grantlee::SafeString( arg.toString() );
       }
       if ( argVar.isConstant() ) {
-        argString = Util::markSafe( argString );
+        argString = markSafe( argString );
       }
       if ( !argString.get().isEmpty() ) {
         arg = argString;
       }
     }
 
-    SafeString varString = Util::getSafeString( var );
+    SafeString varString = getSafeString( var );
 
     var = filter->doFilter( var, arg, c->autoEscape() );
 
     if ( var.userType() == qMetaTypeId<Grantlee::SafeString>() || var.type() == QVariant::String ) {
       if ( filter->isSafe() && varString.isSafe() ) {
-        var = Util::markSafe( Util::getSafeString( var ) );
+        var = markSafe( getSafeString( var ) );
       } else if ( varString.needsEscape() ) {
-        var = Util::markForEscaping( Util::getSafeString( var ) );
+        var = markForEscaping( getSafeString( var ) );
       } else {
-        var = Util::getSafeString( var );
+        var = getSafeString( var );
       }
     }
   }
-  ( *stream ) << Util::getSafeString( var ).get();
+  ( *stream ) << getSafeString( var ).get();
   return var;
 }
 
@@ -242,12 +242,12 @@ QVariant FilterExpression::resolve( Context *c ) const
 QVariantList FilterExpression::toList( Context *c ) const
 {
   QVariant var = resolve( c );
-  return Util::variantToList( var );
+  return variantToList( var );
 }
 
 bool FilterExpression::isTrue( Context *c ) const
 {
-  return Util::variantIsTrue( resolve( c ) );
+  return variantIsTrue( resolve( c ) );
 }
 
 QStringList FilterExpression::filters() const

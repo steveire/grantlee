@@ -20,18 +20,18 @@
 
 #include "integers.h"
 
-#include "util_p.h"
+#include "util.h"
 
 QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  return Util::getSafeString( input ).get().toInt() + Util::getSafeString( argument ).get().toInt();
+  return getSafeString( input ).get().toInt() + getSafeString( argument ).get().toInt();
 }
 
 QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString value = Util::getSafeString( input );
+  SafeString value = getSafeString( input );
 
   bool ok;
   ( void )value.get().toInt( &ok );
@@ -41,7 +41,7 @@ QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argume
   if ( value.get().size() < 1 )
     return value;
 
-  int arg = Util::getSafeString( argument ).get().toInt();
+  int arg = getSafeString( argument ).get().toInt();
 
   if ( value.get().size() < arg )
     return value;

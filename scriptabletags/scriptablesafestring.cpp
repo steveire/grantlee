@@ -22,7 +22,7 @@
 
 #include <QtScript/QScriptEngine>
 
-#include "util_p.h"
+#include "util.h"
 
 QScriptValue markSafeFunction( QScriptContext *context,
                                QScriptEngine *engine )
@@ -40,7 +40,7 @@ QScriptValue markSafeFunction( QScriptContext *context,
   } else if ( inputValue.isString() ) {
     QString str = inputValue.toString();
     ScriptableSafeString *ssObj = new ScriptableSafeString( engine );
-    ssObj->setContent( Util::markSafe( str ) );
+    ssObj->setContent( markSafe( str ) );
     return engine->newQObject( ssObj );
 
   }

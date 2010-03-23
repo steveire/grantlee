@@ -24,7 +24,7 @@
 
 #include "parser.h"
 #include "scriptablecontext.h"
-#include "util_p.h"
+#include "util.h"
 
 using namespace Grantlee;
 
@@ -69,6 +69,6 @@ bool ScriptableFilterExpression::isTrue( ScriptableContext* c )
 bool ScriptableFilterExpression::equals( ScriptableFilterExpression* other, ScriptableContext *scriptableC )
 {
   Context *c = scriptableC->context();
-  return Util::equals( m_filterExpression.resolve( c ), other->m_filterExpression.resolve( c ) );
+  return Grantlee::equals( m_filterExpression.resolve( c ), other->m_filterExpression.resolve( c ) );
 }
 

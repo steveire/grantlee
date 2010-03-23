@@ -25,7 +25,7 @@
 #include "parser.h"
 #include "template.h"
 #include "exception.h"
-#include <util_p.h>
+#include <util.h>
 
 
 const char * __loadedBlocks = "__loadedBlocks";
@@ -115,7 +115,7 @@ SafeString BlockNode::getSuper() const
   QTextStream superTextStream( &superContent );
   QSharedPointer<OutputStream> superStream = m_stream->clone( &superTextStream );
   m_nodeParent->render( superStream.data(), m_context );
-  return Util::markSafe( superContent );
+  return markSafe( superContent );
 }
 
 QString BlockNode::blockName()

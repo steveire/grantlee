@@ -24,7 +24,7 @@
 #include "parser.h"
 #include "exception.h"
 
-#include "util_p.h"
+#include "util.h"
 
 static const char * _namedCycleNodes = "_namedCycleNodes";
 

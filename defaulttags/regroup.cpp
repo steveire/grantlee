@@ -24,7 +24,7 @@
 #include "parser.h"
 #include "exception.h"
 
-#include "util_p.h"
+#include "util.h"
 
 RegroupNodeFactory::RegroupNodeFactory()
 {
@@ -84,13 +84,13 @@ void RegroupNode::render( OutputStream *stream, Context *c )
   QVariantList contextList;
   QString hashKey;
   QString lastKey;
-  QString keyName = Util::getSafeString( m_expression.resolve( c ) );
+  QString keyName = getSafeString( m_expression.resolve( c ) );
   QListIterator<QVariant> i( objList );
   while ( i.hasNext() ) {
     QVariant var = i.next();
     c->push();
     c->insert( "var", var );
-    QString key = Util::getSafeString( FilterExpression( "var." + keyName, 0 ).resolve( c ) );
+    QString key = getSafeString( FilterExpression( "var." + keyName, 0 ).resolve( c ) );
     c->pop();
     QVariantHash hash;
     if ( contextList.size() > 0 ) {
