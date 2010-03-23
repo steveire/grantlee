@@ -55,5 +55,13 @@ namespace Grantlee
     </ul>
   @endcode
 
+  The range tag can also be used without arguments:
+
+  @code
+    {% range rating %}
+      <img src="{% media_finder "star.png" %}" />
+    {% endrange %}
+  @endcode
+
 */
 }

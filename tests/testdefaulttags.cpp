@@ -1369,6 +1369,7 @@ void TestDefaultTags::testRangeTag_data()
 
   QTest::newRow( "range-tag04" ) << "{% range values.0 values.1 values.2 as i %}{{ i }};{% endrange %}" << dict << "10;12;14;" << NoError;
 
+  QTest::newRow( "range-tag05" ) << "{% range 5 %}Foo;{% endrange %}" << dict << "Foo;Foo;Foo;Foo;Foo;" << NoError;
 }
 
 

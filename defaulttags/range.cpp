@@ -39,16 +39,20 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
 
   expr.takeAt( 0 );
   int numArgs = expr.size();
-  if ( numArgs <= 2 ) {
-    throw Grantlee::Exception( TagSyntaxError, "'range' tag requires at least three arguments" );
+  if ( numArgs != 1 )
+  {
+    if ( numArgs <= 2 ) {
+      throw Grantlee::Exception( TagSyntaxError, "'range' tag requires at least three arguments" );
+    }
+
+    if ( expr.at( numArgs - 2 ) != "as"  ) {
+      throw Grantlee::Exception( TagSyntaxError, "Invalid arguments to 'range' tag" );
+    }
   }
 
-  if ( expr.at( numArgs - 2 ) != "as"  ) {
-    throw Grantlee::Exception( TagSyntaxError, "Invalid arguments to 'range' tag" );
-  }
-
-  const QString name = expr.at( numArgs - 1 );
-  numArgs -= 2;
+  const QString name = ( numArgs > 2 ) ? expr.at( numArgs - 1 ) : QString();
+  if ( numArgs > 2 )
+    numArgs -= 2;
 
   RangeNode *n = 0;
 
