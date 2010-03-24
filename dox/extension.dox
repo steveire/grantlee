@@ -96,11 +96,18 @@ namespace Grantlee
   @code
     class CurrentTimeTag : public Grantlee::AbstractNodeFactory
     {
-      Node *getNode(const QString &tagContent, Parser *p) const
+      Grantlee::Node *getNode(const QString &tagContent, Parser *p) const
       {
         // You almost always want to use smartSplit.
-        QStringList content = smartSplit(tagContent);
+        QStringList parts = smartSplit(tagContent);
+        parts.removeFirst(); // Not interested in the name of the tag.
 
+        if (!parts.isEmpty())
+          // The remaining parts are the arguments to the tag. If an incorrect number of arguments
+          // is supplied, and exception should be thrown.
+          throw Grantlee::Exception( TagSyntaxError, "current_time does not take any arguments" );
+
+        return new CurrentTimeNode();
       }
     };
 
@@ -114,12 +121,17 @@ namespace Grantlee
 
       }
 
-      QString render(Context *c)
+      void render( Grantlee::OutputStream *stream, Context *c)
       {
-        return ;
+        Q_UNUSED(c);
+        return QDateTime::currentDateTime().toString();
       }
     };
   @endcode
+
+  @see AbstractNodeFactory::smartSplit
+
+  @note The current_time tag could be extended to format the time in a particular way. That is the behaviour of the {%&nbsp;now&nbsp;%} tag. See its documentation and implementation for details.
 
   Also, note that, nodeFactory may throw an execption at template compilation time, but like Filters, Nodes should handle errors gracefully in their render method, and should return an empty QString in most error cases.
 
