@@ -6,17 +6,17 @@ Version 0.1:
     Some tags such as {% url %} depend on the Django views system and are not
     relevant to Grantlee.
 * Django regression tests ported to Qt/Grantlee.
-* i18n support.
-* API docs including basics of creating templates. 
+* API docs including basics of creating templates.
 * Grantlee support in KJots stable.
 
 Version 0.2:
+* Update API and features to match Django 1.2
+* i18n support.
 * Package structure and GHNS integration.
 * Partial redesign to take advantage of more Qt features (possibly use QScriptEngine more instead of Context and Variable).
 * Grantlee support in KMail, KNode, Akregator.
 
 Version 0.3 and later:
-* Kopete themes
 * Akonadi mail-merge agent
 * Grantlee-mime
 * Tools and widgets for creating templates.
