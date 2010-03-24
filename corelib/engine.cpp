@@ -217,7 +217,6 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
 
 PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion )
 {
-  Q_Q( Engine );
   int pluginIndex = 0;
   QString libFileName;
 
@@ -242,7 +241,6 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
     PluginPointer<TagLibraryInterface> plugin = PluginPointer<TagLibraryInterface>( pluginDir.absoluteFilePath( list.first() ) );
 
     if ( plugin ) {
-      plugin->setEngine( q );
       m_libraries.insert( name, plugin );
       return plugin;
     }

@@ -70,9 +70,19 @@ public:
 
 void ParserPrivate::openLibrary( TagLibraryInterface *library )
 {
+  Q_Q( Parser );
   QHashIterator<QString, AbstractNodeFactory*> nodeIt( library->nodeFactories() );
+
+  TemplateImpl *ti = qobject_cast<TemplateImpl *>( q->parent() );
+
+  Engine const *cengine = ti->engine();
+  if ( !cengine )
+    return;
+  Engine *engine = const_cast<Engine *>( cengine );
+
   while ( nodeIt.hasNext() ) {
     nodeIt.next();
+    nodeIt.value()->setEngine( engine );
     m_nodeFactories.insert( nodeIt.key(), nodeIt.value() );
   }
   QHashIterator<QString, Filter*> filterIt( library->filters() );

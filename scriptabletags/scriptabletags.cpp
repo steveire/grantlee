@@ -38,7 +38,6 @@
 #include "token.h"
 
 Q_DECLARE_METATYPE( Token )
-Q_DECLARE_METATYPE( Engine* )
 
 QScriptValue tokenToScriptValue( QScriptEngine *engine, const Token &t )
 {
@@ -97,11 +96,6 @@ ScriptableTagLibrary::ScriptableTagLibrary( QObject *parent )
   QScriptValue markSafeFunctionObject = m_scriptEngine->newFunction( markSafeFunction );
   m_scriptEngine->globalObject().setProperty( "mark_safe", markSafeFunctionObject );
 
-}
-
-void ScriptableTagLibrary::setEngine( Engine *engine )
-{
-  m_scriptEngine->setProperty( "templateEngine", QVariant::fromValue( engine ) );
 }
 
 bool ScriptableTagLibrary::evaluateScript( const QString &name )

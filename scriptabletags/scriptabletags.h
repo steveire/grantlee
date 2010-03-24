@@ -50,8 +50,6 @@ public:
 
   virtual QHash<QString, Filter*> filters( const QString &name = QString() );
 
-  /* reimp */ void setEngine( Grantlee::Engine *engine );
-
 public Q_SLOTS:
   void addFactory( const QString &factoryName, const QString &tagname );
   void addFilter( const QString &filterName );

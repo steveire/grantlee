@@ -33,6 +33,7 @@ class QScriptContext;
 namespace Grantlee
 {
 class Context;
+class Engine;
 }
 
 typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
@@ -78,6 +79,8 @@ class ScriptableNodeFactory : public AbstractNodeFactory
 public:
   ScriptableNodeFactory( QObject* parent = 0 );
   void setScriptEngine( QScriptEngine *engine );
+
+  /* reimp */ void setEngine( Grantlee::Engine *engine );
   void setFactory( QScriptValue factoryMethod );
 
   Node* getNode( const QString &tagContent, Parser *p = 0 ) const;

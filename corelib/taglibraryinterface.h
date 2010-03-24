@@ -95,10 +95,6 @@ public:
     QHash<QString, Filter*> h;
     return h;
   };
-
-  virtual void setEngine( Engine *engine ) {
-    Q_UNUSED( engine )
-  }
 };
 
 }

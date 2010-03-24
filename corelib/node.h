@@ -40,6 +40,7 @@
 namespace Grantlee
 {
 
+class Engine;
 class NodeList;
 class TemplateImpl;
 
@@ -328,6 +329,15 @@ public:
     @see tags
   */
   virtual Node* getNode( const QString &tagContent, Parser *p ) const = 0;
+
+#ifndef Q_QDOC
+  /**
+    @internal
+
+    Sets the Engine which created this NodeFactory. Used by the ScriptableNodeFactory.
+  */
+  virtual void setEngine( Engine * ) {}
+#endif
 
 protected:
   /**

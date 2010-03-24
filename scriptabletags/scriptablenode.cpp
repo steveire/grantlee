@@ -25,9 +25,11 @@
 #include "context.h"
 #include "scriptablecontext.h"
 #include "scriptableparser.h"
+#include "engine.h"
 #include "exception.h"
 #include "parser.h"
 
+Q_DECLARE_METATYPE( Engine* )
 
 QScriptValue nodeToScriptValue( QScriptEngine *engine, Node* const &node )
 {
@@ -104,6 +106,11 @@ ScriptableNodeFactory::ScriptableNodeFactory( QObject* parent )
 void ScriptableNodeFactory::setScriptEngine( QScriptEngine *engine )
 {
   m_scriptEngine = engine;
+}
+
+void ScriptableNodeFactory::setEngine(Engine* engine)
+{
+  m_scriptEngine->setProperty( "templateEngine", QVariant::fromValue( engine ) );
 }
 
 void ScriptableNodeFactory::setFactory( QScriptValue factoryMethod )

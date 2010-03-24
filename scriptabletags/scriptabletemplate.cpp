@@ -30,7 +30,6 @@
 
 Q_DECLARE_METATYPE( Engine* )
 
-
 QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
     QScriptEngine *engine )
 {
