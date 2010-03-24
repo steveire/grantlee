@@ -57,21 +57,24 @@ QList<Token> Lexer::tokenize() const
 
   int pos = 0;
   int oldPosition = 0;
+  int linecount = 0;
   while ( ( pos = tagRe.indexIn( m_templateString, pos ) ) != -1 ) {
-    tokenList << createToken( m_templateString.mid( oldPosition, pos - oldPosition ), NotInTag );
-    tokenList << createToken( tagRe.cap( 1 ), InTag );
+    tokenList << createToken( m_templateString.mid( oldPosition, pos - oldPosition ), NotInTag, &linecount );
+    tokenList << createToken( tagRe.cap( 1 ), InTag, &linecount );
     pos += tagRe.matchedLength();
     oldPosition = pos;
   }
-  tokenList << createToken( m_templateString.right( m_templateString.size() - oldPosition ), NotInTag );
+  tokenList << createToken( m_templateString.right( m_templateString.size() - oldPosition ), NotInTag, &linecount );
 
   return tokenList;
 }
 
-Token Lexer::createToken( const QString &fragment, int inTag ) const
+Token Lexer::createToken( const QString &fragment, State inTag, int *linecount ) const
 {
   Token token;
+  token.linenumber = ( *linecount ) + 1;
   if ( inTag == NotInTag ) {
+    ( *linecount ) += fragment.count( QLatin1Char( '\n' ) );
     token.content = fragment;
     token.tokenType = TextToken;
   } else {

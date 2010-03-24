@@ -134,15 +134,15 @@ void Engine::loadDefaultLibraries()
   // Make sure we can load default scriptable libraries if we're supposed to.
   if ( d->m_defaultLibraries.contains( __scriptableLibName ) ) {
     PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
+    if ( !library )
+      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Could not load scriptable tags library" ) );
   }
 
   Q_FOREACH( const QString &libName, d->m_defaultLibraries ) {
     if ( libName == __scriptableLibName )
       continue;
 
-    TagLibraryInterface *library = loadLibrary( libName );
-    if ( !library )
-      continue;
+    loadLibrary( libName );
   }
 }
 
@@ -163,6 +163,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
     if ( library )
       return library;
   }
+  throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Plugin library '%1' not found." ).arg( name ) );
   return 0;
 }
 

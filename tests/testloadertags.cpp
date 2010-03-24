@@ -133,7 +133,7 @@ void TestLoaderTags::testIncludeTag_data()
   QTest::newRow( "include03" ) << "{% include templateName %}" << dict << "Included" << NoError;
 
   dict.clear();
-  QTest::newRow( "include04" ) << "a{% include \"nonexistent\" %}b" << dict << "ab" << NoError;
+  QTest::newRow( "include04" ) << "a{% include \"nonexistent\" %}b" << dict << "ab" << TagSyntaxError;
 
   QString incl05 = "template with a space";
   loader->setTemplate( "include 05", incl05 );

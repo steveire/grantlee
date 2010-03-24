@@ -194,13 +194,22 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         // Error. Empty variable
         QString message;
         if ( q->hasNextToken() )
-          message = QString( "Empty variable before \"%1\"" ).arg( q->takeNextToken().content );
+          message = QString( "Empty variable before \"%1\", line %2, %3" ).arg( q->takeNextToken().content.left( 20 ) ).arg( token.linenumber ).arg( q->parent()->objectName() );
         else
           message = QString( "Empty variable at end of input." );
 
         throw Grantlee::Exception( EmptyVariableError, message );
       }
-      FilterExpression filterExpression( token.content, q );
+
+      FilterExpression filterExpression;
+      try {
+        filterExpression = FilterExpression( token.content, q );
+      } catch ( Grantlee::Exception e )
+      {
+        throw Grantlee::Exception( e.errorCode(), QString( "%1, line %2, %3" ).arg( e.what() )
+                                                                              .arg( token.linenumber )
+                                                                              .arg( q->parent()->objectName() ) );
+      }
 
       nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
     } else if ( token.tokenType == BlockToken ) {
@@ -214,7 +223,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       if ( tagContents.size() == 0 ) {
         QString message;
         if ( q->hasNextToken() )
-          message = QString( "Empty block tag before \"%1\"" ).arg( q->takeNextToken().content );
+          message = QString( "Empty block tag before \"%1\", line %2, %3" ).arg( token.content.left( 20 ) ).arg( token.linenumber ).arg( q->parent()->objectName() );
         else
           message = QString( "Empty block tag at end of input." );
 
@@ -225,14 +234,20 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
 
       // unknown tag.
       if ( !nodeFactory ) {
-        throw Grantlee::Exception( InvalidBlockTagError, QString( "Unknown tag: \"%1\"" ).arg( command ) );
+        throw Grantlee::Exception( InvalidBlockTagError, QString( "Unknown tag: \"%1\", line %2, %3" ).arg( command ).arg( token.linenumber ).arg( q->parent()->objectName() ) );
       }
 
       // TODO: Make getNode take a Token instead?
-      Node *n = nodeFactory->getNode( token.content, q );
-
+      Node *n;
+      try {
+        n = nodeFactory->getNode( token.content, q );
+      } catch ( Grantlee::Exception e ){
+        throw Grantlee::Exception( e.errorCode(), QString( "%1, line %2, %3" ).arg( e.what() )
+                                                                              .arg( token.linenumber )
+                                                                              .arg( q->parent()->objectName() ) );
+      }
       if ( !n ) {
-        throw Grantlee::Exception( EmptyBlockTagError, QString( "Failed to get node from %1" ).arg( command ) );
+        throw Grantlee::Exception( EmptyBlockTagError, QString( "Failed to get node from %1, line %2, %3" ).arg( command ).arg( token.linenumber ).arg( q->parent()->objectName() ) );
       }
 
       n->setParent( parent );
@@ -242,7 +257,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
   }
 
   if ( !stopAt.isEmpty() ) {
-    QString message = QString( "Unclosed tag in template. Expected one of: (%1)" ).arg( stopAt.join( " " ) );
+    QString message = QString( "Unclosed tag in template %1. Expected one of: (%2)" ).arg( q->parent()->objectName() ).arg( stopAt.join( " " ) );
     throw Grantlee::Exception( UnclosedBlockTagError, message );
   }
 

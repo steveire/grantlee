@@ -47,6 +47,7 @@ enum TokenType {
 */
 struct Token {
   int tokenType;    ///< The Type of this Token
+  int linenumber;
   QString content;  ///< The content of this Token
 };
 

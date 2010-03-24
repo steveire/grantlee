@@ -160,6 +160,15 @@ void BookWindow::renderBooks()
     Grantlee::Template t = m_engine->loadByName( themeName + ".html" );
     if (!t)
     {
+      QMessageBox::critical(this, "Unable to load template",
+                QString( "Error loading template: %1" ).arg( themeName + ".html" ) );
+      return;
+    }
+
+    if ( t->error() )
+    {
+      QMessageBox::critical(this, "Unable to load template",
+                QString( "Error loading template: %1" ).arg( t->errorString() ) );
       return;
     }
 
@@ -175,6 +184,14 @@ void BookWindow::renderBooks()
       return;
 
     QString content = t->render(&c);
+
+    if ( t->error() )
+    {
+      QMessageBox::critical(this, "Unable render template",
+                QString( "Error rendering template: %1" ).arg( t->errorString() ) );
+      return;
+    }
+
     file.write(content.toLocal8Bit());
     file.close();
 

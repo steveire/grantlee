@@ -64,7 +64,8 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   TemplateImpl *t = qobject_cast<TemplateImpl *>( p->parent() );
 
-  Q_ASSERT( t );
+  if ( !t )
+    throw Grantlee::Exception( TagSyntaxError, "Extends tag is not in a template." );
 
   NodeList nodeList = p->parse( t );
   n->setNodeList( nodeList );
@@ -116,6 +117,12 @@ Template ExtendsNode::getParent( Context *c )
   TemplateImpl *ti = containerTemplate();
 
   Template t = ti->engine()->loadByName( parentName );
+
+  if ( !t )
+    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Template not found %1" ).arg( parentName ) );
+
+  if ( t->error() )
+    throw Grantlee::Exception( t->error(), t->errorString() );
 
   return t;
 }

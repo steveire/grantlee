@@ -136,13 +136,12 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
   }
 
   if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist." ).arg( fileName ) );
+    return Template();
   }
 
   QString content;
   content = file.readAll();
-  Template t = engine->newTemplate( content, fileName );
-  return t;
+  return engine->newTemplate( content, fileName );
 }
 
 QString FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const

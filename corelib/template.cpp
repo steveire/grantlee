@@ -21,6 +21,8 @@
 #include "template.h"
 #include "template_p.h"
 
+#include <QtCore/QDebug>
+
 #include "lexer_p.h"
 #include "parser.h"
 #include "context.h"
@@ -59,6 +61,7 @@ void TemplateImpl::setContent( const QString &templateString )
   try {
     d->m_nodeList = d->compileString( templateString );
   } catch ( Grantlee::Exception &e ) {
+    qWarning() << e.what();
     d->setError( e.errorCode(), e.what() );
   }
 }
@@ -80,6 +83,7 @@ OutputStream* TemplateImpl::render( OutputStream *stream, Context *c )
   try {
     d->m_nodeList.render( stream, c );
   } catch ( Grantlee::Exception &e ) {
+    qWarning() << e.what();
     d->setError( e.errorCode(), e.what() );
   }
 

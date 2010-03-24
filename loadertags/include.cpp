@@ -64,15 +64,18 @@ void IncludeNode::render( OutputStream *stream, Context *c )
 
   TemplateImpl *ti = containerTemplate();
 
-  try {
-    Template t = ti->engine()->loadByName( filename );
+  Template t = ti->engine()->loadByName( filename );
 
-    if ( !t )
-      return;
+  if ( !t )
+    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Template not found %1" ).arg( filename ) );
 
-    t->render( stream, c );
-  } catch ( Grantlee::Exception e ) {
-  }
+  if ( t->error() )
+    throw Grantlee::Exception( t->error(), t->errorString() );
+
+  t->render( stream, c );
+
+  if ( t->error() )
+    throw Grantlee::Exception( t->error(), t->errorString() );
 }
 
 ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
@@ -85,13 +88,16 @@ void ConstantIncludeNode::render( OutputStream *stream, Context *c )
 {
   TemplateImpl *ti = containerTemplate();
 
-  try {
-    Template t = ti->engine()->loadByName( m_name );
-    if ( !t )
-      return;
+  Template t = ti->engine()->loadByName( m_name );
+  if ( !t )
+    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Template not found %1" ).arg( m_name ) );
 
-    t->render( stream, c );
-  } catch ( Grantlee::Exception e ) {
-  }
+  if ( t->error() )
+    throw Grantlee::Exception( t->error(), t->errorString() );
+
+  t->render( stream, c );
+
+  if ( t->error() )
+    throw Grantlee::Exception( t->error(), t->errorString() );
 }
 

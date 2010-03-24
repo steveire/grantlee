@@ -43,7 +43,7 @@ private:
     NotInTag
   };
 
-  Token createToken( const QString &fragment, int inTag ) const;
+  Token createToken( const QString &fragment, State inTag, int *linecount ) const;
 
   QString m_templateString;
 
