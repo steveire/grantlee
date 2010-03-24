@@ -194,6 +194,8 @@ void TestDefaultTags::doTest()
   QString result = t->render( &context );
 
   if ( t->error() != NoError ) {
+    if ( t->error() != error )
+      qDebug() << t->errorString();
     QCOMPARE( t->error(), error );
     return;
   }
