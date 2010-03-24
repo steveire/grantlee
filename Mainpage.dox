@@ -69,7 +69,8 @@ namespace Grantlee
 
   The source repository is located at http://gitorious.org/grantlee.
 
-  Report bugs in the KDE bug tracker under the component 'grantlee'.
+  - Existing bugs https://bugs.kde.org/buglist.cgi?product=grantlee
+  - File new bug https://bugs.kde.org/enter_bug.cgi?product=grantlee
 
 */
 
