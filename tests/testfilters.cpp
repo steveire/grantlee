@@ -109,7 +109,7 @@ void TestFilters::doTest()
   QFETCH( QString, input );
   QFETCH( Dict, dict );
   QFETCH( QString, output );
-  QFETCH( Grantlee::Error, errorNumber );
+  QFETCH( Grantlee::Error, error );
 
   Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
 
@@ -118,12 +118,12 @@ void TestFilters::doTest()
   QString result = t->render( &context );
 
   if ( t->error() != NoError ) {
-    QCOMPARE( t->error(), errorNumber );
+    QCOMPARE( t->error(), error );
     return;
   }
 
   // Didn't catch any errors, so make sure I didn't expect any.
-  QCOMPARE( NoError, errorNumber );
+  QCOMPARE( NoError, error );
 
   QCOMPARE( t->error(), NoError );
 
@@ -135,7 +135,7 @@ void TestFilters::testDateBasedFilters_data()
   QTest::addColumn<QString>( "input" );
   QTest::addColumn<Dict>( "dict" );
   QTest::addColumn<QString>( "output" );
-  QTest::addColumn<Grantlee::Error>( "errorNumber" );
+  QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
 
@@ -325,7 +325,7 @@ void TestFilters::testStringFilters_data()
   QTest::addColumn<QString>( "input" );
   QTest::addColumn<Dict>( "dict" );
   QTest::addColumn<QString>( "output" );
-  QTest::addColumn<Grantlee::Error>( "errorNumber" );
+  QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
 
@@ -638,7 +638,7 @@ void TestFilters::testListFilters_data()
   QTest::addColumn<QString>( "input" );
   QTest::addColumn<Dict>( "dict" );
   QTest::addColumn<QString>( "output" );
-  QTest::addColumn<Grantlee::Error>( "errorNumber" );
+  QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
 
@@ -818,7 +818,7 @@ void TestFilters::testLogicFilters_data()
   QTest::addColumn<QString>( "input" );
   QTest::addColumn<Dict>( "dict" );
   QTest::addColumn<QString>( "output" );
-  QTest::addColumn<Grantlee::Error>( "errorNumber" );
+  QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
 
@@ -853,7 +853,7 @@ void TestFilters::testMiscFilters_data()
   QTest::addColumn<QString>( "input" );
   QTest::addColumn<Dict>( "dict" );
   QTest::addColumn<QString>( "output" );
-  QTest::addColumn<Grantlee::Error>( "errorNumber" );
+  QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
 
@@ -921,7 +921,7 @@ void TestFilters::testIntegerFilters_data()
   QTest::addColumn<QString>( "input" );
   QTest::addColumn<Dict>( "dict" );
   QTest::addColumn<QString>( "output" );
-  QTest::addColumn<Grantlee::Error>( "errorNumber" );
+  QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
 
