@@ -265,7 +265,11 @@ Template Engine::loadByName( const QString &name ) const
       return t;
     }
   }
-  return Template();
+  Template t = Template( new TemplateImpl( this ) );
+  t->setObjectName( name );
+  t->d_ptr->m_error = TagSyntaxError;
+  t->d_ptr->m_errorString = QString::fromLatin1( "Template not found, %1" ).arg( name );
+  return t;
 }
 
 MutableTemplate Engine::loadMutableByName( const QString &name ) const
@@ -281,7 +285,11 @@ MutableTemplate Engine::loadMutableByName( const QString &name ) const
       return t;
     }
   }
-  throw Grantlee::Exception( TagSyntaxError, QString( "Most recent state is invalid." ) );
+  MutableTemplate t = MutableTemplate( new MutableTemplateImpl( this ) );
+  t->setObjectName( name );
+  t->d_ptr->m_error = TagSyntaxError;
+  t->d_ptr->m_errorString = QString::fromLatin1( "Template not found, %1" ).arg( name );
+  return t;
 }
 
 MutableTemplate Engine::newMutableTemplate( const QString &content, const QString &name ) const
