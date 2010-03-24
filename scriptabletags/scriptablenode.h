@@ -54,7 +54,7 @@ class ScriptableNode : public Node
   Q_OBJECT
 public:
   ScriptableNode( QObject* parent = 0 );
-  void setEngine( QScriptEngine* engine );
+  void setScriptEngine( QScriptEngine* engine );
   void init( const QScriptValue &concreteNode,
              const QScriptValue &renderMethod );
 
@@ -77,7 +77,7 @@ class ScriptableNodeFactory : public AbstractNodeFactory
   Q_OBJECT
 public:
   ScriptableNodeFactory( QObject* parent = 0 );
-  void setEngine( QScriptEngine *engine );
+  void setScriptEngine( QScriptEngine *engine );
   void setFactory( QScriptValue factoryMethod );
 
   Node* getNode( const QString &tagContent, Parser *p = 0 ) const;

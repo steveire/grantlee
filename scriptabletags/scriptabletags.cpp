@@ -162,7 +162,7 @@ QHash<QString, AbstractNodeFactory*> ScriptableTagLibrary::getFactories()
     QScriptValue factoryObject = m_scriptEngine->globalObject().property( factoryName );
 
     ScriptableNodeFactory *snf = new ScriptableNodeFactory();
-    snf->setEngine( m_scriptEngine );
+    snf->setScriptEngine( m_scriptEngine );
     snf->setFactory( factoryObject );
 
     factories.insert( tagName, snf );

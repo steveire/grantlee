@@ -60,7 +60,7 @@ QScriptValue ScriptableNodeConstructor( QScriptContext *context,
 
   ScriptableNode *object = new ScriptableNode( engine );
   object->setObjectName( scriptableNodeName );
-  object->setEngine( engine );
+  object->setScriptEngine( engine );
   object->init( concreteNode, renderMethod );
   return engine->newQObject( object );
 }
@@ -71,7 +71,7 @@ ScriptableNode::ScriptableNode( QObject* parent ): Node( parent ), m_scriptEngin
 }
 
 
-void ScriptableNode::setEngine( QScriptEngine *engine )
+void ScriptableNode::setScriptEngine( QScriptEngine *engine )
 {
   m_scriptEngine = engine;
 }
@@ -101,7 +101,7 @@ ScriptableNodeFactory::ScriptableNodeFactory( QObject* parent )
 
 }
 
-void ScriptableNodeFactory::setEngine( QScriptEngine *engine )
+void ScriptableNodeFactory::setScriptEngine( QScriptEngine *engine )
 {
   m_scriptEngine = engine;
 }
