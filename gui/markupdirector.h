@@ -92,6 +92,7 @@ public:
   virtual QPair<QTextFrame::iterator, QTextBlock> processBlockGroup( QTextFrame::iterator it, const QTextBlock &block, QTextBlockGroup *textBlockGroup );
   virtual QPair<QTextFrame::iterator, QTextBlock> processList( QTextFrame::iterator it, const QTextBlock &block, QTextList *textList );
   virtual QTextFrame::iterator processBlockContents( QTextFrame::iterator it, const QTextBlock &block );
+  virtual void processCustomFragment( const QTextFragment &fragment, QTextDocument const *doc );
   virtual QTextBlock::iterator processFragment( QTextBlock::iterator it, const QTextFragment &fragment, QTextDocument const *doc );
   virtual QTextBlock::iterator processCharTextObject( QTextBlock::iterator it, const QTextFragment &fragment, QTextObject *textObject );
   virtual QTextBlock::iterator processImage( QTextBlock::iterator it, const QTextImageFormat &imageFormat, QTextDocument *doc );
