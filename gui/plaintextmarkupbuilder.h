@@ -178,6 +178,10 @@ public:
 
   /* reimp */ void appendLiteralText( const QString &text );
 
+  /* reimp */ void appendRawText( const QString &text );
+
+  int addReference( const QString &reference );
+
   /**
     Returns the finalised plain text markup, including references at the end.
   */

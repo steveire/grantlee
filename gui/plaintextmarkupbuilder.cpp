@@ -193,16 +193,24 @@ void PlainTextMarkupBuilder::insertHorizontalRule( int width )
   d->m_text.append( "--------------------\n" );
 }
 
+int PlainTextMarkupBuilder::addReference( const QString& reference )
+{
+  Q_D( PlainTextMarkupBuilder );
+
+  if ( !d->m_urls.contains( reference ) )
+    d->m_urls.append( reference );
+  return d->m_urls.indexOf( reference ) + 1;
+}
+
 void PlainTextMarkupBuilder::insertImage( const QString &src, qreal width, qreal height )
 {
   Q_D( PlainTextMarkupBuilder );
   Q_UNUSED( width )
   Q_UNUSED( height )
 
-  if ( !d->m_urls.contains( src ) ) {
-    d->m_urls.append( src );
-  }
-  d->m_text.append( QString( "[%1]" ).arg( d->m_urls.indexOf( src ) + 1 ) );
+  int ref = addReference( src );
+
+  d->m_text.append( QString( "[%1]" ).arg( ref ) );
 }
 
 void PlainTextMarkupBuilder::beginList( QTextListFormat::Style style )
