@@ -98,9 +98,10 @@ public:
   }
 
   /**
-   Reimplement to filter @p input given @p argument.
-   @p autoescape determines whether the autoescape feature is currently on or off. Most filters will not use this.
+    Reimplement to filter @p input given @p argument.
+    @p autoescape determines whether the autoescape feature is currently on or off. Most filters will not use this.
 
+    @see @ref autoescaping
   */
   virtual QVariant doFilter( const QVariant &input,
                              const QVariant &argument = QVariant(),

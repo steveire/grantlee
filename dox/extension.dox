@@ -76,12 +76,14 @@ namespace Grantlee
 
   @section autoescaping Autoescaping and safe-ness
 
-  Xss stuff.
+  When implementing filters, it is necessary to consider whether string output from the template should be escaped by %Grantlee when rendering the template. %Grantlee features an autoescaping feature which ensures that a string which should only be escaped once is not escaped two or more times.
 
-  - http://groups.google.com/group/django-users/browse_thread/thread/311f336d74e7b643
-  - http://docs.djangoproject.com/en/dev/howto/custom-template-tags/#filters-and-auto-escaping
-  - http://groups.google.com.tr/group/django-developers/browse_thread/thread/96e516d5915ee334
+  @see @ref templates_safestring
 
+  The filter interface contains two elements relevant to autoescaping. The first is the autoescape parameter to the Filter::doFilter method. The autoescape parameter indicates the current autoescaping state of the renderer, which can be manipulated in templates with the <tt>{%&nbsp;autoescape&nbsp;%}</tt> tag. Use of the autoescape parameter is rare. The second element of autoescaping in the Filter API is the Filter::isSafe method. This method can be reimplemented to indicate that a Filter is 'safe', that is given safe input, it produces safe output.
+
+  @see http://docs.djangoproject.com/en/dev/howto/custom-template-tags/#filters-and-auto-escaping
+  @see http://groups.google.com/group/django-users/browse_thread/thread/311f336d74e7b643
 
   @subsection tags Tags
 

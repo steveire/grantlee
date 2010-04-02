@@ -153,15 +153,122 @@ namespace Grantlee
 
   %Grantlee ships with many useful filters including upper, lower, slice, truncate, join, split etc (see&nbsp;http://docs.djangoproject.com/en/dev/ref/templates/builtins/). Application developers and artists can also define their own filters.
 
-
-  @section templates_safestring SafeString
-
-  caveats and XSS care for themers.
-
-
   @subsection template_loading Template Inclusion and Inheritance
 
   // include and extends.
+
+  @section templates_safestring Autoescaping in templates.
+
+  When creating HTML string output it is necessary to consider escaping data inserted into the template. HTML escaping involves replacing '&lt;' with '&amp;lt;' and '&amp;' with '&amp;amp;' etc. %Grantlee automatically escapes string input before adding it to the output.
+
+  This is relevant when writing a variable from the context into the Template.
+
+  If the context object <tt>companies</tt> is a list containing ('Burger King', 'Ben &amp; Jerries', 'Ford'), and it is used in a template such as:
+
+  @verbatim
+    <ul>
+    {% for company in companies %}
+      <li> {{ company }}
+    {% endfor %}
+    </ul>
+  @endverbatim
+
+  The output would be
+
+  @verbatim
+    <ul>
+      <li> Burger King
+      <li> Ben &amp; Jerries
+      <li> Ford
+    </ul>
+  @endverbatim
+
+  Notice that the '&amp;' has been replaced with '&amp;amp;', as is appropriate for html output.
+
+  Sometimes however, a variable will contain text which has already been escaped and does not need to be escaped again. For example,
+  if we already created a <tt>table</tt> in the context containing the content:
+
+  @verbatim
+    <table class="myclass">
+      <tr><th> Company </th><th> Product </th></tr>
+      <tr><td> Burger King </td><td> Fast Food </td></tr>
+      <tr><td> Ben &amp; Jerries </td><td> Icecream </td></tr>
+      <tr><td> Ford </td><td> Cars </td></tr>
+    </table>
+  @endverbatim
+
+  and a template with the content:
+
+  @verbatim
+    <h2> Table of companies </h2>
+
+    {{ table }}
+
+    As you can see in the table...
+  @endverbatim
+
+  the content would not be rendered properly because it would be escaped.
+
+  @verbatim
+    <h2> Table of companies </h2>
+
+    &lt;table class=&quot;myclass&quot;&gt;
+      &lt;tr&gt;&lt;th&gt; Company &lt;/th&gt;&lt;th&gt; Product &lt;/th&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt; Burger King &lt;/td&gt;&lt;td&gt; Fast Food &lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt; Ben &amp;amp; Jerries &lt;/td&gt;&lt;td&gt; Icecream &lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt; Ford &lt;/td&gt;&lt;td&gt; Cars &lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+
+    As you can see in the table...
+  @endverbatim
+
+  Note that the content of <tt>table</tt> has already been escaped. That is 'Ben &amp;amp; Jerries' is already used instead of 'Ben &amp; Jerries'. If a variable has already been escaped and should not be escaped again, it can be marked as safe from further escaping using the <tt>safe</tt> filter.
+
+  @verbatim
+    <h2> Table of companies </h2>
+
+    {{ table|safe }}
+
+    As you can see in the table...
+  @endverbatim
+
+  Resulting in:
+
+  @verbatim
+    <h2> Table of companies </h2>
+
+    <table class="myclass">
+      <tr><th> Company </th><th> Product </th></tr>
+      <tr><td> Burger King </td><td> Fast Food </td></tr>
+      <tr><td> Ben &amp; Jerries </td><td> Icecream </td></tr>
+      <tr><td> Ford </td><td> Cars </td></tr>
+    </table>
+
+    As you can see in the table...
+  @endverbatim
+
+  It is also possible to turn this autoescaping feature off for a block in a template.
+
+  For example:
+
+  @verbatim
+    <h2> Some pre-prepared safe data </h2>
+
+    {% autoescape off %}
+      {{ table }}
+      As you can see in the table...
+
+      {% for list in lists %}
+        {{ list }}
+      {% endfor %}
+
+      {{ paragraph_data }}
+    {% endautoescape %}
+  @endverbatim
+
+  would not escape the content between the autoescape and endautoescape tags. This should only be used for content which is actually already safe.
+
+  @see http://docs.djangoproject.com/en/1.1/topics/templates/#for-individual-variables
 
   @subsection extending_syntax Extending the syntax
 
