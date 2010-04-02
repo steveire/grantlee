@@ -291,6 +291,12 @@ void PlainTextMarkupBuilder::appendLiteralText( const QString &text )
   d->m_text.append( text );
 }
 
+void PlainTextMarkupBuilder::appendRawText( const QString &text )
+{
+  Q_D( PlainTextMarkupBuilder );
+  d->m_text.append( text );
+}
+
 QString PlainTextMarkupBuilder::getResult()
 {
   Q_D( PlainTextMarkupBuilder );

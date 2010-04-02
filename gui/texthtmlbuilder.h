@@ -203,7 +203,7 @@ public:
 
     This is useful if extending MarkupDirector
   */
-  void appendRawText( const QString &text );
+  /* reimp */ void appendRawText( const QString &text );
 
   /* reimp */ QString getResult();
 

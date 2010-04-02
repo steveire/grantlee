@@ -237,6 +237,8 @@ public:
   */
   virtual void appendLiteralText( const QString &text ) = 0;
 
+  virtual void appendRawText( const QString &text ) = 0;
+
   /**
     Return the fully marked up result of the building process. This may contain metadata etc, such as a head element in html.
 
