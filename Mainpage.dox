@@ -53,11 +53,13 @@ namespace Grantlee
       - @ref internals
     </td></tr>
       <tr><th class="library" colspan="3">%Grantlee GUI</th></tr>
-    <tr><td colspan="3">
+    <tr><td colspan="2">
       - AbstractMarkupBuilder
       - MarkupDirector
       - TextHTMLBuilder
       - PlainTextMarkupBuilder
+    </td><td>
+      - @ref custom_qtextobject
     </td></tr>
   </table>
 
