@@ -96,7 +96,10 @@ public:
 
   /* reimp */ void appendLiteralText( const QString &text );
 
-  const QString escape( const QString &s );
+  /**
+    Escapes @p text appropriately for BBCode.
+  */
+  const QString escape( const QString &text ) const;
 
   /* reimp */ QString getResult();
 

@@ -66,6 +66,9 @@ public:
 
   /* reimp */ void appendLiteralText( const QString &text );
 
+  /**
+    Escapes @p text appropriately for MediaWiki.
+  */
   const QString escape( const QString &s );
 
   /* reimp */ QString getResult();

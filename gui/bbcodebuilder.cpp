@@ -78,6 +78,7 @@ void BBCodeBuilder::endForeground()
 
 void BBCodeBuilder::beginAnchor( const QString &href, const QString &name )
 {
+  Q_UNUSED(name)
   m_text.append( QString( "[URL=%1]" ).arg( href ) );
 }
 void BBCodeBuilder::endAnchor()
@@ -203,7 +204,7 @@ void BBCodeBuilder::appendLiteralText( const QString &text )
   m_text.append( escape( text ) );
 }
 
-const QString BBCodeBuilder::escape( const QString &s )
+const QString BBCodeBuilder::escape( const QString &s ) const
 {
   if ( s.contains( "[" ) ) {
     return QString( "[NOPARSE]" + s + "[/NOPARSE]" );

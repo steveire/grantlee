@@ -38,12 +38,11 @@ class AbstractMarkupBuilderPrivate;
 /**
   @brief The AbstractMarkupBuilder class serves as a base class for creating marked up plain text output.
 
-  The AbstractMarkupBuilder is used by the MarkupDirector to create marked up output such as html or markdown.
+  The AbstractMarkupBuilder is used by a MarkupDirector to create marked up output such as html or markdown.
 
-  Subclasses can reimplement whichever methods they choose. None of the methods are pure virtual and all default to an empty function
-  to allow a clean fall-through. The exception is appendLiteralText, which appends its argument to the text being built.
+  See PlainTextMarkupBuilder and TextHTMLBuilder for example implementations.
 
-  See PlainTextMarkupBuilder and HTMLBuilder for example implementations.
+  This interface can be extended to handle custom format types in a QTextDocument. @see @ref custom_qtextobject
 
   @author Stephen Kelly <steveire@gmail.com>
 */
@@ -237,6 +236,9 @@ public:
   */
   virtual void appendLiteralText( const QString &text ) = 0;
 
+  /**
+    Appends the raw text @p text to the markup. @p text is added unescaped.
+  */
   virtual void appendRawText( const QString &text ) = 0;
 
   /**

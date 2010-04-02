@@ -66,7 +66,7 @@ class TextHTMLBuilderPrivate;
 
   @code
     AbstractMarkupBuilder *b = new TextHTMLBuilder();
-    KMarkupDirector *md = new KMarkupDirector(b);
+    MarkupDirector *md = new MarkupDirector(b);
     md->constructContent();
     QString cleanHtml("<head>\n<title>%1</title>\n</head>\n<body>%2</body>\n</html>")
                       .arg(document.metaInformation(QTextDocument::DocumentTitle))

@@ -180,6 +180,9 @@ public:
 
   /* reimp */ void appendRawText( const QString &text );
 
+  /**
+    Adds a reference to @p reference to the internal list of references in the document.
+  */
   int addReference( const QString &reference );
 
   /**
