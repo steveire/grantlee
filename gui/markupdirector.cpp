@@ -40,9 +40,10 @@
 
 using namespace Grantlee;
 
-MarkupDirector::MarkupDirector()
-  : AbstractMarkupBuilder(), d_ptr( new MarkupDirectorPrivate( this ) )
+MarkupDirector::MarkupDirector( AbstractMarkupBuilder *builder )
+  : d_ptr( new MarkupDirectorPrivate(this) ), m_builder( builder )
 {
+
 }
 
 MarkupDirector::~MarkupDirector()
@@ -113,7 +114,7 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
     sWidth = sWidth.arg( tableWidth.rawValue() );
   }
 
-  beginTable( format.cellPadding(), format.cellSpacing(), sWidth );
+  m_builder->beginTable( format.cellPadding(), format.cellSpacing(), sWidth );
 
   int headerRowCount = format.headerRowCount();
 
@@ -126,7 +127,7 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
     // beginTableHeader();
     // }
 
-    beginTableRow();
+    m_builder->beginTableRow();
 
     // Header attribute should really be on cells, not determined by number of rows.
     //http://www.webdesignfromscratch.com/html-tables.cfm
@@ -161,22 +162,22 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
 
       // TODO: Use THEAD instead
       if ( row < headerRowCount ) {
-        beginTableHeaderCell( sCellWidth, columnSpan, rowSpan );
+        m_builder->beginTableHeaderCell( sCellWidth, columnSpan, rowSpan );
       } else {
-        beginTableCell( sCellWidth, columnSpan, rowSpan );
+        m_builder->beginTableCell( sCellWidth, columnSpan, rowSpan );
       }
 
       processTableCell( tableCell, table );
 
       if ( row < headerRowCount ) {
-        endTableHeaderCell();
+        m_builder->endTableHeaderCell();
       } else {
-        endTableCell();
+        m_builder->endTableCell();
       }
     }
-    endTableRow();
+    m_builder->endTableRow();
   }
-  endTable();
+  m_builder->endTable();
 
 
   if ( !it.atEnd() )
@@ -195,12 +196,12 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame:
   QList<QTextList*> lists;
 
   QTextListFormat::Style style = list->format().style();
-  beginList( style );
+  m_builder->beginList( style );
   QTextBlock block = _block;
   while ( block.isValid() && block.textList() ) {
-    beginListItem();
+    m_builder->beginListItem();
     processBlockContents( it, block );
-    endListItem();
+    m_builder->endListItem();
 
     if ( !it.atEnd() )
       ++it;
@@ -215,7 +216,7 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame:
       }
     }
   }
-  endList();
+  m_builder->endList();
   return qMakePair( it, block );
 }
 
@@ -227,7 +228,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
   // TODO: decide when to use <h1> etc.
 
   if ( blockFormat.hasProperty( QTextFormat::BlockTrailingHorizontalRulerWidth ) ) {
-    insertHorizontalRule();
+    m_builder->insertHorizontalRule();
     if ( !frameIt.atEnd() )
       return ++frameIt;
     return frameIt;
@@ -237,7 +238,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
 
   // The beginning is the end. This is an empty block. Insert a newline and move on.
   if ( it.atEnd() ) {
-    addNewline();
+    m_builder->addNewline();
     if ( !frameIt.atEnd() )
       return ++frameIt;
     return frameIt;
@@ -247,7 +248,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
   if ( !block.textList() ) {
     // Don't instruct builders to use margins. The rich text widget doesn't have an action for them yet,
     // So users can't edit them. See bug http://bugs.kde.org/show_bug.cgi?id=160600
-    beginParagraph( blockAlignment //,
+    m_builder->beginParagraph( blockAlignment //,
 //                                blockFormat.topMargin(),
 //                                blockFormat.bottomMargin(),
 //                                blockFormat.leftMargin(),
@@ -261,7 +262,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
 
   // Don't have p tags inside li tags.
   if ( !block.textList() ) {
-    endParagraph();
+    m_builder->endParagraph();
   }
 
   if ( !frameIt.atEnd() )
@@ -272,14 +273,14 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
 
 QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, const QTextFragment &fragment, QTextDocument const *doc )
 {
-  Q_D( MarkupDirector );
+//   Q_D( MarkupDirector );
   QTextCharFormat charFormat = fragment.charFormat();
   QTextObject *textObject = doc->objectForFormat( charFormat );
   if ( textObject )
     return processCharTextObject( it, fragment, textObject );
 
   if ( fragment.text().at( 0 ).category() == QChar::Separator_Line ) {
-    addNewline();
+    m_builder->addNewline();
 
     if ( !it.atEnd() )
       return ++it;
@@ -308,7 +309,7 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
   // didn't appeal.
   // See testDoubleStartDifferentFinish, testDoubleStartDifferentFinishReverseOrder
 
-  d->processOpeningElements( it );
+  processOpeningElements( it );
 
   // If a sequence such as '<br /><br />' is imported into a document with setHtml, LineSeparator
   // characters are inserted. Here I make sure to put them back.
@@ -316,16 +317,16 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
   QStringListIterator i( sl );
   bool paraClosed = false;
   while ( i.hasNext() ) {
-    appendLiteralText( i.next() );
+    m_builder->appendLiteralText( i.next() );
     if ( i.hasNext() ) {
       if ( i.peekNext().isEmpty() ) {
         if ( !paraClosed ) {
-          endParagraph();
+          m_builder->endParagraph();
           paraClosed = true;
         }
-        addNewline();
+        m_builder->addNewline();
       } else if ( paraClosed ) {
-        beginParagraph( /* blockAlignment */ );
+        m_builder->beginParagraph( /* blockAlignment */ );
         paraClosed = false;
       }
     }
@@ -333,7 +334,7 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
   if ( !it.atEnd() )
     ++it;
 
-  d->processClosingElements( it );
+  processClosingElements( it );
 
   return it;
 }
@@ -417,10 +418,407 @@ QTextBlock::iterator MarkupDirector::processImage( QTextBlock::iterator it, cons
 {
   Q_UNUSED( doc )
   // TODO: Close any open format elements?
-  insertImage( imageFormat.name(), imageFormat.width(), imageFormat.height() );
+  m_builder->insertImage( imageFormat.name(), imageFormat.width(), imageFormat.height() );
   if ( !it.atEnd() )
     return ++it;
   return it;
 }
 
+void MarkupDirector::processClosingElements( QTextBlock::iterator it )
+{
+  Q_D( MarkupDirector );
+  // The order of closing elements is determined by the order they were opened in.
+  // The order of opened elements is in the openElements member list.
+  // see testDifferentStartDoubleFinish and testDifferentStartDoubleFinishReverseOrder
 
+  if ( d->m_openElements.isEmpty() )
+    return;
+
+  QSet<int> elementsToClose = getElementsToClose( it );
+
+  int previousSize;
+  int remainingSize = elementsToClose.size();
+  while ( !elementsToClose.isEmpty() ) {
+    int tag = d->m_openElements.last();
+    if ( elementsToClose.contains( tag ) ) {
+      switch ( tag ) {
+      case Strong:
+        m_builder->endStrong();
+        break;
+      case Emph:
+        m_builder->endEmph();
+        break;
+      case Underline:
+        m_builder->endUnderline();
+        break;
+      case StrikeOut:
+        m_builder->endStrikeout();
+        break;
+      case SpanFontPointSize:
+        m_builder->endFontPointSize();
+        break;
+      case SpanFontFamily:
+        m_builder->endFontFamily();
+        break;
+      case SpanBackground:
+        m_builder->endBackground();
+        break;
+      case SpanForeground:
+        m_builder->endForeground();
+        break;
+      case Anchor:
+        m_builder->endAnchor();
+        break;
+      case SubScript:
+        m_builder->endSubscript();
+        break;
+      case SuperScript:
+        m_builder->endSuperscript();
+        break;
+
+      default:
+        break;
+      }
+      d->m_openElements.removeLast();
+      elementsToClose.remove( tag );
+    }
+    previousSize = remainingSize;
+    remainingSize = elementsToClose.size();
+
+    if ( previousSize == remainingSize ) {
+      // Iterated once through without closing any tags.
+      // This means that there's overlap in the tags, such as
+      // 'text with <b>some <i>formatting</i></b><i> tags</i>'
+      // See testOverlap.
+      // The top element in openElements must be a blocker, so close it on next iteration.
+      elementsToClose.insert( d->m_openElements.last() );
+    }
+  }
+}
+
+
+void MarkupDirector::processOpeningElements( QTextBlock::iterator it )
+{
+  Q_D( MarkupDirector );
+  QTextFragment fragment = it.fragment();
+
+  if ( !fragment.isValid() )
+    return;
+
+  QTextCharFormat fragmentFormat = fragment.charFormat();
+  QList<int> elementsToOpenList = getElementsToOpen( it );
+
+  Q_FOREACH( int tag, elementsToOpenList ) {
+    switch ( tag ) {
+    case Strong:
+      m_builder->beginStrong();
+      break;
+    case Emph:
+      m_builder->beginEmph();
+      break;
+    case Underline:
+      m_builder->beginUnderline();
+      break;
+    case StrikeOut:
+      m_builder->beginStrikeout();
+      break;
+    case SpanFontPointSize:
+      m_builder->beginFontPointSize( fragmentFormat.font().pointSize() );
+      d->m_openFontPointSize = fragmentFormat.font().pointSize();
+      break;
+    case SpanFontFamily:
+      m_builder->beginFontFamily( fragmentFormat.fontFamily() );
+      d->m_openFontFamily = fragmentFormat.fontFamily();
+      break;
+    case SpanBackground:
+      m_builder->beginBackground( fragmentFormat.background() );
+      d->m_openBackground = fragmentFormat.background();
+      break;
+    case SpanForeground:
+      m_builder->beginForeground( fragmentFormat.foreground() );
+      d->m_openForeground = fragmentFormat.foreground();
+      break;
+    case Anchor: {
+      // TODO: Multiple anchor names here.
+      QStringList anchorNames = fragmentFormat.anchorNames();
+      if ( !anchorNames.isEmpty() ) {
+        while ( !anchorNames.isEmpty() ) {
+          QString n = anchorNames.last();
+          anchorNames.removeLast();
+          if ( anchorNames.isEmpty() ) {
+            // Doesn't matter if anchorHref is empty.
+            m_builder->beginAnchor( fragmentFormat.anchorHref(), n );
+            break;
+          } else {
+            // Empty <a> tags allow multiple names for the same section.
+            m_builder->beginAnchor( QString(), n );
+            m_builder->endAnchor();
+          }
+        }
+      } else {
+        m_builder->beginAnchor( fragmentFormat.anchorHref() );
+      }
+      d->m_openAnchorHref = fragmentFormat.anchorHref();
+      break;
+    }
+    case SuperScript:
+      m_builder->beginSuperscript();
+      break;
+    case SubScript:
+      m_builder->beginSubscript();
+      break;
+    default:
+      break;
+    }
+    d->m_openElements.append( tag );
+    d->m_elementsToOpen.remove( tag );
+  }
+}
+
+
+QSet< int > MarkupDirector::getElementsToClose( QTextBlock::iterator it ) const
+{
+  Q_D( const MarkupDirector );
+  QSet<int> closedElements;
+
+  if ( it.atEnd() ) {
+    // End of block?. Close all open tags.
+    QSet< int > elementsToClose = d->m_openElements.toSet();
+    return elementsToClose.unite( d->m_elementsToOpen );
+  }
+
+  QTextFragment fragment = it.fragment();
+
+  if ( !fragment.isValid() )
+    return closedElements;
+
+  QTextCharFormat fragmentFormat = fragment.charFormat();
+
+  int fontWeight = fragmentFormat.fontWeight();
+  bool fontItalic = fragmentFormat.fontItalic();
+  bool fontUnderline = fragmentFormat.fontUnderline();
+  bool fontStrikeout = fragmentFormat.fontStrikeOut();
+
+  QBrush fontForeground = fragmentFormat.foreground();
+  QBrush fontBackground = fragmentFormat.background();
+
+  QString fontFamily = fragmentFormat.fontFamily();
+  int fontPointSize = fragmentFormat.font().pointSize();
+  QString anchorHref = fragmentFormat.anchorHref();
+
+  QTextCharFormat::VerticalAlignment vAlign = fragmentFormat.verticalAlignment();
+  bool superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
+  bool subscript = ( vAlign == QTextCharFormat::AlignSubScript );
+
+
+  if ( !fontStrikeout &&
+        ( d->m_openElements.contains( StrikeOut )
+          || d->m_elementsToOpen.contains( StrikeOut ) ) ) {
+    closedElements.insert( StrikeOut );
+  }
+
+  if ( !fontUnderline &&
+        ( d->m_openElements.contains( Underline )
+          || d->m_elementsToOpen.contains( Underline ) )
+        && !( d->m_openElements.contains( Anchor )
+              || d->m_elementsToOpen.contains( Anchor ) )
+      ) {
+    closedElements.insert( Underline );
+  }
+
+  if ( !fontItalic &&
+        ( d->m_openElements.contains( Emph )
+          || d->m_elementsToOpen.contains( Emph ) ) ) {
+    closedElements.insert( Emph );
+  }
+
+  if ( fontWeight != QFont::Bold &&
+        ( d->m_openElements.contains( Strong )
+          || d->m_elementsToOpen.contains( Strong ) ) ) {
+    closedElements.insert( Strong );
+  }
+
+  if (( d->m_openElements.contains( SpanFontPointSize )
+        || d->m_elementsToOpen.contains( SpanFontPointSize ) )
+      && ( d->m_openFontPointSize != fontPointSize )
+      ) {
+    closedElements.insert( SpanFontPointSize );
+  }
+
+  if (( d->m_openElements.contains( SpanFontFamily )
+        || d->m_elementsToOpen.contains( SpanFontFamily ) )
+      && ( d->m_openFontFamily != fontFamily )
+      ) {
+    closedElements.insert( SpanFontFamily );
+  }
+
+  if (( d->m_openElements.contains( SpanBackground ) && ( d->m_openBackground != fontBackground ) )
+      || ( d->m_elementsToOpen.contains( SpanBackground ) && ( d->m_backgroundToOpen != fontBackground ) ) ) {
+    closedElements.insert( SpanBackground );
+  }
+
+  if (( d->m_openElements.contains( SpanForeground ) && ( d->m_openForeground != fontForeground ) )
+      || ( d->m_elementsToOpen.contains( SpanForeground ) && ( d->m_foregroundToOpen != fontForeground ) ) ) {
+    closedElements.insert( SpanForeground );
+  }
+
+  if (( d->m_openElements.contains( Anchor ) && ( d->m_openAnchorHref != anchorHref ) )
+      || ( d->m_elementsToOpen.contains( Anchor ) && ( d->m_anchorHrefToOpen != anchorHref ) ) ) {
+    closedElements.insert( Anchor );
+  }
+
+  if ( !subscript &&
+        ( d->m_openElements.contains( SubScript )
+          || d->m_elementsToOpen.contains( SubScript ) ) ) {
+    closedElements.insert( SubScript );
+  }
+
+  if ( !superscript &&
+        ( d->m_openElements.contains( SuperScript )
+          || d->m_elementsToOpen.contains( SuperScript ) ) ) {
+    closedElements.insert( SuperScript );
+  }
+  return closedElements;
+}
+
+QList< int > MarkupDirector::getElementsToOpen( QTextBlock::iterator it )
+{
+  Q_D( MarkupDirector );
+  QTextFragment fragment = it.fragment();
+  if ( !fragment.isValid() ) {
+    return QList< int >();
+  }
+  QTextCharFormat fragmentFormat = fragment.charFormat();
+
+  int fontWeight = fragmentFormat.fontWeight();
+  bool fontItalic = fragmentFormat.fontItalic();
+  bool fontUnderline = fragmentFormat.fontUnderline();
+  bool fontStrikeout = fragmentFormat.fontStrikeOut();
+
+  QBrush fontForeground = fragmentFormat.foreground();
+  QBrush fontBackground = fragmentFormat.background();
+
+  QString fontFamily = fragmentFormat.fontFamily();
+  int fontPointSize = fragmentFormat.font().pointSize();
+  QString anchorHref = fragmentFormat.anchorHref();
+
+  QTextCharFormat::VerticalAlignment vAlign = fragmentFormat.verticalAlignment();
+  bool superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
+  bool subscript = ( vAlign == QTextCharFormat::AlignSubScript );
+
+  if ( superscript && !( d->m_openElements.contains( SuperScript ) ) ) {
+    d->m_elementsToOpen.insert( SuperScript );
+  }
+
+  if ( subscript && !( d->m_openElements.contains( SubScript ) ) ) {
+    d->m_elementsToOpen.insert( SubScript );
+  }
+
+  if ( !anchorHref.isEmpty()
+       && !( d->m_openElements.contains( Anchor ) )
+       && ( d->m_openAnchorHref != anchorHref )
+     ) {
+    d->m_elementsToOpen.insert( Anchor );
+    d->m_anchorHrefToOpen = anchorHref;
+  }
+
+  if ( fontForeground != Qt::NoBrush
+       && !( d->m_openElements.contains( SpanForeground ) ) // Can only open one foreground element at a time.
+       && ( fontForeground != d->m_openForeground )
+       && !(( d->m_openElements.contains( Anchor )          // Links can't have a foreground color.
+              || d->m_elementsToOpen.contains( Anchor ) ) )
+     ) {
+    d->m_elementsToOpen.insert( SpanForeground );
+    d->m_foregroundToOpen = fontForeground;
+  }
+
+  if ( fontBackground != Qt::NoBrush
+       && !( d->m_openElements.contains( SpanBackground ) )
+       && ( fontBackground != d->m_openBackground )
+     ) {
+    d->m_elementsToOpen.insert( SpanBackground );
+    d->m_backgroundToOpen = fontBackground;
+  }
+
+
+  if ( !fontFamily.isEmpty()
+       && !( d->m_openElements.contains( SpanFontFamily ) )
+       && ( fontFamily != d->m_openFontFamily )
+     ) {
+    d->m_elementsToOpen.insert( SpanFontFamily );
+    d->m_fontFamilyToOpen = fontFamily;
+  }
+
+  if (( QTextCharFormat().font().pointSize() != fontPointSize )   // Different from the default.
+      && !( d->m_openElements.contains( SpanFontPointSize ) )
+      && ( fontPointSize != d->m_openFontPointSize )
+     ) {
+    d->m_elementsToOpen.insert( SpanFontPointSize );
+    d->m_fontPointSizeToOpen = fontPointSize;
+  }
+
+//   Only open a new bold tag if one is not already open.
+//   eg, <b>some <i>mixed</i> format</b> should be as is, rather than
+//   <b>some </b><b><i>mixed</i></b><b> format</b>
+
+  if ( fontWeight == QFont::Bold && !( d->m_openElements.contains( Strong ) ) ) {
+    d->m_elementsToOpen.insert( Strong );
+  }
+
+  if ( fontItalic && !( d->m_openElements.contains( Emph ) ) ) {
+    d->m_elementsToOpen.insert( Emph );
+  }
+
+  if ( fontUnderline
+       && !( d->m_openElements.contains( Underline ) )
+       && !( d->m_openElements.contains( Anchor )
+             || d->m_elementsToOpen.contains( Anchor ) ) // Can't change the underline state of a link.
+     ) {
+    d->m_elementsToOpen.insert( Underline );
+  }
+
+  if ( fontStrikeout && !( d->m_openElements.contains( StrikeOut ) ) ) {
+    d->m_elementsToOpen.insert( StrikeOut );
+  }
+
+  if ( d->m_elementsToOpen.size() <= 1 ) {
+    return d->m_elementsToOpen.toList();
+  }
+  return sortOpeningOrder( d->m_elementsToOpen, it );
+
+}
+
+QList< int > MarkupDirector::sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const
+{
+  QList< int > sortedOpenedElements;
+
+  // This is an insertion sort in a way. elements in openingOrder are assumed to be out of order.
+  // The rest of the block is traversed until there are no more elements to sort, or the end is reached.
+  while ( openingOrder.size() != 0 ) {
+    if ( !it.atEnd() ) {
+      it++;
+
+      if ( !it.atEnd() ) {
+        // Because I've iterated, this returns the elements that will
+        // be closed by the next fragment.
+        QSet<int> elementsToClose = getElementsToClose( it );
+
+        // The exact order these are opened in is irrelevant, as all will be closed on the same block.
+        // See testDoubleFormat.
+        Q_FOREACH( int tag, elementsToClose ) {
+          if ( openingOrder.remove( tag ) ) {
+            sortedOpenedElements.prepend( tag );
+          }
+        }
+      }
+    } else {
+      // End of block. Need to close all open elements.
+      // Order irrelevant in this case.
+      Q_FOREACH( int tag, openingOrder ) {
+        sortedOpenedElements.prepend( tag );
+      }
+      break;
+    }
+  }
+  return sortedOpenedElements;
+}

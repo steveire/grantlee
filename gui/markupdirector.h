@@ -69,13 +69,13 @@ class MarkupDirectorPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT MarkupDirector : public virtual AbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT MarkupDirector
 {
 public:
   /**
     Construct a new MarkupDirector
   */
-  MarkupDirector();
+  MarkupDirector( AbstractMarkupBuilder *builder );
 
   /**
     Destructor
@@ -103,11 +103,40 @@ protected:
 
   QPair<QTextFrame::iterator, QTextBlock> skipBlockGroup( QTextFrame::iterator it, const QTextBlock &_block, QTextBlockGroup *blockGroup );
 
-private:
-  Q_DECLARE_PRIVATE( MarkupDirector )
+  QList< int > sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const;
+
+  virtual void processClosingElements( QTextBlock::iterator it );
+  virtual void processOpeningElements( QTextBlock::iterator it );
+  virtual QSet< int > getElementsToClose( QTextBlock::iterator it ) const;
+  virtual QList< int > getElementsToOpen( QTextBlock::iterator it );
+
+  enum OpenElementValues {
+    None = 0x0,
+    SuperScript = 0x01,
+    SubScript = 0x02,
+    Anchor = 0x04,
+    SpanForeground = 0x08,
+    SpanBackground = 0x10,
+    SpanFontFamily = 0x20,
+    SpanFontPointSize = 0x40,
+    Strong = 0x80,
+    Emph = 0x100,
+    Underline = 0x200,
+    StrikeOut = 0x400
+  };
+//   Q_DECLARE_FLAGS(OpenElements, OpenElementValues)
+
+protected:
   MarkupDirectorPrivate * const d_ptr;
+
+  AbstractMarkupBuilder *m_builder;
+
+private:
+  Q_DECLARE_PRIVATE(MarkupDirector)
 };
 
 }
+
+// Q_DECLARE_OPERATORS_FOR_FLAGS(Grantlee::MarkupDirector::OpenElements)
 
 #endif

@@ -10,7 +10,6 @@ include(${QT_USE_FILE})
 set (grantlee_gui_SRCS
   bbcodebuilder.cpp
   markupdirector.cpp
-  markupdirector_p.cpp
   plaintextmarkupbuilder.cpp
   texthtmlbuilder.cpp
   mediawikimarkupbuilder.cpp

@@ -245,20 +245,6 @@ public:
   virtual QString getResult() = 0;
 };
 
-/// @headerfile abstractmarkupbuilder.h grantlee/abstractmarkupbuilder.h
-
-/**
-  @brief The DocumentOutputter is an aggregation template class for combining a markup director with a builder
-
-
-*/
-template <typename DocumentProcessor, typename ConcreteBuilder>
-class GRANTLEE_GUI_EXPORT DocumentOutputter : public DocumentProcessor, protected ConcreteBuilder
-{
-public:
-  using ConcreteBuilder::getResult;
-};
-
 }
 
 #endif

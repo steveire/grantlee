@@ -32,39 +32,18 @@ namespace Grantlee
 
 /**
   @internal
-  Maintainability class for KMarkupDirector
+  Maintainability class for MarkupDirector
 */
 class MarkupDirectorPrivate
 {
-public:
   MarkupDirectorPrivate( MarkupDirector *md )
-      : q_ptr( md ) {
+    : q_ptr( md )
+  {
+
   }
 
   Q_DECLARE_PUBLIC( MarkupDirector )
-  MarkupDirector * q_ptr;
-
-  void processClosingElements( QTextBlock::iterator it );
-  void processOpeningElements( QTextBlock::iterator it );
-  QSet< int > getElementsToClose( QTextBlock::iterator it ) const;
-  QList< int > getElementsToOpen( QTextBlock::iterator it );
-  QList< int > sortOpeningOrder( QSet< int > openingOrder, QTextBlock::iterator it ) const;
-
-  enum OpenElementValues {
-    None = 0x0,
-    SuperScript = 0x01,
-    SubScript = 0x02,
-    Anchor = 0x04,
-    SpanForeground = 0x08,
-    SpanBackground = 0x10,
-    SpanFontFamily = 0x20,
-    SpanFontPointSize = 0x40,
-    Strong = 0x80,
-    Emph = 0x100,
-    Underline = 0x200,
-    StrikeOut = 0x400
-  };
-//     Q_DECLARE_FLAGS(OpenElements, OpenElementValues)
+  MarkupDirector * const q_ptr;
 
   QString m_openAnchorHref;
   QString m_anchorHrefToOpen;
@@ -84,9 +63,7 @@ public:
 
   // Elements that have yet to be opened. Used while determine the order to open them.
   QSet< int > m_elementsToOpen;
-
 };
-// Q_DECLARE_OPERATORS_FOR_FLAGS(KMarkupDirector::Private::OpenElements)
 
 }
 

@@ -87,7 +87,7 @@ class TextHTMLBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT TextHTMLBuilder : public virtual AbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT TextHTMLBuilder : virtual public AbstractMarkupBuilder
 {
 public:
 
@@ -212,16 +212,6 @@ private:
   Q_DECLARE_PRIVATE( TextHTMLBuilder )
 
 };
-
-#ifdef Q_OS_WIN
-class GRANTLEE_GUI_EXPORT TextHtmlOutputter : public MarkupDirector, protected TextHTMLBuilder
-{
-public:
-  using TextHTMLBuilder::getResult;
-};
-#else
-typedef DocumentOutputter<MarkupDirector, TextHTMLBuilder> TextHtmlOutputter;
-#endif
 
 }
 

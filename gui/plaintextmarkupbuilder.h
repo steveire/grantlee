@@ -94,7 +94,7 @@ class PlainTextMarkupBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT PlainTextMarkupBuilder : public virtual AbstractMarkupBuilder
+class GRANTLEE_GUI_EXPORT PlainTextMarkupBuilder : virtual public AbstractMarkupBuilder
 {
 public:
   /** Construct a new PlainTextHTMLMarkupBuilder. */
@@ -188,16 +188,6 @@ private:
   Q_DECLARE_PRIVATE( PlainTextMarkupBuilder )
 
 };
-
-#ifdef Q_OS_WIN
-class GRANTLEE_GUI_EXPORT PlainTextMarkupOutputter : public MarkupDirector, protected PlainTextMarkupBuilder
-{
-public:
-  using PlainTextMarkupBuilder::getResult;
-};
-#else
-typedef DocumentOutputter<MarkupDirector, PlainTextMarkupBuilder> PlainTextMarkupOutputter;
-#endif
 
 }
 
