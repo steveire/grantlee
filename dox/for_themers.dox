@@ -92,7 +92,7 @@ namespace Grantlee
 
   @subsection lookups Variable lookups
 
-  So far we've mostly used simple variable lookups in <tt>{{ variable }}</tt> tags, but the template system is capable of a lot more. Complex structures can be evaluated using the dot ('.') character.
+  So far we've mostly used simple variable lookups in @gr_var{variable} tags, but the template system is capable of a lot more. Complex structures can be evaluated using the dot ('.') character.
 
   The dot can be used for list index lookup (Note that list lookup is 0-indexed.):
   @verbatim
@@ -231,7 +231,7 @@ namespace Grantlee
 
   Note that it is optional to override a @gr_tag{block} in a extended template. It is also optional to repeat the name of the block in its corresponding @gr_tag{endblock} tag.
 
-  The content of an overriden tag is available in the <tt>{{&nbsp;block.super&nbsp;}}</tt> variable, and can be reused where appropriate. In the above examples, the use of <tt>block.super</tt> results in the titles of the rendered pages being <tt>"My Stuff - My Books"</tt>, and <tt>"My Stuff - My DVDs"</tt> respectively.
+  The content of an overriden tag is available in the @gr_var{block.super} variable, and can be reused where appropriate. In the above examples, the use of @gr_var{block.super} results in the titles of the rendered pages being <tt>"My Stuff - My Books"</tt>, and <tt>"My Stuff - My DVDs"</tt> respectively.
 
   @section templates_safestring Autoescaping in templates.
 
