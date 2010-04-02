@@ -155,7 +155,83 @@ namespace Grantlee
 
   @subsection template_loading Template Inclusion and Inheritance
 
-  // include and extends.
+  It is possible for templates to include other templates in two ways, by directly including the content of another template, and by extending another template.
+
+  @subsubsection template_including
+
+  The @gr_tag{include} tag is used to include the content of another template.
+
+  @verbatim
+    <h1>My page</h1>
+      {% include "breadcrumbs.html" %}
+
+    <h2>My Data</h2>
+      {% include "table.html" %}
+  @endverbatim
+
+  If "breadcrumbs.html" and "table.html" exist and contain appropriate content, they will be rendered and added to the output of the template.
+
+  @subsubsection template_extending
+
+  The @gr_tag{extends} tag is used to include and override the content of another template.
+
+  The template being extended must define several blocks using the @gr_tag{block} tag. Typically, one or more base templates will be defined which define the structure and content of all templates, and some placeholders for other templates to fill in.
+
+  For example, a <tt>base.html</tt> might look like this:
+
+  @verbatim
+    <html>
+      <head>
+        <title>{% block title %}My Stuff{% endblock %}</title>
+      </head>
+      <body>
+        <div class="sidebar">
+          {% block sidebar %}
+          {% endblock sidebar %}
+        </div>
+        <div class="main_content">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </body>
+    </html>
+  @endverbatim
+
+  Then other templates could be written which extend this template, reusing its content and replacing the content of the @gr_tag{block} tags.
+
+  For example, a page about books:
+
+  @verbatim
+    {% extends "base.html" %}
+    {% block title %}{{ block.super }} - My Books{% endblock %}
+
+    {% block content %}
+    <ul>
+      {% for book in books %}
+        <li>{{ book.name }}, {{ book.author }}
+      {% endfor %}
+    </ul>
+    {% endblock %}
+  @endverbatim
+
+  Or a page about DVDs:
+
+  @verbatim
+    {% extends "base.html" %}
+    {% block title %}{{ block.super }} - My DVDs{% endblock %}
+
+    {% block content %}
+    <ul>
+      {% for dvd in dvds %}
+        <li>{{ dvd.title }}, {{ dvd.director }}
+      {% endfor %}
+    </ul>
+    {% endblock content %}
+  @endverbatim
+
+  Note that it is optional to override a @gr_tag{block} in a extended template. It is also optional to repeat the name of the block in its corresponding @gr_tag{endblock} tag.
+
+  The content of an overriden tag is available in the <tt>{{&nbsp;block.super&nbsp;}}</tt> variable, and can be reused where appropriate. In the above examples, the use of <tt>block.super</tt> results in the titles of the rendered pages being <tt>"My Stuff - My Books"</tt>, and <tt>"My Stuff - My DVDs"</tt> respectively.
 
   @section templates_safestring Autoescaping in templates.
 
