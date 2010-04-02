@@ -74,7 +74,7 @@ public:
     Advance the parser, using @p parent as the parent of new Nodes. The parser will stop
     if it encounters a tag which is contained in the list @p stopAt.
 
-    For example, the "{%&nbsp;if&nbsp;%}" tag would stopAt both "endif" and "else" tags.
+    For example, the @gr_tag{if} tag would stopAt both @gr_tag{endif} and @gr_tag{else} tags.
 
     @see AbstractNodeFactory::getNode
 
@@ -108,8 +108,8 @@ public:
     Returns the next token to be processed by the parser. This can be examined in template tag implementations to
     determine why parsing stopped.
 
-    For example, if the "{% if %}" tag, parsing may stop at an "else" tag, in which case parsing
-    should be restarted, or it could stop at an "endif" tag, in which case parsing is finished for that node.
+    For example, if the @gr_tag{if} tag, parsing may stop at an @gr_tag{else} tag, in which case parsing
+    should be restarted, or it could stop at an @gr_tag{endif} tag, in which case parsing is finished for that node.
   */
   Token takeNextToken();
 
@@ -127,7 +127,7 @@ public:
   /**
     @internal
 
-    Used by the "{% load %}" tag to load libraries.
+    Used by the @gr_tag{load} tag to load libraries.
   */
   void loadLib( const QString &name );
 #endif

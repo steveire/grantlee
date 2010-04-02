@@ -46,7 +46,7 @@ namespace Grantlee
 
   @subsection variables Variables
 
-  A Context object maps a string to another object for reference in the template. String keys in the Context object are available as variables in the Template, and can be used with the <tt>{{&nbsp;variable&nbsp;}}</tt> syntax or inside <tt>{%&nbsp;control&nbsp;tags&nbsp;%}</tt>. In the above example, we mapped the string <tt>"name"</tt> to the string <tt>"Grainne"</tt> and then to the string <tt>"Henry"</tt>. We can create more than just string mappings though.
+  A Context object maps a string to another object for reference in the template. String keys in the Context object are available as variables in the Template, and can be used with the <tt>{{&nbsp;variable&nbsp;}}</tt> syntax or inside @gr_tag{control&nbsp;tags}. In the above example, we mapped the string <tt>"name"</tt> to the string <tt>"Grainne"</tt> and then to the string <tt>"Henry"</tt>. We can create more than just string mappings though.
 
   @code
     mapping.insert("myint", 6); // Can insert ints

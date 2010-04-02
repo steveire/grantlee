@@ -267,7 +267,7 @@ class AbstractNodeFactoryPrivate;
     }
   @endcode
 
-  The @ref getNode implementation might also advance the parser. For example if we had a <tt>times</tt> tag which rendered content the amount of times it was given in its argument, it could be used like this:
+  The @ref getNode implementation might also advance the parser. For example if we had a @gr_tag{times} tag which rendered content the amount of times it was given in its argument, it could be used like this:
 
   @code
     Some text content.
@@ -277,7 +277,7 @@ class AbstractNodeFactoryPrivate;
     End text content
   @endcode
 
-  The argument to <tt>times</tt> might not be a simple number, but could be a FilterExpression such as <tt>someobject.some_property|getDigit:1</tt>.
+  The argument to @gr_tag{times} might not be a simple number, but could be a FilterExpression such as <tt>someobject.some_property|getDigit:1</tt>.
 
   The implementation could look like
 
@@ -322,7 +322,7 @@ public:
     This method should be reimplemented to return a Node which can be rendered.
 
     The @p tagContent is the content of the tag including the tag name and arguments. For example,
-    if the template content is &quot;{% my_tag arg1 arg2 %}&quot;, the tagContent will be &quot;my_tag arg1 arg2&quot;.
+    if the template content is @gr_tag{my_tag arg1 arg2}, the tagContent will be &quot;my_tag arg1 arg2&quot;.
 
     The Parser @p p is available and can be advanced if appropriate. For example, if the tag has an
     end tag, the parser can be advanced to the end tag.

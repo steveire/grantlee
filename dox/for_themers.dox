@@ -33,9 +33,9 @@ namespace Grantlee
     {{ myname }}
   @endverbatim
 
-  Content inside <tt>{# #}</tt> are comments and are not part of the output.
-  Content inside <tt>{{ }}</tt> are variables which are substitued when the template is rendered.
-  Content inside <tt>{% %}</tt> are control tags which can affect the rendering of the template. %Grantlee ships with commonly used tags such as <tt>if</tt>, <tt>for</tt>, <tt>cycle</tt> and a host of others (see&nbsp;http://docs.djangoproject.com/en/dev/ref/templates/builtins/). It is also possible for application developers and artists to define their own tags.
+  - Content inside <tt>{# #}</tt> are comments and are not part of the output.
+  - Content inside <tt>{{ }}</tt> are variables which are substitued when the template is rendered.
+  - Content inside <tt>{% %}</tt> are control tags which can affect the rendering of the template. %Grantlee ships with commonly used tags such as @gr_tag{if}, @gr_tag{for}, @gr_tag{cycle} and a host of others (see&nbsp;http://docs.djangoproject.com/en/dev/ref/templates/builtins/). It is also possible for application developers and artists to define their own tags.
 
 
   @subsection loops Loops

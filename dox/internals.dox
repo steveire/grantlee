@@ -11,7 +11,7 @@ namespace Grantlee
 
   A template string is first tokenized by the lexer class. The result is a list of tokens with content which can be of type TextToken, CommentToken, VariableToken or TagToken.
 
-  The tokens are further processed by the Parser class. The Parser generates nodes from the token stream. For a TextToken it generates a TextNode, for a CommentToken it generates nothing, for a VariableToken it generates a VariableNode, and for a TagToken it generates another type of Node determined by available plugins. Some plugins are built in, and others may be loaded by the template itself using the {% load %} tag, or preloaded by the application developer.
+  The tokens are further processed by the Parser class. The Parser generates nodes from the token stream. For a TextToken it generates a TextNode, for a CommentToken it generates nothing, for a VariableToken it generates a VariableNode, and for a TagToken it generates another type of Node determined by available plugins. Some plugins are built in, and others may be loaded by the template itself using the @gr_tag{load} tag, or preloaded by the application developer.
 
   The plugin uses the Abstract Factory pattern. It returns a list of concrete factories, one for each tag handled by that plugin. The factories have a getNode method which accepts the tag content and the active parser as an argument and returns a concrete Node. The getNode method may advance the parser in the case of begin/end tags etc. When the parser is finished, it has created a tree of nodes, which is essentially a Template object.
 

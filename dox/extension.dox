@@ -80,7 +80,7 @@ namespace Grantlee
 
   @see @ref templates_safestring
 
-  The filter interface contains two elements relevant to autoescaping. The first is the autoescape parameter to the Filter::doFilter method. The autoescape parameter indicates the current autoescaping state of the renderer, which can be manipulated in templates with the <tt>{%&nbsp;autoescape&nbsp;%}</tt> tag. Use of the autoescape parameter is rare. The second element of autoescaping in the Filter API is the Filter::isSafe method. This method can be reimplemented to indicate that a Filter is 'safe', that is given safe input, it produces safe output.
+  The filter interface contains two elements relevant to autoescaping. The first is the autoescape parameter to the Filter::doFilter method. The autoescape parameter indicates the current autoescaping state of the renderer, which can be manipulated in templates with the @gr_tag{autoescape} tag. Use of the autoescape parameter is rare. The second element of autoescaping in the Filter API is the Filter::isSafe method. This method can be reimplemented to indicate that a Filter is 'safe', that is given safe input, it produces safe output.
 
   @see http://docs.djangoproject.com/en/dev/howto/custom-template-tags/#filters-and-auto-escaping
   @see http://groups.google.com/group/django-users/browse_thread/thread/311f336d74e7b643
@@ -93,7 +93,7 @@ namespace Grantlee
 
   Tags can take arguments, advance the parser, create nodes, and generally have broad control over the parsing and rendering stages.
 
-  Here is an example of a {% current_time %} tag which displays the current time.
+  Here is an example of a @gr_tag{current_time} tag which displays the current time.
 
   @code
     class CurrentTimeTag : public Grantlee::AbstractNodeFactory
@@ -133,7 +133,7 @@ namespace Grantlee
 
   @see AbstractNodeFactory::smartSplit
 
-  @note The current_time tag could be extended to format the time in a particular way. That is the behaviour of the {%&nbsp;now&nbsp;%} tag. See its documentation and implementation for details.
+  @note The current_time tag could be extended to format the time in a particular way. That is the behaviour of the @gr_tag{now} tag. See its documentation and implementation for details.
 
   Also, note that, nodeFactory may throw an execption at template compilation time, but like Filters, Nodes should handle errors gracefully in their render method, and should return an empty QString in most error cases.
 
@@ -182,7 +182,7 @@ namespace Grantlee
     }
   @endcode
 
-  There is no limit to the number of intermediate tokens you can use in your tags. For example, a better <tt>{%&nbsp;if&nbsp;%}</tt> tag might support multiple elif tags.
+  There is no limit to the number of intermediate tokens you can use in your tags. For example, a better @gr_tag{if} tag might support multiple elif tags.
 
   @code
     text content
@@ -241,7 +241,7 @@ namespace Grantlee
 
   Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamically loaded at runtime.
 
-  Here is a complete QtScript library defining an {% echo %} tag which outputs its arguments:
+  Here is a complete QtScript library defining an @gr_tag{echo} tag which outputs its arguments:
 
   @code
     var EchoNode = function(content)

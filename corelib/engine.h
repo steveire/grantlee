@@ -57,7 +57,7 @@ class EnginePrivate;
   Once it is configured, the engine can be used to create new templates by name by loading the templates with the loadByName method,
   or by defining the content in the newTemplate method.
 
-  By default the builtin tags and filters distributed with %Grantlee are available in all templates without using the <tt>{%&nbsp;load&nbsp;%}</tt>
+  By default the builtin tags and filters distributed with %Grantlee are available in all templates without using the @gr_tag{load}
   tag in the template. These pre-loaded libraries may be configured if appropriate to the application. For example, an application
   which defines its own tags and filters may want them to be always available, or it may be desirable to restrict the features
   available to template authors by removing built in libraries.
@@ -105,7 +105,7 @@ public:
     depending on the templateLoaders configured.
 
     This method will not usually be called by application code.
-    To load media in a template, use the <tt>{%&nbsp;media_finder&nbsp;%}</tt> template tag.
+    To load media in a template, use the @gr_tag{media_finder} template tag.
   */
   QString mediaUri( const QString &fileName ) const;
 
@@ -165,7 +165,7 @@ public:
 
     Loads and returns the library specified by @p name in the current Engine configuration or @p state.
 
-    Templates wishing to load a library should use the {%&nbsp;load&nbsp;%} tag.
+    Templates wishing to load a library should use the @gr_tag{load} tag.
   */
   TagLibraryInterface* loadLibrary( const QString &name );
 #endif

@@ -16,7 +16,7 @@ namespace Grantlee
 
   Python dictionary objects can be processed in templates. In %Grantlee, QVariantHash is supported, which has the same effect. QVariantHash keys must be strings, whereas python dictionary keys may be any pickle-able object.
 
-  Django uses PHP datetime string format for the {% now %} tag, whereas %Grantlee uses QDateTime format.
+  Django uses PHP datetime string format for the @gr_tag{now} tag, whereas %Grantlee uses QDateTime format.
 
   The Django autoescape system is based on marking a string object as safe. In Qt, this is not directly possible, so a wrapper class, Grantlee::SafeString is provided with several convenient operator overloads. This has (hopefully) minimal impact on plugin writers.
 

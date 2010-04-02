@@ -65,7 +65,7 @@ class ContextPrivate;
   tag makes additional variables temporarily available in a part of a template. Template tags should only modify layers of context
   that they push themselves, and should pop any layers created before finishing its rendering step.
 
-  See for example the "{% with %}" tag. In a template such as
+  See for example the @gr_tag{with} tag. In a template such as
   @code
     Some content
     {% with person.name|toUpper as lowerName %}
@@ -73,8 +73,8 @@ class ContextPrivate;
     {% endwith %}
   @endcode
 
-  In this case, lowerName is available in the context only between the "{% with %}" and "{% endwith %}" tags. The implementation of
-  the "{% with %}" tag render method is:
+  In this case, lowerName is available in the context only between the @gr_tag{with} and @gr_tag{endwith} tags. The implementation of
+  the @gr_tag{with} tag render method is:
 
   @code
     void WithNode::render( OutputStream *stream, Context *c )
@@ -120,14 +120,14 @@ public:
   /**
     @internal
 
-    Whether to automatically escape all context content. This is not usually used directly. Use the "{% autoescape %}" tag instead.
+    Whether to automatically escape all context content. This is not usually used directly. Use the @gr_tag{autoescape} tag instead.
   */
   bool autoEscape() const;
 
   /**
     @internal
 
-    Sets whether to automatically escape all context content. This is not usually used directly. Use the "{% autoescape %}" tag instead.
+    Sets whether to automatically escape all context content. This is not usually used directly. Use the @gr_tag{autoescape} tag instead.
   */
   void setAutoEscape( bool autoescape );
 #endif

@@ -163,7 +163,7 @@ namespace Grantlee
 
   In C++ code, it is necessary to either instruct the Grantlee::Engine about the location of the plugins or to configure your QCoreApplication::libraryPaths by another standard method. Note that it is possible to define custom versions of built in tags and filters by putting your own plugin library in the path before the path to the default %Grantlee plugins.
 
-  For example, if your custom plugin library contained a custom implementation of the {%&nbsp;for&nbsp;%} tag:
+  For example, if your custom plugin library contained a custom implementation of the @gr_tag{for} tag:
   @code
     Engine *engine = new Engine( this );
     engine->setPluginPaths( QStringList() << path_to_custom_plugins << path_to_grantlee_defaults );
