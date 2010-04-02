@@ -83,6 +83,7 @@ private Q_SLOTS:
 
     void exportThemedHtml();
     void exportPlainText();
+    void addAudio();
 
     void textBold();
     void textUnderline();

@@ -21,6 +21,7 @@ include_directories(
 
 grantlee_add_plugin(customtags
   customtagslibrary
+  audiotextdocumentoutputter
 
   FILTERS
     filters
@@ -35,6 +36,8 @@ configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 set(textedit_example_SRCS
   main.cpp
+  audiotextedit.cpp
+  audioobject.cpp
   textedit.cpp
 )
 
@@ -60,6 +63,7 @@ target_link_libraries(
   ${QT_QTCORE_LIBRARIES}
   ${QT_QTGUI_LIBRARIES}
   ${QT_QTWEBKIT_LIBRARIES}
+  ${QT_PHONON_LIBRARIES}
   ${Grantlee_CORE_LIBRARIES}
 )
 

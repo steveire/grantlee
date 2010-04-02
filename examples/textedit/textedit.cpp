@@ -72,6 +72,9 @@
 #include <grantlee/context.h>
 #include "grantlee_paths.h"
 
+#include "audioobject.h"
+#include "audiotextedit.h"
+
 #ifdef Q_WS_MAC
 const QString rsrcPath = ":/images/mac";
 #else
@@ -95,12 +98,14 @@ TextEdit::TextEdit(QWidget *parent)
 
     abstractTextEdit = new QTextEdit(this);
 
-    textEdit = new QTextEdit(this);
+    textEdit = new AudioTextEdit(this);
     connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
             this, SLOT(currentCharFormatChanged(QTextCharFormat)));
     connect(textEdit, SIGNAL(cursorPositionChanged()),
             this, SLOT(cursorPositionChanged()));
 
+    QObject *audioObjectInterface = new AudioObject;
+    textEdit->document()->documentLayout()->registerHandler(AudioType, audioObjectInterface);
 
     QSplitter *hSplitter = new QSplitter(this);
 
@@ -235,9 +240,16 @@ void TextEdit::setupFileActions()
 #endif
 
     a = new QAction(QIcon::fromTheme("export_themed_html"),
-    tr("&Export Themed HTML..."), this);
+    tr("&Export Themed HTML"), this);
     a->setPriority(QAction::LowPriority);
     connect(a, SIGNAL(triggered()), this, SLOT(exportThemedHtml()));
+    tb->addAction(a);
+    menu->addAction(a);
+
+    a = new QAction(QIcon::fromTheme("add_audio"),
+    tr("&Add Audio..."), this);
+    a->setPriority(QAction::LowPriority);
+    connect(a, SIGNAL(triggered()), this, SLOT(addAudio()));
     tb->addAction(a);
     menu->addAction(a);
 
@@ -813,6 +825,23 @@ void TextEdit::alignmentChanged(Qt::Alignment a)
     } else if (a & Qt::AlignJustify) {
         actionAlignJustify->setChecked(true);
     }
+}
+
+void TextEdit::addAudio()
+{
+//   QString fn = QFileDialog::getOpenFileName(this, tr("Open File..."),
+//                                             QString(), tr("Audio-Files (*.ogg );;All Files (*)"));
+//   if (fn.isEmpty())
+//       return;
+
+  AudioFormat audioFormat;
+
+  // read file into Phonon object?
+
+//   audioFormat.setProperty( AudioProperty, fn );
+  audioFormat.setProperty( AudioProperty, "horse.ogg" );
+
+  textEdit->textCursor().insertText(QString(QChar::ObjectReplacementCharacter), audioFormat);
 }
 
 #include "textedit.moc"
