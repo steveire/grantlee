@@ -125,7 +125,7 @@ namespace Grantlee
     [1] http://www.example.com/mysound.ogg
   @endverbatim
 
-
+  The textedit example in the %Grantlee source distribution implements this feature.
 */
 
 }
