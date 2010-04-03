@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+  <file alias="custom_tags.qs">template_tags/custom_tags.qs</file>
+</qresource>
+</RCC>

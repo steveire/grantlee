@@ -1,0 +1,17 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+  <file>templates/cpp/lgpl.h</file>
+  <file>templates/cpp/gpl.h</file>
+  <file>templates/cpp/bsd.h</file>
+  <file>templates/cpp/header.h</file>
+  <file>templates/cpp/base_header.h</file>
+  <file>templates/cpp/args.h</file>
+  <file>templates/cpp/private_header.h</file>
+  <file>templates/cpp/implementation.cpp</file>
+  <file>templates/py/lgpl.py</file>
+  <file>templates/py/gpl.py</file>
+  <file>templates/py/bsd.py</file>
+  <file>templates/py/args.py</file>
+  <file>templates/py/class.py</file>
+</qresource>
+</RCC>
