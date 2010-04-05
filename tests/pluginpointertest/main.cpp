@@ -46,7 +46,7 @@ int main( int argc, char **argv )
 
   if ( true ) {
     PluginPointer<MyInterface> p3( app.applicationDirPath() + "/myplugin.so" );
-    p1 = p3;
+    p2 = p3;
     PluginPointer<MyInterface> p4( p3 );
     PluginPointer<MyInterface> p5 = p3;
   }
