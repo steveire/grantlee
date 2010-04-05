@@ -713,22 +713,22 @@ void TestBuiltinSyntax::testAlternativeEscaping()
 
   QString output;
   QTextStream ts( &output );
-  QSharedPointer<OutputStream> noEscapeOs = QSharedPointer<OutputStream>( new NoEscapeOutputStream( &ts ) );
 
-  t1->render( noEscapeOs.data(), &c );
+  NoEscapeOutputStream noEscapeOs( &ts );
+
+  t1->render( &noEscapeOs, &c );
 
   QCOMPARE( output, input );
   output.clear();
 
-  QSharedPointer<OutputStream> jsOs = QSharedPointer<OutputStream>( new JSOutputStream( &ts ) );
+  JSOutputStream jsOs( &ts );
 
-  t1->render( jsOs.data(), &c );
+  t1->render( &jsOs, &c );
 
   QString jsOutput( "\\x3C \\x3E \\x0D\\x0A \\x26 \\x22 \\x27 # \\x3D % $" );
 
   QCOMPARE( output, jsOutput );
 }
-
 
 void TestBuiltinSyntax::testTemplatePathSafety_data()
 {
