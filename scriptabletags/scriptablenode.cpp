@@ -94,7 +94,10 @@ void ScriptableNode::render( OutputStream *stream, Context *c )
   args << contextObject;
 
   // Call the render method in the context of the concreteNode
-  ( *stream ) << m_renderMethod.call( m_concreteNode, args ).toString();
+  QScriptValue value = m_renderMethod.call( m_concreteNode, args );
+
+  if ( value.isValid() && !value.isUndefined() )
+    ( *stream ) << value.toString();
 }
 
 ScriptableNodeFactory::ScriptableNodeFactory( QObject* parent )
