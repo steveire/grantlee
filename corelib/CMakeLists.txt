@@ -58,6 +58,7 @@ install(FILES
   filter.h
   filterexpression.h
   grantlee_core_export.h
+  ${PROJECT_BINARY_DIR}/grantlee_version.h
   mutabletemplate.h
   node.h
   outputstream.h
