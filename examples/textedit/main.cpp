@@ -47,6 +47,7 @@ int main( int argc, char ** argv )
     Q_INIT_RESOURCE(textedit);
 
     QApplication a( argc, argv );
+    a.setApplicationName("textedit");
     TextEdit mw;
     mw.resize( 700, 800 );
     mw.show();
