@@ -56,8 +56,8 @@ bool Grantlee::variantIsTrue( const QVariant &variant )
   case QVariant::List: {
     return ( variant.toList().size() > 0 );
   }
-  case QVariant::Map: {
-    return ( variant.toMap().size() > 0 );
+  case QVariant::Hash: {
+    return ( variant.toHash().size() > 0 );
   }
   }
 

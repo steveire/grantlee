@@ -541,6 +541,49 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow( "if-tag-error04" ) << "{% if not foo and %}yes{% else %}no{% endif %}" << dict << "" << TagSyntaxError;
   QTest::newRow( "if-tag-error05" ) << "{% if not foo or %}yes{% else %}no{% endif %}" << dict << "" << TagSyntaxError;
 
+  // Truthiness
+  dict.clear();
+  QVariantHash hash;
+  dict.insert( "var", hash );
+  QTest::newRow( "if-truthiness01" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "No" << NoError;
+  hash.insert( "foo", "bar" );
+  dict.insert( "var", hash );
+  QTest::newRow( "if-truthiness02" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "Yes" << NoError;
+  QVariantList list;
+  dict.insert( "var", list );
+  QTest::newRow( "if-truthiness03" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "No" << NoError;
+  list.append( "foo" );
+  dict.insert( "var", list );
+  QTest::newRow( "if-truthiness04" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "Yes" << NoError;
+
+  QVariant var;
+  dict.insert( "var", var );
+  QTest::newRow( "if-truthiness05" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "No" << NoError;
+  var = "foo";
+  dict.insert( "var", var );
+  QTest::newRow( "if-truthiness06" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "Yes" << NoError;
+
+  QString str;
+  dict.insert( "var", str );
+  QTest::newRow( "if-truthiness07" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "No" << NoError;
+  str = "foo";
+  dict.insert( "var", str );
+  QTest::newRow( "if-truthiness08" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "Yes" << NoError;
+
+  int i = 0;
+  dict.insert( "var", i );
+  QTest::newRow( "if-truthiness07" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "No" << NoError;
+  i = 7;
+  dict.insert( "var", i );
+  QTest::newRow( "if-truthiness08" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "Yes" << NoError;
+
+  qreal r = 0.0;
+  dict.insert( "var", r );
+  QTest::newRow( "if-truthiness09" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "No" << NoError;
+  r = 7.1;
+  dict.insert( "var", r );
+  QTest::newRow( "if-truthiness10" ) << "{% if var %}Yes{% else %}No{% endif %}" << dict << "Yes" << NoError;
+
 }
 
 void TestDefaultTags::testForTag_data()
