@@ -33,14 +33,25 @@ AudioObject::AudioObject(QObject* parent)
 
 void AudioObject::drawObject( QPainter* painter, const QRectF& rect, QTextDocument* doc, int posInDocument, const QTextFormat& format )
 {
-  painter->setBrush( Qt::red );
-  painter->setPen( Qt::blue );
+  painter->setBrush( Qt::darkGreen );
   painter->drawRect( rect );
+
+  painter->setBrush( Qt::white );
+  QRect circleRect(rect.left() + 2.0, rect.top() + 2.0, rect.width() - 4.0, rect.height() - 4.0 );
+  painter->drawEllipse( circleRect );
+
+  painter->setBrush( Qt::green );
+  const QPointF points[3] = {
+     QPointF( circleRect.left() + 7.0, circleRect.top() + 4.0 ),
+     QPointF( circleRect.right() - 4.0, circleRect.top() + 4.0 + ( ( circleRect.height() - 8.0) / 2.0 ) ),
+     QPointF( circleRect.left() + 7.0, circleRect.bottom() - 4.0 )
+  };
+  painter->drawPolygon(points, 3);
 }
 
 QSizeF AudioObject::intrinsicSize( QTextDocument* doc, int posInDocument, const QTextFormat& format )
 {
-  return QSizeF( 100, 25 );
+  return QSizeF( 30, 30 );
 }
 
 AudioFormat::AudioFormat()
