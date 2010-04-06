@@ -23,6 +23,27 @@
 
 #include <QItemDelegate>
 
+static const char * sTypes[] = {
+  "int",
+  "qreal",
+  "QString",
+  "QStringList",
+  "QDateTime",
+  "QPoint",
+  "QFile",
+  "QDir",
+  "QUrl",
+  "QSize",
+  "QRect",
+  "QObject *",
+  "QVariant",
+  "QModelIndex",
+  "QColor",
+  "QWidget *",
+  "QAction *",
+  "QModelIndex"
+};
+
 class ComboBoxDelegate : public QItemDelegate
 {
   Q_OBJECT

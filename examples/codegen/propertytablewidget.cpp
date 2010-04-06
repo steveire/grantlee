@@ -30,10 +30,8 @@ PropertyTableWidget::PropertyTableWidget(QWidget* parent)
   : QTableWidget(parent)
 {
   QStringList types;
-  types << "QString"
-        << "QVariant"
-        << "QColor"
-        << "int";
+  for ( int i = 0; i < sizeof sTypes / sizeof *sTypes; ++i)
+    types << *(sTypes + i);
 
   setItemDelegateForColumn(0, new ComboBoxDelegate(types, ComboBoxDelegate::Editable));
 

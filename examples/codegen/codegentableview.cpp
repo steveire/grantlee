@@ -39,9 +39,9 @@ MethodTableView::MethodTableView(QWidget* parent)
   setItemDelegateForColumn(0, new ComboBoxDelegate(accessTypes));
 
   QStringList types;
-  types << "QString"
-        << "QVariant"
-        << "QModelIndex";
+  types << "void";
+  for ( int i = 0; i < sizeof sTypes / sizeof *sTypes; ++i)
+    types << *(sTypes + i);
 
   setItemDelegateForColumn(2, new ComboBoxDelegate(types, ComboBoxDelegate::Editable));
 
@@ -53,10 +53,8 @@ ArgsTableView::ArgsTableView(QWidget* parent)
   : QTableView(parent)
 {
   QStringList types;
-  types << "const QString &"
-        << "const QVariant &"
-        << "const QModelIndex &";
-
+  for ( int i = 0; i < sizeof sTypes / sizeof *sTypes; ++i)
+    types << *(sTypes + i);
 
   setItemDelegateForColumn(0, new ComboBoxDelegate(types, ComboBoxDelegate::Editable));
 
