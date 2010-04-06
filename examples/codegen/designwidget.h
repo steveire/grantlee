@@ -45,6 +45,8 @@ Q_SIGNALS:
 
 private:
   void setInitialContent();
+  void insertProperty(int row, const QString &type, const QString &name, bool readonly);
+  void insertMethod(const QString &access, bool _virtual, const QString &type, const QString &name, bool _const, QList<QStringList> args = QList<QStringList>());
 
 private Q_SLOTS:
   void setArgsRootIndex(const QModelIndex &index);

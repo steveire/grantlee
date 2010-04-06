@@ -40,78 +40,29 @@ void DesignWidget::setInitialContent()
   ui.email_edit->setText("winston@smithfamily.com");
   ui.className_edit->setText("MyClass");
 
-  int propRows = 3;
+  int propRows = 5;
   ui.properties_table->setRowCount(propRows);
-  QTableWidgetItem *checkableItem;
 
-  ui.properties_table->setItem(0, 0, new QTableWidgetItem("QString"));
-  ui.properties_table->setItem(0, 1, new QTableWidgetItem("name"));
+  insertProperty(0, "QString", "name", false);
+  insertProperty(1, "int", "age", true);
+  insertProperty(2, "QColor", "furColor", false);
+  insertProperty(3, "bool", "pedigree", true);
+  insertProperty(4, "QString", "owner", false);
 
-  checkableItem = new QTableWidgetItem;
-  checkableItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-  checkableItem->setCheckState(Qt::Unchecked);
-  ui.properties_table->setItem(0, 2, checkableItem);
-
-  ui.properties_table->setItem(1, 0, new QTableWidgetItem("QColor"));
-  ui.properties_table->setItem(1, 1, new QTableWidgetItem("color"));
-
-  checkableItem = new QTableWidgetItem;
-  checkableItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-  checkableItem->setCheckState(Qt::Checked);
-  ui.properties_table->setItem(1, 2, checkableItem);
-
-  ui.properties_table->setItem(2, 0, new QTableWidgetItem("int"));
-  ui.properties_table->setItem(2, 1, new QTableWidgetItem("age"));
-
-  checkableItem = new QTableWidgetItem;
-  checkableItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-  checkableItem->setCheckState(Qt::Checked);
-  ui.properties_table->setItem(2, 2, checkableItem);
+  QList<QStringList> args;
 
   m_methodModel = new MethodModel(this);
-
-  QList<QStandardItem*> method;
-  method << new QStandardItem("public")
-         << new QStandardItem()
-         << new QStandardItem("QString")
-         << new QStandardItem("somethingStupid")
-         << new QStandardItem();
-
-  method.at(1)->setEditable(false);
-  method.at(4)->setEditable(false);
-  method.at(1)->setCheckable(true);
-  method.at(4)->setCheckable(true);
-
-  m_methodModel->appendRow(method);
-  method.clear();
-
-  method << new QStandardItem("protected")
-         << new QStandardItem()
-         << new QStandardItem("QModelIndex")
-         << new QStandardItem("differentThings")
-         << new QStandardItem();
-
-  method.at(1)->setEditable(false);
-  method.at(4)->setEditable(false);
-  method.at(1)->setCheckable(true);
-  method.at(4)->setCheckable(true);
-  method.at(1)->setCheckState(Qt::Checked);
-  method.at(4)->setCheckState(Qt::Checked);
-
-  QList<QStandardItem*> arg;
-  arg << new QStandardItem("QString")
-      << new QStandardItem("someString")
-      << new QStandardItem();
-
-  method.first()->appendRow(arg);
-  arg.clear();
-  arg << new QStandardItem("int")
-      << new QStandardItem("more")
-      << new QStandardItem("0");
-
-  method.first()->appendRow(arg);
-
-  m_methodModel->appendRow(method);
+  insertMethod("public", false, "QString", "getResult", true );
+  args << ( QStringList() << "QString" << "silly" );
+  args << ( QStringList() << "int" << "number" << "9" );
+  insertMethod("public slots", false, "void", "somethingStupid", false, args );
+  insertMethod("protected", false, "void", "reset", false );
+  args.clear();
+  args << ( QStringList() << "int" << "var" );
+  args << ( QStringList() << "QString" << "input" << "QString()" );
+  insertMethod("protected", false, "QModelIndex", "findIndex", true, args );
+  insertMethod("protected", true, "void", "clear", false );
+  insertMethod("private", false, "void", "internalMethod", true );
 
   ui.methods_table->setModel(m_methodModel);
 
@@ -122,6 +73,48 @@ void DesignWidget::setInitialContent()
   setArgsRootIndex(QModelIndex());
 
   connect( ui.pushButton, SIGNAL(clicked(bool)), SIGNAL(generateClicked(bool)));
+}
+
+void DesignWidget::insertMethod(const QString& access, bool _virtual, const QString& type, const QString& name, bool _const, QList<QStringList> args)
+{
+  QList<QStandardItem*> method;
+  method << new QStandardItem(access)
+         << new QStandardItem()
+         << new QStandardItem(type)
+         << new QStandardItem(name)
+         << new QStandardItem();
+
+  method.at(1)->setEditable(false);
+  method.at(4)->setEditable(false);
+  method.at(1)->setCheckable(true);
+  method.at(4)->setCheckable(true);
+  method.at(1)->setCheckState(_virtual ? Qt::Checked : Qt::Unchecked);
+  method.at(4)->setCheckState(_const ? Qt::Checked : Qt::Unchecked);
+
+  if (!args.isEmpty())
+  {
+    Q_FOREACH(const QStringList &arg, args)
+    {
+      QList<QStandardItem*> argItem;
+      argItem << new QStandardItem(arg.at(0))
+              << new QStandardItem(arg.at(1))
+              << new QStandardItem(arg.value(2));
+      method.first()->appendRow(argItem);
+    }
+  }
+
+  m_methodModel->appendRow(method);
+}
+
+void DesignWidget::insertProperty(int row, const QString& type, const QString& name, bool readonly)
+{
+  ui.properties_table->setItem(row, 0, new QTableWidgetItem(type));
+  ui.properties_table->setItem(row, 1, new QTableWidgetItem(name));
+
+  QTableWidgetItem *checkableItem = new QTableWidgetItem;
+  checkableItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+  checkableItem->setCheckState(readonly ? Qt::Unchecked : Qt::Checked);
+  ui.properties_table->setItem(row, 2, checkableItem);
 }
 
 void DesignWidget::setArgsRootIndex(const QModelIndex &index)

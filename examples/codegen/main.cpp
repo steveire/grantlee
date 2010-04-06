@@ -28,6 +28,7 @@ int main(int argc, char * argv[])
 
     MainWindow mw;
     mw.show();
+    mw.resize(1200, 770);
 
     return app.exec();
 }
