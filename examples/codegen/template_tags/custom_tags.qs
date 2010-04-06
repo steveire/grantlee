@@ -28,7 +28,6 @@ function RandomNode( numChars, contextName )
   this.render = function( context )
   {
     var num = this.numChars.resolve(context);
-    print(Math.pow(10, num));
     var num = parseInt(Math.random() * (Math.pow(10, this.numChars.resolve(context) )));
     context.insert(this.contextName, num);
   }
@@ -56,7 +55,7 @@ Library.addFilter("ToWriteFilter");
 var ToArgFilter = function(input)
 {
   input = input.rawString();
-  if (input.substr(input.length) == "*")
+  if (input.substr(input.length - 1, input.length) == "*")
     return input;
 
   if (input.substr(0, 1) != "Q")

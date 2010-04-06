@@ -5,7 +5,7 @@
 
 {% if baseClass %}from PyQt4.{{ baseClass.module }} import {{ baseClass.type }}{% endif %}
 
-class {{ className }}({{ baseClass.type }}):
+class {{ className }}({% if baseClass %}{{ baseClass.type }}{% else %}object{% endif %}):
 
     def __init__(self):
         {% if baseClass %}{{ baseClass.type }}.__init__(self){% endif %}
