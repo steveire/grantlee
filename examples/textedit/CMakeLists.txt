@@ -15,6 +15,7 @@ include_directories(
   ${QT_INCLUDES}
   ${QT_QTGUI_INCLUDE_DIR}
   ${PROJECT_BINARY_DIR}
+  ${Grantlee_INCLUDE_DIR}
 )
 
 ## Grantlee plugin
