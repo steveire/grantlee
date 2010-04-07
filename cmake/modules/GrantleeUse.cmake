@@ -71,3 +71,12 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
     ${Grantlee_CORE_LIBRARIES}
   )
 endmacro(GRANTLEE_ADD_PLUGIN)
+
+if (MINGW)
+  # http://mail.kde.org/pipermail/kde-windows/2007-December/001692.html
+  # http://lists.trolltech.com/pipermail/qt-interest/2009-July/009829.html
+  # qt is always compiled with QT_NO_DEBUG under mingw,
+  # so we need to compile stuff linked against it
+  # the same or otherwise QPluginLoader rejects plugins
+  add_definitions(-DQT_NO_DEBUG)
+endif ()
