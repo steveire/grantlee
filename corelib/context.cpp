@@ -31,7 +31,11 @@ namespace Grantlee
 class ContextPrivate
 {
   ContextPrivate( Context *context, const QVariantHash &variantHash )
-      : q_ptr( context ), m_autoescape( true ), m_mutating( false ) {
+      : q_ptr( context ),
+        m_autoescape( true ),
+        m_mutating( false ),
+        m_urlType( Context::AbsoluteUrls )
+  {
     m_variantHashStack.append( variantHash );
   }
 
@@ -41,7 +45,8 @@ class ContextPrivate
   QList<QVariantHash> m_variantHashStack;
   bool m_autoescape;
   bool m_mutating;
-  QStringList m_externalMedia;
+  QList<QPair<QString, QString> > m_externalMedia;
+  Context::UrlType m_urlType;
 };
 
 }
@@ -71,6 +76,7 @@ Context& Context::operator=( const Context &other )
   d_ptr->m_externalMedia = other.d_ptr->m_externalMedia;
   d_ptr->m_mutating = other.d_ptr->m_mutating;
   d_ptr->m_variantHashStack = other.d_ptr->m_variantHashStack;
+  d_ptr->m_urlType = other.d_ptr->m_urlType;
   return *this;
 }
 
@@ -153,13 +159,13 @@ void Context::setMutating( bool mutating )
   d->m_mutating = mutating;
 }
 
-void Context::addExternalMedia( const QString& uri )
+void Context::addExternalMedia( const QString &absolutePart, const QString &relativePart )
 {
   Q_D( Context );
-  d->m_externalMedia.append( uri );
+  d->m_externalMedia.append( qMakePair( absolutePart, relativePart ) );
 }
 
-QStringList Context::externalMedia() const
+QList<QPair<QString, QString> > Context::externalMedia() const
 {
   Q_D( const Context );
   return d->m_externalMedia;
@@ -169,6 +175,18 @@ void Context::clearExternalMedia()
 {
   Q_D( Context );
   d->m_externalMedia.clear();
+}
+
+void Context::setUrlType(Context::UrlType type)
+{
+  Q_D( Context );
+  d->m_urlType = type;
+}
+
+Context::UrlType Context::urlType() const
+{
+  Q_D( const Context );
+  return d->m_urlType;
 }
 
 

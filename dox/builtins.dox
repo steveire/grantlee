@@ -22,7 +22,15 @@ namespace Grantlee
     <img src="{% media_finder "someimage.png" %}" />
   @endcode
 
-  The media_finder tag retrieves the result through Engine::mediaUri, which in turn queries the TemplateLoaders for the URL to return via the TemplateLoader::getMediaUri interface. This way it is possible to configure different TemplateLoaders to return different URLs, for example absolute or relative.
+  The media_finder tag retrieves the result through Engine::mediaUri, which in turn queries the TemplateLoaders for the URL to return via the TemplateLoader::getMediaUri interface.
+
+  It is possible to configure whether absolute or relative urls are created by using the Context::setUrlType method. If the same template may be used to create refereneces to either absolute or relative urls, for example, for portable exporting, it may be necessary to use something like
+
+  @code
+    <img src="{{ media_prefix }}{% media_finder "someimage.png" %}" />
+  @endcode
+
+  with <tt>media_prefix</tt> defined to nothing when creating output with absolute urls, and something like <tt>"media/"</tt> if creating output with relative urls and external media should be available in the <tt>media/</tt> subdirectory.
 
   @subsection range_tag range
 

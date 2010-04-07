@@ -89,16 +89,16 @@ void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader )
   d->m_loaders << loader;
 }
 
-QString Engine::mediaUri( const QString &fileName ) const
+QPair<QString, QString> Engine::mediaUri( const QString &fileName ) const
 {
   Q_D( const Engine );
   QListIterator<AbstractTemplateLoader::Ptr> it( d->m_loaders );
 
-  QString uri;
+  QPair<QString, QString> uri;
   while ( it.hasNext() ) {
     AbstractTemplateLoader::Ptr loader = it.next();
     uri = loader->getMediaUri( fileName );
-    if ( !uri.isEmpty() )
+    if ( !uri.second.isEmpty() )
       break;
   }
   return uri;

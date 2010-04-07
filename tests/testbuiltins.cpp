@@ -795,11 +795,11 @@ void TestBuiltinSyntax::testMediaPathSafety()
   f.write( inputPath.toUtf8() );
   f.close();
 
-  QString uri = loader->getMediaUri( inputPath );
+  QPair<QString, QString> uri = loader->getMediaUri( inputPath );
   if ( output.isEmpty() )
-    QVERIFY( uri.isEmpty() );
+    QVERIFY( uri.second.isEmpty() );
   else
-    QCOMPARE( QFileInfo( uri ).absoluteFilePath(), QFileInfo( output ).absoluteFilePath() );
+    QCOMPARE( QFileInfo( uri.first + uri.second ).absoluteFilePath(), QFileInfo( output ).absoluteFilePath() );
 
   delete loader;
   f.remove();

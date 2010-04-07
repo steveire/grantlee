@@ -107,7 +107,7 @@ public:
     This method will not usually be called by application code.
     To load media in a template, use the @gr_tag{media_finder} template tag.
   */
-  QString mediaUri( const QString &fileName ) const;
+  QPair<QString, QString> mediaUri( const QString &fileName ) const;
 
   /**
     Load the Template identified by @p name.

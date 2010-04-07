@@ -69,7 +69,7 @@ public:
   /**
     Return a complete URI for media identified by fileName.
   */
-  virtual QString getMediaUri( const QString &fileName ) const = 0;
+  virtual QPair<QString, QString> getMediaUri( const QString &fileName ) const = 0;
 
   /**
     Return true if a Template identified by @p name exists and can be loaded.
@@ -146,7 +146,7 @@ public:
 
   /* reimp */ bool canLoadTemplate( const QString &name ) const;
 
-  /* reimp */ QString getMediaUri( const QString& fileName ) const;
+  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const;
 
   /**
     Sets the theme of this loader to @p themeName
@@ -193,7 +193,7 @@ public:
 
   /* reimp */ bool canLoadTemplate( const QString &name ) const;
 
-  /* reimp */ QString getMediaUri( const QString& fileName ) const;
+  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const;
 
   /**
     Add a template content to this Loader.

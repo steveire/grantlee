@@ -144,7 +144,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
   return engine->newTemplate( content, fileName );
 }
 
-QString FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
+QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
 {
   int i = 0;
   QFile file;
@@ -156,15 +156,17 @@ QString FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
 
     QFileInfo fi( file );
     if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
-      return QString();
+      return QPair<QString, QString>();
 
     if ( file.exists() ) {
       QFileInfo fi( file );
-      return fi.absoluteFilePath();
+      QString path = fi.absoluteFilePath();
+      path.chop( fileName.size() );
+      return qMakePair( path, fileName );
     }
     ++i;
   }
-  return QString();
+  return QPair<QString, QString>();
 }
 
 
@@ -196,10 +198,10 @@ MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name, 
   throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }
 
-QString InMemoryTemplateLoader::getMediaUri( const QString& fileName ) const
+QPair<QString, QString> InMemoryTemplateLoader::getMediaUri( const QString& fileName ) const
 {
   Q_UNUSED( fileName )
   // This loader doesn't make any media available yet.
-  return QString();
+  return QPair<QString, QString>();
 }
 

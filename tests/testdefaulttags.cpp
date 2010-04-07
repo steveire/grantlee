@@ -31,8 +31,10 @@
 #include "grantlee_paths.h"
 
 typedef QHash<QString, QVariant> Dict;
+typedef QPair<QString, QString> StringPair;
 
 Q_DECLARE_METATYPE( Dict )
+Q_DECLARE_METATYPE( StringPair )
 Q_DECLARE_METATYPE( Grantlee::Error )
 
 class FakeTemplateLoader : public Grantlee::InMemoryTemplateLoader
@@ -47,10 +49,10 @@ public:
     m_existingMedia << "existing_image.png" << "another_existing_image.png";
   }
 
-  /* reimp */ QString getMediaUri( const QString &fileName ) const {
+  /* reimp */ QPair<QString, QString> getMediaUri( const QString &fileName ) const {
     if ( m_existingMedia.contains( fileName ) )
-      return "/path/to/" + fileName;
-    return QString();
+      return qMakePair( QString( "/path/to/" ), fileName );
+    return QPair<QString, QString>();
   }
 
 private:
@@ -156,6 +158,9 @@ private Q_SLOTS:
   void testRangeTag() {
     doTest();
   }
+
+  void testUrlTypes_data();
+  void testUrlTypes();
 
 private:
 
@@ -1416,6 +1421,50 @@ void TestDefaultTags::testRangeTag_data()
 
   QTest::newRow( "range-tag05" ) << "{% range 5 %}Foo;{% endrange %}" << dict << "Foo;Foo;Foo;Foo;Foo;" << NoError;
 }
+
+void TestDefaultTags::testUrlTypes_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QPair<QString, QString> >( "output" );
+
+  Dict dict;
+  QTest::newRow( "url-types01" ) << "{% media_finder \"existing_image.png\" %}" << dict
+                                 << qMakePair( QString( "file:///path/to/" ), QString( "existing_image.png" ) );
+
+  QTest::newRow( "url-types02" ) << "{% media_finder \"does_not_exist.png\" %}" << dict
+                                 << qMakePair( QString(), QString() );
+
+  dict.insert( "existing_img", "existing_image.png" );
+  dict.insert( "nonexisting_img", "does_not_exist.png" );
+
+  QTest::newRow( "url-types03" ) << "{% media_finder existing_img %}" << dict
+                                 << qMakePair( QString( "file:///path/to/" ), QString( "existing_image.png" ) );
+
+
+  QTest::newRow( "url-types04" ) << "{% media_finder nonexisting_img %}" << dict
+                                 << qMakePair( QString(), QString() );
+}
+
+void TestDefaultTags::testUrlTypes()
+{
+  QFETCH(QString, input);
+  QFETCH(Dict, dict);
+  QFETCH(StringPair, output);
+
+  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
+  QVERIFY( t->error() == NoError );
+  Context c(dict);
+  QString result = t->render( &c );
+  QVERIFY( t->error() == NoError );
+  QVERIFY( result == output.first + output.second );
+
+  c.setUrlType( Context::RelativeUrls );
+  result = t->render( &c );
+  QVERIFY( t->error() == NoError );
+  QVERIFY( result == output.second );
+}
+
 
 
 QTEST_MAIN( TestDefaultTags )

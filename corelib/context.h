@@ -190,7 +190,7 @@ public:
   /**
     @internal
   */
-  void addExternalMedia( const QString &uri );
+  void addExternalMedia( const QString &absolutePart, const QString &relativePart );
 
   /**
     @internal
@@ -201,7 +201,15 @@ public:
   /**
     Returns the external media encountered in the Template while rendering.
   */
-  QStringList externalMedia() const;
+  QList<QPair<QString, QString> > externalMedia() const;
+
+  enum UrlType
+  {
+    AbsoluteUrls,
+    RelativeUrls
+  };
+  void setUrlType(UrlType type);
+  UrlType urlType() const;
 
 private:
   Q_DECLARE_PRIVATE( Context )
