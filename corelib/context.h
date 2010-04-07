@@ -116,6 +116,17 @@ public:
   */
   explicit Context( const QVariantHash &hash );
 
+
+  /**
+    Copy Constructor
+  */
+  Context( const Context &other );
+
+  /**
+    Assignmant operator
+  */
+  Context& operator =( const Context &other );
+
 #ifndef Q_QDOC
   /**
     @internal

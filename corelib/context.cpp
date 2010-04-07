@@ -51,10 +51,27 @@ Context::Context()
 {
 }
 
-
 Context::Context( const QVariantHash &variantHash )
     : d_ptr( new ContextPrivate( this, variantHash ) )
 {
+}
+
+Context::Context( const Context &other )
+    : d_ptr( new ContextPrivate( this, QVariantHash() ) )
+{
+  *this = other;
+}
+
+
+Context& Context::operator=( const Context &other )
+{
+  if ( &other == this )
+    return *this;
+  d_ptr->m_autoescape = other.d_ptr->m_autoescape;
+  d_ptr->m_externalMedia = other.d_ptr->m_externalMedia;
+  d_ptr->m_mutating = other.d_ptr->m_mutating;
+  d_ptr->m_variantHashStack = other.d_ptr->m_variantHashStack;
+  return *this;
 }
 
 Context::~Context()
