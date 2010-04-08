@@ -162,6 +162,9 @@ private Q_SLOTS:
   void testUrlTypes_data();
   void testUrlTypes();
 
+  void testRelativePaths_data();
+  void testRelativePaths();
+
 private:
 
   void doTest();
@@ -1463,6 +1466,53 @@ void TestDefaultTags::testUrlTypes()
   result = t->render( &c );
   QVERIFY( t->error() == NoError );
   QVERIFY( result == output.second );
+}
+
+void TestDefaultTags::testRelativePaths_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+
+  Dict dict;
+  QTest::newRow( "relativepaths01" ) << "{% media_finder \"existing_image.png\" %}" << dict << "existing_image.png";
+
+  QTest::newRow( "relativepaths02" ) << "{% media_finder \"does_not_exist.png\" %}" << dict << QString();
+
+  dict.insert( "existing_img", "existing_image.png" );
+  dict.insert( "nonexisting_img", "does_not_exist.png" );
+
+  QTest::newRow( "relativepaths03" ) << "{% media_finder existing_img %}" << dict << "existing_image.png";
+
+
+  QTest::newRow( "relativepaths04" ) << "{% media_finder nonexisting_img %}" << dict << QString();
+}
+
+void TestDefaultTags::testRelativePaths()
+{
+  QFETCH(QString, input);
+  QFETCH(Dict, dict);
+  QFETCH(QString, output);
+
+  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
+  QVERIFY( t->error() == NoError );
+  Context c(dict);
+  QString result = t->render( &c );
+  QVERIFY( t->error() == NoError );
+  if ( !output.isEmpty() )
+    QVERIFY( result == "file:///path/to/" + output );
+  else
+    QVERIFY( result.isEmpty() );
+
+  c.setUrlType( Context::RelativeUrls );
+  QString relativePath = "relative/path";
+  c.setRelativeMediaPath( relativePath );
+  result = t->render( &c );
+  QVERIFY( t->error() == NoError );
+  if ( !output.isEmpty() )
+    QVERIFY( result == relativePath + QLatin1Char( '/' ) + output );
+  else
+    QVERIFY( result.isEmpty() );
 }
 
 

@@ -47,6 +47,7 @@ class ContextPrivate
   bool m_mutating;
   QList<QPair<QString, QString> > m_externalMedia;
   Context::UrlType m_urlType;
+  QString m_relativeMediaPath;
 };
 
 }
@@ -77,6 +78,7 @@ Context& Context::operator=( const Context &other )
   d_ptr->m_mutating = other.d_ptr->m_mutating;
   d_ptr->m_variantHashStack = other.d_ptr->m_variantHashStack;
   d_ptr->m_urlType = other.d_ptr->m_urlType;
+  d_ptr->m_relativeMediaPath = other.d_ptr->m_relativeMediaPath;
   return *this;
 }
 
@@ -177,7 +179,7 @@ void Context::clearExternalMedia()
   d->m_externalMedia.clear();
 }
 
-void Context::setUrlType(Context::UrlType type)
+void Context::setUrlType( Context::UrlType type )
 {
   Q_D( Context );
   d->m_urlType = type;
@@ -187,6 +189,18 @@ Context::UrlType Context::urlType() const
 {
   Q_D( const Context );
   return d->m_urlType;
+}
+
+void Context::setRelativeMediaPath( const QString &path )
+{
+  Q_D( Context );
+  d->m_relativeMediaPath = path;
+}
+
+QString Context::relativeMediaPath() const
+{
+  Q_D( const Context );
+  return d->m_relativeMediaPath;
 }
 
 

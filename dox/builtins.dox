@@ -24,11 +24,9 @@ namespace Grantlee
 
   The media_finder tag retrieves the result through Engine::mediaUri, which in turn queries the TemplateLoaders for the URL to return via the TemplateLoader::getMediaUri interface.
 
-  It is possible to configure whether absolute or relative urls are created by using the Context::setUrlType method. If the same template may be used to create refereneces to either absolute or relative urls, for example, for portable exporting, it may be necessary to use something like
+  It is possible to configure whether absolute or relative urls are created by using the Context::setUrlType method. If the path to external media is not the same as the path to the template, the Context::setRelativeMediaPath method can be used to specify a relative base path. For example, if creating a template <tt>/home/user/myoutput.html</tt> which references someimage.png, the path "myoutput_media/" can be set so that the @gr_tag{media_finder} puts the path <tt>myoutput_media/someimage.png</tt> into the template. This way the output and the media it references are portable together.
 
-  @code
-    <img src="{{ media_prefix }}{% media_finder "someimage.png" %}" />
-  @endcode
+  It is the responsibility of the caller to copy the media to the <tt>/home/user/myoutput_media/</tt> directory.
 
   with <tt>media_prefix</tt> defined to nothing when creating output with absolute urls, and something like <tt>"media/"</tt> if creating output with relative urls and external media should be available in the <tt>media/</tt> subdirectory.
 

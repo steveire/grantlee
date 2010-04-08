@@ -66,6 +66,8 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
       c->addExternalMedia( uri, fileUrl.second );
       if ( c->urlType() == Context::AbsoluteUrls )
         ( *stream ) << uri;
+      else if ( !c->relativeMediaPath().isEmpty() )
+        ( *stream ) << ( c->relativeMediaPath() + QLatin1Char( '/' ) );
       ( *stream ) << fileUrl.second;
       return;
     }

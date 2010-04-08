@@ -203,13 +203,36 @@ public:
   */
   QList<QPair<QString, QString> > externalMedia() const;
 
+  /**
+    The type of urls to external media that should be put in the template.
+  */
   enum UrlType
   {
-    AbsoluteUrls,
-    RelativeUrls
+    AbsoluteUrls,   ///< Absolute URLs should be put in the template.
+    RelativeUrls    ///< Relative URLs should be put in the template.
   };
-  void setUrlType(UrlType type);
+
+  /**
+    Sets the type of external media URL to be used in the template to @p type.
+    @see @ref media_finder_tag
+  */
+  void setUrlType( UrlType type );
+
+  /**
+    The type of URL used in the template.
+  */
   UrlType urlType() const;
+
+  /**
+    Sets the relative path to external media to be used in templates to @p relativePath
+    @see @ref media_finder_tag
+  */
+  void setRelativeMediaPath( const QString &relativePath );
+
+  /**
+    The relative path to external media to be used in templates.
+  */
+  QString relativeMediaPath() const;
 
 private:
   Q_DECLARE_PRIVATE( Context )
