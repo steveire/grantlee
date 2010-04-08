@@ -28,7 +28,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 set(Grantlee_VERSION_MAJOR 0)
-set(Grantlee_VERSION_MINOR 1)
+set(Grantlee_VERSION_MINOR 2)
 set(Grantlee_VERSION_PATCH 0)
 set(Grantlee_MIN_PLUGIN_VERSION 1)
 
