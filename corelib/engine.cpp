@@ -66,8 +66,7 @@ Engine::Engine( QObject *parent )
 {
   d_ptr->m_defaultLibraries << "grantlee_defaulttags"
                             << "grantlee_loadertags"
-                            << "grantlee_defaultfilters"
-                            << "grantlee_scriptabletags";
+                            << "grantlee_defaultfilters";
 }
 
 Engine::~Engine()

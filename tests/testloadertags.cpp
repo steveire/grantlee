@@ -73,8 +73,9 @@ void TestLoaderTags::initTestCase()
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH
-                                         << ":/plugins/" // For testtags.qs
+                                          << ":/plugins/" // For testtags.qs
                          );
+  m_engine->addDefaultLibrary( "grantlee_scriptabletags" );
 }
 
 void TestLoaderTags::cleanupTestCase()

@@ -598,6 +598,7 @@ void TextEdit::exportThemedHtml()
 {
     Grantlee::Engine *engine = new Grantlee::Engine();
     engine->addDefaultLibrary( "customtags" );
+    engine->addDefaultLibrary( "grantlee_scriptabletags" );
 
     Grantlee::FileSystemTemplateLoader::Ptr loader(new Grantlee::FileSystemTemplateLoader());
     qDebug() << GRANTLEE_TEMPLATE_PATH;
