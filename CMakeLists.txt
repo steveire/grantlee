@@ -63,8 +63,6 @@ if (BUILD_MAIN_PLUGINS)
   add_subdirectory(defaulttags)
 
   add_subdirectory(defaultfilters)
-
-  add_subdirectory(mutabletags)
 endif()
 
 if (BUILD_SCRIPT_PLUGIN)

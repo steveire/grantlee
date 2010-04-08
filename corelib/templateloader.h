@@ -23,7 +23,6 @@
 
 #include <QtCore/QSharedPointer>
 
-#include "mutabletemplate.h"
 #include "template.h"
 
 #include "grantlee_core_export.h"
@@ -55,11 +54,6 @@ public:
     Destructor
   */
   virtual ~AbstractTemplateLoader();
-
-  /**
-    Load a MutableTemplate called @p name. Return an invalid Template if no content by that name exists.
-  */
-  virtual MutableTemplate loadMutableByName( const QString &name, Engine const *engine ) const = 0;
 
   /**
     Load a Template called @p name. Return an invalid Template if no content by that name exists.
@@ -140,8 +134,6 @@ public:
   */
   virtual ~FileSystemTemplateLoader();
 
-  /* reimp */ MutableTemplate loadMutableByName( const QString &name, Engine const *engine ) const;
-
   /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const;
 
   /* reimp */ bool canLoadTemplate( const QString &name ) const;
@@ -186,8 +178,6 @@ public:
 
   InMemoryTemplateLoader();
   virtual ~InMemoryTemplateLoader();
-
-  /* reimp */ MutableTemplate loadMutableByName( const QString &name, Engine const *engine ) const;
 
   /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const;
 

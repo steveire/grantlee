@@ -271,34 +271,6 @@ Template Engine::loadByName( const QString &name ) const
   return t;
 }
 
-MutableTemplate Engine::loadMutableByName( const QString &name ) const
-{
-  Q_D( const Engine );
-
-  QListIterator<AbstractTemplateLoader::Ptr> it( d->m_loaders );
-
-  while ( it.hasNext() ) {
-    AbstractTemplateLoader::Ptr loader = it.next();
-    MutableTemplate t = loader->loadMutableByName( name, this );
-    if ( t ) {
-      return t;
-    }
-  }
-  MutableTemplate t = MutableTemplate( new MutableTemplateImpl( this ) );
-  t->setObjectName( name );
-  t->d_ptr->m_error = TagSyntaxError;
-  t->d_ptr->m_errorString = QString::fromLatin1( "Template not found, %1" ).arg( name );
-  return t;
-}
-
-MutableTemplate Engine::newMutableTemplate( const QString &content, const QString &name ) const
-{
-  MutableTemplate t = MutableTemplate( new MutableTemplateImpl( this ) );
-  t->setObjectName( name );
-  t->setContent( content );
-  return t;
-}
-
 Template Engine::newTemplate( const QString &content, const QString &name ) const
 {
   Template t = Template( new TemplateImpl( this ) );

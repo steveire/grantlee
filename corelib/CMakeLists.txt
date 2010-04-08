@@ -14,7 +14,6 @@ set (grantlee_core_SRCS
   engine.cpp
   filterexpression.cpp
   lexer.cpp
-  mutabletemplate.cpp
   node.cpp
   nodebuiltins.cpp
   outputstream.cpp
@@ -59,7 +58,6 @@ install(FILES
   filterexpression.h
   grantlee_core_export.h
   ${PROJECT_BINARY_DIR}/grantlee_version.h
-  mutabletemplate.h
   node.h
   outputstream.h
   parser.h

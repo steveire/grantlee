@@ -22,8 +22,6 @@ namespace Grantlee
   @image html grantlee_chat_coloured.png "Simple version with some colouring."
   @image html grantlee_chat_boxes.png "A version with content in boxes."
 
-  The idea for the Mutable Tags comes from <a href="http://simonwillison.net/2009/May/19/twophased/">this blog</a>.
-
   @section kjots KJots Rewrite.
   (see playground/pim/akonadi)
   KJots shows a use of %Grantlee by retrieving items from a Model using a custom role, and allows arbitrary nesting by recursively including templates.

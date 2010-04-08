@@ -105,10 +105,6 @@ Template ExtendsNode::getParent( Context *c )
       return parentTemplate;
     }
 
-    if ( parentVar.userType() == qMetaTypeId<Grantlee::MutableTemplate>() ) {
-      Template parentTemplate = parentVar.value<Template>();
-      return parentTemplate;
-    }
     parentName = getSafeString( parentVar );
   } else {
     parentName = m_name;

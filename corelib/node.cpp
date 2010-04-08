@@ -152,51 +152,11 @@ bool NodeList::containsNonText() const
 
 void NodeList::render( OutputStream *stream, Context *c )
 {
-  if ( c->isMutating() )
-    return mutableRender( stream, c );
-
   for ( int i = 0; i < this->size(); ++i ) {
     this->at( i )->render( stream, c );
   }
 
   return;
-}
-
-void NodeList::mutableRender( OutputStream *stream, Context *c )
-{
-  QString renderedTemplate;
-  QString renderedNode;
-
-  QTextStream textStream( &renderedNode );
-  QSharedPointer<OutputStream> nodeStream = stream->clone( &textStream );
-
-  QList<Grantlee::Node*>::iterator it;
-  QList<Grantlee::Node*>::iterator first = begin();
-  QList<Grantlee::Node*>::iterator last = end();
-
-  for ( it = first; it != last; ++it ) {
-    renderedNode.clear();
-    Grantlee::Node *node = *it;
-    node->render( nodeStream.data(), c );
-    renderedTemplate += renderedNode;
-    bool isPersistent = node->isPersistent();
-    if ( it != first ) {
-      Grantlee::Node *lastNode = *( it - 1 );
-      TextNode *textNode = qobject_cast<TextNode*>( lastNode );
-      if ( textNode && ( !isPersistent || node->isRepeatable() ) ) {
-        textNode->appendContent( renderedNode );
-      }
-      if ( *it == *( last - 1 ) ) {
-        break;
-      }
-      if ( !isPersistent && !lastNode->isPersistent() ) {
-        it = erase( it );
-        // TODO: This --it is broken. Fix this iteration.
-        --it;
-      }
-    }
-  }
-  ( *stream ) << renderedTemplate;
 }
 
 AbstractNodeFactory::AbstractNodeFactory( QObject *parent )
