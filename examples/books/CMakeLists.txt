@@ -13,7 +13,7 @@ include_directories(
   ${QT_INCLUDES}
   ${QT_QTGUI_INCLUDE_DIR}
   ${QT_QTSQL_INCLUDE_DIR}
-  ${Grantlee_INCLUDE_DIR}
+  ${Grantlee_INCLUDE_DIRS}
   ${PROJECT_BINARY_DIR}
 )
 
