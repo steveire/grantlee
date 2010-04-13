@@ -10,6 +10,10 @@ option( BUILD_MAIN_PLUGINS "Build the Grantlee plugins" TRUE )
 option( BUILD_SCRIPT_PLUGIN "Build the Grantlee scriptable tags plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 
+if (BUILD_TESTS)
+  enable_testing()
+endif()
+
 set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
