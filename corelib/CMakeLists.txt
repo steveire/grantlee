@@ -3,6 +3,8 @@ project(grantlee_core)
 include_directories(
   ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
+  ${PROJECT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/../scriptabletags
 )
 
 include(${QT_USE_FILE})
@@ -26,16 +28,36 @@ set (grantlee_core_SRCS
   variable.cpp
 )
 
+set(scriptabletags_FILES
+  scriptablecontext.cpp
+  scriptablefilterexpression.cpp
+  scriptablenode.cpp
+  scriptableparser.cpp
+  scriptablesafestring.cpp
+  scriptabletags.cpp
+  scriptabletemplate.cpp
+  scriptablevariable.cpp
+  scriptablefilter.cpp
+)
+
+foreach(file ${scriptabletags_FILES})
+  set(scriptabletags_SRCS ${scriptabletags_SRCS} ${CMAKE_SOURCE_DIR}/scriptabletags/${file})
+endforeach()
+
 set(Grantlee_CORE_LIB_SOVERSION 0)
 
-qt4_automoc(${grantlee_core_SRCS})
+set(moc_SRCS ${grantlee_core_SRCS} ${scriptabletags_SRCS})
+
+qt4_automoc(${moc_SRCS})
 
 add_library(grantlee_core SHARED
   ${grantlee_core_SRCS}
+  ${scriptabletags_SRCS}
 )
 
 target_link_libraries(grantlee_core
   ${QT_QTCORE_LIBRARY}
+  ${QT_QTSCRIPT_LIBRARY}
 )
 
 set_target_properties(grantlee_core PROPERTIES

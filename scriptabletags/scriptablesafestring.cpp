@@ -78,3 +78,5 @@ QString ScriptableSafeString::rawString()
   return m_safeString;
 }
 
+#include "scriptablesafestring.moc"
+

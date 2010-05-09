@@ -1,6 +1,5 @@
 project(grantleetests)
 
-enable_testing()
 include(${QT_USE_FILE})
 
 include_directories( ${QT_INCLUDES}

@@ -35,9 +35,6 @@ namespace Grantlee
 {
 class Engine;
 class Parser;
-}
-
-using namespace Grantlee;
 
 class ScriptableTagLibrary : public QObject, public TagLibraryInterface
 {
@@ -68,6 +65,8 @@ private:
   QHash<QString, Filter*> m_filters;
 
 };
+
+}
 
 #endif
 

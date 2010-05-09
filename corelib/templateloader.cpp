@@ -156,7 +156,10 @@ QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fi
 
     QFileInfo fi( file );
     if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
-      return QPair<QString, QString>();
+    {
+      ++i;
+      continue;
+    }
 
     if ( file.exists() ) {
       QFileInfo fi( file );

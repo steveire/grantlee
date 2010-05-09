@@ -31,6 +31,8 @@ class QPluginLoader;
 namespace Grantlee
 {
 
+class ScriptableTagLibrary;
+
 class EnginePrivate
 {
   EnginePrivate( Engine *engine );
@@ -48,6 +50,7 @@ class EnginePrivate
   QList<AbstractTemplateLoader::Ptr> m_loaders;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
+  ScriptableTagLibrary *m_scriptableTagLibrary;
 };
 
 }

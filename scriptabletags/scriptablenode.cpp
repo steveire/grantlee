@@ -159,3 +159,5 @@ void ScriptableNode::setNodeList( const QString &name, QObjectList objectList )
   m_concreteNode.setProperty( name, objectListArray );
 }
 
+
+#include "scriptablenode.moc"
