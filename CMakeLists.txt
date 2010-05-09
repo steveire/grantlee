@@ -33,7 +33,7 @@ endif()
 
 set(Grantlee_VERSION_MAJOR 0)
 set(Grantlee_VERSION_MINOR 1)
-set(Grantlee_VERSION_PATCH 1)
+set(Grantlee_VERSION_PATCH 2)
 set(Grantlee_MIN_PLUGIN_VERSION 1)
 
 set(Grantlee_MAJOR_MINOR_VERSION_STRING "${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}" )
