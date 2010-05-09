@@ -70,7 +70,7 @@ if (BUILD_MAIN_PLUGINS)
 endif()
 
 if (BUILD_SCRIPT_PLUGIN)
-  add_subdirectory(scriptabletags)
+#  add_subdirectory(scriptabletags)
 endif()
 
 if (BUILD_TESTS)

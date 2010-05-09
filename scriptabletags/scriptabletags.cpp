@@ -39,6 +39,8 @@
 
 Q_DECLARE_METATYPE( Token )
 
+using namespace Grantlee;
+
 QScriptValue tokenToScriptValue( QScriptEngine *engine, const Token &t )
 {
   QScriptValue obj = engine->newObject();
@@ -195,3 +197,5 @@ void ScriptableTagLibrary::addFilter( const QString &filterName )
 
 Q_EXPORT_PLUGIN2( grantlee_scriptabletags_library, ScriptableTagLibrary )
 
+
+#include "scriptabletags.moc"

@@ -67,3 +67,4 @@ QString ScriptableContext::render( const QObjectList &list )
   return ret;
 }
 
+#include "scriptablecontext.moc"

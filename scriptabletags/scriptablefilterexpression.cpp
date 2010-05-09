@@ -72,3 +72,5 @@ bool ScriptableFilterExpression::equals( ScriptableFilterExpression* other, Scri
   return Grantlee::equals( m_filterExpression.resolve( c ), other->m_filterExpression.resolve( c ) );
 }
 
+#include "scriptablefilterexpression.moc"
+

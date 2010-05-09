@@ -33,6 +33,8 @@
 #include "grantlee_version.h"
 #include "exception.h"
 
+#include "scriptabletags.h"
+
 using namespace Grantlee;
 
 static const char * __scriptableLibName = "grantlee_scriptabletags";
@@ -132,9 +134,17 @@ void Engine::loadDefaultLibraries()
   Q_D( Engine );
   // Make sure we can load default scriptable libraries if we're supposed to.
   if ( d->m_defaultLibraries.contains( __scriptableLibName ) ) {
+    d->m_scriptableTagLibrary = new ScriptableTagLibrary(this);
+
+    // It would be better to load this as a plugin, but that is not currently possible with webkit/javascriptcore
+    // so we new the library directly.
+    // https://bugs.webkit.org/show_bug.cgi?id=38193
+#if 0
+    d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
     PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
     if ( !library )
       throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Could not load scriptable tags library" ) );
+#endif
   }
 
   Q_FOREACH( const QString &libName, d->m_defaultLibraries ) {
@@ -178,7 +188,7 @@ TagLibraryInterface* EnginePrivate::loadLibrary( const QString &name, uint minor
 }
 
 EnginePrivate::EnginePrivate( Engine *engine )
-  : q_ptr( engine )
+  : q_ptr( engine ), m_scriptableTagLibrary( 0 )
 {
 }
 
@@ -186,8 +196,13 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
 {
   int pluginIndex = 0;
   QString libFileName;
+  if ( !m_scriptableTagLibrary )
+    return 0;
+
+#if 0
   if ( !m_libraries.contains( __scriptableLibName ) )
     return 0;
+#endif
 
   QStringList pluginDirs;
   if ( m_pluginDirs.isEmpty() )
@@ -202,10 +217,12 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     if ( !file.exists() )
       continue;
 
+#if 0
     PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
+#endif
 
-    QHash<QString, AbstractNodeFactory*> factories = scriptableTagLibrary->nodeFactories( libFileName );
-    QHash<QString, Filter*> filters = scriptableTagLibrary->filters( libFileName );
+    QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
+    QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
 
     TagLibraryInterface *library = new ScriptableLibraryContainer( factories, filters );
     m_scriptableLibraries << library;
