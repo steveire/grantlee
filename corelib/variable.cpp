@@ -29,6 +29,8 @@
 #include "context.h"
 #include "util.h"
 
+#include "metaenumvariable_p.h"
+
 using namespace Grantlee;
 
 namespace Grantlee
@@ -165,7 +167,7 @@ QVariant Variable::resolve( Context *c ) const
       return QVariant::fromValue<Grantlee::SafeString>( var.toString() );
     return QVariant();
   }
-  // Could be a list or a hash.
+  // Could be a list, hash or enum.
   return var;
 }
 
@@ -198,9 +200,59 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
       if ( QString( mp.name() ) != nextPart )
         continue;
 
-      return mp.read( obj );
+      if (mp.isEnumType())
+      {
+        MetaEnumVariable mev(mp.enumerator(), mp.read( obj ).toInt());
+        return QVariant::fromValue(mev);
+      }
 
+      return mp.read( obj );
     }
+    QMetaEnum me;
+    for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
+      me = metaObj->enumerator( i );
+
+      if (me.name() == nextPart)
+      {
+        MetaEnumVariable mev(me);
+        return QVariant::fromValue(mev);
+      }
+
+      const int value = me.keyToValue(nextPart.toLatin1());
+
+      if (value < 0)
+        continue;
+
+      MetaEnumVariable mev(me, value);
+
+      return QVariant::fromValue(mev);
+    }
+    return QVariant();
+  } else if ( qMetaTypeId<MetaEnumVariable>() == var.userType()){
+    MetaEnumVariable mev = var.value<MetaEnumVariable>();
+
+    if ( nextPart == "name" )
+      return mev.enumerator.name();
+    if ( nextPart == "value" )
+      return mev.value;
+    if ( nextPart == "key" )
+      return mev.enumerator.valueToKey( mev.value );
+    if ( nextPart == "scope" )
+      return mev.enumerator.scope();
+    if ( nextPart == "keyCount" )
+      return mev.enumerator.keyCount();
+
+    bool ok = false;
+    const int listIndex = nextPart.toInt( &ok );
+    if (ok)
+    {
+      if (listIndex >= mev.enumerator.keyCount())
+        return QVariant();
+
+      mev.value = mev.enumerator.value(listIndex);
+      return QVariant::fromValue(mev);
+    }
+
     return QVariant();
   } else {
     // List index test
@@ -218,4 +270,3 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
 
   return QVariant();
 }
-

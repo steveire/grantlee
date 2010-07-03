@@ -23,6 +23,7 @@
 #include "nodebuiltins_p.h"
 #include "util.h"
 #include "template.h"
+#include "metaenumvariable_p.h"
 
 using namespace Grantlee;
 
@@ -68,6 +69,10 @@ void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Co
   Grantlee::SafeString inputString;
   if ( input.type() == QVariant::List ) {
     inputString = toString( input.toList() );
+  } else if ( input.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    const MetaEnumVariable mev = input.value<MetaEnumVariable>();
+    if ( mev.value >= 0 )
+      ( *stream ) << QString::number( mev.value );
   } else {
     inputString = getSafeString( input );
   }
