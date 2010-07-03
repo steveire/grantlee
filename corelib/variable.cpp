@@ -135,13 +135,56 @@ bool Variable::isTrue( Context *c ) const
   return variantIsTrue( resolve( c ) );
 }
 
+class StaticQtMetaObject : public QObject
+{
+public:
+  static const QMetaObject* _smo() { return &QObject::staticQtMetaObject; }
+};
+
 QVariant Variable::resolve( Context *c ) const
 {
   Q_D( const Variable );
   QVariant var;
   if ( !d->m_lookups.isEmpty() ) {
     int i = 0;
-    var = c->lookup( d->m_lookups.at( i++ ) );
+    if ( d->m_lookups.at( i ) == "Qt" )
+    {
+      ++i;
+      const QString nextPart = d->m_lookups.at( i );
+      ++i;
+
+      static const QMetaObject *globalMetaObject = StaticQtMetaObject::_smo();
+
+      bool breakout = false;
+      for ( int j = 0; j < globalMetaObject->enumeratorCount(); ++j ) {
+        const QMetaEnum me = globalMetaObject->enumerator( j );
+
+        if (me.name() == nextPart)
+        {
+          MetaEnumVariable mev(me);
+          var = QVariant::fromValue(mev);
+          break;
+        }
+
+        for ( int k = 0; k < me.keyCount(); ++k )
+        {
+          if (me.key(k) == nextPart)
+          {
+            MetaEnumVariable mev(me, k);
+            var = QVariant::fromValue(mev);
+            breakout = true;
+            break;
+          }
+        }
+        if (breakout)
+          break;
+      }
+      if (!var.isValid())
+        return QVariant();
+
+    } else {
+      var = c->lookup( d->m_lookups.at( i++ ) );
+    }
     while ( i < d->m_lookups.size() ) {
       var = d->resolvePart( var, d->m_lookups.at( i++ ) );
       if ( !var.isValid() )

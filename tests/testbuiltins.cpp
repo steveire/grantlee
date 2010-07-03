@@ -534,6 +534,13 @@ void TestBuiltinSyntax::testEnums_data()
                                         "{{ result }},{{ result.scope }}"
                                       "{% endwith %}"
                                    << dict << "2,4,8,Voter,Consumer,Citizen,,SomeClass" << NoError;
+
+  QTest::newRow( "qt-enums01" ) << "{{ Qt.AlignRight }}" << dict << "2" << NoError;
+  QTest::newRow( "qt-enums02" ) << "{{ Qt.AlignRight.scope }}" << dict << "Qt" << NoError;
+  QTest::newRow( "qt-enums03" ) << "{{ Qt.AlignRight.name }}" << dict << "Alignment" << NoError;
+  QTest::newRow( "qt-enums04" ) << "{{ Qt.AlignRight.value }}" << dict << "2" << NoError;
+  QTest::newRow( "qt-enums05" ) << "{{ Qt.AlignRight.key }}" << dict << "AlignRight" << NoError;
+  QTest::newRow( "qt-enums06" ) << "{{ Qt.Alignment.2.key }}" << dict << "AlignRight" << NoError;
 }
 
 void TestBuiltinSyntax::testListIndex_data()
