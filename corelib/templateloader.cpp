@@ -130,7 +130,9 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
 
     file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
     QFileInfo fi( file );
-    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
+
+    if ( file.exists() &&
+          !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
       return Template();
     ++i;
   }

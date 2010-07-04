@@ -130,6 +130,176 @@ namespace Grantlee
 
   For most uses of %Grantlee, this is enough to get make an application themable easily and quickly. For more advanced usage, see @ref extension. For some example uses of %Grantlee, see @ref examples.
 
+  @subsection enumerator_variables Enumerators
+
+  %Grantlee has built-in support for enumerators which use the Q_ENUMS macro.
+
+  @code
+  class MyClass : public QObject
+  {
+    Q_OBJECT
+    Q_ENUMS(PersonName)
+    Q_PROPERTY(PersonName personName READ personName)
+  public:
+
+    enum PersonName
+    {
+      Mike,
+      Natalie,
+      Oliver,
+      Patrica = 9
+      Quentin
+    };
+
+    MyClass(QObject *parent = 0 );
+
+    PersonName personName() const { return Quentin; }
+
+  };
+
+  ...
+
+  {
+    QObject *object = new MyClass(this);
+    context.insert("myObj", object);
+    t->render(context);
+  }
+  @endcode
+
+  The enums can be used and accessed in various ways. See QMetaEnum for details.
+
+  @code
+    Oliver is value {{ myObj.Oliver }}.
+    // Output: "Oliver is value 2".
+
+    ...
+
+    Oliver key is {{ myObj.Oliver.key }}.
+    // Output: "Oliver key is Oliver".
+
+    ...
+
+    Oliver value is {{ myObj.Oliver.value }}.
+    // Output: "Oliver value is 2".
+
+    ...
+
+    Oliver scope is {{ myObj.Oliver.scope }}.
+    // Output: "Oliver scope is MyClass".
+
+    ...
+
+    Oliver scope is {{ myObj.Oliver.name }}.
+    // Output: "Oliver scope is PersonName".
+
+    ...
+
+    Patrica is value {{ myObj.Patrica }}.
+    // Output: "Patrica is value 9".
+
+    ...
+
+    PersonName has {{ myObj.PersonName.keyCount }} items.
+    // Output: "PersonName has 5 items".
+
+    ...
+
+    Second item is {{ myObj.PersonName.1 }}.
+    // Output: "Second item is 1".
+
+    ...
+
+    Second item is {{ myObj.PersonName.1.key }}.
+    // Output: "Second item is Natalie".
+
+    ...
+
+    Fourth item is {{ myObj.PersonName.3 }}.
+    // Output: "Fourth item is 9".
+
+    ...
+
+    Fourth item is {{ myObj.PersonName.3.key }}.
+    // Output: "Fourth item is Patrica".
+
+    ...
+
+    The personName property is {{ myObj.personName }}.
+    // Output: "The personName property is 10".
+
+    ...
+
+    The personName property is {{ myObj.personName.key }}.
+    // Output: "The personName property is Quentin".
+
+    ...
+
+    The personName type is {{ myObj.personName.scope }}.
+    // Output: "The personName type is PersonName".
+
+    ...
+
+    The personName is {% with myObj.personName as var %}{{ var }}, {{ var.key }}{% endwith %}.
+    // Output: "The personName is 10, Quentin".
+
+    ...
+
+    The enum is {% with myObj.PersonName as enum %}{{ enum.3 }}, {{ enum.4 }}, {{ enum.4.key }}{% endwith %}.
+    // Output: "The enum is 9, 10, Quentin".
+
+    ...
+
+    The enum is {% for enum in myObj.PersonName %}{{ enum }} : {{ enum.key }}, {% endfor %}.
+    // Output: "The enum 0 : Mike, 1 : Natalie, 2 : Oliver, 9 : Patrica, 10 : Quentin, ".
+
+    ...
+
+    The enum is {% for enum in myObj.PersonName %}
+                    {% ifequal enum Oliver %}**{{ enum }} : {{ enum.key }}**
+                    {% else %}{{ enum }} : {{ enum.key }},
+                    {% endifequal %}
+                {% endfor %}.
+    // Output: "The enum 0 : Mike, 1 : Natalie, **2 : Oliver**, 9 : Patrica, 10 : Quentin, ".
+
+    ...
+
+    The enum is {% for enum in myObj.PersonName %}
+                    {% ifequal enum myObj.personName %}**{{ enum }} : {{ enum.key }}**
+                    {% else %}{{ enum }} : {{ enum.key }},
+                    {% endifequal %}
+                {% endfor %}.
+    // Output: "The enum 0 : Mike, 1 : Natalie, 2 : Oliver, 9 : Patrica, **10 : Quentin**, ".
+  @endcode
+
+  Enumerators in the Qt namespaces are also supported.
+
+  @code
+    AlignRight value is {{ Qt.AlignRight }}.
+    // Output: "AlignRight value is 2".
+
+    ...
+
+    AlignRight key is {{ Qt.AlignRight.key }}.
+    // Output: "AlignRight value is AlignRight".
+
+    ...
+
+    AlignRight scope is {{ Qt.AlignRight.scope }}.
+    // Output: "AlignRight scope is Qt".
+
+    ...
+
+    AlignRight name is {{ Qt.AlignRight.name }}.
+    // Output: "AlignRight scope is Alignment".
+
+    ...
+
+    {% ifequal myObj.alignment Qt.AlignRight %}RightAligned{% else %}Not RightAligned{% endifequal %}.
+    // Output: "RightAligned". or "Not RightAligned", depending on the value of myObj.alignment.
+
+    ...
+  @endcode
+
 */
 
 }

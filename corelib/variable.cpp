@@ -29,6 +29,8 @@
 #include "context.h"
 #include "util.h"
 
+#include "metaenumvariable_p.h"
+
 using namespace Grantlee;
 
 namespace Grantlee
@@ -133,13 +135,56 @@ bool Variable::isTrue( Context *c ) const
   return variantIsTrue( resolve( c ) );
 }
 
+class StaticQtMetaObject : public QObject
+{
+public:
+  static const QMetaObject* _smo() { return &QObject::staticQtMetaObject; }
+};
+
 QVariant Variable::resolve( Context *c ) const
 {
   Q_D( const Variable );
   QVariant var;
   if ( !d->m_lookups.isEmpty() ) {
     int i = 0;
-    var = c->lookup( d->m_lookups.at( i++ ) );
+    if ( d->m_lookups.at( i ) == "Qt" )
+    {
+      ++i;
+      const QString nextPart = d->m_lookups.at( i );
+      ++i;
+
+      static const QMetaObject *globalMetaObject = StaticQtMetaObject::_smo();
+
+      bool breakout = false;
+      for ( int j = 0; j < globalMetaObject->enumeratorCount(); ++j ) {
+        const QMetaEnum me = globalMetaObject->enumerator( j );
+
+        if (me.name() == nextPart)
+        {
+          MetaEnumVariable mev(me);
+          var = QVariant::fromValue(mev);
+          break;
+        }
+
+        for ( int k = 0; k < me.keyCount(); ++k )
+        {
+          if (me.key(k) == nextPart)
+          {
+            MetaEnumVariable mev(me, k);
+            var = QVariant::fromValue(mev);
+            breakout = true;
+            break;
+          }
+        }
+        if (breakout)
+          break;
+      }
+      if (!var.isValid())
+        return QVariant();
+
+    } else {
+      var = c->lookup( d->m_lookups.at( i++ ) );
+    }
     while ( i < d->m_lookups.size() ) {
       var = d->resolvePart( var, d->m_lookups.at( i++ ) );
       if ( !var.isValid() )
@@ -165,7 +210,7 @@ QVariant Variable::resolve( Context *c ) const
       return QVariant::fromValue<Grantlee::SafeString>( var.toString() );
     return QVariant();
   }
-  // Could be a list or a hash.
+  // Could be a list, hash or enum.
   return var;
 }
 
@@ -198,9 +243,59 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
       if ( QString( mp.name() ) != nextPart )
         continue;
 
-      return mp.read( obj );
+      if (mp.isEnumType())
+      {
+        MetaEnumVariable mev(mp.enumerator(), mp.read( obj ).toInt());
+        return QVariant::fromValue(mev);
+      }
 
+      return mp.read( obj );
     }
+    QMetaEnum me;
+    for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
+      me = metaObj->enumerator( i );
+
+      if (me.name() == nextPart)
+      {
+        MetaEnumVariable mev(me);
+        return QVariant::fromValue(mev);
+      }
+
+      const int value = me.keyToValue(nextPart.toLatin1());
+
+      if (value < 0)
+        continue;
+
+      MetaEnumVariable mev(me, value);
+
+      return QVariant::fromValue(mev);
+    }
+    return QVariant();
+  } else if ( qMetaTypeId<MetaEnumVariable>() == var.userType()){
+    MetaEnumVariable mev = var.value<MetaEnumVariable>();
+
+    if ( nextPart == "name" )
+      return mev.enumerator.name();
+    if ( nextPart == "value" )
+      return mev.value;
+    if ( nextPart == "key" )
+      return mev.enumerator.valueToKey( mev.value );
+    if ( nextPart == "scope" )
+      return mev.enumerator.scope();
+    if ( nextPart == "keyCount" )
+      return mev.enumerator.keyCount();
+
+    bool ok = false;
+    const int listIndex = nextPart.toInt( &ok );
+    if (ok)
+    {
+      if (listIndex >= mev.enumerator.keyCount())
+        return QVariant();
+
+      mev.value = mev.enumerator.value(listIndex);
+      return QVariant::fromValue(mev);
+    }
+
     return QVariant();
   } else {
     // List index test
@@ -218,4 +313,3 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
 
   return QVariant();
 }
-

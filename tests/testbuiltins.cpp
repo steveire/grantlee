@@ -44,10 +44,20 @@ class OtherClass : public QObject
 {
   Q_OBJECT
   Q_PROPERTY( QString method READ method )
-
+  Q_PROPERTY( Animals animals READ animals )
 public:
   OtherClass( QObject *parent = 0 )
       : QObject( parent ) { }
+
+  enum Animals
+  {
+    Lions,
+    Tigers,
+    Bears
+  };
+
+  Q_ENUMS(Animals)
+  Animals animals() const { return Tigers; }
 
   QString method() const {
     return "OtherClass::method";
@@ -65,6 +75,22 @@ class SomeClass : public QObject
   Q_PROPERTY( QVariant otherClass READ otherClass )
 
 public:
+  enum FirstEnum
+  {
+    Employee,
+    Employer,
+    Manager
+  };
+
+  enum SecondEnum
+  {
+    Voter = 2,
+    Consumer = 4,
+    Citizen = 8
+  };
+
+  Q_ENUMS(FirstEnum SecondEnum)
+
   SomeClass( QObject *parent = 0 )
       : QObject( parent ), m_other( new OtherClass( this ) ) { }
 
@@ -168,6 +194,11 @@ private Q_SLOTS:
 
   void testBasicSyntax_data();
   void testBasicSyntax() {
+    doTest();
+  }
+
+  void testEnums_data();
+  void testEnums() {
     doTest();
   }
 
@@ -434,7 +465,109 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.insert( "1", "abc" );
   QTest::newRow( "basic-syntax33" ) << "{{ 1 }}" << dict << "1" << NoError;
   QTest::newRow( "basic-syntax34" ) << "{{ 1.2 }}" << dict << "1.2" << NoError;
+}
 
+void TestBuiltinSyntax::testEnums_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QObject *otherClass = new OtherClass( this );
+  dict.insert( "var", QVariant::fromValue( otherClass ) );
+
+  QTest::newRow( "class-enums01" ) << "{{ var.Lions }}" << dict << "0" << NoError;
+  QTest::newRow( "class-enums02" ) << "{{ var.Tigers }}" << dict << "1" << NoError;
+  QTest::newRow( "class-enums03" ) << "{{ var.Bears }}" << dict << "2" << NoError;
+  QTest::newRow( "class-enums04" ) << "{{ var.Hamsters }}" << dict << "" << NoError;
+  QTest::newRow( "class-enums05" ) << "{{ var.Tigers.name }}" << dict << "Animals" << NoError;
+  QTest::newRow( "class-enums06" ) << "{{ var.Tigers.scope }}" << dict << "OtherClass" << NoError;
+  QTest::newRow( "class-enums07" ) << "{{ var.Tigers.value }}" << dict << "1" << NoError;
+  QTest::newRow( "class-enums08" ) << "{{ var.Tigers.key }}" << dict << "Tigers" << NoError;
+  QTest::newRow( "class-enums09" ) << "{{ var.animals }}" << dict << "1" << NoError;
+  QTest::newRow( "class-enums10" ) << "{{ var.animals.name }}" << dict << "Animals" << NoError;
+  QTest::newRow( "class-enums11" ) << "{{ var.animals.scope }}" << dict << "OtherClass" << NoError;
+  QTest::newRow( "class-enums12" ) << "{{ var.animals.value }}" << dict << "1" << NoError;
+  QTest::newRow( "class-enums13" ) << "{{ var.animals.key }}" << dict << "Tigers" << NoError;
+  QTest::newRow( "class-enums14" ) << "{{ var.Animals.0 }}" << dict << "0" << NoError;
+  QTest::newRow( "class-enums15" ) << "{{ var.Animals.2 }}" << dict << "2" << NoError;
+  QTest::newRow( "class-enums16" ) << "{{ var.Animals.3 }}" << dict << "" << NoError;
+  QTest::newRow( "class-enums17" ) << "{{ var.Animals.0.name }}" << dict << "Animals" << NoError;
+  QTest::newRow( "class-enums18" ) << "{{ var.Animals.0.scope }}" << dict << "OtherClass" << NoError;
+  QTest::newRow( "class-enums19" ) << "{{ var.Animals.0.value }}" << dict << "0" << NoError;
+  QTest::newRow( "class-enums20" ) << "{{ var.Animals.0.key }}" << dict << "Lions" << NoError;
+  QTest::newRow( "class-enums21" ) << "{{ var.Animals.2.key }}" << dict << "Bears" << NoError;
+  QTest::newRow( "class-enums22" ) << "{{ var.Tigers.samba }}" << dict << "" << NoError;
+  QTest::newRow( "class-enums23" )
+      << "{% with var.animals as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" << dict
+      << "Tigers,1,OtherClass" << NoError;
+  QTest::newRow( "class-enums24" )
+      << "{% with var.Animals.2 as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" << dict
+      << "Bears,2,OtherClass" << NoError;
+  QTest::newRow( "class-enums25" )
+      << "{% with var.Bears as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" << dict
+      << "Bears,2,OtherClass" << NoError;
+  QTest::newRow( "class-enums26" )
+      << "{% with var.Animals as result %}{{ result.0.key }},{{ result.1.key }},{{ result.2.key }}{% endwith %}" << dict
+      << "Lions,Tigers,Bears" << NoError;
+
+  dict.clear();
+
+  QObject *someClass = new SomeClass( this );
+  dict.insert( "var", QVariant::fromValue( someClass ) );
+
+  QTest::newRow( "class-enums27" ) << "{{ var.Employee }}" << dict << "0" << NoError;
+  QTest::newRow( "class-enums28" ) << "{{ var.Employer }}" << dict << "1" << NoError;
+  QTest::newRow( "class-enums29" ) << "{{ var.Manager }}" << dict << "2" << NoError;
+  QTest::newRow( "class-enums30" ) << "{{ var.Voter }}" << dict << "2" << NoError;
+  QTest::newRow( "class-enums31" ) << "{{ var.Consumer }}" << dict << "4" << NoError;
+  QTest::newRow( "class-enums32" ) << "{{ var.Citizen }}" << dict << "8" << NoError;
+  QTest::newRow( "class-enums33" ) << "{{ var.FirstEnum }}" << dict << "" << NoError;
+  QTest::newRow( "class-enums34" ) << "{{ var.SecondEnum }}" << dict << "" << NoError;
+
+  QTest::newRow( "class-enums35" ) << "{% with var.SecondEnum as result %}"
+                                        "{{ result.0 }},{{ result.1 }},{{ result.2 }},"
+                                        "{{ result.0.key }},{{ result.1.key }},{{ result.2.key }},"
+                                        "{{ result }},{{ result.scope }}"
+                                      "{% endwith %}"
+                                   << dict << "2,4,8,Voter,Consumer,Citizen,,SomeClass" << NoError;
+
+  dict.insert( "var", QVariant::fromValue( otherClass ) );
+
+  QTest::newRow( "enums-loops01" ) << "{% for enum in var.Animals %}{% ifequal enum var.Tigers %}"
+                                      "<b>{{ enum.key }}</b>{% else %}{{ enum.key }}{% endifequal %},"
+                                      "{% empty %}No content{% endfor %}"
+                                   << dict << "Lions,<b>Tigers</b>,Bears," << NoError;
+
+  QTest::newRow( "enums-loops02" ) << "{% for enum in var.Tigers %}"
+                                        "{% ifequal enum result %}<b>{{ enum.key }}</b>"
+                                        "{% else %}{{ enum.key }}{% endifequal %},"
+                                      "{% empty %}No content"
+                                      "{% endfor %}"
+                                   << dict << "No content" << NoError;
+
+  QTest::newRow( "enums-loops03" ) << "{% with var.animals as result %}"
+                                        "{% for enum in var.Animals %}"
+                                          "{% ifequal enum result %}<b>{{ enum.key }}</b>"
+                                          "{% else %}{{ enum.key }}{% endifequal %},"
+                                        "{% empty %}No content"
+                                        "{% endfor %}"
+                                      "{% endwith %}"
+                                   << dict << "Lions,<b>Tigers</b>,Bears," << NoError;
+
+  QTest::newRow( "enums-keycount01" ) << "{{ var.Animals.keyCount }}" << dict << "3" << NoError;
+  QTest::newRow( "enums-keycount02" ) << "{{ var.Lions.keyCount }}" << dict << "3" << NoError;
+  QTest::newRow( "enums-keycount02" ) << "{{ var.animals.keyCount }}" << dict << "3" << NoError;
+
+  QTest::newRow( "qt-enums01" ) << "{{ Qt.AlignRight }}" << dict << "2" << NoError;
+  QTest::newRow( "qt-enums02" ) << "{{ Qt.AlignRight.scope }}" << dict << "Qt" << NoError;
+  QTest::newRow( "qt-enums03" ) << "{{ Qt.AlignRight.name }}" << dict << "Alignment" << NoError;
+  QTest::newRow( "qt-enums04" ) << "{{ Qt.AlignRight.value }}" << dict << "2" << NoError;
+  QTest::newRow( "qt-enums05" ) << "{{ Qt.AlignRight.key }}" << dict << "AlignRight" << NoError;
+  QTest::newRow( "qt-enums06" ) << "{{ Qt.Alignment.2.key }}" << dict << "AlignRight" << NoError;
 }
 
 void TestBuiltinSyntax::testListIndex_data()
