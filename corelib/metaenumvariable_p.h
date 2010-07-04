@@ -42,6 +42,15 @@ struct MetaEnumVariable
   {
   }
 
+  bool operator==(const MetaEnumVariable &other) const {
+    return ( enumerator.scope() == other.enumerator.scope() && enumerator.name() == other.enumerator.name() )
+        && value == other.value;
+  }
+
+  bool operator==(int otherValue) const {
+    return value == otherValue;
+  }
+
   QMetaEnum enumerator;
   int value;
 };

@@ -19,6 +19,7 @@
 */
 
 #include "util.h"
+#include "metaenumvariable_p.h"
 
 QString Grantlee::unescapeStringLiteral( const QString &input )
 {
@@ -86,6 +87,18 @@ QVariantList Grantlee::variantToList( const QVariant &var )
     return list;
   }
 
+  if ( var.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    MetaEnumVariable mev = var.value<MetaEnumVariable>();
+    if (mev.value != -1)
+      return QVariantList();
+
+    QVariantList list;
+    for (int row = 0; row < mev.enumerator.keyCount(); ++row) {
+      list << QVariant::fromValue( MetaEnumVariable( mev.enumerator, row ) );
+    }
+    return list;
+  }
+
   if ( var.userType() == QMetaType::QObjectStar ) {
     QObject *obj = var.value<QObject*>();
     if ( obj->property( "__list__" ).isValid() ) {
@@ -145,6 +158,8 @@ bool Grantlee::supportedOutputType( const QVariant &input )
 bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
 {
 
+  // TODO: Redesign...
+
   // QVariant doesn't use operator== to compare its held data, so we do it manually instead for SafeString.
   bool equal = false;
   if ( lhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
@@ -155,7 +170,17 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
     }
   } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && lhs.userType() == QVariant::String ) {
     equal = ( rhs.value<Grantlee::SafeString>() == lhs.toString() );
-  }  else {
+  } else if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    if (lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+      equal = ( rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>() );
+    } else if ( lhs.type() == QVariant::Int ) {
+      equal = ( rhs.value<MetaEnumVariable>() == lhs.toInt() );
+    }
+  } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    if ( rhs.type() == QVariant::Int ) {
+      equal = ( lhs.value<MetaEnumVariable>() == rhs.toInt() );
+    }
+  } else {
     equal = (( lhs == rhs ) && ( lhs.userType() == rhs.userType() ) );
   }
   return equal;

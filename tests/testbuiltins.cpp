@@ -535,6 +535,33 @@ void TestBuiltinSyntax::testEnums_data()
                                       "{% endwith %}"
                                    << dict << "2,4,8,Voter,Consumer,Citizen,,SomeClass" << NoError;
 
+  dict.insert( "var", QVariant::fromValue( otherClass ) );
+
+  QTest::newRow( "enums-loops01" ) << "{% for enum in var.Animals %}{% ifequal enum var.Tigers %}"
+                                      "<b>{{ enum.key }}</b>{% else %}{{ enum.key }}{% endifequal %},"
+                                      "{% empty %}No content{% endfor %}"
+                                   << dict << "Lions,<b>Tigers</b>,Bears," << NoError;
+
+  QTest::newRow( "enums-loops02" ) << "{% for enum in var.Tigers %}"
+                                        "{% ifequal enum result %}<b>{{ enum.key }}</b>"
+                                        "{% else %}{{ enum.key }}{% endifequal %},"
+                                      "{% empty %}No content"
+                                      "{% endfor %}"
+                                   << dict << "No content" << NoError;
+
+  QTest::newRow( "enums-loops03" ) << "{% with var.animals as result %}"
+                                        "{% for enum in var.Animals %}"
+                                          "{% ifequal enum result %}<b>{{ enum.key }}</b>"
+                                          "{% else %}{{ enum.key }}{% endifequal %},"
+                                        "{% empty %}No content"
+                                        "{% endfor %}"
+                                      "{% endwith %}"
+                                   << dict << "Lions,<b>Tigers</b>,Bears," << NoError;
+
+  QTest::newRow( "enums-keycount01" ) << "{{ var.Animals.keyCount }}" << dict << "3" << NoError;
+  QTest::newRow( "enums-keycount02" ) << "{{ var.Lions.keyCount }}" << dict << "3" << NoError;
+  QTest::newRow( "enums-keycount02" ) << "{{ var.animals.keyCount }}" << dict << "3" << NoError;
+
   QTest::newRow( "qt-enums01" ) << "{{ Qt.AlignRight }}" << dict << "2" << NoError;
   QTest::newRow( "qt-enums02" ) << "{{ Qt.AlignRight.scope }}" << dict << "Qt" << NoError;
   QTest::newRow( "qt-enums03" ) << "{{ Qt.AlignRight.name }}" << dict << "Alignment" << NoError;
