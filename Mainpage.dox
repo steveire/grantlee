@@ -15,7 +15,7 @@ namespace Grantlee
 
   %Grantlee is covered by the GNU Lesser General Public Licence version 2.1 or, at your option, any later version.
 
-  @note This version of Grantlee is experimental API. There will likely be minor backwards source and binary incompatible changes in the next minor version.
+  @note This version of %Grantlee is experimental API. There will likely be minor backwards source and binary incompatible changes in the next minor version.
 
   @section start_howto How to use Grantlee
 
