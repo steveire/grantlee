@@ -4,8 +4,14 @@ if [ -n "$1" ]
 then
   version=$1
 else
-  echo "This script takes one argument- a version string."
+  echo "This script takes one required argument- a version string, and an optional argument for the tarball name fragment."
   exit
+fi
+if [ -n "$2" ]
+then
+  name_fragment=$2
+else
+  name_fragment=$1
 fi
 
 tempDir="/tmp/grantlee-release"
@@ -15,12 +21,12 @@ then
   mkdir $tempDir
 fi
 
-echo Creating $tempDir/grantlee-$version.tar.gz
+echo Creating $tempDir/grantlee-$name_fragment.tar.gz
 
-git archive --format=tar --prefix=grantlee-$version/ $version | gzip > $tempDir/grantlee-$version.tar.gz
+git archive --format=tar --prefix=grantlee-$name_fragment/ $version | gzip > $tempDir/grantlee-$name_fragment.tar.gz
 
-echo Unpacking to $tempDir/grantlee-$version
-tar -C $tempDir -xvf $tempDir/grantlee-$version.tar.gz
+echo Unpacking to $tempDir/grantlee-$name_fragment
+tar -C $tempDir -xvf $tempDir/grantlee-$name_fragment.tar.gz
 
 if [ "$?" -ne "0" ]
 then
@@ -31,7 +37,7 @@ fi
 oldDir=$PWD
 
 echo Creating build directory
-mkdir -p $tempDir/grantlee-$version/build && cd $tempDir/grantlee-$version/build
+mkdir -p $tempDir/grantlee-$name_fragment/build && cd $tempDir/grantlee-$name_fragment/build
 
 echo Building.
 cmake -DCMAKE_INSTALL_PREFIX=../prefix ..
@@ -41,9 +47,9 @@ echo "Testing"
 cd tests && ctest
 
 
-echo Copying archive to $oldDir/grantlee-$version.tar.gz
-cp $tempDir/grantlee-$version.tar.gz $oldDir
+echo Copying archive to $oldDir/grantlee-$name_fragment.tar.gz
+cp $tempDir/grantlee-$name_fragment.tar.gz $oldDir
 
 cd $oldDir
-md5sum grantlee-$version.tar.gz > grantlee-$version-md5.txt
+md5sum grantlee-$name_fragment.tar.gz > grantlee-$name_fragment-md5.txt
 
