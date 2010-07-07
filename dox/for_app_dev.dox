@@ -33,7 +33,7 @@ namespace Grantlee
     mapping.insert("name", "Henry");
     c = Grantlee::Context(mapping);
 
-    t.render(&c); // Returns "My name is Henry."
+    t->render(&c); // Returns "My name is Henry."
   @endcode
 
   Ususally, applications will not create a Template directly, but instead use a Grantlee::Engine to load external files. This allows artists to define the template without needing to recompile.
