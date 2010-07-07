@@ -51,5 +51,5 @@ echo Copying archive to $oldDir/grantlee-$name_fragment.tar.gz
 cp $tempDir/grantlee-$name_fragment.tar.gz $oldDir
 
 cd $oldDir
-md5sum grantlee-$name_fragment.tar.gz > grantlee-$name_fragment-md5.txt
+gpg --detach-sign --armor grantlee-$name_fragment.tar.gz
 
