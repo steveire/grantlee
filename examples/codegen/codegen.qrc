@@ -13,5 +13,10 @@
   <file>templates/py/bsd.py</file>
   <file>templates/py/args.py</file>
   <file>templates/py/class.py</file>
+  <file>templates/rb/lgpl.rb</file>
+  <file>templates/rb/gpl.rb</file>
+  <file>templates/rb/bsd.rb</file>
+  <file>templates/rb/args.rb</file>
+  <file>templates/rb/class.rb</file>
 </qresource>
 </RCC>

@@ -42,6 +42,11 @@
        <string>py</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>rb</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="0">
