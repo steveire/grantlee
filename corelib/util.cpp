@@ -21,6 +21,8 @@
 #include "util.h"
 #include "metaenumvariable_p.h"
 
+#include <QStringList>
+
 QString Grantlee::unescapeStringLiteral( const QString &input )
 {
   return input.mid( 1, input.size() - 2 )
@@ -74,6 +76,13 @@ QVariantList Grantlee::variantToList( const QVariant &var )
 
   if ( var.type() == QVariant::List ) {
     return var.toList();
+  }
+
+  if ( var.type() == QVariant::StringList ) {
+    QVariantList list;
+    foreach(const QString &_string, var.toStringList())
+      list << _string;
+    return list;
   }
 
   if ( var.type() == QVariant::Hash ) {
