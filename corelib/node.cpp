@@ -188,7 +188,20 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
 
 QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
 {
-  QRegExp r( "(\"(?:[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\"|\\\'(?:[^\\\'\\\\]*(?:\\\\.[^\\\'\\\\]*)*)\\\'|[^\\s]+)" );
+  static const QRegExp r( "("                                   // match
+                            "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
+                              "(?:"                             // followed by
+                                "(?:\""                         // Either a quote starting with "
+                                  "(?:[^\"\\\\]|\\\\.)*\""      // followed by anything that is not the end of the quote
+                                "|\'"                           // Or a quote starting with '
+                                  "(?:[^\'\\\\]|\\\\.)*\'"      // followed by anything that is not the end of the quote
+                                ")"                             // (End either)
+                                "[^\\s\'\"]*"                   // To the start of the next such fragment
+                              ")+"                              // Perform multiple matches of the above.
+                            ")"                                 // End of quoted string handling.
+                            "|\\S+"                             // Apart from quoted strings, match non-whitespace fragments also
+                          ")"                                   // End match
+                        );
 
   QStringList l;
   int count = 0;
