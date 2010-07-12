@@ -16,6 +16,12 @@ if (BUILD_MAIN_PLUGINS)
   add_subdirectory(defaultfilters)
 endif()
 
+
+if (BUILD_I18N_PLUGIN)
+  add_subdirectory(i18n)
+endif()
+
+
 if (BUILD_SCRIPT_PLUGIN)
 #  add_subdirectory(scriptabletags)
 endif()

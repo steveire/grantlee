@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.6)
 option( BUILD_CORE "Build the Grantlee template library" TRUE )
 option( BUILD_GUI "Build the Grantlee textdocument library" TRUE )
 option( BUILD_MAIN_PLUGINS "Build the Grantlee plugins" TRUE )
+option( BUILD_I18N_PLUGIN "Build the i18n plugin" TRUE )
 option( BUILD_SCRIPT_PLUGIN "Build the Grantlee scriptable tags plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 
