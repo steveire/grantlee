@@ -34,7 +34,7 @@ using namespace Grantlee;
 NodeList TemplatePrivate::compileString( const QString &str )
 {
   Q_Q( TemplateImpl );
-  Lexer l( str );
+  const Lexer l( str );
   Parser p( l.tokenize(), q );
 
   return p.parse( q );

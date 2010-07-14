@@ -100,7 +100,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
       break;
 
     file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
-    QFileInfo fi( file );
+    const QFileInfo fi( file );
 
     if ( file.exists() &&
           !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
@@ -112,9 +112,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
     return Template();
   }
 
-  QString content;
-  content = file.readAll();
-  return engine->newTemplate( content, fileName );
+  return engine->newTemplate( file.readAll(), fileName );
 }
 
 QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
@@ -127,7 +125,7 @@ QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fi
 
     file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
 
-    QFileInfo fi( file );
+    const QFileInfo fi( file );
     if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
     {
       ++i;
@@ -135,7 +133,6 @@ QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fi
     }
 
     if ( file.exists() ) {
-      QFileInfo fi( file );
       QString path = fi.absoluteFilePath();
       path.chop( fileName.size() );
       return qMakePair( path, fileName );
@@ -159,8 +156,7 @@ bool InMemoryTemplateLoader::canLoadTemplate( const QString &name ) const
 Template InMemoryTemplateLoader::loadByName( const QString& name, Engine const *engine ) const
 {
   if ( m_namedTemplates.contains( name ) ) {
-    Template t = engine->newTemplate( m_namedTemplates.value( name ), name );
-    return t;
+    return engine->newTemplate( m_namedTemplates.value( name ), name );
   }
   throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }

@@ -86,7 +86,7 @@ QVariant FixAmpersandsFilter::doFilter( const QVariant& input, const QVariant &a
   Q_UNUSED( autoescape )
   SafeString safeString = getSafeString( input );
 
-  QRegExp fixAmpersandsRegexp( "&(?!(\\w+|#\\d+);)" );
+  static const QRegExp fixAmpersandsRegexp( "&(?!(\\w+|#\\d+);)" );
 
   safeString.get().replace( fixAmpersandsRegexp, "&amp;" );
 
@@ -159,7 +159,7 @@ QVariant TitleFilter::doFilter( const QVariant& input, const QVariant &argument,
   Q_UNUSED( autoescape )
 //   QRegExp re( "\b([a-z])" );
 
-  QRegExp re( "([a-z])'([A-Z])" );
+  static const QRegExp re( "([a-z])'([A-Z])" );
 
   QString str = getSafeString( input );
 
@@ -266,7 +266,7 @@ QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argum
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
-  QRegExp tagRe( "<[^>]*>" );
+  static QRegExp tagRe( "<[^>]*>" );
   tagRe.setMinimal( true );
 
   QString value = getSafeString( input );
@@ -331,7 +331,7 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
 {
   Q_UNUSED( argument )
   SafeString inputString = getSafeString( input );
-  QRegExp re( "\n{2,}" );
+  static const QRegExp re( "\n{2,}" );
   QStringList output;
 
   Q_FOREACH( const QString &bit, inputString.get().split( re ) ) {

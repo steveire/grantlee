@@ -37,7 +37,7 @@ class NodePrivate
 
   }
   Q_DECLARE_PUBLIC( Node )
-  Node *q_ptr;
+  Node * const q_ptr;
 };
 
 class AbstractNodeFactoryPrivate
@@ -180,7 +180,7 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
   QList<FilterExpression> fes;
   QListIterator<QString> it( list );
   while ( it.hasNext() ) {
-    QString varString = it.next();
+    const QString varString = it.next();
     fes << FilterExpression( varString, p );
   }
   return fes;
@@ -209,7 +209,7 @@ QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
   while (( pos = r.indexIn( str, pos ) ) != -1 ) {
     ++count;
     pos += r.matchedLength();
-    l << r.capturedTexts().at( 0 );
+    l << r.capturedTexts().first();
   }
 
   return l;

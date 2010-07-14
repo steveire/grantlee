@@ -51,7 +51,7 @@ class TemplatePrivate
   void setError( Error type, const QString &message );
 
   Q_DECLARE_PUBLIC( TemplateImpl )
-  TemplateImpl *q_ptr;
+  TemplateImpl * const q_ptr;
 
   qint64 m_settingsToken;
   Error m_error;

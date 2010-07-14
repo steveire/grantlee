@@ -64,8 +64,7 @@ bool Grantlee::variantIsTrue( const QVariant &variant )
   }
   }
 
-  Grantlee::SafeString str = getSafeString( variant );
-  return !str.get().isEmpty();
+  return !getSafeString( variant ).get().isEmpty();
 }
 
 QVariantList Grantlee::variantToList( const QVariant &var )
@@ -86,7 +85,7 @@ QVariantList Grantlee::variantToList( const QVariant &var )
   }
 
   if ( var.type() == QVariant::Hash ) {
-    QVariantHash varHash = var.toHash();
+    const QVariantHash varHash = var.toHash();
     QVariantList list;
 
     QVariantHash::const_iterator it = varHash.constBegin();
@@ -97,7 +96,7 @@ QVariantList Grantlee::variantToList( const QVariant &var )
   }
 
   if ( var.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-    MetaEnumVariable mev = var.value<MetaEnumVariable>();
+    const MetaEnumVariable mev = var.value<MetaEnumVariable>();
     if (mev.value != -1)
       return QVariantList();
 
@@ -147,12 +146,12 @@ Grantlee::SafeString Grantlee::getSafeString( const QVariant &input )
 
 bool Grantlee::isSafeString( const QVariant &input )
 {
-  int type = input.userType();
+  const int type = input.userType();
   return (( type == qMetaTypeId<Grantlee::SafeString>() )
           || type == QVariant::String );
 }
 
-bool Grantlee::supportedOutputType( const QVariant &input )
+static QList<int> getPrimitives()
 {
   QList<int> primitives;
   primitives << qMetaTypeId<Grantlee::SafeString>()
@@ -160,6 +159,12 @@ bool Grantlee::supportedOutputType( const QVariant &input )
              << QVariant::Int
              << QVariant::Double
              << QVariant::DateTime;
+  return primitives;
+}
+
+bool Grantlee::supportedOutputType( const QVariant &input )
+{
+  static const QList<int> primitives = getPrimitives();
   return primitives.contains( input.userType() );
 }
 
@@ -201,7 +206,7 @@ Grantlee::SafeString Grantlee::toString( const QVariantList &list )
   QVariantList::const_iterator it = list.constBegin();
   const QVariantList::const_iterator end = list.constEnd();
   while ( it != end ) {
-    QVariant item = *it;
+    const QVariant item = *it;
     if ( isSafeString( item ) ) {
       output.append( "u\'" );
       output.append( getSafeString( item ) );

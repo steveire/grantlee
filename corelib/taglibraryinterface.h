@@ -83,7 +83,7 @@ public:
   */
   virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
     Q_UNUSED( name );
-    QHash<QString, AbstractNodeFactory*> h;
+    static const QHash<QString, AbstractNodeFactory*> h;
     return h;
   };
 
@@ -92,7 +92,7 @@ public:
   */
   virtual QHash<QString, Filter*> filters( const QString &name = QString() ) {
     Q_UNUSED( name );
-    QHash<QString, Filter*> h;
+    static const QHash<QString, Filter*> h;
     return h;
   };
 };
