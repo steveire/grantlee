@@ -109,8 +109,8 @@ Variable::Variable( const QString &var )
     }
     if (( localVar.startsWith( '"' ) && localVar.endsWith( '"' ) )
         || ( localVar.startsWith( '\'' ) && localVar.endsWith( '\'' ) ) ) {
-      QString unesc = unescapeStringLiteral( localVar );
-      Grantlee::SafeString ss = markSafe( unesc );
+      const QString unesc = unescapeStringLiteral( localVar );
+      const Grantlee::SafeString ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
       d->m_lookups = localVar.split( '.' );
@@ -161,7 +161,7 @@ QVariant Variable::resolve( Context *c ) const
 
         if (me.name() == nextPart)
         {
-          MetaEnumVariable mev(me);
+          const MetaEnumVariable mev(me);
           var = QVariant::fromValue(mev);
           break;
         }
@@ -170,7 +170,7 @@ QVariant Variable::resolve( Context *c ) const
         {
           if (me.key(k) == nextPart)
           {
-            MetaEnumVariable mev(me, k);
+            const MetaEnumVariable mev(me, k);
             var = QVariant::fromValue(mev);
             breakout = true;
             break;
@@ -223,7 +223,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
 // * Property? (member in django)
 // * list index
   if ( QVariant::Hash == var.type() ) {
-    QVariantHash hash = var.toHash();
+    const QVariantHash hash = var.toHash();
     if ( hash.contains( nextPart ) )
       return hash.value( nextPart );
     return TypeAccessor<QVariantHash>::lookUp( hash, nextPart );
@@ -266,7 +266,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
       if (value < 0)
         continue;
 
-      MetaEnumVariable mev(me, value);
+      const MetaEnumVariable mev(me, value);
 
       return QVariant::fromValue(mev);
     }
@@ -301,10 +301,10 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
     // List index test
 
     bool ok = false;
-    int listIndex = nextPart.toInt( &ok );
+    const int listIndex = nextPart.toInt( &ok );
     if ( !ok )
       return QVariant();
-    QVariantList varList = variantToList( var );
+    const QVariantList varList = variantToList( var );
 
     if ( listIndex >= varList.size() )
       return QVariant();

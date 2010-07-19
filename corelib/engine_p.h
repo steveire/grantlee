@@ -42,7 +42,7 @@ class EnginePrivate
   PluginPointer<TagLibraryInterface> loadCppLibrary( const QString& name, uint minorVersion );
 
   Q_DECLARE_PUBLIC( Engine )
-  Engine *q_ptr;
+  Engine * const q_ptr;
 
   QHash<QString, PluginPointer<TagLibraryInterface> > m_libraries;
   QList<TagLibraryInterface*> m_scriptableLibraries;

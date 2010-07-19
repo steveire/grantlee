@@ -44,7 +44,7 @@ class FilterExpressionPrivate
   QStringList m_filterNames;
 
   Q_DECLARE_PUBLIC( FilterExpression )
-  FilterExpression *q_ptr;
+  FilterExpression * const q_ptr;
 };
 
 }
@@ -104,7 +104,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     while ( ( pos = sFilterRe.indexIn( vs, pos ) ) != -1 ) {
       len = sFilterRe.matchedLength();
       subString = vs.mid( pos, len );
-      int ssSize = subString.size();
+      const int ssSize = subString.size();
 
       if ( pos != lastPos ) {
         throw Grantlee::Exception( TagSyntaxError,
@@ -122,7 +122,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
       } else if ( subString.startsWith( FILTER_ARGUMENT_SEPARATOR ) ) {
         subString = subString.right( ssSize - 1 );
-        int lastFilter = d->m_filters.size();
+        const int lastFilter = d->m_filters.size();
         if ( subString.isEmpty() )
           throw Grantlee::Exception( EmptyVariableError,
               QString( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
@@ -141,7 +141,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
       lastPos = pos;
     }
 
-    QString remainder = vs.right( vs.size() - lastPos );
+    const QString remainder = vs.right( vs.size() - lastPos );
     if ( !remainder.isEmpty() ) {
       throw Grantlee::Exception( TagSyntaxError,
           QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
@@ -197,7 +197,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
   Q_FOREACH( const ArgFilter &argfilter, d->m_filters ) {
     Filter::Ptr filter = argfilter.first;
     filter->setStream( stream );
-    Variable argVar = argfilter.second;
+    const Variable argVar = argfilter.second;
     QVariant arg = argVar.resolve( c );
 
     if ( arg.isValid() ) {
@@ -215,7 +215,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
       }
     }
 
-    SafeString varString = getSafeString( var );
+    const SafeString varString = getSafeString( var );
 
     var = filter->doFilter( var, arg, c->autoEscape() );
 
@@ -241,7 +241,7 @@ QVariant FilterExpression::resolve( Context *c ) const
 
 QVariantList FilterExpression::toList( Context *c ) const
 {
-  QVariant var = resolve( c );
+  const QVariant var = resolve( c );
   return variantToList( var );
 }
 

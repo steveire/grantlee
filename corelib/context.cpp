@@ -40,7 +40,7 @@ class ContextPrivate
   }
 
   Q_DECLARE_PUBLIC( Context )
-  Context *q_ptr;
+  Context * const q_ptr;
 
   QList<QVariantHash> m_variantHashStack;
   bool m_autoescape;
@@ -106,7 +106,7 @@ QVariant Context::lookup( const QString &str ) const
   // return a variant from the stack.
   QListIterator<QVariantHash> i( d->m_variantHashStack );
   while ( i.hasNext() ) {
-    QVariantHash h = i.next();
+    const QVariantHash h = i.next();
     if ( h.contains( str ) ) {
       QVariant var = h.value( str );
       // If the user passed a string into the context, turn it into a Grantlee::SafeString.
@@ -124,7 +124,7 @@ void Context::push()
 {
   Q_D( Context );
 
-  QHash<QString, QVariant> hash;
+  const QHash<QString, QVariant> hash;
   d->m_variantHashStack.prepend( hash );
 }
 

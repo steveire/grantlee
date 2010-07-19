@@ -56,7 +56,7 @@ public:
 
   void openLibrary( TagLibraryInterface * library );
   Q_DECLARE_PUBLIC( Parser )
-  Parser *q_ptr;
+  Parser * const q_ptr;
 
   QList<Token> m_tokenList;
 
@@ -157,7 +157,7 @@ NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 void Parser::skipPast( const QString &tag )
 {
   while ( hasNextToken() ) {
-    Token token = takeNextToken();
+    const Token token = takeNextToken();
     if ( token.tokenType == BlockToken && token.content.trimmed() == tag )
       return;
   }
@@ -196,7 +196,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
   NodeList nodeList;
 
   while ( q->hasNextToken() ) {
-    Token token = q->takeNextToken();
+    const Token token = q->takeNextToken();
     if ( token.tokenType == TextToken ) {
       nodeList = extendNodeList( nodeList, new TextNode( token.content, parent ) );
     } else if ( token.tokenType == VariableToken ) {
@@ -229,7 +229,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         return nodeList;
       }
 
-      QStringList tagContents = token.content.split( ' ' );
+      const QStringList tagContents = token.content.split( ' ' );
       if ( tagContents.size() == 0 ) {
         QString message;
         if ( q->hasNextToken() )
@@ -239,7 +239,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
 
         throw Grantlee::Exception( EmptyBlockTagError, message );
       }
-      QString command = tagContents.at( 0 );
+      const QString command = tagContents.first();
       AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
 
       // unknown tag.
@@ -267,7 +267,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
   }
 
   if ( !stopAt.isEmpty() ) {
-    QString message = QString( "Unclosed tag in template %1. Expected one of: (%2)" ).arg( q->parent()->objectName() ).arg( stopAt.join( " " ) );
+    const QString message = QString( "Unclosed tag in template %1. Expected one of: (%2)" ).arg( q->parent()->objectName() ).arg( stopAt.join( " " ) );
     throw Grantlee::Exception( UnclosedBlockTagError, message );
   }
 
@@ -278,20 +278,20 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
 bool Parser::hasNextToken() const
 {
   Q_D( const Parser );
-  return d->m_tokenList.size() > 0;
+  return !d->m_tokenList.isEmpty();
 }
 
 Token Parser::takeNextToken()
 {
   Q_D( Parser );
-  return d->m_tokenList.takeAt( 0 );
+  return d->m_tokenList.takeFirst();
 }
 
 void Parser::removeNextToken()
 {
   Q_D( Parser );
   if ( !d->m_tokenList.isEmpty() )
-    d->m_tokenList.removeAt( 0 );
+    d->m_tokenList.removeFirst();;
 }
 
 void Parser::prependToken( const Token &token )

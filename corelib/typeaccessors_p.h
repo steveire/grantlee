@@ -45,7 +45,7 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
   }
 
   if ( part == QLatin1String( "keys" ) ) {
-    QStringList keys = object.keys();
+    const QStringList keys = object.keys();
     QVariantList list;
     Q_FOREACH( const QString &key, keys )
       list << key;
@@ -59,15 +59,27 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
   return QVariant();
 }
 
+static QRegExp getIsTitleRegexp() {
+  QRegExp titleRe( "\\b[a-z]" );
+  titleRe.setMinimal( true );
+  return titleRe;
+}
+
+static QRegExp getTitleRegexp() {
+  QRegExp titleRe( "\\b(.)" );
+  titleRe.setMinimal( true );
+  return titleRe;
+}
+
 template <>
 QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object, const QString& part )
 {
   if ( part == QLatin1String( "capitalize" ) ) {
-    QString s = object.get();
+    const QString s = object.get();
     return s.at( 0 ).toUpper() + s.right( s.length() - 1 );
   }
   if ( part == QLatin1String( "isalnum" ) ) {
-    QString s = object.get();
+    const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isLetterOrNumber() )
@@ -77,7 +89,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     return "True";
   }
   if ( part == QLatin1String( "isalpha" ) ) {
-    QString s = object.get();
+    const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isLetter() )
@@ -87,7 +99,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     return "True";
   }
   if ( part == QLatin1String( "isdigit" ) ) {
-    QString s = object.get();
+    const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isNumber() )
@@ -97,40 +109,38 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     return "True";
   }
   if ( part == QLatin1String( "islower" ) ) {
-    QString s = object.get().toLower();
+    const QString s = object.get().toLower();
     return ( s == object.get() ) ? "True" : "False";
   }
   if ( part == QLatin1String( "isspace" ) ) {
-    QString s = object.get().trimmed();
+    const QString s = object.get().trimmed();
     return ( s.isEmpty() ) ? "True" : "False";
   }
   if ( part == QLatin1String( "istitle" ) ) {
-    QString s = object.get();
-    QRegExp titleRe( "\\b[a-z]" );
-    titleRe.setMinimal( true );
+    const QString s = object.get();
+
+    static const QRegExp titleRe = getIsTitleRegexp();
     return ( titleRe.indexIn( s ) < 0 ) ? "True" : "False";
   }
   if ( part == QLatin1String( "isupper" ) ) {
-    QString s = object.get().toUpper();
+    const QString s = object.get().toUpper();
     return ( s == object ) ? "True" : "False";
   }
   if ( part == QLatin1String( "lower" ) ) {
-    QString s = object.get().toLower();
-    return s;
+    return object.get().toLower();
   }
   if ( part == QLatin1String( "splitlines" ) ) {
-    QStringList strings = object.get().split( QLatin1Char( '\n' ) );
+    const QStringList strings = object.get().split( QLatin1Char( '\n' ) );
     QVariantList list;
     Q_FOREACH( const QString &string, strings )
       list << string;
     return list;
   }
   if ( part == QLatin1String( "strip" ) ) {
-    QString s = object.get().trimmed();
-    return s;
+    return object.get().trimmed();
   }
   if ( part == QLatin1String( "swapcase" ) ) {
-    QString inputString = object.get();
+    const QString inputString = object.get();
     QString s;
     s.reserve( inputString.size() );
     QString::const_iterator it = inputString.constBegin();
@@ -146,10 +156,9 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     return s;
   }
   if ( part == QLatin1String( "title" ) ) {
-    QRegExp titleRe( "\\b(.)" );
-    titleRe.setMinimal( true );
+    static const QRegExp titleRe = getTitleRegexp();
 
-    QString s = object.get();
+    const QString s = object.get();
     QString output;
     output.reserve( s.size() );
     int pos = 0;
@@ -168,8 +177,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     return output;
   }
   if ( part == QLatin1String( "upper" ) ) {
-    QString s = object.get().toUpper();
-    return s;
+    return object.get().toUpper();
   }
   return QVariant();
 }

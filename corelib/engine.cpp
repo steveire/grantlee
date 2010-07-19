@@ -97,7 +97,7 @@ QPair<QString, QString> Engine::mediaUri( const QString &fileName ) const
 
   QPair<QString, QString> uri;
   while ( it.hasNext() ) {
-    AbstractTemplateLoader::Ptr loader = it.next();
+    const AbstractTemplateLoader::Ptr loader = it.next();
     uri = loader->getMediaUri( fileName );
     if ( !uri.second.isEmpty() )
       break;
@@ -211,9 +211,9 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     pluginDirs = m_pluginDirs;
 
   while ( pluginDirs.size() > pluginIndex ) {
-    QString nextDir = pluginDirs.at( pluginIndex++ );
+    const QString nextDir = pluginDirs.at( pluginIndex++ );
     libFileName = nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
-    QFile file( libFileName );
+    const QFile file( libFileName );
     if ( !file.exists() )
       continue;
 
@@ -221,8 +221,8 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
 #endif
 
-    QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
-    QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
+    const QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
+    const QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
 
     TagLibraryInterface *library = new ScriptableLibraryContainer( factories, filters );
     m_scriptableLibraries << library;
@@ -243,13 +243,13 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
     pluginDirs = m_pluginDirs;
 
   while ( pluginDirs.size() > pluginIndex ) {
-    QString nextDir = pluginDirs.at( pluginIndex++ );
-    QDir pluginDir( nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
+    const QString nextDir = pluginDirs.at( pluginIndex++ );
+    const QDir pluginDir( nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
 
     if ( !pluginDir.exists() )
       continue;
 
-    QStringList list = pluginDir.entryList( QStringList( name + "*" ) );
+    const QStringList list = pluginDir.entryList( QStringList( name + "*" ) );
 
     if ( list.isEmpty() )
       continue;
@@ -270,12 +270,12 @@ Template Engine::loadByName( const QString &name ) const
 
   QListIterator<AbstractTemplateLoader::Ptr> it( d->m_loaders );
   while ( it.hasNext() ) {
-    AbstractTemplateLoader::Ptr loader = it.next();
+    const AbstractTemplateLoader::Ptr loader = it.next();
 
     if ( !loader->canLoadTemplate( name ) )
       continue;
 
-    Template t = loader->loadByName( name, this );
+    const Template t = loader->loadByName( name, this );
 
     if ( t ) {
       return t;

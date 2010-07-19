@@ -445,6 +445,12 @@ void TestFilters::testStringFilters_data()
 
   QTest::newRow( "filter-stringformat01" ) << "{% autoescape off %}.{{ a|stringformat:\"%1\" }}. .{{ b|stringformat:\"%2\" }}.{% endautoescape %}" << dict << ".a<b. .a<b." << NoError;
   QTest::newRow( "filter-stringformat02" ) << ".{{ a|stringformat:\"%1\" }}. .{{ b|stringformat:\"%2\" }}." << dict << ".a&lt;b. .a<b." << NoError;
+  QTest::newRow( "filter-stringformat03" ) << ".{{ a|stringformat:\"foo %1 bar\" }}. .{{ b|stringformat:\"baz %2 bat\" }}." << dict << ".foo a&lt;b bar. .baz a<b bat." << NoError;
+
+  dict.clear();
+  dict.insert( "path", "www.grantlee.org" );
+  QTest::newRow( "filter-stringformat04" ) << "{% with path|stringformat:\"<a href=\\\"%1\\\">%1</a>\"|safe as result %}{{ result }}{% endwith %}" << dict << "<a href=\"www.grantlee.org\">www.grantlee.org</a>" << NoError;
+
 
 
   //  XXX No test for "title" filter; needs an actual object.

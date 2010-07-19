@@ -37,7 +37,7 @@ class NodePrivate
 
   }
   Q_DECLARE_PUBLIC( Node )
-  Node *q_ptr;
+  Node * const q_ptr;
 };
 
 class AbstractNodeFactoryPrivate
@@ -220,7 +220,7 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
   QList<FilterExpression> fes;
   QListIterator<QString> it( list );
   while ( it.hasNext() ) {
-    QString varString = it.next();
+    const QString varString = it.next();
     fes << FilterExpression( varString, p );
   }
   return fes;
@@ -228,7 +228,20 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
 
 QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
 {
-  QRegExp r( "(\"(?:[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\"|\\\'(?:[^\\\'\\\\]*(?:\\\\.[^\\\'\\\\]*)*)\\\'|[^\\s]+)" );
+  static const QRegExp r( "("                                   // match
+                            "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
+                              "(?:"                             // followed by
+                                "(?:\""                         // Either a quote starting with "
+                                  "(?:[^\"\\\\]|\\\\.)*\""      // followed by anything that is not the end of the quote
+                                "|\'"                           // Or a quote starting with '
+                                  "(?:[^\'\\\\]|\\\\.)*\'"      // followed by anything that is not the end of the quote
+                                ")"                             // (End either)
+                                "[^\\s\'\"]*"                   // To the start of the next such fragment
+                              ")+"                              // Perform multiple matches of the above.
+                            ")"                                 // End of quoted string handling.
+                            "|\\S+"                             // Apart from quoted strings, match non-whitespace fragments also
+                          ")"                                   // End match
+                        );
 
   QStringList l;
   int count = 0;
@@ -236,7 +249,7 @@ QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
   while (( pos = r.indexIn( str, pos ) ) != -1 ) {
     ++count;
     pos += r.matchedLength();
-    l << r.capturedTexts().at( 0 );
+    l << r.capturedTexts().first();
   }
 
   return l;

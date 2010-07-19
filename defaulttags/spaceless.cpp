@@ -53,7 +53,7 @@ QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 {
   QString stripped = input;
 
-  QRegExp re( ">\\s+<" );
+  static const QRegExp re( ">\\s+<" );
   stripped.replace( re, "><" );
   return stripped;
 }

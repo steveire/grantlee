@@ -28,16 +28,23 @@
 
 using namespace Grantlee;
 
-// In python regex, '.' matches any character except newline, whereas it QRegExp,
-// it matches any character including newline. We match 'not newline' instead.
-static QRegExp tagRe( QString( "(%1[^\\n]*%2|%3[^\\n]*%4|%5[^\\n]*%6)" )
-                      .arg( QRegExp::escape( BLOCK_TAG_START ) )
-                      .arg( QRegExp::escape( BLOCK_TAG_END ) )
-                      .arg( QRegExp::escape( VARIABLE_TAG_START ) )
-                      .arg( QRegExp::escape( VARIABLE_TAG_END ) )
-                      .arg( QRegExp::escape( COMMENT_TAG_START ) )
-                      .arg( QRegExp::escape( COMMENT_TAG_END ) )
-                    );
+static QRegExp getTagRe()
+{
+
+  // In python regex, '.' matches any character except newline, whereas it QRegExp,
+  // it matches any character including newline. We match 'not newline' instead.
+  static QRegExp sTagRe( QString( "(%1[^\\n]*%2|%3[^\\n]*%4|%5[^\\n]*%6)" )
+                        .arg( QRegExp::escape( BLOCK_TAG_START ) )
+                        .arg( QRegExp::escape( BLOCK_TAG_END ) )
+                        .arg( QRegExp::escape( VARIABLE_TAG_START ) )
+                        .arg( QRegExp::escape( VARIABLE_TAG_END ) )
+                        .arg( QRegExp::escape( COMMENT_TAG_START ) )
+                        .arg( QRegExp::escape( COMMENT_TAG_END ) )
+                      );
+
+  sTagRe.setMinimal( true ); // Can't use '?', eg '.*?', Have to setMinimal instead
+  return sTagRe;
+}
 
 Lexer::Lexer( const QString &templateString )
   : m_templateString( templateString )
@@ -51,7 +58,7 @@ Lexer::~Lexer()
 
 QList<Token> Lexer::tokenize() const
 {
-  tagRe.setMinimal( true ); // Can't use '?', eg '.*?', Have to setMinimal instead
+  const QRegExp tagRe = getTagRe();
 
   QList<Token> tokenList;
 
@@ -78,8 +85,8 @@ Token Lexer::createToken( const QString &fragment, State inTag, int *linecount )
     token.content = fragment;
     token.tokenType = TextToken;
   } else {
-    int startTagSize = 2;
-    int endTagSize = 2;
+    static const int startTagSize = 2;
+    static const int endTagSize = 2;
     QString content = fragment.mid( startTagSize, fragment.size() - startTagSize - endTagSize );
     if ( fragment.startsWith( VARIABLE_TAG_START ) ) {
       token.tokenType = VariableToken;
