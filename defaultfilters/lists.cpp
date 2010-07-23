@@ -86,7 +86,7 @@ QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument,
   if ( varList.isEmpty() )
     return QString();
 
-  return varList.at( 0 );
+  return varList.first();
 }
 
 QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const

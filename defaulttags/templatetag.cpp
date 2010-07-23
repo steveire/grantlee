@@ -39,7 +39,7 @@ Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p ) co
     throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'templatetag' statement takes one argument" ) );
   }
 
-  QString name = expr.at( 0 );
+  QString name = expr.first();
 
   if ( !TemplateTagNode::isKeyword( name ) ) {
     throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Not a template tag" ) );

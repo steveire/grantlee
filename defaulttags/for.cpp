@@ -49,7 +49,7 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     expr.removeLast();
   }
 
-  if ( expr.mid( expr.size() - 2 ).at( 0 ) != QLatin1String( "in" ) ) {
+  if ( expr.mid( expr.size() - 2 ).first() != QLatin1String( "in" ) ) {
     throw Grantlee::Exception( TagSyntaxError,
       QString::fromLatin1( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
   }
@@ -143,10 +143,10 @@ void ForNode::handleHashItem( OutputStream *stream, Context *c, QString key, QVa
     // Iterating over a hash but not unpacking it.
     // convert each key-value pair to a list and insert it in the context.
     list << key << value;
-    c->insert( m_loopVars.at( 0 ), list );
+    c->insert( m_loopVars.first(), list );
     list.clear();
   } else {
-    c->insert( m_loopVars.at( 0 ), key );
+    c->insert( m_loopVars.first(), key );
     c->insert( m_loopVars.at( 1 ), value );
   }
   renderLoop( stream, c );

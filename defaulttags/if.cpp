@@ -63,7 +63,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       if ( bits.size() != 2 ) {
         throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'if' statement improperly formatted" ) );
       }
-      if ( bits.at( 0 ) != QLatin1String( "not" ) ) {
+      if ( bits.first() != QLatin1String( "not" ) ) {
         throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Expected 'not' in if statement" ) );
       }
       pair.first = true;

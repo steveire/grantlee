@@ -62,7 +62,7 @@ class FilterExpressionPrivate;
 
       parts.removeFirst(); // Remove the "some_tag" part.
 
-      FilterExpression arg1( parts.at( 0 ), p );
+      FilterExpression arg1( parts.first(), p );
       FilterExpression arg2( parts.at( 1 ), p );
 
       return new SomeTagNode( arg1, arg2, p );
