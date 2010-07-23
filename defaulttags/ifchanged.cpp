@@ -34,17 +34,17 @@ IfChangedNodeFactory::IfChangedNodeFactory()
 
 Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   expr.takeAt( 0 );
   IfChangedNode *n =  new IfChangedNode( getFilterExpressionList( expr, p ), p );
 
-  NodeList trueList = p->parse( n, QStringList() << "else" << "endifchanged" );
+  NodeList trueList = p->parse( n, QStringList() << QLatin1String( "else" ) << QLatin1String( "endifchanged" ) );
   n->setTrueList( trueList );
   NodeList falseList;
 
-  if ( p->takeNextToken().content.trimmed() == "else" ) {
-    falseList = p->parse( n, QStringList() << "endifchanged" );
+  if ( p->takeNextToken().content.trimmed() == QLatin1String( "else" ) ) {
+    falseList = p->parse( n, QLatin1String( "endifchanged" ) );
     n->setFalseList( falseList );
     p->removeNextToken();
   }
@@ -71,11 +71,11 @@ void IfChangedNode::setFalseList( NodeList falseList )
 
 void IfChangedNode::render( OutputStream *stream, Context *c )
 {
-  if ( c->lookup( "forloop" ).isValid() && ( !c->lookup( "forloop" ).toHash().contains( m_id ) ) ) {
+  if ( c->lookup( QLatin1String( "forloop" ) ).isValid() && ( !c->lookup( QLatin1String( "forloop" ) ).toHash().contains( m_id ) ) ) {
     m_lastSeen = QVariant();
-    QVariantHash hash = c->lookup( "forloop" ).toHash();
+    QVariantHash hash = c->lookup( QLatin1String( "forloop" ) ).toHash();
     hash.insert( m_id, 1 );
-    c->insert( "forloop", hash );
+    c->insert( QLatin1String( "forloop" ), hash );
   }
 
   QString watchedString;
@@ -108,8 +108,8 @@ void IfChangedNode::render( OutputStream *stream, Context *c )
     c->push();
     QVariantHash hash;
     // TODO: Document this.
-    hash.insert( "firstloop", firstLoop );
-    c->insert( "ifchanged", hash );
+    hash.insert( QLatin1String( "firstloop" ), firstLoop );
+    c->insert( QLatin1String( "ifchanged" ), hash );
     m_trueList.render( stream, c );
     c->pop();
   } else if ( !m_falseList.isEmpty() ) {

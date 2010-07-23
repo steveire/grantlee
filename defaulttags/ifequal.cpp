@@ -38,7 +38,7 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 3 ) {
-    throw Grantlee::Exception( TagSyntaxError, QString( "%1 tag takes two arguments." ).arg( expr.at( 0 ) ) );
+    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 tag takes two arguments." ).arg( expr.at( 0 ) ) );
   }
 
   QStringList vars;
@@ -48,11 +48,11 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
 
   IfEqualNode *n = new IfEqualNode( val1 , val2, negate, p );
 
-  const QString endTag( "end" + expr.at( 0 ) );
-  NodeList trueList = p->parse( n, QStringList() << "else" << endTag );
+  const QString endTag( QLatin1String( "end" ) + expr.first() );
+  NodeList trueList = p->parse( n, QStringList() << QLatin1String( "else" ) << endTag );
   n->setTrueList( trueList );
   NodeList falseList;
-  if ( p->takeNextToken().content.trimmed() == "else" ) {
+  if ( p->takeNextToken().content.trimmed() == QLatin1String( "else" ) ) {
     falseList = p->parse( n, QStringList() << endTag );
     n->setFalseList( falseList );
     p->removeNextToken();

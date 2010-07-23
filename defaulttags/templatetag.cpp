@@ -26,35 +26,23 @@
 #include "grantlee_tags_p.h"
 #include "exception.h"
 
-
-static QHash<QString, QString> s_map;
-
-
 TemplateTagNodeFactory::TemplateTagNodeFactory()
 {
-  s_map.insert( "openblock", BLOCK_TAG_START );
-  s_map.insert( "closeblock", BLOCK_TAG_END );
-  s_map.insert( "openvariable", VARIABLE_TAG_START );
-  s_map.insert( "closevariable", VARIABLE_TAG_END );
-  s_map.insert( "openbrace", "{" );
-  s_map.insert( "closebrace", "}" );
-  s_map.insert( "opencomment", COMMENT_TAG_START );
-  s_map.insert( "closecomment", COMMENT_TAG_END );
-}
 
+}
 
 Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
   expr.takeAt( 0 );
   if ( expr.size() <= 0 ) {
-    throw Grantlee::Exception( TagSyntaxError, "'templatetag' statement takes one argument" );
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'templatetag' statement takes one argument" ) );
   }
 
   QString name = expr.at( 0 );
 
   if ( !TemplateTagNode::isKeyword( name ) ) {
-    throw Grantlee::Exception( TagSyntaxError, "Not a template tag" );
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Not a template tag" ) );
   }
 
   return new TemplateTagNode( name, p );
@@ -67,14 +55,30 @@ TemplateTagNode::TemplateTagNode( const QString &name, QObject *parent )
   m_name = name;
 }
 
+static QHash<QString, QString> getKeywordMap()
+{
+  QHash<QString, QString> map;
+  map.insert( QLatin1String( "openblock" ), BLOCK_TAG_START );
+  map.insert( QLatin1String( "closeblock" ), BLOCK_TAG_END );
+  map.insert( QLatin1String( "openvariable" ), VARIABLE_TAG_START );
+  map.insert( QLatin1String( "closevariable" ), VARIABLE_TAG_END );
+  map.insert( QLatin1String( "openbrace" ), QChar::fromLatin1( '{' ) );
+  map.insert( QLatin1String( "closebrace" ), QChar::fromLatin1( '}' ) );
+  map.insert( QLatin1String( "opencomment" ), COMMENT_TAG_START );
+  map.insert( QLatin1String( "closecomment" ), COMMENT_TAG_END );
+  return map;
+}
+
 bool TemplateTagNode::isKeyword( const QString &name )
 {
-  return s_map.contains( name );
+  static QHash<QString, QString> map = getKeywordMap();
+  return map.contains( name );
 }
 
 void TemplateTagNode::render( OutputStream *stream, Context *c )
 {
   Q_UNUSED( c )
-  ( *stream ) << s_map.value( m_name );
+  static QHash<QString, QString> map = getKeywordMap();
+  ( *stream ) << map.value( m_name );
 }
 

@@ -31,10 +31,10 @@ LoadNodeFactory::LoadNodeFactory()
 
 Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   if ( expr.size() <= 1 ) {
-    throw Grantlee::Exception( TagSyntaxError, QString( "%1 expects at least one argument" ).arg( expr.at( 0 ) ) );
+    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expects at least one argument" ).arg( expr.first() ) );
   }
 
   expr.takeAt( 0 );

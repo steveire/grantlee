@@ -47,20 +47,20 @@ void DebugNode::render( OutputStream *stream, Context *c )
   int i = 0;
   QHash<QString, QVariant> h = c->stackHash( i++ );
 
-  ret += "\n\nContext:\n";
+  ret += QLatin1String( "\n\nContext:\n" );
   while ( !h.isEmpty() ) {
     QHashIterator<QString, QVariant> it( h );
     while ( it.hasNext() ) {
       it.next();
-      ret += "key " + it.key() + ", ";
-      ret += "type ";
+      ret += QLatin1String( "key " ) + it.key() + QLatin1String( ", " );
+      ret += QLatin1String( "type " );
       ret.append( it.value().typeName() );
-      ret += '\n';
+      ret += QLatin1Char( '\n' );
     }
     h = c->stackHash( i++ );
   }
 
-  ret += "End context:\n\n";
+  ret += QLatin1String( "End context:\n\n" );
 
   ( *stream ) << ret;
 }

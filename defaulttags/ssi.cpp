@@ -38,18 +38,18 @@ SsiNodeFactory::SsiNodeFactory()
 
 Node* SsiNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   int exprSize = expr.size();
 
   bool parse = false;
 
   if ( ( exprSize != 3 ) && ( exprSize != 2 ) ) {
-    throw Grantlee::Exception( TagSyntaxError, "ssi tag takes one argument" );
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "ssi tag takes one argument" ) );
   }
 
   if ( exprSize == 3 ) {
-    if ( expr.at( 2 ) == "parsed" ) {
+    if ( expr.at( 2 ) == QLatin1String( "parsed" ) ) {
       parse = true;
     }
   }

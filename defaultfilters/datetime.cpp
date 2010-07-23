@@ -32,13 +32,24 @@ QVariant timeSince( QDateTime early, QDateTime late )
   int secsSince = early.secsTo( late );
 
   if ( secsSince < 0 )
-    return SafeString( "0 minutes" );
+    return SafeString( QLatin1String( "0 minutes" ) );
 
   // TODO: i18n
   QStringList singularNames;
-  singularNames << "year" << "month" << "week" << "day" << "hour" << "minute";
+  singularNames << QLatin1String( "year" )
+                << QLatin1String( "month" )
+                << QLatin1String( "week" )
+                << QLatin1String( "day" )
+                << QLatin1String( "hour" )
+                << QLatin1String( "minute" );
+
   QStringList pluralNames;
-  pluralNames << "years" << "months" << "weeks" << "days" << "hours" << "minutes";
+  pluralNames << QLatin1String( "years" )
+              << QLatin1String( "months" )
+              << QLatin1String( "weeks" )
+              << QLatin1String( "days" )
+              << QLatin1String( "hours" )
+              << QLatin1String( "minutes" );
 
   QList<int> seconds;
   seconds << ( 60 * 60 * 24 * 365 ) // year
@@ -59,17 +70,17 @@ QVariant timeSince( QDateTime early, QDateTime late )
   QString firstChunk;
 
   if ( count != 1 )
-    firstChunk.append( QString( "%1 %2" ).arg( count ).arg( pluralNames.at( i - 1 ) ) );
+    firstChunk.append( QString::fromLatin1( "%1 %2" ).arg( count ).arg( pluralNames.at( i - 1 ) ) );
   else {
-    firstChunk.append( QString( "%1 %2" ).arg( count ).arg( singularNames.at( i - 1 ) ) );
+    firstChunk.append( QString::fromLatin1( "%1 %2" ).arg( count ).arg( singularNames.at( i - 1 ) ) );
   }
   if ( seconds.size() > i ) {
     int count2 = ( secsSince - ( seconds.at( i - 1 ) * count ) ) / seconds.at( i );
     if ( count2 != 0 ) {
       if ( count2 > 1 )
-        firstChunk.append( QString( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i ) ) );
+        firstChunk.append( QString::fromLatin1( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i ) ) );
       else
-        firstChunk.append( QString( ", %1 %2" ).arg( count2 ).arg( singularNames.at( i ) ) );
+        firstChunk.append( QString::fromLatin1( ", %1 %2" ).arg( count2 ).arg( singularNames.at( i ) ) );
     }
   }
   return firstChunk;
@@ -86,21 +97,21 @@ QVariant timeUntil( QDateTime dt, QDateTime now = QDateTime() )
 QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  QDateTime d = QDateTime::fromString( getSafeString( input ), "yyyy-MM-ddThh:mm:ss" );
+  QDateTime d = QDateTime::fromString( getSafeString( input ), QLatin1String( "yyyy-MM-ddThh:mm:ss" ) );
 
   SafeString argString = getSafeString( argument );
 
   if ( !argString.get().isEmpty() )
     return d.toString( argString );
 
-  return d.toString( "MMM. d, yyyy" );
+  return d.toString( QLatin1String( "MMM. d, yyyy" ) );
 }
 
 QVariant TimeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
   SafeString argString = getSafeString( argument );
-  return QDateTime::fromString( getSafeString( input ), "yyyy-MM-ddThh:mm:ss" ).toString( argString );
+  return QDateTime::fromString( getSafeString( input ), QLatin1String( "yyyy-MM-ddThh:mm:ss" ) ).toString( argString );
 }
 
 QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const

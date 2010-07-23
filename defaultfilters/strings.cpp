@@ -29,7 +29,7 @@ QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argu
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   SafeString safeString = getSafeString( input );
-  safeString.get().replace( '\\', "\\\\" ).get().replace( '\"', "\\\"" ).get().replace( '\'', "\\\'" );
+  safeString.get().replace( QLatin1Char( '\\' ), QLatin1String( "\\\\" ) ).get().replace( QLatin1Char( '\"' ), QLatin1String( "\\\"" ) ).get().replace( QLatin1Char( '\'' ), QLatin1String( "\\\'" ) );
   return safeString;
 }
 
@@ -47,22 +47,28 @@ QVariant CapFirstFilter::doFilter( const QVariant& input, const QVariant &argume
 
 EscapeJsFilter::EscapeJsFilter()
 {
-  m_jsEscapes << QPair<QString, QString>( "\\", "\\x5C" )
-              << QPair<QString, QString>( "\'",  "\\x27" )
-              << QPair<QString, QString>( "\"",  "\\x22" )
-              << QPair<QString, QString>( ">", "\\x3E" )
-              << QPair<QString, QString>( "<", "\\x3C" )
-              << QPair<QString, QString>( "&", "\\x26" )
-              << QPair<QString, QString>( "=", "\\x3D" )
-              << QPair<QString, QString>( "-", "\\x2D" )
-              << QPair<QString, QString>( ";", "\\x3B" )
-              << QPair<QString, QString>( QChar( 0x2028 ), "\\u2028" )
-              << QPair<QString, QString>( QChar( 0x2029 ), "\\u2029" );
+}
+
+static QList<QPair<QString, QString> > getJsEscapes()
+{
+  QList<QPair<QString, QString> > jsEscapes;
+  jsEscapes << QPair<QString, QString>( QChar::fromLatin1( '\\' ), QLatin1String( "\\x5C" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '\'' ),  QLatin1String( "\\x27" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '\"' ),  QLatin1String( "\\x22" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '>' ), QLatin1String( "\\x3E" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '<' ), QLatin1String( "\\x3C" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '&' ), QLatin1String( "\\x26" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '=' ), QLatin1String( "\\x3D" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '-' ), QLatin1String( "\\x2D" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( ';' ), QLatin1String( "\\x3B" ) )
+            << QPair<QString, QString>( QChar( 0x2028 ), QLatin1String( "\\u2028" ) )
+            << QPair<QString, QString>( QChar( 0x2029 ), QLatin1String( "\\u2029" ) );
 
   for( int i = 0; i < 32; ++i )
   {
-    m_jsEscapes << QPair<QString, QString>( QChar( i ), "\\x" + QString( "%1" ).arg( i, 2, 16, QChar('0') ).toUpper() );
+    jsEscapes << QPair<QString, QString>( QChar( i ), QLatin1String( "\\x" ) + QString::fromLatin1( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
   }
+  return jsEscapes;
 }
 
 QVariant EscapeJsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -71,7 +77,9 @@ QVariant EscapeJsFilter::doFilter( const QVariant& input, const QVariant &argume
   Q_UNUSED( autoescape )
   QString retString = getSafeString( input );
 
-  QListIterator<QPair<QString, QString> > it( m_jsEscapes );
+  static const QList<QPair<QString, QString> > jsEscapes = getJsEscapes();
+
+  QListIterator<QPair<QString, QString> > it( jsEscapes );
 
   while ( it.hasNext() ) {
     QPair<QString, QString> escape = it.next();
@@ -86,9 +94,9 @@ QVariant FixAmpersandsFilter::doFilter( const QVariant& input, const QVariant &a
   Q_UNUSED( autoescape )
   SafeString safeString = getSafeString( input );
 
-  static const QRegExp fixAmpersandsRegexp( "&(?!(\\w+|#\\d+);)" );
+  const QRegExp fixAmpersandsRegexp( QLatin1String( "&(?!(\\w+|#\\d+);)" ) );
 
-  safeString.get().replace( fixAmpersandsRegexp, "&amp;" );
+  safeString.get().replace( fixAmpersandsRegexp, QLatin1String( "&amp;" ) );
 
   return safeString;
 }
@@ -103,7 +111,7 @@ QVariant CutFilter::doFilter( const QVariant& input, const QVariant &argument, b
 
   retString.get().remove( argString );
 
-  if ( inputSafe && argString.get() != ";" )
+  if ( inputSafe && argString.get() != QChar::fromLatin1( ';' ) )
     return markSafe( retString );
   else
     return retString;
@@ -120,17 +128,17 @@ QVariant LineNumbersFilter::doFilter( const QVariant& input, const QVariant &arg
 {
   Q_UNUSED( argument )
   SafeString safeString = getSafeString( input );
-  QStringList lines = safeString.get().split( '\n' );
+  QStringList lines = safeString.get().split( QLatin1Char( '\n' ) );
   int width = QString::number( lines.size() ).size();
 
   const bool shouldEscape = ( autoescape && !safeString.isSafe() );
   for ( int i = 0; i < lines.size(); ++i ) {
-    lines[ i ] = QString( "%1. %2" ).arg( i + 1, width ).arg(
+    lines[ i ] = QString::fromLatin1( "%1. %2" ).arg( i + 1, width ).arg(
                    shouldEscape ? QString( escape( lines.at( i ) ) ) : lines.at( i )
                  );
   }
 
-  return markSafe( lines.join( QString( '\n' ) ) );
+  return markSafe( lines.join( QChar::fromLatin1( '\n' ) ) );
 }
 
 QVariant LowerFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -159,11 +167,11 @@ QVariant TitleFilter::doFilter( const QVariant& input, const QVariant &argument,
   Q_UNUSED( autoescape )
 //   QRegExp re( "\b([a-z])" );
 
-  static const QRegExp re( "([a-z])'([A-Z])" );
+  static const QRegExp re( QLatin1String( "([a-z])'([A-Z])" ) );
 
   QString str = getSafeString( input );
 
-  str.replace( re, QString( "\\1" ).toUpper() );
+  str.replace( re, QString::fromLatin1( "\\1" ).toUpper() );
 
   return str;
 }
@@ -181,15 +189,15 @@ QVariant TruncateWordsFilter::doFilter( const QVariant& input, const QVariant &a
   }
 
   QString inputString = getSafeString( input );
-  QStringList words = inputString.split( ' ', QString::SkipEmptyParts );
+  QStringList words = inputString.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   if ( words.size() > numWords ) {
     words = words.mid( 0, numWords );
     if ( !words.at( words.size() - 1 ).endsWith( QLatin1String( "..." ) ) ) {
-      words << "...";
+      words << QLatin1String( "..." );
     }
   }
-  return words.join( QChar( ' ' ) );
+  return words.join( QChar::fromLatin1( ' ' ) );
 
 }
 
@@ -204,7 +212,7 @@ QVariant WordCountFilter::doFilter( const QVariant& input, const QVariant &argum
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
-  return QString::number( getSafeString( input ).get().split( ' ' ).size() );
+  return QString::number( getSafeString( input ).get().split( QLatin1Char( ' ' ) ).size() );
 }
 
 QVariant LJustFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -248,10 +256,10 @@ QVariant ForceEscapeFilter::doFilter( const QVariant& input, const QVariant &arg
 QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  QStringList tags = getSafeString( argument ).get().split( ' ' );
-  QString tagRe = QString( "(%1)" ).arg( tags.join( "|" ) );
-  QRegExp startTag( QString( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
-  QRegExp endTag( QString( "</%1>" ).arg( tagRe ) );
+  const QStringList tags = getSafeString( argument ).get().split( QLatin1Char( ' ' ) );
+  const QString tagRe = QString::fromLatin1( "(%1)" ).arg( tags.join( QChar::fromLatin1( '|' ) ) );
+  const QRegExp startTag( QString::fromLatin1( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
+  const QRegExp endTag( QString::fromLatin1( "</%1>" ).arg( tagRe ) );
 
   SafeString value = getSafeString( input );
   const bool safeInput = value.isSafe();
@@ -266,7 +274,7 @@ QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argum
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
-  static QRegExp tagRe( "<[^>]*>" );
+  static QRegExp tagRe( QLatin1String( "<[^>]*>" ) );
   tagRe.setMinimal( true );
 
   QString value = getSafeString( input );
@@ -279,22 +287,22 @@ QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argume
   Q_UNUSED( autoescape )
   QString _input = getSafeString( input );
   int width = argument.toInt();
-  QStringList partList = _input.split( ' ', QString::SkipEmptyParts );
+  QStringList partList = _input.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
   QString output = partList.takeFirst();
-  int pos = output.size() - output.lastIndexOf( '\n' ) - 1;
+  int pos = output.size() - output.lastIndexOf( QLatin1Char( '\n' ) ) - 1;
   Q_FOREACH( const QString &part, partList ) {
     QStringList lines;
-    if ( part.contains( '\n' ) ) {
-      lines = part.split( '\n' );
+    if ( part.contains( QLatin1Char( '\n' ) ) ) {
+      lines = part.split( QLatin1Char( '\n' ) );
     } else {
       lines.append( part );
     }
     pos += lines.first().size() + 1;
     if ( pos > width ) {
-      output.append( '\n' );
+      output.append( QLatin1Char( '\n' ) );
       pos += lines.last().size();
     } else {
-      output.append( ' ' );
+      output.append( QLatin1Char( ' ' ) );
       if ( lines.size() > 1 )
         pos += lines.last().size();
     }
@@ -331,17 +339,17 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
 {
   Q_UNUSED( argument )
   SafeString inputString = getSafeString( input );
-  static const QRegExp re( "\n{2,}" );
+  static const QRegExp re( QLatin1String( "\n{2,}" ) );
   QStringList output;
 
   Q_FOREACH( const QString &bit, inputString.get().split( re ) ) {
     SafeString _bit = SafeString( bit, inputString.isSafe() );
     if ( autoescape )
       _bit = conditionalEscape( _bit );
-    _bit.get().replace( '\n', "<br />" );
-    output.append( QString( "<p>%1</p>" ).arg( _bit ) );
+    _bit.get().replace( QLatin1Char( '\n' ), QLatin1String( "<br />" ) );
+    output.append( QString::fromLatin1( "<p>%1</p>" ).arg( _bit ) );
   }
-  return markSafe( output.join( "\n\n" ) );
+  return markSafe( output.join( QLatin1String( "\n\n" ) ) );
 }
 
 QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
@@ -351,7 +359,7 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
   if ( autoescape && isSafeString( input ) ) {
     inputString = conditionalEscape( inputString );
   }
-  return markSafe( inputString.get().replace( '\n', "<br />" ) );
+  return markSafe( inputString.get().replace( QLatin1Char( '\n' ), QLatin1String( "<br />" ) ) );
 }
 
 QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
@@ -360,7 +368,7 @@ QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argumen
   Q_UNUSED( autoescape )
   QString inputString = getSafeString( input );
   inputString = inputString.normalized( QString::NormalizationForm_KD ).toAscii();
-  inputString = inputString.remove( QRegExp( "[^\\w\\s-]" ) ).trimmed().toLower();
-  return markSafe( inputString.replace( QRegExp( "[-\\s]+" ), QChar( '-' ) ) );
+  inputString = inputString.remove( QRegExp( QLatin1String( "[^\\w\\s-]" ) ) ).trimmed().toLower();
+  return markSafe( inputString.replace( QRegExp( QLatin1String( "[-\\s]+" ) ), QChar::fromLatin1( '-' ) ) );
 }
 

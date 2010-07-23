@@ -40,7 +40,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 ) {
-    throw Grantlee::Exception( TagSyntaxError, "block tag takes one argument" );
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "block tag takes one argument" ) );
   }
 
   QString blockName = expr.at( 1 );
@@ -55,7 +55,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       QString blockNodeName = it.next().toString();
 
       if ( blockNodeName == blockName ) {
-        throw Grantlee::Exception( TagSyntaxError, QString( "%1 appears more than once." ).arg( blockName ) );
+        throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 appears more than once." ).arg( blockName ) );
       }
     }
   }
@@ -66,7 +66,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
   BlockNode *n = new BlockNode( blockName, p );
-  NodeList list = p->parse( n, QStringList() << "endblock" << "endblock " + blockName );
+  NodeList list = p->parse( n, QStringList() << QLatin1String( "endblock" ) << QLatin1String( "endblock " ) + blockName );
 
   n->setNodeList( list );
   p->removeNextToken();
@@ -97,7 +97,7 @@ void BlockNode::render( OutputStream *stream, Context *c )
   c->push();
   m_context = c;
   m_stream = stream;
-  c->insert( "block", QVariant::fromValue( static_cast<QObject *>( this ) ) );
+  c->insert( QLatin1String( "block" ), QVariant::fromValue( static_cast<QObject *>( this ) ) );
   m_list.render( stream, c );
   m_stream = 0;
   c->pop();

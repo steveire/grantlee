@@ -35,7 +35,7 @@ Node* CommentNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   Q_UNUSED( tagContent );
 
-  p->skipPast( "endcomment" );
+  p->skipPast( QLatin1String( "endcomment" ) );
 
   return new CommentNode( p );
 }
