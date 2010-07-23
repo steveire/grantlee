@@ -32,12 +32,13 @@
 #include "templateloader.h"
 #include "grantlee_version.h"
 #include "exception.h"
+#include "grantlee_latin1literal_p.h"
 
 #include "scriptabletags.h"
 
 using namespace Grantlee;
 
-static const char * __scriptableLibName = "grantlee_scriptabletags";
+static const QLatin1String __scriptableLibName( "grantlee_scriptabletags" );
 
 class ScriptableLibraryContainer : public TagLibraryInterface
 {
@@ -66,9 +67,11 @@ private:
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
 {
-  d_ptr->m_defaultLibraries << "grantlee_defaulttags"
-                            << "grantlee_loadertags"
-                            << "grantlee_defaultfilters";
+  d_ptr->m_defaultLibraries << QLatin1String( "grantlee_defaulttags" )
+                            << QLatin1String( "grantlee_loadertags" )
+                            << QLatin1String( "grantlee_defaultfilters" );
+
+
 }
 
 Engine::~Engine()
@@ -195,7 +198,6 @@ EnginePrivate::EnginePrivate( Engine *engine )
 TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
 {
   int pluginIndex = 0;
-  QString libFileName;
   if ( !m_scriptableTagLibrary )
     return 0;
 
@@ -212,7 +214,15 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
 
   while ( pluginDirs.size() > pluginIndex ) {
     const QString nextDir = pluginDirs.at( pluginIndex++ );
-    libFileName = nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
+    const QString libFileName = nextDir
+                              + QLatin1Literal( "/grantlee/" )
+                              + QString::number( GRANTLEE_VERSION_MAJOR )
+                              + QLatin1Char( '.' )
+                              + QString::number( minorVersion )
+                              + QLatin1Char( '/' )
+                              + name
+                              + QLatin1Literal( ".qs" );
+
     const QFile file( libFileName );
     if ( !file.exists() )
       continue;
@@ -244,12 +254,19 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
 
   while ( pluginDirs.size() > pluginIndex ) {
     const QString nextDir = pluginDirs.at( pluginIndex++ );
-    const QDir pluginDir( nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
+    const QString pluginDirString = nextDir
+                                  + QLatin1Literal( "/grantlee/" )
+                                  + QString::number( GRANTLEE_VERSION_MAJOR )
+                                  + QLatin1Char( '.' )
+                                  + QString::number( minorVersion )
+                                  + QLatin1Char( '/' );
+
+    const QDir pluginDir( pluginDirString );
 
     if ( !pluginDir.exists() )
       continue;
 
-    const QStringList list = pluginDir.entryList( QStringList( name + "*" ) );
+    const QStringList list = pluginDir.entryList( QStringList( name + QLatin1Char( '*' ) ) );
 
     if ( list.isEmpty() )
       continue;
