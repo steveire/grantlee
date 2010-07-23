@@ -20,15 +20,16 @@
 
 #include "util.h"
 #include "metaenumvariable_p.h"
+#include "grantlee_latin1literal_p.h"
 
 #include <QStringList>
 
 QString Grantlee::unescapeStringLiteral( const QString &input )
 {
   return input.mid( 1, input.size() - 2 )
-         .replace( "\\\'", QChar( '\'' ) )
-         .replace( "\\\"", QChar( '"' ) )
-         .replace( "\\\\", QChar( '\\' ) );
+         .replace( QLatin1String( "\\\'" ), QChar::fromLatin1( '\'' ) )
+         .replace( QLatin1String( "\\\"" ), QChar::fromLatin1( '"' ) )
+         .replace( QLatin1String( "\\\\" ), QChar::fromLatin1( '\\' ) );
 }
 
 bool Grantlee::variantIsTrue( const QVariant &variant )
@@ -202,25 +203,23 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
 
 Grantlee::SafeString Grantlee::toString( const QVariantList &list )
 {
-  QString output( '[' );
+  QString output( QLatin1Char( '[' ) );
   QVariantList::const_iterator it = list.constBegin();
   const QVariantList::const_iterator end = list.constEnd();
   while ( it != end ) {
     const QVariant item = *it;
     if ( isSafeString( item ) ) {
-      output.append( "u\'" );
-      output.append( getSafeString( item ) );
-      output.append( '\'' );
-      if (( it + 1 ) != end )
-        output.append( ", " );
+      output += QLatin1Literal( "u\'" )
+              + static_cast<QString>( getSafeString( item ).get() )
+              + QLatin1Char( '\'' )
+              + ( ( it + 1 ) != end ? QLatin1Literal( ", " ) : QLatin1Literal( "" ) );
     }
     if ( item.type() == QVariant::List ) {
-      output.append( toString( item.toList() ) );
-      output.append( ", " );
+      output += static_cast<QString>( toString( item.toList() ).get() ) + QLatin1Literal( ", " );
     }
     ++it;
   }
 
-  return output.append( ']' );
+  return output.append( QLatin1Char( ']' ) );
 }
 
