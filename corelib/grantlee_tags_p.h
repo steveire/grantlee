@@ -21,15 +21,17 @@
 #ifndef GRANTLEE_TAGS_P_H
 #define GRANTLEE_TAGS_P_H
 
+#include <QString>
+
 namespace Grantlee
 {
 
-static const char * BLOCK_TAG_START = "{%";
-static const char * BLOCK_TAG_END = "%}";
-static const char * VARIABLE_TAG_START = "{{";
-static const char * VARIABLE_TAG_END = "}}";
-static const char * COMMENT_TAG_START = "{#";
-static const char * COMMENT_TAG_END = "#}";
+static const QLatin1String BLOCK_TAG_START( "{%" );
+static const QLatin1String BLOCK_TAG_END( "%}" );
+static const QLatin1String VARIABLE_TAG_START( "{{" );
+static const QLatin1String VARIABLE_TAG_END( "}}" );
+static const QLatin1String COMMENT_TAG_START( "{#" );
+static const QLatin1String COMMENT_TAG_END( "#}" );
 //static const char * SINGLE_BRACE_START = "{";
 //static const char * SINGLE_BRACE_END = "}";
 

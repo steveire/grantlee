@@ -94,8 +94,8 @@ Variable::Variable( const QString &var )
   QVariant v( var );
   if ( v.convert( QVariant::Double ) ) {
     d->m_literal = v;
-    if ( !var.contains( '.' ) && !var.contains( 'e' ) ) {
-      if ( var.endsWith( '.' ) ) {
+    if ( !var.contains( QLatin1Char( '.' ) ) && !var.contains( QLatin1Char( 'e' ) ) ) {
+      if ( var.endsWith( QLatin1Char( '.' ) ) ) {
 //         throw Grantlee::Exception( VariableSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( v.toString() ) );
       }
 
@@ -107,13 +107,13 @@ Variable::Variable( const QString &var )
       d->m_translate = true;
       localVar = var.mid( 2, var.size() - 3 );
     }
-    if (( localVar.startsWith( '"' ) && localVar.endsWith( '"' ) )
-        || ( localVar.startsWith( '\'' ) && localVar.endsWith( '\'' ) ) ) {
+    if (( localVar.startsWith( QLatin1Char( '"' ) ) && localVar.endsWith( QLatin1Char( '"' ) ) )
+        || ( localVar.startsWith( QLatin1Char( '\'' ) ) && localVar.endsWith( QLatin1Char( '\'' ) ) ) ) {
       const QString unesc = unescapeStringLiteral( localVar );
       const Grantlee::SafeString ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
-      d->m_lookups = localVar.split( '.' );
+      d->m_lookups = localVar.split( QLatin1Char( '.' ) );
     }
   }
 }
@@ -147,7 +147,7 @@ QVariant Variable::resolve( Context *c ) const
   QVariant var;
   if ( !d->m_lookups.isEmpty() ) {
     int i = 0;
-    if ( d->m_lookups.at( i ) == "Qt" )
+    if ( d->m_lookups.at( i ) == QLatin1String( "Qt" ) )
     {
       ++i;
       const QString nextPart = d->m_lookups.at( i );
@@ -274,15 +274,15 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
   } else if ( qMetaTypeId<MetaEnumVariable>() == var.userType()){
     MetaEnumVariable mev = var.value<MetaEnumVariable>();
 
-    if ( nextPart == "name" )
+    if ( nextPart == QLatin1String( "name" ) )
       return mev.enumerator.name();
-    if ( nextPart == "value" )
+    if ( nextPart == QLatin1String( "value" ) )
       return mev.value;
-    if ( nextPart == "key" )
+    if ( nextPart == QLatin1String( "key" ) )
       return mev.enumerator.valueToKey( mev.value );
-    if ( nextPart == "scope" )
+    if ( nextPart == QLatin1String( "scope" ) )
       return mev.enumerator.scope();
-    if ( nextPart == "keyCount" )
+    if ( nextPart == QLatin1String( "keyCount" ) )
       return mev.enumerator.keyCount();
 
     bool ok = false;

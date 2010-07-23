@@ -60,13 +60,13 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
 }
 
 static QRegExp getIsTitleRegexp() {
-  QRegExp titleRe( "\\b[a-z]" );
+  QRegExp titleRe( QLatin1String( "\\b[a-z]" ) );
   titleRe.setMinimal( true );
   return titleRe;
 }
 
 static QRegExp getTitleRegexp() {
-  QRegExp titleRe( "\\b(.)" );
+  QRegExp titleRe( QLatin1String( "\\b(.)" ) );
   titleRe.setMinimal( true );
   return titleRe;
 }
@@ -78,53 +78,57 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     const QString s = object.get();
     return s.at( 0 ).toUpper() + s.right( s.length() - 1 );
   }
+
+  static const QLatin1String falseString( "False" );
+  static const QLatin1String trueString( "True" );
+
   if ( part == QLatin1String( "isalnum" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isLetterOrNumber() )
-        return "False";
+        return falseString;
       ++it;
     }
-    return "True";
+    return trueString;
   }
   if ( part == QLatin1String( "isalpha" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isLetter() )
-        return "False";
+        return falseString;
       ++it;
     }
-    return "True";
+    return trueString;
   }
   if ( part == QLatin1String( "isdigit" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isNumber() )
-        return "False";
+        return falseString;
       ++it;
     }
-    return "True";
+    return trueString;
   }
   if ( part == QLatin1String( "islower" ) ) {
     const QString s = object.get().toLower();
-    return ( s == object.get() ) ? "True" : "False";
+    return ( s == object.get() ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "isspace" ) ) {
     const QString s = object.get().trimmed();
-    return ( s.isEmpty() ) ? "True" : "False";
+    return ( s.isEmpty() ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "istitle" ) ) {
     const QString s = object.get();
 
     static const QRegExp titleRe = getIsTitleRegexp();
-    return ( titleRe.indexIn( s ) < 0 ) ? "True" : "False";
+    return ( titleRe.indexIn( s ) < 0 ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "isupper" ) ) {
     const QString s = object.get().toUpper();
-    return ( s == object ) ? "True" : "False";
+    return ( s == object ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "lower" ) ) {
     return object.get().toLower();

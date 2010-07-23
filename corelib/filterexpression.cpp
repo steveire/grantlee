@@ -108,7 +108,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
       if ( pos != lastPos ) {
         throw Grantlee::Exception( TagSyntaxError,
-            QString( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
+            QString::fromLatin1( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
       }
 
       if ( subString.startsWith( FILTER_SEPARATOR ) ) {
@@ -125,13 +125,13 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
         const int lastFilter = d->m_filters.size();
         if ( subString.isEmpty() )
           throw Grantlee::Exception( EmptyVariableError,
-              QString( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
+              QString::fromLatin1( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
 
         d->m_filters[lastFilter -1].second = Variable( subString );
       } else {
-        if ( subString.contains( "._" ) || ( subString.startsWith( QLatin1Char( '_' ) ) && !subString.startsWith( QLatin1String( "_(" ) ) ) ) {
+        if ( subString.contains( QLatin1String( "._" ) ) || ( subString.startsWith( QLatin1Char( '_' ) ) && !subString.startsWith( QLatin1String( "_(" ) ) ) ) {
           throw Grantlee::Exception( TagSyntaxError,
-              QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
+              QString::fromLatin1( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
         }
         // Token is _("translated"), or "constant", or a variable;
         d->m_variable = Variable( subString );
@@ -144,7 +144,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     const QString remainder = vs.right( vs.size() - lastPos );
     if ( !remainder.isEmpty() ) {
       throw Grantlee::Exception( TagSyntaxError,
-          QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
+          QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
     }
   } catch ( ... ) {
     delete d_ptr;
