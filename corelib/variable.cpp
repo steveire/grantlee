@@ -159,7 +159,7 @@ QVariant Variable::resolve( Context *c ) const
       for ( int j = 0; j < globalMetaObject->enumeratorCount(); ++j ) {
         const QMetaEnum me = globalMetaObject->enumerator( j );
 
-        if (me.name() == nextPart)
+        if ( QLatin1String( me.name() ) == nextPart)
         {
           const MetaEnumVariable mev(me);
           var = QVariant::fromValue(mev);
@@ -168,7 +168,7 @@ QVariant Variable::resolve( Context *c ) const
 
         for ( int k = 0; k < me.keyCount(); ++k )
         {
-          if (me.key(k) == nextPart)
+          if ( QLatin1String( me.key( k ) ) == nextPart )
           {
             const MetaEnumVariable mev(me, k);
             var = QVariant::fromValue(mev);
@@ -240,7 +240,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
       // This might also handle the variant messing I hit before.
       mp = metaObj->property( i );
 
-      if ( QString( mp.name() ) != nextPart )
+      if ( QString::fromUtf8( mp.name() ) != nextPart )
         continue;
 
       if (mp.isEnumType())
@@ -255,7 +255,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
     for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
       me = metaObj->enumerator( i );
 
-      if (me.name() == nextPart)
+      if ( QLatin1String( me.name() ) == nextPart )
       {
         MetaEnumVariable mev(me);
         return QVariant::fromValue(mev);
@@ -275,13 +275,13 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
     MetaEnumVariable mev = var.value<MetaEnumVariable>();
 
     if ( nextPart == QLatin1String( "name" ) )
-      return mev.enumerator.name();
+      return QLatin1String( mev.enumerator.name() );
     if ( nextPart == QLatin1String( "value" ) )
       return mev.value;
     if ( nextPart == QLatin1String( "key" ) )
-      return mev.enumerator.valueToKey( mev.value );
+      return QLatin1String( mev.enumerator.valueToKey( mev.value ) );
     if ( nextPart == QLatin1String( "scope" ) )
-      return mev.enumerator.scope();
+      return QLatin1String( mev.enumerator.scope() );
     if ( nextPart == QLatin1String( "keyCount" ) )
       return mev.enumerator.keyCount();
 

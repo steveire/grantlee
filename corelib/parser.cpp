@@ -147,7 +147,7 @@ NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 {
   if ( node->mustBeFirst() && list.containsNonText() ) {
     throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1(
-        "Node appeared twice in template: %1" ).arg( node->metaObject()->className() ) );
+        "Node appeared twice in template: %1" ).arg( QLatin1String( node->metaObject()->className() ) ) );
   }
 
   list.append( node );
