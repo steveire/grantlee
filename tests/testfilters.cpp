@@ -430,6 +430,11 @@ void TestFilters::testStringFilters_data()
   QTest::newRow( "filter-slugify01" ) << "{% autoescape off %}{{ a|slugify }} {{ b|slugify }}{% endautoescape %}" << dict << "a-b a-amp-b" << NoError;
   QTest::newRow( "filter-slugify02" ) << "{{ a|slugify }} {{ b|slugify }}" << dict << "a-b a-amp-b" << NoError;
 
+  dict.clear();
+  dict.insert( "a", QString::fromUtf8( "Schöne Grüße" ) );
+
+  QTest::newRow( "filter-slugify03" ) << "{{ a|slugify }}" << dict << "schone-grue" << NoError;
+
 
   dict.clear();
   dict.insert( "a", "testing\r\njavascript \'string\" <b>escaping</b>" );

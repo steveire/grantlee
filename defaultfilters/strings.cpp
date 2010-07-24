@@ -362,12 +362,28 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
   return markSafe( inputString.get().replace( QLatin1Char( '\n' ), QLatin1String( "<br />" ) ) );
 }
 
+static QString nofailStringToAscii(const QString &input)
+{
+  QString output;
+  output.reserve( input.size() );
+
+  QString::const_iterator it = input.constBegin();
+  const QString::const_iterator end = input.constEnd();
+  static const QChar asciiEndPoint(128);
+  for ( ; it != end; ++it )
+    if ( *it < asciiEndPoint )
+      output.append( *it );
+
+  return output;
+}
+
 QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   QString inputString = getSafeString( input );
-  inputString = inputString.normalized( QString::NormalizationForm_KD ).toAscii();
+  inputString = inputString.normalized( QString::NormalizationForm_KD );
+  inputString = nofailStringToAscii( inputString );
   inputString = inputString.remove( QRegExp( QLatin1String( "[^\\w\\s-]" ) ) ).trimmed().toLower();
   return markSafe( inputString.replace( QRegExp( QLatin1String( "[-\\s]+" ) ), QChar::fromLatin1( '-' ) ) );
 }
