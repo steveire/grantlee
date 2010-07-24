@@ -113,7 +113,11 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
     return Template();
   }
 
-  return engine->newTemplate( file.readAll(), fileName );
+  QTextStream fstream( &file );
+  fstream.setCodec( "UTF-8" );
+  const QString fileContent = fstream.readAll();
+
+  return engine->newTemplate( fileContent, fileName );
 }
 
 QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const

@@ -108,7 +108,9 @@ bool ScriptableTagLibrary::evaluateScript( const QString &name )
     return false;
   }
 
-  QString fileContent = scriptFile.readAll();
+  QTextStream fstream( &scriptFile );
+  fstream.setCodec( "UTF-8" );
+  const QString fileContent = fstream.readAll();
 
   scriptFile.close();
 

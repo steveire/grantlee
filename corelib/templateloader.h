@@ -114,6 +114,8 @@ public:
     engine->mediaUri( "logo.png" );
   @endcode
 
+  The template files loaded by a %FileSystemTemplateLoader must be UTF-8 encoded.
+
   @see @ref deploying_templates
 
 */
