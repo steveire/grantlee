@@ -32,76 +32,76 @@ MediaWikiMarkupBuilder::~MediaWikiMarkupBuilder()
 
 void MediaWikiMarkupBuilder::beginStrong()
 {
-  m_text.append( "'''" );
+  m_text.append( QLatin1String( "'''" ) );
 }
 void MediaWikiMarkupBuilder::endStrong()
 {
-  m_text.append( "'''" );
+  m_text.append( QLatin1String( "'''" ) );
 }
 void MediaWikiMarkupBuilder::beginEmph()
 {
-  m_text.append( "''" );
+  m_text.append( QLatin1String( "''" ) );
 }
 void MediaWikiMarkupBuilder::endEmph()
 {
-  m_text.append( "''" );
+  m_text.append( QLatin1String( "''" ) );
 }
 void MediaWikiMarkupBuilder::beginUnderline()
 {
-  m_text.append( "<u>" );
+  m_text.append( QLatin1String( "<u>" ) );
 }
 void MediaWikiMarkupBuilder::endUnderline()
 {
-  m_text.append( "</u>" );
+  m_text.append( QLatin1String( "</u>" ) );
 }
 void MediaWikiMarkupBuilder::beginStrikeout()
 {
-  m_text.append( "<s>" );
+  m_text.append( QLatin1String( "<s>" ) );
 }
 void MediaWikiMarkupBuilder::endStrikeout()
 {
-  m_text.append( "</s>" );
+  m_text.append( QLatin1String( "</s>" ) );
 }
 
 void MediaWikiMarkupBuilder::endParagraph()
 {
-  m_text.append( "\n" );
+  m_text.append( QLatin1Char( '\n' ) );
 }
 void MediaWikiMarkupBuilder::addNewline()
 {
-  m_text.append( "\n" );
+  m_text.append( QLatin1Char( '\n' ) );
 }
 
 void MediaWikiMarkupBuilder::beginAnchor( const QString &href, const QString &name )
 {
   Q_UNUSED( name );
-  m_text.append( QString( "[%1 " ).arg( href ) );
+  m_text.append( QString::fromLatin1( "[%1 " ).arg( href ) );
 }
 void MediaWikiMarkupBuilder::endAnchor()
 {
-  m_text.append( "]" );
+  m_text.append( QLatin1Char( ']' ) );
 }
 
 void MediaWikiMarkupBuilder::beginHeader( int level )
 {
   switch ( level ) {
   case 1:
-    m_text.append( "= " );
+    m_text.append( QLatin1String( "= " ) );
     break;
   case 2:
-    m_text.append( "== " );
+    m_text.append( QLatin1String( "== " ) );
     break;
   case 3:
-    m_text.append( "=== " );
+    m_text.append( QLatin1String( "=== " ) );
     break;
   case 4:
-    m_text.append( "==== " );
+    m_text.append( QLatin1String( "==== " ) );
     break;
   case 5:
-    m_text.append( "===== " );
+    m_text.append( QLatin1String( "===== " ) );
     break;
   case 6:
-    m_text.append( "====== " );
+    m_text.append( QLatin1String( "====== " ) );
     break;
   default:
     break;
@@ -112,22 +112,22 @@ void MediaWikiMarkupBuilder::endHeader( int level )
 {
   switch ( level ) {
   case 1:
-    m_text.append( " =\n" );
+    m_text.append( QLatin1String( " =\n" ) );
     break;
   case 2:
-    m_text.append( " ==\n" );
+    m_text.append( QLatin1String( " ==\n" ) );
     break;
   case 3:
-    m_text.append( " ===\n" );
+    m_text.append( QLatin1String( " ===\n" ) );
     break;
   case 4:
-    m_text.append( " ====\n" );
+    m_text.append( QLatin1String( " ====\n" ) );
     break;
   case 5:
-    m_text.append( " =====\n" );
+    m_text.append( QLatin1String( " =====\n" ) );
     break;
   case 6:
-    m_text.append( " ======\n" );
+    m_text.append( QLatin1String( " ======\n" ) );
     break;
   default:
     break;
@@ -144,7 +144,7 @@ void MediaWikiMarkupBuilder::beginList( QTextListFormat::Style type )
   case QTextListFormat::ListDecimal:
   case QTextListFormat::ListLowerAlpha:
   case QTextListFormat::ListUpperAlpha:
-    m_text.append( "\n" );
+    m_text.append( QLatin1Char( '\n' ) );
     break;
   default:
     break;
@@ -153,7 +153,7 @@ void MediaWikiMarkupBuilder::beginList( QTextListFormat::Style type )
 
 void MediaWikiMarkupBuilder::endList()
 {
-  m_text.append( "\n" );
+  m_text.append( QLatin1Char( '\n' ) );
   currentListItemStyles.removeLast();
 }
 
@@ -163,12 +163,12 @@ void MediaWikiMarkupBuilder::beginListItem()
   case QTextListFormat::ListDisc:
   case QTextListFormat::ListCircle:
   case QTextListFormat::ListSquare:
-    m_text.append( "* " );  // Unordered lists are all disc type in MediaWikiMarkup.
+    m_text.append( QLatin1String( "* " ) );  // Unordered lists are all disc type in MediaWikiMarkup.
     break;
   case QTextListFormat::ListDecimal:
   case QTextListFormat::ListLowerAlpha:
   case QTextListFormat::ListUpperAlpha:
-    m_text.append( "# " );
+    m_text.append( QLatin1String( "# " ) );
     break;
   default:
     break;
@@ -177,7 +177,7 @@ void MediaWikiMarkupBuilder::beginListItem()
 
 void MediaWikiMarkupBuilder::endListItem()
 {
-  m_text.append( "\n" );
+  m_text.append( QLatin1Char( '\n' ) );
 }
 
 void MediaWikiMarkupBuilder::appendLiteralText( const QString &text )
@@ -187,8 +187,8 @@ void MediaWikiMarkupBuilder::appendLiteralText( const QString &text )
 
 const QString MediaWikiMarkupBuilder::escape( const QString &s )
 {
-  if ( s.contains( "<" ) ) {    // TODO: This could contain more. "''" and "[" for example
-    return QString( "<nowiki>" + s + "</nowiki>" );
+  if ( s.contains( QLatin1Char( '<' ) ) ) {    // TODO: This could contain more. "''" and "[" for example
+    return QLatin1String( "<nowiki>" ) + s + QLatin1String( "</nowiki>" );
   }
   return s;
 }
