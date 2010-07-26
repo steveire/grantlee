@@ -246,6 +246,8 @@ private Q_SLOTS:
 private:
   Engine *m_engine;
 
+  InMemoryTemplateLoader::Ptr m_loader;
+
   Engine* getEngine();
 
   void doTest();
@@ -255,6 +257,9 @@ private:
 void TestBuiltinSyntax::initTestCase()
 {
   m_engine = getEngine();
+
+  m_loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
+  m_engine->addTemplateLoader( m_loader );
 }
 
 Engine* TestBuiltinSyntax::getEngine()
@@ -1074,6 +1079,49 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   QTest::newRow( "type-accessors-string39" ) << QString::fromLatin1( "{{ str1.upper }}" ) << dict << QString::fromLatin1( "MY STRING" ) << NoError;
   QTest::newRow( "type-accessors-string40" ) << QString::fromLatin1( "{{ str2.upper }}" ) << dict << QString::fromLatin1( "MYSTRING" ) << NoError;
   QTest::newRow( "type-accessors-string41" ) << QString::fromLatin1( "{{ str3.upper }}" ) << dict << QString::fromLatin1( "MY STRING" ) << NoError;
+
+  dict.clear();
+
+#define SON(obj) obj->setObjectName(#obj)
+
+  QObject *obj1 = new QObject(this);
+  SON(obj1);
+  QObject *obj2 = new QObject(this);
+  SON(obj2);
+  obj2->setParent(obj1);
+  QObject *obj3 = new QObject(this);
+  obj3->setParent(obj2);
+  SON(obj3);
+  QObject *obj4 = new QObject(this);
+  obj4->setParent(obj2);
+  SON(obj4);
+
+  dict.insert("object", QVariant::fromValue( obj1 ) );
+
+  QTest::newRow( "type-accessors-qobject01" ) << QString::fromLatin1( "{{ object.objectName }}" ) << dict << QString::fromLatin1( "obj1" ) << NoError;
+
+  const QLatin1String objectDumper( "<li>{{ object.objectName }}</li>"
+                                    "{% if object.children %}"
+                                      "<ul>"
+                                        "{% for object in object.children %}"
+                                          "{% include 'objectdumper.html' %}"
+                                        "{% endfor %}"
+                                      "</ul>"
+                                    "{% endif %}" );
+
+  m_loader->setTemplate( QLatin1String( "objectdumper.html" ), objectDumper );
+
+  QTest::newRow( "type-accessors-qobject02" ) << QString::fromLatin1( "<ul>{% include 'objectdumper.html' %}</ul>" ) << dict <<
+                              QString::fromLatin1( "<ul>"
+                                                   "<li>obj1</li>"
+                                                      "<ul>"
+                                                        "<li>obj2</li>"
+                                                          "<ul>"
+                                                          "<li>obj3</li>"
+                                                          "<li>obj4</li>"
+                                                        "</ul>"
+                                                      "</ul>"
+                                                    "</ul>" ) << NoError;
 
 }
 

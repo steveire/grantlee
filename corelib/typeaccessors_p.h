@@ -193,6 +193,21 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
 template <>
 QVariant TypeAccessor<QObject*>::lookUp( QObject *object, const QString& part )
 {
+  if ( part == QLatin1String( "children" ) )
+  {
+    QObjectList childList = object->children();
+    if (childList.isEmpty())
+      return QVariant();
+    QVariantList children;
+    foreach ( QObject *object, childList )
+      children.append( QVariant::fromValue( object ) );
+    return children;
+  }
+
+  if ( part == QLatin1String( "objectName" ) )
+  {
+    return object->objectName();
+  }
   // Can't be const because of invokeMethod.
   const QMetaObject *metaObj = object->metaObject();
 
