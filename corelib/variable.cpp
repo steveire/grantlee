@@ -223,10 +223,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
 // * Property? (member in django)
 // * list index
   if ( QVariant::Hash == var.type() ) {
-    const QVariantHash hash = var.toHash();
-    if ( hash.contains( nextPart ) )
-      return hash.value( nextPart );
-    return TypeAccessor<QVariantHash>::lookUp( hash, nextPart );
+    return TypeAccessor<QVariantHash>::lookUp( var.toHash(), nextPart );
   } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() ) {
     return TypeAccessor<SafeString>::lookUp( getSafeString( var ), nextPart );
   } else if ( QMetaType::QObjectStar == var.userType() ) {

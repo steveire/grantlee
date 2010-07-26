@@ -36,6 +36,8 @@ struct TypeAccessor
 template <>
 QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString& part )
 {
+  if ( object.contains( part ) )
+    return object.value( part );
   if ( part == QLatin1String( "items" ) ) {
     QVariantList itemsList;
     Q_FOREACH( const QString &key, object.keys() ) {
