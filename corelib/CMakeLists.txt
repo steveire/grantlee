@@ -10,6 +10,7 @@ include_directories(
 include(${QT_USE_FILE})
 
 configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
+configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_p.h)
 
 set (grantlee_core_SRCS
   context.cpp
