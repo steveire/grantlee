@@ -227,47 +227,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
   } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() ) {
     return TypeAccessor<SafeString>::lookUp( getSafeString( var ), nextPart );
   } else if ( QMetaType::QObjectStar == var.userType() ) {
-    // Can't be const because of invokeMethod.
-    const QObject *obj = var.value<QObject *>();
-    const QMetaObject *metaObj = obj->metaObject();
-
-    QMetaProperty mp;
-    for ( int i = 0; i < metaObj->propertyCount(); ++i ) {
-      // TODO only read-only properties should be allowed here.
-      // This might also handle the variant messing I hit before.
-      mp = metaObj->property( i );
-
-      if ( QString::fromUtf8( mp.name() ) != nextPart )
-        continue;
-
-      if (mp.isEnumType())
-      {
-        MetaEnumVariable mev(mp.enumerator(), mp.read( obj ).toInt());
-        return QVariant::fromValue(mev);
-      }
-
-      return mp.read( obj );
-    }
-    QMetaEnum me;
-    for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
-      me = metaObj->enumerator( i );
-
-      if ( QLatin1String( me.name() ) == nextPart )
-      {
-        MetaEnumVariable mev(me);
-        return QVariant::fromValue(mev);
-      }
-
-      const int value = me.keyToValue(nextPart.toLatin1());
-
-      if (value < 0)
-        continue;
-
-      const MetaEnumVariable mev(me, value);
-
-      return QVariant::fromValue(mev);
-    }
-    return QVariant();
+    return TypeAccessor<QObject*>::lookUp( var.value<QObject*>(), nextPart );
   } else if ( qMetaTypeId<MetaEnumVariable>() == var.userType()){
     MetaEnumVariable mev = var.value<MetaEnumVariable>();
 

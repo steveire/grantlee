@@ -24,8 +24,10 @@
 #include <QtCore/QVariant>
 #include <QtCore/QStringList>
 #include <QtCore/QDebug>
-#include "safestring.h"
 #include <QtCore/QRegExp>
+
+#include "metaenumvariable_p.h"
+#include "safestring.h"
 
 template <typename T>
 struct TypeAccessor
@@ -184,6 +186,51 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
   }
   if ( part == QLatin1String( "upper" ) ) {
     return object.get().toUpper();
+  }
+  return QVariant();
+}
+
+template <>
+QVariant TypeAccessor<QObject*>::lookUp( QObject *object, const QString& part )
+{
+  // Can't be const because of invokeMethod.
+  const QMetaObject *metaObj = object->metaObject();
+
+  QMetaProperty mp;
+  for ( int i = 0; i < metaObj->propertyCount(); ++i ) {
+    // TODO only read-only properties should be allowed here.
+    // This might also handle the variant messing I hit before.
+    mp = metaObj->property( i );
+
+    if ( QString::fromUtf8( mp.name() ) != part )
+      continue;
+
+    if ( mp.isEnumType() )
+    {
+      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).toInt());
+      return QVariant::fromValue( mev );
+    }
+
+    return mp.read( object );
+  }
+  QMetaEnum me;
+  for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
+    me = metaObj->enumerator( i );
+
+    if ( QLatin1String( me.name() ) == part )
+    {
+      MetaEnumVariable mev( me );
+      return QVariant::fromValue( mev );
+    }
+
+    const int value = me.keyToValue( part.toLatin1() );
+
+    if ( value < 0 )
+      continue;
+
+    const MetaEnumVariable mev( me, value );
+
+    return QVariant::fromValue( mev );
   }
   return QVariant();
 }
