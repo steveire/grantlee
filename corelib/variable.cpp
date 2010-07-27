@@ -30,6 +30,7 @@
 #include "util.h"
 
 #include "metaenumvariable_p.h"
+#include "exception.h"
 
 using namespace Grantlee;
 
@@ -113,6 +114,10 @@ Variable::Variable( const QString &var )
       const Grantlee::SafeString ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
+      if ( localVar.contains( QLatin1String( "._" ) ) || ( localVar.startsWith( QLatin1Char( '_' ) ) ) ) {
+        throw Grantlee::Exception( TagSyntaxError,
+            QString::fromLatin1( "Variables and attributes may not begin with underscores: %1" ).arg( localVar ) );
+      }
       d->m_lookups = localVar.split( QLatin1Char( '.' ) );
     }
   }

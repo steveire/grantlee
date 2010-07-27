@@ -470,6 +470,12 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.insert( QLatin1String( "1" ), QLatin1String( "abc" ) );
   QTest::newRow( "basic-syntax33" ) << QString::fromLatin1( "{{ 1 }}" ) << dict << QString::fromLatin1( "1" ) << NoError;
   QTest::newRow( "basic-syntax34" ) << QString::fromLatin1( "{{ 1.2 }}" ) << dict << QString::fromLatin1( "1.2" ) << NoError;
+
+  dict.clear();
+
+  dict.insert( QLatin1String( "abc" ), QLatin1String( "def" ) );
+
+  QTest::newRow( "basic-syntax35" ) << QString::fromLatin1( "{{ abc._something }} {{ abc._something|upper }}" ) << dict << QString() << TagSyntaxError;
 }
 
 void TestBuiltinSyntax::testEnums_data()

@@ -136,10 +136,6 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
         d->m_filters[lastFilter -1].second = Variable( subString );
       } else {
-        if ( subString.contains( QLatin1String( "._" ) ) || ( subString.startsWith( QLatin1Char( '_' ) ) && !subString.startsWith( QLatin1String( "_(" ) ) ) ) {
-          throw Grantlee::Exception( TagSyntaxError,
-              QString::fromLatin1( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
-        }
         // Token is _("translated"), or "constant", or a variable;
         d->m_variable = Variable( subString );
       }
