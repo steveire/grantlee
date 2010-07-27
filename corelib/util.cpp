@@ -211,12 +211,21 @@ Grantlee::SafeString Grantlee::toString( const QVariantList &list )
     if ( isSafeString( item ) ) {
       output += QLatin1Literal( "u\'" )
               + static_cast<QString>( getSafeString( item ).get() )
-              + QLatin1Char( '\'' )
-              + ( ( it + 1 ) != end ? QLatin1Literal( ", " ) : QLatin1Literal( "" ) );
+              + QLatin1Char( '\'' );
+    }
+    if ( ( item.type() == QVariant::Int )
+      || ( item.type() == QVariant::UInt )
+      || ( item.type() == QVariant::Double )
+      || ( item.type() == QVariant::LongLong )
+      || ( item.type() == QVariant::ULongLong )
+    ) {
+      output += item.toString();
     }
     if ( item.type() == QVariant::List ) {
-      output += static_cast<QString>( toString( item.toList() ).get() ) + QLatin1Literal( ", " );
+      output += static_cast<QString>( toString( item.toList() ).get() );
     }
+    if ( ( it + 1 ) != end )
+      output += QLatin1String( ", " );
     ++it;
   }
 
