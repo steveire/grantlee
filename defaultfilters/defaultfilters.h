@@ -91,6 +91,7 @@ public:
     filters.insert( QLatin1String( "time" ), new TimeFilter() );
     filters.insert( QLatin1String( "timesince" ), new TimeSinceFilter() );
     filters.insert( QLatin1String( "timeuntil" ), new TimeUntilFilter() );
+    filters.insert( QLatin1String( "title" ), new TitleFilter() );
     filters.insert( QLatin1String( "truncatewords" ), new TruncateWordsFilter() );
     filters.insert( QLatin1String( "unordered_list" ), new UnorderedListFilter() );
     filters.insert( QLatin1String( "upper" ), new UpperFilter() );

@@ -456,10 +456,13 @@ void TestFilters::testStringFilters_data()
   dict.insert( QLatin1String( "path" ), QLatin1String( "www.grantlee.org" ) );
   QTest::newRow( "filter-stringformat04" ) << "{% with path|stringformat:\"<a href=\\\"%1\\\">%1</a>\"|safe as result %}{{ result }}{% endwith %}" << dict << "<a href=\"www.grantlee.org\">www.grantlee.org</a>" << NoError;
 
+  dict.clear();
+  dict.insert( QLatin1String( "a" ), QLatin1String( "JOE\'S CRAB SHACK" ) );
+  QTest::newRow( "filter-title01" ) << "{{ a|title }}" << dict << QString::fromLatin1( "Joe&#39;s Crab Shack" ) << NoError;
 
-
-  //  XXX No test for "title" filter; needs an actual object.
-
+  dict.clear();
+  dict.insert( QLatin1String( "a" ), QLatin1String( "555 WEST 53RD STREET" ) );
+  QTest::newRow( "filter-title02" ) << "{{ a|title }}" << dict << QString::fromLatin1( "555 West 53rd Street" ) << NoError;
 
   dict.clear();
   dict.insert( QLatin1String( "a" ), QLatin1String( "alpha & bravo" ) );

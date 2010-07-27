@@ -165,13 +165,21 @@ QVariant TitleFilter::doFilter( const QVariant& input, const QVariant &argument,
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
-//   QRegExp re( "\b([a-z])" );
-
-  static const QRegExp re( QLatin1String( "([a-z])'([A-Z])" ) );
 
   QString str = getSafeString( input );
 
-  str.replace( re, QString::fromLatin1( "\\1" ).toUpper() );
+  QString::iterator it = str.begin();
+  const QString::iterator end = str.end();
+
+  bool toUpper = true;
+  for ( ; it != end; ++it )
+  {
+    if ( toUpper )
+      *it = it->toUpper();
+    else
+      *it = it->toLower();
+    toUpper = it->isSpace();
+  }
 
   return str;
 }
