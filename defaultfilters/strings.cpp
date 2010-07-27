@@ -52,21 +52,21 @@ EscapeJsFilter::EscapeJsFilter()
 static QList<QPair<QString, QString> > getJsEscapes()
 {
   QList<QPair<QString, QString> > jsEscapes;
-  jsEscapes << QPair<QString, QString>( QChar::fromLatin1( '\\' ), QLatin1String( "\\x5C" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '\'' ),  QLatin1String( "\\x27" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '\"' ),  QLatin1String( "\\x22" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '>' ), QLatin1String( "\\x3E" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '<' ), QLatin1String( "\\x3C" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '&' ), QLatin1String( "\\x26" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '=' ), QLatin1String( "\\x3D" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '-' ), QLatin1String( "\\x2D" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( ';' ), QLatin1String( "\\x3B" ) )
+  jsEscapes << QPair<QString, QString>( QChar::fromLatin1( '\\' ), QLatin1String( "\\u005C" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '\'' ),  QLatin1String( "\\u0027" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '\"' ),  QLatin1String( "\\u0022" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '>' ), QLatin1String( "\\u003E" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '<' ), QLatin1String( "\\u003C" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '&' ), QLatin1String( "\\u0026" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '=' ), QLatin1String( "\\u003D" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '-' ), QLatin1String( "\\u002D" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( ';' ), QLatin1String( "\\u003B" ) )
             << QPair<QString, QString>( QChar( 0x2028 ), QLatin1String( "\\u2028" ) )
             << QPair<QString, QString>( QChar( 0x2029 ), QLatin1String( "\\u2029" ) );
 
   for( int i = 0; i < 32; ++i )
   {
-    jsEscapes << QPair<QString, QString>( QChar( i ), QLatin1String( "\\x" ) + QString::fromLatin1( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
+    jsEscapes << QPair<QString, QString>( QChar( i ), QLatin1String( "\\u00" ) + QString::fromLatin1( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
   }
   return jsEscapes;
 }

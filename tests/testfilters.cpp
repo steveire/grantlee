@@ -438,8 +438,8 @@ void TestFilters::testStringFilters_data()
 
   dict.clear();
   dict.insert( QLatin1String( "a" ), QLatin1String( "testing\r\njavascript \'string\" <b>escaping</b>" ) );
-  QTest::newRow( "escapejs01" ) << QString::fromLatin1( "{{ a|escapejs }}" ) << dict << "testing\\x0D\\x0Ajavascript \\x27string\\x22 \\x3Cb\\x3Eescaping\\x3C/b\\x3E" << NoError;
-  QTest::newRow( "escapejs02" ) << QString::fromLatin1( "{% autoescape off %}{{ a|escapejs }}{% endautoescape %}" ) << dict << "testing\\x0D\\x0Ajavascript \\x27string\\x22 \\x3Cb\\x3Eescaping\\x3C/b\\x3E" << NoError;
+  QTest::newRow( "escapejs01" ) << QString::fromLatin1( "{{ a|escapejs }}" ) << dict << "testing\\u000D\\u000Ajavascript \\u0027string\\u0022 \\u003Cb\\u003Eescaping\\u003C/b\\u003E" << NoError;
+  QTest::newRow( "escapejs02" ) << QString::fromLatin1( "{% autoescape off %}{{ a|escapejs }}{% endautoescape %}" ) << dict << "testing\\u000D\\u000Ajavascript \\u0027string\\u0022 \\u003Cb\\u003Eescaping\\u003C/b\\u003E" << NoError;
 
   //  Notice that escaping is applied *after* any filters, so the string
   //  formatting here only needs to deal with pre-escaped characters.
