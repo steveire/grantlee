@@ -592,6 +592,20 @@ void TestDefaultTags::testIfTag_data()
   dict.insert( QLatin1String( "var" ), r );
   QTest::newRow( "if-truthiness10" ) << QString::fromLatin1( "{% if var %}Yes{% else %}No{% endif %}" ) << dict << QString::fromLatin1( "Yes" ) << NoError;
 
+  dict.clear();
+  QTest::newRow( "if-tag-badarg01" ) << QString::fromLatin1( "{% if x|default_if_none:y %}yes{% endif %}" ) << dict << QString() << NoError;
+
+  dict.insert( QLatin1String( "y" ), 0 );
+
+  QTest::newRow( "if-tag-badarg02" ) << QString::fromLatin1( "{% if x|default_if_none:y %}yes{% endif %}" ) << dict << QString() << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "y" ), 1 );
+
+  QTest::newRow( "if-tag-badarg03" ) << QString::fromLatin1( "{% if x|default_if_none:y %}yes{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  QTest::newRow( "if-tag-badarg04" ) << QString::fromLatin1( "{% if x|default_if_none:y %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 }
 
 void TestDefaultTags::testForTag_data()
