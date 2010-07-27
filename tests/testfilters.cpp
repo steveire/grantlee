@@ -941,7 +941,27 @@ void TestFilters::testIntegerFilters_data()
 
   Dict dict;
 
-  QTest::newRow( "filter-add01" ) << QString::fromLatin1( "{{ 1|add:2 }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
+  dict.insert( QLatin1String( "i" ), 2000 );
+
+  QTest::newRow( "add01" ) << QString::fromLatin1( "{{ i|add:5 }}" ) << dict << QString::fromLatin1( "2005" ) << NoError;
+  QTest::newRow( "add02" ) << QString::fromLatin1( "{{ i|add:\"napis\" }}" ) << dict << QString::fromLatin1( "2000" ) << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "i" ), QLatin1String( "not_an_int" ) );
+
+  QTest::newRow( "add03" ) << QString::fromLatin1( "{{ i|add:16 }}" ) << dict << QString::fromLatin1( "not_an_int" ) << NoError;
+  QTest::newRow( "add04" ) << QString::fromLatin1( "{{ i|add:\"16\" }}" ) << dict << QString::fromLatin1( "not_an_int16" ) << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "l1" ), QVariantList() << 1 << 2 );
+  dict.insert( QLatin1String( "l2" ), QVariantList() << 3 << 4 );
+
+  QTest::newRow( "add05" ) << QString::fromLatin1( "{{ l1|add:l2 }}" ) << dict << QString::fromLatin1( "[1, 2, 3, 4]" ) << NoError;
+  // QTest::newRow( "add06" ) << QString::fromLatin1( "{{ t1|add:t2 }}" ) << dict << QString::fromLatin1( "2005" ) << NoError;
+
+  // QTest::newRow( "add07" ) << QString::fromLatin1( "{{ d|add:t }}" ) << dict << QString::fromLatin1( "2005" ) << NoError;
+
+  QTest::newRow( "add08" ) << QString::fromLatin1( "{{ 1|add:2 }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
 
   QTest::newRow( "filter-getdigit01" ) << QString::fromLatin1( "{{ 123|get_digit:1 }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
   QTest::newRow( "filter-getdigit02" ) << QString::fromLatin1( "{{ 123|get_digit:2 }}" ) << dict << QString::fromLatin1( "2" ) << NoError;

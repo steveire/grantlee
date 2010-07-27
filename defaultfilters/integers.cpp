@@ -25,7 +25,63 @@
 QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  return getSafeString( input ).get().toInt() + getSafeString( argument ).get().toInt();
+
+  if ( isSafeString( input ) )
+  {
+    if ( isSafeString( argument ) )
+      return getSafeString( input ) + getSafeString( argument );
+    return input;
+  }
+
+  if ( input.type() == QVariant::List )
+  {
+    if ( argument.type() == QVariant::List )
+      return input.toList() + argument.toList();
+    return input;
+  }
+
+  if ( input.type() == QVariant::StringList )
+  {
+    if ( argument == QVariant::StringList )
+      return input.toStringList() + argument.toStringList();
+    return input;
+  }
+
+  if ( input.type() == QVariant::Int )
+  {
+    if ( argument.type() == QVariant::Int )
+      return input.toInt() + argument.toInt();
+    return input;
+  }
+
+  if ( input.type() == QVariant::UInt )
+  {
+    if ( argument.type() == QVariant::UInt )
+      return input.toUInt() + argument.toUInt();
+    return input;
+  }
+
+  if ( input.type() == QVariant::Double )
+  {
+    if ( argument.type() == QVariant::Double )
+      return input.toDouble() + argument.toDouble();
+    return input;
+  }
+
+  if ( input.type() == QVariant::LongLong )
+  {
+    if ( argument.type() == QVariant::LongLong )
+      return input.toLongLong() + argument.toLongLong();
+    return input;
+  }
+
+  if ( input.type() == QVariant::ULongLong )
+  {
+    if ( argument.type() == QVariant::ULongLong )
+      return input.toULongLong() + argument.toULongLong();
+    return input;
+  }
+  return input;
 }
 
 QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
