@@ -122,7 +122,7 @@ namespace Grantlee
     Q_PROPERTY(int age READ age)
   @endverbatim
 
-  to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects.
+  to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects. In the case of dynamic properties, the property name must be UTF-8 encoded.
 
   If you already have QObjects in your application which would be suitable for use in templates, you only need to add some Q_PROPERTY entries to the classes to make them accessible to %Grantlee.
 

@@ -241,6 +241,9 @@ private Q_SLOTS:
   void testMediaPathSafety_data();
   void testMediaPathSafety();
 
+  void testDynamicProperties_data();
+  void testDynamicProperties() { doTest(); }
+
   void cleanupTestCase();
 
 private:
@@ -1139,6 +1142,24 @@ void TestBuiltinSyntax::testTypeAccessors_data()
                                                     "</ul>" ) << NoError;
 
 }
+
+void TestBuiltinSyntax::testDynamicProperties_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QObject *obj = new QObject( this );
+  obj->setProperty( "prop", 7 );
+  dict.insert( QLatin1String( "var" ), QVariant::fromValue( static_cast<QObject*>( obj ) ) );
+
+  QTest::newRow( "dynamic-properties01" ) << QString::fromLatin1( "{{ var.prop }}" ) << dict << QString::fromLatin1( "7" ) << NoError;
+
+}
+
 
 
 QTEST_MAIN( TestBuiltinSyntax )

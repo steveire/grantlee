@@ -241,7 +241,7 @@ QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QSt
 
     return QVariant::fromValue( mev );
   }
-  return QVariant();
+  return object->property( property.toUtf8() );
 }
 
 template <>
