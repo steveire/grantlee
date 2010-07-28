@@ -95,7 +95,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 CycleNode::CycleNode( const QList<FilterExpression> &list, const QString &name, QObject *parent )
-    : Node( parent ), m_variableIterator( list ), m_name( name )
+    : Node( parent ), m_list( list ), m_variableIterator( list ), m_name( name )
 {
 }
 
