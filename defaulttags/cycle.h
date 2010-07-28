@@ -42,7 +42,7 @@ template <typename T>
 class RingIterator
 {
 public:
-  RingIterator<T>( QList<T> list )
+  RingIterator<T>( const QList<T> &list )
       : m_it( list ) {
     Q_ASSERT( list.size() > 0 );
   }
@@ -68,14 +68,13 @@ class CycleNode : public Node
 {
   Q_OBJECT
 public:
-  CycleNode( QList<FilterExpression> list, const QString &name, QObject *parent = 0 );
+  CycleNode( const QList<FilterExpression> &list, const QString &name, QObject *parent = 0 );
 
   void render( OutputStream *stream, Context *c );
 
 private:
   RingIterator<FilterExpression> m_variableIterator;
-  QString m_name;
-
+  const QString m_name;
 };
 
 #endif
