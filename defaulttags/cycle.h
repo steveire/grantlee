@@ -42,6 +42,11 @@ template <typename T>
 class RingIterator
 {
 public:
+  RingIterator<T>()
+  {
+
+  }
+
   RingIterator<T>( const QList<T> &list )
       : m_begin( list.constBegin() ), m_it( list.constBegin() ), m_end( list.constEnd() )
   {
@@ -68,6 +73,8 @@ private:
 };
 
 typedef RingIterator<FilterExpression> FilterExpressionRotator;
+
+Q_DECLARE_METATYPE(FilterExpressionRotator)
 
 class CycleNode : public Node
 {

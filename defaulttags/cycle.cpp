@@ -25,6 +25,7 @@
 #include "exception.h"
 
 #include "util.h"
+#include <rendercontext.h>
 
 static const char * _namedCycleNodes = "_namedCycleNodes";
 
@@ -101,11 +102,23 @@ CycleNode::CycleNode( const QList<FilterExpression> &list, const QString &name, 
 
 void CycleNode::render( OutputStream *stream, Context *c )
 {
+  QVariant &variant = c->renderContext()->data( this );
+
+  FilterExpressionRotator rotator;
+
+  if ( variant.isValid() )
+    rotator = variant.value<FilterExpressionRotator>();
+  else
+    rotator = FilterExpressionRotator( m_list );
+
   QString value;
   QTextStream textStream( &value );
   QSharedPointer<OutputStream> temp = stream->clone( &textStream );
 
-  m_variableIterator.next().resolve( temp.data(), c );
+  rotator.next().resolve( temp.data(), c ).toString();
+
+  variant.setValue( rotator );
+
   if ( !m_name.isEmpty() ) {
     c->insert( m_name, value );
   }
