@@ -71,13 +71,13 @@ void TestPlainMarkupOutput::testSingleFormat()
     QTextDocument *doc = new QTextDocument();
 
     // One format
-    doc->setHtml("This <b>text</b> is bold.");
+    doc->setHtml( QLatin1String( "This <b>text</b> is bold." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
-    QRegExp regex(QString("^This \\*text\\* is bold.\\n$"));
+    QRegExp regex(QLatin1String("^This \\*text\\* is bold.\\n$"));
 
     QVERIFY(regex.exactMatch(result));
 
@@ -88,13 +88,13 @@ void TestPlainMarkupOutput::testDoubleFormat()
     QTextDocument *doc = new QTextDocument();
 
     // One format
-    doc->setHtml("Some <b><i>formatted</i></b> text.");
+    doc->setHtml( QLatin1String( "Some <b><i>formatted</i></b> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
-    QRegExp regex(QString("^Some (\\*/|/\\*)formatted(\\*/|/\\*) text.\\n$"));
+    QRegExp regex(QLatin1String("^Some (\\*/|/\\*)formatted(\\*/|/\\*) text.\\n$"));
 
     QVERIFY(regex.exactMatch(result));
 
@@ -103,14 +103,14 @@ void TestPlainMarkupOutput::testDoubleFormat()
 void TestPlainMarkupOutput::testAnchor()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("A <a href=\"http://www.kde.org\">link</a> to KDE.");
+    doc->setHtml( QLatin1String( "A <a href=\"http://www.kde.org\">link</a> to KDE." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex(QString("^A link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
+    QRegExp regex(QLatin1String("^A link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
 
     regex.exactMatch(result);
 
@@ -123,7 +123,7 @@ void TestPlainMarkupOutput::testAnchor()
 void TestPlainMarkupOutput::testAnchorWithFormattedContent()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("A <a href=\"http://www.kde.org\"><b>formatted</b> link</a> to KDE.");
+    doc->setHtml( QLatin1String( "A <a href=\"http://www.kde.org\"><b>formatted</b> link</a> to KDE." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
@@ -131,7 +131,7 @@ void TestPlainMarkupOutput::testAnchorWithFormattedContent()
     QString result = hb->getResult();
 
 
-    QRegExp regex(QString("^A \\*formatted\\* link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
+    QRegExp regex(QLatin1String("^A \\*formatted\\* link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
 
     QVERIFY(regex.exactMatch(result));
 
@@ -140,14 +140,14 @@ void TestPlainMarkupOutput::testAnchorWithFormattedContent()
 void TestPlainMarkupOutput::testAdjacentAnchors()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Two <a href=\"http://www.kde.org\">links</a><a href=\"http://www.google.com\">next</a> to eachother.");
+    doc->setHtml( QLatin1String( "Two <a href=\"http://www.kde.org\">links</a><a href=\"http://www.google.com\">next</a> to eachother." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex(QString("^Two links\\[1\\]next\\[2\\] to eachother.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n\\[2\\] http://www.google.com\\n$"));
+    QRegExp regex(QLatin1String("^Two links\\[1\\]next\\[2\\] to eachother.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n\\[2\\] http://www.google.com\\n$"));
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -155,14 +155,14 @@ void TestPlainMarkupOutput::testAdjacentAnchors()
 void TestPlainMarkupOutput::testNestedFormatting()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("This <b>text is <i>italic</i> and</b> bold.");
+    doc->setHtml( QLatin1String( "This <b>text is <i>italic</i> and</b> bold." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex(QString("^This \\*text is /italic/ and\\* bold.\\n$"));
+    QRegExp regex(QLatin1String("^This \\*text is /italic/ and\\* bold.\\n$"));
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -170,14 +170,14 @@ void TestPlainMarkupOutput::testNestedFormatting()
 void TestPlainMarkupOutput::testSpan()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Some <span style=\"color:#ff0000;\">formatted</span> text.");
+    doc->setHtml( QLatin1String( "Some <span style=\"color:#ff0000;\">formatted</span> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Some formatted text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Some formatted text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -185,7 +185,7 @@ void TestPlainMarkupOutput::testSpan()
 void TestPlainMarkupOutput::testDoubleSpan()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Some <span style=\"color:#ff0000;background-color:#00ff00;\">formatted</span> text.");
+    doc->setHtml( QLatin1String( "Some <span style=\"color:#ff0000;background-color:#00ff00;\">formatted</span> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
@@ -193,7 +193,7 @@ void TestPlainMarkupOutput::testDoubleSpan()
     QString result = hb->getResult();
 
 
-    QRegExp regex = QRegExp("^Some formatted text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Some formatted text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 
@@ -202,14 +202,14 @@ void TestPlainMarkupOutput::testDoubleSpan()
 void TestPlainMarkupOutput::testSpanNesting()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph <span style=\"background-color:#00ff00;\">with some <span style=\"color:#ff0000;\">formatted</span> nested</span> text.");
+    doc->setHtml( QLatin1String( "Paragraph <span style=\"background-color:#00ff00;\">with some <span style=\"color:#ff0000;\">formatted</span> nested</span> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Paragraph with some formatted nested text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph with some formatted nested text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -217,14 +217,14 @@ void TestPlainMarkupOutput::testSpanNesting()
 void TestPlainMarkupOutput::testDoubleStartDifferentFinish()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph <i><b>with</b> some formatted</i> text.");
+    doc->setHtml( QLatin1String( "Paragraph <i><b>with</b> some formatted</i> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Paragraph /\\*with\\* some formatted/ text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph /\\*with\\* some formatted/ text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -232,14 +232,14 @@ void TestPlainMarkupOutput::testDoubleStartDifferentFinish()
 void TestPlainMarkupOutput::testDoubleStartDifferentFinishReverseOrder()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph <b><i>with</i> some formatted</b> text.");
+    doc->setHtml( QLatin1String( "Paragraph <b><i>with</i> some formatted</b> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Paragraph \\*/with/ some formatted\\* text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph \\*/with/ some formatted\\* text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 
@@ -248,14 +248,14 @@ void TestPlainMarkupOutput::testDoubleStartDifferentFinishReverseOrder()
 void TestPlainMarkupOutput::testDifferentStartDoubleFinish()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph <i>with some <b>formatted<b></i> text.");
+    doc->setHtml( QLatin1String( "Paragraph <i>with some <b>formatted<b></i> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Paragraph /with some \\*formatted\\*/ text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph /with some \\*formatted\\*/ text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -263,7 +263,7 @@ void TestPlainMarkupOutput::testDifferentStartDoubleFinish()
 void TestPlainMarkupOutput::testDifferentStartDoubleFinishReverseOrder()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph <b>with some <i>formatted</i></b> text.");
+    doc->setHtml( QLatin1String( "Paragraph <b>with some <i>formatted</i></b> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
@@ -271,7 +271,7 @@ void TestPlainMarkupOutput::testDifferentStartDoubleFinishReverseOrder()
     QString result = hb->getResult();
 
 
-    QRegExp regex = QRegExp("^Paragraph \\*with some /formatted/\\* text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph \\*with some /formatted/\\* text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 
@@ -280,7 +280,7 @@ void TestPlainMarkupOutput::testDifferentStartDoubleFinishReverseOrder()
 void TestPlainMarkupOutput::testOverlap()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph <b>with <i>some</i></b><i> formatted</i> text.");
+    doc->setHtml( QLatin1String( "Paragraph <b>with <i>some</i></b><i> formatted</i> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
@@ -288,7 +288,7 @@ void TestPlainMarkupOutput::testOverlap()
     QString result = hb->getResult();
 
 
-    QRegExp regex = QRegExp("^Paragraph \\*with /some/\\*/ formatted/ text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph \\*with /some/\\*/ formatted/ text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 
@@ -297,14 +297,14 @@ void TestPlainMarkupOutput::testOverlap()
 void TestPlainMarkupOutput::testEdgeCaseLeft()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph <b>with some formatted text.</b>");
+    doc->setHtml( QLatin1String( "Paragraph <b>with some formatted text.</b>" ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Paragraph \\*with some formatted text.\\*\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph \\*with some formatted text.\\*\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -312,14 +312,14 @@ void TestPlainMarkupOutput::testEdgeCaseLeft()
 void TestPlainMarkupOutput::testEdgeCaseRight()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<b>Paragraph with some formatted</b> text.");
+    doc->setHtml( QLatin1String( "<b>Paragraph with some formatted</b> text." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^\\*Paragraph with some formatted\\* text.\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^\\*Paragraph with some formatted\\* text.\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -327,14 +327,14 @@ void TestPlainMarkupOutput::testEdgeCaseRight()
 void TestPlainMarkupOutput::testImage()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" /> image.");
+    doc->setHtml( QLatin1String( "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" /> image." ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -348,7 +348,7 @@ void TestPlainMarkupOutput::testImageResized()
     QTextDocument *doc = new QTextDocument();
 
     // width
-    doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" /> image.");
+    doc->setHtml( QLatin1String( "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" /> image." ) );
 
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
@@ -356,29 +356,29 @@ void TestPlainMarkupOutput::testImageResized()
     result = hb->getResult();
 
 
-    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    regex = QRegExp( QLatin1String( "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // height
-    doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" /> image.");
+    doc->setHtml( QLatin1String( "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" /> image." ) );
 
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    regex = QRegExp( QLatin1String( "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // height and width
-    doc->setHtml("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" width=\"10\" /> image.");
+    doc->setHtml( QLatin1String( "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" width=\"10\" /> image." ) );
 
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$");
+    regex = QRegExp( QLatin1String( "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -393,105 +393,105 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
 
     // Test bold
-    doc->setHtml("Some <b>formatted</b> text.");
+    doc->setHtml( QLatin1String( "Some <b>formatted</b> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some \\*formatted\\* text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some \\*formatted\\* text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
 
     // Test Italic
-    doc->setHtml("Some <i>formatted</i> text.");
+    doc->setHtml( QLatin1String( "Some <i>formatted</i> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some /formatted/ text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some /formatted/ text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // Test Underline
-    doc->setHtml("Some <u>formatted</u> text.");
+    doc->setHtml( QLatin1String( "Some <u>formatted</u> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some _formatted_ text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some _formatted_ text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // Test Strikeout
-    doc->setHtml("Some <s>formatted</s> text.");
+    doc->setHtml( QLatin1String( "Some <s>formatted</s> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some -formatted- text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some -formatted- text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // Test Superscript
-    doc->setHtml("Some <sup>formatted</sup> text.");
+    doc->setHtml( QLatin1String( "Some <sup>formatted</sup> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some \\^\\{formatted\\} text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some \\^\\{formatted\\} text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // Test Subscript
-    doc->setHtml("Some <sub>formatted</sub> text.");
+    doc->setHtml( QLatin1String( "Some <sub>formatted</sub> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some _\\{formatted\\} text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some _\\{formatted\\} text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // Test Foreground
-    doc->setHtml("Some <span style=\"color:#ff0000;\">formatted</span> text.");
+    doc->setHtml( QLatin1String( "Some <span style=\"color:#ff0000;\">formatted</span> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some formatted text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some formatted text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
 
     // Test Background
-    doc->setHtml("Some <span style=\"background-color:#ff0000;\">formatted</span> text.");
+    doc->setHtml( QLatin1String( "Some <span style=\"background-color:#ff0000;\">formatted</span> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some formatted text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some formatted text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // Test Font Family
-    doc->setHtml("Some <span style=\"font-family:courier;\">formatted</span> text.");
+    doc->setHtml( QLatin1String( "Some <span style=\"font-family:courier;\">formatted</span> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some formatted text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some formatted text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
     // Test Font Size
-    doc->setHtml("Some <span style=\"font-size:20pt;\">formatted</span> text.");
+    doc->setHtml( QLatin1String( "Some <span style=\"font-size:20pt;\">formatted</span> text." ) );
     hb = new PlainTextMarkupBuilder();
     md = new MarkupDirector(hb);
     md->processDocument(doc);
     result = hb->getResult();
 
-    regex = QRegExp("^Some formatted text.\\n$");
+    regex = QRegExp( QLatin1String( "^Some formatted text.\\n$" ) );
     QVERIFY(regex.exactMatch(result));
 
 }
@@ -499,7 +499,7 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 void TestPlainMarkupOutput::testHorizontalRule()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr /><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>");
+    doc->setHtml( QLatin1String( "<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr /><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>" ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
@@ -507,7 +507,7 @@ void TestPlainMarkupOutput::testHorizontalRule()
     QString result = hb->getResult();
 
 
-    QRegExp regex = QRegExp("^Foo\\n--------------------\\nBar\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Foo\\n--------------------\\nBar\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -515,14 +515,14 @@ void TestPlainMarkupOutput::testHorizontalRule()
 void TestPlainMarkupOutput::testNewlines()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<p>Foo</p>\n<br /><br />\n<p>Bar</p>");
+    doc->setHtml( QLatin1String( "<p>Foo</p>\n<br /><br />\n<p>Bar</p>" ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Foo\\n\\n\\nBar\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Foo\\n\\n\\nBar\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -530,14 +530,14 @@ void TestPlainMarkupOutput::testNewlines()
 void TestPlainMarkupOutput::testEmptyParagraphs()
 {
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<p>Foo</p>\n<br /><br />\n<p>Bar</p>");
+    doc->setHtml( QLatin1String( "<p>Foo</p>\n<br /><br />\n<p>Bar</p>" ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(doc);
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Foo\\n\\n\\nBar\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Foo\\n\\n\\nBar\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -548,18 +548,18 @@ void TestPlainMarkupOutput::testNewlinesThroughQTextEdit()
     QTextEdit *te = new QTextEdit();
     QTextCursor cursor = te->textCursor();
     cursor.movePosition(QTextCursor::Start);
-    cursor.insertText("Foo");
-    cursor.insertText("\n");
-    cursor.insertText("\n");
-    cursor.insertText("\n");
-    cursor.insertText("Bar");
+    cursor.insertText( QLatin1String( "Foo" ) );
+    cursor.insertText( QLatin1String( "\n" ) );
+    cursor.insertText( QLatin1String( "\n" ) );
+    cursor.insertText( QLatin1String( "\n" ) );
+    cursor.insertText( QLatin1String( "Bar" ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
     md->processDocument(te->document());
     QString result = hb->getResult();
 
-    QRegExp regex = QRegExp("^Foo\\n\\n\\nBar\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Foo\\n\\n\\nBar\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }
@@ -568,7 +568,7 @@ void TestPlainMarkupOutput:: testBrInsideParagraph()
 {
 
     QTextDocument *doc = new QTextDocument();
-    doc->setHtml("<p>Foo<br /><br /><br />Bar</p>");
+    doc->setHtml( QLatin1String( "<p>Foo<br /><br /><br />Bar</p>" ) );
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
@@ -577,7 +577,7 @@ void TestPlainMarkupOutput:: testBrInsideParagraph()
 
     // Two paragraphs separated by two line breaks
 
-    QRegExp regex = QRegExp("^Foo\\n\\n\\nBar\\n$");
+    QRegExp regex = QRegExp( QLatin1String( "^Foo\\n\\n\\nBar\\n$" ) );
 
     QVERIFY(regex.exactMatch(result));
 }

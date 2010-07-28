@@ -24,8 +24,10 @@
 #include <QtCore/QVariant>
 #include <QtCore/QStringList>
 #include <QtCore/QDebug>
-#include "safestring.h"
 #include <QtCore/QRegExp>
+
+#include "metaenumvariable_p.h"
+#include "safestring.h"
 
 template <typename T>
 struct TypeAccessor
@@ -36,6 +38,8 @@ struct TypeAccessor
 template <>
 QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString& part )
 {
+  if ( object.contains( part ) )
+    return object.value( part );
   if ( part == QLatin1String( "items" ) ) {
     QVariantList itemsList;
     Q_FOREACH( const QString &key, object.keys() ) {
@@ -60,13 +64,13 @@ QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString&
 }
 
 static QRegExp getIsTitleRegexp() {
-  QRegExp titleRe( "\\b[a-z]" );
+  QRegExp titleRe( QLatin1String( "\\b[a-z]" ) );
   titleRe.setMinimal( true );
   return titleRe;
 }
 
 static QRegExp getTitleRegexp() {
-  QRegExp titleRe( "\\b(.)" );
+  QRegExp titleRe( QLatin1String( "\\b(.)" ) );
   titleRe.setMinimal( true );
   return titleRe;
 }
@@ -78,53 +82,57 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
     const QString s = object.get();
     return s.at( 0 ).toUpper() + s.right( s.length() - 1 );
   }
+
+  static const QLatin1String falseString( "False" );
+  static const QLatin1String trueString( "True" );
+
   if ( part == QLatin1String( "isalnum" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isLetterOrNumber() )
-        return "False";
+        return falseString;
       ++it;
     }
-    return "True";
+    return trueString;
   }
   if ( part == QLatin1String( "isalpha" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isLetter() )
-        return "False";
+        return falseString;
       ++it;
     }
-    return "True";
+    return trueString;
   }
   if ( part == QLatin1String( "isdigit" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isNumber() )
-        return "False";
+        return falseString;
       ++it;
     }
-    return "True";
+    return trueString;
   }
   if ( part == QLatin1String( "islower" ) ) {
     const QString s = object.get().toLower();
-    return ( s == object.get() ) ? "True" : "False";
+    return ( s == object.get() ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "isspace" ) ) {
     const QString s = object.get().trimmed();
-    return ( s.isEmpty() ) ? "True" : "False";
+    return ( s.isEmpty() ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "istitle" ) ) {
     const QString s = object.get();
 
     static const QRegExp titleRe = getIsTitleRegexp();
-    return ( titleRe.indexIn( s ) < 0 ) ? "True" : "False";
+    return ( titleRe.indexIn( s ) < 0 ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "isupper" ) ) {
     const QString s = object.get().toUpper();
-    return ( s == object ) ? "True" : "False";
+    return ( s == object ) ? trueString : falseString;
   }
   if ( part == QLatin1String( "lower" ) ) {
     return object.get().toLower();
@@ -178,6 +186,66 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
   }
   if ( part == QLatin1String( "upper" ) ) {
     return object.get().toUpper();
+  }
+  return QVariant();
+}
+
+template <>
+QVariant TypeAccessor<QObject*>::lookUp( QObject *object, const QString& part )
+{
+  if ( part == QLatin1String( "children" ) )
+  {
+    QObjectList childList = object->children();
+    if (childList.isEmpty())
+      return QVariant();
+    QVariantList children;
+    foreach ( QObject *object, childList )
+      children.append( QVariant::fromValue( object ) );
+    return children;
+  }
+
+  if ( part == QLatin1String( "objectName" ) )
+  {
+    return object->objectName();
+  }
+  // Can't be const because of invokeMethod.
+  const QMetaObject *metaObj = object->metaObject();
+
+  QMetaProperty mp;
+  for ( int i = 0; i < metaObj->propertyCount(); ++i ) {
+    // TODO only read-only properties should be allowed here.
+    // This might also handle the variant messing I hit before.
+    mp = metaObj->property( i );
+
+    if ( QString::fromUtf8( mp.name() ) != part )
+      continue;
+
+    if ( mp.isEnumType() )
+    {
+      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).toInt());
+      return QVariant::fromValue( mev );
+    }
+
+    return mp.read( object );
+  }
+  QMetaEnum me;
+  for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
+    me = metaObj->enumerator( i );
+
+    if ( QLatin1String( me.name() ) == part )
+    {
+      MetaEnumVariable mev( me );
+      return QVariant::fromValue( mev );
+    }
+
+    const int value = me.keyToValue( part.toLatin1() );
+
+    if ( value < 0 )
+      continue;
+
+    const MetaEnumVariable mev( me, value );
+
+    return QVariant::fromValue( mev );
   }
   return QVariant();
 }

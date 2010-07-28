@@ -33,21 +33,21 @@ RegroupNodeFactory::RegroupNodeFactory()
 
 Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( ' ' );
+  QStringList expr = tagContent.split( QLatin1Char( ' ' ) );
 
   if ( expr.size() != 6 ) {
-    throw Grantlee::Exception( TagSyntaxError, "widthratio takes five arguments" );
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "widthratio takes five arguments" ) );
   }
   FilterExpression target( expr.at( 1 ), p );
-  if ( expr.at( 2 ) != "by" ) {
-    throw Grantlee::Exception( TagSyntaxError, "second argument must be 'by'" );
+  if ( expr.at( 2 ) != QLatin1String( "by" ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "second argument must be 'by'" ) );
   }
 
-  if ( expr.at( 4 ) != "as" ) {
-    throw Grantlee::Exception( TagSyntaxError, "fourth argument must be 'as'" );
+  if ( expr.at( 4 ) != QLatin1String( "as" ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "fourth argument must be 'as'" ) );
   }
 
-  FilterExpression expression( "\"" + expr.at( 3 ) + "\"", p );
+  FilterExpression expression( QLatin1String( "\"" ) + expr.at( 3 ) + QLatin1String( "\"" ), p );
 
   QString name = expr.at( 5 );
 
@@ -89,24 +89,24 @@ void RegroupNode::render( OutputStream *stream, Context *c )
   while ( i.hasNext() ) {
     QVariant var = i.next();
     c->push();
-    c->insert( "var", var );
-    QString key = getSafeString( FilterExpression( "var." + keyName, 0 ).resolve( c ) );
+    c->insert( QLatin1String( "var" ), var );
+    QString key = getSafeString( FilterExpression( QLatin1String( "var." ) + keyName, 0 ).resolve( c ) );
     c->pop();
     QVariantHash hash;
     if ( contextList.size() > 0 ) {
       QVariant hashVar = contextList.last();
       hash = hashVar.toHash();
     }
-    if ( !hash.contains( "grouper" ) || hash.value( "grouper" ) != key ) {
+    if ( !hash.contains( QLatin1String( "grouper" ) ) || hash.value( QLatin1String( "grouper" ) ) != key ) {
       QVariantHash newHash;
-      hash.insert( "grouper", key );
-      hash.insert( "list", QVariantList() );
+      hash.insert( QLatin1String( "grouper" ), key );
+      hash.insert( QLatin1String( "list" ), QVariantList() );
       contextList.append( newHash );
     }
 
-    QVariantList list = hash.value( "list" ).toList();
+    QVariantList list = hash.value( QLatin1String( "list" ) ).toList();
     list.append( var );
-    hash.insert( "list", list );
+    hash.insert( QLatin1String( "list" ), list );
     contextList[contextList.size() - 1] = hash;
   }
   c->insert( m_varName, contextList );

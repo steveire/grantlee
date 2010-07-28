@@ -239,7 +239,7 @@ namespace Grantlee
 
   If you configure your application to use the grantlee_scriptabletags_library, it will be possible for you and theme writers to write tags and filters in QtScript instead of C++. Themers would have as much control as a C++ plugin writer over those steps of processing and rendering the template.
 
-  Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamically loaded at runtime.
+  Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamically loaded at runtime. QtScript files must be UTF-8 encoded.
 
   Here is a complete QtScript library defining an @gr_tag{echo} tag which outputs its arguments:
 

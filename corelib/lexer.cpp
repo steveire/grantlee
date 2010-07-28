@@ -25,6 +25,7 @@
 #include <QtCore/QStringList>
 
 #include "grantlee_tags_p.h"
+#include "grantlee_latin1literal_p.h"
 
 using namespace Grantlee;
 
@@ -33,14 +34,24 @@ static QRegExp getTagRe()
 
   // In python regex, '.' matches any character except newline, whereas it QRegExp,
   // it matches any character including newline. We match 'not newline' instead.
-  static QRegExp sTagRe( QString( "(%1[^\\n]*%2|%3[^\\n]*%4|%5[^\\n]*%6)" )
-                        .arg( QRegExp::escape( BLOCK_TAG_START ) )
-                        .arg( QRegExp::escape( BLOCK_TAG_END ) )
-                        .arg( QRegExp::escape( VARIABLE_TAG_START ) )
-                        .arg( QRegExp::escape( VARIABLE_TAG_END ) )
-                        .arg( QRegExp::escape( COMMENT_TAG_START ) )
-                        .arg( QRegExp::escape( COMMENT_TAG_END ) )
-                      );
+
+  static const QLatin1Literal notEndOfLine( "[^\\n]*" );
+
+  static const QString tagString = QLatin1Char( '(' )
+                                 + QRegExp::escape( BLOCK_TAG_START )
+                                 + notEndOfLine
+                                 + QRegExp::escape( BLOCK_TAG_END )
+                                 + QLatin1Char( '|' )
+                                 + QRegExp::escape( VARIABLE_TAG_START )
+                                 + notEndOfLine
+                                 + QRegExp::escape( VARIABLE_TAG_END )
+                                 + QLatin1Char( '|' )
+                                 + QRegExp::escape( COMMENT_TAG_START )
+                                 + notEndOfLine
+                                 + QRegExp::escape( COMMENT_TAG_END )
+                                 + QLatin1Char( ')' );
+
+  static QRegExp sTagRe( tagString );
 
   sTagRe.setMinimal( true ); // Can't use '?', eg '.*?', Have to setMinimal instead
   return sTagRe;

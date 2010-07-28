@@ -26,6 +26,7 @@
 #include "filter.h"
 #include "util.h"
 #include "exception.h"
+#include "grantlee_latin1literal_p.h"
 
 typedef QPair<Grantlee::Filter::Ptr, Grantlee::Variable > ArgFilter;
 
@@ -51,39 +52,45 @@ class FilterExpressionPrivate
 
 using namespace Grantlee;
 
-static const QChar FILTER_SEPARATOR = '|';
-static const QChar FILTER_ARGUMENT_SEPARATOR = ':';
+static const QLatin1Char FILTER_SEPARATOR( '|' );
+static const QLatin1Char FILTER_ARGUMENT_SEPARATOR( ':' );
 
-static const char * varChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.";
-static const char * numChars = "[-+\\.]?\\d[\\d\\.e]*";
-static const QString filterSep( QRegExp::escape( FILTER_SEPARATOR ) );
-static const QString argSep( QRegExp::escape( FILTER_ARGUMENT_SEPARATOR ) );
-static const QString i18nOpen( QRegExp::escape( "_(" ) );
-static const QString i18nClose( QRegExp::escape( ")" ) );
+static const QString filterSep( QRegExp::escape( QChar( FILTER_SEPARATOR ) ) );
+static const QString argSep( QRegExp::escape( QChar( FILTER_ARGUMENT_SEPARATOR ) ) );
 
-static const QString constantString = QString(
-                                        "(?:%3%1%4|"
-                                        "%3%2%4|"
-                                        "%1|"
-                                        "%2)"
-                                      )
-                                      .arg( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" )
-                                      .arg( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" )
-                                      .arg( i18nOpen )
-                                      .arg( i18nClose );
+static const QLatin1Literal varChars( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_." );
+static const QLatin1Literal numChars( "[-+\\.]?\\d[\\d\\.e]*" );
+static const QString i18nOpen( QRegExp::escape( QLatin1String( "_(" ) ) );
+static const QLatin1Literal doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" );
+static const QLatin1Literal singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
+static const QString i18nClose( QRegExp::escape( QLatin1String( ")" ) ) );
 
-static const QString filterRawString = QString(
-                                         "^%1|"                      /* Match "strings" and 'strings' incl i18n */
-                                         "^[%2]+|"                   /* Match variables */
-                                         "%3|"                       /* Match numbers */
-                                         "%4\\w+|"                   /* Match filters */
-                                         "%5(?:%1|[%2]+|%3|%4\\w+)"  /* Match arguments to filters, which may be strings, */
-                                       )                             /* variables, numbers or another filter in the chain */
-                                       /* 1 */  .arg( constantString )
-                                       /* 2 */  .arg( varChars )
-                                       /* 3 */  .arg( numChars )
-                                       /* 4 */  .arg( filterSep )
-                                       /* 5 */  .arg( argSep );
+static const
+#if QT_VERSION < 0x040600
+QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QLatin1Literal, QString>, QLatin1Literal>, QLatin1Char>, QLatin1Char>, QString>, QLatin1Literal>, QLatin1Char>, QLatin1Char>, QLatin1Literal>, QLatin1Char>, QLatin1Literal>, QLatin1Char>
+#else
+QString
+#endif
+constantString = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+                                                              + i18nOpen + singleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+                                                              + doubleQuoteStringLiteral + QLatin1Char( '|' )
+                                                              + singleQuoteStringLiteral
+                                    + QLatin1Char( ')' );
+
+static const QString filterRawString = QLatin1Char( '^' ) + constantString + QLatin1Char( '|' )
+                                     + QLatin1Literal( "^[" ) + varChars + QLatin1Literal( "]+|" )
+                                     + numChars + QLatin1Char( '|' )
+                                     + filterSep + QLatin1Literal( "\\w+|" )
+                                     + argSep
+                                     + QLatin1Literal( "(?:" )
+                                       + constantString
+                                       + QLatin1Literal( "|[" )
+                                       + varChars
+                                       + QLatin1Literal( "]+|" )
+                                       + numChars
+                                       + QLatin1Char( '|' )
+                                       + filterSep
+                                     + QLatin1Literal( "\\w+)" );
 
 static const QRegExp sFilterRe( filterRawString );
 
@@ -108,7 +115,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
       if ( pos != lastPos ) {
         throw Grantlee::Exception( TagSyntaxError,
-            QString( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
+            QString::fromLatin1( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
       }
 
       if ( subString.startsWith( FILTER_SEPARATOR ) ) {
@@ -125,14 +132,10 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
         const int lastFilter = d->m_filters.size();
         if ( subString.isEmpty() )
           throw Grantlee::Exception( EmptyVariableError,
-              QString( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
+              QString::fromLatin1( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
 
         d->m_filters[lastFilter -1].second = Variable( subString );
       } else {
-        if ( subString.contains( "._" ) || ( subString.startsWith( QLatin1Char( '_' ) ) && !subString.startsWith( QLatin1String( "_(" ) ) ) ) {
-          throw Grantlee::Exception( TagSyntaxError,
-              QString( "Variables and attributes may not begin with underscores: %1" ).arg( subString ) );
-        }
         // Token is _("translated"), or "constant", or a variable;
         d->m_variable = Variable( subString );
       }
@@ -144,7 +147,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     const QString remainder = vs.right( vs.size() - lastPos );
     if ( !remainder.isEmpty() ) {
       throw Grantlee::Exception( TagSyntaxError,
-          QString( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
+          QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
     }
   } catch ( ... ) {
     delete d_ptr;

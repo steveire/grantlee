@@ -37,34 +37,34 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
   expr.takeAt( 0 );
   if ( expr.size() <= 0 ) {
-    throw Grantlee::Exception( TagSyntaxError, "'if' statement requires at least one argument" );
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'if' statement requires at least one argument" ) );
   }
 
   int linkType = IfNode::OrLink;
 
-  QString exprString = expr.join( QChar( ' ' ) );
+  QString exprString = expr.join( QChar::fromLatin1( ' ' ) );
 
-  QStringList boolPairs = exprString.split( " and " );
+  QStringList boolPairs = exprString.split( QLatin1String( " and " ) );
 
   if ( boolPairs.size() == 1 ) {
-    boolPairs = exprString.split( " or " );
+    boolPairs = exprString.split( QLatin1String( " or " ) );
   } else {
     linkType = IfNode::AndLink;
-    if ( exprString.contains( " or " ) ) {
-      throw Grantlee::Exception( TagSyntaxError, "'if' tags can't mix 'and' and 'or'" );
+    if ( exprString.contains( QLatin1String( " or " ) ) ) {
+      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'if' tags can't mix 'and' and 'or'" ) );
     }
   }
 
   QList<QPair<bool, FilterExpression > > boolVars;
   Q_FOREACH( const QString &boolStr, boolPairs ) {
     QPair<bool, FilterExpression> pair;
-    if ( boolStr.contains( ' ' ) ) {
-      QStringList bits = boolStr.split( ' ' );
+    if ( boolStr.contains( QLatin1Char( ' ' ) ) ) {
+      QStringList bits = boolStr.split( QChar::fromLatin1( ' ' ) );
       if ( bits.size() != 2 ) {
-        throw Grantlee::Exception( TagSyntaxError, "'if' statement improperly formatted" );
+        throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'if' statement improperly formatted" ) );
       }
-      if ( bits.at( 0 ) != "not" ) {
-        throw Grantlee::Exception( TagSyntaxError, "Expected 'not' in if statement" );
+      if ( bits.first() != QLatin1String( "not" ) ) {
+        throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Expected 'not' in if statement" ) );
       }
       pair.first = true;
       pair.second = FilterExpression( bits.at( 1 ).trimmed(), p );
@@ -77,11 +77,11 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   IfNode *n = new IfNode( boolVars, linkType, p );
 
-  NodeList trueList = p->parse( n, QStringList() << "else" << "endif" );
+  NodeList trueList = p->parse( n, QStringList() << QLatin1String( "else" ) << QLatin1String( "endif" ) );
   n->setTrueList( trueList );
   NodeList falseList;
-  if ( p->takeNextToken().content.trimmed() == "else" ) {
-    falseList = p->parse( n, QStringList() << "endif" );
+  if ( p->takeNextToken().content.trimmed() == QLatin1String( "else" ) ) {
+    falseList = p->parse( n, QLatin1String( "endif" ) );
     n->setFalseList( falseList );
     // skip past the endif tag
     p->removeNextToken();

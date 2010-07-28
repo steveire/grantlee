@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2009,2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,24 +18,19 @@
 
 */
 
-#ifndef GRANTLEE_TAGS_P_H
-#define GRANTLEE_TAGS_P_H
+#ifndef GRANTLEE_LATIN1LITERAL_P_H
+#define GRANTLEE_LATIN1LITERAL_P_H
 
-#include <QString>
+#  if QT_VERSION < 0x040600
 
-namespace Grantlee
-{
+#    define QLatin1Literal QLatin1String
 
-static const QLatin1String BLOCK_TAG_START( "{%" );
-static const QLatin1String BLOCK_TAG_END( "%}" );
-static const QLatin1String VARIABLE_TAG_START( "{{" );
-static const QLatin1String VARIABLE_TAG_END( "}}" );
-static const QLatin1String COMMENT_TAG_START( "{#" );
-static const QLatin1String COMMENT_TAG_END( "#}" );
-//static const char * SINGLE_BRACE_START = "{";
-//static const char * SINGLE_BRACE_END = "}";
+#  else
 
-}
+#    define QT_USE_FAST_CONCATENATION
+#    define QT_USE_FAST_OPERATOR_PLUS
+#    include <QtCore/QStringBuilder>
+
+#  endif
 
 #endif
-

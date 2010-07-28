@@ -58,7 +58,7 @@ QScriptValue ScriptableNodeConstructor( QScriptContext *context,
 
   concreteNode.call( concreteNode, args );
 
-  QScriptValue renderMethod = concreteNode.property( "render" );
+  QScriptValue renderMethod = concreteNode.property( QLatin1String( "render" ) );
 
   ScriptableNode *object = new ScriptableNode( engine );
   object->setObjectName( scriptableNodeName );
@@ -124,7 +124,7 @@ void ScriptableNodeFactory::setFactory( QScriptValue factoryMethod )
 Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   if ( m_scriptEngine->hasUncaughtException() ) {
-    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
+    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( QChar::fromLatin1( ' ' ) ) );
   }
   ScriptableParser *sp = new ScriptableParser( p, m_scriptEngine );
   QScriptValue parserObject = m_scriptEngine->newQObject( sp );
@@ -137,7 +137,7 @@ Node* ScriptableNodeFactory::getNode( const QString &tagContent, Parser *p ) con
 
   QScriptValue scriptNode = factory.call( factory, args );
   if ( m_scriptEngine->hasUncaughtException() )
-    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( " " ) );
+    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( QChar::fromLatin1( ' ' ) ) );
 
   Node* node = qscriptvalue_cast<Node*>( scriptNode );
   node->setParent( p );

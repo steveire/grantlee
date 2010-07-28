@@ -162,7 +162,7 @@ FORMULA_FONTSIZE       = 10
 GENERATE_QHP       = @GENERATE_QHP@
 QHP_NAMESPACE      = "org.grantlee.@Grantlee_VERSION_MAJOR@@Grantlee_VERSION_MINOR@@Grantlee_VERSION_PATCH@"
 QHP_VIRTUAL_FOLDER = "grantlee-@Grantlee_VERSION_MAJOR@.@Grantlee_VERSION_MINOR@"
-QCH_FILE           = @CMAKE_BINARY_DIR@/"grantlee.qch"
+QCH_FILE           = @CMAKE_BINARY_DIR@/"grantlee-@Grantlee_VERSION_MAJOR@@Grantlee_VERSION_MINOR@@Grantlee_VERSION_PATCH@.qch"
 QHG_LOCATION       = "qhelpgenerator"
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output

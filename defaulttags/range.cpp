@@ -42,11 +42,11 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
   if ( numArgs != 1 )
   {
     if ( numArgs <= 2 ) {
-      throw Grantlee::Exception( TagSyntaxError, "'range' tag requires at least three arguments" );
+      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'range' tag requires at least three arguments" ) );
     }
 
-    if ( expr.at( numArgs - 2 ) != "as"  ) {
-      throw Grantlee::Exception( TagSyntaxError, "Invalid arguments to 'range' tag" );
+    if ( expr.at( numArgs - 2 ) != QLatin1String( "as" ) ) {
+      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Invalid arguments to 'range' tag" ) );
     }
   }
 
@@ -58,19 +58,19 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
 
   switch ( numArgs ) {
   case 1:
-    n = new RangeNode( name, FilterExpression( "0", p ), FilterExpression( expr.at( 0 ), p ), p );
+    n = new RangeNode( name, FilterExpression( QChar::fromLatin1( '0' ), p ), FilterExpression( expr.first(), p ), p );
     break;
   case 2:
-    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ), p );
+    n = new RangeNode( name, FilterExpression( expr.first(), p ), FilterExpression( expr.at( 1 ), p ), p );
     break;
   case 3:
-    n = new RangeNode( name, FilterExpression( expr.at( 0 ), p ), FilterExpression( expr.at( 1 ), p ), FilterExpression( expr.at( 2 ), p ), p );
+    n = new RangeNode( name, FilterExpression( expr.first(), p ), FilterExpression( expr.at( 1 ), p ), FilterExpression( expr.at( 2 ), p ), p );
     break;
   default:
     return 0;
   }
 
-  NodeList list = p->parse( n, "endrange" );
+  NodeList list = p->parse( n, QLatin1String( "endrange" ) );
   p->removeNextToken();
 
   n->setNodeList( list );

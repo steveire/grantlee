@@ -32,7 +32,7 @@ Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
 {
   Q_UNUSED( tagContent )
   SpacelessNode *n = new SpacelessNode( p );
-  NodeList list = p->parse( n, QStringList() << "endspaceless" );
+  NodeList list = p->parse( n, QLatin1String( "endspaceless" ) );
   n->setList( list );
   p->removeNextToken();
   return n;
@@ -53,8 +53,8 @@ QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 {
   QString stripped = input;
 
-  static const QRegExp re( ">\\s+<" );
-  stripped.replace( re, "><" );
+  static const QRegExp re( QLatin1String( ">\\s+<" ) );
+  stripped.replace( re, QLatin1String( "><" ) );
   return stripped;
 }
 

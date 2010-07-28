@@ -30,6 +30,7 @@
 #include "util.h"
 
 #include "metaenumvariable_p.h"
+#include "exception.h"
 
 using namespace Grantlee;
 
@@ -94,8 +95,8 @@ Variable::Variable( const QString &var )
   QVariant v( var );
   if ( v.convert( QVariant::Double ) ) {
     d->m_literal = v;
-    if ( !var.contains( '.' ) && !var.contains( 'e' ) ) {
-      if ( var.endsWith( '.' ) ) {
+    if ( !var.contains( QLatin1Char( '.' ) ) && !var.contains( QLatin1Char( 'e' ) ) ) {
+      if ( var.endsWith( QLatin1Char( '.' ) ) ) {
 //         throw Grantlee::Exception( VariableSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( v.toString() ) );
       }
 
@@ -107,13 +108,17 @@ Variable::Variable( const QString &var )
       d->m_translate = true;
       localVar = var.mid( 2, var.size() - 3 );
     }
-    if (( localVar.startsWith( '"' ) && localVar.endsWith( '"' ) )
-        || ( localVar.startsWith( '\'' ) && localVar.endsWith( '\'' ) ) ) {
+    if (( localVar.startsWith( QLatin1Char( '"' ) ) && localVar.endsWith( QLatin1Char( '"' ) ) )
+        || ( localVar.startsWith( QLatin1Char( '\'' ) ) && localVar.endsWith( QLatin1Char( '\'' ) ) ) ) {
       const QString unesc = unescapeStringLiteral( localVar );
       const Grantlee::SafeString ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
-      d->m_lookups = localVar.split( '.' );
+      if ( localVar.contains( QLatin1String( "._" ) ) || ( localVar.startsWith( QLatin1Char( '_' ) ) ) ) {
+        throw Grantlee::Exception( TagSyntaxError,
+            QString::fromLatin1( "Variables and attributes may not begin with underscores: %1" ).arg( localVar ) );
+      }
+      d->m_lookups = localVar.split( QLatin1Char( '.' ) );
     }
   }
 }
@@ -147,7 +152,7 @@ QVariant Variable::resolve( Context *c ) const
   QVariant var;
   if ( !d->m_lookups.isEmpty() ) {
     int i = 0;
-    if ( d->m_lookups.at( i ) == "Qt" )
+    if ( d->m_lookups.at( i ) == QLatin1String( "Qt" ) )
     {
       ++i;
       const QString nextPart = d->m_lookups.at( i );
@@ -159,7 +164,7 @@ QVariant Variable::resolve( Context *c ) const
       for ( int j = 0; j < globalMetaObject->enumeratorCount(); ++j ) {
         const QMetaEnum me = globalMetaObject->enumerator( j );
 
-        if (me.name() == nextPart)
+        if ( QLatin1String( me.name() ) == nextPart)
         {
           const MetaEnumVariable mev(me);
           var = QVariant::fromValue(mev);
@@ -168,7 +173,7 @@ QVariant Variable::resolve( Context *c ) const
 
         for ( int k = 0; k < me.keyCount(); ++k )
         {
-          if (me.key(k) == nextPart)
+          if ( QLatin1String( me.key( k ) ) == nextPart )
           {
             const MetaEnumVariable mev(me, k);
             var = QVariant::fromValue(mev);
@@ -223,66 +228,23 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
 // * Property? (member in django)
 // * list index
   if ( QVariant::Hash == var.type() ) {
-    const QVariantHash hash = var.toHash();
-    if ( hash.contains( nextPart ) )
-      return hash.value( nextPart );
-    return TypeAccessor<QVariantHash>::lookUp( hash, nextPart );
+    return TypeAccessor<QVariantHash>::lookUp( var.toHash(), nextPart );
   } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() ) {
     return TypeAccessor<SafeString>::lookUp( getSafeString( var ), nextPart );
   } else if ( QMetaType::QObjectStar == var.userType() ) {
-    // Can't be const because of invokeMethod.
-    const QObject *obj = var.value<QObject *>();
-    const QMetaObject *metaObj = obj->metaObject();
-
-    QMetaProperty mp;
-    for ( int i = 0; i < metaObj->propertyCount(); ++i ) {
-      // TODO only read-only properties should be allowed here.
-      // This might also handle the variant messing I hit before.
-      mp = metaObj->property( i );
-
-      if ( QString( mp.name() ) != nextPart )
-        continue;
-
-      if (mp.isEnumType())
-      {
-        MetaEnumVariable mev(mp.enumerator(), mp.read( obj ).toInt());
-        return QVariant::fromValue(mev);
-      }
-
-      return mp.read( obj );
-    }
-    QMetaEnum me;
-    for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
-      me = metaObj->enumerator( i );
-
-      if (me.name() == nextPart)
-      {
-        MetaEnumVariable mev(me);
-        return QVariant::fromValue(mev);
-      }
-
-      const int value = me.keyToValue(nextPart.toLatin1());
-
-      if (value < 0)
-        continue;
-
-      const MetaEnumVariable mev(me, value);
-
-      return QVariant::fromValue(mev);
-    }
-    return QVariant();
+    return TypeAccessor<QObject*>::lookUp( var.value<QObject*>(), nextPart );
   } else if ( qMetaTypeId<MetaEnumVariable>() == var.userType()){
     MetaEnumVariable mev = var.value<MetaEnumVariable>();
 
-    if ( nextPart == "name" )
-      return mev.enumerator.name();
-    if ( nextPart == "value" )
+    if ( nextPart == QLatin1String( "name" ) )
+      return QLatin1String( mev.enumerator.name() );
+    if ( nextPart == QLatin1String( "value" ) )
       return mev.value;
-    if ( nextPart == "key" )
-      return mev.enumerator.valueToKey( mev.value );
-    if ( nextPart == "scope" )
-      return mev.enumerator.scope();
-    if ( nextPart == "keyCount" )
+    if ( nextPart == QLatin1String( "key" ) )
+      return QLatin1String( mev.enumerator.valueToKey( mev.value ) );
+    if ( nextPart == QLatin1String( "scope" ) )
+      return QLatin1String( mev.enumerator.scope() );
+    if ( nextPart == QLatin1String( "keyCount" ) )
       return mev.enumerator.keyCount();
 
     bool ok = false;

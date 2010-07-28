@@ -31,13 +31,15 @@
 #include "template_p.h"
 #include "templateloader.h"
 #include "grantlee_version.h"
+#include "grantlee_config_p.h"
 #include "exception.h"
+#include "grantlee_latin1literal_p.h"
 
 #include "scriptabletags.h"
 
 using namespace Grantlee;
 
-static const char * __scriptableLibName = "grantlee_scriptabletags";
+static const QLatin1String __scriptableLibName( "grantlee_scriptabletags" );
 
 class ScriptableLibraryContainer : public TagLibraryInterface
 {
@@ -66,9 +68,12 @@ private:
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
 {
-  d_ptr->m_defaultLibraries << "grantlee_defaulttags"
-                            << "grantlee_loadertags"
-                            << "grantlee_defaultfilters";
+  d_ptr->m_defaultLibraries << QLatin1String( "grantlee_defaulttags" )
+                            << QLatin1String( "grantlee_loadertags" )
+                            << QLatin1String( "grantlee_defaultfilters" );
+
+  d_ptr->m_pluginDirs = QCoreApplication::instance()->libraryPaths();
+  d_ptr->m_pluginDirs << QString::fromLocal8Bit( GRANTLEE_PLUGIN_PATH );
 }
 
 Engine::~Engine()
@@ -109,6 +114,21 @@ void Engine::setPluginPaths( const QStringList &dirs )
 {
   Q_D( Engine );
   d->m_pluginDirs = dirs;
+}
+
+void Engine::addPluginPath( const QString &dir )
+{
+  Q_D( Engine );
+  QStringList temp;
+  temp << dir;
+  temp << d->m_pluginDirs;
+  d->m_pluginDirs = temp;
+}
+
+QStringList Engine::pluginPaths() const
+{
+  Q_D(const Engine);
+  return d->m_pluginDirs;
 }
 
 QStringList Engine::defaultLibraries() const
@@ -195,7 +215,6 @@ EnginePrivate::EnginePrivate( Engine *engine )
 TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
 {
   int pluginIndex = 0;
-  QString libFileName;
   if ( !m_scriptableTagLibrary )
     return 0;
 
@@ -204,15 +223,17 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     return 0;
 #endif
 
-  QStringList pluginDirs;
-  if ( m_pluginDirs.isEmpty() )
-    pluginDirs = QCoreApplication::instance()->libraryPaths();
-  else
-    pluginDirs = m_pluginDirs;
+  while ( m_pluginDirs.size() > pluginIndex ) {
+    const QString nextDir = m_pluginDirs.at( pluginIndex++ );
+    const QString libFileName = nextDir
+                              + QLatin1Literal( "/grantlee/" )
+                              + QString::number( GRANTLEE_VERSION_MAJOR )
+                              + QLatin1Char( '.' )
+                              + QString::number( minorVersion )
+                              + QLatin1Char( '/' )
+                              + name
+                              + QLatin1Literal( ".qs" );
 
-  while ( pluginDirs.size() > pluginIndex ) {
-    const QString nextDir = pluginDirs.at( pluginIndex++ );
-    libFileName = nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' + name + ".qs";
     const QFile file( libFileName );
     if ( !file.exists() )
       continue;
@@ -236,20 +257,21 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
   int pluginIndex = 0;
   QString libFileName;
 
-  QStringList pluginDirs;
-  if ( m_pluginDirs.isEmpty() )
-    pluginDirs = QCoreApplication::instance()->libraryPaths();
-  else
-    pluginDirs = m_pluginDirs;
+  while ( m_pluginDirs.size() > pluginIndex ) {
+    const QString nextDir = m_pluginDirs.at( pluginIndex++ );
+    const QString pluginDirString = nextDir
+                                  + QLatin1Literal( "/grantlee/" )
+                                  + QString::number( GRANTLEE_VERSION_MAJOR )
+                                  + QLatin1Char( '.' )
+                                  + QString::number( minorVersion )
+                                  + QLatin1Char( '/' );
 
-  while ( pluginDirs.size() > pluginIndex ) {
-    const QString nextDir = pluginDirs.at( pluginIndex++ );
-    const QDir pluginDir( nextDir + QString( "/grantlee/%1.%2" ).arg( GRANTLEE_VERSION_MAJOR ).arg( minorVersion ) + '/' );
+    const QDir pluginDir( pluginDirString );
 
     if ( !pluginDir.exists() )
       continue;
 
-    const QStringList list = pluginDir.entryList( QStringList( name + "*" ) );
+    const QStringList list = pluginDir.entryList( QStringList( name + QLatin1Char( '*' ) ) );
 
     if ( list.isEmpty() )
       continue;

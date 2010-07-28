@@ -21,6 +21,7 @@
 #include "templateloader.h"
 #include "engine.h"
 #include "exception.h"
+#include "grantlee_latin1literal_p.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
@@ -79,7 +80,7 @@ bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
     if ( i >= m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + name );
+    file.setFileName( m_templateDirs.at( i ) + QLatin1Char( '/' ) + m_themeName + QLatin1Char( '/' ) + name );
     ++i;
   }
 
@@ -128,7 +129,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
     if ( i >= m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
+    file.setFileName( m_templateDirs.at( i ) + QLatin1Char( '/' ) + m_themeName + QLatin1Char( '/' ) + fileName );
     const QFileInfo fi( file );
 
     if ( file.exists() &&
@@ -141,7 +142,11 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
     return Template();
   }
 
-  return engine->newTemplate( file.readAll(), fileName );
+  QTextStream fstream( &file );
+  fstream.setCodec( "UTF-8" );
+  const QString fileContent = fstream.readAll();
+
+  return engine->newTemplate( fileContent, fileName );
 }
 
 QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
@@ -152,7 +157,7 @@ QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fi
     if ( i >= m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
+    file.setFileName( m_templateDirs.at( i ) + QLatin1Char( '/' ) + m_themeName + QLatin1Char( '/' ) + fileName );
 
     const QFileInfo fi( file );
     if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
@@ -187,7 +192,7 @@ Template InMemoryTemplateLoader::loadByName( const QString& name, Engine const *
   if ( m_namedTemplates.contains( name ) ) {
     return engine->newTemplate( m_namedTemplates.value( name ), name );
   }
-  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );
+  throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }
 
 MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name, Engine const *engine ) const

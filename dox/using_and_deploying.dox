@@ -119,9 +119,23 @@ namespace Grantlee
 
   @section finding_plugins Finding tags and filters
 
-  By default, %Grantlee searches in the paths specified by QCoreApplication::libraryPaths() for %Grantlee plugins. Each specified path has <tt>&quot;grantlee/$version/&quot;</tt> appended to it, and the resulting directory is searched for plugins. For example, if the version of %Grantlee is 0.2 and QCoreApplication::libraryPaths() contains <tt>&quot;/usr/lib/plugins/&quot;</tt>, the path <tt>&quot;/usr/lib/plugins/grantlee/0.2&quot;</tt> would be searched for plugins.
+  Grantlee looks for plugins in the paths from the Engines pluginPath property. It does so
+  in the same order they appear there.
 
-  The paths used to search for plugins can be overriden by using Engine::setPluginPaths. Again, <tt>&quot;grantlee/$version/&quot;</tt> is appended to the path before using it. Paths are searched in order for particular plugins, and the search stops when a plugin matching a particular name is found.
+  The property defaults to the following directories
+    - The default plugin directory of your qt installation (qmake -query QT_INSTALL_PLUGINS).
+    - The directories specified in the environment variable QT_PLUGIN_DIR.
+    - The default plugin directory of your grantlee installation.
+
+  Each path has <tt>&quot;grantlee/$version/&quot;</tt> appended to it, and the resulting
+  directory is searched for plugins. For example, if the version of %Grantlee is 0.2 and
+  QCoreApplication::libraryPaths() contains <tt>&quot;/usr/lib/plugins/&quot;</tt>, the directory
+  <tt>&quot;/usr/lib/plugins/grantlee/0.2&quot;</tt> would be searched for plugins. The search
+  stops when a plugin matching a particular name is found.
+
+  The paths used to search for plugins can be overriden by using Engine::setPluginPaths. If you
+  just want to add some additional paths use Engine::addPluginPath. The added path will be
+  prepended to the list of search paths.
 
   @section deploying_custom_plugins Deploying custom tags and filters
 

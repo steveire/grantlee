@@ -47,7 +47,7 @@ class EnginePrivate;
     loader->setTemplateDirs( QStringList() << "/usr/share/myapp/templates" );
     engine->addTemplateLoader( loader );
 
-    engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH );
+    engine->addPluginPath( "/usr/lib/myapp" );
 
     Template template1 = engine->newTemplate( "Template content", "template name" );
 
@@ -93,9 +93,21 @@ public:
   /**
     Sets the plugin dirs currently configured on the Engine to @p dirs.
 
+    @warning This overwrites the default paths. You normally want addPluginPath.
+
     @see @ref finding_plugins
   */
   void setPluginPaths( const QStringList &dirs );
+
+  /**
+    Prepend @p path to the list of plugin dirs.
+  */
+  void addPluginPath( const QString &dir );
+
+  /**
+    Returns the currently configured plugin dirs
+  */
+  QStringList pluginPaths() const;
 
   /**
     Returns a URI for a media item with the name @p name.

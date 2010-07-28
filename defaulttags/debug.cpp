@@ -22,6 +22,7 @@
 
 #include <QtCore/QStringList>
 #include "parser.h"
+#include "grantlee_latin1literal_p.h"
 
 DebugNodeFactory::DebugNodeFactory()
 {
@@ -47,20 +48,20 @@ void DebugNode::render( OutputStream *stream, Context *c )
   int i = 0;
   QHash<QString, QVariant> h = c->stackHash( i++ );
 
-  ret += "\n\nContext:\n";
+  ret += QLatin1String( "\n\nContext:\n" );
   while ( !h.isEmpty() ) {
     QHashIterator<QString, QVariant> it( h );
     while ( it.hasNext() ) {
       it.next();
-      ret += "key " + it.key() + ", ";
-      ret += "type ";
-      ret.append( it.value().typeName() );
-      ret += '\n';
+      ret += QLatin1Literal( "key " ) + it.key() + QLatin1Literal( ", " )
+          + QLatin1Literal( "type " )
+          + QLatin1String( it.value().typeName() )
+          + QLatin1Char( '\n' );
     }
     h = c->stackHash( i++ );
   }
 
-  ret += "End context:\n\n";
+  ret += QLatin1String( "End context:\n\n" );
 
   ( *stream ) << ret;
 }

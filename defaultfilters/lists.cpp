@@ -86,7 +86,7 @@ QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument,
   if ( varList.isEmpty() )
     return QString();
 
-  return varList.at( 0 );
+  return varList.first();
 }
 
 QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
@@ -116,7 +116,7 @@ QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument,
 {
   Q_UNUSED( autoescape )
   SafeString argString = getSafeString( argument );
-  int splitterIndex = argString.get().indexOf( ":" );
+  int splitterIndex = argString.get().indexOf( QLatin1Char( ':' ) );
   QString inputString = getSafeString( input );
   if ( splitterIndex >= 0 ) {
     int left = argString.get().left( splitterIndex ).get().toInt();
@@ -161,7 +161,7 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
 {
   QString indent;
   for ( int i = 0; i < tabs; ++i )
-    indent.append( "\t" );
+    indent.append( QLatin1Char( '\t' ) );
   QStringList output;
 
   int i = 0;
@@ -184,14 +184,15 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
     }
     if ( sublistItem.isValid() ) {
       sublist = processList( sublistItem.toList(), tabs + 1, autoescape );
-      sublist = QString( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent ).arg( sublist ).arg( indent ).arg( indent );
+      sublist = QString::fromLatin1( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent ).arg( sublist ).arg( indent ).arg( indent );
     }
-    output.append( QString( "%1<li>%2%3</li>" ).arg( indent )
-                                               .arg( autoescape ? conditionalEscape( title ) : title )
-                                               .arg( sublist ) );
+    output.append( QString::fromLatin1( "%1<li>%2%3</li>" ).arg( indent )
+                                                           .arg( autoescape ? conditionalEscape( title ) : title )
+                                                           .arg( sublist ) );
     ++i;
   }
 
-  return output.join( "\n" );
+  // Should be QLatin1Char() ?
+  return output.join( QChar::fromLatin1( '\n' ) );
 }
 

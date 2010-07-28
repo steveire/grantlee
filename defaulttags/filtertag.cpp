@@ -32,21 +32,21 @@ FilterNodeFactory::FilterNodeFactory()
 
 Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee::Parser* p ) const
 {
-  QStringList expr = tagContent.split( ' ', QString::SkipEmptyParts );
+  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   expr.removeFirst();
 
-  QString expression = expr.join( " " );
-  FilterExpression fe( QString( "var|%1" ).arg( expression ), p );
+  QString expression = expr.join( QChar::fromLatin1( ' ' ) );
+  FilterExpression fe( QString::fromLatin1( "var|%1" ).arg( expression ), p );
 
   QStringList filters = fe.filters();
-  if ( filters.contains( "safe" ) || filters.contains( "escape" ) ) {
-    throw Grantlee::Exception( TagSyntaxError, "Use the \"autoescape\" tag instead." );
+  if ( filters.contains( QLatin1String( "safe" ) ) || filters.contains( QLatin1String( "escape" ) ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Use the \"autoescape\" tag instead." ) );
   }
 
   FilterNode *n = new FilterNode( fe, p );
 
-  NodeList filterNodes = p->parse( n, QStringList() << "endfilter" );
+  NodeList filterNodes = p->parse( n, QLatin1String( "endfilter" ) );
   p->removeNextToken();
 
   n->setNodeList( filterNodes );
@@ -71,7 +71,7 @@ void FilterNode::render( OutputStream *stream, Context* c )
   QSharedPointer<OutputStream> temp = stream->clone( &textStream );
   m_filterList.render( temp.data(), c );
   c->push();
-  c->insert( "var", output );
+  c->insert( QLatin1String( "var" ), output );
   m_fe.resolve( stream, c );
   c->pop();
 }

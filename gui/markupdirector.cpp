@@ -107,10 +107,10 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
   QString sWidth;
 
   if ( tableWidth.type() == QTextLength::PercentageLength ) {
-    sWidth = "%1%";
+    sWidth = QLatin1String( "%1%" );
     sWidth = sWidth.arg( tableWidth.rawValue() );
   } else if ( tableWidth.type() == QTextLength::FixedLength ) {
-    sWidth = "%1";
+    sWidth = QLatin1String( "%1" );
     sWidth = sWidth.arg( tableWidth.rawValue() );
   }
 
@@ -153,10 +153,10 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
       QString sCellWidth;
 
       if ( cellWidth.type() == QTextLength::PercentageLength ) {
-        sCellWidth = "%1%";
+        sCellWidth = QLatin1String( "%1%" );
         sCellWidth = sCellWidth.arg( cellWidth.rawValue() );
       } else if ( cellWidth.type() == QTextLength::FixedLength ) {
-        sCellWidth = "%1";
+        sCellWidth = QLatin1String( "%1" );
         sCellWidth = sCellWidth.arg( cellWidth.rawValue() );
       }
 

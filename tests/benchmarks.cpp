@@ -81,16 +81,16 @@ void Benchmarking::initTestCase()
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
 
-  m_engine->setPluginPaths( QStringList( GRANTLEE_PLUGIN_PATH ) );
+  m_engine->setPluginPaths( QStringList( QLatin1String( GRANTLEE_PLUGIN_PATH ) ) );
 
   m_templateGeneratorString =
-    "Lorem {% for i in items %}"
+    QLatin1String(  "Lorem {% for i in items %}"
     " Ipsum {% templatetag openblock %} if boo {% templatetag closeblock %} "
     "bar {% templatetag openvariable %} bat|upper {% templatetag closevariable %} baz {{ i }} dolor"
     " {% templatetag openblock %} endif {% templatetag closeblock %} sit."
-    "{% endfor %} amet.\n";
+    "{% endfor %} amet.\n" );
 
-  m_templateGenerator = m_engine->newTemplate( m_templateGeneratorString, "generator" );
+  m_templateGenerator = m_engine->newTemplate( m_templateGeneratorString, QLatin1String( "generator" ) );
 
 }
 
@@ -119,7 +119,7 @@ void Benchmarking::testParsing()
   QList<Token> tokens;
   tokens = l.tokenize();
 
-  Template t = m_engine->newTemplate( "", "" );
+  Template t = m_engine->newTemplate( QString(), QString() );
 
   Parser p( tokens, t.data() );
   NodeList list;
@@ -132,11 +132,11 @@ void Benchmarking::testRendering()
   QFETCH( QString, input );
   QFETCH( Dict, dict );
 
-  Template t = m_engine->newTemplate( input, "testtemplate" );
+  Template t = m_engine->newTemplate( input, QLatin1String( "testtemplate" ) );
 
   Context context( dict );
 
-  QFile outputFile( "./output" );
+  QFile outputFile( QLatin1String( "./output" ) );
   outputFile.open( QFile::WriteOnly );
   QTextStream tstream( &outputFile );
 
@@ -152,9 +152,9 @@ void Benchmarking::getData()
 
   Dict dict;
 
-  dict.insert( "boo", "Far" );
-  dict.insert( "bat", "Cat" );
-  dict.insert( "booList", QVariantList() << "Tom" << "Dick" << "Harry" );
+  dict.insert( QLatin1String( "boo" ), QLatin1String( "Far" ) );
+  dict.insert( QLatin1String( "bat" ), QLatin1String( "Cat" ) );
+  dict.insert( QLatin1String( "booList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
 
   // Using Grantlee to create Grantlee templates. How recursive...
 
@@ -163,7 +163,7 @@ void Benchmarking::getData()
 
 //   Q_FOREACH(int size, repeatSizes)
 //   {
-//     const char * name = QString("growing-%1").arg( size ).toLatin1();
+//     const char * name = QLatin1String( "growing-%1" ).arg( size ).toLatin1();
 //     QTest::newRow( name ) << getTemplate( size ) << dict;
 //   }
 
@@ -187,7 +187,7 @@ QVariantHash Benchmarking::getDictData( int size )
 
   for ( int i = 0 ; i < size; i++ )
     list << i;
-  h.insert( "items", list );
+  h.insert( QLatin1String( "items" ), list );
 
   return h;
 }

@@ -63,10 +63,10 @@ void TestScriptableTagsSyntax::initTestCase()
 {
   m_engine = new Engine( this );
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH
-                                          << ":/plugins/" // For scripteddefaults.qs
+  m_engine->setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH )
+                                          << QString::fromLatin1( ":/plugins/" ) // For scripteddefaults.qs
                          );
-  m_engine->addDefaultLibrary( "grantlee_scriptabletags" );
+  m_engine->addDefaultLibrary( QLatin1String( "grantlee_scriptabletags" ) );
 }
 
 void TestScriptableTagsSyntax::cleanupTestCase()
@@ -81,7 +81,7 @@ void TestScriptableTagsSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
+  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   Context context( dict );
 
@@ -115,39 +115,39 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
 
   Dict dict;
 
-  dict.insert( "boo", "Far" );
-  dict.insert( "booList", QVariantList() << "Tom" << "Dick" << "Harry" );
+  dict.insert( QLatin1String( "boo" ), QLatin1String( "Far" ) );
+  dict.insert( QLatin1String( "booList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
 
-  QTest::newRow( "scriptable-tags01" ) << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{{ boo }}{% endif2 %}" << dict << "Far" << NoError;
-
-  // Nest c++ tags inside scripted tags.
-  QTest::newRow( "scriptable-tags02" ) << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{% for name in booList %}:{{ name }};{% endfor %}{% endif2 %}" << dict << ":Tom;:Dick;:Harry;" << NoError;
+  QTest::newRow( "scriptable-tags01" ) << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{{ boo }}{% endif2 %}" << dict << QString::fromLatin1( "Far" ) << NoError;
 
   // Nest c++ tags inside scripted tags.
-  QTest::newRow( "scriptable-tags03" ) << "{% load scripteddefaults %}{% if2 boo %}yes{% else %}no{% endif2 %}" << dict << "yes" << NoError;
-  QTest::newRow( "scriptable-tags04" ) << "{% load scripteddefaults %}{% if2 foo %}yes{% else %}no{% endif2 %}" << dict << "no" << NoError;
+  QTest::newRow( "scriptable-tags02" ) << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{% for name in booList %}:{{ name }};{% endfor %}{% endif2 %}" << dict << QString::fromLatin1( ":Tom;:Dick;:Harry;" ) << NoError;
 
-  QTest::newRow( "scriptable-tags05" ) << "{% load scripteddefaults %}{{ boo|upper }}" << dict << "FAR" << NoError;
+  // Nest c++ tags inside scripted tags.
+  QTest::newRow( "scriptable-tags03" ) << QString::fromLatin1( "{% load scripteddefaults %}{% if2 boo %}yes{% else %}no{% endif2 %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+  QTest::newRow( "scriptable-tags04" ) << QString::fromLatin1( "{% load scripteddefaults %}{% if2 foo %}yes{% else %}no{% endif2 %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  QTest::newRow( "scriptable-tags05" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ boo|upper }}" ) << dict << QString::fromLatin1( "FAR" ) << NoError;
 
 
-  dict.insert( "boo", "Far & away" );
+  dict.insert( QLatin1String( "boo" ), QLatin1String( "Far & away" ) );
   // Variables are escaped ...
-  QTest::newRow( "scriptable-tags06" ) << "{% load scripteddefaults %}{{ boo }}" << dict << "Far &amp; away" << NoError;
+  QTest::newRow( "scriptable-tags06" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ boo }}" ) << dict << QString::fromLatin1( "Far &amp; away" ) << NoError;
   // and scripted filters can mark output as 'safe'.
-  QTest::newRow( "scriptable-tags07" ) << "{% load scripteddefaults %}{{ boo|safe2 }}" << dict << "Far & away" << NoError;
+  QTest::newRow( "scriptable-tags07" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ boo|safe2 }}" ) << dict << QString::fromLatin1( "Far & away" ) << NoError;
 
   // Filters can take arguments
-  QTest::newRow( "scriptable-tags08" ) << "{% load scripteddefaults %}{{ booList|join2:\" \" }}" << dict << "Tom Dick Harry" << NoError;
+  QTest::newRow( "scriptable-tags08" ) << "{% load scripteddefaults %}{{ booList|join2:\" \" }}" << dict << QString::fromLatin1( "Tom Dick Harry" ) << NoError;
 
   // Literals in tags are compared un-escaped.
-  QTest::newRow( "scriptable-tags09" ) << "{% load scripteddefaults %}{% ifequal2 boo \"Far & away\" %}yes{% endifequal2 %}" << dict << "yes" << NoError;
+  QTest::newRow( "scriptable-tags09" ) << "{% load scripteddefaults %}{% ifequal2 boo \"Far & away\" %}yes{% endifequal2 %}" << dict << QString::fromLatin1( "yes" ) << NoError;
 
   // Literals in arguments to filters are not escaped.
-  QTest::newRow( "scriptable-tags10" ) << "{% load scripteddefaults %}{{ booList|join2:\" & \" }}" << dict << "Tom & Dick & Harry" << NoError;
+  QTest::newRow( "scriptable-tags10" ) << "{% load scripteddefaults %}{{ booList|join2:\" & \" }}" << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
   // Nor are variables.
-  dict.insert( "amp", " & " );
-  QTest::newRow( "scriptable-tags11" ) << "{% load scripteddefaults %}{{ booList|join2:amp }}" << dict << "Tom & Dick & Harry" << NoError;
+  dict.insert( QLatin1String( "amp" ), QLatin1String( " & " ) );
+  QTest::newRow( "scriptable-tags11" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ booList|join2:amp }}" ) << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
 
 

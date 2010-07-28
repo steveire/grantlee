@@ -148,8 +148,11 @@ public:
     SafeString& append( const QString &str );
     SafeString& append( const QStringRef &reference );
     SafeString& append( const QLatin1String &str );
+    // BIC: Use QT_NO_CAST_FROM_ASCII instead.
+#ifndef GRANTLEE_NO_CAST_FROM_ASCII
     SafeString& append( const QByteArray &ba );
     SafeString& append( const char *str );
+#endif
     SafeString& append( const QChar ch );
 
     SafeString& fill( QChar ch, int size = -1 );
@@ -170,8 +173,10 @@ public:
     SafeString& prepend( const SafeString &str );
     SafeString& prepend( const QString &str );
     SafeString& prepend( const QLatin1String &str );
+#ifndef GRANTLEE_NO_CAST_FROM_ASCII
     SafeString& prepend( const QByteArray &ba );
     SafeString& prepend( const char *str );
+#endif
     SafeString& prepend( QChar ch );
 
     void push_back( const SafeString& other );

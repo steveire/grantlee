@@ -60,7 +60,7 @@ public:
   Animals animals() const { return Tigers; }
 
   QString method() const {
-    return "OtherClass::method";
+    return QLatin1String( "OtherClass::method" );
   }
 
 };
@@ -95,7 +95,7 @@ public:
       : QObject( parent ), m_other( new OtherClass( this ) ) { }
 
   QString method() const {
-    return "SomeClass::method";
+    return QLatin1String( "SomeClass::method" );
   }
 
   QVariant otherClass() const {
@@ -156,21 +156,21 @@ public:
 
   virtual QString escape( const QString& input ) const {
     QList<QPair<QString, QString> > jsEscapes;
-    jsEscapes << QPair<QString, QString>( "\\", "\\x5C" )
-              << QPair<QString, QString>( "\'",  "\\x27" )
-              << QPair<QString, QString>( "\"",  "\\x22" )
-              << QPair<QString, QString>( ">", "\\x3E" )
-              << QPair<QString, QString>( "<", "\\x3C" )
-              << QPair<QString, QString>( "&", "\\x26" )
-              << QPair<QString, QString>( "=", "\\x3D" )
-              << QPair<QString, QString>( "-", "\\x2D" )
-              << QPair<QString, QString>( ";", "\\x3B" )
-              << QPair<QString, QString>( QChar( 0x2028 ), "\\u2028" )
-              << QPair<QString, QString>( QChar( 0x2029 ), "\\u2029" );
+    jsEscapes << QPair<QString, QString>( QChar::fromLatin1( '\\' ), QLatin1String( "\\u005C" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( '\'' ),  QLatin1String( "\\u0027" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( '\"' ),  QLatin1String( "\\u0022" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( '>' ), QLatin1String( "\\u003E" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( '<' ), QLatin1String( "\\u003C" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( '&' ), QLatin1String( "\\u0026" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( '=' ), QLatin1String( "\\u003D" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( '-' ), QLatin1String( "\\u002D" ) )
+              << QPair<QString, QString>( QChar::fromLatin1( ';' ), QLatin1String( "\\u003B" ) )
+              << QPair<QString, QString>( QChar( 0x2028 ), QLatin1String( "\\u2028" ) )
+              << QPair<QString, QString>( QChar( 0x2029 ), QLatin1String( "\\u2029" ) );
 
     for( int i = 0; i < 32; ++i )
     {
-      jsEscapes << QPair<QString, QString>( QChar( i ), "\\x" + QString( "%1" ).arg( i, 2, 16, QChar('0') ).toUpper() );
+      jsEscapes << QPair<QString, QString>( QChar( i ), QLatin1String( "\\u00" ) + QString::fromLatin1( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
     }
 
     QListIterator<QPair<QString, QString> > it( jsEscapes );
@@ -246,6 +246,8 @@ private Q_SLOTS:
 private:
   Engine *m_engine;
 
+  InMemoryTemplateLoader::Ptr m_loader;
+
   Engine* getEngine();
 
   void doTest();
@@ -255,12 +257,15 @@ private:
 void TestBuiltinSyntax::initTestCase()
 {
   m_engine = getEngine();
+
+  m_loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
+  m_engine->addTemplateLoader( m_loader );
 }
 
 Engine* TestBuiltinSyntax::getEngine()
 {
   Engine *engine = new Engine( this );
-  engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH );
+  engine->setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
   return engine;
 }
 
@@ -276,7 +281,7 @@ void TestBuiltinSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = m_engine->newTemplate( input, QTest::currentDataTag() );
+  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   Context context( dict );
 
@@ -306,93 +311,93 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   Dict dict;
 
   // Plain text should go through the template parser untouched
-  QTest::newRow( "basic-syntax01" ) << "something cool" << dict << "something cool" << NoError;
+  QTest::newRow( "basic-syntax01" ) << QString::fromLatin1( "something cool" ) << dict << QString::fromLatin1( "something cool" ) << NoError;
 
   // Variables should be replaced with their value in the current
   // context
-  dict.insert( "headline", "Success" );
-  QTest::newRow( "basic-syntax02" ) << "{{ headline }}" << dict << "Success" << NoError;
+  dict.insert( QLatin1String( "headline" ), QLatin1String( "Success" ) );
+  QTest::newRow( "basic-syntax02" ) << QString::fromLatin1( "{{ headline }}" ) << dict << QString::fromLatin1( "Success" ) << NoError;
 
   dict.clear();
-  dict.insert( "first", 1 );
-  dict.insert( "second", 2 );
+  dict.insert( QLatin1String( "first" ), 1 );
+  dict.insert( QLatin1String( "second" ), 2 );
 
   // More than one replacement variable is allowed in a template
-  QTest::newRow( "basic-syntax03" ) << "{{ first }} --- {{ second }}" << dict << "1 --- 2" << NoError;
+  QTest::newRow( "basic-syntax03" ) << QString::fromLatin1( "{{ first }} --- {{ second }}" ) << dict << QString::fromLatin1( "1 --- 2" ) << NoError;
 
   dict.clear();
   // Fail silently when a variable is not found in the current context
-  QTest::newRow( "basic-syntax04" ) << "as{{ missing }}df" << dict << "asdf" << NoError;
+  QTest::newRow( "basic-syntax04" ) << QString::fromLatin1( "as{{ missing }}df" ) << dict << QString::fromLatin1( "asdf" ) << NoError;
 
   // A variable may not contain more than one word
-  QTest::newRow( "basic-syntax06" ) << "{{ multi word variable }}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "basic-syntax06" ) << QString::fromLatin1( "{{ multi word variable }}" ) << dict << QString() << TagSyntaxError;
   // Raise TemplateSyntaxError for empty variable tags
-  QTest::newRow( "basic-syntax07" ) << "{{ }}" << dict << "" << EmptyVariableError;
-  QTest::newRow( "basic-syntax08" ) << "{{        }}" << dict << "" << EmptyVariableError;
+  QTest::newRow( "basic-syntax07" ) << QString::fromLatin1( "{{ }}" ) << dict << QString() << EmptyVariableError;
+  QTest::newRow( "basic-syntax08" ) << QString::fromLatin1( "{{        }}" ) << dict << QString() << EmptyVariableError;
 
 
   // Attribute syntax allows a template to call an object's attribute
 
   QObject *someClass = new SomeClass( this );
-  dict.insert( "var", QVariant::fromValue( someClass ) );
+  dict.insert( QLatin1String( "var" ), QVariant::fromValue( someClass ) );
 
-  QTest::newRow( "basic-syntax09" ) << "{{ var.method }}" << dict << "SomeClass::method" << NoError;
+  QTest::newRow( "basic-syntax09" ) << QString::fromLatin1( "{{ var.method }}" ) << dict << QString::fromLatin1( "SomeClass::method" ) << NoError;
 
   // Multiple levels of attribute access are allowed
-  QTest::newRow( "basic-syntax10" ) << "{{ var.otherClass.method }}" << dict << "OtherClass::method" << NoError;
+  QTest::newRow( "basic-syntax10" ) << QString::fromLatin1( "{{ var.otherClass.method }}" ) << dict << QString::fromLatin1( "OtherClass::method" ) << NoError;
 
   // Fail silently when a variable's attribute isn't found
-  QTest::newRow( "basic-syntax11" ) << "{{ var.blech }}" << dict << "" << NoError;
+  QTest::newRow( "basic-syntax11" ) << QString::fromLatin1( "{{ var.blech }}" ) << dict << QString() << NoError;
 
   // TODO: Needed?
   // Raise TemplateSyntaxError when trying to access a variable beginning with an underscore
   // #C# {"var": SomeClass()}
   dict.clear();
   QVariantHash hash;
-  hash.insert( "__dict__",  "foo" );
-  dict.insert( "var", hash );
-  QTest::newRow( "basic-syntax12" ) << "{{ var.__dict__ }}" << dict << "" << TagSyntaxError;
+  hash.insert( QLatin1String( "__dict__" ), QLatin1String( "foo" ) );
+  dict.insert( QLatin1String( "var" ), hash );
+  QTest::newRow( "basic-syntax12" ) << QString::fromLatin1( "{{ var.__dict__ }}" ) << dict << QString() << TagSyntaxError;
 
   dict.clear();
   // Raise TemplateSyntaxError when trying to access a variable containing an illegal character
-  QTest::newRow( "basic-syntax13" ) << "{{ va>r }}" << dict << "" << TagSyntaxError;
-  QTest::newRow( "basic-syntax14" ) << "{{ (var.r) }}" << dict << "" << TagSyntaxError;
-  QTest::newRow( "basic-syntax15" ) << "{{ sp%am }}" << dict << "" << TagSyntaxError;
-  QTest::newRow( "basic-syntax16" ) << "{{ eggs! }}" << dict << "" << TagSyntaxError;
-  QTest::newRow( "basic-syntax17" ) << "{{ moo? }}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "basic-syntax13" ) << QString::fromLatin1( "{{ va>r }}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "basic-syntax14" ) << QString::fromLatin1( "{{ (var.r) }}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "basic-syntax15" ) << QString::fromLatin1( "{{ sp%am }}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "basic-syntax16" ) << QString::fromLatin1( "{{ eggs! }}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "basic-syntax17" ) << QString::fromLatin1( "{{ moo? }}" ) << dict << QString() << TagSyntaxError;
 
   // Attribute syntax allows a template to call a dictionary key's value
 
   hash.clear();
-  hash.insert( "bar", "baz" );
-  dict.insert( "foo", hash );
-  QTest::newRow( "basic-syntax18" ) << "{{ foo.bar }}" << dict << "baz" << NoError;
+  hash.insert( QLatin1String( "bar" ), QLatin1String( "baz" ) );
+  dict.insert( QLatin1String( "foo" ), hash );
+  QTest::newRow( "basic-syntax18" ) << QString::fromLatin1( "{{ foo.bar }}" ) << dict << QString::fromLatin1( "baz" ) << NoError;
 
   // Fail silently when a variable's dictionary key isn't found
-  QTest::newRow( "basic-syntax19" ) << "{{ foo.spam }}" << dict << "" << NoError;
+  QTest::newRow( "basic-syntax19" ) << QString::fromLatin1( "{{ foo.spam }}" ) << dict << QString() << NoError;
 
   dict.clear();
-  dict.insert( "var", QVariant::fromValue( someClass ) );
+  dict.insert( QLatin1String( "var" ), QVariant::fromValue( someClass ) );
   // Fail silently when attempting to access an unavailable method
-  QTest::newRow( "basic-syntax20" ) << "{{ var.nonAccessibleMethod }}" << dict << "" << NoError;
+  QTest::newRow( "basic-syntax20" ) << QString::fromLatin1( "{{ var.nonAccessibleMethod }}" ) << dict << QString() << NoError;
 
   dict.clear();
   // Don't get confused when parsing something that is almost, but not
   // quite, a template tag.
-  QTest::newRow( "basic-syntax21" ) << "a {{ moo %} b" << dict << "a {{ moo %} b" << NoError;
-  QTest::newRow( "basic-syntax22" ) << "{{ moo #}" << dict << "{{ moo #}" << NoError;
+  QTest::newRow( "basic-syntax21" ) << QString::fromLatin1( "a {{ moo %} b" ) << dict << QString::fromLatin1( "a {{ moo %} b" ) << NoError;
+  QTest::newRow( "basic-syntax22" ) << QString::fromLatin1( "{{ moo #}" ) << dict << QString::fromLatin1( "{{ moo #}" ) << NoError;
 
-  dict.insert( "cow", "cow" );
+  dict.insert( QLatin1String( "cow" ), QLatin1String( "cow" ) );
   // Will try to treat "moo #} {{ cow" as the variable. Not ideal, but
   // costly to work around, so this triggers an error.
-  QTest::newRow( "basic-syntax23" ) << "{{ moo #} {{ cow }}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "basic-syntax23" ) << QString::fromLatin1( "{{ moo #} {{ cow }}" ) << dict << QString() << TagSyntaxError;
 
   dict.clear();
   // Embedded newlines make it not-a-tag.
   QTest::newRow( "basic-syntax24" ) << "{{ moo\n }}" << dict << "{{ moo\n }}" << NoError;
   // Literal strings are permitted inside variables, mostly for i18n
   // purposes.
-  QTest::newRow( "basic-syntax25" ) << "{{ \"fred\" }}" << dict << "fred" << NoError;
+  QTest::newRow( "basic-syntax25" ) << "{{ \"fred\" }}" << dict << QString::fromLatin1( "fred" ) << NoError;
   QTest::newRow( "basic-syntax26" ) << "{{ \"\\\"fred\\\"\" }}" << dict << "\"fred\"" << NoError;
   QTest::newRow( "basic-syntax27" ) << "{{ _(\"\\\"fred\\\"\") }}" << dict << "\"fred\"" << NoError;
 
@@ -400,71 +405,77 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.clear();
   hash.clear();
   QVariantHash innerHash;
-  innerHash.insert( "3", "d" );
-  hash.insert( "2", innerHash );
-  dict.insert( "1", hash );
+  innerHash.insert( QLatin1String( "3" ), QLatin1String( "d" ) );
+  hash.insert( QLatin1String( "2" ), innerHash );
+  dict.insert( QLatin1String( "1" ), hash );
 
-  QTest::newRow( "basic-syntax28" ) << "{{ 1.2.3 }}" << dict << "d" << NoError;
+  QTest::newRow( "basic-syntax28" ) << QString::fromLatin1( "{{ 1.2.3 }}" ) << dict << QString::fromLatin1( "d" ) << NoError;
 
   dict.clear();
   hash.clear();
   QVariantList list;
-  list << "a" << "b" << "c" << "d";
-  hash.insert( "2", list );
-  dict.insert( "1", hash );
-  QTest::newRow( "basic-syntax29" ) << "{{ 1.2.3 }}" << dict << "d" << NoError;
+  list << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) << QString::fromLatin1( "d" );
+  hash.insert( QLatin1String( "2" ), list );
+  dict.insert( QLatin1String( "1" ), hash );
+  QTest::newRow( "basic-syntax29" ) << QString::fromLatin1( "{{ 1.2.3 }}" ) << dict << QString::fromLatin1( "d" ) << NoError;
 
   dict.clear();
   list.clear();
   QVariantList innerList;
-  innerList << "x" << "x" << "x" << "x";
+  innerList << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << "y" << "y" << "y" << "y";
+  innerList << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << "a" << "b" << "c" << "d";
+  innerList << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) << QString::fromLatin1( "d" );
   list.append( QVariant( innerList ) );
-  dict.insert( "1", list );
+  dict.insert( QLatin1String( "1" ), list );
 
-  QTest::newRow( "basic-syntax30" ) << "{{ 1.2.3 }}" << dict << "d" << NoError;
+  QTest::newRow( "basic-syntax30" ) << QString::fromLatin1( "{{ 1.2.3 }}" ) << dict << QString::fromLatin1( "d" ) << NoError;
 
   dict.clear();
   list.clear();
   innerList.clear();
-  innerList << "x" << "x" << "x" << "x";
+  innerList << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << "y" << "y" << "y" << "y";
+  innerList << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << "a" << "b" << "c" << "d";
+  innerList << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) << QString::fromLatin1( "d" );
   list.append( QVariant( innerList ) );
-  dict.insert( "1", list );
+  dict.insert( QLatin1String( "1" ), list );
 
-  QTest::newRow( "basic-syntax31" ) << "{{ 1.2.3 }}" << dict << "d" << NoError;
+  QTest::newRow( "basic-syntax31" ) << QString::fromLatin1( "{{ 1.2.3 }}" ) << dict << QString::fromLatin1( "d" ) << NoError;
 
   dict.clear();
   list.clear();
   hash.clear();
-  hash.insert( "x", "x" );
+  hash.insert( QLatin1String( "x" ), QLatin1String( "x" ) );
   list.append( hash );
   hash.clear();
-  hash.insert( "y", "y" );
+  hash.insert( QLatin1String( "y" ), QLatin1String( "y" ) );
   list.append( hash );
   hash.clear();
-  hash.insert( "3", "d" );
+  hash.insert( QLatin1String( "3" ), QLatin1String( "d" ) );
   list.append( hash );
 
-  dict.insert( "1", list );
+  dict.insert( QLatin1String( "1" ), list );
 
-  QTest::newRow( "basic-syntax32" ) << "{{ 1.2.3 }}" << dict << "d" << NoError;
+  QTest::newRow( "basic-syntax32" ) << QString::fromLatin1( "{{ 1.2.3 }}" ) << dict << QString::fromLatin1( "d" ) << NoError;
 
   dict.clear();
 
-  dict.insert( "1", "abc" );
-  QTest::newRow( "basic-syntax33" ) << "{{ 1 }}" << dict << "1" << NoError;
-  QTest::newRow( "basic-syntax34" ) << "{{ 1.2 }}" << dict << "1.2" << NoError;
+  dict.insert( QLatin1String( "1" ), QLatin1String( "abc" ) );
+  QTest::newRow( "basic-syntax33" ) << QString::fromLatin1( "{{ 1 }}" ) << dict << QString::fromLatin1( "1" ) << NoError;
+  QTest::newRow( "basic-syntax34" ) << QString::fromLatin1( "{{ 1.2 }}" ) << dict << QString::fromLatin1( "1.2" ) << NoError;
+
+  dict.clear();
+
+  dict.insert( QLatin1String( "abc" ), QLatin1String( "def" ) );
+
+  QTest::newRow( "basic-syntax35" ) << QString::fromLatin1( "{{ abc._something }} {{ abc._something|upper }}" ) << dict << QString() << TagSyntaxError;
 }
 
 void TestBuiltinSyntax::testEnums_data()
@@ -477,97 +488,97 @@ void TestBuiltinSyntax::testEnums_data()
   Dict dict;
 
   QObject *otherClass = new OtherClass( this );
-  dict.insert( "var", QVariant::fromValue( otherClass ) );
+  dict.insert( QLatin1String( "var" ), QVariant::fromValue( otherClass ) );
 
-  QTest::newRow( "class-enums01" ) << "{{ var.Lions }}" << dict << "0" << NoError;
-  QTest::newRow( "class-enums02" ) << "{{ var.Tigers }}" << dict << "1" << NoError;
-  QTest::newRow( "class-enums03" ) << "{{ var.Bears }}" << dict << "2" << NoError;
-  QTest::newRow( "class-enums04" ) << "{{ var.Hamsters }}" << dict << "" << NoError;
-  QTest::newRow( "class-enums05" ) << "{{ var.Tigers.name }}" << dict << "Animals" << NoError;
-  QTest::newRow( "class-enums06" ) << "{{ var.Tigers.scope }}" << dict << "OtherClass" << NoError;
-  QTest::newRow( "class-enums07" ) << "{{ var.Tigers.value }}" << dict << "1" << NoError;
-  QTest::newRow( "class-enums08" ) << "{{ var.Tigers.key }}" << dict << "Tigers" << NoError;
-  QTest::newRow( "class-enums09" ) << "{{ var.animals }}" << dict << "1" << NoError;
-  QTest::newRow( "class-enums10" ) << "{{ var.animals.name }}" << dict << "Animals" << NoError;
-  QTest::newRow( "class-enums11" ) << "{{ var.animals.scope }}" << dict << "OtherClass" << NoError;
-  QTest::newRow( "class-enums12" ) << "{{ var.animals.value }}" << dict << "1" << NoError;
-  QTest::newRow( "class-enums13" ) << "{{ var.animals.key }}" << dict << "Tigers" << NoError;
-  QTest::newRow( "class-enums14" ) << "{{ var.Animals.0 }}" << dict << "0" << NoError;
-  QTest::newRow( "class-enums15" ) << "{{ var.Animals.2 }}" << dict << "2" << NoError;
-  QTest::newRow( "class-enums16" ) << "{{ var.Animals.3 }}" << dict << "" << NoError;
-  QTest::newRow( "class-enums17" ) << "{{ var.Animals.0.name }}" << dict << "Animals" << NoError;
-  QTest::newRow( "class-enums18" ) << "{{ var.Animals.0.scope }}" << dict << "OtherClass" << NoError;
-  QTest::newRow( "class-enums19" ) << "{{ var.Animals.0.value }}" << dict << "0" << NoError;
-  QTest::newRow( "class-enums20" ) << "{{ var.Animals.0.key }}" << dict << "Lions" << NoError;
-  QTest::newRow( "class-enums21" ) << "{{ var.Animals.2.key }}" << dict << "Bears" << NoError;
-  QTest::newRow( "class-enums22" ) << "{{ var.Tigers.samba }}" << dict << "" << NoError;
+  QTest::newRow( "class-enums01" ) << QString::fromLatin1( "{{ var.Lions }}" ) << dict << QString::fromLatin1( "0" ) << NoError;
+  QTest::newRow( "class-enums02" ) << QString::fromLatin1( "{{ var.Tigers }}" ) << dict << QString::fromLatin1( "1" ) << NoError;
+  QTest::newRow( "class-enums03" ) << QString::fromLatin1( "{{ var.Bears }}" ) << dict << QString::fromLatin1( "2" ) << NoError;
+  QTest::newRow( "class-enums04" ) << QString::fromLatin1( "{{ var.Hamsters }}" ) << dict << QString() << NoError;
+  QTest::newRow( "class-enums05" ) << QString::fromLatin1( "{{ var.Tigers.name }}" ) << dict << QString::fromLatin1( "Animals" ) << NoError;
+  QTest::newRow( "class-enums06" ) << QString::fromLatin1( "{{ var.Tigers.scope }}" ) << dict << QString::fromLatin1( "OtherClass" ) << NoError;
+  QTest::newRow( "class-enums07" ) << QString::fromLatin1( "{{ var.Tigers.value }}" ) << dict << QString::fromLatin1( "1" ) << NoError;
+  QTest::newRow( "class-enums08" ) << QString::fromLatin1( "{{ var.Tigers.key }}" ) << dict << QString::fromLatin1( "Tigers" ) << NoError;
+  QTest::newRow( "class-enums09" ) << QString::fromLatin1( "{{ var.animals }}" ) << dict << QString::fromLatin1( "1" ) << NoError;
+  QTest::newRow( "class-enums10" ) << QString::fromLatin1( "{{ var.animals.name }}" ) << dict << QString::fromLatin1( "Animals" ) << NoError;
+  QTest::newRow( "class-enums11" ) << QString::fromLatin1( "{{ var.animals.scope }}" ) << dict << QString::fromLatin1( "OtherClass" ) << NoError;
+  QTest::newRow( "class-enums12" ) << QString::fromLatin1( "{{ var.animals.value }}" ) << dict << QString::fromLatin1( "1" ) << NoError;
+  QTest::newRow( "class-enums13" ) << QString::fromLatin1( "{{ var.animals.key }}" ) << dict << QString::fromLatin1( "Tigers" ) << NoError;
+  QTest::newRow( "class-enums14" ) << QString::fromLatin1( "{{ var.Animals.0 }}" ) << dict << QString::fromLatin1( "0" ) << NoError;
+  QTest::newRow( "class-enums15" ) << QString::fromLatin1( "{{ var.Animals.2 }}" ) << dict << QString::fromLatin1( "2" ) << NoError;
+  QTest::newRow( "class-enums16" ) << QString::fromLatin1( "{{ var.Animals.3 }}" ) << dict << QString() << NoError;
+  QTest::newRow( "class-enums17" ) << QString::fromLatin1( "{{ var.Animals.0.name }}" ) << dict << QString::fromLatin1( "Animals" ) << NoError;
+  QTest::newRow( "class-enums18" ) << QString::fromLatin1( "{{ var.Animals.0.scope }}" ) << dict << QString::fromLatin1( "OtherClass" ) << NoError;
+  QTest::newRow( "class-enums19" ) << QString::fromLatin1( "{{ var.Animals.0.value }}" ) << dict << QString::fromLatin1( "0" ) << NoError;
+  QTest::newRow( "class-enums20" ) << QString::fromLatin1( "{{ var.Animals.0.key }}" ) << dict << QString::fromLatin1( "Lions" ) << NoError;
+  QTest::newRow( "class-enums21" ) << QString::fromLatin1( "{{ var.Animals.2.key }}" ) << dict << QString::fromLatin1( "Bears" ) << NoError;
+  QTest::newRow( "class-enums22" ) << QString::fromLatin1( "{{ var.Tigers.samba }}" ) << dict << QString() << NoError;
   QTest::newRow( "class-enums23" )
-      << "{% with var.animals as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" << dict
-      << "Tigers,1,OtherClass" << NoError;
+      << QString::fromLatin1( "{% with var.animals as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" ) << dict
+      << QString::fromLatin1( "Tigers,1,OtherClass" ) << NoError;
   QTest::newRow( "class-enums24" )
-      << "{% with var.Animals.2 as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" << dict
-      << "Bears,2,OtherClass" << NoError;
+      << QString::fromLatin1( "{% with var.Animals.2 as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" ) << dict
+      << QString::fromLatin1( "Bears,2,OtherClass" ) << NoError;
   QTest::newRow( "class-enums25" )
-      << "{% with var.Bears as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" << dict
-      << "Bears,2,OtherClass" << NoError;
+      << QString::fromLatin1( "{% with var.Bears as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}" ) << dict
+      << QString::fromLatin1( "Bears,2,OtherClass" ) << NoError;
   QTest::newRow( "class-enums26" )
-      << "{% with var.Animals as result %}{{ result.0.key }},{{ result.1.key }},{{ result.2.key }}{% endwith %}" << dict
-      << "Lions,Tigers,Bears" << NoError;
+      << QString::fromLatin1( "{% with var.Animals as result %}{{ result.0.key }},{{ result.1.key }},{{ result.2.key }}{% endwith %}" ) << dict
+      << QString::fromLatin1( "Lions,Tigers,Bears" ) << NoError;
 
   dict.clear();
 
   QObject *someClass = new SomeClass( this );
-  dict.insert( "var", QVariant::fromValue( someClass ) );
+  dict.insert( QLatin1String( "var" ), QVariant::fromValue( someClass ) );
 
-  QTest::newRow( "class-enums27" ) << "{{ var.Employee }}" << dict << "0" << NoError;
-  QTest::newRow( "class-enums28" ) << "{{ var.Employer }}" << dict << "1" << NoError;
-  QTest::newRow( "class-enums29" ) << "{{ var.Manager }}" << dict << "2" << NoError;
-  QTest::newRow( "class-enums30" ) << "{{ var.Voter }}" << dict << "2" << NoError;
-  QTest::newRow( "class-enums31" ) << "{{ var.Consumer }}" << dict << "4" << NoError;
-  QTest::newRow( "class-enums32" ) << "{{ var.Citizen }}" << dict << "8" << NoError;
-  QTest::newRow( "class-enums33" ) << "{{ var.FirstEnum }}" << dict << "" << NoError;
-  QTest::newRow( "class-enums34" ) << "{{ var.SecondEnum }}" << dict << "" << NoError;
+  QTest::newRow( "class-enums27" ) << QString::fromLatin1( "{{ var.Employee }}" ) << dict << QString::fromLatin1( "0" ) << NoError;
+  QTest::newRow( "class-enums28" ) << QString::fromLatin1( "{{ var.Employer }}" ) << dict << QString::fromLatin1( "1" ) << NoError;
+  QTest::newRow( "class-enums29" ) << QString::fromLatin1( "{{ var.Manager }}" ) << dict << QString::fromLatin1( "2" ) << NoError;
+  QTest::newRow( "class-enums30" ) << QString::fromLatin1( "{{ var.Voter }}" ) << dict << QString::fromLatin1( "2" ) << NoError;
+  QTest::newRow( "class-enums31" ) << QString::fromLatin1( "{{ var.Consumer }}" ) << dict << QString::fromLatin1( "4" ) << NoError;
+  QTest::newRow( "class-enums32" ) << QString::fromLatin1( "{{ var.Citizen }}" ) << dict << QString::fromLatin1( "8" ) << NoError;
+  QTest::newRow( "class-enums33" ) << QString::fromLatin1( "{{ var.FirstEnum }}" ) << dict << QString() << NoError;
+  QTest::newRow( "class-enums34" ) << QString::fromLatin1( "{{ var.SecondEnum }}" ) << dict << QString() << NoError;
 
-  QTest::newRow( "class-enums35" ) << "{% with var.SecondEnum as result %}"
+  QTest::newRow( "class-enums35" ) << QString::fromLatin1( "{% with var.SecondEnum as result %}"
                                         "{{ result.0 }},{{ result.1 }},{{ result.2 }},"
                                         "{{ result.0.key }},{{ result.1.key }},{{ result.2.key }},"
                                         "{{ result }},{{ result.scope }}"
-                                      "{% endwith %}"
-                                   << dict << "2,4,8,Voter,Consumer,Citizen,,SomeClass" << NoError;
+                                      "{% endwith %}" )
+                                   << dict << QString::fromLatin1( "2,4,8,Voter,Consumer,Citizen,,SomeClass" ) << NoError;
 
-  dict.insert( "var", QVariant::fromValue( otherClass ) );
+  dict.insert( QLatin1String( "var" ), QVariant::fromValue( otherClass ) );
 
-  QTest::newRow( "enums-loops01" ) << "{% for enum in var.Animals %}{% ifequal enum var.Tigers %}"
+  QTest::newRow( "enums-loops01" ) << QString::fromLatin1( "{% for enum in var.Animals %}{% ifequal enum var.Tigers %}"
                                       "<b>{{ enum.key }}</b>{% else %}{{ enum.key }}{% endifequal %},"
-                                      "{% empty %}No content{% endfor %}"
-                                   << dict << "Lions,<b>Tigers</b>,Bears," << NoError;
+                                      "{% empty %}No content{% endfor %}" )
+                                   << dict << QString::fromLatin1( "Lions,<b>Tigers</b>,Bears," ) << NoError;
 
-  QTest::newRow( "enums-loops02" ) << "{% for enum in var.Tigers %}"
+  QTest::newRow( "enums-loops02" ) << QString::fromLatin1( "{% for enum in var.Tigers %}"
                                         "{% ifequal enum result %}<b>{{ enum.key }}</b>"
                                         "{% else %}{{ enum.key }}{% endifequal %},"
                                       "{% empty %}No content"
-                                      "{% endfor %}"
-                                   << dict << "No content" << NoError;
+                                      "{% endfor %}" )
+                                   << dict << QString::fromLatin1( "No content" ) << NoError;
 
-  QTest::newRow( "enums-loops03" ) << "{% with var.animals as result %}"
+  QTest::newRow( "enums-loops03" ) << QString::fromLatin1( "{% with var.animals as result %}"
                                         "{% for enum in var.Animals %}"
                                           "{% ifequal enum result %}<b>{{ enum.key }}</b>"
                                           "{% else %}{{ enum.key }}{% endifequal %},"
                                         "{% empty %}No content"
                                         "{% endfor %}"
-                                      "{% endwith %}"
-                                   << dict << "Lions,<b>Tigers</b>,Bears," << NoError;
+                                      "{% endwith %}" )
+                                   << dict << QString::fromLatin1( "Lions,<b>Tigers</b>,Bears," ) << NoError;
 
-  QTest::newRow( "enums-keycount01" ) << "{{ var.Animals.keyCount }}" << dict << "3" << NoError;
-  QTest::newRow( "enums-keycount02" ) << "{{ var.Lions.keyCount }}" << dict << "3" << NoError;
-  QTest::newRow( "enums-keycount02" ) << "{{ var.animals.keyCount }}" << dict << "3" << NoError;
+  QTest::newRow( "enums-keycount01" ) << QString::fromLatin1( "{{ var.Animals.keyCount }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
+  QTest::newRow( "enums-keycount02" ) << QString::fromLatin1( "{{ var.Lions.keyCount }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
+  QTest::newRow( "enums-keycount02" ) << QString::fromLatin1( "{{ var.animals.keyCount }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
 
-  QTest::newRow( "qt-enums01" ) << "{{ Qt.AlignRight }}" << dict << "2" << NoError;
-  QTest::newRow( "qt-enums02" ) << "{{ Qt.AlignRight.scope }}" << dict << "Qt" << NoError;
-  QTest::newRow( "qt-enums03" ) << "{{ Qt.AlignRight.name }}" << dict << "Alignment" << NoError;
-  QTest::newRow( "qt-enums04" ) << "{{ Qt.AlignRight.value }}" << dict << "2" << NoError;
-  QTest::newRow( "qt-enums05" ) << "{{ Qt.AlignRight.key }}" << dict << "AlignRight" << NoError;
-  QTest::newRow( "qt-enums06" ) << "{{ Qt.Alignment.2.key }}" << dict << "AlignRight" << NoError;
+  QTest::newRow( "qt-enums01" ) << QString::fromLatin1( "{{ Qt.AlignRight }}" ) << dict << QString::fromLatin1( "2" ) << NoError;
+  QTest::newRow( "qt-enums02" ) << QString::fromLatin1( "{{ Qt.AlignRight.scope }}" ) << dict << QString::fromLatin1( "Qt" ) << NoError;
+  QTest::newRow( "qt-enums03" ) << QString::fromLatin1( "{{ Qt.AlignRight.name }}" ) << dict << QString::fromLatin1( "Alignment" ) << NoError;
+  QTest::newRow( "qt-enums04" ) << QString::fromLatin1( "{{ Qt.AlignRight.value }}" ) << dict << QString::fromLatin1( "2" ) << NoError;
+  QTest::newRow( "qt-enums05" ) << QString::fromLatin1( "{{ Qt.AlignRight.key }}" ) << dict << QString::fromLatin1( "AlignRight" ) << NoError;
+  QTest::newRow( "qt-enums06" ) << QString::fromLatin1( "{{ Qt.Alignment.2.key }}" ) << dict << QString::fromLatin1( "AlignRight" ) << NoError;
 }
 
 void TestBuiltinSyntax::testListIndex_data()
@@ -581,34 +592,34 @@ void TestBuiltinSyntax::testListIndex_data()
   Dict dict;
 
   QVariantList l;
-  l << "first item" << "second item";
+  l << QString::fromLatin1( "first item" ) << QString::fromLatin1( "second item" );
 
-  dict.insert( "var", l );
+  dict.insert( QLatin1String( "var" ), l );
 
   // List-index syntax allows a template to access a certain item of a subscriptable object.
-  QTest::newRow( "list-index01" ) << "{{ var.1 }}" << dict << "second item" << NoError;
+  QTest::newRow( "list-index01" ) << QString::fromLatin1( "{{ var.1 }}" ) << dict << QString::fromLatin1( "second item" ) << NoError;
   // Fail silently when the list index is out of range.
-  QTest::newRow( "list-index02" ) << "{{ var.5 }}" << dict << "" << NoError;
+  QTest::newRow( "list-index02" ) << QString::fromLatin1( "{{ var.5 }}" ) << dict << QString() << NoError;
 
   dict.clear();
-  dict.insert( "var", QVariant() );
+  dict.insert( QLatin1String( "var" ), QVariant() );
 
   // Fail silently when the variable is not a subscriptable object.
-  QTest::newRow( "list-index03" ) << "{{ var.1 }}" << dict << "" << NoError;
+  QTest::newRow( "list-index03" ) << QString::fromLatin1( "{{ var.1 }}" ) << dict << QString() << NoError;
 
   dict.clear();
-  dict.insert( "var", QVariantHash() );
+  dict.insert( QLatin1String( "var" ), QVariantHash() );
   // Fail silently when variable is a dict without the specified key.
-  QTest::newRow( "list-index04" ) << "{{ var.1 }}" << dict << "" << NoError;
+  QTest::newRow( "list-index04" ) << QString::fromLatin1( "{{ var.1 }}" ) << dict << QString() << NoError;
 
 
   dict.clear();
 
   QVariantHash hash;
-  hash.insert( "1", "hello" );
-  dict.insert( "var", hash );
+  hash.insert( QLatin1String( "1" ), QLatin1String( "hello" ) );
+  dict.insert( QLatin1String( "var" ), hash );
   // Dictionary lookup wins out when dict's key is a string.
-  QTest::newRow( "list-index05" ) << "{{ var.1 }}" << dict << "hello" << NoError;
+  QTest::newRow( "list-index05" ) << QString::fromLatin1( "{{ var.1 }}" ) << dict << QString::fromLatin1( "hello" ) << NoError;
 
   // QVariantHash can only use strings as keys, so list-index06 and list-index07 are not valid.
 }
@@ -624,66 +635,66 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   Dict dict;
 
   // Basic filter usage
-  dict.insert( "var", "Django is the greatest!" );
-  QTest::newRow( "filter-syntax01" ) << "{{ var|upper }}" << dict << "DJANGO IS THE GREATEST!" << NoError;
+  dict.insert( QLatin1String( "var" ), QLatin1String( "Django is the greatest!" ) );
+  QTest::newRow( "filter-syntax01" ) << QString::fromLatin1( "{{ var|upper }}" ) << dict << QString::fromLatin1( "DJANGO IS THE GREATEST!" ) << NoError;
 
   // Chained filters
-  QTest::newRow( "filter-syntax02" ) << "{{ var|upper|lower }}" << dict << "django is the greatest!" << NoError;
+  QTest::newRow( "filter-syntax02" ) << QString::fromLatin1( "{{ var|upper|lower }}" ) << dict << QString::fromLatin1( "django is the greatest!" ) << NoError;
 
   // Raise TemplateSyntaxError for space between a variable and filter pipe
   dict.clear();
-  QTest::newRow( "filter-syntax03" ) << "{{ var |upper }}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "filter-syntax03" ) << QString::fromLatin1( "{{ var |upper }}" ) << dict << QString() << TagSyntaxError;
 
   // Raise TemplateSyntaxError for space after a filter pipe
-  QTest::newRow( "filter-syntax04" ) << "{{ var| upper }}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "filter-syntax04" ) << QString::fromLatin1( "{{ var| upper }}" ) << dict << QString() << TagSyntaxError;
 
   // Raise TemplateSyntaxError for a nonexistent filter
-  QTest::newRow( "filter-syntax05" ) << "{{ var|does_not_exist }}" << dict << "" << UnknownFilterError;
+  QTest::newRow( "filter-syntax05" ) << QString::fromLatin1( "{{ var|does_not_exist }}" ) << dict << QString() << UnknownFilterError;
 
   // Raise TemplateSyntaxError when trying to access a filter containing an illegal character
-  QTest::newRow( "filter-syntax06" ) << "{{ var|fil(ter) }}" << dict << "" << UnknownFilterError;
+  QTest::newRow( "filter-syntax06" ) << QString::fromLatin1( "{{ var|fil(ter) }}" ) << dict << QString() << UnknownFilterError;
 
   // Raise TemplateSyntaxError for invalid block tags
-  QTest::newRow( "filter-syntax07" ) << "{% nothing_to_see_here %}" << dict << "" << InvalidBlockTagError;
+  QTest::newRow( "filter-syntax07" ) << QString::fromLatin1( "{% nothing_to_see_here %}" ) << dict << QString() << InvalidBlockTagError;
   // Raise TemplateSyntaxError for empty block tags
-  QTest::newRow( "filter-syntax08" ) << "{% %}" << dict << "" << InvalidBlockTagError;
+  QTest::newRow( "filter-syntax08" ) << QString::fromLatin1( "{% %}" ) << dict << QString() << InvalidBlockTagError;
 
   // Chained filters, with an argument to the first one
-  dict.insert( "var", "<b><i>Yes</i></b>" );
-  QTest::newRow( "filter-syntax09" ) << "{{ var|removetags:\"b i\"|upper|lower }}" << dict << "yes" << NoError;
+  dict.insert( QLatin1String( "var" ), QLatin1String( "<b><i>Yes</i></b>" ) );
+  QTest::newRow( "filter-syntax09" ) << "{{ var|removetags:\"b i\"|upper|lower }}" << dict << QString::fromLatin1( "yes" ) << NoError;
   // Literal string as argument is always "safe" from auto-escaping..
   dict.clear();
-  dict.insert( "var", QVariant() );
+  dict.insert( QLatin1String( "var" ), QVariant() );
   QTest::newRow( "filter-syntax10" ) << "{{ var|default_if_none:\" endquote\\\" hah\" }}" << dict << " endquote\" hah" << NoError;
   // Variable as argument
-  dict.insert( "var2", "happy" );
-  QTest::newRow( "filter-syntax11" ) << "{{ var|default_if_none:var2 }}" << dict << "happy" << NoError;
+  dict.insert( QLatin1String( "var2" ), QLatin1String( "happy" ) );
+  QTest::newRow( "filter-syntax11" ) << QString::fromLatin1( "{{ var|default_if_none:var2 }}" ) << dict << QString::fromLatin1( "happy" ) << NoError;
   // Default argument testing
   dict.clear();
-  dict.insert( "var", true );
-  QTest::newRow( "filter-syntax12" ) << "{{ var|yesno:\"yup,nup,mup\" }} {{ var|yesno }}" << dict << "yup yes" << NoError;
+  dict.insert( QLatin1String( "var" ), true );
+  QTest::newRow( "filter-syntax12" ) << "{{ var|yesno:\"yup,nup,mup\" }} {{ var|yesno }}" << dict << QString::fromLatin1( "yup yes" ) << NoError;
 
   // Fail silently for methods that raise an exception with a
   // "silent_variable_failure" attribute
 //   dict.clear();
 //   QObject *someClass = new SomeClass(this);
-//   dict.insert("var", QVariant::fromValue(someClass));
-//   QTest::newRow("filter-syntax13") << "1{{ var.method3 }}2" << dict << "12" << NoError;
+//   dict.insert( QLatin1String( "var" ), QVariant::fromValue(someClass));
+//   QTest::newRow("filter-syntax13") << QString::fromLatin1( "1{{ var.method3 }}2" ) << dict << QString::fromLatin1( "12" ) << NoError;
 //   // In methods that raise an exception without a
 //   // "silent_variable_attribute" set to True, the exception propagates
 //   // #C# SomeOtherException)
-//   QTest::newRow("filter-syntax14") << "var" << dict << "" << TagSyntaxError;
+//   QTest::newRow("filter-syntax14") << QString::fromLatin1( "var" ) << dict << QString() << TagSyntaxError;
 
   // Escaped backslash in argument
   dict.clear();
-  dict.insert( "var", QVariant() );
+  dict.insert( QLatin1String( "var" ), QVariant() );
   QTest::newRow( "filter-syntax15" ) << "{{ var|default_if_none:\"foo\\bar\" }}" << dict << "foo\\bar" << NoError;
   // Escaped backslash using known escape char
   QTest::newRow( "filter-syntax16" ) << "{{ var|default_if_none:\"foo\\now\" }}" << dict << "foo\\now" << NoError;
   // Empty strings can be passed as arguments to filters
   dict.clear();
-  dict.insert( "var", QVariantList() << "a" << "b" << "c" );
-  QTest::newRow( "filter-syntax17" ) << "{{ var|join:\"\" }}" << dict << "abc" << NoError;
+  dict.insert( QLatin1String( "var" ), QVariantList() << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) );
+  QTest::newRow( "filter-syntax17" ) << "{{ var|join:\"\" }}" << dict << QString::fromLatin1( "abc" ) << NoError;
 
   // Make sure that any unicode strings are converted to bytestrings
   // in the final output.
@@ -691,11 +702,11 @@ void TestBuiltinSyntax::testFilterSyntax_data()
 
   // Numbers as filter arguments should work
   dict.clear();
-  dict.insert( "var", "hello world" );
-  QTest::newRow( "filter-syntax19" ) << "{{ var|truncatewords:1 }}" << dict << "hello ..." << NoError;
+  dict.insert( QLatin1String( "var" ), QLatin1String( "hello world" ) );
+  QTest::newRow( "filter-syntax19" ) << QString::fromLatin1( "{{ var|truncatewords:1 }}" ) << dict << QString::fromLatin1( "hello ..." ) << NoError;
   //filters should accept empty string constants
   dict.clear();
-  QTest::newRow( "filter-syntax20" ) << "{{ \"\"|default_if_none:\"was none\" }}" << dict << "" << NoError;
+  QTest::newRow( "filter-syntax20" ) << "{{ \"\"|default_if_none:\"was none\" }}" << dict << QString() << NoError;
 
 }
 
@@ -708,19 +719,19 @@ void TestBuiltinSyntax::testCommentSyntax_data()
 
   Dict dict;
 
-  QTest::newRow( "comment-syntax01" ) << "{# this is hidden #}hello" << dict << "hello" << NoError;
-  QTest::newRow( "comment-syntax02" ) << "{# this is hidden #}hello{# foo #}" << dict << "hello" << NoError;
+  QTest::newRow( "comment-syntax01" ) << QString::fromLatin1( "{# this is hidden #}hello" ) << dict << QString::fromLatin1( "hello" ) << NoError;
+  QTest::newRow( "comment-syntax02" ) << QString::fromLatin1( "{# this is hidden #}hello{# foo #}" ) << dict << QString::fromLatin1( "hello" ) << NoError;
   // Comments can contain invalid stuff.
-  QTest::newRow( "comment-syntax03" ) << "foo{#  {% if %}  #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax04" ) << "foo{#  {% endblock %}  #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax05" ) << "foo{#  {% somerandomtag %}  #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax06" ) << "foo{# {% #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax07" ) << "foo{# %} #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax08" ) << "foo{# %} #}bar" << dict << "foobar" << NoError;
-  QTest::newRow( "comment-syntax09" ) << "foo{# {{ #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax10" ) << "foo{# }} #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax11" ) << "foo{# { #}" << dict << "foo" << NoError;
-  QTest::newRow( "comment-syntax12" ) << "foo{# } #}" << dict << "foo" << NoError;
+  QTest::newRow( "comment-syntax03" ) << QString::fromLatin1( "foo{#  {% if %}  #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax04" ) << QString::fromLatin1( "foo{#  {% endblock %}  #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax05" ) << QString::fromLatin1( "foo{#  {% somerandomtag %}  #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax06" ) << QString::fromLatin1( "foo{# {% #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax07" ) << QString::fromLatin1( "foo{# %} #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax08" ) << QString::fromLatin1( "foo{# %} #}bar" ) << dict << QString::fromLatin1( "foobar" ) << NoError;
+  QTest::newRow( "comment-syntax09" ) << QString::fromLatin1( "foo{# {{ #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax10" ) << QString::fromLatin1( "foo{# }} #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax11" ) << QString::fromLatin1( "foo{# { #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-syntax12" ) << QString::fromLatin1( "foo{# } #}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
 }
 
 void TestBuiltinSyntax::testMultiline_data()
@@ -747,42 +758,42 @@ void TestBuiltinSyntax::testEscaping_data()
 
 
   // html escaping is not to be confused with for example url escaping.
-  dict.insert( "var", "< > & \" \' # = % $" );
-  QTest::newRow( "escape01" ) << "{{ var }}" << dict << "&lt; &gt; &amp; \" &#39; # = % $" << NoError;
+  dict.insert( QLatin1String( "var" ), QLatin1String( "< > & \" \' # = % $" ) );
+  QTest::newRow( "escape01" ) << QString::fromLatin1( "{{ var }}" ) << dict << "&lt; &gt; &amp; \" &#39; # = % $" << NoError;
 
   dict.clear();
-  dict.insert( "var", "this & that" );
-  QTest::newRow( "escape02" ) << "{{ var }}" << dict << "this &amp; that" << NoError;
+  dict.insert( QLatin1String( "var" ), QLatin1String( "this & that" ) );
+  QTest::newRow( "escape02" ) << QString::fromLatin1( "{{ var }}" ) << dict << QString::fromLatin1( "this &amp; that" ) << NoError;
 
   // Strings are compared unescaped.
-  QTest::newRow( "escape03" ) << "{% ifequal var \"this & that\" %}yes{% endifequal %}" << dict << "yes" << NoError;
+  QTest::newRow( "escape03" ) << "{% ifequal var \"this & that\" %}yes{% endifequal %}" << dict << QString::fromLatin1( "yes" ) << NoError;
 
   // Arguments to filters are 'safe' and manipulate their input unescaped.
-  QTest::newRow( "escape04" ) << "{{ var|cut:\"&\" }}" << dict << "this  that" << NoError;
+  QTest::newRow( "escape04" ) << "{{ var|cut:\"&\" }}" << dict << QString::fromLatin1( "this  that" ) << NoError;
 
-  dict.insert( "varList", QVariantList() << "Tom" << "Dick" << "Harry" );
-  QTest::newRow( "escape05" ) << "{{ varList|join:\" & \" }}" << dict << "Tom & Dick & Harry" << NoError;
+  dict.insert( QLatin1String( "varList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
+  QTest::newRow( "escape05" ) << "{{ varList|join:\" & \" }}" << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
   // Same with variable args.
-  dict.insert( "amp", " & " );
-  QTest::newRow( "escape06" ) << "{{ varList|join:amp }}" << dict << "Tom & Dick & Harry" << NoError;
+  dict.insert( QLatin1String( "amp" ), QLatin1String( " & " ) );
+  QTest::newRow( "escape06" ) << QString::fromLatin1( "{{ varList|join:amp }}" ) << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
   // Literal strings are safe.
-  QTest::newRow( "escape07" ) << "{{ \"this & that\" }}" << dict << "this & that" << NoError;
+  QTest::newRow( "escape07" ) << "{{ \"this & that\" }}" << dict << QString::fromLatin1( "this & that" ) << NoError;
 
   // Iterating outputs safe characters.
   dict.clear();
   QVariantList list;
-  list << "K" << "&" << "R";
-  dict.insert( "list", list );
-  QTest::newRow( "escape08" ) << "{% for letter in list %}{{ letter }},{% endfor %}" << dict << "K,&amp;,R," << NoError;
+  list << QString::fromLatin1( "K" ) << QString::fromLatin1( "&" ) << QString::fromLatin1( "R" );
+  dict.insert( QLatin1String( "list" ), list );
+  QTest::newRow( "escape08" ) << QString::fromLatin1( "{% for letter in list %}{{ letter }},{% endfor %}" ) << dict << QString::fromLatin1( "K,&amp;,R," ) << NoError;
 
   dict.clear();
   // escape requirement survives lookup.
   QVariantHash hash;
-  hash.insert( "key", "this & that" );
-  dict.insert( "var", hash );
-  QTest::newRow( "escape09" ) << "{{ var.key }}" << dict << "this &amp; that" << NoError;
+  hash.insert( QLatin1String( "key" ), QLatin1String( "this & that" ) );
+  dict.insert( QLatin1String( "var" ), hash );
+  QTest::newRow( "escape09" ) << QString::fromLatin1( "{{ var.key }}" ) << dict << QString::fromLatin1( "this &amp; that" ) << NoError;
 
   dict.clear();
 
@@ -794,39 +805,39 @@ void TestBuiltinSyntax::testMultipleStates()
 
   InMemoryTemplateLoader::Ptr loader1 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
-  loader1->setTemplate( "template1", "Template 1" );
+  loader1->setTemplate( QLatin1String( "template1" ), QLatin1String( "Template 1" ) );
   engine1->addTemplateLoader( loader1 );
 
-  Template t1 = engine1->newTemplate( "{% include \"template1\" %}", "\"template1\"" );
+  Template t1 = engine1->newTemplate( QLatin1String( "{% include \"template1\" %}" ), QLatin1String( "\"template1\"" ) );
 
   Engine *engine2 = getEngine();
 
   InMemoryTemplateLoader::Ptr loader2 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
-  loader2->setTemplate( "template2", "Template 2" );
+  loader2->setTemplate( QLatin1String( "template2" ), QLatin1String( "Template 2" ) );
 
   engine2->addTemplateLoader( loader2 );
 
-  Template t2 = engine2->newTemplate( "{% include \"template2\" %}", "\"template2\"" );
+  Template t2 = engine2->newTemplate( QLatin1String( "{% include \"template2\" %}" ), QLatin1String( "\"template2\"" ) );
 
   Engine *engine3 = getEngine();
 
   InMemoryTemplateLoader::Ptr loader3 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
 
-  loader3->setTemplate( "template3", "Template 3" );
+  loader3->setTemplate( QLatin1String( "template3" ), QLatin1String( "Template 3" ) );
 
   engine3->addTemplateLoader( loader3 );
 
-  Template t3 = engine3->newTemplate( "{% include var %}", "var" );
+  Template t3 = engine3->newTemplate( QLatin1String( "{% include var %}" ), QLatin1String( "var" ) );
 
   QVariantHash h;
-  h.insert( "var", "template3" );
+  h.insert( QLatin1String( "var" ), QLatin1String( "template3" ) );
   Context c( h );
   t1->render( &c );
 
-  QString expected1 = "Template 1";
-  QString expected2 = "Template 2";
-  QString expected3 = "Template 3";
+  QString expected1 = QLatin1String( "Template 1" );
+  QString expected2 = QLatin1String( "Template 2" );
+  QString expected3 = QLatin1String( "Template 3" );
   QCOMPARE( t1->render( &c ), expected1 );
   QCOMPARE( t2->render( &c ), expected2 );
   QCOMPARE( t3->render( &c ), expected3 );
@@ -836,12 +847,12 @@ void TestBuiltinSyntax::testAlternativeEscaping()
 {
   Engine *engine1 = getEngine();
 
-  Template t1 = engine1->newTemplate( "{{ var }}", "\"template1\"" );
+  Template t1 = engine1->newTemplate( QLatin1String( "{{ var }}" ), QLatin1String( "\"template1\"" ) );
 
-  QString input = "< > \r\n & \" \' # = % $";
+  QString input = QLatin1String( "< > \r\n & \" \' # = % $" );
 
   QVariantHash h;
-  h.insert( "var", input );
+  h.insert( QLatin1String( "var" ), input );
   Context c( h );
 
   QString output;
@@ -858,7 +869,7 @@ void TestBuiltinSyntax::testAlternativeEscaping()
 
   t1->render( &jsOs, &c );
 
-  QString jsOutput( "\\x3C \\x3E \\x0D\\x0A \\x26 \\x22 \\x27 # \\x3D % $" );
+  QString jsOutput( QLatin1String( "\\u003C \\u003E \\u000D\\u000A \\u0026 \\u0022 \\u0027 # \\u003D % $" ) );
 
   QCOMPARE( output, jsOutput );
 }
@@ -868,8 +879,8 @@ void TestBuiltinSyntax::testTemplatePathSafety_data()
   QTest::addColumn<QString>( "inputPath" );
   QTest::addColumn<QString>( "output" );
 
-  QTest::newRow( "template-path-safety01" ) << "visible_file" << "visible_file";
-  QTest::newRow( "template-path-safety02" ) << "../invisible_file" << "";
+  QTest::newRow( "template-path-safety01" ) << QString::fromLatin1( "visible_file" ) << QString::fromLatin1( "visible_file" );
+  QTest::newRow( "template-path-safety02" ) << QString::fromLatin1( "../invisible_file" ) << QString();
 }
 
 void TestBuiltinSyntax::testTemplatePathSafety()
@@ -879,7 +890,7 @@ void TestBuiltinSyntax::testTemplatePathSafety()
 
   Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
 
-  loader->setTemplateDirs( QStringList() << "." );
+  loader->setTemplateDirs( QStringList() << QString::fromLatin1( "." ) );
 
   QFile f( inputPath );
   bool opened = f.open( QFile::WriteOnly | QFile::Text );
@@ -909,8 +920,8 @@ void TestBuiltinSyntax::testMediaPathSafety_data()
   QTest::addColumn<QString>( "inputPath" );
   QTest::addColumn<QString>( "output" );
 
-  QTest::newRow( "media-path-safety01" ) << "visible_file" << "./visible_file";
-  QTest::newRow( "media-path-safety02" ) << "../invisible_file" << "";
+  QTest::newRow( "media-path-safety01" ) << QString::fromLatin1( "visible_file" ) << QString::fromLatin1( "./visible_file" );
+  QTest::newRow( "media-path-safety02" ) << QString::fromLatin1( "../invisible_file" ) << QString();
 }
 
 void TestBuiltinSyntax::testMediaPathSafety()
@@ -920,7 +931,7 @@ void TestBuiltinSyntax::testMediaPathSafety()
 
   Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
 
-  loader->setTemplateDirs( QStringList() << "." );
+  loader->setTemplateDirs( QStringList() << QString::fromLatin1( "." ) );
 
   QFile f( inputPath );
   bool opened = f.open( QFile::WriteOnly | QFile::Text );
@@ -948,138 +959,181 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   Dict dict;
 
   QVariantHash itemsHash;
-  itemsHash.insert( "one", 1 );
-  itemsHash.insert( "two", 2 );
-  itemsHash.insert( "three", 3 );
+  itemsHash.insert( QLatin1String( "one" ), 1 );
+  itemsHash.insert( QLatin1String( "two" ), 2 );
+  itemsHash.insert( QLatin1String( "three" ), 3 );
 
-  dict.insert( "hash", itemsHash );
+  dict.insert( QLatin1String( "hash" ), itemsHash );
 
-  QTest::newRow( "type-accessors-hash01" ) << "{{ hash.items|length }}" << dict << "3" << NoError;
-  QTest::newRow( "type-accessors-hash02" ) << "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}"
-                                      << dict << "one:1;two:2;three:3;" << NoError;
-  QTest::newRow( "type-accessors-hash03" ) << "{{ hash.keys|length }}" << dict << "3" << NoError;
-  QTest::newRow( "type-accessors-hash04" ) << "{% for key in hash.keys %}{{ key }};{% endfor %}"
-                                      << dict << "one;two;three;" << NoError;
-  QTest::newRow( "type-accessors-hash05" ) << "{{ hash.values|length }}" << dict << "3" << NoError;
-  QTest::newRow( "type-accessors-hash06" ) << "{% for value in hash.values %}{{ value }};{% endfor %}"
-                                      << dict << "1;2;3;" << NoError;
-
-  dict.clear();
-  dict.insert( "str1", "my string" );
-  dict.insert( "str2", "mystring" );
-
-  QTest::newRow( "type-accessors-string01" ) << "{{ str1.capitalize }}" << dict << "My string" << NoError;
-  QTest::newRow( "type-accessors-string02" ) << "{{ str2.capitalize }}" << dict << "Mystring" << NoError;
+  QTest::newRow( "type-accessors-hash01" ) << QString::fromLatin1( "{{ hash.items|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
+  QTest::newRow( "type-accessors-hash02" ) << QString::fromLatin1( "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}" )
+                                      << dict << QString::fromLatin1( "one:1;two:2;three:3;" ) << NoError;
+  QTest::newRow( "type-accessors-hash03" ) << QString::fromLatin1( "{{ hash.keys|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
+  QTest::newRow( "type-accessors-hash04" ) << QString::fromLatin1( "{% for key in hash.keys %}{{ key }};{% endfor %}" )
+                                      << dict << QString::fromLatin1( "one;two;three;" ) << NoError;
+  QTest::newRow( "type-accessors-hash05" ) << QString::fromLatin1( "{{ hash.values|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
+  QTest::newRow( "type-accessors-hash06" ) << QString::fromLatin1( "{% for value in hash.values %}{{ value }};{% endfor %}" )
+                                      << dict << QString::fromLatin1( "1;2;3;" ) << NoError;
 
   dict.clear();
-  dict.insert( "str1", "de24335fre" );
-  dict.insert( "str2", "de435f3.-5r" );
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "my string" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "mystring" ) );
 
-  QTest::newRow( "type-accessors-string03" ) << "{{ str1.isalnum }}" << dict << "True" << NoError;
-  QTest::newRow( "type-accessors-string04" ) << "{{ str2.isalnum }}" << dict << "False" << NoError;
-
-  dict.clear();
-  dict.insert( "str1", "24335" );
-  dict.insert( "str2", "de435f35r" );
-  dict.insert( "str3", "de435f3.-5r" );
-
-  QTest::newRow( "type-accessors-string05" ) << "{{ str1.isdigit }}" << dict << "True" << NoError;
-  QTest::newRow( "type-accessors-string06" ) << "{{ str2.isdigit }}" << dict << "False" << NoError;
-  QTest::newRow( "type-accessors-string07" ) << "{{ str3.isdigit }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string01" ) << QString::fromLatin1( "{{ str1.capitalize }}" ) << dict << QString::fromLatin1( "My string" ) << NoError;
+  QTest::newRow( "type-accessors-string02" ) << QString::fromLatin1( "{{ str2.capitalize }}" ) << dict << QString::fromLatin1( "Mystring" ) << NoError;
 
   dict.clear();
-  dict.insert( "str", "MyString" );
-  dict.insert( "lowerStr", "mystring" );
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "de24335fre" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "de435f3.-5r" ) );
 
-  QTest::newRow( "type-accessors-string08" ) << "{{ str.islower }}" << dict << "False" << NoError;
-  QTest::newRow( "type-accessors-string09" ) << "{{ lowerStr.islower }}" << dict << "True" << NoError;
-
-  dict.clear();
-  dict.insert( "str1", "        " );
-  dict.insert( "str2", "     r  " );
-  dict.insert( "str3", " \t\nr  " );
-  dict.insert( "str4", " \t\n   " );
-
-  QTest::newRow( "type-accessors-string10" ) << "{{ str1.isspace }}" << dict << "True" << NoError;
-  QTest::newRow( "type-accessors-string11" ) << "{{ str2.isspace }}" << dict << "False" << NoError;
-  QTest::newRow( "type-accessors-string12" ) << "{{ str3.isspace }}" << dict << "False" << NoError;
-  QTest::newRow( "type-accessors-string13" ) << "{{ str4.isspace }}" << dict << "True" << NoError;
+  QTest::newRow( "type-accessors-string03" ) << QString::fromLatin1( "{{ str1.isalnum }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
+  QTest::newRow( "type-accessors-string04" ) << QString::fromLatin1( "{{ str2.isalnum }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
 
   dict.clear();
-  dict.insert( "str1", "My String" );
-  dict.insert( "str2", "Mystring" );
-  dict.insert( "str3", "My string" );
-  dict.insert( "str4", "my string" );
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "24335" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "de435f35r" ) );
+  dict.insert( QLatin1String( "str3" ), QLatin1String( "de435f3.-5r" ) );
 
-  QTest::newRow( "type-accessors-string14" ) << "{{ str1.istitle }}" << dict << "True" << NoError;
-  QTest::newRow( "type-accessors-string15" ) << "{{ str2.istitle }}" << dict << "True" << NoError;
-  QTest::newRow( "type-accessors-string16" ) << "{{ str3.istitle }}" << dict << "False" << NoError;
-  QTest::newRow( "type-accessors-string17" ) << "{{ str4.istitle }}" << dict << "False" << NoError;
+  QTest::newRow( "type-accessors-string05" ) << QString::fromLatin1( "{{ str1.isdigit }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
+  QTest::newRow( "type-accessors-string06" ) << QString::fromLatin1( "{{ str2.isdigit }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+  QTest::newRow( "type-accessors-string07" ) << QString::fromLatin1( "{{ str3.isdigit }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
 
   dict.clear();
-  dict.insert( "str", "MyString" );
-  dict.insert( "upperStr", "MYSTRING" );
+  dict.insert( QLatin1String( "str" ), QLatin1String( "MyString" ) );
+  dict.insert( QLatin1String( "lowerStr" ), QLatin1String( "mystring" ) );
 
-  QTest::newRow( "type-accessors-string18" ) << "{{ str.isupper }}" << dict << "False" << NoError;
-  QTest::newRow( "type-accessors-string19" ) << "{{ upperStr.isupper }}" << dict << "True" << NoError;
-
-  dict.clear();
-  dict.insert( "str1", "My String" );
-  dict.insert( "str2", "MYSTRING" );
-  dict.insert( "str3", "MY STRING" );
-
-  QTest::newRow( "type-accessors-string20" ) << "{{ str1.lower }}" << dict << "my string" << NoError;
-  QTest::newRow( "type-accessors-string21" ) << "{{ str2.lower }}" << dict << "mystring" << NoError;
-  QTest::newRow( "type-accessors-string22" ) << "{{ str3.lower }}" << dict << "my string" << NoError;
+  QTest::newRow( "type-accessors-string08" ) << QString::fromLatin1( "{{ str.islower }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+  QTest::newRow( "type-accessors-string09" ) << QString::fromLatin1( "{{ lowerStr.islower }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
 
   dict.clear();
-  dict.insert( "str", "one\ntwo three\nfour" );
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "        " ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "     r  " ) );
+  dict.insert( QLatin1String( "str3" ), QLatin1String( " \t\nr  " ) );
+  dict.insert( QLatin1String( "str4" ), QLatin1String( " \t\n   " ) );
 
-  QTest::newRow( "type-accessors-string23" ) << "{% for line in str.splitlines %}{{ line }};{% endfor %}" << dict << "one;two three;four;" << NoError;
-
-  dict.clear();
-  dict.insert( "str1", "          one" );
-  dict.insert( "str2", "     one     " );
-  dict.insert( "str3", "one          " );
-  dict.insert( "str4", "             " );
-  dict.insert( "str5", "" );
-
-  QTest::newRow( "type-accessors-string24" ) << "{{ str1.strip }}" << dict << "one" << NoError;
-  QTest::newRow( "type-accessors-string25" ) << "{{ str2.strip }}" << dict << "one" << NoError;
-  QTest::newRow( "type-accessors-string26" ) << "{{ str3.strip }}" << dict << "one" << NoError;
-  QTest::newRow( "type-accessors-string27" ) << "{{ str4.strip }}" << dict << "" << NoError;
-  QTest::newRow( "type-accessors-string28" ) << "{{ str5.strip }}" << dict << "" << NoError;
+  QTest::newRow( "type-accessors-string10" ) << QString::fromLatin1( "{{ str1.isspace }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
+  QTest::newRow( "type-accessors-string11" ) << QString::fromLatin1( "{{ str2.isspace }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+  QTest::newRow( "type-accessors-string12" ) << QString::fromLatin1( "{{ str3.isspace }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+  QTest::newRow( "type-accessors-string13" ) << QString::fromLatin1( "{{ str4.isspace }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
 
   dict.clear();
-  dict.insert( "str1", "My String" );
-  dict.insert( "str2", "mY sTRING" );
-  dict.insert( "str3", "My StrInG" );
-  dict.insert( "str4", "my string" );
-  dict.insert( "str5", "MY STRING" );
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "My String" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "Mystring" ) );
+  dict.insert( QLatin1String( "str3" ), QLatin1String( "My string" ) );
+  dict.insert( QLatin1String( "str4" ), QLatin1String( "my string" ) );
+
+  QTest::newRow( "type-accessors-string14" ) << QString::fromLatin1( "{{ str1.istitle }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
+  QTest::newRow( "type-accessors-string15" ) << QString::fromLatin1( "{{ str2.istitle }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
+  QTest::newRow( "type-accessors-string16" ) << QString::fromLatin1( "{{ str3.istitle }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+  QTest::newRow( "type-accessors-string17" ) << QString::fromLatin1( "{{ str4.istitle }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "str" ), QLatin1String( "MyString" ) );
+  dict.insert( QLatin1String( "upperStr" ), QLatin1String( "MYSTRING" ) );
+
+  QTest::newRow( "type-accessors-string18" ) << QString::fromLatin1( "{{ str.isupper }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+  QTest::newRow( "type-accessors-string19" ) << QString::fromLatin1( "{{ upperStr.isupper }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "My String" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "MYSTRING" ) );
+  dict.insert( QLatin1String( "str3" ), QLatin1String( "MY STRING" ) );
+
+  QTest::newRow( "type-accessors-string20" ) << QString::fromLatin1( "{{ str1.lower }}" ) << dict << QString::fromLatin1( "my string" ) << NoError;
+  QTest::newRow( "type-accessors-string21" ) << QString::fromLatin1( "{{ str2.lower }}" ) << dict << QString::fromLatin1( "mystring" ) << NoError;
+  QTest::newRow( "type-accessors-string22" ) << QString::fromLatin1( "{{ str3.lower }}" ) << dict << QString::fromLatin1( "my string" ) << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "str" ), QLatin1String( "one\ntwo three\nfour" ) );
+
+  QTest::newRow( "type-accessors-string23" ) << QString::fromLatin1( "{% for line in str.splitlines %}{{ line }};{% endfor %}" ) << dict << QString::fromLatin1( "one;two three;four;" ) << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "          one" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "     one     " ) );
+  dict.insert( QLatin1String( "str3" ), QLatin1String( "one          " ) );
+  dict.insert( QLatin1String( "str4" ), QLatin1String( "             " ) );
+  dict.insert( QLatin1String( "str5" ), QLatin1String( "" ) );
+
+  QTest::newRow( "type-accessors-string24" ) << QString::fromLatin1( "{{ str1.strip }}" ) << dict << QString::fromLatin1( "one" ) << NoError;
+  QTest::newRow( "type-accessors-string25" ) << QString::fromLatin1( "{{ str2.strip }}" ) << dict << QString::fromLatin1( "one" ) << NoError;
+  QTest::newRow( "type-accessors-string26" ) << QString::fromLatin1( "{{ str3.strip }}" ) << dict << QString::fromLatin1( "one" ) << NoError;
+  QTest::newRow( "type-accessors-string27" ) << QString::fromLatin1( "{{ str4.strip }}" ) << dict << QString() << NoError;
+  QTest::newRow( "type-accessors-string28" ) << QString::fromLatin1( "{{ str5.strip }}" ) << dict << QString() << NoError;
+
+  dict.clear();
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "My String" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "mY sTRING" ) );
+  dict.insert( QLatin1String( "str3" ), QLatin1String( "My StrInG" ) );
+  dict.insert( QLatin1String( "str4" ), QLatin1String( "my string" ) );
+  dict.insert( QLatin1String( "str5" ), QLatin1String( "MY STRING" ) );
 
   // Yes, this really is a python built-in.
-  QTest::newRow( "type-accessors-string29" ) << "{{ str1.swapcase }}" << dict << "mY sTRING" << NoError;
-  QTest::newRow( "type-accessors-string30" ) << "{{ str2.swapcase }}" << dict << "My String" << NoError;
-  QTest::newRow( "type-accessors-string31" ) << "{{ str3.swapcase }}" << dict << "mY sTRiNg" << NoError;
-  QTest::newRow( "type-accessors-string32" ) << "{{ str4.swapcase }}" << dict << "MY STRING" << NoError;
-  QTest::newRow( "type-accessors-string33" ) << "{{ str5.swapcase }}" << dict << "my string" << NoError;
+  QTest::newRow( "type-accessors-string29" ) << QString::fromLatin1( "{{ str1.swapcase }}" ) << dict << QString::fromLatin1( "mY sTRING" ) << NoError;
+  QTest::newRow( "type-accessors-string30" ) << QString::fromLatin1( "{{ str2.swapcase }}" ) << dict << QString::fromLatin1( "My String" ) << NoError;
+  QTest::newRow( "type-accessors-string31" ) << QString::fromLatin1( "{{ str3.swapcase }}" ) << dict << QString::fromLatin1( "mY sTRiNg" ) << NoError;
+  QTest::newRow( "type-accessors-string32" ) << QString::fromLatin1( "{{ str4.swapcase }}" ) << dict << QString::fromLatin1( "MY STRING" ) << NoError;
+  QTest::newRow( "type-accessors-string33" ) << QString::fromLatin1( "{{ str5.swapcase }}" ) << dict << QString::fromLatin1( "my string" ) << NoError;
 
   dict.clear();
-  dict.insert( "str1", "My String" );
-  dict.insert( "str2", "mystring" );
-  dict.insert( "str3", "my string" );
-  dict.insert( "str4", "my String" );
-  dict.insert( "str5", "My string" );
+  dict.insert( QLatin1String( "str1" ), QLatin1String( "My String" ) );
+  dict.insert( QLatin1String( "str2" ), QLatin1String( "mystring" ) );
+  dict.insert( QLatin1String( "str3" ), QLatin1String( "my string" ) );
+  dict.insert( QLatin1String( "str4" ), QLatin1String( "my String" ) );
+  dict.insert( QLatin1String( "str5" ), QLatin1String( "My string" ) );
 
-  QTest::newRow( "type-accessors-string34" ) << "{{ str1.title }}" << dict << "My String" << NoError;
-  QTest::newRow( "type-accessors-string35" ) << "{{ str2.title }}" << dict << "Mystring" << NoError;
-  QTest::newRow( "type-accessors-string36" ) << "{{ str3.title }}" << dict << "My String" << NoError;
-  QTest::newRow( "type-accessors-string37" ) << "{{ str4.title }}" << dict << "My String" << NoError;
-  QTest::newRow( "type-accessors-string38" ) << "{{ str5.title }}" << dict << "My String" << NoError;
+  QTest::newRow( "type-accessors-string34" ) << QString::fromLatin1( "{{ str1.title }}" ) << dict << QString::fromLatin1( "My String" ) << NoError;
+  QTest::newRow( "type-accessors-string35" ) << QString::fromLatin1( "{{ str2.title }}" ) << dict << QString::fromLatin1( "Mystring" ) << NoError;
+  QTest::newRow( "type-accessors-string36" ) << QString::fromLatin1( "{{ str3.title }}" ) << dict << QString::fromLatin1( "My String" ) << NoError;
+  QTest::newRow( "type-accessors-string37" ) << QString::fromLatin1( "{{ str4.title }}" ) << dict << QString::fromLatin1( "My String" ) << NoError;
+  QTest::newRow( "type-accessors-string38" ) << QString::fromLatin1( "{{ str5.title }}" ) << dict << QString::fromLatin1( "My String" ) << NoError;
 
-  QTest::newRow( "type-accessors-string39" ) << "{{ str1.upper }}" << dict << "MY STRING" << NoError;
-  QTest::newRow( "type-accessors-string40" ) << "{{ str2.upper }}" << dict << "MYSTRING" << NoError;
-  QTest::newRow( "type-accessors-string41" ) << "{{ str3.upper }}" << dict << "MY STRING" << NoError;
+  QTest::newRow( "type-accessors-string39" ) << QString::fromLatin1( "{{ str1.upper }}" ) << dict << QString::fromLatin1( "MY STRING" ) << NoError;
+  QTest::newRow( "type-accessors-string40" ) << QString::fromLatin1( "{{ str2.upper }}" ) << dict << QString::fromLatin1( "MYSTRING" ) << NoError;
+  QTest::newRow( "type-accessors-string41" ) << QString::fromLatin1( "{{ str3.upper }}" ) << dict << QString::fromLatin1( "MY STRING" ) << NoError;
+
+  dict.clear();
+
+#define SON(obj) obj->setObjectName(#obj)
+
+  QObject *obj1 = new QObject(this);
+  SON(obj1);
+  QObject *obj2 = new QObject(this);
+  SON(obj2);
+  obj2->setParent(obj1);
+  QObject *obj3 = new QObject(this);
+  obj3->setParent(obj2);
+  SON(obj3);
+  QObject *obj4 = new QObject(this);
+  obj4->setParent(obj2);
+  SON(obj4);
+
+  dict.insert("object", QVariant::fromValue( obj1 ) );
+
+  QTest::newRow( "type-accessors-qobject01" ) << QString::fromLatin1( "{{ object.objectName }}" ) << dict << QString::fromLatin1( "obj1" ) << NoError;
+
+  const QLatin1String objectDumper( "<li>{{ object.objectName }}</li>"
+                                    "{% if object.children %}"
+                                      "<ul>"
+                                        "{% for object in object.children %}"
+                                          "{% include 'objectdumper.html' %}"
+                                        "{% endfor %}"
+                                      "</ul>"
+                                    "{% endif %}" );
+
+  m_loader->setTemplate( QLatin1String( "objectdumper.html" ), objectDumper );
+
+  QTest::newRow( "type-accessors-qobject02" ) << QString::fromLatin1( "<ul>{% include 'objectdumper.html' %}</ul>" ) << dict <<
+                              QString::fromLatin1( "<ul>"
+                                                   "<li>obj1</li>"
+                                                      "<ul>"
+                                                        "<li>obj2</li>"
+                                                          "<ul>"
+                                                          "<li>obj3</li>"
+                                                          "<li>obj4</li>"
+                                                        "</ul>"
+                                                      "</ul>"
+                                                    "</ul>" ) << NoError;
 
 }
 
