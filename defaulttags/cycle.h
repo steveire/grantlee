@@ -67,6 +67,8 @@ private:
   typename QList<T>::const_iterator m_end;
 };
 
+typedef RingIterator<FilterExpression> FilterExpressionRotator;
+
 class CycleNode : public Node
 {
   Q_OBJECT
@@ -77,7 +79,7 @@ public:
 
 private:
   const QList<FilterExpression> m_list;
-  RingIterator<FilterExpression> m_variableIterator;
+  FilterExpressionRotator m_variableIterator;
   const QString m_name;
 };
 
