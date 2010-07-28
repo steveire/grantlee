@@ -21,6 +21,7 @@
 #ifndef GRANTLEE_H
 #define GRANTLEE_H
 
+#include "grantlee/cachingloaderdecorator.h"
 #include "grantlee/context.h"
 #include "grantlee/engine.h"
 #include "grantlee/exception.h"
