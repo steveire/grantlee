@@ -31,6 +31,7 @@
 #include "grantlee/node.h"
 #include "grantlee/outputstream.h"
 #include "grantlee/parser.h"
+#include "grantlee/rendercontext.h"
 #include "grantlee/safestring.h"
 #include "grantlee/taglibraryinterface.h"
 #include "grantlee/template.h"

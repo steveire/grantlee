@@ -21,6 +21,7 @@ set (grantlee_core_SRCS
   nodebuiltins.cpp
   outputstream.cpp
   parser.cpp
+  rendercontext.cpp
   safestring.cpp
   template.cpp
   templateloader.cpp
@@ -84,6 +85,7 @@ install(FILES
   node.h
   outputstream.h
   parser.h
+  rendercontext.h
   safestring.h
   taglibraryinterface.h
   template.h

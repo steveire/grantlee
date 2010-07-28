@@ -101,6 +101,7 @@ public:
   /**
     Renders the Template to the OutputStream @p stream given the Context c.
   */
+  // ### BIC make this const and non-virtual.
   virtual OutputStream* render( OutputStream *stream, Context *c );
 
 #ifndef Q_QDOC

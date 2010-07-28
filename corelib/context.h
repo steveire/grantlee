@@ -28,6 +28,8 @@
 namespace Grantlee
 {
 
+class RenderContext;
+
 class ContextPrivate;
 
 /// @headerfile context.h grantlee/context.h
@@ -233,6 +235,13 @@ public:
     The relative path to external media to be used in templates.
   */
   QString relativeMediaPath() const;
+
+  /**
+   * Returns a modifiable RenderContext for the Node @p scopeNode. This may be used to make
+   * Template rendering threadsafe so that render state does not need to be stored in the
+   * Node implementation itself.
+   */
+  RenderContext* renderContext() const;
 
 private:
   Q_DECLARE_PRIVATE( Context )

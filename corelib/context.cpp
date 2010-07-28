@@ -23,6 +23,7 @@
 #include <QtCore/QStringList>
 
 #include "util.h"
+#include "rendercontext.h"
 
 using namespace Grantlee;
 
@@ -34,9 +35,15 @@ class ContextPrivate
       : q_ptr( context ),
         m_autoescape( true ),
         m_mutating( false ),
-        m_urlType( Context::AbsoluteUrls )
+        m_urlType( Context::AbsoluteUrls ),
+        m_renderContext( new RenderContext )
   {
     m_variantHashStack.append( variantHash );
+  }
+
+  ~ContextPrivate()
+  {
+    delete m_renderContext;
   }
 
   Q_DECLARE_PUBLIC( Context )
@@ -48,6 +55,7 @@ class ContextPrivate
   QList<QPair<QString, QString> > m_externalMedia;
   Context::UrlType m_urlType;
   QString m_relativeMediaPath;
+  RenderContext * const m_renderContext;
 };
 
 }
@@ -201,6 +209,12 @@ QString Context::relativeMediaPath() const
 {
   Q_D( const Context );
   return d->m_relativeMediaPath;
+}
+
+RenderContext* Context::renderContext() const
+{
+  Q_D( const Context );
+  return d->m_renderContext;
 }
 
 
