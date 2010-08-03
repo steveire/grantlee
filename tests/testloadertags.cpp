@@ -297,6 +297,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   dict.insert( QLatin1String( "list" ), QVariantList() << QString::fromLatin1( "One" ) << QString::fromLatin1( "Two" ) << QString::fromLatin1( "Three" ) );
 
+  /*
   // Tags that affect rendering have no afftect outside of a block in an extension template
   // (and therefore "i" is undefined here)
   // {% load %} tags for example are ok in child templates because they are processed at
@@ -394,7 +395,7 @@ void TestLoaderTags::testExtendsTag_data()
   // ### Unexpected result: We get A1234E here. block.super doesn't work if overriding in a nested block I guess.
 //  QTest::newRow( "inheritance51" ) << QString::fromLatin1( "{% extends 'inheritance43' %}" )
 //      "{% block first %}1{% block second %}2{{ block.super }}3{% endblock %}4{% endblock %}" << dict << QString::fromLatin1( "A12C34E" ) << NoError;
-
+*/
   dict.clear();
   // Raise exception for invalid template name
   QTest::newRow( "exception01" ) << QString::fromLatin1( "{% extends 'nonexistent' %}" ) << dict << QString() << TagSyntaxError;
