@@ -48,7 +48,7 @@ public:
   ExtendsNode( const QString &filename, FilterExpression fe, QObject *parent = 0 );
   ~ExtendsNode();
 
-  void setNodeList( NodeList list );
+  void setNodeList( const NodeList &list );
 
   void render( OutputStream *stream, Context *c );
 

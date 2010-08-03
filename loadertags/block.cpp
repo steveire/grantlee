@@ -37,13 +37,13 @@ BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( par
 
 Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  const QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QLatin1String( "block tag takes one argument" ) );
   }
 
-  QString blockName = expr.at( 1 );
+  const QString blockName = expr.at( 1 );
 
   QVariant loadedBlocksVariant = p->property( __loadedBlocks );
   QVariantList blockVariantList;
@@ -52,7 +52,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     blockVariantList = loadedBlocksVariant.toList();
     QListIterator<QVariant> it( blockVariantList );
     while ( it.hasNext() ) {
-      QString blockNodeName = it.next().toString();
+      const QString blockNodeName = it.next().toString();
 
       if ( blockNodeName == blockName ) {
         throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 appears more than once." ).arg( blockName ) );
@@ -66,7 +66,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
   BlockNode *n = new BlockNode( blockName, p );
-  NodeList list = p->parse( n, QStringList() << QLatin1String( "endblock" ) << QLatin1String( "endblock " ) + blockName );
+  const NodeList list = p->parse( n, QStringList() << QLatin1String( "endblock" ) << QLatin1String( "endblock " ) + blockName );
 
   n->setNodeList( list );
   p->removeNextToken();
@@ -75,10 +75,8 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 BlockNode::BlockNode( const QString &name, QObject *parent )
-    : Node( parent ), m_nodeParent( 0 ), m_stream( 0 )
+    : Node( parent ), m_name( name ), m_nodeParent( 0 ), m_stream( 0 )
 {
-  m_name = name;
-
   qRegisterMetaType<Grantlee::SafeString>( "Grantlee::SafeString" );
 }
 
@@ -87,7 +85,7 @@ BlockNode::~BlockNode()
   delete m_nodeParent;
 }
 
-void BlockNode::setNodeList( NodeList list )
+void BlockNode::setNodeList( const NodeList &list )
 {
   m_list = list;
 }
@@ -146,12 +144,12 @@ void BlockNode::setNodeParent( BlockNode* node )
   m_nodeParent = node;
 }
 
-NodeList BlockNode::nodeList()
+NodeList BlockNode::nodeList() const
 {
   return m_list;
 }
 
-QString BlockNode::name()
+QString BlockNode::name() const
 {
   return m_name;
 }

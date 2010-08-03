@@ -48,19 +48,19 @@ public:
   BlockNode( const QString &blockName, QObject *parent = 0 );
   ~BlockNode();
 
-  void setNodeList( NodeList list );
+  void setNodeList( const NodeList &list );
 
   void render( OutputStream *stream, Context *c );
 
   BlockNode* takeNodeParent();
 
-  QString name();
+  QString name() const;
 
   void setNodeParent( BlockNode * );
 
   void addParent( NodeList );
 
-  NodeList nodeList();
+  NodeList nodeList() const;
 
 // Q_SLOTS
   /**
@@ -69,7 +69,7 @@ public:
   SafeString getSuper() const;
 
 private:
-  QString m_name;
+  const QString m_name;
   NodeList m_list;
   Context *m_context;
   BlockNode *m_nodeParent;
