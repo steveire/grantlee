@@ -32,6 +32,8 @@
 
 #include <QtCore/QListIterator>
 #include <util.h>
+#include <rendercontext.h>
+#include "blockcontext.h"
 
 using namespace Grantlee;
 
@@ -89,10 +91,27 @@ ExtendsNode::~ExtendsNode()
 {
 }
 
+static QHash<QString, BlockNode*> createNodeMap( QList<BlockNode*> list )
+{
+  QHash<QString, BlockNode*> map;
+
+  QList<BlockNode*>::const_iterator it = list.constBegin();
+  const QList<BlockNode*>::const_iterator end = list.constEnd();
+
+  for ( ; it != end; ++it )
+  {
+    map.insert( ( *it )->name(), *it );
+  }
+
+  return map;
+}
 
 void ExtendsNode::setNodeList( const NodeList &list )
 {
   m_list = list;
+
+  const QList<BlockNode*> blockList = m_list.findChildren<BlockNode*>();
+  m_blocks = createNodeMap( blockList );
 }
 
 Template ExtendsNode::getParent( Context *c )
@@ -130,42 +149,30 @@ void ExtendsNode::render( OutputStream *stream, Context *c )
     throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Cannot load template '%1'" ).arg( m_name ) );
   }
 
-  const QList<BlockNode*> nodeList = m_parentTemplate->findChildren<BlockNode *>();
+  QVariant &variant = c->renderContext()->data( 0 );
+  BlockContext blockContext = variant.value<BlockContext>();
+  blockContext.addBlocks( m_blocks );
+  variant.setValue( blockContext );
 
-  QHash<QString, BlockNode *> parentBlocks;
+  const NodeList nodeList = m_parentTemplate->nodeList();
 
-  QListIterator<BlockNode *> i( nodeList );
+  const QHash<QString, BlockNode*> parentBlocks = createNodeMap( m_parentTemplate->findChildren<BlockNode*>() );
+  QListIterator<Node*> i( nodeList );
 
   while ( i.hasNext() ) {
-    BlockNode* bn = i.next();
-    parentBlocks.insert( bn->name(), bn );
-  }
-
-  const QList<BlockNode*> l = parent()->findChildren<BlockNode *>();
-  QListIterator<BlockNode *> j( l );
-
-  while ( j.hasNext() ) {
-    BlockNode *bn = j.next();
-    if ( parentBlocks.contains( bn->name() ) ) {
-      BlockNode *pbn = parentBlocks.value( bn->name() );
-      pbn->setNodeParent( bn->takeNodeParent() );
-      pbn->addParent( pbn->nodeList() );
-      pbn->setNodeList( bn->nodeList() );
-    } else {
-      Q_FOREACH( Node *node, m_parentTemplate->nodeList() ) {
-        TextNode *tn = qobject_cast<TextNode*>( node );
-        if ( !tn ) {
-          ExtendsNode *en = qobject_cast<ExtendsNode*>( node );
-          if ( en ) {
-            en->appendNode( bn );
-          }
-          break;
-        }
+    Node* n = i.next();
+    TextNode *tn = qobject_cast<TextNode*>( n );
+    if ( !tn ) {
+      ExtendsNode *en = qobject_cast<ExtendsNode*>( n );
+      if ( !en ) {
+        blockContext.addBlocks( parentBlocks );
+        variant.setValue( blockContext );
       }
+      break;
     }
   }
-
-  m_parentTemplate->render( stream, c );
+  variant.setValue( blockContext );
+  m_parentTemplate->nodeList().render( stream, c );
 }
 
 void ExtendsNode::appendNode( Node *node )
