@@ -118,11 +118,6 @@ SafeString BlockNode::getSuper() const
   return markSafe( superContent );
 }
 
-QString BlockNode::blockName()
-{
-  return m_name;
-}
-
 BlockNode* BlockNode::takeNodeParent()
 {
   BlockNode *n = m_nodeParent;

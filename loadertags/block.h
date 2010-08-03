@@ -50,8 +50,6 @@ public:
 
   void setNodeList( NodeList list );
 
-  QString blockName();
-
   void render( OutputStream *stream, Context *c );
 
   BlockNode* takeNodeParent();
