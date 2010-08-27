@@ -28,6 +28,7 @@
 #include "context.h"
 #include "engine.h"
 #include "exception.h"
+#include "rendercontext.h"
 
 using namespace Grantlee;
 
@@ -80,12 +81,17 @@ OutputStream* TemplateImpl::render( OutputStream *stream, Context *c )
   Q_D( Template );
 
   c->clearExternalMedia();
+
+  c->renderContext()->push();
+
   try {
     d->m_nodeList.render( stream, c );
   } catch ( Grantlee::Exception &e ) {
     qWarning() << e.what();
     d->setError( e.errorCode(), e.what() );
   }
+
+  c->renderContext()->pop();
 
   return stream;
 }

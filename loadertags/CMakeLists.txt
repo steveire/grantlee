@@ -10,6 +10,7 @@ include_directories(
 
 grantlee_add_plugin(grantlee_loadertags
   loadertags
+  blockcontext
 
   TAGS
     block

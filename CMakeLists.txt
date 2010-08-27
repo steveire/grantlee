@@ -117,7 +117,7 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
   # Add support for a docs target
 
   set(TAGFILES "${CMAKE_SOURCE_DIR}/scripts/qttags.tag=http://qt.nokia.com/doc/${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}")
-  set(DOCS_OUTPUT_DIRECTORY "@CMAKE_BINARY_DIR@/apidocs")
+  set(DOCS_OUTPUT_DIRECTORY "@CMAKE_BINARY_DIR@")
   configure_file(
     "${CMAKE_MODULE_PATH}/Doxyfile.in"
     "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"

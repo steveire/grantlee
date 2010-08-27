@@ -295,8 +295,53 @@ void TestLoaderTags::testExtendsTag_data()
   // Inheritance from a template with a space in its name should work.
   QTest::newRow( "inheritance29" ) << QString::fromLatin1( "{% extends 'inheritance 28' %}" ) << dict << QString::fromLatin1( "!" ) << NoError;
 
+  dict.insert( "optional", "True" );
+
+  QString inh30 = QLatin1String( "1{% if optional %}{% block opt %}2{% endblock %}{% endif %}3" );
+  loader->setTemplate( QLatin1String( "inheritance30" ), inh30 );
+
+  QTest::newRow( "inheritance30" ) << inh30 << dict << QString::fromLatin1( "123" ) << NoError;
+  QTest::newRow( "inheritance31" ) << QString::fromLatin1( "{% extends 'inheritance30' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "1two3" ) << NoError;
+  dict.clear();
+  QTest::newRow( "inheritance32" ) << QString::fromLatin1( "{% extends 'inheritance30' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "13" ) << NoError;
+
+  dict.insert( "optional", 1 );
+  QString inh33 = QLatin1String( "1{% ifequal optional 1 %}{% block opt %}2{% endblock %}{% endifequal %}3" );
+  loader->setTemplate( QLatin1String( "inheritance33" ), inh33 );
+
+  QTest::newRow( "inheritance33" ) << inh33 << dict << QString::fromLatin1( "123" ) << NoError;
+
+  QTest::newRow( "inheritance34" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "1two3" ) << NoError;
+  dict.clear();
+  QTest::newRow( "inheritance35" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "13" ) << NoError;
+
+  dict.clear();
+  dict.insert( "numbers", QVariantList() << 1 << 2 << 3 );
+
+  QString inh36 = QLatin1String( "{% for n in numbers %}_{% block opt %}{{ n }}{% endblock %}{% endfor %}_" );
+  loader->setTemplate( QLatin1String( "inheritance36" ), inh36 );
+
+  QTest::newRow( "inheritance36" ) << inh36 << dict << QString::fromLatin1( "_1_2_3_" ) << NoError;
+  QTest::newRow( "inheritance37" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}X{% endblock %}" ) << dict << QString::fromLatin1( "_X_X_X_" ) << NoError;
+  dict.clear();
+  QTest::newRow( "inheritance38" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}X{% endblock %}" ) << dict << QString::fromLatin1( "_" ) << NoError;
+
+  dict.insert( QLatin1String( "optional" ), QLatin1String( "True" ) );
+
+  QTest::newRow( "inheritance39" ) << QString::fromLatin1( "{% extends 'inheritance30' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "1new23" ) << NoError;
+
+  dict.insert( QLatin1String( "optional" ), 1 );
+
+  QTest::newRow( "inheritance40" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "1new23" ) << NoError;
+
+  dict.clear();
+  dict.insert( "numbers", QVariantList() << 1 << 2 << 3 );
+
+  QTest::newRow( "inheritance41" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "_new1_new2_new3_" ) << NoError;
+
   dict.insert( QLatin1String( "list" ), QVariantList() << QString::fromLatin1( "One" ) << QString::fromLatin1( "Two" ) << QString::fromLatin1( "Three" ) );
 
+  /*
   // Tags that affect rendering have no afftect outside of a block in an extension template
   // (and therefore "i" is undefined here)
   // {% load %} tags for example are ok in child templates because they are processed at
@@ -394,7 +439,7 @@ void TestLoaderTags::testExtendsTag_data()
   // ### Unexpected result: We get A1234E here. block.super doesn't work if overriding in a nested block I guess.
 //  QTest::newRow( "inheritance51" ) << QString::fromLatin1( "{% extends 'inheritance43' %}" )
 //      "{% block first %}1{% block second %}2{{ block.super }}3{% endblock %}4{% endblock %}" << dict << QString::fromLatin1( "A12C34E" ) << NoError;
-
+*/
   dict.clear();
   // Raise exception for invalid template name
   QTest::newRow( "exception01" ) << QString::fromLatin1( "{% extends 'nonexistent' %}" ) << dict << QString() << TagSyntaxError;

@@ -21,6 +21,7 @@
 #ifndef GRANTLEE_H
 #define GRANTLEE_H
 
+#include "grantlee/cachingloaderdecorator.h"
 #include "grantlee/context.h"
 #include "grantlee/engine.h"
 #include "grantlee/exception.h"
@@ -32,6 +33,7 @@
 #include "grantlee/node.h"
 #include "grantlee/outputstream.h"
 #include "grantlee/parser.h"
+#include "grantlee/rendercontext.h"
 #include "grantlee/safestring.h"
 #include "grantlee/taglibraryinterface.h"
 #include "grantlee/template.h"

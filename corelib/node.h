@@ -204,11 +204,11 @@ public:
     const QList<Grantlee::Node*>::const_iterator first = constBegin();
     const QList<Grantlee::Node*>::const_iterator last = constEnd();
     for ( it = first; it != last; ++it ) {
-      T *object = qobject_cast<T>( *it );
+      T object = qobject_cast<T>( *it );
       if ( object ) {
         children << object;
       }
-      children << object->findChildren<T>();
+      children << ( *it )->findChildren<T>();
     }
     return children;
   }

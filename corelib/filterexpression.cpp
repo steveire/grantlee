@@ -66,8 +66,8 @@ static const QLatin1Literal singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\
 static const QString i18nClose( QRegExp::escape( QLatin1String( ")" ) ) );
 
 static const
-#if QT_VERSION < 0x040600
-QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QLatin1Literal, QString>, QLatin1Literal>, QLatin1Char>, QLatin1Char>, QString>, QLatin1Literal>, QLatin1Char>, QLatin1Char>, QLatin1Literal>, QLatin1Char>, QLatin1Literal>, QLatin1Char>
+#if QT_VERSION >= 0x040600
+QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QLatin1Literal, QString>, QLatin1Literal>, QString>, QLatin1Char>, QString>, QLatin1Literal>, QString>, QLatin1Char>, QLatin1Literal>, QLatin1Char>, QLatin1Literal>, QLatin1Char>
 #else
 QString
 #endif

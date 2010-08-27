@@ -42,40 +42,52 @@ template <typename T>
 class RingIterator
 {
 public:
-  RingIterator<T>( QList<T> list )
-      : m_it( list ) {
-    Q_ASSERT( list.size() > 0 );
+  RingIterator<T>()
+  {
+
+  }
+
+  RingIterator<T>( const QList<T> &list )
+      : m_begin( list.constBegin() ), m_it( list.constBegin() ), m_end( list.constEnd() )
+  {
+    Q_ASSERT( !list.isEmpty() );
   }
 
   /**
-  Returns the next element in the list, or the first element if already
-  at the last element.
+    Returns the next element in the list, or the first element if already
+    at the last element.
   */
   T next() {
-    if ( m_it.hasNext() ) {
-      T item = m_it.next();
-      return item;
-    }
-    m_it.toFront();
-    return m_it.next();
+    Q_ASSERT( m_it != m_end );
+
+    const T t = *m_it++;
+    if ( m_it == m_end )
+      m_it = m_begin;
+    return t;
   }
 
 private:
-  QListIterator<T> m_it;
+  typename QList<T>::const_iterator m_begin;
+  typename QList<T>::const_iterator m_it;
+  typename QList<T>::const_iterator m_end;
 };
+
+typedef RingIterator<FilterExpression> FilterExpressionRotator;
+
+Q_DECLARE_METATYPE(FilterExpressionRotator)
 
 class CycleNode : public Node
 {
   Q_OBJECT
 public:
-  CycleNode( QList<FilterExpression> list, const QString &name, QObject *parent = 0 );
+  CycleNode( const QList<FilterExpression> &list, const QString &name, QObject *parent = 0 );
 
   void render( OutputStream *stream, Context *c );
 
 private:
-  RingIterator<FilterExpression> m_variableIterator;
-  QString m_name;
-
+  const QList<FilterExpression> m_list;
+  FilterExpressionRotator m_variableIterator;
+  const QString m_name;
 };
 
 #endif

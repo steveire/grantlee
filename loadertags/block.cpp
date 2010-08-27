@@ -26,9 +26,13 @@
 #include "template.h"
 #include "exception.h"
 #include <util.h>
-
+#include <rendercontext.h>
+#include "blockcontext.h"
 
 const char * __loadedBlocks = "__loadedBlocks";
+
+// Terrible hack warning.
+#define BLOCK_CONTEXT_KEY 0
 
 BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( parent )
 {
@@ -37,13 +41,13 @@ BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( par
 
 Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  const QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QLatin1String( "block tag takes one argument" ) );
   }
 
-  QString blockName = expr.at( 1 );
+  const QString blockName = expr.at( 1 );
 
   QVariant loadedBlocksVariant = p->property( __loadedBlocks );
   QVariantList blockVariantList;
@@ -52,7 +56,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     blockVariantList = loadedBlocksVariant.toList();
     QListIterator<QVariant> it( blockVariantList );
     while ( it.hasNext() ) {
-      QString blockNodeName = it.next().toString();
+      const QString blockNodeName = it.next().toString();
 
       if ( blockNodeName == blockName ) {
         throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 appears more than once." ).arg( blockName ) );
@@ -66,7 +70,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
   BlockNode *n = new BlockNode( blockName, p );
-  NodeList list = p->parse( n, QStringList() << QLatin1String( "endblock" ) << QLatin1String( "endblock " ) + blockName );
+  const NodeList list = p->parse( n, QStringList() << QLatin1String( "endblock" ) << QLatin1String( "endblock " ) + blockName );
 
   n->setNodeList( list );
   p->removeNextToken();
@@ -75,89 +79,84 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 BlockNode::BlockNode( const QString &name, QObject *parent )
-    : Node( parent ), m_nodeParent( 0 ), m_stream( 0 )
+    : Node( parent ), m_name( name ), m_stream( 0 )
 {
-  m_name = name;
-
   qRegisterMetaType<Grantlee::SafeString>( "Grantlee::SafeString" );
 }
 
 BlockNode::~BlockNode()
 {
-  delete m_nodeParent;
 }
 
-void BlockNode::setNodeList( NodeList list )
+void BlockNode::setNodeList( const NodeList &list )
 {
   m_list = list;
 }
 
 void BlockNode::render( OutputStream *stream, Context *c )
 {
+  QVariant &variant = c->renderContext()->data( BLOCK_CONTEXT_KEY );
+  BlockContext blockContext = variant.value<BlockContext>();
+
   c->push();
-  m_context = c;
-  m_stream = stream;
-  c->insert( QLatin1String( "block" ), QVariant::fromValue( static_cast<QObject *>( this ) ) );
-  m_list.render( stream, c );
-  m_stream = 0;
+
+  if (blockContext.isEmpty()) {
+    m_context = c;
+    m_stream = stream;
+    c->insert( QLatin1String( "block" ), QVariant::fromValue( static_cast<QObject *>( this ) ) );
+    m_list.render( stream, c );
+    m_stream = 0;
+  } else {
+    BlockNode *block = blockContext.pop( m_name );
+    variant.setValue( blockContext );
+    BlockNode *push = block;
+    if ( !block )
+      block = this;
+
+    // BIC Make const when render() is const.
+    NodeList list = block->m_list;
+
+    block = new BlockNode( block->m_name, 0 );
+    block->setNodeList( list );
+    block->m_context = c;
+    block->m_stream = stream;
+    c->insert( QLatin1String( "block" ), QVariant::fromValue( static_cast<QObject *>( block ) ) );
+    list.render( stream, c );
+
+    delete block;
+    if ( push ) {
+      blockContext.push( m_name, push );
+      variant.setValue( blockContext );
+    }
+  }
   c->pop();
 }
 
 SafeString BlockNode::getSuper() const
 {
-  // If blocks which are siblings in a parent are arranged nested in an extended template,
-  // and {{ block.super }} is used, m_nodeParent will be 0 in the nested instance of
-  // the block. See testExtendsTag:inheritance33
-  if ( !m_nodeParent )
-    return SafeString();
-
-  QString superContent;
-  QTextStream superTextStream( &superContent );
-  QSharedPointer<OutputStream> superStream = m_stream->clone( &superTextStream );
-  m_nodeParent->render( superStream.data(), m_context );
-  return markSafe( superContent );
-}
-
-QString BlockNode::blockName()
-{
-  return m_name;
-}
-
-BlockNode* BlockNode::takeNodeParent()
-{
-  BlockNode *n = m_nodeParent;
-  // Make sure there's only one valid pointer to m_nodeParent
-  // It's safe to delete 0.
-  m_nodeParent = 0;
-  return n;
-}
-
-void BlockNode::addParent( NodeList nodeList )
-{
-  if ( m_nodeParent )
-    m_nodeParent->addParent( nodeList );
-  else {
-    // This new node is not really part of the template, so it can't be added as
-    // a descendant of it or else it would show up in findChildren for the template.
-    // So, we manage the resource manually.
-    BlockNode *n = new BlockNode( m_name );
-    n->setNodeList( nodeList );
-    m_nodeParent = n;
+  if ( m_context->renderContext()->contains( BLOCK_CONTEXT_KEY ) )
+  {
+    QVariant &variant = m_context->renderContext()->data( BLOCK_CONTEXT_KEY );
+    const BlockContext blockContext = variant.value<BlockContext>();
+    BlockNode *block = blockContext.getBlock( m_name );
+    if ( block )
+    {
+      QString superContent;
+      QTextStream superTextStream( &superContent );
+      QSharedPointer<OutputStream> superStream = m_stream->clone( &superTextStream );
+      const_cast<BlockNode*>( this )->render( superStream.data(), m_context );
+      return markSafe( superContent );
+    }
   }
+  return SafeString();
 }
 
-void BlockNode::setNodeParent( BlockNode* node )
-{
-  m_nodeParent = node;
-}
-
-NodeList BlockNode::nodeList()
+NodeList BlockNode::nodeList() const
 {
   return m_list;
 }
 
-QString BlockNode::name()
+QString BlockNode::name() const
 {
   return m_name;
 }
-

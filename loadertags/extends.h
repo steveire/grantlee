@@ -29,6 +29,8 @@ namespace Grantlee
 class Parser;
 }
 
+class BlockNode;
+
 using namespace Grantlee;
 
 class ExtendsNodeFactory : public AbstractNodeFactory
@@ -48,7 +50,7 @@ public:
   ExtendsNode( const QString &filename, FilterExpression fe, QObject *parent = 0 );
   ~ExtendsNode();
 
-  void setNodeList( NodeList list );
+  void setNodeList( const NodeList &list );
 
   void render( OutputStream *stream, Context *c );
 
@@ -65,6 +67,7 @@ private:
   FilterExpression m_filterExpression;
   QString m_name;
   NodeList m_list;
+  QHash<QString, BlockNode*> m_blocks;
   Template m_parentTemplate;
 };
 

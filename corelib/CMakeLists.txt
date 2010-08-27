@@ -13,6 +13,7 @@ configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h
 configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_p.h)
 
 set (grantlee_core_SRCS
+  cachingloaderdecorator.cpp
   context.cpp
   engine.cpp
   filterexpression.cpp
@@ -22,6 +23,7 @@ set (grantlee_core_SRCS
   nodebuiltins.cpp
   outputstream.cpp
   parser.cpp
+  rendercontext.cpp
   safestring.cpp
   template.cpp
   templateloader.cpp
@@ -75,6 +77,7 @@ install(TARGETS grantlee_core
 )
 
 install(FILES
+  cachingloaderdecorator.h
   context.h
   engine.h
   exception.h
@@ -86,6 +89,7 @@ install(FILES
   node.h
   outputstream.h
   parser.h
+  rendercontext.h
   safestring.h
   taglibraryinterface.h
   template.h

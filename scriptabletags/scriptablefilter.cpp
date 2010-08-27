@@ -52,7 +52,11 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
     QVariantList inputList = input.toList();
     QScriptValue array = m_scriptEngine->newArray( inputList.size() );
     for ( int i = 0; i < inputList.size(); ++i ) {
-      array.setProperty( i, m_scriptEngine->newVariant( inputList.at( i ) ) );
+      if ( inputList.at( i ).canConvert<QObject*>() ) {
+        array.setProperty( i, m_scriptEngine->newQObject( inputList.at( i ).value<QObject*>() ) );
+      } else {
+        array.setProperty( i, m_scriptEngine->newVariant( inputList.at( i ) ) );
+      }
     }
     args << array;
   } else {
@@ -60,6 +64,8 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
       ScriptableSafeString *ssObj = new ScriptableSafeString( m_scriptEngine );
       ssObj->setContent( getSafeString( input ) );
       args << m_scriptEngine->newQObject( ssObj );
+    } else if ( input.canConvert<QObject*>() ) {
+      args << m_scriptEngine->newQObject( input.value<QObject*>() );
     } else {
       args << m_scriptEngine->newVariant( input );
     }
@@ -86,6 +92,8 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
     return returnedString;
   } else if ( returnValue.isVariant() ) {
     return qscriptvalue_cast<QVariant>( returnValue );
+  } else if ( returnValue.isArray() ) {
+    return qscriptvalue_cast<QVariantList>( returnValue );
   }
   return QVariant();
 }
