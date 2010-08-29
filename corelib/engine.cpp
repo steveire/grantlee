@@ -27,7 +27,6 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QCoreApplication>
 
-#include "taglibraryinterface.h"
 #include "template_p.h"
 #include "templateloader.h"
 #include "grantlee_version.h"
@@ -40,30 +39,6 @@
 using namespace Grantlee;
 
 static const QLatin1String __scriptableLibName( "grantlee_scriptabletags" );
-
-class ScriptableLibraryContainer : public TagLibraryInterface
-{
-public:
-  ScriptableLibraryContainer( QHash<QString, AbstractNodeFactory*> factories, QHash<QString, Filter *> filters )
-      : m_nodeFactories( factories ), m_filters( filters ) {
-
-  }
-
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
-    Q_UNUSED( name );
-    return m_nodeFactories;
-  }
-
-  QHash<QString, Filter*> filters( const QString &name = QString() ) {
-    Q_UNUSED( name );
-    return m_filters;
-  }
-
-private:
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-  QHash<QString, Filter*> m_filters;
-
-};
 
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
@@ -238,6 +213,13 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     if ( !file.exists() )
       continue;
 
+    if ( m_scriptableLibraries.contains( libFileName ) )
+    {
+      ScriptableLibraryContainer *library = m_scriptableLibraries.value( libFileName );
+      library->setNodeFactories( m_scriptableTagLibrary->nodeFactories( libFileName ) );
+      library->setFilters( m_scriptableTagLibrary->filters( libFileName ) );
+      return library;
+    }
 #if 0
     PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
 #endif
@@ -245,8 +227,8 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     const QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
     const QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
 
-    TagLibraryInterface *library = new ScriptableLibraryContainer( factories, filters );
-    m_scriptableLibraries << library;
+    ScriptableLibraryContainer *library = new ScriptableLibraryContainer( factories, filters );
+    m_scriptableLibraries.insert( libFileName, library );
     return library;
   }
   return 0;

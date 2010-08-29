@@ -23,6 +23,7 @@
 
 #include "engine.h"
 #include "pluginpointer_p.h"
+#include "taglibraryinterface.h"
 
 class QPluginLoader;
 
@@ -32,6 +33,39 @@ namespace Grantlee
 {
 
 class ScriptableTagLibrary;
+
+class ScriptableLibraryContainer : public TagLibraryInterface
+{
+public:
+  ScriptableLibraryContainer( QHash<QString, AbstractNodeFactory*> factories, QHash<QString, Filter *> filters )
+      : m_nodeFactories( factories ), m_filters( filters ) {
+  }
+
+  void setNodeFactories( const QHash<QString, AbstractNodeFactory*> factories )
+  {
+    m_nodeFactories = factories;
+  }
+
+  void setFilters( const QHash<QString, Filter*> filters )
+  {
+    m_filters = filters;
+  }
+
+  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
+    Q_UNUSED( name );
+    return m_nodeFactories;
+  }
+
+  QHash<QString, Filter*> filters( const QString &name = QString() ) {
+    Q_UNUSED( name );
+    return m_filters;
+  }
+
+private:
+  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
+  QHash<QString, Filter*> m_filters;
+
+};
 
 class EnginePrivate
 {
@@ -45,7 +79,7 @@ class EnginePrivate
   Engine * const q_ptr;
 
   QHash<QString, PluginPointer<TagLibraryInterface> > m_libraries;
-  QList<TagLibraryInterface*> m_scriptableLibraries;
+  QHash<QString, ScriptableLibraryContainer*> m_scriptableLibraries;
 
   QList<AbstractTemplateLoader::Ptr> m_loaders;
   QStringList m_pluginDirs;
