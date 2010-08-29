@@ -53,6 +53,8 @@ Engine::Engine( QObject *parent )
 
 Engine::~Engine()
 {
+  delete d_ptr->m_scriptableTagLibrary;
+  d_ptr->m_scriptableTagLibrary = 0;
   qDeleteAll( d_ptr->m_scriptableLibraries );
   d_ptr->m_libraries.clear();
   delete d_ptr;
