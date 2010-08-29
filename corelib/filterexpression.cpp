@@ -65,13 +65,7 @@ static const QLatin1Literal doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\
 static const QLatin1Literal singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
 static const QString i18nClose( QRegExp::escape( QLatin1String( ")" ) ) );
 
-static const
-#if QT_VERSION >= 0x040600
-QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QStringBuilder<QLatin1Literal, QString>, QLatin1Literal>, QString>, QLatin1Char>, QString>, QLatin1Literal>, QString>, QLatin1Char>, QLatin1Literal>, QLatin1Char>, QLatin1Literal>, QLatin1Char>
-#else
-QString
-#endif
-constantString = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+static const QString constantString = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
                                                               + i18nOpen + singleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
                                                               + doubleQuoteStringLiteral + QLatin1Char( '|' )
                                                               + singleQuoteStringLiteral
