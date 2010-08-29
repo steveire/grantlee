@@ -153,8 +153,8 @@ void Engine::loadDefaultLibraries()
 {
   Q_D( Engine );
   // Make sure we can load default scriptable libraries if we're supposed to.
-  if ( d->m_defaultLibraries.contains( __scriptableLibName ) ) {
-    d->m_scriptableTagLibrary = new ScriptableTagLibrary(this);
+  if ( d->m_defaultLibraries.contains( __scriptableLibName ) && !d->m_scriptableTagLibrary ) {
+    d->m_scriptableTagLibrary = new ScriptableTagLibrary( this );
 
     // It would be better to load this as a plugin, but that is not currently possible with webkit/javascriptcore
     // so we new the library directly.
