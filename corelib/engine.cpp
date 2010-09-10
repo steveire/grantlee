@@ -146,7 +146,36 @@ void Engine::loadDefaultLibraries()
     if ( libName == __scriptableLibName )
       continue;
 
-    loadLibrary( libName );
+    // already loaded by the engine.
+    if ( d->m_libraries.contains( libName ) )
+      continue;
+
+    // Warning. We load C++ plugins in this method, but not plugins written in QtScript.
+    // This should be a better situation in Grantlee 0.2 when the TagLibraryInterface
+    // can have shared pointers instead of raw pointers in its API. The whole scriptable
+    // thing likely needs to be redesigned too.
+    // The reason for explicitly not loading scripted plugins here is that they create new
+    // NodeFactory and Filter instances with each call to loadLibrary.
+    // NodeFactories are memory-managed by the Parser, as are Filters to an extent, because it
+    // creates shared pointers for Filters.
+    // Because this method loads the libraries but doesn't actually use them or send them
+    // back to the Parser the scriptable NodeFactories and Filters but be deleted immediately.
+    // The C++ plugins are different because although they are loaded, their NodeFactories
+    // and Filters are accessed only by the Parser, which manages them after that.
+    uint minorVersion = GRANTLEE_VERSION_MINOR;
+    while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION ) {
+      // Although we don't use scripted libaries here, we need to recognize them being first
+      // in the search path and not load a c++ plugin of the same name in that case.
+      ScriptableLibraryContainer* scriptableLibrary = d->loadScriptableLibrary( libName, minorVersion );
+      if (scriptableLibrary) {
+        scriptableLibrary->clear();
+        break;
+      }
+
+      PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( libName, minorVersion-- );
+      if ( library )
+        break;
+    }
   }
 }
 
@@ -187,7 +216,7 @@ EnginePrivate::EnginePrivate( Engine *engine )
 {
 }
 
-TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
+ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
 {
   int pluginIndex = 0;
   if ( !m_scriptableTagLibrary )

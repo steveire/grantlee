@@ -22,6 +22,7 @@
 #define GRANTLEE_ENGINE_P_H
 
 #include "engine.h"
+#include "filter.h"
 #include "pluginpointer_p.h"
 #include "taglibraryinterface.h"
 
@@ -51,6 +52,15 @@ public:
     m_filters = filters;
   }
 
+  // Warning: should only be called by Engine::loadDefaultLibraries
+  void clear()
+  {
+    qDeleteAll(m_nodeFactories);
+    qDeleteAll(m_filters);
+    m_nodeFactories.clear();
+    m_filters.clear();
+  }
+
   QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
     Q_UNUSED( name );
     return m_nodeFactories;
@@ -72,7 +82,7 @@ class EnginePrivate
   EnginePrivate( Engine *engine );
 
   TagLibraryInterface* loadLibrary( const QString &name, uint minorVersion );
-  TagLibraryInterface* loadScriptableLibrary( const QString &name, uint minorVersion );
+  ScriptableLibraryContainer* loadScriptableLibrary( const QString &name, uint minorVersion );
   PluginPointer<TagLibraryInterface> loadCppLibrary( const QString& name, uint minorVersion );
 
   Q_DECLARE_PUBLIC( Engine )
