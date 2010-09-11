@@ -20,17 +20,14 @@
 
 #include "variable.h"
 
-#include "typeaccessors_p.h"
-
-#include <QtCore/QStringList>
-#include <QtCore/QMetaEnum>
-#include <QtCore/QDebug>
-
 #include "context.h"
+#include "exception.h"
+#include "metaenumvariable_p.h"
+#include "typeaccessors_p.h"
 #include "util.h"
 
-#include "metaenumvariable_p.h"
-#include "exception.h"
+#include <QtCore/QMetaEnum>
+#include <QtCore/QStringList>
 
 using namespace Grantlee;
 

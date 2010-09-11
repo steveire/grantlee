@@ -20,10 +20,10 @@
 
 #include "node.h"
 
-#include "nodebuiltins_p.h"
-#include "util.h"
-#include "template.h"
 #include "metaenumvariable_p.h"
+#include "nodebuiltins_p.h"
+#include "template.h"
+#include "util.h"
 
 using namespace Grantlee;
 

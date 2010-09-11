@@ -21,20 +21,19 @@
 #include "engine.h"
 #include "engine_p.h"
 
-#include <QtCore/QRegExp>
-#include <QtCore/QTextStream>
-#include <QtCore/QDir>
-#include <QtCore/QPluginLoader>
-#include <QtCore/QCoreApplication>
-
+#include "exception.h"
+#include "grantlee_config_p.h"
+#include "grantlee_latin1literal_p.h"
+#include "grantlee_version.h"
+#include "scriptabletags.h"
 #include "template_p.h"
 #include "templateloader.h"
-#include "grantlee_version.h"
-#include "grantlee_config_p.h"
-#include "exception.h"
-#include "grantlee_latin1literal_p.h"
 
-#include "scriptabletags.h"
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QPluginLoader>
+#include <QtCore/QRegExp>
+#include <QtCore/QTextStream>
 
 using namespace Grantlee;
 

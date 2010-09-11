@@ -21,10 +21,11 @@
 #ifndef GRANTLEE_LEXER_P_H
 #define GRANTLEE_LEXER_P_H
 
-#include <QtCore/QList>
-#include <QtCore/QString>
-
 #include "token.h"
+
+// #include <QtCore/QList>
+
+template <typename T> class QList;
 
 namespace Grantlee
 {

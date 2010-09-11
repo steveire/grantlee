@@ -23,15 +23,13 @@
 #ifndef GRANTLEE_FILTER_H
 #define GRANTLEE_FILTER_H
 
-#include <QtCore/QSharedPointer>
-#include <QtCore/QStringList>
-#include <QtCore/QVariant>
-
+#include "grantlee_core_export.h"
 #include "outputstream.h"
 #include "safestring.h"
 
-#include "grantlee_core_export.h"
-
+#include <QtCore/QSharedPointer>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
 
 namespace Grantlee
 {

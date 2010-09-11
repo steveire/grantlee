@@ -20,13 +20,13 @@
 
 #include "filterexpression.h"
 
-#include <QtCore/QBuffer>
-
-#include "parser.h"
-#include "filter.h"
-#include "util.h"
 #include "exception.h"
+#include "filter.h"
 #include "grantlee_latin1literal_p.h"
+#include "parser.h"
+#include "util.h"
+
+#include <QtCore/QBuffer>
 
 typedef QPair<Grantlee::Filter::Ptr, Grantlee::Variable > ArgFilter;
 

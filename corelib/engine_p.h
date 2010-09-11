@@ -28,8 +28,6 @@
 
 class QPluginLoader;
 
-class QPluginLoader;
-
 namespace Grantlee
 {
 

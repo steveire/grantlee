@@ -21,11 +21,11 @@
 
 #include "lexer_p.h"
 
+#include "grantlee_latin1literal_p.h"
+#include "grantlee_tags_p.h"
+
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
-
-#include "grantlee_tags_p.h"
-#include "grantlee_latin1literal_p.h"
 
 using namespace Grantlee;
 

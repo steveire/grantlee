@@ -20,10 +20,10 @@
 
 #include "context.h"
 
-#include <QtCore/QStringList>
-
-#include "util.h"
 #include "rendercontext.h"
+#include "util.h"
+
+#include <QtCore/QStringList>
 
 using namespace Grantlee;
 
