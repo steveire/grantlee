@@ -21,19 +21,16 @@
 #include "extends.h"
 
 #include "block.h"
-
-#include <QtCore/QStringList>
-
-#include "nodebuiltins_p.h"
-#include "parser.h"
-#include "template.h"
+#include "blockcontext.h"
 #include "engine.h"
 #include "exception.h"
+#include "nodebuiltins_p.h"
+#include "parser.h"
+#include "rendercontext.h"
+#include "template.h"
+#include "util.h"
 
 #include <QtCore/QListIterator>
-#include <util.h>
-#include <rendercontext.h>
-#include "blockcontext.h"
 
 using namespace Grantlee;
 

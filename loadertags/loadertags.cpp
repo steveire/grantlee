@@ -20,12 +20,7 @@
 
 #include "loadertags.h"
 
-#include <QtCore/QStringList>
-#include <QtPlugin>
-
-#include "parser.h"
-
-#include <QtCore/QDebug>
+#include <QtCore/QtPlugin>
 
 Q_EXPORT_PLUGIN2( grantlee_loadertags_library, LoaderTagLibrary )
 
