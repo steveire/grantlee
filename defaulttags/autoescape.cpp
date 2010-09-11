@@ -20,16 +20,12 @@
 
 #include "autoescape.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QFile>
-
+#include "exception.h"
 #include "parser.h"
 #include "template.h"
-#include "exception.h"
-
 #include "util.h"
 
-
+#include <QtCore/QFile>
 
 AutoescapeNodeFactory::AutoescapeNodeFactory()
 {

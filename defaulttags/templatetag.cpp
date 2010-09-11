@@ -20,11 +20,9 @@
 
 #include "templatetag.h"
 
-#include <QtCore/QStringList>
-
-#include "parser.h"
-#include "grantlee_tags_p.h"
 #include "exception.h"
+#include "grantlee_tags_p.h"
+#include "parser.h"
 
 TemplateTagNodeFactory::TemplateTagNodeFactory()
 {

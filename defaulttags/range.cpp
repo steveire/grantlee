@@ -20,12 +20,10 @@
 
 #include "range.h"
 
-#include "parser.h"
-
-#include "exception.h"
-
-#include "util.h"
 #include "engine.h"
+#include "exception.h"
+#include "parser.h"
+#include "util.h"
 
 
 RangeNodeFactory::RangeNodeFactory()

@@ -20,9 +20,8 @@
 
 #include "debug.h"
 
-#include <QtCore/QStringList>
-#include "parser.h"
 #include "grantlee_latin1literal_p.h"
+#include "parser.h"
 
 DebugNodeFactory::DebugNodeFactory()
 {

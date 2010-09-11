@@ -20,9 +20,8 @@
 
 #include "with.h"
 
-#include <QtCore/QStringList>
-#include "parser.h"
 #include "exception.h"
+#include "parser.h"
 
 
 WithNodeFactory::WithNodeFactory()

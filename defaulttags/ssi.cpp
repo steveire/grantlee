@@ -20,15 +20,13 @@
 
 #include "ssi.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-
+#include "engine.h"
+#include "exception.h"
 #include "parser.h"
 #include "template.h"
-#include "engine.h"
 
-#include "exception.h"
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 
 
 SsiNodeFactory::SsiNodeFactory()

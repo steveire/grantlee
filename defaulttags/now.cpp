@@ -20,12 +20,10 @@
 
 #include "now.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
-
-#include "parser.h"
 #include "exception.h"
+#include "parser.h"
 
+#include <QtCore/QDateTime>
 
 
 NowNodeFactory::NowNodeFactory()

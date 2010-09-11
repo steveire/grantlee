@@ -20,11 +20,8 @@
 
 #include "if.h"
 
-#include <QtCore/QStringList>
-
-#include "parser.h"
 #include "exception.h"
-
+#include "parser.h"
 
 IfNodeFactory::IfNodeFactory()
 {

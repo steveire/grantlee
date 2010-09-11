@@ -20,11 +20,9 @@
 
 #include "ifchanged.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QDateTime>
-
 #include "parser.h"
 
+#include <QtCore/QDateTime>
 
 
 IfChangedNodeFactory::IfChangedNodeFactory()
