@@ -19,6 +19,7 @@
 */
 
 #include "logic.h"
+
 #include "util.h"
 
 QVariant DefaultFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
