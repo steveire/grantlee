@@ -43,3 +43,8 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
 {
   return customTypes()->lookup( object, property );
 }
+
+bool Grantlee::MetaType::lookupAlreadyRegistered( int id )
+{
+  return customTypes()->lookupAlreadyRegistered( id );
+}

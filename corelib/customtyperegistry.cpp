@@ -78,3 +78,8 @@ QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &prop
 
   return lf( object, property );
 }
+
+bool CustomTypeRegistry::lookupAlreadyRegistered( int id ) const
+{
+  return types.contains( id ) && types.value( id ).lookupFunction != 0;
+}

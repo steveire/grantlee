@@ -39,6 +39,8 @@ public:
 
   static QVariant lookup( const QVariant &object, const QString &property );
 
+  static bool lookupAlreadyRegistered(int id);
+
 private:
   MetaType();
 };
@@ -69,9 +71,12 @@ struct LookupTrait
 template<typename RealType, typename HandleAs>
 int registerMetaType()
 {
-  QVariant ( *lf )(const QVariant&, const QString&) = LookupTrait<RealType, HandleAs>::doLookUp;
-
   const int id = qMetaTypeId<RealType>();
+
+  if ( MetaType::lookupAlreadyRegistered( id ) )
+    return id;
+
+  QVariant ( *lf )(const QVariant&, const QString&) = LookupTrait<RealType, HandleAs>::doLookUp;
 
   MetaType::registerLookUpOperator( id, reinterpret_cast<MetaType::LookupFunction>( lf ) );
 

@@ -65,6 +65,7 @@ struct CustomTypeRegistry
   }
 
   QVariant lookup( const QVariant &object, const QString &property ) const;
+  bool lookupAlreadyRegistered( int id ) const;
 
   QHash<int, CustomTypeInfo> types;
   QMutex mutex;
