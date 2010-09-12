@@ -97,6 +97,7 @@ install(FILES
   taglibraryinterface.h
   template.h
   templateloader.h
+  typeaccessor.h
   token.h
   util.h
   variable.h

@@ -37,6 +37,7 @@
 #include "grantlee/taglibraryinterface.h"
 #include "grantlee/template.h"
 #include "grantlee/templateloader.h"
+#include "grantlee/typeaccessor.h"
 #include "grantlee/token.h"
 #include "grantlee/util.h"
 #include "grantlee/variable.h"

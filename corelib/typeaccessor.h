@@ -18,8 +18,8 @@
 
 */
 
-#ifndef GRANTLEE_TYPEACCESSOR_P_H
-#define GRANTLEE_TYPEACCESSOR_P_H
+#ifndef GRANTLEE_TYPEACCESSOR_H
+#define GRANTLEE_TYPEACCESSOR_H
 
 #include <QtCore/QVariant>
 

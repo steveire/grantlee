@@ -18,7 +18,8 @@
 
 */
 
-#include "typeaccessors_p.h"
+#include "typeaccessor.h"
+
 #include "metaenumvariable_p.h"
 #include "safestring.h"
 

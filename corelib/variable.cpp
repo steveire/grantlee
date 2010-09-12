@@ -23,7 +23,7 @@
 #include "context.h"
 #include "exception.h"
 #include "metaenumvariable_p.h"
-#include "typeaccessors_p.h"
+#include "typeaccessor.h"
 #include "util.h"
 
 #include <QtCore/QMetaEnum>
