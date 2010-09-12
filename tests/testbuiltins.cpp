@@ -622,6 +622,15 @@ void TestBuiltinSyntax::testListIndex_data()
   QTest::newRow( "list-index05" ) << QString::fromLatin1( "{{ var.1 }}" ) << dict << QString::fromLatin1( "hello" ) << NoError;
 
   // QVariantHash can only use strings as keys, so list-index06 and list-index07 are not valid.
+
+  dict.clear();
+
+  QStringList sl;
+  sl.append( QLatin1String( "hello" ) );
+  sl.append( QLatin1String( "world" ) );
+  dict.insert( QLatin1String( "var" ), sl );
+  // QStringList lookup
+  QTest::newRow( "list-index08" ) << QString::fromLatin1( "{{ var.0 }}, {{ var.1 }}!" ) << dict << QString::fromLatin1( "hello, world!" ) << NoError;
 }
 
 
