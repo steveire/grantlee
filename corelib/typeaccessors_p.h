@@ -249,4 +249,32 @@ QVariant TypeAccessor<QObject*>::lookUp( QObject *object, const QString& part )
   return QVariant();
 }
 
+template <>
+QVariant TypeAccessor<MetaEnumVariable>::lookUp( MetaEnumVariable mev, const QString& part )
+{
+  if ( part == QLatin1String( "name" ) )
+    return QLatin1String( mev.enumerator.name() );
+  if ( part == QLatin1String( "value" ) )
+    return mev.value;
+  if ( part == QLatin1String( "key" ) )
+    return QLatin1String( mev.enumerator.valueToKey( mev.value ) );
+  if ( part == QLatin1String( "scope" ) )
+    return QLatin1String( mev.enumerator.scope() );
+  if ( part == QLatin1String( "keyCount" ) )
+    return mev.enumerator.keyCount();
+
+  bool ok = false;
+  const int listIndex = part.toInt( &ok );
+  if (ok)
+  {
+    if (listIndex >= mev.enumerator.keyCount())
+      return QVariant();
+
+    mev.value = mev.enumerator.value(listIndex);
+    return QVariant::fromValue(mev);
+  }
+
+  return QVariant();
+}
+
 #endif
