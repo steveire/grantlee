@@ -18,10 +18,12 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII)
 
 set (grantlee_core_SRCS
   cachingloaderdecorator.cpp
+  customtyperegistry.cpp
   context.cpp
   engine.cpp
   filterexpression.cpp
   lexer.cpp
+  metatype.cpp
   node.cpp
   nodebuiltins.cpp
   outputstream.cpp
@@ -90,6 +92,7 @@ install(FILES
   filterexpression.h
   grantlee_core_export.h
   ${PROJECT_BINARY_DIR}/grantlee_version.h
+  metatype.h
   node.h
   outputstream.h
   parser.h

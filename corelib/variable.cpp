@@ -23,7 +23,7 @@
 #include "context.h"
 #include "exception.h"
 #include "metaenumvariable_p.h"
-#include "typeaccessor.h"
+#include "metatype.h"
 #include "util.h"
 
 #include <QtCore/QMetaEnum>
@@ -41,8 +41,6 @@ public:
       : q_ptr( variable ) {
 
   }
-
-  QVariant resolvePart( const QVariant &variant, const QString &s ) const;
 
   QString m_varString;
   QVariant m_literal;
@@ -188,7 +186,7 @@ QVariant Variable::resolve( Context *c ) const
       var = c->lookup( d->m_lookups.at( i++ ) );
     }
     while ( i < d->m_lookups.size() ) {
-      var = d->resolvePart( var, d->m_lookups.at( i++ ) );
+      var = MetaType::lookup( var, d->m_lookups.at( i++ ) );
       if ( !var.isValid() )
         return var;
     }
@@ -214,37 +212,4 @@ QVariant Variable::resolve( Context *c ) const
   }
   // Could be a list, hash or enum.
   return var;
-}
-
-QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextPart ) const
-{
-  QVariant returnVar;
-
-//   Should be
-// * QVariantHash key lookup
-// * Property? (member in django)
-// * list index
-  if ( QVariant::Hash == var.type() ) {
-    return TypeAccessor<QVariantHash>::lookUp( var.toHash(), nextPart );
-  } else if ( qMetaTypeId< Grantlee::SafeString >() == var.userType() ) {
-    return TypeAccessor<SafeString>::lookUp( getSafeString( var ), nextPart );
-  } else if ( QMetaType::QObjectStar == var.userType() ) {
-    return TypeAccessor<QObject*>::lookUp( var.value<QObject*>(), nextPart );
-  } else if ( qMetaTypeId<MetaEnumVariable>() == var.userType()){
-    return TypeAccessor<MetaEnumVariable>::lookUp( var.value<MetaEnumVariable>(), nextPart );
-  } else {
-    // List index test
-
-    bool ok = false;
-    const int listIndex = nextPart.toInt( &ok );
-    if ( !ok )
-      return QVariant();
-    const QVariantList varList = variantToList( var );
-
-    if ( listIndex >= varList.size() )
-      return QVariant();
-    return varList.at( listIndex );
-  }
-
-  return QVariant();
 }
