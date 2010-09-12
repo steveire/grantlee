@@ -96,5 +96,18 @@ int registerMetaType()
 
 } // namespace Grantlee
 
+#define GRANTLEE_BEGIN_LOOKUP(TYPE)                                                      \
+namespace Grantlee                                                                       \
+{                                                                                        \
+template<>                                                                               \
+inline QVariant TypeAccessor<TYPE>::lookUp( const TYPE object, const QString &property ) \
+{                                                                                        \
+
+#define GRANTLEE_END_LOOKUP                                                              \
+  return QVariant();                                                                     \
+}                                                                                        \
+}                                                                                        \
+
+
 #endif // #define GRANTLEE_METATYPE_H
 
