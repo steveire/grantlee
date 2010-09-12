@@ -28,6 +28,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
+namespace Grantlee
+{
+
 template <typename T>
 struct TypeAccessor
 {
@@ -275,6 +278,8 @@ QVariant TypeAccessor<MetaEnumVariable>::lookUp( MetaEnumVariable mev, const QSt
   }
 
   return QVariant();
+}
+
 }
 
 #endif
