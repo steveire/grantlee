@@ -50,7 +50,7 @@ public:
   bool m_translate;
 
   Q_DECLARE_PUBLIC( Variable )
-  Variable *q_ptr;
+  Variable * const q_ptr;
 };
 
 }

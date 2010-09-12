@@ -48,7 +48,7 @@ class AbstractNodeFactoryPrivate
   }
 
   Q_DECLARE_PUBLIC( AbstractNodeFactory )
-  AbstractNodeFactory *q_ptr;
+  AbstractNodeFactory * const q_ptr;
 };
 
 }
