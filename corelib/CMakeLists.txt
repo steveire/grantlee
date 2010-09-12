@@ -26,6 +26,7 @@ set (grantlee_core_SRCS
   safestring.cpp
   template.cpp
   templateloader.cpp
+  typeaccessors.cpp
   util.cpp
   variable.cpp
 )
