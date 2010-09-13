@@ -23,6 +23,8 @@
 
 #include "containeraccessor.h"
 
+#include <QtCore/QLinkedList>
+#include <QtCore/QSet>
 #include <QtCore/QVariant>
 
 namespace Grantlee
@@ -107,6 +109,18 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
 
 }
 
+#define GRANTLEE_DISABLE_RANDOM_ACCESS(Container)             \
+namespace Grantlee {                                          \
+template<typename T>                                          \
+struct TypeAccessor<Container<T> >                            \
+{                                                             \
+  static QVariant lookUp(const Container<T>, const QString &) \
+  {                                                           \
+    return QVariant();                                        \
+  }                                                           \
+};                                                            \
+}                                                             \
+
 #define GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_type)           \
 namespace Grantlee {                                                                    \
 template<typename T>                                                                    \
@@ -135,7 +149,12 @@ struct TypeAccessor<Container<QString, T> >                                     
 }                                                                                  \
 
 GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(QList)
+GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(QVector)
 
 GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(QHash)
+GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(QMap)
+
+GRANTLEE_DISABLE_RANDOM_ACCESS(QSet)
+GRANTLEE_DISABLE_RANDOM_ACCESS(QLinkedList)
 
 #endif
