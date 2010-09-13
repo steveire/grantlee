@@ -23,21 +23,30 @@
 #define CUSTOMTYPESREGISTRY_P_H
 
 #include "metatype.h"
+#include "containeraccessor.h"
 
 #include <QtCore/QMutex>
 
 namespace Grantlee
 {
 
+template<typename ContainedType>
+struct VariantToList
+{
+  static QVariantList doConvert( const QVariant &obj );
+};
+
 struct CustomTypeInfo
 {
  public:
   CustomTypeInfo()
-    : lookupFunction(0)
+    : lookupFunction( 0 ),
+      toVariantListFunction( 0 )
   {
   }
 
   Grantlee::MetaType::LookupFunction lookupFunction;
+  Grantlee::MetaType::ToVariantListFunction toVariantListFunction;
 };
 
 struct CustomTypeRegistry
@@ -45,6 +54,7 @@ struct CustomTypeRegistry
   CustomTypeRegistry();
 
   void registerLookupOperator( int id, MetaType::LookupFunction f );
+  void registerToListOperator( int id, MetaType::ToVariantListFunction f );
 
   template<typename RealType, typename HandleAs>
   int registerBuiltInMetatype()
@@ -64,7 +74,64 @@ struct CustomTypeRegistry
     return registerBuiltInMetatype<Type, Type>();
   }
 
+  template<typename Type, typename HandleAs>
+  int registerVariantToList()
+  {
+    QVariantList ( *vtlf )( const QVariant& ) = VariantToList<HandleAs>::doConvert;
+
+    const int id = qMetaTypeId<Type>();
+
+    registerToListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( vtlf ) );
+
+    return id;
+  }
+
+  template<typename Type>
+  int registerVariantToList()
+  {
+    return registerVariantToList<Type, Type>();
+  }
+
+
+  template<typename Type, typename HandleAs>
+  int registerSequentialToList()
+  {
+    QVariantList ( *vtlf )( const QVariant& ) = SequentialContainerAccessor<HandleAs>::doToList;
+
+    const int id = qMetaTypeId<Type>();
+
+    registerToListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( vtlf ) );
+
+    return id;
+  }
+
+  template<typename Type>
+  int registerSequentialToList()
+  {
+    return registerSequentialToList<Type, Type>();
+  }
+
+  template<typename Type, typename HandleAs>
+  int registerAssociativeToList()
+  {
+    QVariantList ( *vtlf )( const QVariant& ) = AssociativeContainerAccessor<HandleAs>::doToList;
+
+    const int id = qMetaTypeId<Type>();
+
+    registerToListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( vtlf ) );
+
+    return id;
+  }
+
+  template<typename Type>
+  int registerAssociativeToList()
+  {
+    return registerAssociativeToList<Type, Type>();
+  }
+
+
   QVariant lookup( const QVariant &object, const QString &property ) const;
+  QVariantList toVariantList( const QVariant &variant ) const;
   bool lookupAlreadyRegistered( int id ) const;
 
   QHash<int, CustomTypeInfo> types;

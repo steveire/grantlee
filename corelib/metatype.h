@@ -2,6 +2,7 @@
   This file is part of the Grantlee template system.
 
   Copyright (c) 2010 Michael Jansen <kde@michael-jansen.biz>
+  Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -34,10 +35,13 @@ class GRANTLEE_CORE_EXPORT MetaType
 {
 public:
   typedef QVariant (*LookupFunction)(const QVariant &, const QString &);
+  typedef QVariantList (*ToVariantListFunction)(const QVariant &);
 
   static void registerLookUpOperator( int id, LookupFunction f );
+  static void registerToVariantListOperator( int id, ToVariantListFunction f );
 
   static QVariant lookup( const QVariant &object, const QString &property );
+  static QVariantList toVariantList( const QVariant &obj );
 
   static bool lookupAlreadyRegistered(int id);
 

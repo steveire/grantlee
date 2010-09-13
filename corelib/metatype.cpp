@@ -2,6 +2,7 @@
   This file is part of the Grantlee template system.
 
   Copyright (c) 2010 Michael Jansen <kde@michael-jansen.biz>
+  Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -39,9 +40,25 @@ void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
   customTypes()->registerLookupOperator( id, f );
 }
 
+void Grantlee::MetaType::registerToVariantListOperator( int id, ToVariantListFunction f )
+{
+  Q_ASSERT(id>0);
+  Q_ASSERT(f);
+  if ( id < 0 ) {
+    qWarning() << "registerTypeOperators() called with invalid arguments";
+    return;
+  }
+  customTypes()->registerToListOperator( id, f );
+}
+
 QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &property )
 {
   return customTypes()->lookup( object, property );
+}
+
+QVariantList Grantlee::MetaType::toVariantList( const QVariant &obj )
+{
+  return customTypes()->toVariantList( obj );
 }
 
 bool Grantlee::MetaType::lookupAlreadyRegistered( int id )
