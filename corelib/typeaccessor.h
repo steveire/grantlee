@@ -43,6 +43,22 @@ struct TypeAccessor<T*>
 namespace
 {
 
+template<typename Container, typename size_type = int>
+struct SequentialContainerLookup
+{
+  static QVariant doLookUp( const Container &container, const QString &property )
+  {
+    bool ok = false;
+    const size_type listIndex = property.toInt( &ok );
+
+    if ( !ok || listIndex >= container.size() ) {
+        return QVariant();
+    }
+
+    return QVariant::fromValue( container[listIndex] );
+  }
+};
+
 template<typename Container>
 QVariant doAssociativeContainerLookup( const Container &object, const QString &property )
 {
@@ -91,6 +107,21 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
 
 }
 
+#define GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_type)           \
+namespace Grantlee {                                                                    \
+template<typename T>                                                                    \
+struct TypeAccessor<Container<T> >                                                      \
+{                                                                                       \
+  static QVariant lookUp( const Container<T> c, const QString &property )               \
+  {                                                                                     \
+    return SequentialContainerLookup<Container<T>, size_type>::doLookUp( c, property ); \
+  }                                                                                     \
+};                                                                                      \
+}                                                                                       \
+
+#define GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)              \
+  GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, int)           \
+
 #define GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(Container)                    \
 namespace Grantlee {                                                               \
 template<typename T>                                                               \
@@ -102,6 +133,8 @@ struct TypeAccessor<Container<QString, T> >                                     
   }                                                                                \
 };                                                                                 \
 }                                                                                  \
+
+GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(QList)
 
 GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(QHash)
 
