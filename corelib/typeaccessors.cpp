@@ -30,34 +30,6 @@
 namespace Grantlee
 {
 
-template <>
-QVariant TypeAccessor<QVariantHash>::lookUp( const QVariantHash object, const QString &property )
-{
-  if ( object.contains( property ) )
-    return object.value( property );
-  if ( property == QLatin1String( "items" ) ) {
-    QVariantList itemsList;
-    Q_FOREACH( const QString &key, object.keys() ) {
-      itemsList.append( QVariant( QVariantList() << key << object.value( key ) ) );
-    }
-    return itemsList;
-  }
-
-  if ( property == QLatin1String( "keys" ) ) {
-    const QStringList keys = object.keys();
-    QVariantList list;
-    Q_FOREACH( const QString &key, keys )
-      list << key;
-    return list;
-  }
-
-  if ( property == QLatin1String( "values" ) ) {
-    return object.values();
-  }
-
-  return QVariant();
-}
-
 static QRegExp getIsTitleRegexp() {
   QRegExp titleRe( QLatin1String( "\\b[a-z]" ) );
   titleRe.setMinimal( true );

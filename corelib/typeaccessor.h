@@ -38,6 +38,69 @@ struct TypeAccessor<T*>
   static QVariant lookUp( const T * const object, const QString &property );
 };
 
+namespace
+{
+
+template<typename Container>
+QVariant doAssociativeContainerLookup( const Container &object, const QString &property )
+{
+  {
+    typename Container::const_iterator it = object.find( property );
+    if ( it != object.end() )
+      return QVariant::fromValue( *it );
+  }
+  if ( property == QLatin1String( "items" ) ) {
+    typename Container::const_iterator it = object.begin();
+    const typename Container::const_iterator end = object.end();
+    QVariantList list;
+    for( ; it != end; ++it ) {
+      QVariantList nested;
+      nested.push_back( QVariant::fromValue( it.key() ) );
+      nested.push_back( QVariant::fromValue( *it ) );
+      list.push_back( nested );
+    }
+    return list;
+  }
+
+  if ( property == QLatin1String( "keys" ) ) {
+    typename Container::const_iterator it = object.begin();
+    const typename Container::const_iterator end = object.end();
+    QVariantList list;
+    for( ; it != end; ++it ) {
+      list.push_back( QVariant::fromValue( it.key() ) );
+    }
+    return list;
+  }
+
+  if ( property == QLatin1String( "values" ) ) {
+    typename Container::const_iterator it = object.begin();
+    const typename Container::const_iterator end = object.end();
+    QVariantList list;
+    for( ; it != end; ++it ) {
+      list.push_back( QVariant::fromValue( *it ) );
+    }
+    return list;
+  }
+
+  return QVariant();
 }
+
+}
+
+}
+
+#define GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(Container)                    \
+namespace Grantlee {                                                               \
+template<typename T>                                                               \
+struct TypeAccessor<Container<QString, T> >                                        \
+{                                                                                  \
+  static QVariant lookUp( const Container<QString, T> c, const QString &property ) \
+  {                                                                                \
+    return doAssociativeContainerLookup( c, property );                            \
+  }                                                                                \
+};                                                                                 \
+}                                                                                  \
+
+GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(QHash)
 
 #endif
