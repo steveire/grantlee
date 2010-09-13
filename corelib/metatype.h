@@ -27,6 +27,9 @@
 #include "typeaccessor.h"
 
 #include <QtCore/QVariant>
+#include <QtCore/QStringList>
+#include <QtCore/QStack>
+#include <QtCore/QQueue>
 
 namespace Grantlee
 {
@@ -65,15 +68,13 @@ struct LookupTrait
   }
 };
 
-}
-
 /*
  * Register a type so grantlee knows how to handle it.
  *
  * :TODO: Real docu
  */
 template<typename RealType, typename HandleAs>
-int registerMetaType()
+int internalRegisterType()
 {
   const int id = qMetaTypeId<RealType>();
 
@@ -83,6 +84,83 @@ int registerMetaType()
   QVariant ( *lf )(const QVariant&, const QString&) = LookupTrait<RealType, HandleAs>::doLookUp;
 
   MetaType::registerLookUpOperator( id, reinterpret_cast<MetaType::LookupFunction>( lf ) );
+
+  return id;
+}
+
+template<typename Container, typename HandleAs>
+int registerSequentialContainer()
+{
+  const int id = internalRegisterType<Container, HandleAs>();
+
+  QVariantList ( *tlf )(const QVariant&) = SequentialContainerAccessor<Container>::doToList;
+  MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );
+  return id;
+}
+
+template<typename Container>
+int registerSequentialContainer()
+{
+  return registerSequentialContainer<Container, Container>();
+}
+
+template<typename Container, typename HandleAs>
+int registerAssociativeContainer()
+{
+  const int id = internalRegisterType<Container, HandleAs>();
+
+  QVariantList ( *tlf )(const QVariant&) = AssociativeContainerAccessor<Container>::doToList;
+  MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );
+  return id;
+}
+
+template<typename Container>
+int registerAssociativeContainer()
+{
+  return registerAssociativeContainer<Container, Container>();
+}
+
+}
+
+template<typename RealType, int n>
+struct RegisterTypeContainer
+{
+  static void reg()
+  {
+  }
+};
+
+#define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(Container, Type)                                   \
+  Grantlee::RegisterTypeContainer<Container<Type>, QMetaTypeId2<Container<Type> >::Defined>::reg();  \
+
+#define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(Container, Key, Type)                                       \
+  Grantlee::RegisterTypeContainer<Container<Key, Type>, QMetaTypeId2<Container<Key, Type> >::Defined>::reg();  \
+
+namespace
+{
+
+template<typename T>
+void registerContainers()
+{
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QList,          T )
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QQueue,         T )
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QVector,        T )
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QStack,         T )
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QSet,           T )
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QLinkedList,    T )
+
+  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QHash, QString, T )
+  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QMap,  QString, T )
+}
+
+}
+
+template<typename RealType, typename HandleAs>
+int registerMetaType()
+{
+  const int id = internalRegisterType<RealType, HandleAs>();
+
+  registerContainers<RealType>();
 
   return id;
 }
@@ -98,7 +176,58 @@ int registerMetaType()
   return registerMetaType<Type, Type>();
 }
 
+// http://catb.org/jargon/html/magic-story.html
+enum {
+  Magic,
+  MoreMagic
+};
+
 } // namespace Grantlee
+
+#define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER(Container)             \
+namespace Grantlee {                                                  \
+template<typename T>                                                  \
+struct RegisterTypeContainer<Container<T>, MoreMagic>                 \
+{                                                                     \
+  static int reg()                                                    \
+  {                                                                   \
+    return registerSequentialContainer<Container<T> >();              \
+  }                                                                   \
+};                                                                    \
+}                                                                     \
+
+#define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER(Container)                     \
+namespace Grantlee {                                                           \
+template<typename T>                                                           \
+struct RegisterTypeContainer<Container<QString, T>, MoreMagic>                 \
+{                                                                              \
+  static int reg()                                                             \
+  {                                                                            \
+    return registerAssociativeContainer<Container<QString, T> >();             \
+  }                                                                            \
+};                                                                             \
+}                                                                              \
+
+#define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_AS(Container, As)               \
+namespace Grantlee {                                                           \
+template<typename T>                                                           \
+struct RegisterTypeContainer<Container<T>, MoreMagic>                          \
+{                                                                              \
+  static int reg()                                                             \
+  {                                                                            \
+    return registerSequentialContainer<Container<T>, As<T> >();                \
+  }                                                                            \
+};                                                                             \
+}                                                                              \
+
+GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (QList)
+GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_AS (QQueue, QList)
+GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (QVector)
+GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_AS (QStack, QVector)
+GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (QSet) // Actually associative, but iterated as a sequential.
+GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (QLinkedList)
+GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER   (QHash)
+GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER   (QMap)
 
 #define GRANTLEE_BEGIN_LOOKUP(TYPE)                                                      \
 namespace Grantlee                                                                       \

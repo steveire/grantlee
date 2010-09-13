@@ -47,6 +47,8 @@ private Q_SLOTS:
   void testGenericClassType();
   void testSequentialContainer_Variant();
   void testAssociativeContainer_Variant();
+  void testSequentialContainer_Type();
+  void testAssociativeContainer_Type();
 
 }; // class TestGenericTypes
 
@@ -84,6 +86,20 @@ GRANTLEE_BEGIN_LOOKUP(Person)
   else if ( property == QLatin1String( "age" ) )
     return object.age;
 GRANTLEE_END_LOOKUP
+
+
+Q_DECLARE_METATYPE(QList<Person>)
+Q_DECLARE_METATYPE(QVector<Person>)
+Q_DECLARE_METATYPE(QStack<Person>)
+Q_DECLARE_METATYPE(QQueue<Person>)
+Q_DECLARE_METATYPE(QLinkedList<Person>)
+Q_DECLARE_METATYPE(QSet<Person>)
+
+typedef QHash<QString, Person> PersonHash;
+typedef QMap<QString, Person> PersonMap;
+Q_DECLARE_METATYPE(PersonHash)
+Q_DECLARE_METATYPE(PersonMap)
+
 
 void TestGenericTypes::initTestCase()
 {
@@ -282,6 +298,95 @@ void TestGenericTypes::testAssociativeContainer_Variant()
 {
   doTestAssociativeContainer_Variant<QVariantMap>();
   doTestAssociativeContainer_Variant<QVariantHash>(true);
+}
+
+template<typename SequentialContainer>
+void insertPeople(Grantlee::Context &c)
+{
+  QMap<int, Person> people = getPeople();
+  QMap<int, Person>::const_iterator it = people.constBegin();
+  const QMap<int, Person>::const_iterator end = people.constEnd();
+  SequentialContainer container;
+  for ( ; it != end; ++it )
+    container.insert( container.end(), it.value() );
+  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+}
+
+template<>
+void insertPeople<QSet<Person> >(Grantlee::Context &c)
+{
+  QMap<int, Person> people = getPeople();
+  QMap<int, Person>::const_iterator it = people.constBegin();
+  const QMap<int, Person>::const_iterator end = people.constEnd();
+  QSet<Person> container;
+  for ( ; it != end; ++it )
+    container.insert( it.value() );
+  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+}
+
+template<typename AssociativeContainer>
+void insertAssociatedPeople(Grantlee::Context &c)
+{
+  QMap<int, Person> people = getPeople();
+  QMap<int, Person>::const_iterator it = people.constBegin();
+  const QMap<int, Person>::const_iterator end = people.constEnd();
+  AssociativeContainer container;
+  for ( ; it != end; ++it )
+    container[QString::number( it.key() )] = it.value();
+  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+}
+
+template<>
+void testSequentialIndexing<QLinkedList<Person> >(Grantlee::Context)
+{
+  // No op
+}
+
+template<>
+void testSequentialIndexing<QSet<Person> >(Grantlee::Context)
+{
+  // No op
+}
+
+template<typename Container>
+void doTestSequentialContainer_Type()
+{
+  Grantlee::Context c;
+
+  insertPeople<Container>(c);
+
+  testSequentialIteration<Container>(c);
+  testSequentialIndexing<Container>(c);
+}
+
+template<typename Container>
+void doTestAssociativeContainer_Type(bool unordered = false)
+{
+  Grantlee::Engine engine;
+
+  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+
+  Grantlee::Context c;
+
+  insertAssociatedPeople<Container>(c);
+  testAssociativeValues<Container>(c, unordered);
+  testAssociativeItems<Container>(c, unordered);
+}
+
+void TestGenericTypes::testSequentialContainer_Type()
+{
+  doTestSequentialContainer_Type<QList<Person> >();
+  doTestSequentialContainer_Type<QVector<Person> >();
+  doTestSequentialContainer_Type<QStack<Person> >();
+  doTestSequentialContainer_Type<QQueue<Person> >();
+  doTestSequentialContainer_Type<QLinkedList<Person> >();
+  doTestSequentialContainer_Type<QSet<Person> >();
+}
+
+void TestGenericTypes::testAssociativeContainer_Type()
+{
+  doTestAssociativeContainer_Type<QMap<QString, Person> >();
+  doTestAssociativeContainer_Type<QHash<QString, Person> >(true);
 }
 
 QTEST_MAIN( TestGenericTypes )
