@@ -20,13 +20,14 @@
 
 #include "lists.h"
 
+#include "metatype.h"
 #include "util.h"
 
 #include <QtCore/QDateTime>
 
 QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
   QListIterator<QVariant> i( varList );
   QString ret;
   while ( i.hasNext() ) {
@@ -83,7 +84,7 @@ QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument,
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
 
   if ( varList.isEmpty() )
     return QString();
@@ -95,7 +96,7 @@ QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, 
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
 
   if ( varList.isEmpty() )
     return QString();
@@ -107,7 +108,7 @@ QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
 
   qsrand( QDateTime::currentDateTime().toTime_t() );
   int rnd = qrand() % varList.size();

@@ -23,6 +23,7 @@
 #include "exception.h"
 #include "filter.h"
 #include "grantlee_latin1literal_p.h"
+#include "metatype.h"
 #include "parser.h"
 #include "util.h"
 
@@ -244,7 +245,7 @@ QVariant FilterExpression::resolve( Context *c ) const
 QVariantList FilterExpression::toList( Context *c ) const
 {
   const QVariant var = resolve( c );
-  return variantToList( var );
+  return MetaType::toVariantList( var );
 }
 
 bool FilterExpression::isTrue( Context *c ) const
