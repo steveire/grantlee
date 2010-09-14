@@ -37,6 +37,8 @@ class TestGenericTypes : public QObject
 
 private Q_SLOTS:
 
+  void initTestCase();
+
   void testGenericClassType();
 
 }; // class TestGenericTypes
@@ -64,6 +66,12 @@ GRANTLEE_BEGIN_LOOKUP(Person)
     return object.age;
 GRANTLEE_END_LOOKUP
 
+void TestGenericTypes::initTestCase()
+{
+  // Register the handler for our custom type
+  Grantlee::registerMetaType<Person>();
+}
+
 void TestGenericTypes::testGenericClassType()
 {
   Grantlee::Engine engine;
@@ -73,9 +81,6 @@ void TestGenericTypes::testGenericClassType()
   Grantlee::Template t1 = engine.newTemplate(
       QLatin1String( "Person: \nName: {{p.name}}\nAge: {{p.age}}\nUnknown: {{p.unknown}}" ),
       QLatin1String( "template1" ) );
-
-  // Register the handler for our custom type
-  Grantlee::registerMetaType<Person>();
 
   // Check it
   QVariantHash h;
