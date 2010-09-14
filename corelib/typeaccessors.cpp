@@ -157,8 +157,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( const Grantlee::SafeString 
   return QVariant();
 }
 
-template <>
-QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QString &property )
+QVariant doQobjectLookUp( const QObject * const object, const QString &property )
 {
   if ( property == QLatin1String( "children" ) )
   {
@@ -215,6 +214,12 @@ QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QSt
     return QVariant::fromValue( mev );
   }
   return object->property( property.toUtf8() );
+}
+
+template <>
+QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QString &property )
+{
+  return doQobjectLookUp( object, property );
 }
 
 template <>

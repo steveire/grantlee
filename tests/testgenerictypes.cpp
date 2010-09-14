@@ -86,6 +86,7 @@ private Q_SLOTS:
   void testAssociativeContainer_Variant();
   void testSequentialContainer_Type();
   void testAssociativeContainer_Type();
+  void testSharedPointer();
 
 }; // class TestGenericTypes
 
@@ -123,6 +124,26 @@ GRANTLEE_BEGIN_LOOKUP(Person)
   else if ( property == QLatin1String( "age" ) )
     return object.age;
 GRANTLEE_END_LOOKUP
+
+class PersonObject : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(QString name READ name)
+  Q_PROPERTY(int age READ age)
+public:
+  PersonObject(const QString &name, int age, QObject* parent = 0)
+    : QObject(parent), m_name(name), m_age(age)
+  {
+
+  }
+
+  QString name() const { return m_name; }
+  int age() const { return m_age; }
+
+private:
+  const QString m_name;
+  const int m_age; // Yeah, you wish...
+};
 
 
 Q_DECLARE_METATYPE(QList<Person>)
@@ -221,6 +242,7 @@ void TestGenericTypes::initTestCase()
   Grantlee::registerMetaType<Person>();
   GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(QtUnorderedMap, Person)
   GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(ThreeArray, Person)
+  Grantlee::registerMetaType<QSharedPointer<PersonObject> >();
 }
 
 void TestGenericTypes::testGenericClassType()
@@ -579,6 +601,29 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint16, Person> >(true);
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint32, Person> >(true);
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint64, Person> >(true);
+}
+
+Q_DECLARE_METATYPE(QSharedPointer<PersonObject>)
+
+void TestGenericTypes::testSharedPointer()
+{
+  Grantlee::Engine engine;
+
+  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+
+  Grantlee::Template t1 = engine.newTemplate(
+      QLatin1String( "{{ p.name }} {{ p.age }}" ),
+      QLatin1String( "template1" ) );
+
+  // Check it
+  QVariantHash h;
+  QSharedPointer<PersonObject> p( new PersonObject( QLatin1String( "Grant Lee" ), 2 ) );
+  h.insert( QLatin1String( "p" ), QVariant::fromValue( p ) );
+  Grantlee::Context c( h );
+  QCOMPARE(
+      t1->render( &c ),
+      QLatin1String( "Grant Lee 2" ));
+
 }
 
 QTEST_MAIN( TestGenericTypes )

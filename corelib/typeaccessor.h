@@ -22,9 +22,11 @@
 #define GRANTLEE_TYPEACCESSOR_H
 
 #include "containeraccessor.h"
+#include "grantlee_core_export.h"
 
 #include <QtCore/QLinkedList>
 #include <QtCore/QSet>
+#include <QtCore/QSharedPointer>
 #include <QtCore/QVariant>
 
 #include <vector>
@@ -110,6 +112,8 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
 
 }
 
+QVariant GRANTLEE_CORE_EXPORT doQobjectLookUp( const QObject * const object, const QString& property );
+
 }
 
 #define GRANTLEE_DISABLE_RANDOM_ACCESS(Container)             \
@@ -154,6 +158,18 @@ struct TypeAccessor<Container<T, U> >                                           
 };                                                                                 \
 }                                                                                  \
 
+#define GRANTLEE_SMART_PTR_ACCESSOR(SmartPointer)                                 \
+namespace Grantlee {                                                              \
+template<typename T>                                                              \
+struct TypeAccessor<SmartPointer<T> >                                             \
+{                                                                                 \
+  static QVariant lookUp( const SmartPointer<T> object, const QString &property ) \
+  {                                                                               \
+    return doQobjectLookUp( object.operator->(), property );                      \
+  }                                                                               \
+};                                                                                \
+}                                                                                 \
+
 GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(QList)
 GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(QVector)
 
@@ -167,5 +183,7 @@ GRANTLEE_DISABLE_RANDOM_ACCESS(std::list)
 GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::deque)
 GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::vector)
 GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR     (std::map)
+
+GRANTLEE_SMART_PTR_ACCESSOR(QSharedPointer)
 
 #endif
