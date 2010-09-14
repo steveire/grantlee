@@ -44,6 +44,12 @@ private Q_SLOTS:
 class Person
 {
 public:
+  Person() :age(0) {}
+  Person(std::string _name, int _age)
+    : name(_name), age(_age)
+  {
+
+  }
 
  std::string name;
  int age;
@@ -73,9 +79,7 @@ void TestGenericTypes::testGenericClassType()
 
   // Check it
   QVariantHash h;
-  Person p;
-  p.name = "Grant Lee";
-  p.age  = 2;
+  Person p( "Grant Lee", 2);
   h.insert( QLatin1String( "p" ), QVariant::fromValue(p) );
   Grantlee::Context c( h );
   QCOMPARE(
