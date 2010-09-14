@@ -57,12 +57,24 @@ public:
   Person(std::string _name, int _age)
     : name(_name), age(_age)
   {
+    static int _uid = 0;
+    uid = ++_uid;
+  }
 
+  bool operator==(const Person &other) const
+  {
+    return uid == other.uid;
   }
 
  std::string name;
  int age;
+ int uid;
 };
+
+int qHash(const Person &p)
+{
+  return p.uid;
+}
 
 Q_DECLARE_METATYPE(Person)
 
