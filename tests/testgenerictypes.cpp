@@ -23,6 +23,7 @@
 #include "engine.h"
 #include "grantlee_paths.h"
 #include "template.h"
+#include "qtunorderedmap.h"
 
 #include <QtTest/QtTest>
 #include <QtCore/QVariant>
@@ -35,6 +36,31 @@ Q_DECLARE_METATYPE(QVector<QVariant>)
 Q_DECLARE_METATYPE(QStack<QVariant>)
 Q_DECLARE_METATYPE(QQueue<QVariant>)
 Q_DECLARE_METATYPE(QLinkedList<QVariant>)
+
+GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER      (QtUnorderedMap)
+GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR  (QtUnorderedMap)
+
+namespace Grantlee {
+
+template<typename T, typename U>
+struct KeyGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T, U> >
+{
+  static T get(typename QtUnorderedMap<T, U>::const_iterator it)
+  {
+    return it->first;
+  }
+};
+
+template<typename T, typename U>
+struct MappedValueGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T, U> >
+{
+  static U get(typename QtUnorderedMap<T, U>::const_iterator it)
+  {
+    return it->second;
+  }
+};
+
+}
 
 class TestGenericTypes : public QObject
 {
@@ -155,10 +181,32 @@ Q_DECLARE_METATYPE(PersonUInt32StdMap)
 typedef std::map<quint64, Person> PersonUInt64StdMap;
 Q_DECLARE_METATYPE(PersonUInt64StdMap)
 
+typedef QtUnorderedMap<QString, Person> PersonHashMap;
+Q_DECLARE_METATYPE(PersonHashMap)
+
+typedef QtUnorderedMap<qint16, Person> PersonInt16HashMap;
+Q_DECLARE_METATYPE(PersonInt16HashMap)
+
+typedef QtUnorderedMap<qint32, Person> PersonInt32HashMap;
+Q_DECLARE_METATYPE(PersonInt32HashMap)
+
+typedef QtUnorderedMap<qint64, Person> PersonInt64HashMap;
+Q_DECLARE_METATYPE(PersonInt64HashMap)
+
+typedef QtUnorderedMap<quint16, Person> PersonUInt16HashMap;
+Q_DECLARE_METATYPE(PersonUInt16HashMap)
+
+typedef QtUnorderedMap<quint32, Person> PersonUInt32HashMap;
+Q_DECLARE_METATYPE(PersonUInt32HashMap)
+
+typedef QtUnorderedMap<quint64, Person> PersonUInt64HashMap;
+Q_DECLARE_METATYPE(PersonUInt64HashMap)
+
 void TestGenericTypes::initTestCase()
 {
   // Register the handler for our custom type
   Grantlee::registerMetaType<Person>();
+  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(QtUnorderedMap, Person)
 }
 
 void TestGenericTypes::testGenericClassType()
@@ -496,6 +544,14 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<std::map<quint16, Person> >();
   doTestAssociativeContainer_Type_Number<std::map<quint32, Person> >();
   doTestAssociativeContainer_Type_Number<std::map<quint64, Person> >();
+
+  doTestAssociativeContainer_Type<QtUnorderedMap<QString, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint16, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint32, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint64, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint16, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint32, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint64, Person> >(true);
 }
 
 QTEST_MAIN( TestGenericTypes )
