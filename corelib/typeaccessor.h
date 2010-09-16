@@ -27,6 +27,9 @@
 #include <QtCore/QSet>
 #include <QtCore/QVariant>
 
+#include <vector>
+#include <deque>
+
 namespace Grantlee
 {
 
@@ -136,6 +139,9 @@ struct TypeAccessor<Container<T> >                                              
 #define GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)              \
   GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, int)           \
 
+#define GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)          \
+  GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_t)        \
+
 #define GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(Container)                    \
 namespace Grantlee {                                                               \
 template<typename T, typename U>                                                   \
@@ -156,5 +162,10 @@ GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(QMap)
 
 GRANTLEE_DISABLE_RANDOM_ACCESS(QSet)
 GRANTLEE_DISABLE_RANDOM_ACCESS(QLinkedList)
+GRANTLEE_DISABLE_RANDOM_ACCESS(std::list)
+
+GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::deque)
+GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::vector)
+GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR     (std::map)
 
 #endif

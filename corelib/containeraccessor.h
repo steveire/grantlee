@@ -48,6 +48,22 @@ struct MappedValueGetter : public Getter<Container>
   }
 };
 
+template<typename T, typename U>
+struct KeyGetter<std::map<T, U> > : public Getter<std::map<T, U> >
+{
+  static T get(typename std::map<T, U>::const_iterator it) {
+    return it->first;
+  }
+};
+
+template<typename T, typename U>
+struct MappedValueGetter<std::map<T, U> > : public Getter<std::map<T, U> >
+{
+  static U get(typename std::map<T, U>::const_iterator it) {
+    return it->second;
+  }
+};
+
 template<typename Container>
 struct ValueGetter : public Getter<Container>
 {

@@ -130,6 +130,30 @@ typedef QMap<quint64, Person> PersonUInt64Map;
 Q_DECLARE_METATYPE(PersonUInt64Hash)
 Q_DECLARE_METATYPE(PersonUInt64Map)
 
+Q_DECLARE_METATYPE(std::deque<Person>)
+Q_DECLARE_METATYPE(std::vector<Person>)
+Q_DECLARE_METATYPE(std::list<Person>)
+
+typedef std::map<QString, Person> PersonStdMap;
+Q_DECLARE_METATYPE(PersonStdMap)
+
+typedef std::map<qint16, Person> PersonInt16StdMap;
+Q_DECLARE_METATYPE(PersonInt16StdMap)
+
+typedef std::map<qint32, Person> PersonInt32StdMap;
+Q_DECLARE_METATYPE(PersonInt32StdMap)
+
+typedef std::map<qint64, Person> PersonInt64StdMap;
+Q_DECLARE_METATYPE(PersonInt64StdMap)
+
+typedef std::map<quint16, Person> PersonUInt16StdMap;
+Q_DECLARE_METATYPE(PersonUInt16StdMap)
+
+typedef std::map<quint32, Person> PersonUInt32StdMap;
+Q_DECLARE_METATYPE(PersonUInt32StdMap)
+
+typedef std::map<quint64, Person> PersonUInt64StdMap;
+Q_DECLARE_METATYPE(PersonUInt64StdMap)
 
 void TestGenericTypes::initTestCase()
 {
@@ -390,6 +414,12 @@ void testSequentialIndexing<QSet<Person> >(Grantlee::Context)
   // No op
 }
 
+template<>
+void testSequentialIndexing<std::list<Person> >(Grantlee::Context)
+{
+  // No op
+}
+
 template<typename Container>
 void doTestSequentialContainer_Type()
 {
@@ -437,6 +467,9 @@ void TestGenericTypes::testSequentialContainer_Type()
   doTestSequentialContainer_Type<QQueue<Person> >();
   doTestSequentialContainer_Type<QLinkedList<Person> >();
   doTestSequentialContainer_Type<QSet<Person> >();
+  doTestSequentialContainer_Type<std::deque<Person> >();
+  doTestSequentialContainer_Type<std::vector<Person> >();
+  doTestSequentialContainer_Type<std::list<Person> >();
 }
 
 void TestGenericTypes::testAssociativeContainer_Type()
@@ -455,6 +488,14 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<QHash<quint16, Person> >(true);
   doTestAssociativeContainer_Type_Number<QHash<quint32, Person> >(true);
   doTestAssociativeContainer_Type_Number<QHash<quint64, Person> >(true);
+
+  doTestAssociativeContainer_Type<std::map<QString, Person> >();
+  doTestAssociativeContainer_Type_Number<std::map<qint16, Person> >();
+  doTestAssociativeContainer_Type_Number<std::map<qint32, Person> >();
+  doTestAssociativeContainer_Type_Number<std::map<qint64, Person> >();
+  doTestAssociativeContainer_Type_Number<std::map<quint16, Person> >();
+  doTestAssociativeContainer_Type_Number<std::map<quint32, Person> >();
+  doTestAssociativeContainer_Type_Number<std::map<quint64, Person> >();
 }
 
 QTEST_MAIN( TestGenericTypes )
