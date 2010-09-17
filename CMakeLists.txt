@@ -31,6 +31,9 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   endif ()
 endif()
 
+add_definitions(-DQT_NO_CAST_TO_ASCII)
+add_definitions(-DQT_NO_CAST_FROM_ASCII)
+
 set(Grantlee_VERSION_MAJOR 0)
 set(Grantlee_VERSION_MINOR 1)
 set(Grantlee_VERSION_PATCH 6)

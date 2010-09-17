@@ -295,7 +295,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Inheritance from a template with a space in its name should work.
   QTest::newRow( "inheritance29" ) << QString::fromLatin1( "{% extends 'inheritance 28' %}" ) << dict << QString::fromLatin1( "!" ) << NoError;
 
-  dict.insert( "optional", "True" );
+  dict.insert( QLatin1String( "optional" ), QLatin1String( "True" ) );
 
   QString inh30 = QLatin1String( "1{% if optional %}{% block opt %}2{% endblock %}{% endif %}3" );
   loader->setTemplate( QLatin1String( "inheritance30" ), inh30 );
@@ -305,7 +305,7 @@ void TestLoaderTags::testExtendsTag_data()
   dict.clear();
   QTest::newRow( "inheritance32" ) << QString::fromLatin1( "{% extends 'inheritance30' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "13" ) << NoError;
 
-  dict.insert( "optional", 1 );
+  dict.insert( QLatin1String( "optional" ), 1 );
   QString inh33 = QLatin1String( "1{% ifequal optional 1 %}{% block opt %}2{% endblock %}{% endifequal %}3" );
   loader->setTemplate( QLatin1String( "inheritance33" ), inh33 );
 
@@ -316,7 +316,7 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow( "inheritance35" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "13" ) << NoError;
 
   dict.clear();
-  dict.insert( "numbers", QVariantList() << 1 << 2 << 3 );
+  dict.insert( QLatin1String( "numbers" ), QVariantList() << 1 << 2 << 3 );
 
   QString inh36 = QLatin1String( "{% for n in numbers %}_{% block opt %}{{ n }}{% endblock %}{% endfor %}_" );
   loader->setTemplate( QLatin1String( "inheritance36" ), inh36 );
@@ -335,7 +335,7 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow( "inheritance40" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "1new23" ) << NoError;
 
   dict.clear();
-  dict.insert( "numbers", QVariantList() << 1 << 2 << 3 );
+  dict.insert( QLatin1String( "numbers" ), QVariantList() << 1 << 2 << 3 );
 
   QTest::newRow( "inheritance41" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "_new1_new2_new3_" ) << NoError;
 

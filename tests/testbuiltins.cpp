@@ -1097,7 +1097,7 @@ void TestBuiltinSyntax::testTypeAccessors_data()
 
   dict.clear();
 
-#define SON(obj) obj->setObjectName(#obj)
+#define SON(obj) obj->setObjectName( QLatin1String( #obj ) )
 
   QObject *obj1 = new QObject(this);
   SON(obj1);
@@ -1111,7 +1111,7 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   obj4->setParent(obj2);
   SON(obj4);
 
-  dict.insert("object", QVariant::fromValue( obj1 ) );
+  dict.insert( QLatin1String( "object" ), QVariant::fromValue( obj1 ) );
 
   QTest::newRow( "type-accessors-qobject01" ) << QString::fromLatin1( "{{ object.objectName }}" ) << dict << QString::fromLatin1( "obj1" ) << NoError;
 
