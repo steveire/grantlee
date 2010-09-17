@@ -51,6 +51,7 @@ grantlee_core_unit_tests(
   testdefaulttags
   testscriptabletags
   testfilters
+  testgenerictypes
   benchmarks
 )
 
