@@ -47,6 +47,12 @@ struct TypeAccessor<T*>
 {
   static QVariant lookUp( const T * const object, const QString &property );
 };
+
+template <typename T>
+struct TypeAccessor<T&>
+{
+  static QVariant lookUp( const T &object, const QString &property );
+};
 #endif
 
 namespace
@@ -122,17 +128,17 @@ QVariant GRANTLEE_CORE_EXPORT doQobjectLookUp( const QObject * const object, con
 #endif
 }
 
-#define GRANTLEE_DISABLE_RANDOM_ACCESS(Container)             \
-namespace Grantlee {                                          \
-template<typename T>                                          \
-struct TypeAccessor<Container<T> >                            \
-{                                                             \
-  static QVariant lookUp(const Container<T>, const QString &) \
-  {                                                           \
-    return QVariant();                                        \
-  }                                                           \
-};                                                            \
-}                                                             \
+#define GRANTLEE_DISABLE_RANDOM_ACCESS(Container)                     \
+namespace Grantlee {                                                  \
+template<typename T>                                                  \
+struct TypeAccessor<Container<T>&>                                    \
+{                                                                     \
+  static QVariant lookUp( const Container<T> &, const QString &)      \
+  {                                                                   \
+    return QVariant();                                                \
+  }                                                                   \
+};                                                                    \
+}                                                                     \
 
 #ifndef Q_QDOC
 /**
@@ -141,9 +147,9 @@ struct TypeAccessor<Container<T> >                            \
 #define GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_type)           \
 namespace Grantlee {                                                                    \
 template<typename T>                                                                    \
-struct TypeAccessor<Container<T> >                                                      \
+struct TypeAccessor<Container<T>&>                                                      \
 {                                                                                       \
-  static QVariant lookUp( const Container<T> c, const QString &property )               \
+  static QVariant lookUp( const Container<T> &c, const QString &property )              \
   {                                                                                     \
     return SequentialContainerLookup<Container<T>, size_type>::doLookUp( c, property ); \
   }                                                                                     \
@@ -174,9 +180,9 @@ struct TypeAccessor<Container<T> >                                              
 #define GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(Container)                    \
 namespace Grantlee {                                                               \
 template<typename T, typename U>                                                   \
-struct TypeAccessor<Container<T, U> >                                              \
+struct TypeAccessor<Container<T, U>&>                                              \
 {                                                                                  \
-  static QVariant lookUp(const Container<T, U> c, const QString &property )        \
+  static QVariant lookUp( const Container<T, U> &c, const QString &property )      \
   {                                                                                \
     return doAssociativeContainerLookup( c, property );                            \
   }                                                                                \
@@ -188,17 +194,17 @@ struct TypeAccessor<Container<T, U> >                                           
 
   @see @ref smart_pointers
  */
-#define GRANTLEE_SMART_PTR_ACCESSOR(SmartPointer)                                 \
-namespace Grantlee {                                                              \
-template<typename T>                                                              \
-struct TypeAccessor<SmartPointer<T> >                                             \
-{                                                                                 \
-  static QVariant lookUp( const SmartPointer<T> object, const QString &property ) \
-  {                                                                               \
-    return doQobjectLookUp( object.operator->(), property );                      \
-  }                                                                               \
-};                                                                                \
-}                                                                                 \
+#define GRANTLEE_SMART_PTR_ACCESSOR(SmartPointer)                                  \
+namespace Grantlee {                                                               \
+template<typename T>                                                               \
+struct TypeAccessor<SmartPointer<T>&>                                              \
+{                                                                                  \
+  static QVariant lookUp( const SmartPointer<T> &object, const QString &property ) \
+  {                                                                                \
+    return doQobjectLookUp( object.operator->(), property );                       \
+  }                                                                                \
+};                                                                                 \
+}                                                                                  \
 
 GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(QList)
 GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(QVector)

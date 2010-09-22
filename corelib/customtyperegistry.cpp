@@ -48,6 +48,19 @@ QVariantList VariantToList<MetaEnumVariable>::doConvert( const QVariant &obj )
   }
   return list;
 }
+
+template<>
+int CustomTypeRegistry::registerBuiltInMetatype<QObject*>()
+{
+  QVariant ( *lf )( const QVariant&, const QString& ) = LookupTrait<QObject*, QObject*>::doLookUp;
+
+  const int id = qMetaTypeId<QObject*>();
+
+  registerLookupOperator( id, reinterpret_cast<MetaType::LookupFunction>( lf ) );
+
+  return id;
+}
+
 }
 
 CustomTypeRegistry::CustomTypeRegistry()

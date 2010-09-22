@@ -59,7 +59,7 @@ struct CustomTypeRegistry
   template<typename RealType, typename HandleAs>
   int registerBuiltInMetatype()
   {
-    QVariant ( *lf )( const QVariant&, const QString& ) = LookupTrait<RealType, HandleAs>::doLookUp;
+    QVariant ( *lf )( const QVariant&, const QString& ) = LookupTrait<RealType&, HandleAs&>::doLookUp;
 
     const int id = qMetaTypeId<RealType>();
 

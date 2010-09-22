@@ -43,7 +43,7 @@ static QRegExp getTitleRegexp() {
 }
 
 template <>
-QVariant TypeAccessor<Grantlee::SafeString>::lookUp( const Grantlee::SafeString object, const QString &property )
+QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString &object, const QString &property )
 {
   if ( property == QLatin1String( "capitalize" ) ) {
     const QString s = object.get();
@@ -223,7 +223,7 @@ QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QSt
 }
 
 template <>
-QVariant TypeAccessor<MetaEnumVariable>::lookUp( const MetaEnumVariable object, const QString &property )
+QVariant TypeAccessor<MetaEnumVariable&>::lookUp( const MetaEnumVariable &object, const QString &property )
 {
   if ( property == QLatin1String( "name" ) )
     return QLatin1String( object.enumerator.name() );

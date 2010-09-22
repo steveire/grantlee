@@ -136,14 +136,19 @@ struct LookupTrait
   }
 };
 
-/*
- * Register a type so grantlee knows how to handle it.
- */
 template<typename RealType, typename HandleAs>
-int internalRegisterType()
+struct LookupTrait<RealType&, HandleAs&>
 {
-  const int id = qMetaTypeId<RealType>();
+  static QVariant doLookUp( const QVariant &object, const QString &property )
+  {
+    typedef typename Grantlee::TypeAccessor<HandleAs&> Accessor;
+    return Accessor::lookUp( static_cast<HandleAs>( object.value<RealType>() ), property );
+  }
+};
 
+template<typename RealType, typename HandleAs>
+static int doRegister(int id)
+{
   if ( MetaType::lookupAlreadyRegistered( id ) )
     return id;
 
@@ -154,10 +159,31 @@ int internalRegisterType()
   return id;
 }
 
+/*
+ * Register a type so grantlee knows how to handle it.
+ */
+template<typename RealType, typename HandleAs>
+struct InternalRegisterType
+{
+  static int doReg() {
+    const int id = qMetaTypeId<RealType>();
+    return doRegister<RealType&, HandleAs&>( id );
+  }
+};
+
+template<typename RealType, typename HandleAs>
+struct InternalRegisterType<RealType*, HandleAs*>
+{
+  static int doReg() {
+    const int id = qMetaTypeId<RealType*>();
+    return doRegister<RealType*, HandleAs*>( id );
+  }
+};
+
 template<typename Container, typename HandleAs>
 int registerSequentialContainer()
 {
-  const int id = internalRegisterType<Container, HandleAs>();
+  const int id = InternalRegisterType<Container, HandleAs>::doReg();
 
   if ( MetaType::toListAlreadyRegistered( id ) )
     return id;
@@ -176,7 +202,7 @@ int registerSequentialContainer()
 template<typename Container, typename HandleAs>
 int registerAssociativeContainer()
 {
-  const int id = internalRegisterType<Container, HandleAs>();
+  const int id = InternalRegisterType<Container, HandleAs>::doReg();
 
   if ( MetaType::toListAlreadyRegistered( id ) )
     return id;
@@ -353,7 +379,7 @@ int registerMetaType()
   }
   MetaType::internalLock();
 
-  const int id = internalRegisterType<RealType, HandleAs>();
+  const int id = InternalRegisterType<RealType, HandleAs>::doReg();
 
   registerContainers<RealType>();
 
@@ -445,12 +471,19 @@ struct RegisterTypeContainer<Container<T>, MoreMagic>                          \
 
   @see @ref generic_types
  */
-#define GRANTLEE_BEGIN_LOOKUP(Type)                                                      \
-namespace Grantlee                                                                       \
-{                                                                                        \
-template<>                                                                               \
-inline QVariant TypeAccessor<Type>::lookUp( const Type object, const QString &property ) \
-{                                                                                        \
+#define GRANTLEE_BEGIN_LOOKUP(Type)                                                        \
+namespace Grantlee                                                                         \
+{                                                                                          \
+template<>                                                                                 \
+inline QVariant TypeAccessor<Type&>::lookUp( const Type &object, const QString &property ) \
+{                                                                                          \
+
+#define GRANTLEE_BEGIN_LOOKUP_PTR(Type)                                                            \
+namespace Grantlee                                                                                 \
+{                                                                                                  \
+template<>                                                                                         \
+inline QVariant TypeAccessor<Type*>::lookUp( const Type * const object, const QString &property )  \
+{                                                                                                  \
 
 /**
   Bottom boundary of a lookup function for Type.
