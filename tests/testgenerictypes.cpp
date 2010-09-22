@@ -100,6 +100,36 @@ typedef QMap<QString, Person> PersonMap;
 Q_DECLARE_METATYPE(PersonHash)
 Q_DECLARE_METATYPE(PersonMap)
 
+typedef QHash<qint16, Person> PersonInt16Hash;
+typedef QMap<qint16, Person> PersonInt16Map;
+Q_DECLARE_METATYPE(PersonInt16Hash)
+Q_DECLARE_METATYPE(PersonInt16Map)
+
+typedef QHash<qint32, Person> PersonInt32Hash;
+typedef QMap<qint32, Person> PersonInt32Map;
+Q_DECLARE_METATYPE(PersonInt32Hash)
+Q_DECLARE_METATYPE(PersonInt32Map)
+
+typedef QHash<qint64, Person> PersonInt64Hash;
+typedef QMap<qint64, Person> PersonInt64Map;
+Q_DECLARE_METATYPE(PersonInt64Hash)
+Q_DECLARE_METATYPE(PersonInt64Map)
+
+typedef QHash<quint16, Person> PersonUInt16Hash;
+typedef QMap<quint16, Person> PersonUInt16Map;
+Q_DECLARE_METATYPE(PersonUInt16Hash)
+Q_DECLARE_METATYPE(PersonUInt16Map)
+
+typedef QHash<quint32, Person> PersonUInt32Hash;
+typedef QMap<quint32, Person> PersonUInt32Map;
+Q_DECLARE_METATYPE(PersonUInt32Hash)
+Q_DECLARE_METATYPE(PersonUInt32Map)
+
+typedef QHash<quint64, Person> PersonUInt64Hash;
+typedef QMap<quint64, Person> PersonUInt64Map;
+Q_DECLARE_METATYPE(PersonUInt64Hash)
+Q_DECLARE_METATYPE(PersonUInt64Map)
+
 
 void TestGenericTypes::initTestCase()
 {
@@ -336,6 +366,18 @@ void insertAssociatedPeople(Grantlee::Context &c)
   c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
 }
 
+template<typename AssociativeContainer>
+void insertAssociatedPeople_Number(Grantlee::Context &c)
+{
+  QMap<int, Person> people = getPeople();
+  QMap<int, Person>::const_iterator it = people.constBegin();
+  const QMap<int, Person>::const_iterator end = people.constEnd();
+  AssociativeContainer container;
+  for ( ; it != end; ++it )
+    container[it.key()] = it.value();
+  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+}
+
 template<>
 void testSequentialIndexing<QLinkedList<Person> >(Grantlee::Context)
 {
@@ -373,6 +415,20 @@ void doTestAssociativeContainer_Type(bool unordered = false)
   testAssociativeItems<Container>(c, unordered);
 }
 
+template<typename Container>
+void doTestAssociativeContainer_Type_Number(bool unordered = false)
+{
+  Grantlee::Engine engine;
+
+  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+
+  Grantlee::Context c;
+
+  insertAssociatedPeople_Number<Container>(c);
+  testAssociativeValues<Container>(c, unordered);
+  testAssociativeItems<Container>(c, unordered);
+}
+
 void TestGenericTypes::testSequentialContainer_Type()
 {
   doTestSequentialContainer_Type<QList<Person> >();
@@ -386,7 +442,19 @@ void TestGenericTypes::testSequentialContainer_Type()
 void TestGenericTypes::testAssociativeContainer_Type()
 {
   doTestAssociativeContainer_Type<QMap<QString, Person> >();
+  doTestAssociativeContainer_Type_Number<QMap<qint16, Person> >();
+  doTestAssociativeContainer_Type_Number<QMap<qint32, Person> >();
+  doTestAssociativeContainer_Type_Number<QMap<qint64, Person> >();
+  doTestAssociativeContainer_Type_Number<QMap<quint16, Person> >();
+  doTestAssociativeContainer_Type_Number<QMap<quint32, Person> >();
+  doTestAssociativeContainer_Type_Number<QMap<quint64, Person> >();
   doTestAssociativeContainer_Type<QHash<QString, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QHash<qint16, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QHash<qint32, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QHash<qint64, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QHash<quint16, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QHash<quint32, Person> >(true);
+  doTestAssociativeContainer_Type_Number<QHash<quint64, Person> >(true);
 }
 
 QTEST_MAIN( TestGenericTypes )

@@ -140,8 +140,17 @@ struct RegisterTypeContainer
 #define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(Container, Type)                                   \
   Grantlee::RegisterTypeContainer<Container<Type>, QMetaTypeId2<Container<Type> >::Defined>::reg();  \
 
-#define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(Container, Key, Type)                                       \
+#define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, Key, Type)                                   \
   Grantlee::RegisterTypeContainer<Container<Key, Type>, QMetaTypeId2<Container<Key, Type> >::Defined>::reg();  \
+
+#define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(Container,          Type)     \
+    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, QString, Type)     \
+    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, qint16,  Type)     \
+    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, qint32,  Type)     \
+    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, qint64,  Type)     \
+    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, quint16, Type)     \
+    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, quint32, Type)     \
+    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, quint64, Type)     \
 
 namespace
 {
@@ -156,8 +165,8 @@ void registerContainers()
   GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QSet,           T )
   GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(  QLinkedList,    T )
 
-  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QHash, QString, T )
-  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QMap,  QString, T )
+  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QHash,          T )
+  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QMap,           T )
 }
 
 }
@@ -205,12 +214,12 @@ struct RegisterTypeContainer<Container<T>, MoreMagic>                 \
 
 #define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER(Container)                     \
 namespace Grantlee {                                                           \
-template<typename T>                                                           \
-struct RegisterTypeContainer<Container<QString, T>, MoreMagic>                 \
+template<typename T, typename U>                                               \
+struct RegisterTypeContainer<Container<T, U>, MoreMagic>                       \
 {                                                                              \
   static int reg()                                                             \
   {                                                                            \
-    return registerAssociativeContainer<Container<QString, T> >();             \
+    return registerAssociativeContainer<Container<T, U> >();                   \
   }                                                                            \
 };                                                                             \
 }                                                                              \

@@ -138,10 +138,10 @@ struct TypeAccessor<Container<T> >                                              
 
 #define GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(Container)                    \
 namespace Grantlee {                                                               \
-template<typename T>                                                               \
-struct TypeAccessor<Container<QString, T> >                                        \
+template<typename T, typename U>                                                   \
+struct TypeAccessor<Container<T, U> >                                              \
 {                                                                                  \
-  static QVariant lookUp( const Container<QString, T> c, const QString &property ) \
+  static QVariant lookUp(const Container<T, U> c, const QString &property )        \
   {                                                                                \
     return doAssociativeContainerLookup( c, property );                            \
   }                                                                                \
