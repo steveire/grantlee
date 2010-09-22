@@ -245,28 +245,28 @@ QVariant TypeAccessor<QObject*>::lookUp( QObject *object, const QString &propert
 }
 
 template <>
-QVariant TypeAccessor<MetaEnumVariable>::lookUp( MetaEnumVariable mev, const QString &property )
+QVariant TypeAccessor<MetaEnumVariable>::lookUp( MetaEnumVariable object, const QString &property )
 {
   if ( property == QLatin1String( "name" ) )
-    return QLatin1String( mev.enumerator.name() );
+    return QLatin1String( object.enumerator.name() );
   if ( property == QLatin1String( "value" ) )
-    return mev.value;
+    return object.value;
   if ( property == QLatin1String( "key" ) )
-    return QLatin1String( mev.enumerator.valueToKey( mev.value ) );
+    return QLatin1String( object.enumerator.valueToKey( object.value ) );
   if ( property == QLatin1String( "scope" ) )
-    return QLatin1String( mev.enumerator.scope() );
+    return QLatin1String( object.enumerator.scope() );
   if ( property == QLatin1String( "keyCount" ) )
-    return mev.enumerator.keyCount();
+    return object.enumerator.keyCount();
 
   bool ok = false;
   const int listIndex = property.toInt( &ok );
   if (ok)
   {
-    if (listIndex >= mev.enumerator.keyCount())
+    if (listIndex >= object.enumerator.keyCount())
       return QVariant();
 
-    mev.value = mev.enumerator.value(listIndex);
-    return QVariant::fromValue(mev);
+    object.value = object.enumerator.value(listIndex);
+    return QVariant::fromValue(object);
   }
 
   return QVariant();
