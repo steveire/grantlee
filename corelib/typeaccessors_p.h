@@ -29,7 +29,7 @@ namespace Grantlee
 template <typename T>
 struct TypeAccessor
 {
-  static QVariant lookUp( T object, const QString &part );
+  static QVariant lookUp( T object, const QString &property );
 };
 
 }
