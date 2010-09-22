@@ -30,7 +30,7 @@ namespace Grantlee
 {
 
 template <>
-QVariant TypeAccessor<QVariantHash>::lookUp( QVariantHash object, const QString &property )
+QVariant TypeAccessor<QVariantHash>::lookUp( const QVariantHash object, const QString &property )
 {
   if ( object.contains( property ) )
     return object.value( property );
@@ -70,7 +70,7 @@ static QRegExp getTitleRegexp() {
 }
 
 template <>
-QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object, const QString &property )
+QVariant TypeAccessor<Grantlee::SafeString>::lookUp( const Grantlee::SafeString object, const QString &property )
 {
   if ( property == QLatin1String( "capitalize" ) ) {
     const QString s = object.get();
@@ -185,7 +185,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( Grantlee::SafeString object
 }
 
 template <>
-QVariant TypeAccessor<QObject*>::lookUp( QObject *object, const QString &property )
+QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QString &property )
 {
   if ( property == QLatin1String( "children" ) )
   {
@@ -245,7 +245,7 @@ QVariant TypeAccessor<QObject*>::lookUp( QObject *object, const QString &propert
 }
 
 template <>
-QVariant TypeAccessor<MetaEnumVariable>::lookUp( MetaEnumVariable object, const QString &property )
+QVariant TypeAccessor<MetaEnumVariable>::lookUp( const MetaEnumVariable object, const QString &property )
 {
   if ( property == QLatin1String( "name" ) )
     return QLatin1String( object.enumerator.name() );
@@ -265,8 +265,8 @@ QVariant TypeAccessor<MetaEnumVariable>::lookUp( MetaEnumVariable object, const 
     if (listIndex >= object.enumerator.keyCount())
       return QVariant();
 
-    object.value = object.enumerator.value(listIndex);
-    return QVariant::fromValue(object);
+    const MetaEnumVariable mev( object.enumerator, object.enumerator.value( listIndex ) );
+    return QVariant::fromValue( mev );
   }
 
   return QVariant();
