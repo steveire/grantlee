@@ -21,6 +21,8 @@
 #ifndef GRANTLEE_TYPEACCESSOR_H
 #define GRANTLEE_TYPEACCESSOR_H
 
+#include "containeraccessor.h"
+
 #include <QtCore/QVariant>
 
 namespace Grantlee
@@ -47,7 +49,7 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
   {
     typename Container::const_iterator it = object.find( property );
     if ( it != object.end() )
-      return QVariant::fromValue( *it );
+      return QVariant::fromValue( MappedValueGetter<Container>::get( it ) );
   }
   if ( property == QLatin1String( "items" ) ) {
     typename Container::const_iterator it = object.begin();
@@ -55,8 +57,8 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
     QVariantList list;
     for( ; it != end; ++it ) {
       QVariantList nested;
-      nested.push_back( QVariant::fromValue( it.key() ) );
-      nested.push_back( QVariant::fromValue( *it ) );
+      nested.push_back( QVariant::fromValue( KeyGetter<Container>::get( it ) ) );
+      nested.push_back( QVariant::fromValue( MappedValueGetter<Container>::get( it ) ) );
       list.push_back( nested );
     }
     return list;
@@ -67,7 +69,7 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
     const typename Container::const_iterator end = object.end();
     QVariantList list;
     for( ; it != end; ++it ) {
-      list.push_back( QVariant::fromValue( it.key() ) );
+      list.push_back( QVariant::fromValue( KeyGetter<Container>::get( it ) ) );
     }
     return list;
   }
@@ -77,7 +79,7 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
     const typename Container::const_iterator end = object.end();
     QVariantList list;
     for( ; it != end; ++it ) {
-      list.push_back( QVariant::fromValue( *it ) );
+      list.push_back( QVariant::fromValue( MappedValueGetter<Container>::get( it ) ) );
     }
     return list;
   }
