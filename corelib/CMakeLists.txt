@@ -82,6 +82,7 @@ install(TARGETS grantlee_core
 
 install(FILES
   cachingloaderdecorator.h
+  containeraccessor.h
   context.h
   engine.h
   exception.h
