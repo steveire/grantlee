@@ -47,7 +47,7 @@ template<typename Container>
 QVariant doAssociativeContainerLookup( const Container &object, const QString &property )
 {
   {
-    typename Container::const_iterator it = object.find( property );
+    typename Container::const_iterator it = Finder<Container>::find( object, property );
     if ( it != object.end() )
       return QVariant::fromValue( MappedValueGetter<Container>::get( it ) );
   }

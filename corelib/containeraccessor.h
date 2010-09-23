@@ -21,6 +21,8 @@
 #ifndef CONTAINERACCESSOR_H
 #define CONTAINERACCESSOR_H
 
+#include <QtCore/QVariant>
+
 namespace Grantlee
 {
 
@@ -43,6 +45,34 @@ struct MappedValueGetter : public Getter<Container>
 {
   static typename Container::mapped_type get(const typename Container::const_iterator it) {
     return *it;
+  }
+};
+
+template<typename Container, typename T = typename Container::key_type>
+struct Finder
+{
+  static typename Container::const_iterator find( const Container &container, const QString &nextPart )
+  {
+    {
+      // Compile error if key_type is not a number.
+      static const QString s = QString::number( T() );
+      Q_UNUSED(s)
+    }
+
+    QVariant v = nextPart;
+    if (!v.canConvert<typename Container::key_type>() || !v.convert(QVariant::Double))
+      return container.end();
+    typename Container::key_type key = v.value<typename Container::key_type>();
+    return container.find( key );
+  }
+};
+
+template<typename Container>
+struct Finder<Container, QString>
+{
+  static typename Container::const_iterator find( const Container &container, const QString &nextPart )
+  {
+    return container.find( nextPart );
   }
 };
 
