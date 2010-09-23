@@ -48,6 +48,14 @@ struct MappedValueGetter : public Getter<Container>
   }
 };
 
+template<typename Container>
+struct ValueGetter : public Getter<Container>
+{
+  static typename Container::value_type get(const typename Container::const_iterator it) {
+    return *it;
+  }
+};
+
 template<typename Container, typename T = typename Container::key_type>
 struct Finder
 {
@@ -75,6 +83,50 @@ struct Finder<Container, QString>
     return container.find( nextPart );
   }
 };
+
+namespace {
+
+template<typename Getter>
+QVariantList getList( const QVariant &obj )
+{
+  const typename Getter::Container c = obj.value<typename Getter::Container>();
+  typename Getter::Container::const_iterator it = c.begin();
+  const typename Getter::Container::const_iterator end = c.end();
+  QVariantList list;
+  for( ; it != end; ++it ) {
+    list << QVariant::fromValue( Getter::get( it ) );
+  }
+  return list;
+}
+
+template<typename Container>
+struct SequentialContainerAccessor
+{
+  static QVariantList doToList( const QVariant &obj )
+  {
+    return getList<ValueGetter<Container> >( obj );
+  }
+};
+
+template<>
+struct SequentialContainerAccessor<QVariantList>
+{
+  static QVariantList doToList( const QVariant &obj )
+  {
+    return obj.toList();
+  }
+};
+
+template<typename Container>
+struct AssociativeContainerAccessor
+{
+  static QVariantList doToList( const QVariant &obj )
+  {
+    return getList<KeyGetter<Container> >( obj );
+  }
+};
+
+}
 
 }
 
