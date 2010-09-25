@@ -37,7 +37,7 @@
 
 using namespace Grantlee;
 
-static const QLatin1String __scriptableLibName( "grantlee_scriptabletags" );
+static const char __scriptableLibName[] = "grantlee_scriptabletags";
 
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
@@ -127,7 +127,7 @@ void Engine::loadDefaultLibraries()
 {
   Q_D( Engine );
   // Make sure we can load default scriptable libraries if we're supposed to.
-  if ( d->m_defaultLibraries.contains( __scriptableLibName ) && !d->m_scriptableTagLibrary ) {
+  if ( d->m_defaultLibraries.contains( QLatin1String( __scriptableLibName ) ) && !d->m_scriptableTagLibrary ) {
     d->m_scriptableTagLibrary = new ScriptableTagLibrary( this );
 
     // It would be better to load this as a plugin, but that is not currently possible with webkit/javascriptcore
@@ -142,7 +142,7 @@ void Engine::loadDefaultLibraries()
   }
 
   Q_FOREACH( const QString &libName, d->m_defaultLibraries ) {
-    if ( libName == __scriptableLibName )
+    if ( libName == QLatin1String( __scriptableLibName ) )
       continue;
 
     // already loaded by the engine.
@@ -182,7 +182,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 {
   Q_D( Engine );
 
-  if ( name == __scriptableLibName )
+  if ( name == QLatin1String( __scriptableLibName ) )
     return 0;
 
   // already loaded by the engine.
