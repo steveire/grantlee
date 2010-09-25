@@ -25,7 +25,7 @@
 #include "rendercontext.h"
 #include "util.h"
 
-static const char * _namedCycleNodes = "_namedCycleNodes";
+static const char _namedCycleNodes[] = "_namedCycleNodes";
 
 CycleNodeFactory::CycleNodeFactory()
 {
