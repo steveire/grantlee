@@ -52,41 +52,44 @@ class FilterExpressionPrivate
 
 using namespace Grantlee;
 
-static const QLatin1Char FILTER_SEPARATOR( '|' );
-static const QLatin1Char FILTER_ARGUMENT_SEPARATOR( ':' );
+static const char FILTER_SEPARATOR = '|';
+static const char FILTER_ARGUMENT_SEPARATOR = ':';
 
-static const QString filterSep( QRegExp::escape( QChar( FILTER_SEPARATOR ) ) );
-static const QString argSep( QRegExp::escape( QChar( FILTER_ARGUMENT_SEPARATOR ) ) );
+static QRegExp getFilterRegexp()
+{
+  const QString filterSep( QRegExp::escape( QChar( FILTER_SEPARATOR ) ) );
+  const QString argSep( QRegExp::escape( QChar( FILTER_ARGUMENT_SEPARATOR ) ) );
 
-static const QLatin1Literal varChars( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_." );
-static const QLatin1Literal numChars( "[-+\\.]?\\d[\\d\\.e]*" );
-static const QString i18nOpen( QRegExp::escape( QLatin1String( "_(" ) ) );
-static const QLatin1Literal doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" );
-static const QLatin1Literal singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
-static const QString i18nClose( QRegExp::escape( QLatin1String( ")" ) ) );
+  const QLatin1Literal varChars( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_." );
+  const QLatin1Literal numChars( "[-+\\.]?\\d[\\d\\.e]*" );
+  const QString i18nOpen( QRegExp::escape( QLatin1String( "_(" ) ) );
+  const QLatin1Literal doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" );
+  const QLatin1Literal singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
+  const QString i18nClose( QRegExp::escape( QLatin1String( ")" ) ) );
 
-static const QString constantString = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
-                                                              + i18nOpen + singleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
-                                                              + doubleQuoteStringLiteral + QLatin1Char( '|' )
-                                                              + singleQuoteStringLiteral
-                                    + QLatin1Char( ')' );
+  const QString constantString = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+                                                         + i18nOpen + singleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+                                                         + doubleQuoteStringLiteral + QLatin1Char( '|' )
+                                                         + singleQuoteStringLiteral
+                               + QLatin1Char( ')' );
 
-static const QString filterRawString = QLatin1Char( '^' ) + constantString + QLatin1Char( '|' )
-                                     + QLatin1Literal( "^[" ) + varChars + QLatin1Literal( "]+|" )
-                                     + numChars + QLatin1Char( '|' )
-                                     + filterSep + QLatin1Literal( "\\w+|" )
-                                     + argSep
-                                     + QLatin1Literal( "(?:" )
-                                       + constantString
-                                       + QLatin1Literal( "|[" )
-                                       + varChars
-                                       + QLatin1Literal( "]+|" )
-                                       + numChars
-                                       + QLatin1Char( '|' )
-                                       + filterSep
-                                     + QLatin1Literal( "\\w+)" );
+  const QString filterRawString = QLatin1Char( '^' ) + constantString + QLatin1Char( '|' )
+                               + QLatin1Literal( "^[" ) + varChars + QLatin1Literal( "]+|" )
+                               + numChars + QLatin1Char( '|' )
+                               + filterSep + QLatin1Literal( "\\w+|" )
+                               + argSep
+                               + QLatin1Literal( "(?:" )
+                                 + constantString
+                                 + QLatin1Literal( "|[" )
+                                 + varChars
+                                 + QLatin1Literal( "]+|" )
+                                 + numChars
+                                 + QLatin1Char( '|' )
+                                 + filterSep
+                               + QLatin1Literal( "\\w+)" );
 
-static const QRegExp sFilterRe( filterRawString );
+  return QRegExp( filterRawString );
+}
 
 FilterExpression::FilterExpression( const QString &varString, Parser *parser )
   : d_ptr( new FilterExpressionPrivate( this ) )
@@ -99,6 +102,8 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
   QString subString;
 
   QString vs = varString;
+
+  static const QRegExp sFilterRe = getFilterRegexp();
 
   // This is one fo the few contstructors that can throw so we make sure to delete its d->pointer.
   try {
