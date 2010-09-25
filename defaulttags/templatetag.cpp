@@ -56,14 +56,14 @@ TemplateTagNode::TemplateTagNode( const QString &name, QObject *parent )
 static QHash<QString, QString> getKeywordMap()
 {
   QHash<QString, QString> map;
-  map.insert( QLatin1String( "openblock" ), BLOCK_TAG_START );
-  map.insert( QLatin1String( "closeblock" ), BLOCK_TAG_END );
-  map.insert( QLatin1String( "openvariable" ), VARIABLE_TAG_START );
-  map.insert( QLatin1String( "closevariable" ), VARIABLE_TAG_END );
+  map.insert( QLatin1String( "openblock" ), QLatin1String( BLOCK_TAG_START ) );
+  map.insert( QLatin1String( "closeblock" ), QLatin1String( BLOCK_TAG_END ) );
+  map.insert( QLatin1String( "openvariable" ), QLatin1String( VARIABLE_TAG_START ) );
+  map.insert( QLatin1String( "closevariable" ), QLatin1String( VARIABLE_TAG_END ) );
   map.insert( QLatin1String( "openbrace" ), QChar::fromLatin1( '{' ) );
   map.insert( QLatin1String( "closebrace" ), QChar::fromLatin1( '}' ) );
-  map.insert( QLatin1String( "opencomment" ), COMMENT_TAG_START );
-  map.insert( QLatin1String( "closecomment" ), COMMENT_TAG_END );
+  map.insert( QLatin1String( "opencomment" ), QLatin1String( COMMENT_TAG_START ) );
+  map.insert( QLatin1String( "closecomment" ), QLatin1String( COMMENT_TAG_END ) );
   return map;
 }
 
