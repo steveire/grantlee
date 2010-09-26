@@ -40,8 +40,8 @@ public:
   QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
     Q_UNUSED( name );
     QHash<QString, AbstractNodeFactory*> nodeFactories;
-    nodeFactories.insert( "raw", new RawNodeFactory() );
-    nodeFactories.insert( "repeater", new RepeaterNodeFactory() );
+    nodeFactories.insert( QLatin1String( "raw" ), new RawNodeFactory() );
+    nodeFactories.insert( QLatin1String( "repeater" ), new RepeaterNodeFactory() );
     return nodeFactories;
   }
 };

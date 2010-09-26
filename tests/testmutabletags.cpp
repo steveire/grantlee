@@ -58,9 +58,9 @@ private:
 void TestMutableTagsSyntax::initTestCase()
 {
   m_engine = new Engine( this );
-  m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH );
+  m_engine->setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
 
-  m_engine->addDefaultLibrary( "grantlee_mutabletags" );
+  m_engine->addDefaultLibrary( QLatin1String( "grantlee_mutabletags" ) );
 }
 
 void TestMutableTagsSyntax::cleanupTestCase()
@@ -73,22 +73,22 @@ void TestMutableTagsSyntax::testRawTag0()
 
   QVariantHash dict;
 
-  dict.insert( "var", "Far" );
-  dict.insert( "nameList", QVariantList() << "Tom" << "Dick" << "Harry" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "Far" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "Tom" ) << QLatin1String( "Dick" ) << QLatin1String( "Harry" ) );
 
-  QString content = "Begin"
+  QString content = QLatin1String( "Begin"
                     "{% raw %} Stuff {% endraw %}"
-                    "Afters.";
-  Template t = m_engine->newMutableTemplate( content, "t1" );
+                    "Afters." );
+  Template t = m_engine->newMutableTemplate( content, QLatin1String( "t1" ) );
 
   Context c1( dict );
   QString result = t->render( &c1 );
-  QString expected = "Begin Stuff Afters.";
+  QString expected = QLatin1String( "Begin Stuff Afters." );
   QCOMPARE( result, expected );
 
   dict.clear();
-  dict.insert( "var", "SPAM" );
-  dict.insert( "nameList", QVariantList() << "Larry" << "Moe" << "Curly" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "SPAM" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "Larry" ) << QLatin1String( "Moe" ) << QLatin1String( "Curly" ) );
 
   Context c2( dict );
   result = t->render( &c2 );
@@ -101,36 +101,36 @@ void TestMutableTagsSyntax::testRawTag()
 
   QVariantHash dict;
 
-  dict.insert( "var", "Far" );
-  dict.insert( "nameList", QVariantList() << "Tom" << "Dick" << "Harry" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "Far" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "Tom" ) << QLatin1String( "Dick" ) << QLatin1String( "Harry" ) );
 
 
-  QString content = "Begin {% for name in nameList %}{{ name }},{% endfor %}"
+  QString content = QLatin1String( "Begin {% for name in nameList %}{{ name }},{% endfor %}"
                     "{% raw %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endraw %}"
-                    "Afters.";
-  Template t = m_engine->newMutableTemplate( content, "t" );
+                    "Afters." );
+  Template t = m_engine->newMutableTemplate( content, QChar::fromLatin1( 't' ) );
 
   Context c1( dict );
   QString result = t->render( &c1 );
-  QString expected = "Begin Tom,Dick,Harry,Tom,Dick,Harry, var: Far. Afters.";
+  QString expected = QLatin1String( "Begin Tom,Dick,Harry,Tom,Dick,Harry, var: Far. Afters." );
   QCOMPARE( result, expected );
 
   dict.clear();
-  dict.insert( "var", "SPAM" );
-  dict.insert( "nameList", QVariantList() << "Larry" << "Moe" << "Curly" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "SPAM" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "Larry" ) << QLatin1String( "Moe" ) << QLatin1String( "Curly" ) );
 
   Context c2( dict );
   result = t->render( &c2 );
-  expected = "Begin Tom,Dick,Harry,Larry,Moe,Curly, var: SPAM. Afters.";
+  expected = QLatin1String( "Begin Tom,Dick,Harry,Larry,Moe,Curly, var: SPAM. Afters." );
   QCOMPARE( result, expected );
 
   dict.clear();
-  dict.insert( "var", "EGGS" );
-  dict.insert( "nameList", QVariantList() << "John" << "Michael" << "Terry" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "EGGS" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "John" ) << QLatin1String( "Michael" ) << QLatin1String( "Terry" ) );
 
   Context c3( dict );
   result = t->render( &c3 );
-  expected = "Begin Tom,Dick,Harry,John,Michael,Terry, var: EGGS. Afters.";
+  expected = QLatin1String( "Begin Tom,Dick,Harry,John,Michael,Terry, var: EGGS. Afters." );
   QCOMPARE( result, expected );
 
 }
@@ -139,52 +139,52 @@ void TestMutableTagsSyntax::testRepeaterTag()
 {
   QVariantHash dict;
 
-  dict.insert( "var", "Far" );
-  dict.insert( "nameList", QVariantList() << "Tom" << "Dick" << "Harry" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "Far" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "Tom" ) << QLatin1String( "Dick" ) << QLatin1String( "Harry" ) );
 
-  QString content = "{% for name in nameList %}{{ name }},{% endfor %}"
+  QString content = QLatin1String( "{% for name in nameList %}{{ name }},{% endfor %}"
                     "{% repeater %}{% for name in nameList %}{{ name }},{% endfor %} var: {{ var }}. {% endrepeater %}"
-                    "Afters";
+                    "Afters" );
 
-  Template t = m_engine->newMutableTemplate( content, "t" );
+  Template t = m_engine->newMutableTemplate( content, QChar::fromLatin1( 't' ) );
 
   Context c1( dict );
   QString result = t->render( &c1 );
-  QString expected = "Tom,Dick,Harry,"
+  QString expected = QLatin1String( "Tom,Dick,Harry,"
                      "Tom,Dick,Harry, var: Far. "
-                     "Afters";
+                     "Afters" );
   QCOMPARE( result, expected );
 
   dict.clear();
-  dict.insert( "var", "SPAM" );
-  dict.insert( "nameList", QVariantList() << "Larry" << "Moe" << "Curly" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "SPAM" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "Larry" ) << QLatin1String( "Moe" ) << QLatin1String( "Curly" ) );
 
   Context c2( dict );
   result = t->render( &c2 );
-  expected = "Tom,Dick,Harry,"
+  expected = QLatin1String( "Tom,Dick,Harry,"
              "Tom,Dick,Harry, var: Far. "
              "Larry,Moe,Curly, var: SPAM. "
-             "Afters";
+             "Afters" );
   QCOMPARE( result, expected );
 
   dict.clear();
-  dict.insert( "var", "EGGS" );
-  dict.insert( "nameList", QVariantList() << "John" << "Michael" << "Terry" );
+  dict.insert( QLatin1String( "var" ), QLatin1String( "EGGS" ) );
+  dict.insert( QLatin1String( "nameList" ), QVariantList() << QLatin1String( "John" ) << QLatin1String( "Michael" ) << QLatin1String( "Terry" ) );
 
   Context c3( dict );
   result = t->render( &c3 );
-  expected = "Tom,Dick,Harry,"
+  expected = QLatin1String( "Tom,Dick,Harry,"
              "Tom,Dick,Harry, var: Far. "
              "Larry,Moe,Curly, var: SPAM. "
              "John,Michael,Terry, var: EGGS. "
-             "Afters";
+             "Afters" );
   QCOMPARE( result, expected );
 }
 
 void TestMutableTagsSyntax::testMultiRepeater()
 {
 
-  QString content = "Before."
+  QString content = QLatin1String( "Before."
                     "{% repeater %}"
                     "Foo."
                     "{% endrepeater %}"
@@ -192,17 +192,17 @@ void TestMutableTagsSyntax::testMultiRepeater()
                     "{% repeater %}"
                     "Bar."
                     "{% endrepeater %}"
-                    "After.";
+                    "After." );
 
-  Template t = m_engine->newMutableTemplate( content, "t" );
+  Template t = m_engine->newMutableTemplate( content, QChar::fromLatin1( 't' ) );
 
   QVariantHash h;
   Context c( h );
   QString result = t->render( &c );
-  QString expected = "Before.Foo.Middle.Bar.After.";
+  QString expected = QLatin1String( "Before.Foo.Middle.Bar.After." );
   QCOMPARE( result, expected );
 
-  content = "Before."
+  content = QLatin1String( "Before."
             "{% repeater %}"
             "Foo."
             "{% endrepeater %}"
@@ -210,13 +210,13 @@ void TestMutableTagsSyntax::testMultiRepeater()
             "{% repeater %}"
             "Bar."
             "{% endrepeater %}"
-            "After.";
-  Template t2 = m_engine->newMutableTemplate( content, "t2" );
+            "After." );
+  Template t2 = m_engine->newMutableTemplate( content, QLatin1String( "t2" ) );
 
-  h.insert( "var", "String" );
+  h.insert( QLatin1String( "var" ), QLatin1String( "String" ) );
   Context c2( h );
   QString result2 = t2->render( &c2 );
-  QString expected2 = "Before.Foo.Middle.String.Bar.After.";
+  QString expected2 = QLatin1String( "Before.Foo.Middle.String.Bar.After." );
   QCOMPARE( result2, expected2 );
 }
 

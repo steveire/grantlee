@@ -31,7 +31,7 @@ Node* RawNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
   Q_UNUSED( tagContent )
   RawNode *n = new RawNode( p );
-  NodeList nodeList = p->parse( n, "endraw" );
+  NodeList nodeList = p->parse( n, QLatin1String( "endraw" ) );
   n->setNodeList( nodeList );
   p->removeNextToken();
   return n;
