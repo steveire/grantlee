@@ -29,6 +29,17 @@ using namespace Grantlee;
 
 Q_GLOBAL_STATIC(CustomTypeRegistry, customTypes)
 
+
+void Grantlee::MetaType::internalLock()
+{
+  return customTypes()->mutex.lock();
+}
+
+void Grantlee::MetaType::internalUnlock()
+{
+  return customTypes()->mutex.unlock();
+}
+
 void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
 {
   Q_ASSERT(id>0);

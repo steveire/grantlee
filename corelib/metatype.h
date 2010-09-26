@@ -43,6 +43,9 @@ public:
   static void registerLookUpOperator( int id, LookupFunction f );
   static void registerToVariantListOperator( int id, ToVariantListFunction f );
 
+  static void internalLock();
+  static void internalUnlock();
+
   static QVariant lookup( const QVariant &object, const QString &property );
   static QVariantList toVariantList( const QVariant &obj );
 
@@ -179,9 +182,13 @@ void registerContainers()
 template<typename RealType, typename HandleAs>
 int registerMetaType()
 {
+  MetaType::internalLock();
+
   const int id = internalRegisterType<RealType, HandleAs>();
 
   registerContainers<RealType>();
+
+  MetaType::internalUnlock();
 
   return id;
 }

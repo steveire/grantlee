@@ -87,22 +87,14 @@ CustomTypeRegistry::CustomTypeRegistry()
 
 void CustomTypeRegistry::registerLookupOperator( int id, MetaType::LookupFunction f )
 {
-  mutex.lock();
-
   CustomTypeInfo &info = types[id];
   info.lookupFunction = f;
-
-  mutex.unlock();
 }
 
 void CustomTypeRegistry::registerToListOperator( int id, MetaType::ToVariantListFunction f )
 {
-  mutex.lock();
-
   CustomTypeInfo &info = types[id];
   info.toVariantListFunction = f;
-
-  mutex.unlock();
 }
 
 QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &property ) const
