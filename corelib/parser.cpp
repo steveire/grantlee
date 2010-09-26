@@ -20,17 +20,16 @@
 
 #include "parser.h"
 
-#include <QtCore/QFile>
-
+#include "engine.h"
+#include "exception.h"
+#include "filter.h"
+#include "grantlee_version.h"
 #include "nodebuiltins_p.h"
 #include "taglibraryinterface.h"
 #include "template.h"
 #include "template_p.h"
-#include "engine.h"
-#include "filter.h"
-#include "exception.h"
 
-#include "grantlee_version.h"
+#include <QtCore/QFile>
 
 using namespace Grantlee;
 

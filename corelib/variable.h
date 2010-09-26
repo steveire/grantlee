@@ -21,9 +21,9 @@
 #ifndef GRANTLEE_VARIABLE_H
 #define GRANTLEE_VARIABLE_H
 
-#include <QtCore/QVariant>
-
 #include "grantlee_core_export.h"
+
+#include <QtCore/QVariant>
 
 namespace Grantlee
 {

@@ -21,9 +21,9 @@
 #ifndef TAGLIBRARYINTERFACE_H
 #define TAGLIBRARYINTERFACE_H
 
-#include <QtCore/QHash>
-
 #include "outputstream.h"
+
+#include <QtCore/QHash>
 
 namespace Grantlee
 {

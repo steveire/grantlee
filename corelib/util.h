@@ -21,12 +21,11 @@
 #ifndef GRANTLEE_UTIL_P_H
 #define GRANTLEE_UTIL_P_H
 
-#include <QtCore/QVariant>
-
 #include "context.h"
+#include "grantlee_core_export.h"
 #include "safestring.h"
 
-#include "grantlee_core_export.h"
+#include <QtCore/QVariant>
 
 /// @file util.h Utility functions used throughout %Grantlee.
 

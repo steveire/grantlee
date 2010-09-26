@@ -20,7 +20,7 @@
 
 #include "defaulttags.h"
 
-#include <QtPlugin>
+#include <QtCore/QtPlugin>
 
 
 Q_EXPORT_PLUGIN2( grantlee_defaulttags_library, DefaultTagLibrary )

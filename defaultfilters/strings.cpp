@@ -20,9 +20,9 @@
 
 #include "strings.h"
 
-#include <QtCore/QVariant>
-
 #include "util.h"
+
+#include <QtCore/QVariant>
 
 QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {

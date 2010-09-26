@@ -21,49 +21,23 @@
 #include "engine.h"
 #include "engine_p.h"
 
-#include <QtCore/QRegExp>
-#include <QtCore/QTextStream>
-#include <QtCore/QDir>
-#include <QtCore/QPluginLoader>
-#include <QtCore/QCoreApplication>
-
-#include "taglibraryinterface.h"
+#include "exception.h"
+#include "grantlee_config_p.h"
+#include "grantlee_latin1literal_p.h"
+#include "grantlee_version.h"
+#include "scriptabletags.h"
 #include "template_p.h"
 #include "templateloader.h"
-#include "grantlee_version.h"
-#include "grantlee_config_p.h"
-#include "exception.h"
-#include "grantlee_latin1literal_p.h"
 
-#include "scriptabletags.h"
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QPluginLoader>
+#include <QtCore/QRegExp>
+#include <QtCore/QTextStream>
 
 using namespace Grantlee;
 
-static const QLatin1String __scriptableLibName( "grantlee_scriptabletags" );
-
-class ScriptableLibraryContainer : public TagLibraryInterface
-{
-public:
-  ScriptableLibraryContainer( QHash<QString, AbstractNodeFactory*> factories, QHash<QString, Filter *> filters )
-      : m_nodeFactories( factories ), m_filters( filters ) {
-
-  }
-
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
-    Q_UNUSED( name );
-    return m_nodeFactories;
-  }
-
-  QHash<QString, Filter*> filters( const QString &name = QString() ) {
-    Q_UNUSED( name );
-    return m_filters;
-  }
-
-private:
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-  QHash<QString, Filter*> m_filters;
-
-};
+static const char __scriptableLibName[] = "grantlee_scriptabletags";
 
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
@@ -153,8 +127,8 @@ void Engine::loadDefaultLibraries()
 {
   Q_D( Engine );
   // Make sure we can load default scriptable libraries if we're supposed to.
-  if ( d->m_defaultLibraries.contains( __scriptableLibName ) ) {
-    d->m_scriptableTagLibrary = new ScriptableTagLibrary(this);
+  if ( d->m_defaultLibraries.contains( QLatin1String( __scriptableLibName ) ) && !d->m_scriptableTagLibrary ) {
+    d->m_scriptableTagLibrary = new ScriptableTagLibrary( this );
 
     // It would be better to load this as a plugin, but that is not currently possible with webkit/javascriptcore
     // so we new the library directly.
@@ -168,10 +142,39 @@ void Engine::loadDefaultLibraries()
   }
 
   Q_FOREACH( const QString &libName, d->m_defaultLibraries ) {
-    if ( libName == __scriptableLibName )
+    if ( libName == QLatin1String( __scriptableLibName ) )
       continue;
 
-    loadLibrary( libName );
+    // already loaded by the engine.
+    if ( d->m_libraries.contains( libName ) )
+      continue;
+
+    // Warning. We load C++ plugins in this method, but not plugins written in QtScript.
+    // This should be a better situation in Grantlee 0.2 when the TagLibraryInterface
+    // can have shared pointers instead of raw pointers in its API. The whole scriptable
+    // thing likely needs to be redesigned too.
+    // The reason for explicitly not loading scripted plugins here is that they create new
+    // NodeFactory and Filter instances with each call to loadLibrary.
+    // NodeFactories are memory-managed by the Parser, as are Filters to an extent, because it
+    // creates shared pointers for Filters.
+    // Because this method loads the libraries but doesn't actually use them or send them
+    // back to the Parser the scriptable NodeFactories and Filters but be deleted immediately.
+    // The C++ plugins are different because although they are loaded, their NodeFactories
+    // and Filters are accessed only by the Parser, which manages them after that.
+    uint minorVersion = GRANTLEE_VERSION_MINOR;
+    while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION ) {
+      // Although we don't use scripted libaries here, we need to recognize them being first
+      // in the search path and not load a c++ plugin of the same name in that case.
+      ScriptableLibraryContainer* scriptableLibrary = d->loadScriptableLibrary( libName, minorVersion );
+      if (scriptableLibrary) {
+        scriptableLibrary->clear();
+        break;
+      }
+
+      PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( libName, minorVersion-- );
+      if ( library )
+        break;
+    }
   }
 }
 
@@ -179,7 +182,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 {
   Q_D( Engine );
 
-  if ( name == __scriptableLibName )
+  if ( name == QLatin1String( __scriptableLibName ) )
     return 0;
 
   // already loaded by the engine.
@@ -212,7 +215,7 @@ EnginePrivate::EnginePrivate( Engine *engine )
 {
 }
 
-TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
+ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
 {
   int pluginIndex = 0;
   if ( !m_scriptableTagLibrary )
@@ -238,6 +241,13 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     if ( !file.exists() )
       continue;
 
+    if ( m_scriptableLibraries.contains( libFileName ) )
+    {
+      ScriptableLibraryContainer *library = m_scriptableLibraries.value( libFileName );
+      library->setNodeFactories( m_scriptableTagLibrary->nodeFactories( libFileName ) );
+      library->setFilters( m_scriptableTagLibrary->filters( libFileName ) );
+      return library;
+    }
 #if 0
     PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
 #endif
@@ -245,8 +255,8 @@ TagLibraryInterface* EnginePrivate::loadScriptableLibrary( const QString &name, 
     const QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
     const QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
 
-    TagLibraryInterface *library = new ScriptableLibraryContainer( factories, filters );
-    m_scriptableLibraries << library;
+    ScriptableLibraryContainer *library = new ScriptableLibraryContainer( factories, filters );
+    m_scriptableLibraries.insert( libFileName, library );
     return library;
   }
   return 0;

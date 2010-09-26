@@ -20,14 +20,12 @@
 
 #include "mediafinder.h"
 
-#include <QtCore/QUrl>
-
-#include "parser.h"
-
-#include "exception.h"
-
-#include "util.h"
 #include "engine.h"
+#include "exception.h"
+#include "parser.h"
+#include "util.h"
+
+#include <QtCore/QUrl>
 
 
 MediaFinderNodeFactory::MediaFinderNodeFactory()

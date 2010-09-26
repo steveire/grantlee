@@ -21,10 +21,10 @@
 #ifndef GRANTLEE_SAFESTRING_H
 #define GRANTLEE_SAFESTRING_H
 
+#include "grantlee_core_export.h"
+
 #include <QtCore/QString>
 #include <QtCore/QVariant>
-
-#include "grantlee_core_export.h"
 
 namespace Grantlee
 {

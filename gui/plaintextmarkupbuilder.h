@@ -30,9 +30,8 @@
 #define DIGITSOFFSET 10
 
 #include "abstractmarkupbuilder.h"
-#include "markupdirector.h"
-
 #include "grantlee_gui_export.h"
+#include "markupdirector.h"
 
 class QBrush;
 

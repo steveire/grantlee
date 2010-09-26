@@ -21,6 +21,8 @@
 #ifndef GRANTLEE_EXCEPTION_H
 #define GRANTLEE_EXCEPTION_H
 
+#include "grantlee_core_export.h"
+
 #include <QtCore/QString>
 
 #include <exception>

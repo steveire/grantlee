@@ -20,9 +20,9 @@
 
 #include "datetime.h"
 
-#include <QtCore/QDateTime>
-
 #include "util.h"
+
+#include <QtCore/QDateTime>
 
 QVariant timeSince( QDateTime early, QDateTime late )
 {

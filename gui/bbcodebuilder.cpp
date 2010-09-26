@@ -18,8 +18,6 @@
 
 */
 
-
-
 #include "bbcodebuilder.h"
 
 using namespace Grantlee;

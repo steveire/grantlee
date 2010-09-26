@@ -26,9 +26,9 @@
 #endif
 
 #include "abstractmarkupbuilder.h"
+#include "grantlee_gui_export.h"
 #include "markupdirector.h"
 
-#include "grantlee_gui_export.h"
 
 namespace Grantlee
 {

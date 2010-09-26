@@ -21,13 +21,12 @@
 #ifndef GRANTLEE_TEMPLATE_H
 #define GRANTLEE_TEMPLATE_H
 
-#include <QtCore/QStringList>
-#include <QtCore/QSharedPointer>
-
-#include "node.h"
-
 #include "exception.h"
 #include "grantlee_core_export.h"
+#include "node.h"
+
+#include <QtCore/QSharedPointer>
+#include <QtCore/QStringList>
 
 namespace Grantlee
 {

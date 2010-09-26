@@ -19,13 +19,14 @@
 */
 
 #include "templateloader.h"
+
 #include "engine.h"
 #include "exception.h"
 #include "grantlee_latin1literal_p.h"
 
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtCore/QDir>
 
 using namespace Grantlee;
 

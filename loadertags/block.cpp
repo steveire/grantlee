@@ -20,14 +20,12 @@
 
 #include "block.h"
 
-#include <QtCore/QStringList>
-
-#include "parser.h"
-#include "template.h"
-#include "exception.h"
-#include <util.h>
-#include <rendercontext.h>
 #include "blockcontext.h"
+#include "exception.h"
+#include "parser.h"
+#include "rendercontext.h"
+#include "template.h"
+#include "util.h"
 
 const char * __loadedBlocks = "__loadedBlocks";
 

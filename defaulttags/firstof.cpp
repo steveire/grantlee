@@ -20,11 +20,8 @@
 
 #include "firstof.h"
 
-#include <QtCore/QStringList>
-#include "parser.h"
-
 #include "exception.h"
-
+#include "parser.h"
 #include "util.h"
 
 

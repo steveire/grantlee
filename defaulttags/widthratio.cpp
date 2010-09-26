@@ -20,10 +20,8 @@
 
 #include "widthratio.h"
 
-#include <QtCore/QStringList>
-#include "parser.h"
-
 #include "exception.h"
+#include "parser.h"
 
 
 WidthRatioNodeFactory::WidthRatioNodeFactory()

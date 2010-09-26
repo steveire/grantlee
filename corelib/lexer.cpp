@@ -21,11 +21,11 @@
 
 #include "lexer_p.h"
 
+#include "grantlee_latin1literal_p.h"
+#include "grantlee_tags_p.h"
+
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
-
-#include "grantlee_tags_p.h"
-#include "grantlee_latin1literal_p.h"
 
 using namespace Grantlee;
 
@@ -38,17 +38,17 @@ static QRegExp getTagRe()
   static const QLatin1Literal notEndOfLine( "[^\\n]*" );
 
   static const QString tagString = QLatin1Char( '(' )
-                                 + QRegExp::escape( BLOCK_TAG_START )
+                                 + QRegExp::escape( QLatin1String( BLOCK_TAG_START ) )
                                  + notEndOfLine
-                                 + QRegExp::escape( BLOCK_TAG_END )
+                                 + QRegExp::escape( QLatin1String( BLOCK_TAG_END ) )
                                  + QLatin1Char( '|' )
-                                 + QRegExp::escape( VARIABLE_TAG_START )
+                                 + QRegExp::escape( QLatin1String( VARIABLE_TAG_START ) )
                                  + notEndOfLine
-                                 + QRegExp::escape( VARIABLE_TAG_END )
+                                 + QRegExp::escape( QLatin1String( VARIABLE_TAG_END ) )
                                  + QLatin1Char( '|' )
-                                 + QRegExp::escape( COMMENT_TAG_START )
+                                 + QRegExp::escape( QLatin1String( COMMENT_TAG_START ) )
                                  + notEndOfLine
-                                 + QRegExp::escape( COMMENT_TAG_END )
+                                 + QRegExp::escape( QLatin1String( COMMENT_TAG_END ) )
                                  + QLatin1Char( ')' );
 
   static QRegExp sTagRe( tagString );
@@ -99,13 +99,13 @@ Token Lexer::createToken( const QString &fragment, State inTag, int *linecount )
     static const int startTagSize = 2;
     static const int endTagSize = 2;
     QString content = fragment.mid( startTagSize, fragment.size() - startTagSize - endTagSize );
-    if ( fragment.startsWith( VARIABLE_TAG_START ) ) {
+    if ( fragment.startsWith( QLatin1String( VARIABLE_TAG_START ) ) ) {
       token.tokenType = VariableToken;
       token.content = content.trimmed();
-    } else if ( fragment.startsWith( BLOCK_TAG_START ) ) {
+    } else if ( fragment.startsWith( QLatin1String( BLOCK_TAG_START ) ) ) {
       token.tokenType = BlockToken;
       token.content = content.trimmed();
-    } else if ( fragment.startsWith( COMMENT_TAG_START ) ) {
+    } else if ( fragment.startsWith( QLatin1String( COMMENT_TAG_START ) ) ) {
       token.tokenType = CommentToken;
       return token;
     }

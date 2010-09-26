@@ -20,14 +20,12 @@
 
 #include "cycle.h"
 
-#include <QtCore/QStringList>
-#include "parser.h"
 #include "exception.h"
-
+#include "parser.h"
+#include "rendercontext.h"
 #include "util.h"
-#include <rendercontext.h>
 
-static const char * _namedCycleNodes = "_namedCycleNodes";
+static const char _namedCycleNodes[] = "_namedCycleNodes";
 
 CycleNodeFactory::CycleNodeFactory()
 {

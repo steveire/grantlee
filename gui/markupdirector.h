@@ -22,11 +22,11 @@
 #ifndef GRANTLEE_MARKUPDIRECTOR_H
 #define GRANTLEE_MARKUPDIRECTOR_H
 
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextFrame>
-
 #include "abstractmarkupbuilder.h"
 #include "grantlee_gui_export.h"
+
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextFrame>
 
 class QTextTable;
 class QTextTableCell;

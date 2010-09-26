@@ -20,17 +20,14 @@
 
 #include "variable.h"
 
-#include "typeaccessors_p.h"
-
-#include <QtCore/QStringList>
-#include <QtCore/QMetaEnum>
-#include <QtCore/QDebug>
-
 #include "context.h"
+#include "exception.h"
+#include "metaenumvariable_p.h"
+#include "typeaccessors_p.h"
 #include "util.h"
 
-#include "metaenumvariable_p.h"
-#include "exception.h"
+#include <QtCore/QMetaEnum>
+#include <QtCore/QStringList>
 
 using namespace Grantlee;
 
@@ -53,7 +50,7 @@ public:
   bool m_translate;
 
   Q_DECLARE_PUBLIC( Variable )
-  Variable *q_ptr;
+  Variable * const q_ptr;
 };
 
 }
@@ -234,31 +231,7 @@ QVariant VariablePrivate::resolvePart( const QVariant &var, const QString &nextP
   } else if ( QMetaType::QObjectStar == var.userType() ) {
     return TypeAccessor<QObject*>::lookUp( var.value<QObject*>(), nextPart );
   } else if ( qMetaTypeId<MetaEnumVariable>() == var.userType()){
-    MetaEnumVariable mev = var.value<MetaEnumVariable>();
-
-    if ( nextPart == QLatin1String( "name" ) )
-      return QLatin1String( mev.enumerator.name() );
-    if ( nextPart == QLatin1String( "value" ) )
-      return mev.value;
-    if ( nextPart == QLatin1String( "key" ) )
-      return QLatin1String( mev.enumerator.valueToKey( mev.value ) );
-    if ( nextPart == QLatin1String( "scope" ) )
-      return QLatin1String( mev.enumerator.scope() );
-    if ( nextPart == QLatin1String( "keyCount" ) )
-      return mev.enumerator.keyCount();
-
-    bool ok = false;
-    const int listIndex = nextPart.toInt( &ok );
-    if (ok)
-    {
-      if (listIndex >= mev.enumerator.keyCount())
-        return QVariant();
-
-      mev.value = mev.enumerator.value(listIndex);
-      return QVariant::fromValue(mev);
-    }
-
-    return QVariant();
+    return TypeAccessor<MetaEnumVariable>::lookUp( var.value<MetaEnumVariable>(), nextPart );
   } else {
     // List index test
 

@@ -21,10 +21,10 @@
 #ifndef GRANTLEE_OUTPUTSTREAM_H
 #define GRANTLEE_OUTPUTSTREAM_H
 
-#include <QtCore/QTextStream>
-#include <QtCore/QSharedPointer>
-
 #include "grantlee_core_export.h"
+
+#include <QtCore/QSharedPointer>
+#include <QtCore/QTextStream>
 
 namespace Grantlee
 {

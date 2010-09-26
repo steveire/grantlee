@@ -12,6 +12,10 @@ include(${QT_USE_FILE})
 configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
 configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_p.h)
 
+# BIC: remove
+remove_definitions(-DQT_NO_CAST_TO_ASCII)
+remove_definitions(-DQT_NO_CAST_FROM_ASCII)
+
 set (grantlee_core_SRCS
   cachingloaderdecorator.cpp
   context.cpp
@@ -27,6 +31,7 @@ set (grantlee_core_SRCS
   safestring.cpp
   template.cpp
   templateloader.cpp
+  typeaccessors.cpp
   util.cpp
   variable.cpp
 )

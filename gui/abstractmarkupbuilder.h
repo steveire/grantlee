@@ -21,12 +21,12 @@
 #ifndef GRANTLEE_ABSTRACTMARKUPBUILDER_H
 #define GRANTLEE_ABSTRACTMARKUPBUILDER_H
 
+#include "grantlee_gui_export.h"
+
 #include <QtCore/QString>
 #include <QtGui/QTextListFormat>
 
 class QBrush;
-
-#include "grantlee_gui_export.h"
 
 namespace Grantlee
 {

@@ -21,9 +21,9 @@
 #ifndef GRANTLEE_CONTEXT_H
 #define GRANTLEE_CONTEXT_H
 
-#include <QtCore/QVariantHash>
-
 #include "grantlee_core_export.h"
+
+#include <QtCore/QVariantHash>
 
 namespace Grantlee
 {

@@ -20,16 +20,13 @@
 
 #include "include.h"
 
-#include <QtCore/QStringList>
-#include <QtPlugin>
-
-#include "parser.h"
-#include "template.h"
 #include "engine.h"
 #include "exception.h"
+#include "parser.h"
+#include "template.h"
+#include "util.h"
 
-#include <QtCore/QDebug>
-#include <util.h>
+#include <QtCore/QtPlugin>
 
 IncludeNodeFactory::IncludeNodeFactory()
 {

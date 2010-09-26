@@ -21,16 +21,14 @@
 #ifndef DEFAULTFILTERS_H
 #define DEFAULTFILTERS_H
 
-#include "node.h"
-#include "filter.h"
-#include "taglibraryinterface.h"
-
 #include "datetime.h"
 #include "integers.h"
 #include "lists.h"
 #include "logic.h"
 #include "misc.h"
 #include "strings.h"
+
+#include "taglibraryinterface.h"
 
 namespace Grantlee
 {

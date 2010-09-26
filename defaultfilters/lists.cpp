@@ -19,7 +19,9 @@
 */
 
 #include "lists.h"
-#include <util.h>
+
+#include "util.h"
+
 #include <QtCore/QDateTime>
 
 QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const

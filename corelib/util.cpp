@@ -19,10 +19,11 @@
 */
 
 #include "util.h"
-#include "metaenumvariable_p.h"
-#include "grantlee_latin1literal_p.h"
 
-#include <QStringList>
+#include "grantlee_latin1literal_p.h"
+#include "metaenumvariable_p.h"
+
+#include <QtCore/QStringList>
 
 QString Grantlee::unescapeStringLiteral( const QString &input )
 {

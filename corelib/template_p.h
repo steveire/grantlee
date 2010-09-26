@@ -21,12 +21,12 @@
 #ifndef GRANTLEE_TEMPLATE_P_H
 #define GRANTLEE_TEMPLATE_P_H
 
+#include "engine.h"
+#include "template.h"
+
 #if QT_VERSION < 0x040600
 #include <QtCore/QPointer>
 #endif
-
-#include "template.h"
-#include "engine.h"
 
 namespace Grantlee
 {

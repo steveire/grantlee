@@ -21,11 +21,11 @@
 #ifndef GRANTLEE_PARSER_H
 #define GRANTLEE_PARSER_H
 
-#include <QtCore/QStringList>
-
 #include "filter.h"
 #include "node.h"
 #include "token.h"
+
+#include <QtCore/QStringList>
 
 namespace Grantlee
 {

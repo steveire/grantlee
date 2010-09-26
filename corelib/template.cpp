@@ -21,14 +21,14 @@
 #include "template.h"
 #include "template_p.h"
 
-#include <QtCore/QDebug>
-
-#include "lexer_p.h"
-#include "parser.h"
 #include "context.h"
 #include "engine.h"
 #include "exception.h"
+#include "lexer_p.h"
+#include "parser.h"
 #include "rendercontext.h"
+
+#include <QtCore/QDebug>
 
 using namespace Grantlee;
 

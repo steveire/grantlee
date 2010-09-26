@@ -21,9 +21,6 @@
 #ifndef DEFAULTTAGS_H
 #define DEFAULTTAGS_H
 
-#include "node.h"
-#include "taglibraryinterface.h"
-
 #include "autoescape.h"
 #include "comment.h"
 #include "cycle.h"
@@ -44,6 +41,9 @@
 #include "templatetag.h"
 #include "widthratio.h"
 #include "with.h"
+
+#include "node.h"
+#include "taglibraryinterface.h"
 
 namespace Grantlee
 {

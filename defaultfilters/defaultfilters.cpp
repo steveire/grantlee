@@ -20,10 +20,7 @@
 
 #include "defaultfilters.h"
 
-#include <QtCore/QStringList>
-#include <QtPlugin>
-
-#include "parser.h"
+#include <QtCore/QtPlugin>
 
 Q_EXPORT_PLUGIN2( grantlee_defaultfilters_library, DefaultFiltersLibrary )
 
