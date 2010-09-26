@@ -62,7 +62,7 @@ private Q_SLOTS:
   void testAssociativeContainer_Type();
   void testSharedPointer();
   void testThirdPartySharedPointer();
-
+  void testNestedContainers();
 }; // class TestGenericTypes
 
 class Person
@@ -533,6 +533,80 @@ void TestGenericTypes::testThirdPartySharedPointer()
       t1->render( &c ),
       QLatin1String( "Grant Lee 2" ));
 
+}
+
+Q_DECLARE_METATYPE(QVector<qint16>)
+typedef QList<QVector<qint16> > ListVectorInt;
+Q_DECLARE_METATYPE(ListVectorInt)
+typedef QMap<int, QList<QVector<qint16> > > MapListVectorInt;
+Q_DECLARE_METATYPE(MapListVectorInt)
+typedef QStack<QMap<int, QList<QVector<qint16> > > > StackMapListVectorInt;
+Q_DECLARE_METATYPE(StackMapListVectorInt)
+
+static QVector<qint16> getNumbers()
+{
+  static int n = 0;
+  QVector<qint16> nums;
+  nums.push_back(++n);
+  nums.push_back(++n);
+  return nums;
+}
+
+static ListVectorInt getNumberLists()
+{
+  ListVectorInt list;
+  for (int i = 0; i < 2; ++i ) {
+    list.append(getNumbers());
+  }
+  return list;
+}
+
+static MapListVectorInt getNumberListMap()
+{
+  MapListVectorInt map;
+  for (int i = 0; i < 2; ++i ) {
+    map.insert(i, getNumberLists());
+  }
+  return map;
+}
+
+static StackMapListVectorInt getMapStack()
+{
+  StackMapListVectorInt stack;
+  for (int i = 0; i < 2; ++i ) {
+    stack.push(getNumberListMap());
+  }
+  return stack;
+}
+
+void TestGenericTypes::testNestedContainers()
+{
+  Grantlee::Engine engine;
+
+  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+
+  Grantlee::Context c;
+  c.insert( QLatin1String( "stack" ), QVariant::fromValue( getMapStack() ) );
+
+  Grantlee::Template t1 = engine.newTemplate(
+    QLatin1String(  "{% for map in stack %}"
+                      "(M {% for key, list in map.items %}"
+                        "({{ key }} : (L {% for vector in list %}"
+                          "(V {% for number in vector %}"
+                            "{{ number }},"
+                          "{% endfor %}),"
+                        "{% endfor %}),"
+                      "{% endfor %}),"
+                    "{% endfor %}" )
+    , QLatin1String( "template1" ) );
+
+  QString result = t1->render( &c );
+
+  QString expectedResult = QLatin1String(
+    "(M (0 : (L (V 1,2,),(V 3,4,),),(1 : (L (V 5,6,),(V 7,8,),),),(M (0 : (L (V 9,10,),(V 11,12,),),(1 : (L (V 13,14,),(V 15,16,),),),"
+  );
+
+  QCOMPARE(result, expectedResult);
 }
 
 QTEST_MAIN( TestGenericTypes )

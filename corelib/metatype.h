@@ -260,7 +260,9 @@ struct RegisterTypeContainer<Container<T>, MoreMagic>                 \
 {                                                                     \
   static int reg()                                                    \
   {                                                                   \
-    return registerSequentialContainer<Container<T> >();              \
+    const int id = registerSequentialContainer<Container<T> >();      \
+    registerContainers<Container<T> >();                              \
+    return id;                                                        \
   }                                                                   \
 };                                                                    \
 }                                                                     \
@@ -272,7 +274,9 @@ struct RegisterTypeContainer<Container<T, U>, MoreMagic>                       \
 {                                                                              \
   static int reg()                                                             \
   {                                                                            \
-    return registerAssociativeContainer<Container<T, U> >();                   \
+    const int id = registerAssociativeContainer<Container<T, U> >();           \
+    registerContainers<Container<T, U> >();                                    \
+    return id;                                                                 \
   }                                                                            \
 };                                                                             \
 }                                                                              \
