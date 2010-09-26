@@ -26,7 +26,20 @@
 #include <QtTest/QtTest>
 #include <QtCore/QVariant>
 
+typedef QObject* QObjectStar;
+
 DECLARE_TYPE_CONTAINERS(QVariant)
+DECLARE_TYPE_CONTAINERS(qint16)
+DECLARE_TYPE_CONTAINERS(qint32)
+DECLARE_TYPE_CONTAINERS(qint64)
+DECLARE_TYPE_CONTAINERS(quint16)
+DECLARE_TYPE_CONTAINERS(quint32)
+DECLARE_TYPE_CONTAINERS(quint64)
+DECLARE_TYPE_CONTAINERS(float)
+DECLARE_TYPE_CONTAINERS(double)
+DECLARE_TYPE_CONTAINERS(QString)
+DECLARE_TYPE_CONTAINERS(QDateTime)
+DECLARE_TYPE_CONTAINERS(QObjectStar)
 
 class TestGenericContainers : public QObject
 {
@@ -55,11 +68,48 @@ QVector<T> getItems()
 }
 
 template<>
+QVector<QString> getItems<QString>()
+{
+  QVector<QString> items;
+  foreach(const int item, getItems<int>())
+    items.push_back(QString::number(item));
+  return items;
+}
+
+template<>
 QVector<QVariant> getItems<QVariant>()
 {
   QVector<QVariant> items;
   foreach(const int item, getItems<int>())
     items.push_back(item);
+  return items;
+}
+
+template<>
+QVector<QDateTime> getItems<QDateTime>()
+{
+  QVector<QDateTime> items;
+  for (int i = 0; i < 3; ++i)
+  {
+    QDateTime d;
+    d.setTime_t(0);
+    d = d.addDays(i);
+    items.push_back(d);
+  }
+  return items;
+}
+
+template<>
+QVector<QObject*> getItems<QObject*>()
+{
+  QVector<QObject*> items;
+  for (int i = 9; i > 4; i -= 2)
+  {
+    QObject *obj = new QObject;
+
+    obj->setObjectName(QString::number(i));
+    items.push_back(obj);
+  }
   return items;
 }
 
@@ -128,16 +178,105 @@ QString getTemplate()
   return QLatin1String( "{% for item in container %}{{ item }},{% endfor %}" );
 }
 
+template<>
+QString getTemplate<QDateTime>()
+{
+  return QLatin1String( "{% for item in container %}{{ item|date }},{% endfor %}" );
+}
+
+template<>
+QString getTemplate<QObject*>()
+{
+  return QLatin1String( "{% for item in container %}{{ item.objectName }},{% endfor %}" );
+}
+
 template<typename T>
 QString getAssociativeTemplate()
 {
   return QLatin1String( "{% for item in container.values %}{{ item }},{% endfor %}" );
 }
 
+template<>
+QString getAssociativeTemplate<QDateTime>()
+{
+  return QLatin1String( "{% for item in container.values %}{{ item|date }},{% endfor %}" );
+}
+
+template<>
+QString getAssociativeTemplate<QObject*>()
+{
+  return QLatin1String( "{% for item in container.values %}{{ item.objectName }},{% endfor %}" );
+}
+
 template <typename T>
 QStringList getResults()
 {
   return QStringList() << QLatin1String( "9," ) << QLatin1String( "7," ) << QLatin1String( "5," );
+}
+
+template<>
+QStringList getResults<QDateTime>()
+{
+  return QStringList() << QLatin1String( "Jan. 1, 1970," ) << QLatin1String( "Jan. 2, 1970," ) << QLatin1String( "Jan. 3, 1970," );
+}
+
+template<typename Container, typename T = typename Container::value_type>
+struct CleanupSequentialContainer
+{
+  static void clean(Container &)
+  {
+
+  }
+};
+
+template<typename Container, typename T = typename Container::mapped_type>
+struct CleanupAssociativeContainer
+{
+  static void clean(Container &)
+  {
+
+  }
+};
+
+template<typename Container>
+struct CleanupSequentialContainer<Container, QObject*>
+{
+  static void clean(Container &c) {
+    qDeleteAll(c);
+  }
+};
+
+template<typename Container>
+struct CleanupAssociativeContainer<Container, QObject*>
+{
+  static void clean(Container &c) {
+    qDeleteAll(c);
+  }
+};
+
+template<typename T>
+struct CleanupAssociativeContainer<std::map<T, QObject*>, QObject*>
+{
+  static void clean(std::map<T, QObject*> &c) {
+    typename std::map<T, QObject*>::iterator it = c.begin();
+    const typename std::map<T, QObject*>::iterator end = c.end();
+    for ( ; it != end; ++it ) {
+      delete it->second;
+      it->second = 0;
+    }
+  }
+};
+
+template<typename Container>
+void cleanupSequential(Container c)
+{
+  CleanupSequentialContainer<Container>::clean(c);
+}
+
+template<typename Container>
+void cleanupAssociative(Container c)
+{
+  CleanupAssociativeContainer<Container>::clean(c);
 }
 
 void testContainer(const QString &stringTemplate, const QVariant &containerVariant, const QStringList &expectedResults, bool unordered)
@@ -173,6 +312,7 @@ void doTestSequentialContainer(bool unordered = false)
       QVariant::fromValue(container),
       getResults<typename Container::value_type>(),
       unordered);
+  cleanupSequential(container);
 }
 
 template<typename Container>
@@ -186,6 +326,7 @@ void doTestAssociativeContainer(bool unordered = false)
       QVariant::fromValue(container),
       getResults<typename Container::mapped_type>(),
       unordered);
+  cleanupAssociative(container);
 }
 
 template<typename T>
@@ -223,11 +364,23 @@ template<typename T>
 void doTestContainers()
 {
   doTestNonHashableContainers<T>();
+  doTestSequentialContainer<QSet<T> >(true);
 }
 
 void TestGenericContainers::testContainer_Builtins()
 {
+  doTestContainers<qint16>();
+  doTestContainers<qint32>();
+  doTestContainers<qint64>();
+  doTestContainers<quint16>();
+  doTestContainers<quint32>();
+  doTestContainers<quint64>();
+  doTestNonHashableContainers<float>();
+  doTestNonHashableContainers<double>();
+  doTestContainers<QString>();
   doTestNonHashableContainers<QVariant>();
+  doTestNonHashableContainers<QDateTime>();
+  doTestContainers<QObject*>();
 }
 
 

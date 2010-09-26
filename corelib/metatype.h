@@ -186,7 +186,19 @@ struct BuiltinRegister
   {
     Grantlee::MetaType::internalLock();
 
+    registerContainers< bool      >();
+    registerContainers< qint16    >();
+    registerContainers< qint32    >();
+    registerContainers< qint64    >();
+    registerContainers< quint16   >();
+    registerContainers< quint32   >();
+    registerContainers< quint64   >();
+    registerContainers< float     >();
+    registerContainers< double    >();
+    registerContainers< QString   >();
     registerContainers< QVariant  >();
+    registerContainers< QDateTime >();
+    registerContainers< QObject*  >();
 
     registerSequentialContainer<QStringList, QList<QString> >();
     Grantlee::MetaType::internalUnlock();
