@@ -31,29 +31,90 @@
 #include <QtCore/QStack>
 #include <QtCore/QQueue>
 
+/// @file
+
 namespace Grantlee
 {
 
+/// @headerfile metatype.h grantlee/metatype.h
+
+/**
+  @brief The MetaType is the interface to the Grantlee introspection system.
+
+  The MetaType class is used as part of the type registration system of %Grantlee.
+
+  The init method should be called in some location where types to be introspected are defined.
+
+  @see @ref generic_types_and_templates
+  @author Michael Jansen <kde@michael-jansen.biz>
+  @author Stephen Kelly <steveire@gmail.com>
+*/
 class GRANTLEE_CORE_EXPORT MetaType
 {
 public:
+#ifndef Q_QDOC
+  /**
+    @internal The signature for a property lookup method
+   */
   typedef QVariant (*LookupFunction)(const QVariant &, const QString &);
+
+  /**
+    @internal The signature for a object to list method
+   */
   typedef QVariantList (*ToVariantListFunction)(const QVariant &);
 
+  /**
+    @internal Registers a property lookup method
+   */
   static void registerLookUpOperator( int id, LookupFunction f );
+
+  /**
+    @internal Registers a object to list method
+   */
   static void registerToVariantListOperator( int id, ToVariantListFunction f );
 
+  /**
+    @internal
+   */
   static void internalLock();
+
+  /**
+    @internal
+   */
   static void internalUnlock();
 
+  /**
+    @internal
+   */
   static QVariant lookup( const QVariant &object, const QString &property );
+
+  /**
+    @internal
+   */
   static QVariantList toVariantList( const QVariant &obj );
 
+  /**
+    @internal
+   */
   static bool lookupAlreadyRegistered(int id);
-  static bool toListAlreadyRegistered(int id);
 
+  /**
+    @internal
+   */
+  static bool toListAlreadyRegistered(int id);
+#endif
+
+  /**
+    Initializes the MetaType system with built in types and containers.
+   */
   static int init();
+
+#ifndef Q_QDOC
+  /**
+    @internal
+   */
   static int initBuiltins() { return init(); }
+#endif
 
 private:
   MetaType();
@@ -77,8 +138,6 @@ struct LookupTrait
 
 /*
  * Register a type so grantlee knows how to handle it.
- *
- * :TODO: Real docu
  */
 template<typename RealType, typename HandleAs>
 int internalRegisterType()
@@ -135,6 +194,13 @@ int registerAssociativeContainer()
 
 }
 
+#ifndef Q_QDOC
+/**
+  @internal Registers a Type with the system so that containers of the type declared as a QMetaType can be used.
+
+  This is an implementation detail. GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF or GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF
+  should be used instead.
+ */
 template<typename RealType, int n>
 struct RegisterTypeContainer
 {
@@ -142,6 +208,7 @@ struct RegisterTypeContainer
   {
   }
 };
+#endif
 
 #define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(Container, Type)                                   \
   Grantlee::RegisterTypeContainer<Container<Type>, QMetaTypeId2<Container<Type> >::Defined>::reg();  \
@@ -216,6 +283,41 @@ inline int MetaType::init()
   return 0;
 }
 
+/**
+  @brief Registers the type RealType with the metatype system.
+
+  This method can take a second template parameter to specify a cast
+  that should be invoked during registration. This is useful if a base type is
+  already supported.
+
+  @code
+    class SomeType
+    {
+    public:
+      QString someProp() const;
+    };
+
+    // define some introspectable API for SomeType
+
+    GRANTLEE_BEGIN_LOOKUP(SomeType)
+      if (property == "someProp")
+        return object.someProp();
+    GRANTLEE_END_LOOKUP
+
+
+    class OtherType : public SomeType
+    {
+      // ...
+    };
+
+    registerMetaType<SomeType>();
+
+    // Only the introspectable API from SomeType is needed, so we can reuse that registration.
+    registerMetaType<OtherType, SomeType>();
+  @endcode
+
+  @see @ref generic_types_and_templates
+ */
 template<typename RealType, typename HandleAs>
 int registerMetaType()
 {
@@ -234,10 +336,12 @@ int registerMetaType()
   return id;
 }
 
-/*
- * Register a type so grantlee knows how to handle it.
- *
- * This is a convenience method.
+#ifndef Q_QDOC
+/**
+  @internal
+  Register a type so grantlee knows how to handle it.
+
+  This is a convenience method.
  */
 template<typename Type>
 int registerMetaType()
@@ -251,6 +355,7 @@ enum {
   MoreMagic
 };
 
+#endif
 } // namespace Grantlee
 
 #define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER(Container)             \

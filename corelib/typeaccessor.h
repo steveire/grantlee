@@ -35,6 +35,7 @@
 namespace Grantlee
 {
 
+#ifndef Q_QDOC
 template <typename T>
 struct TypeAccessor
 {
@@ -46,6 +47,7 @@ struct TypeAccessor<T*>
 {
   static QVariant lookUp( const T * const object, const QString &property );
 };
+#endif
 
 namespace
 {
@@ -112,8 +114,12 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
 
 }
 
+#ifndef Q_QDOC
+/**
+ * @internal Looks up the property @p property from QObject @p object.
+ */
 QVariant GRANTLEE_CORE_EXPORT doQobjectLookUp( const QObject * const object, const QString& property );
-
+#endif
 }
 
 #define GRANTLEE_DISABLE_RANDOM_ACCESS(Container)             \

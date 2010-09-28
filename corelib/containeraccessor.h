@@ -26,28 +26,58 @@
 namespace Grantlee
 {
 
+/// @headerfile containeraccessor.h grantlee/containeraccessor.h
+/**
+  @internal Used as a convenience base class for container %iterator access.
+*/
 template<typename Container_>
 struct Getter
 {
+  /**
+   * @internal Used to extract a list from the container.
+   */
   typedef Container_ Container;
 };
 
+/// @headerfile containeraccessor.h grantlee/containeraccessor.h
+/**
+  Trait for retrieving a key from a container %iterator.
+
+  This can be trivially specialized in rare cases if supporting a third party container.
+
+  @see @ref third_party_containers
+ */
 template<typename Container>
 struct KeyGetter : public Getter<Container>
 {
+  /**
+    Returns the key available through the container %iterator @p it.
+   */
   static typename Container::key_type get(const typename Container::const_iterator it) {
     return it.key();
   }
 };
 
+/// @headerfile containeraccessor.h grantlee/containeraccessor.h
+/**
+  Trait for retrieving a mapped value from a container %iterator.
+
+  This can be trivially specialized in rare cases if supporting a third party container.
+
+  @see @ref third_party_containers
+ */
 template<typename Container>
 struct MappedValueGetter : public Getter<Container>
 {
+  /**
+    Returns the key available through the container %iterator @p it.
+   */
   static typename Container::mapped_type get(const typename Container::const_iterator it) {
     return *it;
   }
 };
 
+#ifndef Q_QDOC
 template<typename T, typename U>
 struct KeyGetter<std::map<T, U> > : public Getter<std::map<T, U> >
 {
@@ -99,6 +129,7 @@ struct Finder<Container, QString>
     return container.find( nextPart );
   }
 };
+#endif
 
 namespace {
 
