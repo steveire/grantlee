@@ -33,6 +33,7 @@
 #include <string>
 
 #include <tr1/array>
+#include <tr1/memory>
 
 template <typename T>
 struct ThreeArray : public std::tr1::array<T, 3>
@@ -50,6 +51,8 @@ Q_DECLARE_METATYPE(QLinkedList<QVariant>)
 
 GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER      (QtUnorderedMap)
 GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR  (QtUnorderedMap)
+
+GRANTLEE_SMART_PTR_ACCESSOR(std::tr1::shared_ptr)
 
 namespace Grantlee {
 
@@ -87,6 +90,7 @@ private Q_SLOTS:
   void testSequentialContainer_Type();
   void testAssociativeContainer_Type();
   void testSharedPointer();
+  void testThirdPartySharedPointer();
 
 }; // class TestGenericTypes
 
@@ -243,6 +247,7 @@ void TestGenericTypes::initTestCase()
   GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(QtUnorderedMap, Person)
   GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(ThreeArray, Person)
   Grantlee::registerMetaType<QSharedPointer<PersonObject> >();
+  Grantlee::registerMetaType<std::tr1::shared_ptr<PersonObject> >();
 }
 
 void TestGenericTypes::testGenericClassType()
@@ -604,6 +609,7 @@ void TestGenericTypes::testAssociativeContainer_Type()
 }
 
 Q_DECLARE_METATYPE(QSharedPointer<PersonObject>)
+Q_DECLARE_METATYPE(std::tr1::shared_ptr<PersonObject>)
 
 void TestGenericTypes::testSharedPointer()
 {
@@ -618,6 +624,27 @@ void TestGenericTypes::testSharedPointer()
   // Check it
   QVariantHash h;
   QSharedPointer<PersonObject> p( new PersonObject( QLatin1String( "Grant Lee" ), 2 ) );
+  h.insert( QLatin1String( "p" ), QVariant::fromValue( p ) );
+  Grantlee::Context c( h );
+  QCOMPARE(
+      t1->render( &c ),
+      QLatin1String( "Grant Lee 2" ));
+
+}
+
+void TestGenericTypes::testThirdPartySharedPointer()
+{
+  Grantlee::Engine engine;
+
+  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+
+  Grantlee::Template t1 = engine.newTemplate(
+      QLatin1String( "{{ p.name }} {{ p.age }}" ),
+      QLatin1String( "template1" ) );
+
+  // Check it
+  QVariantHash h;
+  std::tr1::shared_ptr<PersonObject> p( new PersonObject( QLatin1String( "Grant Lee" ), 2 ) );
   h.insert( QLatin1String( "p" ), QVariant::fromValue( p ) );
   Grantlee::Context c( h );
   QCOMPARE(
