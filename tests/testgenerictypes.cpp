@@ -23,7 +23,7 @@
 #include "engine.h"
 #include "grantlee_paths.h"
 #include "template.h"
-#include "qtunorderedmap.h"
+#include "test_macros.h"
 
 #include <QtTest/QtTest>
 #include <QtCore/QVariant>
@@ -32,14 +32,7 @@
 
 #include <string>
 
-#include <tr1/array>
 #include <tr1/memory>
-
-template <typename T>
-struct ThreeArray : public std::tr1::array<T, 3>
-{
-
-};
 
 GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER           (ThreeArray)
 GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (ThreeArray)
@@ -53,28 +46,6 @@ GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER      (QtUnorderedMap)
 GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR  (QtUnorderedMap)
 
 GRANTLEE_SMART_PTR_ACCESSOR(std::tr1::shared_ptr)
-
-namespace Grantlee {
-
-template<typename T, typename U>
-struct KeyGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T, U> >
-{
-  static T get(typename QtUnorderedMap<T, U>::const_iterator it)
-  {
-    return it->first;
-  }
-};
-
-template<typename T, typename U>
-struct MappedValueGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T, U> >
-{
-  static U get(typename QtUnorderedMap<T, U>::const_iterator it)
-  {
-    return it->second;
-  }
-};
-
-}
 
 class TestGenericTypes : public QObject
 {
@@ -149,96 +120,7 @@ private:
   const int m_age; // Yeah, you wish...
 };
 
-
-Q_DECLARE_METATYPE(QList<Person>)
-Q_DECLARE_METATYPE(QVector<Person>)
-Q_DECLARE_METATYPE(QStack<Person>)
-Q_DECLARE_METATYPE(QQueue<Person>)
-Q_DECLARE_METATYPE(QLinkedList<Person>)
-Q_DECLARE_METATYPE(QSet<Person>)
-
-typedef QHash<QString, Person> PersonHash;
-typedef QMap<QString, Person> PersonMap;
-Q_DECLARE_METATYPE(PersonHash)
-Q_DECLARE_METATYPE(PersonMap)
-
-typedef QHash<qint16, Person> PersonInt16Hash;
-typedef QMap<qint16, Person> PersonInt16Map;
-Q_DECLARE_METATYPE(PersonInt16Hash)
-Q_DECLARE_METATYPE(PersonInt16Map)
-
-typedef QHash<qint32, Person> PersonInt32Hash;
-typedef QMap<qint32, Person> PersonInt32Map;
-Q_DECLARE_METATYPE(PersonInt32Hash)
-Q_DECLARE_METATYPE(PersonInt32Map)
-
-typedef QHash<qint64, Person> PersonInt64Hash;
-typedef QMap<qint64, Person> PersonInt64Map;
-Q_DECLARE_METATYPE(PersonInt64Hash)
-Q_DECLARE_METATYPE(PersonInt64Map)
-
-typedef QHash<quint16, Person> PersonUInt16Hash;
-typedef QMap<quint16, Person> PersonUInt16Map;
-Q_DECLARE_METATYPE(PersonUInt16Hash)
-Q_DECLARE_METATYPE(PersonUInt16Map)
-
-typedef QHash<quint32, Person> PersonUInt32Hash;
-typedef QMap<quint32, Person> PersonUInt32Map;
-Q_DECLARE_METATYPE(PersonUInt32Hash)
-Q_DECLARE_METATYPE(PersonUInt32Map)
-
-typedef QHash<quint64, Person> PersonUInt64Hash;
-typedef QMap<quint64, Person> PersonUInt64Map;
-Q_DECLARE_METATYPE(PersonUInt64Hash)
-Q_DECLARE_METATYPE(PersonUInt64Map)
-
-Q_DECLARE_METATYPE(std::deque<Person>)
-Q_DECLARE_METATYPE(std::vector<Person>)
-Q_DECLARE_METATYPE(std::list<Person>)
-
-typedef std::map<QString, Person> PersonStdMap;
-Q_DECLARE_METATYPE(PersonStdMap)
-
-typedef std::map<qint16, Person> PersonInt16StdMap;
-Q_DECLARE_METATYPE(PersonInt16StdMap)
-
-typedef std::map<qint32, Person> PersonInt32StdMap;
-Q_DECLARE_METATYPE(PersonInt32StdMap)
-
-typedef std::map<qint64, Person> PersonInt64StdMap;
-Q_DECLARE_METATYPE(PersonInt64StdMap)
-
-typedef std::map<quint16, Person> PersonUInt16StdMap;
-Q_DECLARE_METATYPE(PersonUInt16StdMap)
-
-typedef std::map<quint32, Person> PersonUInt32StdMap;
-Q_DECLARE_METATYPE(PersonUInt32StdMap)
-
-typedef std::map<quint64, Person> PersonUInt64StdMap;
-Q_DECLARE_METATYPE(PersonUInt64StdMap)
-
-typedef QtUnorderedMap<QString, Person> PersonHashMap;
-Q_DECLARE_METATYPE(PersonHashMap)
-
-typedef QtUnorderedMap<qint16, Person> PersonInt16HashMap;
-Q_DECLARE_METATYPE(PersonInt16HashMap)
-
-typedef QtUnorderedMap<qint32, Person> PersonInt32HashMap;
-Q_DECLARE_METATYPE(PersonInt32HashMap)
-
-typedef QtUnorderedMap<qint64, Person> PersonInt64HashMap;
-Q_DECLARE_METATYPE(PersonInt64HashMap)
-
-typedef QtUnorderedMap<quint16, Person> PersonUInt16HashMap;
-Q_DECLARE_METATYPE(PersonUInt16HashMap)
-
-typedef QtUnorderedMap<quint32, Person> PersonUInt32HashMap;
-Q_DECLARE_METATYPE(PersonUInt32HashMap)
-
-typedef QtUnorderedMap<quint64, Person> PersonUInt64HashMap;
-Q_DECLARE_METATYPE(PersonUInt64HashMap)
-
-Q_DECLARE_METATYPE(ThreeArray<Person>)
+DECLARE_TYPE_CONTAINERS(Person)
 
 void TestGenericTypes::initTestCase()
 {
