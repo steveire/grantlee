@@ -47,6 +47,7 @@ public:
   static QVariantList toVariantList( const QVariant &obj );
 
   static bool lookupAlreadyRegistered(int id);
+  static bool toListAlreadyRegistered(int id);
 
 private:
   MetaType();
@@ -93,6 +94,9 @@ int registerSequentialContainer()
 {
   const int id = internalRegisterType<Container, HandleAs>();
 
+  if ( MetaType::toListAlreadyRegistered( id ) )
+    return id;
+
   QVariantList ( *tlf )(const QVariant&) = SequentialContainerAccessor<Container>::doToList;
   MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );
   return id;
@@ -108,6 +112,9 @@ template<typename Container, typename HandleAs>
 int registerAssociativeContainer()
 {
   const int id = internalRegisterType<Container, HandleAs>();
+
+  if ( MetaType::toListAlreadyRegistered( id ) )
+    return id;
 
   QVariantList ( *tlf )(const QVariant&) = AssociativeContainerAccessor<Container>::doToList;
   MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );

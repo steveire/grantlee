@@ -65,3 +65,8 @@ bool Grantlee::MetaType::lookupAlreadyRegistered( int id )
 {
   return customTypes()->lookupAlreadyRegistered( id );
 }
+
+bool Grantlee::MetaType::toListAlreadyRegistered( int id )
+{
+  return customTypes()->toListAlreadyRegistered( id );
+}

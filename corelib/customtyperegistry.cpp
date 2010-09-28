@@ -166,3 +166,8 @@ bool CustomTypeRegistry::lookupAlreadyRegistered( int id ) const
 {
   return types.contains( id ) && types.value( id ).lookupFunction != 0;
 }
+
+bool CustomTypeRegistry::toListAlreadyRegistered( int id ) const
+{
+  return types.value( id ).toVariantListFunction != 0;
+}
