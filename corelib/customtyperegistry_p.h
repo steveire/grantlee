@@ -92,44 +92,6 @@ struct CustomTypeRegistry
     return registerVariantToList<Type, Type>();
   }
 
-
-  template<typename Type, typename HandleAs>
-  int registerSequentialToList()
-  {
-    QVariantList ( *vtlf )( const QVariant& ) = SequentialContainerAccessor<HandleAs>::doToList;
-
-    const int id = qMetaTypeId<Type>();
-
-    registerToListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( vtlf ) );
-
-    return id;
-  }
-
-  template<typename Type>
-  int registerSequentialToList()
-  {
-    return registerSequentialToList<Type, Type>();
-  }
-
-  template<typename Type, typename HandleAs>
-  int registerAssociativeToList()
-  {
-    QVariantList ( *vtlf )( const QVariant& ) = AssociativeContainerAccessor<HandleAs>::doToList;
-
-    const int id = qMetaTypeId<Type>();
-
-    registerToListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( vtlf ) );
-
-    return id;
-  }
-
-  template<typename Type>
-  int registerAssociativeToList()
-  {
-    return registerAssociativeToList<Type, Type>();
-  }
-
-
   QVariant lookup( const QVariant &object, const QString &property ) const;
   QVariantList toVariantList( const QVariant &variant ) const;
   bool lookupAlreadyRegistered( int id ) const;

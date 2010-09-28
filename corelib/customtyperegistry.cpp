@@ -50,38 +50,14 @@ QVariantList VariantToList<MetaEnumVariable>::doConvert( const QVariant &obj )
 }
 }
 
-Q_DECLARE_METATYPE(QVector<QVariant>)
-Q_DECLARE_METATYPE(QStack<QVariant>)
-Q_DECLARE_METATYPE(QQueue<QVariant>)
-Q_DECLARE_METATYPE(QLinkedList<QVariant>)
-
 CustomTypeRegistry::CustomTypeRegistry()
 {
-  // Qt Types
-  registerBuiltInMetatype<QStringList>();
-  registerBuiltInMetatype<QVariantList>();
-  registerBuiltInMetatype<QVariantHash>();
-  registerBuiltInMetatype<QVariantMap>();
   registerBuiltInMetatype<QObject*>();
-  registerSequentialToList<QStringList>();
-  registerSequentialToList<QVariantList>();
-
-  registerAssociativeToList<QVariantHash>();
-  registerAssociativeToList<QVariantMap>();
-
-  // Qt Types (Not built into QVariant)
-  registerBuiltInMetatype<QQueue<QVariant>, QList<QVariant> >();
-  registerBuiltInMetatype<QVector<QVariant> >();
-  registerBuiltInMetatype<QStack<QVariant>, QVector<QVariant> >();
-  registerBuiltInMetatype<QLinkedList<QVariant> >();
-  registerSequentialToList<QQueue<QVariant> >();
-  registerSequentialToList<QVector<QVariant> >();
-  registerSequentialToList<QStack<QVariant> >();
-  registerSequentialToList<QLinkedList<QVariant> >();
 
   // Grantlee Types
   registerBuiltInMetatype<SafeString>();
   registerBuiltInMetatype<MetaEnumVariable>();
+
   registerVariantToList<MetaEnumVariable>();
 }
 

@@ -250,10 +250,4 @@ QVariant TypeAccessor<MetaEnumVariable>::lookUp( const MetaEnumVariable object, 
   return QVariant();
 }
 
-template <>
-QVariant TypeAccessor<QStringList>::lookUp( QStringList object, const QString &property )
-{
-  return SequentialContainerLookup<QStringList>::doLookUp( object, property );
-}
-
 }

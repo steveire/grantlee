@@ -64,11 +64,19 @@ void Grantlee::MetaType::registerToVariantListOperator( int id, ToVariantListFun
 
 QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &property )
 {
+  {
+    static const int i = MetaType::initBuiltins();
+    Q_UNUSED(i)
+  }
   return customTypes()->lookup( object, property );
 }
 
 QVariantList Grantlee::MetaType::toVariantList( const QVariant &obj )
 {
+  {
+    static const int i = MetaType::initBuiltins();
+    Q_UNUSED(i)
+  }
   return customTypes()->toVariantList( obj );
 }
 

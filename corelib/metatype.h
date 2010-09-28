@@ -52,6 +52,9 @@ public:
   static bool lookupAlreadyRegistered(int id);
   static bool toListAlreadyRegistered(int id);
 
+  static int init();
+  static int initBuiltins() { return init(); }
+
 private:
   MetaType();
 };
@@ -177,11 +180,37 @@ void registerContainers()
   GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( std::map,       T )
 }
 
+struct BuiltinRegister
+{
+  void registerBuiltinContainers() const
+  {
+    Grantlee::MetaType::internalLock();
+
+    registerContainers< QVariant  >();
+
+    registerSequentialContainer<QStringList, QList<QString> >();
+    Grantlee::MetaType::internalUnlock();
+  }
+};
+
+Q_GLOBAL_STATIC(BuiltinRegister, builtinRegister)
+
+}
+
+inline int MetaType::init()
+{
+  static const BuiltinRegister *br = builtinRegister();
+  br->registerBuiltinContainers();
+  return 0;
 }
 
 template<typename RealType, typename HandleAs>
 int registerMetaType()
 {
+  {
+    static const int i = MetaType::initBuiltins();
+    Q_UNUSED(i)
+  }
   MetaType::internalLock();
 
   const int id = internalRegisterType<RealType, HandleAs>();
