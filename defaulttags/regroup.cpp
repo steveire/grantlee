@@ -77,18 +77,14 @@ void RegroupNode::render( OutputStream *stream, Context *c )
   //
   // We then insert the objHash into the Context ready for rendering later in a for loop.
 
-  QVariantList list;
-  QVariantHash objHash;
   QVariantList contextList;
-  QString hashKey;
-  QString lastKey;
-  QString keyName = getSafeString( m_expression.resolve( c ) );
+  const QString keyName = getSafeString( m_expression.resolve( c ) );
   QListIterator<QVariant> i( objList );
   while ( i.hasNext() ) {
-    QVariant var = i.next();
+    const QVariant var = i.next();
     c->push();
     c->insert( QLatin1String( "var" ), var );
-    QString key = getSafeString( FilterExpression( QLatin1String( "var." ) + keyName, 0 ).resolve( c ) );
+    const QString key = getSafeString( FilterExpression( QLatin1String( "var." ) + keyName, 0 ).resolve( c ) );
     c->pop();
     QVariantHash hash;
     if ( contextList.size() > 0 ) {
