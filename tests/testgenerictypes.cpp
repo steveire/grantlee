@@ -32,6 +32,17 @@
 
 #include <string>
 
+#include <tr1/array>
+
+template <typename T>
+struct ThreeArray : public std::tr1::array<T, 3>
+{
+
+};
+
+GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER           (ThreeArray)
+GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (ThreeArray)
+
 Q_DECLARE_METATYPE(QVector<QVariant>)
 Q_DECLARE_METATYPE(QStack<QVariant>)
 Q_DECLARE_METATYPE(QQueue<QVariant>)
@@ -202,11 +213,14 @@ Q_DECLARE_METATYPE(PersonUInt32HashMap)
 typedef QtUnorderedMap<quint64, Person> PersonUInt64HashMap;
 Q_DECLARE_METATYPE(PersonUInt64HashMap)
 
+Q_DECLARE_METATYPE(ThreeArray<Person>)
+
 void TestGenericTypes::initTestCase()
 {
   // Register the handler for our custom type
   Grantlee::registerMetaType<Person>();
   GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(QtUnorderedMap, Person)
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(ThreeArray, Person)
 }
 
 void TestGenericTypes::testGenericClassType()
@@ -426,6 +440,18 @@ void insertPeople<QSet<Person> >(Grantlee::Context &c)
   c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
 }
 
+template<>
+void insertPeople<ThreeArray<Person> >(Grantlee::Context &c)
+{
+  QMap<int, Person> people = getPeople();
+  QMap<int, Person>::const_iterator it = people.constBegin();
+  const QMap<int, Person>::const_iterator end = people.constEnd();
+  ThreeArray<Person> container;
+  for ( int i = 0; i < 3; ++i, ++it )
+    container[i] = it.value();
+  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+}
+
 template<typename AssociativeContainer>
 void insertAssociatedPeople(Grantlee::Context &c)
 {
@@ -518,6 +544,7 @@ void TestGenericTypes::testSequentialContainer_Type()
   doTestSequentialContainer_Type<std::deque<Person> >();
   doTestSequentialContainer_Type<std::vector<Person> >();
   doTestSequentialContainer_Type<std::list<Person> >();
+  doTestSequentialContainer_Type<ThreeArray<Person> >();
 }
 
 void TestGenericTypes::testAssociativeContainer_Type()
