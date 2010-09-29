@@ -210,12 +210,38 @@ struct RegisterTypeContainer
 };
 #endif
 
+/**
+  Registers Container&lt;Type&gt; with %Grantlee if it has been declared as a metatype.
+
+  @see ref third_party_containers
+*/
 #define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(Container, Type)                                   \
   Grantlee::RegisterTypeContainer<Container<Type>, QMetaTypeId2<Container<Type> >::Defined>::reg();  \
 
+#ifndef Q_QDOC
+/**
+ @internal
+*/
 #define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, Key, Type)                                   \
   Grantlee::RegisterTypeContainer<Container<Key, Type>, QMetaTypeId2<Container<Key, Type> >::Defined>::reg();  \
 
+#endif
+
+/**
+  Registers Container&lt;%Key, Type&gt; with %Grantlee if it has been declared as a metatype.
+
+  The following containers will be available to %Grantlee if they were declared as a QMetaType:
+
+  @li Container&lt;QString, Type&gt;
+  @li Container&lt;qint16,  Type&gt;
+  @li Container&lt;qint32,  Type&gt;
+  @li Container&lt;qint64,  Type&gt;
+  @li Container&lt;quint16, Type&gt;
+  @li Container&lt;quint32, Type&gt;
+  @li Container&lt;quint64, Type&gt;
+
+  @see ref third_party_containers
+*/
 #define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(Container,          Type)     \
     GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, QString, Type)     \
     GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, qint16,  Type)     \
@@ -358,6 +384,11 @@ enum {
 #endif
 } // namespace Grantlee
 
+/**
+  Registers Container so that it can be accessed by %Grantlee.
+
+  @see @ref third_party_containers
+*/
 #define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER(Container)             \
 namespace Grantlee {                                                  \
 template<typename T>                                                  \
@@ -372,6 +403,11 @@ struct RegisterTypeContainer<Container<T>, MoreMagic>                 \
 };                                                                    \
 }                                                                     \
 
+/**
+  Registers Container so that it can be accessed by %Grantlee.
+
+  @see @ref third_party_containers
+*/
 #define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER(Container)                     \
 namespace Grantlee {                                                           \
 template<typename T, typename U>                                               \
@@ -386,6 +422,10 @@ struct RegisterTypeContainer<Container<T, U>, MoreMagic>                       \
 };                                                                             \
 }                                                                              \
 
+#ifndef Q_QDOC
+/**
+  @internal
+ */
 #define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_AS(Container, As)               \
 namespace Grantlee {                                                           \
 template<typename T>                                                           \
@@ -397,6 +437,31 @@ struct RegisterTypeContainer<Container<T>, MoreMagic>                          \
   }                                                                            \
 };                                                                             \
 }                                                                              \
+
+#endif
+
+/**
+  Top boundary of a lookup function for Type.
+
+  @see @ref generic_types
+ */
+#define GRANTLEE_BEGIN_LOOKUP(Type)                                                      \
+namespace Grantlee                                                                       \
+{                                                                                        \
+template<>                                                                               \
+inline QVariant TypeAccessor<Type>::lookUp( const Type object, const QString &property ) \
+{                                                                                        \
+
+/**
+  Bottom boundary of a lookup function for Type.
+
+  @see @ref generic_types
+ */
+#define GRANTLEE_END_LOOKUP                                                              \
+  return QVariant();                                                                     \
+}                                                                                        \
+}                                                                                        \
+
 
 GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (QList)
 GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_AS (QQueue, QList)
@@ -411,18 +476,6 @@ GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (std::deque)
 GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (std::vector)
 GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER    (std::list)
 GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER   (std::map)
-
-#define GRANTLEE_BEGIN_LOOKUP(TYPE)                                                      \
-namespace Grantlee                                                                       \
-{                                                                                        \
-template<>                                                                               \
-inline QVariant TypeAccessor<TYPE>::lookUp( const TYPE object, const QString &property ) \
-{                                                                                        \
-
-#define GRANTLEE_END_LOOKUP                                                              \
-  return QVariant();                                                                     \
-}                                                                                        \
-}                                                                                        \
 
 
 #endif // #define GRANTLEE_METATYPE_H

@@ -134,6 +134,10 @@ struct TypeAccessor<Container<T> >                            \
 };                                                            \
 }                                                             \
 
+#ifndef Q_QDOC
+/**
+  @internal
+*/
 #define GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_type)           \
 namespace Grantlee {                                                                    \
 template<typename T>                                                                    \
@@ -146,12 +150,27 @@ struct TypeAccessor<Container<T> >                                              
 };                                                                                      \
 }                                                                                       \
 
+#endif
+
+/**
+  Registers Container with %Grantlee so that it can be iterated in a @gr_tag{for} tag.
+
+  @see @ref third_party_containers
+*/
 #define GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)              \
   GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, int)           \
 
 #define GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)          \
   GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_t)        \
 
+
+/**
+  Registers Container with %Grantlee so that it can be iterated in a @gr_tag{for} tag.
+
+  Also makes the properties <tt>items</tt>, <tt>keys</tt> and <tt>values</tt> available.
+
+  @see @ref third_party_containers
+*/
 #define GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR(Container)                    \
 namespace Grantlee {                                                               \
 template<typename T, typename U>                                                   \
@@ -164,6 +183,11 @@ struct TypeAccessor<Container<T, U> >                                           
 };                                                                                 \
 }                                                                                  \
 
+/**
+  Allows %Grantlee to access SmartPointer&lt;QObjectSubclass&gt; in templates.
+
+  @see @ref smart_pointers
+ */
 #define GRANTLEE_SMART_PTR_ACCESSOR(SmartPointer)                                 \
 namespace Grantlee {                                                              \
 template<typename T>                                                              \
