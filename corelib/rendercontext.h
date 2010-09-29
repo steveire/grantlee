@@ -25,6 +25,8 @@
 
 #include <QtCore/QVariantHash>
 
+/// @headerfile rendercontext.h grantlee/rendercontext.h
+
 namespace Grantlee
 {
 
