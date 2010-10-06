@@ -25,6 +25,7 @@ echo Creating $tempDir/grantlee-$name_fragment.tar.gz
 
 git archive --format=tar --prefix=grantlee-$name_fragment/ $version | gzip > $tempDir/grantlee-$name_fragment.tar.gz
 
+rm -rf $tempDir/grantlee-$name_fragment/
 echo Unpacking to $tempDir/grantlee-$name_fragment
 tar -C $tempDir -xvf $tempDir/grantlee-$name_fragment.tar.gz
 
