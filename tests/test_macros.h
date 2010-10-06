@@ -22,10 +22,11 @@
 #define TEST_MACROS_H
 
 #include "metatype.h"
-#include "qtunorderedmap.h"
 
 #include <map>
 
+#ifndef GRANTLEE_NO_TR1
+#include "qtunorderedmap.h"
 #include <tr1/array>
 
 template <typename T>
@@ -33,6 +34,7 @@ struct ThreeArray : public std::tr1::array<T, 3>
 {
 
 };
+#endif
 
 using std::map;
 
@@ -49,7 +51,7 @@ using std::map;
   DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint64,    ValueType)  \
   DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, QString,    ValueType)  \
 
-#define DECLARE_TYPE_CONTAINERS(Type)                          \
+#define DECLARE_BUILTIN_TYPE_CONTAINERS(Type)                  \
   Q_DECLARE_METATYPE( QList      < Type > )                    \
   Q_DECLARE_METATYPE( QVector    < Type > )                    \
   Q_DECLARE_METATYPE( QQueue     < Type > )                    \
@@ -59,12 +61,19 @@ using std::map;
   Q_DECLARE_METATYPE( std::vector< Type > )                    \
   Q_DECLARE_METATYPE( std::deque < Type > )                    \
   Q_DECLARE_METATYPE( std::list  < Type > )                    \
-  Q_DECLARE_METATYPE( ThreeArray < Type > )                    \
                                                                \
   DECLARE_ASSOCIATIVE_CONTAINER_TYPES( QMap,           Type )  \
   DECLARE_ASSOCIATIVE_CONTAINER_TYPES( QHash,          Type )  \
   DECLARE_ASSOCIATIVE_CONTAINER_TYPES( map,            Type )  \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES( QtUnorderedMap, Type )  \
+
+#ifndef GRANTLEE_NO_TR1
+#  define DECLARE_TR1_TYPE_CONTAINERS(Type)                       \
+     DECLARE_ASSOCIATIVE_CONTAINER_TYPES( QtUnorderedMap, Type )  \
+     Q_DECLARE_METATYPE( ThreeArray < Type > )                    \
+
+#  define DECLARE_TYPE_CONTAINERS(Type)                           \
+     DECLARE_BUILTIN_TYPE_CONTAINERS(Type)                        \
+     DECLARE_TR1_TYPE_CONTAINERS(Type)                            \
 
 namespace Grantlee {
 
@@ -87,5 +96,12 @@ struct MappedValueGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T
 };
 
 }
+
+#else
+
+#  define DECLARE_TYPE_CONTAINERS(Type)                          \
+     DECLARE_BUILTIN_TYPE_CONTAINERS(Type)                       \
+
+#endif
 
 #endif

@@ -32,20 +32,23 @@
 
 #include <string>
 
+#ifndef GRANTLEE_NO_TR1
 #include <tr1/memory>
 
 GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER           (ThreeArray)
 GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (ThreeArray)
 
-Q_DECLARE_METATYPE(QVector<QVariant>)
-Q_DECLARE_METATYPE(QStack<QVariant>)
-Q_DECLARE_METATYPE(QQueue<QVariant>)
-Q_DECLARE_METATYPE(QLinkedList<QVariant>)
-
 GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER      (QtUnorderedMap)
 GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR  (QtUnorderedMap)
 
 GRANTLEE_SMART_PTR_ACCESSOR(std::tr1::shared_ptr)
+
+#endif
+
+Q_DECLARE_METATYPE(QVector<QVariant>)
+Q_DECLARE_METATYPE(QStack<QVariant>)
+Q_DECLARE_METATYPE(QQueue<QVariant>)
+Q_DECLARE_METATYPE(QLinkedList<QVariant>)
 
 class TestGenericTypes : public QObject
 {
@@ -126,10 +129,12 @@ void TestGenericTypes::initTestCase()
 {
   // Register the handler for our custom type
   Grantlee::registerMetaType<Person>();
+#ifndef GRANTLEE_NO_TR1
   GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(QtUnorderedMap, Person)
   GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(ThreeArray, Person)
-  Grantlee::registerMetaType<QSharedPointer<PersonObject> >();
   Grantlee::registerMetaType<std::tr1::shared_ptr<PersonObject> >();
+#endif
+  Grantlee::registerMetaType<QSharedPointer<PersonObject> >();
 }
 
 void TestGenericTypes::testGenericClassType()
@@ -349,6 +354,7 @@ void insertPeople<QSet<Person> >(Grantlee::Context &c)
   c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
 }
 
+#ifndef GRANTLEE_NO_TR1
 template<>
 void insertPeople<ThreeArray<Person> >(Grantlee::Context &c)
 {
@@ -360,6 +366,7 @@ void insertPeople<ThreeArray<Person> >(Grantlee::Context &c)
     container[i] = it.value();
   c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
 }
+#endif
 
 template<typename AssociativeContainer>
 void insertAssociatedPeople(Grantlee::Context &c)
@@ -453,7 +460,9 @@ void TestGenericTypes::testSequentialContainer_Type()
   doTestSequentialContainer_Type<std::deque<Person> >();
   doTestSequentialContainer_Type<std::vector<Person> >();
   doTestSequentialContainer_Type<std::list<Person> >();
+#ifndef GRANTLEE_NO_TR1
   doTestSequentialContainer_Type<ThreeArray<Person> >();
+#endif
 }
 
 void TestGenericTypes::testAssociativeContainer_Type()
@@ -481,6 +490,7 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<std::map<quint32, Person> >();
   doTestAssociativeContainer_Type_Number<std::map<quint64, Person> >();
 
+#ifndef GRANTLEE_NO_TR1
   doTestAssociativeContainer_Type<QtUnorderedMap<QString, Person> >(true);
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint16, Person> >(true);
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint32, Person> >(true);
@@ -488,10 +498,13 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint16, Person> >(true);
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint32, Person> >(true);
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint64, Person> >(true);
+#endif
 }
 
 Q_DECLARE_METATYPE(QSharedPointer<PersonObject>)
+#ifndef GRANTLEE_NO_TR1
 Q_DECLARE_METATYPE(std::tr1::shared_ptr<PersonObject>)
+#endif
 
 void TestGenericTypes::testSharedPointer()
 {
@@ -516,6 +529,7 @@ void TestGenericTypes::testSharedPointer()
 
 void TestGenericTypes::testThirdPartySharedPointer()
 {
+#ifndef GRANTLEE_NO_TR1
   Grantlee::Engine engine;
 
   engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
@@ -532,7 +546,7 @@ void TestGenericTypes::testThirdPartySharedPointer()
   QCOMPARE(
       t1->render( &c ),
       QLatin1String( "Grant Lee 2" ));
-
+#endif
 }
 
 Q_DECLARE_METATYPE(QVector<qint16>)
