@@ -8,6 +8,8 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../corelib
 )
 
+set_source_files_properties(blockcontext.h PROPERTIES SKIP_AUTOMOC TRUE)
+
 grantlee_add_plugin(grantlee_loadertags
   loadertags
   blockcontext
