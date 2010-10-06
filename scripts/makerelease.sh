@@ -40,6 +40,8 @@ oldDir=$PWD
 echo Creating build directory
 mkdir -p $tempDir/grantlee-$name_fragment/build && cd $tempDir/grantlee-$name_fragment/build
 
+cp $oldDir/scripts/qttags.tag $tempDir/grantlee-$name_fragment/scripts
+
 echo Building.
 cmake -DCMAKE_INSTALL_PREFIX=../prefix ..
 make && make install
@@ -51,6 +53,16 @@ cd tests && ctest
 echo Copying archive to $oldDir/grantlee-$name_fragment.tar.gz
 cp $tempDir/grantlee-$name_fragment.tar.gz $oldDir
 
+qch_version_string=`echo $name_fragment | sed 's/\.//g'`
+
+echo "Creating Docs"
+make docs
+sed -i 's/at your option, any later version.<\/p>/at your option, any later version.<\/p>\
+<p>A version of this documentation suitable for viewing in Qt Assistant is available <a href\=\"http:\/\/www.grantlee.org\/grantlee-'${qch_version_string}'.qch\">here<\/a>.<\/p>/' apidox/index.html
+
+tar -czf $oldDir/apidox.tar.gz apidox
+
+cp $tempDir/grantlee-$name_fragment/build/grantlee-$qch_version_string.qch $oldDir
+
 cd $oldDir
 gpg --detach-sign --armor grantlee-$name_fragment.tar.gz
-
