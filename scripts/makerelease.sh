@@ -44,7 +44,7 @@ echo Building.
 cmake -DCMAKE_INSTALL_PREFIX=../prefix ..
 make && make install
 
-echo "Testing" 
+echo "Testing"
 cd tests && ctest
 
 
