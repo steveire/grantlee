@@ -67,8 +67,15 @@ public:
 #ifndef Q_QDOC
   typedef QSharedPointer<CachingLoaderDecorator> Ptr;
 #endif
+
+  /**
+    Constructor
+  */
   CachingLoaderDecorator( Grantlee::AbstractTemplateLoader::Ptr loader );
 
+  /**
+    Destructor
+  */
   virtual ~CachingLoaderDecorator();
 
   /* reimp */ bool canLoadTemplate( const QString& name ) const;
