@@ -98,7 +98,7 @@ namespace Grantlee
   @li The type must be registered as a QMetaType with Q_DECLARE_METATYPE
   @li If you want to use a Container of the type it too must be registered with Q_DECLARE_METATYPE.
   @li All containers are supported. (See @ref generic_containers)
-  @li The GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros help to define the introspection of the type. Between them is the definition of a method with the signature QVariant getProperty(Type object, const QString &property).
+  @li The GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros help to define the introspection of the type. Between them is the definition of a method with the signature QVariant getProperty(const Type &object, const QString &property).
   @li Grantlee::MetaType::init() must be called at some point to use the metatype system.
   @li Grantlee::registerMetaType must be called at some point in the program before attempting to use the type in a Context.
   @li The Context is created and used as normal.

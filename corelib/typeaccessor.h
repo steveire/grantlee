@@ -32,6 +32,8 @@
 #include <vector>
 #include <deque>
 
+/// @file
+
 namespace Grantlee
 {
 
@@ -128,6 +130,13 @@ QVariant GRANTLEE_CORE_EXPORT doQobjectLookUp( const QObject * const object, con
 #endif
 }
 
+/**
+  Disable random access to Container.
+
+  This is necessary for containers which do not have operator[].
+
+  @see @ref third_party_containers
+*/
 #define GRANTLEE_DISABLE_RANDOM_ACCESS(Container)                     \
 namespace Grantlee {                                                  \
 template<typename T>                                                  \

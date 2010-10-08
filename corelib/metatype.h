@@ -478,6 +478,11 @@ template<>                                                                      
 inline QVariant TypeAccessor<Type&>::lookUp( const Type &object, const QString &property ) \
 {                                                                                          \
 
+/**
+  Top boundary of a lookup function for Type*.
+
+  @see @ref generic_types
+ */
 #define GRANTLEE_BEGIN_LOOKUP_PTR(Type)                                                            \
 namespace Grantlee                                                                                 \
 {                                                                                                  \
