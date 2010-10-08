@@ -58,15 +58,15 @@ struct TypeAccessor<T&>
 namespace
 {
 
-template<typename Container, typename size_type = int>
+template<typename Container>
 struct SequentialContainerLookup
 {
   static QVariant doLookUp( const Container &container, const QString &property )
   {
     bool ok = false;
-    const size_type listIndex = property.toInt( &ok );
+    const size_t listIndex = (size_t)property.toInt( &ok );
 
-    if ( !ok || listIndex >= container.size() ) {
+    if ( !ok || listIndex >= (size_t)container.size() ) {
         return QVariant();
     }
 
@@ -140,35 +140,22 @@ struct TypeAccessor<Container<T>&>                                    \
 };                                                                    \
 }                                                                     \
 
-#ifndef Q_QDOC
 /**
-  @internal
+  Registers Container with %Grantlee so that it can be iterated in a @gr_tag{for} tag.
+
+  @see @ref third_party_containers
 */
-#define GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_type)           \
+#define GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)                          \
 namespace Grantlee {                                                                    \
 template<typename T>                                                                    \
 struct TypeAccessor<Container<T>&>                                                      \
 {                                                                                       \
   static QVariant lookUp( const Container<T> &c, const QString &property )              \
   {                                                                                     \
-    return SequentialContainerLookup<Container<T>, size_type>::doLookUp( c, property ); \
+    return SequentialContainerLookup<Container<T> >::doLookUp( c, property );           \
   }                                                                                     \
 };                                                                                      \
 }                                                                                       \
-
-#endif
-
-/**
-  Registers Container with %Grantlee so that it can be iterated in a @gr_tag{for} tag.
-
-  @see @ref third_party_containers
-*/
-#define GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)              \
-  GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, int)           \
-
-#define GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR(Container)          \
-  GRANTLEE_SEQUENTIAL_SIZETYPE_CONTAINER_ACCESSOR(Container, size_t)        \
-
 
 /**
   Registers Container with %Grantlee so that it can be iterated in a @gr_tag{for} tag.
@@ -216,9 +203,9 @@ GRANTLEE_DISABLE_RANDOM_ACCESS(QSet)
 GRANTLEE_DISABLE_RANDOM_ACCESS(QLinkedList)
 GRANTLEE_DISABLE_RANDOM_ACCESS(std::list)
 
-GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::deque)
-GRANTLEE_STL_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::vector)
-GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR     (std::map)
+GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::deque)
+GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (std::vector)
+GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR (std::map)
 
 GRANTLEE_SMART_PTR_ACCESSOR(QSharedPointer)
 
