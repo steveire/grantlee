@@ -52,6 +52,16 @@ int main(int argc, char **argv)
   renderTemplate( engine, "template3.txt" );
   qDebug() << "Expect: \"Template 5 content\"";
   renderTemplate( engine, "template6.txt" );
+  qDebug() << "Expect: \n" "file://" + QCoreApplication::applicationDirPath() + "/template_dir_2/red.png\n"
+                             "file://" + QCoreApplication::applicationDirPath() + "/template_dir_2/blue.png\n"
+                             "file://" + QCoreApplication::applicationDirPath() + "/template_dir_1/black.png\n"
+                             "file://" + QCoreApplication::applicationDirPath() + "/template_dir_1/white.png";
+  renderTemplate( engine, "mediatemplate1.txt" );
+  qDebug() << "Expect: \n" "file://" + QCoreApplication::applicationDirPath() + "/template_dir_1/black.png\n"
+                             "file://" + QCoreApplication::applicationDirPath() + "/template_dir_1/white.png\n"
+                             "file://" + QCoreApplication::applicationDirPath() + "/template_dir_2/red.png\n"
+                             "file://" + QCoreApplication::applicationDirPath() + "/template_dir_2/blue.png";
+  renderTemplate( engine, "mediatemplate2.txt" );
 
   app.exit(0);
 }
