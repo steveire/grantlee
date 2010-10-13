@@ -41,14 +41,15 @@ echo Creating build directory
 mkdir -p $tempDir/grantlee-$name_fragment/build && cd $tempDir/grantlee-$name_fragment/build
 
 cp $oldDir/scripts/qttags.tag $tempDir/grantlee-$name_fragment/scripts
+cp $oldDir/scripts/libstdc++.tag $tempDir/grantlee-$name_fragment/scripts
+cp $oldDir/scripts/libstdc++-longnames.tag $tempDir/grantlee-$name_fragment/scripts
 
 echo Building.
 cmake -DCMAKE_INSTALL_PREFIX=../prefix ..
 make && make install
 
 echo "Testing"
-cd tests && ctest
-
+make test
 
 echo Copying archive to $oldDir/grantlee-$name_fragment.tar.gz
 cp $tempDir/grantlee-$name_fragment.tar.gz $oldDir
