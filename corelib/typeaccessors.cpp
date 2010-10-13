@@ -6,19 +6,20 @@
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either version
-  2 of the Licence, or (at your option) any later version.
+  2.1 of the Licence, or (at your option) any later version.
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+  Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "typeaccessors_p.h"
+#include "typeaccessor.h"
+
 #include "metaenumvariable_p.h"
 #include "safestring.h"
 
@@ -28,34 +29,6 @@
 
 namespace Grantlee
 {
-
-template <>
-QVariant TypeAccessor<QVariantHash>::lookUp( const QVariantHash object, const QString &property )
-{
-  if ( object.contains( property ) )
-    return object.value( property );
-  if ( property == QLatin1String( "items" ) ) {
-    QVariantList itemsList;
-    Q_FOREACH( const QString &key, object.keys() ) {
-      itemsList.append( QVariant( QVariantList() << key << object.value( key ) ) );
-    }
-    return itemsList;
-  }
-
-  if ( property == QLatin1String( "keys" ) ) {
-    const QStringList keys = object.keys();
-    QVariantList list;
-    Q_FOREACH( const QString &key, keys )
-      list << key;
-    return list;
-  }
-
-  if ( property == QLatin1String( "values" ) ) {
-    return object.values();
-  }
-
-  return QVariant();
-}
 
 static QRegExp getIsTitleRegexp() {
   QRegExp titleRe( QLatin1String( "\\b[a-z]" ) );
@@ -70,7 +43,7 @@ static QRegExp getTitleRegexp() {
 }
 
 template <>
-QVariant TypeAccessor<Grantlee::SafeString>::lookUp( const Grantlee::SafeString object, const QString &property )
+QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString &object, const QString &property )
 {
   if ( property == QLatin1String( "capitalize" ) ) {
     const QString s = object.get();
@@ -184,8 +157,7 @@ QVariant TypeAccessor<Grantlee::SafeString>::lookUp( const Grantlee::SafeString 
   return QVariant();
 }
 
-template <>
-QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QString &property )
+QVariant doQobjectLookUp( const QObject * const object, const QString &property )
 {
   if ( property == QLatin1String( "children" ) )
   {
@@ -241,11 +213,17 @@ QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QSt
 
     return QVariant::fromValue( mev );
   }
-  return QVariant();
+  return object->property( property.toUtf8() );
 }
 
 template <>
-QVariant TypeAccessor<MetaEnumVariable>::lookUp( const MetaEnumVariable object, const QString &property )
+QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QString &property )
+{
+  return doQobjectLookUp( object, property );
+}
+
+template <>
+QVariant TypeAccessor<MetaEnumVariable&>::lookUp( const MetaEnumVariable &object, const QString &property )
 {
   if ( property == QLatin1String( "name" ) )
     return QLatin1String( object.enumerator.name() );

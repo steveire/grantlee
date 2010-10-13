@@ -67,11 +67,15 @@ namespace Grantlee
     mapping.insert("myobject", objVar); // Can insert QObject*
   @endcode
 
+  It is additionally possible to insert any type of object or any container (not just QVariantHash and QVariantList) into the Context.
+  @see @ref generic_types_and_templates.
+
   @section extending_grantlee Extending Grantlee
 
-  %Grantlee has 4 extension points.
+  %Grantlee has 5 extension points.
 
   - Custom object variables
+  - Generic types and containers
   - Filters
   - Tags
   - Loaders
@@ -122,13 +126,18 @@ namespace Grantlee
     Q_PROPERTY(int age READ age)
   @endverbatim
 
-  to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects.
+  to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects. In the case of dynamic properties, the property name must be UTF-8 encoded.
 
   If you already have QObjects in your application which would be suitable for use in templates, you only need to add some Q_PROPERTY entries to the classes to make them accessible to %Grantlee.
 
   @note If you are familiar with Django you may be aware of the alters_data attribute for methods. This method of using wrappers and const is the equivalent to the alters_data attribute. You the wrapper writer choose the properties which will be accessible from the templates and makes them const, so there's no need to mark other methods as alters_data.
 
   For most uses of %Grantlee, this is enough to get make an application themable easily and quickly. For more advanced usage, see @ref extension. For some example uses of %Grantlee, see @ref examples.
+
+  @subsection generic_variables
+
+  An alternative to writing wrapper QObject classes with Q_PROPERTY macros is to use the Grantlee::MetaType system to provide introspection
+  for any type or any container. This subject is treated in detail in @ref generic_types_and_templates
 
   @subsection enumerator_variables Enumerators
 

@@ -18,10 +18,12 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII)
 
 set (grantlee_core_SRCS
   cachingloaderdecorator.cpp
+  customtyperegistry.cpp
   context.cpp
   engine.cpp
   filterexpression.cpp
   lexer.cpp
+  metatype.cpp
   mutabletemplate.cpp
   node.cpp
   nodebuiltins.cpp
@@ -83,6 +85,7 @@ install(TARGETS grantlee_core
 
 install(FILES
   cachingloaderdecorator.h
+  containeraccessor.h
   context.h
   engine.h
   exception.h
@@ -90,6 +93,7 @@ install(FILES
   filterexpression.h
   grantlee_core_export.h
   ${PROJECT_BINARY_DIR}/grantlee_version.h
+  metatype.h
   mutabletemplate.h
   node.h
   outputstream.h
@@ -99,6 +103,7 @@ install(FILES
   taglibraryinterface.h
   template.h
   templateloader.h
+  typeaccessor.h
   token.h
   util.h
   variable.h

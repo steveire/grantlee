@@ -6,12 +6,12 @@
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either version
-  2 of the Licence, or (at your option) any later version.
+  2.1 of the Licence, or (at your option) any later version.
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+  Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
@@ -22,6 +22,7 @@
 
 #include "grantlee_latin1literal_p.h"
 #include "metaenumvariable_p.h"
+#include "metatype.h"
 
 #include <QtCore/QStringList>
 
@@ -71,53 +72,7 @@ bool Grantlee::variantIsTrue( const QVariant &variant )
 
 QVariantList Grantlee::variantToList( const QVariant &var )
 {
-
-  if ( !var.isValid() )
-    return QVariantList();
-
-  if ( var.type() == QVariant::List ) {
-    return var.toList();
-  }
-
-  if ( var.type() == QVariant::StringList ) {
-    QVariantList list;
-    foreach(const QString &_string, var.toStringList())
-      list << _string;
-    return list;
-  }
-
-  if ( var.type() == QVariant::Hash ) {
-    const QVariantHash varHash = var.toHash();
-    QVariantList list;
-
-    QVariantHash::const_iterator it = varHash.constBegin();
-    for ( ; it != varHash.constEnd(); ++it )
-      list << it.key();
-
-    return list;
-  }
-
-  if ( var.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-    const MetaEnumVariable mev = var.value<MetaEnumVariable>();
-    if (mev.value != -1)
-      return QVariantList();
-
-    QVariantList list;
-    for (int row = 0; row < mev.enumerator.keyCount(); ++row) {
-      list << QVariant::fromValue( MetaEnumVariable( mev.enumerator, row ) );
-    }
-    return list;
-  }
-
-  if ( var.userType() == QMetaType::QObjectStar ) {
-    QObject *obj = var.value<QObject*>();
-    if ( obj->property( "__list__" ).isValid() ) {
-      return obj->property( "__list__" ).toList();
-    }
-  } else {
-    return QVariantList() << var;
-  }
-  return QVariantList();
+  return MetaType::toVariantList( var );
 }
 
 Grantlee::SafeString Grantlee::markSafe( const Grantlee::SafeString &input )

@@ -6,12 +6,12 @@
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either version
-  2 of the Licence, or (at your option) any later version.
+  2.1 of the Licence, or (at your option) any later version.
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+  Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
@@ -20,13 +20,14 @@
 
 #include "lists.h"
 
+#include "metatype.h"
 #include "util.h"
 
 #include <QtCore/QDateTime>
 
 QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
   QListIterator<QVariant> i( varList );
   QString ret;
   while ( i.hasNext() ) {
@@ -83,7 +84,7 @@ QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument,
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
 
   if ( varList.isEmpty() )
     return QString();
@@ -95,7 +96,7 @@ QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, 
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
 
   if ( varList.isEmpty() )
     return QString();
@@ -107,7 +108,7 @@ QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  QVariantList varList = variantToList( input );
+  QVariantList varList = MetaType::toVariantList( input );
 
   qsrand( QDateTime::currentDateTime().toTime_t() );
   int rnd = qrand() % varList.size();

@@ -6,38 +6,36 @@
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either version
-  2 of the Licence, or (at your option) any later version.
+  2.1 of the Licence, or (at your option) any later version.
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+  Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef GRANTLEE_TYPEACCESSOR_P_H
-#define GRANTLEE_TYPEACCESSOR_P_H
+#ifndef QTUNORDEREDMAP_H
+#define QTUNORDEREDMAP_H
 
-#include <QtCore/QVariant>
+#include <QtCore/QHash>
 
-namespace Grantlee
+#include <tr1/unordered_map>
+
+template <typename Key>
+struct QtHasher
 {
-
-template <typename T>
-struct TypeAccessor
-{
-  static QVariant lookUp( const T object, const QString &property );
+  size_t operator()(Key k) const
+  { return qHash(k); }
 };
 
-template <typename T>
-struct TypeAccessor<T*>
+template<typename Key, typename Value>
+struct QtUnorderedMap : public std::tr1::unordered_map<Key, Value, QtHasher<Key> >
 {
-  static QVariant lookUp( const T * const object, const QString &property );
-};
 
-}
+};
 
 #endif

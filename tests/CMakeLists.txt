@@ -17,18 +17,34 @@ configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 set (_rcc_file "scriptedtags.qrc")
 qt4_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/plugins/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING}" )
 
-macro(GRANTLEE_UNIT_TESTS)
+macro(GRANTLEE_CORE_UNIT_TESTS)
   foreach(_testname ${ARGN})
     set(_testSrcs ${_testname}.cpp)
     set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
     qt4_generate_moc(${_testname}.cpp ${moc_output_file})
     add_executable(${_testname}_exec ${_testSrcs} ${moc_output_file} ${_scripted_rcc_src} ${CMAKE_SOURCE_DIR}/corelib/lexer.cpp)
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${Grantlee_CORE_LIBRARIES} ${Grantlee_GUI_LIBRARY} )
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${Grantlee_CORE_LIBRARIES} )
   endforeach(_testname)
-endmacro(GRANTLEE_UNIT_TESTS)
+endmacro(GRANTLEE_CORE_UNIT_TESTS)
 
-grantlee_unit_tests(
+macro(GRANTLEE_GUI_UNIT_TESTS)
+  foreach(_testname ${ARGN})
+    set(_testSrcs ${_testname}.cpp)
+    set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
+    qt4_generate_moc(${_testname}.cpp ${moc_output_file})
+    add_executable(${_testname}_exec ${_testSrcs} ${moc_output_file} )
+    add_test(${_testname} ${_testname}_exec )
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${Grantlee_GUI_LIBRARY} )
+  endforeach(_testname)
+endmacro(GRANTLEE_GUI_UNIT_TESTS)
+
+grantlee_gui_unit_tests(
+  htmlbuildertest
+  plainmarkupbuildertest
+)
+
+grantlee_core_unit_tests(
   testsafestring
   testbuiltins
   testloadertags
@@ -36,8 +52,8 @@ grantlee_unit_tests(
   testscriptabletags
   testmutabletags
   testfilters
-  htmlbuildertest
-  plainmarkupbuildertest
+  testgenerictypes
+  testgenericcontainers
   benchmarks
 )
 

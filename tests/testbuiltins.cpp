@@ -6,12 +6,12 @@
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either version
-  2 of the Licence, or (at your option) any later version.
+  2.1 of the Licence, or (at your option) any later version.
 
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Library General Public License for more details.
+  Lesser General Public License for more details.
 
   You should have received a copy of the GNU Lesser General Public
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
@@ -240,6 +240,9 @@ private Q_SLOTS:
 
   void testMediaPathSafety_data();
   void testMediaPathSafety();
+
+  void testDynamicProperties_data();
+  void testDynamicProperties() { doTest(); }
 
   void cleanupTestCase();
 
@@ -1145,6 +1148,24 @@ void TestBuiltinSyntax::testTypeAccessors_data()
                                                     "</ul>" ) << NoError;
 
 }
+
+void TestBuiltinSyntax::testDynamicProperties_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QObject *obj = new QObject( this );
+  obj->setProperty( "prop", 7 );
+  dict.insert( QLatin1String( "var" ), QVariant::fromValue( static_cast<QObject*>( obj ) ) );
+
+  QTest::newRow( "dynamic-properties01" ) << QString::fromLatin1( "{{ var.prop }}" ) << dict << QString::fromLatin1( "7" ) << NoError;
+
+}
+
 
 
 QTEST_MAIN( TestBuiltinSyntax )

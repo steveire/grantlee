@@ -31,6 +31,7 @@ namespace Grantlee
       - Template
       - AbstractTemplateLoader
       - FileSystemTemplateLoader
+      - MetaType
     </td><td>
       - AbstractNodeFactory
       - Exception
@@ -51,6 +52,7 @@ namespace Grantlee
       - @ref differences_django
       - @ref using_and_deploying
       - @ref internals
+      - @ref generic_types_and_templates
     </td></tr>
       <tr><th class="library" colspan="3">%Grantlee GUI</th></tr>
     <tr><td colspan="2">
