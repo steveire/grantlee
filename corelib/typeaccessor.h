@@ -29,8 +29,9 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QVariant>
 
-#include <vector>
 #include <deque>
+#include <list>
+#include <vector>
 
 /// @file
 

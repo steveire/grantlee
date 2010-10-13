@@ -31,6 +31,11 @@
 #include <QtCore/QStack>
 #include <QtCore/QQueue>
 
+#include <deque>
+#include <list>
+#include <map>
+#include <vector>
+
 /// @file
 
 namespace Grantlee

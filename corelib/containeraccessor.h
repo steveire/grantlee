@@ -23,6 +23,8 @@
 
 #include <QtCore/QVariant>
 
+#include <map>
+
 namespace Grantlee
 {
 
