@@ -1,11 +1,8 @@
 project(grantlee_loadertags)
 
-include(${Grantlee_USE_FILE})
-
 include_directories(
   ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/../corelib
 )
 
 set_source_files_properties(blockcontext.h PROPERTIES SKIP_AUTOMOC TRUE)

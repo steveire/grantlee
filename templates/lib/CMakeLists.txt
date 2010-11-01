@@ -50,7 +50,7 @@ set(scriptabletags_FILES
 )
 
 foreach(file ${scriptabletags_FILES})
-  set(scriptabletags_SRCS ${scriptabletags_SRCS} ${CMAKE_SOURCE_DIR}/scriptabletags/${file})
+  set(scriptabletags_SRCS ${scriptabletags_SRCS} ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
 endforeach()
 
 set(Grantlee_CORE_LIB_SOVERSION 0)
