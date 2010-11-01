@@ -27,10 +27,7 @@
 #include "parser.h"
 #include "util.h"
 
-#include <QtCore/QBuffer>
-
-typedef QPair<Grantlee::Filter::Ptr, Grantlee::Variable > ArgFilter;
-
+typedef QPair<Grantlee::Filter::Ptr, Grantlee::Variable> ArgFilter;
 
 namespace Grantlee
 {
@@ -38,7 +35,9 @@ namespace Grantlee
 class FilterExpressionPrivate
 {
   FilterExpressionPrivate( FilterExpression *fe )
-      : q_ptr( fe ) {
+      : q_ptr( fe )
+  {
+
   }
 
   Variable m_variable;
@@ -189,6 +188,7 @@ FilterExpression &FilterExpression::operator=( const FilterExpression & other )
 {
   d_ptr->m_variable = other.d_ptr->m_variable;
   d_ptr->m_filters = other.d_ptr->m_filters;
+  d_ptr->m_filterNames = other.d_ptr->m_filterNames;
   return *this;
 }
 
