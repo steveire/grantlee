@@ -42,14 +42,33 @@ using std::map;
   typedef ContainerType<KeyType, ValueType> ContainerType##KeyType##ValueType;     \
   Q_DECLARE_METATYPE(ContainerType##KeyType##ValueType)                            \
 
-#define DECLARE_ASSOCIATIVE_CONTAINER_TYPES(ContainerType, ValueType)  \
-  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, qint16,     ValueType)  \
-  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, qint32,     ValueType)  \
-  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, qint64,     ValueType)  \
-  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint16,    ValueType)  \
-  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint32,    ValueType)  \
-  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint64,    ValueType)  \
-  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, QString,    ValueType)  \
+#define DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL(ContainerType, ValueType)  \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, qint32,     ValueType)          \
+
+#define DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL(ContainerType, ValueType)  \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, qint16,     ValueType)      \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, qint32,     ValueType)      \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, qint64,     ValueType)      \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint16,    ValueType)      \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint32,    ValueType)      \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint64,    ValueType)      \
+  DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, QString,    ValueType)      \
+
+#define DECLARE_ASSOCIATIVE_CONTAINERS_ALL(Type)          \
+  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL( QMap,  Type )  \
+  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL( QHash, Type )  \
+  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL( map,   Type )  \
+
+#define DECLARE_ASSOCIATIVE_CONTAINERS_MINIMAL(Type)          \
+  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL( QMap,  Type )  \
+  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL( QHash, Type )  \
+  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL( map,   Type )  \
+
+#ifndef MINIMAL_CONTAINER_TESTS
+#  define DECLARE_ASSOCIATIVE_CONTAINER_TYPES DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL
+#else
+#  define DECLARE_ASSOCIATIVE_CONTAINER_TYPES DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL
+#endif
 
 #define DECLARE_BUILTIN_TYPE_CONTAINERS(Type)                  \
   Q_DECLARE_METATYPE( QList      < Type > )                    \

@@ -18,6 +18,8 @@
 
 */
 
+#define MINIMAL_CONTAINER_TESTS
+
 #include "engine.h"
 #include "grantlee_paths.h"
 #include "metatype.h"
@@ -28,9 +30,10 @@
 
 typedef QObject* QObjectStar;
 
+DECLARE_TYPE_CONTAINERS(qint32)
+#ifndef MINIMAL_CONTAINER_TESTS
 DECLARE_TYPE_CONTAINERS(QVariant)
 DECLARE_TYPE_CONTAINERS(qint16)
-DECLARE_TYPE_CONTAINERS(qint32)
 DECLARE_TYPE_CONTAINERS(qint64)
 DECLARE_TYPE_CONTAINERS(quint16)
 DECLARE_TYPE_CONTAINERS(quint32)
@@ -40,6 +43,7 @@ DECLARE_TYPE_CONTAINERS(double)
 DECLARE_TYPE_CONTAINERS(QString)
 DECLARE_TYPE_CONTAINERS(QDateTime)
 DECLARE_TYPE_CONTAINERS(QObjectStar)
+#endif
 
 class TestGenericContainers : public QObject
 {
@@ -337,27 +341,29 @@ void doTestNonHashableContainers()
   doTestSequentialContainer<QLinkedList<T> >();
   doTestSequentialContainer<QQueue<T> >();
   doTestSequentialContainer<QStack<T> >();
-  doTestAssociativeContainer<QMap<qint16, T> >();
   doTestAssociativeContainer<QMap<qint32, T> >();
+  doTestAssociativeContainer<std::map<qint32, T> >();
+  doTestAssociativeContainer<QHash<qint32, T> >(true);
+#ifndef MINIMAL_CONTAINER_TESTS
+  doTestAssociativeContainer<QMap<qint16, T> >();
   doTestAssociativeContainer<QMap<qint64, T> >();
   doTestAssociativeContainer<QMap<quint16, T> >();
   doTestAssociativeContainer<QMap<quint32, T> >();
   doTestAssociativeContainer<QMap<quint64, T> >();
   doTestAssociativeContainer<QMap<QString, T> >();
   doTestAssociativeContainer<std::map<qint16, T> >();
-  doTestAssociativeContainer<std::map<qint32, T> >();
   doTestAssociativeContainer<std::map<qint64, T> >();
   doTestAssociativeContainer<std::map<quint16, T> >();
   doTestAssociativeContainer<std::map<quint32, T> >();
   doTestAssociativeContainer<std::map<quint64, T> >();
   doTestAssociativeContainer<std::map<QString, T> >();
   doTestAssociativeContainer<QHash<qint16, T> >(true);
-  doTestAssociativeContainer<QHash<qint32, T> >(true);
   doTestAssociativeContainer<QHash<qint64, T> >(true);
   doTestAssociativeContainer<QHash<quint16, T> >(true);
   doTestAssociativeContainer<QHash<quint32, T> >(true);
   doTestAssociativeContainer<QHash<quint64, T> >(true);
   doTestAssociativeContainer<QHash<QString, T> >(true);
+#endif
 }
 
 template<typename T>
@@ -369,8 +375,9 @@ void doTestContainers()
 
 void TestGenericContainers::testContainer_Builtins()
 {
-  doTestContainers<qint16>();
   doTestContainers<qint32>();
+#ifndef MINIMAL_CONTAINER_TESTS
+  doTestContainers<qint16>();
   doTestContainers<qint64>();
   doTestContainers<quint16>();
   doTestContainers<quint32>();
@@ -381,6 +388,7 @@ void TestGenericContainers::testContainer_Builtins()
   doTestNonHashableContainers<QVariant>();
   doTestNonHashableContainers<QDateTime>();
   doTestContainers<QObject*>();
+#endif
 }
 
 
