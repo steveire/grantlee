@@ -38,17 +38,19 @@ class VariablePrivate
 {
 public:
   VariablePrivate( Variable *variable )
-      : q_ptr( variable ) {
+      : q_ptr( variable ),
+        m_localize( false )
+  {
 
   }
+
+  Q_DECLARE_PUBLIC( Variable )
+  Variable * const q_ptr;
 
   QString m_varString;
   QVariant m_literal;
   QStringList m_lookups;
-  bool m_translate;
-
-  Q_DECLARE_PUBLIC( Variable )
-  Variable * const q_ptr;
+  bool m_localize;
 };
 
 }
@@ -59,7 +61,7 @@ Variable::Variable( const Variable &other )
   d_ptr->m_varString = other.d_ptr->m_varString;
   d_ptr->m_literal = other.d_ptr->m_literal;
   d_ptr->m_lookups = other.d_ptr->m_lookups;
-  d_ptr->m_translate = other.d_ptr->m_translate;
+  d_ptr->m_localize = other.d_ptr->m_localize;
 }
 
 Variable::Variable()
@@ -77,7 +79,7 @@ Variable &Variable::operator=( const Variable & other )
   d_ptr->m_varString = other.d_ptr->m_varString;
   d_ptr->m_literal = other.d_ptr->m_literal;
   d_ptr->m_lookups = other.d_ptr->m_lookups;
-  d_ptr->m_translate = other.d_ptr->m_translate;
+  d_ptr->m_localize = other.d_ptr->m_localize;
   return *this;
 }
 
@@ -100,7 +102,7 @@ Variable::Variable( const QString &var )
   } else {
     QString localVar = var;
     if ( var.startsWith( QLatin1String( "_(" ) ) && var.endsWith( QLatin1Char( ')' ) ) ) {
-      d->m_translate = true;
+      d->m_localize = true;
       localVar = var.mid( 2, var.size() - 3 );
     }
     if (( localVar.startsWith( QLatin1Char( '"' ) ) && localVar.endsWith( QLatin1Char( '"' ) ) )
@@ -193,7 +195,7 @@ QVariant Variable::resolve( Context *c ) const
       var = d->m_literal;
   }
 
-  if ( d->m_translate ) {
+  if ( d->m_localize ) {
 //     return gettext(var.toString());
   }
 
