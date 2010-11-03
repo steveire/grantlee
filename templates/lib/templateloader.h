@@ -156,6 +156,8 @@ public:
   */
   void setTemplateDirs( const QStringList &dirs );
 
+  QStringList templateDirs() const;
+
 private:
   QString m_themeName;
   QStringList m_templateDirs;

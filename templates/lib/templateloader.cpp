@@ -72,6 +72,11 @@ void FileSystemTemplateLoader::setTemplateDirs( const QStringList &dirs )
   m_templateDirs = dirs;
 }
 
+QStringList FileSystemTemplateLoader::templateDirs() const
+{
+  return m_templateDirs;
+}
+
 bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
 {
   int i = 0;
