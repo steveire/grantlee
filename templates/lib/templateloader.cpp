@@ -23,6 +23,7 @@
 #include "engine.h"
 #include "exception.h"
 #include "grantlee_latin1literal_p.h"
+#include "nulllocalizer_p.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -178,3 +179,52 @@ QPair<QString, QString> InMemoryTemplateLoader::getMediaUri( const QString& file
   return QPair<QString, QString>();
 }
 
+namespace Grantlee
+{
+
+class LocalizedFileSystemTemplateLoaderPrivate
+{
+  LocalizedFileSystemTemplateLoaderPrivate( LocalizedFileSystemTemplateLoader *qq, AbstractLocalizer::Ptr localizer )
+    : q_ptr( qq ), m_localizer( localizer ? localizer : AbstractLocalizer::Ptr( new NullLocalizer ) )
+  {
+
+  }
+  Q_DECLARE_PUBLIC( LocalizedFileSystemTemplateLoader )
+  LocalizedFileSystemTemplateLoader * const q_ptr;
+  const AbstractLocalizer::Ptr m_localizer;
+};
+
+}
+
+LocalizedFileSystemTemplateLoader::LocalizedFileSystemTemplateLoader( const AbstractLocalizer::Ptr localizer )
+  : FileSystemTemplateLoader(),
+    d_ptr( new LocalizedFileSystemTemplateLoaderPrivate( this, localizer ) )
+{
+
+}
+
+LocalizedFileSystemTemplateLoader::~LocalizedFileSystemTemplateLoader()
+{
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d_ptr->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
+}
+
+void LocalizedFileSystemTemplateLoader::setTemplateDirs( const QStringList& dirs )
+{
+  Q_D( LocalizedFileSystemTemplateLoader );
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
+  FileSystemTemplateLoader::setTemplateDirs( dirs );
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->loadCatalog( dir + QLatin1Char( '/' ) + themeName(), themeName() );
+}
+
+void LocalizedFileSystemTemplateLoader::setTheme( const QString& _themeName )
+{
+  Q_D( LocalizedFileSystemTemplateLoader );
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
+  FileSystemTemplateLoader::setTheme( _themeName );
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->loadCatalog( dir + QLatin1Char( '/' ) + _themeName, _themeName );
+}
