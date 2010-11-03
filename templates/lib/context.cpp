@@ -20,6 +20,7 @@
 
 #include "context.h"
 
+#include "nulllocalizer_p.h"
 #include "rendercontext.h"
 #include "util.h"
 
@@ -36,7 +37,8 @@ class ContextPrivate
         m_autoescape( true ),
         m_mutating( false ),
         m_urlType( Context::AbsoluteUrls ),
-        m_renderContext( new RenderContext )
+        m_renderContext( new RenderContext ),
+        m_localizer( new NullLocalizer )
   {
     m_variantHashStack.append( variantHash );
   }
@@ -56,6 +58,7 @@ class ContextPrivate
   Context::UrlType m_urlType;
   QString m_relativeMediaPath;
   RenderContext * const m_renderContext;
+  AbstractLocalizer::Ptr  m_localizer;
 };
 
 }
@@ -217,4 +220,18 @@ RenderContext* Context::renderContext() const
   return d->m_renderContext;
 }
 
+void Context::setLocalizer( AbstractLocalizer::Ptr localizer )
+{
+  Q_D( Context );
+  if ( !localizer ) {
+    d->m_localizer = AbstractLocalizer::Ptr( new NullLocalizer );
+    return;
+  }
+  d->m_localizer = localizer;
+}
 
+AbstractLocalizer::Ptr Context::localizer() const
+{
+  Q_D( const Context );
+  return d->m_localizer;
+}

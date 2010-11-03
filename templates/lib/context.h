@@ -21,6 +21,7 @@
 #ifndef GRANTLEE_CONTEXT_H
 #define GRANTLEE_CONTEXT_H
 
+#include "abstractlocalizer.h"
 #include "grantlee_core_export.h"
 
 #include <QtCore/QVariantHash>
@@ -199,6 +200,18 @@ public:
   */
   void clearExternalMedia();
 #endif
+
+  /**
+    Sets the localizer to be used.
+
+    The Context takes ownerwhip of the localizer.
+  */
+  void setLocalizer( AbstractLocalizer::Ptr localizer );
+
+  /**
+    Returns the localizer currently in use.
+  */
+  AbstractLocalizer::Ptr localizer() const;
 
   /**
     Returns the external media encountered in the Template while rendering.
