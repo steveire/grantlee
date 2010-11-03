@@ -20,6 +20,7 @@
 
 #include "variable.h"
 
+#include "abstractlocalizer.h"
 #include "context.h"
 #include "exception.h"
 #include "metaenumvariable_p.h"
@@ -90,21 +91,21 @@ Variable::Variable( const QString &var )
   d->m_varString = var;
 
   QVariant v( var );
+  QString localVar = var;
+  if ( var.startsWith( QLatin1String( "_(" ) ) && var.endsWith( QLatin1Char( ')' ) ) ) {
+    d->m_localize = true;
+    localVar = var.mid( 2, var.size() - 3 );
+    v = localVar;
+  }
   if ( v.convert( QVariant::Double ) ) {
     d->m_literal = v;
     if ( !var.contains( QLatin1Char( '.' ) ) && !var.contains( QLatin1Char( 'e' ) ) ) {
       if ( var.endsWith( QLatin1Char( '.' ) ) ) {
 //         throw Grantlee::Exception( VariableSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( v.toString() ) );
       }
-
       d->m_literal = v.toInt();
     }
   } else {
-    QString localVar = var;
-    if ( var.startsWith( QLatin1String( "_(" ) ) && var.endsWith( QLatin1Char( ')' ) ) ) {
-      d->m_localize = true;
-      localVar = var.mid( 2, var.size() - 3 );
-    }
     if (( localVar.startsWith( QLatin1Char( '"' ) ) && localVar.endsWith( QLatin1Char( '"' ) ) )
         || ( localVar.startsWith( QLatin1Char( '\'' ) ) && localVar.endsWith( QLatin1Char( '\'' ) ) ) ) {
       const QString unesc = unescapeStringLiteral( localVar );
@@ -195,17 +196,19 @@ QVariant Variable::resolve( Context *c ) const
       var = d->m_literal;
   }
 
-  if ( d->m_localize ) {
-//     return gettext(var.toString());
-  }
-
-
   if ( supportedOutputType( var ) ) {
+    if ( d->m_localize ) {
+      return c->localizer()->localize( var );
+    }
     return var;
   }
   if ( var.canConvert( QVariant::String ) ) {
-    if ( var.convert( QVariant::String ) )
+    if ( var.convert( QVariant::String ) ) {
+      if ( d->m_localize ) {
+        return QVariant::fromValue<Grantlee::SafeString>( c->localizer()->localize( var ) );
+      }
       return QVariant::fromValue<Grantlee::SafeString>( var.toString() );
+    }
     return QVariant();
   }
   // Could be a list, hash or enum.

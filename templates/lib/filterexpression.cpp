@@ -66,23 +66,28 @@ static QRegExp getFilterRegexp()
   const QLatin1Literal doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" );
   const QLatin1Literal singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
   const QString i18nClose( QRegExp::escape( QLatin1String( ")" ) ) );
+  const QString variable = QLatin1Char( '[' ) + varChars + QLatin1Literal( "]+");
 
-  const QString constantString = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
-                                                         + i18nOpen + singleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
-                                                         + doubleQuoteStringLiteral + QLatin1Char( '|' )
+  const QString localizedExpression = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+                                                              + i18nOpen + singleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+                                                              + i18nOpen + numChars                 + i18nClose + QLatin1Char( '|' )
+                                                              + i18nOpen + variable                 + i18nClose + QLatin1Char( ')' );
+
+  const QString constantString = QLatin1Literal( "(?:" ) + doubleQuoteStringLiteral + QLatin1Char( '|' )
                                                          + singleQuoteStringLiteral
-                               + QLatin1Char( ')' );
+                                   + QLatin1Char( ')' );
 
   const QString filterRawString = QLatin1Char( '^' ) + constantString + QLatin1Char( '|' )
-                               + QLatin1Literal( "^[" ) + varChars + QLatin1Literal( "]+|" )
+                               + QLatin1Char( '^' ) + localizedExpression + QLatin1Char( '|' )
+                               + QLatin1Char( '^' ) + variable + QLatin1Char( '|' )
                                + numChars + QLatin1Char( '|' )
                                + filterSep + QLatin1Literal( "\\w+|" )
                                + argSep
                                + QLatin1Literal( "(?:" )
-                                 + constantString
-                                 + QLatin1Literal( "|[" )
-                                 + varChars
-                                 + QLatin1Literal( "]+|" )
+                                 + constantString + QLatin1Char( '|' ) + localizedExpression
+                                 + QLatin1Char( '|' )
+                                 + variable
+                                 + QLatin1Char( '|' )
                                  + numChars
                                  + QLatin1Char( '|' )
                                  + filterSep
