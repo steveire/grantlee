@@ -84,11 +84,11 @@ void Benchmarking::initTestCase()
   m_engine->setPluginPaths( QStringList( QLatin1String( GRANTLEE_PLUGIN_PATH ) ) );
 
   m_templateGeneratorString =
-    QLatin1String(  "Lorem {% for i in items %}"
-    " Ipsum {% templatetag openblock %} if boo {% templatetag closeblock %} "
-    "bar {% templatetag openvariable %} bat|upper {% templatetag closevariable %} baz {{ i }} dolor"
-    " {% templatetag openblock %} endif {% templatetag closeblock %} sit."
-    "{% endfor %} amet.\n" );
+    QLatin1String( "Lorem {% for i in items %}"
+                   " Ipsum {% templatetag openblock %} if boo {% templatetag closeblock %} "
+                   "bar {% templatetag openvariable %} bat|upper {% templatetag closevariable %} baz {{ i }} dolor"
+                   " {% templatetag openblock %} endif {% templatetag closeblock %} sit."
+                   "{% endfor %} amet.\n" );
 
   m_templateGenerator = m_engine->newTemplate( m_templateGeneratorString, QLatin1String( "generator" ) );
 

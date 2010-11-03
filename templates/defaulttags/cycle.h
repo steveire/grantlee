@@ -74,7 +74,7 @@ private:
 
 typedef RingIterator<FilterExpression> FilterExpressionRotator;
 
-Q_DECLARE_METATYPE(FilterExpressionRotator)
+Q_DECLARE_METATYPE( FilterExpressionRotator )
 
 class CycleNode : public Node
 {

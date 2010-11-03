@@ -37,8 +37,7 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
 
   expr.takeAt( 0 );
   int numArgs = expr.size();
-  if ( numArgs != 1 )
-  {
+  if ( numArgs != 1 ) {
     if ( numArgs <= 2 ) {
       throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'range' tag requires at least three arguments" ) );
     }

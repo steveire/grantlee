@@ -100,7 +100,7 @@ public:
   bool isEmpty() const;
 
 private:
-  Q_DECLARE_PRIVATE(CachingLoaderDecorator)
+  Q_DECLARE_PRIVATE( CachingLoaderDecorator )
   CachingLoaderDecoratorPrivate * const d_ptr;
 };
 

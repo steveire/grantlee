@@ -142,7 +142,7 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
   } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && lhs.userType() == QVariant::String ) {
     equal = ( rhs.value<Grantlee::SafeString>() == lhs.toString() );
   } else if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-    if (lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
       equal = ( rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>() );
     } else if ( lhs.type() == QVariant::Int ) {
       equal = ( rhs.value<MetaEnumVariable>() == lhs.toInt() );

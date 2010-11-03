@@ -50,7 +50,7 @@ public:
   /**
     Returns the data for the node @p scopeNode.
    */
-  QVariant& data ( Node * const scopeNode );
+  QVariant& data( Node * const scopeNode );
 
   /**
     Returns whether the RenderContext contains data for @p scopeNode.
@@ -74,8 +74,8 @@ private:
   friend class ContextPrivate;
   friend class TemplateImpl;
 
-  Q_DISABLE_COPY(RenderContext)
-  Q_DECLARE_PRIVATE(RenderContext)
+  Q_DISABLE_COPY( RenderContext )
+  Q_DECLARE_PRIVATE( RenderContext )
   RenderContextPrivate * const d_ptr;
 #endif
 };

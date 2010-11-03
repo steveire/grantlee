@@ -172,8 +172,7 @@ QVariant TitleFilter::doFilter( const QVariant& input, const QVariant &argument,
   const QString::iterator end = str.end();
 
   bool toUpper = true;
-  for ( ; it != end; ++it )
-  {
+  for ( ; it != end; ++it ) {
     if ( toUpper )
       *it = it->toUpper();
     else
@@ -370,14 +369,14 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
   return markSafe( inputString.get().replace( QLatin1Char( '\n' ), QLatin1String( "<br />" ) ) );
 }
 
-static QString nofailStringToAscii(const QString &input)
+static QString nofailStringToAscii( const QString &input )
 {
   QString output;
   output.reserve( input.size() );
 
   QString::const_iterator it = input.constBegin();
   const QString::const_iterator end = input.constEnd();
-  static const QChar asciiEndPoint(128);
+  static const QChar asciiEndPoint( 128 );
   for ( ; it != end; ++it )
     if ( *it < asciiEndPoint )
       output.append( *it );

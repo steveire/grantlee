@@ -22,7 +22,7 @@
 
 #include "block.h"
 
-void BlockContext::addBlocks( const QHash<QString, BlockNode*> &blocks)
+void BlockContext::addBlocks( const QHash<QString, BlockNode*> &blocks )
 {
   QHash<QString, BlockNode*>::const_iterator it = blocks.constBegin();
   const QHash<QString, BlockNode*>::const_iterator end = blocks.constEnd();

@@ -24,7 +24,7 @@
 
 
 MyObject::MyObject( int stop, QObject *parent )
-  : QObject( parent )
+    : QObject( parent )
 {
   m_data.fill( 'o', 2000000 );
 

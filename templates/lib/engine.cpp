@@ -101,7 +101,7 @@ void Engine::addPluginPath( const QString &dir )
 
 QStringList Engine::pluginPaths() const
 {
-  Q_D(const Engine);
+  Q_D( const Engine );
   return d->m_pluginDirs;
 }
 
@@ -166,7 +166,7 @@ void Engine::loadDefaultLibraries()
       // Although we don't use scripted libaries here, we need to recognize them being first
       // in the search path and not load a c++ plugin of the same name in that case.
       ScriptableLibraryContainer* scriptableLibrary = d->loadScriptableLibrary( libName, minorVersion );
-      if (scriptableLibrary) {
+      if ( scriptableLibrary ) {
         scriptableLibrary->clear();
         break;
       }
@@ -241,8 +241,7 @@ ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString 
     if ( !file.exists() )
       continue;
 
-    if ( m_scriptableLibraries.contains( libFileName ) )
-    {
+    if ( m_scriptableLibraries.contains( libFileName ) ) {
       ScriptableLibraryContainer *library = m_scriptableLibraries.value( libFileName );
       library->setNodeFactories( m_scriptableTagLibrary->nodeFactories( libFileName ) );
       library->setFilters( m_scriptableTagLibrary->filters( libFileName ) );

@@ -61,12 +61,12 @@ public:
   /**
     @internal The signature for a property lookup method
    */
-  typedef QVariant (*LookupFunction)(const QVariant &, const QString &);
+  typedef QVariant ( *LookupFunction )( const QVariant &, const QString & );
 
   /**
     @internal The signature for a object to list method
    */
-  typedef QVariantList (*ToVariantListFunction)(const QVariant &);
+  typedef QVariantList ( *ToVariantListFunction )( const QVariant & );
 
   /**
     @internal Registers a property lookup method
@@ -101,12 +101,12 @@ public:
   /**
     @internal
    */
-  static bool lookupAlreadyRegistered(int id);
+  static bool lookupAlreadyRegistered( int id );
 
   /**
     @internal
    */
-  static bool toListAlreadyRegistered(int id);
+  static bool toListAlreadyRegistered( int id );
 #endif
 
   /**
@@ -152,12 +152,12 @@ struct LookupTrait<RealType&, HandleAs&>
 };
 
 template<typename RealType, typename HandleAs>
-static int doRegister(int id)
+static int doRegister( int id )
 {
   if ( MetaType::lookupAlreadyRegistered( id ) )
     return id;
 
-  QVariant ( *lf )(const QVariant&, const QString&) = LookupTrait<RealType, HandleAs>::doLookUp;
+  QVariant ( *lf )( const QVariant&, const QString& ) = LookupTrait<RealType, HandleAs>::doLookUp;
 
   MetaType::registerLookUpOperator( id, reinterpret_cast<MetaType::LookupFunction>( lf ) );
 
@@ -193,7 +193,7 @@ int registerSequentialContainer()
   if ( MetaType::toListAlreadyRegistered( id ) )
     return id;
 
-  QVariantList ( *tlf )(const QVariant&) = SequentialContainerAccessor<Container>::doToList;
+  QVariantList ( *tlf )( const QVariant& ) = SequentialContainerAccessor<Container>::doToList;
   MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );
   return id;
 }
@@ -212,7 +212,7 @@ int registerAssociativeContainer()
   if ( MetaType::toListAlreadyRegistered( id ) )
     return id;
 
-  QVariantList ( *tlf )(const QVariant&) = AssociativeContainerAccessor<Container>::doToList;
+  QVariantList ( *tlf )( const QVariant& ) = AssociativeContainerAccessor<Container>::doToList;
   MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );
   return id;
 }
@@ -329,7 +329,7 @@ struct BuiltinRegister
   }
 };
 
-Q_GLOBAL_STATIC(BuiltinRegister, builtinRegister)
+Q_GLOBAL_STATIC( BuiltinRegister, builtinRegister )
 
 }
 
@@ -380,7 +380,7 @@ int registerMetaType()
 {
   {
     static const int i = MetaType::initBuiltins();
-    Q_UNUSED(i)
+    Q_UNUSED( i )
   }
   MetaType::internalLock();
 

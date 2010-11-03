@@ -38,7 +38,7 @@ struct VariantToList
 
 struct CustomTypeInfo
 {
- public:
+public:
   CustomTypeInfo()
     : lookupFunction( 0 ),
       toVariantListFunction( 0 )

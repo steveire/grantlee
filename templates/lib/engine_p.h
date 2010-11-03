@@ -53,8 +53,8 @@ public:
   // Warning: should only be called by Engine::loadDefaultLibraries
   void clear()
   {
-    qDeleteAll(m_nodeFactories);
-    qDeleteAll(m_filters);
+    qDeleteAll( m_nodeFactories );
+    qDeleteAll( m_filters );
     m_nodeFactories.clear();
     m_filters.clear();
   }

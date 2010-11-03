@@ -39,11 +39,11 @@ QVariantList VariantToList<MetaEnumVariable>::doConvert( const QVariant &obj )
 {
   const MetaEnumVariable mev = obj.value<MetaEnumVariable>();
 
-  if (mev.value != -1)
+  if ( mev.value != -1 )
     return QVariantList();
 
   QVariantList list;
-  for (int row = 0; row < mev.enumerator.keyCount(); ++row) {
+  for ( int row = 0; row < mev.enumerator.keyCount(); ++row ) {
     list << QVariant::fromValue( MetaEnumVariable( mev.enumerator, row ) );
   }
   return list;

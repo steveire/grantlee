@@ -25,40 +25,39 @@
 
 #include "grantlee_paths.h"
 
-static void renderTemplate( Grantlee::Engine *engine, const QString &templateName ) {
+static void renderTemplate( Grantlee::Engine *engine, const QString &templateName )
+{
 
   Grantlee::Template t = engine->loadByName( templateName );
 
-  if ( t->error() )
-  {
+  if ( t->error() ) {
     qDebug() << t->errorString();
-    Q_ASSERT(!"Failed to get template");
+    Q_ASSERT( !"Failed to get template" );
   }
 
   Grantlee::Context c;
 
-  QString result = t->render(&c);
+  QString result = t->render( &c );
 
-  if ( t->error() )
-  {
+  if ( t->error() ) {
     qDebug() << t->errorString();
-    Q_ASSERT(!"Failed to render template");
+    Q_ASSERT( !"Failed to render template" );
   }
 
   qDebug() << result;
 }
 
-int main(int argc, char **argv)
+int main( int argc, char **argv )
 {
-  QCoreApplication app(argc, argv);
+  QCoreApplication app( argc, argv );
 
   Grantlee::Engine *engine = new Grantlee::Engine();
 
   Grantlee::FileSystemTemplateLoader::Ptr loader = Grantlee::FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
   loader->setTemplateDirs( QStringList()
-                          << ( QCoreApplication::applicationDirPath() + "/template_dir_1" )
-                          << ( QCoreApplication::applicationDirPath() + "/template_dir_2" )
-  );
+                           << ( QCoreApplication::applicationDirPath() + "/template_dir_1" )
+                           << ( QCoreApplication::applicationDirPath() + "/template_dir_2" )
+                         );
 
   engine->addTemplateLoader( loader );
 
@@ -82,6 +81,6 @@ int main(int argc, char **argv)
                              "file://" + QCoreApplication::applicationDirPath() + "/template_dir_2/blue.png";
   renderTemplate( engine, "mediatemplate2.txt" );
 
-  app.exit(0);
+  app.exit( 0 );
 }
 

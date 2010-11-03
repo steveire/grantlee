@@ -55,7 +55,7 @@ struct KeyGetter : public Getter<Container>
   /**
     Returns the key available through the container %iterator @p it.
    */
-  static typename Container::key_type get(const typename Container::const_iterator it) {
+  static typename Container::key_type get( const typename Container::const_iterator it ) {
     return it.key();
   }
 };
@@ -74,7 +74,7 @@ struct MappedValueGetter : public Getter<Container>
   /**
     Returns the key available through the container %iterator @p it.
    */
-  static typename Container::mapped_type get(const typename Container::const_iterator it) {
+  static typename Container::mapped_type get( const typename Container::const_iterator it ) {
     return *it;
   }
 };
@@ -83,7 +83,7 @@ struct MappedValueGetter : public Getter<Container>
 template<typename T, typename U>
 struct KeyGetter<std::map<T, U> > : public Getter<std::map<T, U> >
 {
-  static T get(typename std::map<T, U>::const_iterator it) {
+  static T get( typename std::map<T, U>::const_iterator it ) {
     return it->first;
   }
 };
@@ -91,7 +91,7 @@ struct KeyGetter<std::map<T, U> > : public Getter<std::map<T, U> >
 template<typename T, typename U>
 struct MappedValueGetter<std::map<T, U> > : public Getter<std::map<T, U> >
 {
-  static U get(typename std::map<T, U>::const_iterator it) {
+  static U get( typename std::map<T, U>::const_iterator it ) {
     return it->second;
   }
 };
@@ -99,7 +99,7 @@ struct MappedValueGetter<std::map<T, U> > : public Getter<std::map<T, U> >
 template<typename Container>
 struct ValueGetter : public Getter<Container>
 {
-  static typename Container::value_type get(const typename Container::const_iterator it) {
+  static typename Container::value_type get( const typename Container::const_iterator it ) {
     return *it;
   }
 };
@@ -112,11 +112,11 @@ struct Finder
     {
       // Compile error if key_type is not a number.
       static const QString s = QString::number( T() );
-      Q_UNUSED(s)
+      Q_UNUSED( s )
     }
 
     QVariant v = nextPart;
-    if (!v.canConvert<typename Container::key_type>() || !v.convert(QVariant::Double))
+    if ( !v.canConvert<typename Container::key_type>() || !v.convert( QVariant::Double ) )
       return container.end();
     typename Container::key_type key = v.value<typename Container::key_type>();
     return container.find( key );
@@ -142,7 +142,7 @@ QVariantList getList( const QVariant &obj )
   typename Getter::Container::const_iterator it = c.begin();
   const typename Getter::Container::const_iterator end = c.end();
   QVariantList list;
-  for( ; it != end; ++it ) {
+  for ( ; it != end; ++it ) {
     list << QVariant::fromValue( Getter::get( it ) );
   }
   return list;

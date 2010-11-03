@@ -27,7 +27,7 @@
 
 using namespace Grantlee;
 
-Q_GLOBAL_STATIC(CustomTypeRegistry, customTypes)
+Q_GLOBAL_STATIC( CustomTypeRegistry, customTypes )
 
 
 void Grantlee::MetaType::internalLock()
@@ -42,8 +42,8 @@ void Grantlee::MetaType::internalUnlock()
 
 void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
 {
-  Q_ASSERT(id>0);
-  Q_ASSERT(f);
+  Q_ASSERT( id > 0 );
+  Q_ASSERT( f );
   if ( id < 0 ) {
     qWarning() << "registerTypeOperators() called with invalid arguments";
     return;
@@ -53,8 +53,8 @@ void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
 
 void Grantlee::MetaType::registerToVariantListOperator( int id, ToVariantListFunction f )
 {
-  Q_ASSERT(id>0);
-  Q_ASSERT(f);
+  Q_ASSERT( id > 0 );
+  Q_ASSERT( f );
   if ( id < 0 ) {
     qWarning() << "registerTypeOperators() called with invalid arguments";
     return;
@@ -66,7 +66,7 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
 {
   {
     static const int i = MetaType::initBuiltins();
-    Q_UNUSED(i)
+    Q_UNUSED( i )
   }
   return customTypes()->lookup( object, property );
 }
@@ -75,7 +75,7 @@ QVariantList Grantlee::MetaType::toVariantList( const QVariant &obj )
 {
   {
     static const int i = MetaType::initBuiltins();
-    Q_UNUSED(i)
+    Q_UNUSED( i )
   }
   return customTypes()->toVariantList( obj );
 }

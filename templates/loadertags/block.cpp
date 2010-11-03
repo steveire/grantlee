@@ -98,7 +98,7 @@ void BlockNode::render( OutputStream *stream, Context *c )
 
   c->push();
 
-  if (blockContext.isEmpty()) {
+  if ( blockContext.isEmpty() ) {
     m_context = c;
     m_stream = stream;
     c->insert( QLatin1String( "block" ), QVariant::fromValue( static_cast<QObject *>( this ) ) );
@@ -132,13 +132,11 @@ void BlockNode::render( OutputStream *stream, Context *c )
 
 SafeString BlockNode::getSuper() const
 {
-  if ( m_context->renderContext()->contains( BLOCK_CONTEXT_KEY ) )
-  {
+  if ( m_context->renderContext()->contains( BLOCK_CONTEXT_KEY ) ) {
     QVariant &variant = m_context->renderContext()->data( BLOCK_CONTEXT_KEY );
     const BlockContext blockContext = variant.value<BlockContext>();
     BlockNode *block = blockContext.getBlock( m_name );
-    if ( block )
-    {
+    if ( block ) {
       QString superContent;
       QTextStream superTextStream( &superContent );
       QSharedPointer<OutputStream> superStream = m_stream->clone( &superTextStream );

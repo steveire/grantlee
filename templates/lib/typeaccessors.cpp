@@ -159,19 +159,17 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
 
 QVariant doQobjectLookUp( const QObject * const object, const QString &property )
 {
-  if ( property == QLatin1String( "children" ) )
-  {
+  if ( property == QLatin1String( "children" ) ) {
     QObjectList childList = object->children();
-    if (childList.isEmpty())
+    if ( childList.isEmpty() )
       return QVariant();
     QVariantList children;
-    foreach ( QObject *object, childList )
+    foreach( QObject *object, childList )
       children.append( QVariant::fromValue( object ) );
     return children;
   }
 
-  if ( property == QLatin1String( "objectName" ) )
-  {
+  if ( property == QLatin1String( "objectName" ) ) {
     return object->objectName();
   }
   // Can't be const because of invokeMethod.
@@ -186,9 +184,8 @@ QVariant doQobjectLookUp( const QObject * const object, const QString &property 
     if ( QString::fromUtf8( mp.name() ) != property )
       continue;
 
-    if ( mp.isEnumType() )
-    {
-      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).toInt());
+    if ( mp.isEnumType() ) {
+      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).toInt() );
       return QVariant::fromValue( mev );
     }
 
@@ -198,8 +195,7 @@ QVariant doQobjectLookUp( const QObject * const object, const QString &property 
   for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
     me = metaObj->enumerator( i );
 
-    if ( QLatin1String( me.name() ) == property )
-    {
+    if ( QLatin1String( me.name() ) == property ) {
       MetaEnumVariable mev( me );
       return QVariant::fromValue( mev );
     }
@@ -238,9 +234,8 @@ QVariant TypeAccessor<MetaEnumVariable&>::lookUp( const MetaEnumVariable &object
 
   bool ok = false;
   const int listIndex = property.toInt( &ok );
-  if (ok)
-  {
-    if (listIndex >= object.enumerator.keyCount())
+  if ( ok ) {
+    if ( listIndex >= object.enumerator.keyCount() )
       return QVariant();
 
     const MetaEnumVariable mev( object.enumerator, object.enumerator.value( listIndex ) );

@@ -67,10 +67,10 @@ struct SequentialContainerLookup
   static QVariant doLookUp( const Container &container, const QString &property )
   {
     bool ok = false;
-    const size_t listIndex = (size_t)property.toInt( &ok );
+    const size_t listIndex = ( size_t )property.toInt( &ok );
 
-    if ( !ok || listIndex >= (size_t)container.size() ) {
-        return QVariant();
+    if ( !ok || listIndex >= ( size_t )container.size() ) {
+      return QVariant();
     }
 
     return QVariant::fromValue( container[listIndex] );
@@ -89,7 +89,7 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
     typename Container::const_iterator it = object.begin();
     const typename Container::const_iterator end = object.end();
     QVariantList list;
-    for( ; it != end; ++it ) {
+    for ( ; it != end; ++it ) {
       QVariantList nested;
       nested.push_back( QVariant::fromValue( KeyGetter<Container>::get( it ) ) );
       nested.push_back( QVariant::fromValue( MappedValueGetter<Container>::get( it ) ) );
@@ -102,7 +102,7 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
     typename Container::const_iterator it = object.begin();
     const typename Container::const_iterator end = object.end();
     QVariantList list;
-    for( ; it != end; ++it ) {
+    for ( ; it != end; ++it ) {
       list.push_back( QVariant::fromValue( KeyGetter<Container>::get( it ) ) );
     }
     return list;
@@ -112,7 +112,7 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
     typename Container::const_iterator it = object.begin();
     const typename Container::const_iterator end = object.end();
     QVariantList list;
-    for( ; it != end; ++it ) {
+    for ( ; it != end; ++it ) {
       list.push_back( QVariant::fromValue( MappedValueGetter<Container>::get( it ) ) );
     }
     return list;

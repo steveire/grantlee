@@ -36,7 +36,7 @@ AbstractTemplateLoader::~AbstractTemplateLoader()
 }
 
 FileSystemTemplateLoader::FileSystemTemplateLoader()
-    : AbstractTemplateLoader()
+  : AbstractTemplateLoader()
 {
 
 }
@@ -47,7 +47,7 @@ FileSystemTemplateLoader::~FileSystemTemplateLoader()
 }
 
 InMemoryTemplateLoader::InMemoryTemplateLoader()
-    : AbstractTemplateLoader()
+  : AbstractTemplateLoader()
 {
 
 }
@@ -132,8 +132,7 @@ QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fi
     file.setFileName( m_templateDirs.at( i ) + QLatin1Char( '/' ) + m_themeName + QLatin1Char( '/' ) + fileName );
 
     const QFileInfo fi( file );
-    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
-    {
+    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) ) {
       ++i;
       continue;
     }

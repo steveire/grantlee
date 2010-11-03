@@ -628,12 +628,12 @@ void TestDefaultTags::testForTag_data()
   QStringList emails;
   emails << QString::fromLatin1( "one" ) << QString::fromLatin1( "two" );
   QVariantHash obj;
-  obj.insert( QLatin1String( "emails" ), emails);
-  dict.insert( QLatin1String( "contact" ), obj);
+  obj.insert( QLatin1String( "emails" ), emails );
+  dict.insert( QLatin1String( "contact" ), obj );
   QTest::newRow( "for-tag04" ) << QString::fromLatin1( "{% for val in contact.emails %}({{ val }},){% endfor %}" ) << dict << QString::fromLatin1( "(one,)(two,)" ) << NoError;
   emails.clear();
-  obj.insert( QLatin1String( "emails" ), emails);
-  dict.insert( QLatin1String( "contact" ), obj);
+  obj.insert( QLatin1String( "emails" ), emails );
+  dict.insert( QLatin1String( "contact" ), obj );
   QTest::newRow( "for-tag05" ) << QString::fromLatin1( "{% for val in contact.emails %}({{ val }},){% endfor %}" ) << dict << QString() << NoError;
   list.clear();
   list << 1 << 2 << 3;
@@ -1174,12 +1174,12 @@ void TestDefaultTags::testRegroupTag_data()
   dict.insert( QLatin1String( "data" ), list );
 
   QTest::newRow( "regroup01" ) << QString::fromLatin1( "{% regroup data by bar as grouped %}"
-  "{% for group in grouped %}"
-  "{{ group.grouper }}:"
-  "{% for item in group.list %}"
-  "{{ item.foo }}"
-  "{% endfor %},"
-  "{% endfor %}" ) << dict << QString::fromLatin1( "1:cd,2:ab,3:x," ) << NoError;
+      "{% for group in grouped %}"
+      "{{ group.grouper }}:"
+      "{% for item in group.list %}"
+      "{{ item.foo }}"
+      "{% endfor %},"
+      "{% endfor %}" ) << dict << QString::fromLatin1( "1:cd,2:ab,3:x," ) << NoError;
 
   dict.clear();
   hash.clear();
@@ -1215,12 +1215,12 @@ void TestDefaultTags::testRegroupTag_data()
   // Data is output in the order it is sent in.
 
   QTest::newRow( "regroup02" ) << QString::fromLatin1( "{% regroup data by bar as grouped %}"
-  "{% for group in grouped %}"
-  "{{ group.grouper }}:"
-  "{% for item in group.list %}"
-  "{{ item.foo }}"
-  "{% endfor %},"
-  "{% endfor %}" ) << dict << QString::fromLatin1( "2:ab,3:x,1:cd," ) << NoError;
+      "{% for group in grouped %}"
+      "{{ group.grouper }}:"
+      "{% for item in group.list %}"
+      "{{ item.foo }}"
+      "{% endfor %},"
+      "{% endfor %}" ) << dict << QString::fromLatin1( "2:ab,3:x,1:cd," ) << NoError;
 
 }
 
@@ -1479,13 +1479,13 @@ void TestDefaultTags::testUrlTypes_data()
 
 void TestDefaultTags::testUrlTypes()
 {
-  QFETCH(QString, input);
-  QFETCH(Dict, dict);
-  QFETCH(StringPair, output);
+  QFETCH( QString, input );
+  QFETCH( Dict, dict );
+  QFETCH( StringPair, output );
 
   Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
   QVERIFY( t->error() == NoError );
-  Context c(dict);
+  Context c( dict );
   QString result = t->render( &c );
   QVERIFY( t->error() == NoError );
   QVERIFY( result == output.first + output.second );
@@ -1518,13 +1518,13 @@ void TestDefaultTags::testRelativePaths_data()
 
 void TestDefaultTags::testRelativePaths()
 {
-  QFETCH(QString, input);
-  QFETCH(Dict, dict);
-  QFETCH(QString, output);
+  QFETCH( QString, input );
+  QFETCH( Dict, dict );
+  QFETCH( QString, output );
 
   Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
   QVERIFY( t->error() == NoError );
-  Context c(dict);
+  Context c( dict );
   QString result = t->render( &c );
   QVERIFY( t->error() == NoError );
   if ( !output.isEmpty() )

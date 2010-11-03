@@ -31,23 +31,23 @@ struct MetaEnumVariable
 
   }
 
-  MetaEnumVariable(const QMetaEnum &_enumerator)
-    : enumerator(_enumerator), value(-1)
+  MetaEnumVariable( const QMetaEnum &_enumerator )
+    : enumerator( _enumerator ), value( -1 )
   {
 
   }
 
-  MetaEnumVariable(const QMetaEnum &_enumerator, int _value)
-    : enumerator(_enumerator), value(_value)
+  MetaEnumVariable( const QMetaEnum &_enumerator, int _value )
+    : enumerator( _enumerator ), value( _value )
   {
   }
 
-  bool operator==(const MetaEnumVariable &other) const {
+  bool operator==( const MetaEnumVariable &other ) const {
     return ( enumerator.scope() == other.enumerator.scope() && enumerator.name() == other.enumerator.name() )
         && value == other.value;
   }
 
-  bool operator==(int otherValue) const {
+  bool operator==( int otherValue ) const {
     return value == otherValue;
   }
 
@@ -55,6 +55,6 @@ struct MetaEnumVariable
   int value;
 };
 
-Q_DECLARE_METATYPE(MetaEnumVariable)
+Q_DECLARE_METATYPE( MetaEnumVariable )
 
 #endif

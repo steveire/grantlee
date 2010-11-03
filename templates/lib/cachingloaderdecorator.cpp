@@ -32,7 +32,7 @@ public:
 
   }
 
-  Q_DECLARE_PUBLIC(CachingLoaderDecorator)
+  Q_DECLARE_PUBLIC( CachingLoaderDecorator )
   CachingLoaderDecorator * const q_ptr;
 
   const Grantlee::AbstractTemplateLoader::Ptr m_wrappedLoader;

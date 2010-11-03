@@ -45,10 +45,10 @@ GRANTLEE_SMART_PTR_ACCESSOR(std::tr1::shared_ptr)
 
 #endif
 
-Q_DECLARE_METATYPE(QVector<QVariant>)
-Q_DECLARE_METATYPE(QStack<QVariant>)
-Q_DECLARE_METATYPE(QQueue<QVariant>)
-Q_DECLARE_METATYPE(QLinkedList<QVariant>)
+Q_DECLARE_METATYPE( QVector<QVariant> )
+Q_DECLARE_METATYPE( QStack<QVariant> )
+Q_DECLARE_METATYPE( QQueue<QVariant> )
+Q_DECLARE_METATYPE( QLinkedList<QVariant> )
 
 class TestGenericTypes : public QObject
 {
@@ -89,12 +89,12 @@ public:
  int uid;
 };
 
-int qHash(const Person &p)
+int qHash( const Person &p )
 {
   return p.uid;
 }
 
-Q_DECLARE_METATYPE(Person)
+Q_DECLARE_METATYPE( Person )
 
 GRANTLEE_BEGIN_LOOKUP(Person)
   if ( property == QLatin1String( "name" ) )
@@ -106,8 +106,8 @@ GRANTLEE_END_LOOKUP
 class PersonObject : public QObject
 {
   Q_OBJECT
-  Q_PROPERTY(QString name READ name)
-  Q_PROPERTY(int age READ age)
+  Q_PROPERTY( QString name READ name )
+  Q_PROPERTY( int age READ age )
 public:
   PersonObject(const QString &name, int age, QObject* parent = 0)
     : QObject(parent), m_name(name), m_age(age)
@@ -123,15 +123,15 @@ private:
   const int m_age; // Yeah, you wish...
 };
 
-DECLARE_TYPE_CONTAINERS(Person)
+DECLARE_TYPE_CONTAINERS( Person )
 
 void TestGenericTypes::initTestCase()
 {
   // Register the handler for our custom type
   Grantlee::registerMetaType<Person>();
 #ifndef GRANTLEE_NO_TR1
-  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF(QtUnorderedMap, Person)
-  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(ThreeArray, Person)
+  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QtUnorderedMap, Person )
+  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF( ThreeArray, Person )
   Grantlee::registerMetaType<std::tr1::shared_ptr<PersonObject> >();
 #endif
   Grantlee::registerMetaType<QSharedPointer<PersonObject> >();
@@ -149,8 +149,8 @@ void TestGenericTypes::testGenericClassType()
 
   // Check it
   QVariantHash h;
-  Person p( "Grant Lee", 2);
-  h.insert( QLatin1String( "p" ), QVariant::fromValue(p) );
+  Person p( "Grant Lee", 2 );
+  h.insert( QLatin1String( "p" ), QVariant::fromValue( p ) );
   Grantlee::Context c( h );
   QCOMPARE(
       t1->render( &c ),
@@ -162,13 +162,13 @@ static QMap<int, Person> getPeople()
 {
   QMap<int, Person> people;
   people.insert( 23, Person( "Claire", 23 ) );
-  people.insert( 32, Person( "Grant", 32) );
+  people.insert( 32, Person( "Grant", 32 ) );
   people.insert( 50, Person( "Alan", 50 ) );
   return people;
 }
 
 template<typename SequentialContainer>
-void insertPeopleVariants(Grantlee::Context &c)
+void insertPeopleVariants( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
@@ -180,7 +180,7 @@ void insertPeopleVariants(Grantlee::Context &c)
 }
 
 template<typename AssociativeContainer>
-void insertAssociatedPeopleVariants(Grantlee::Context &c)
+void insertAssociatedPeopleVariants( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
@@ -192,19 +192,19 @@ void insertAssociatedPeopleVariants(Grantlee::Context &c)
 }
 
 template<>
-void insertPeopleVariants<QMap<QString, QVariant> >(Grantlee::Context &c)
+void insertPeopleVariants<QMap<QString, QVariant> >( Grantlee::Context &c )
 {
-  insertAssociatedPeopleVariants<QMap<QString, QVariant> >(c);
+  insertAssociatedPeopleVariants<QMap<QString, QVariant> >( c );
 }
 
 template<>
-void insertPeopleVariants<QHash<QString, QVariant> >(Grantlee::Context &c)
+void insertPeopleVariants<QHash<QString, QVariant> >( Grantlee::Context &c )
 {
-  insertAssociatedPeopleVariants<QHash<QString, QVariant> >(c);
+  insertAssociatedPeopleVariants<QHash<QString, QVariant> >( c );
 }
 
 template<typename Container>
-void testSequentialIteration(Grantlee::Context c)
+void testSequentialIteration( Grantlee::Context c )
 {
   Grantlee::Engine engine;
 
@@ -216,12 +216,12 @@ void testSequentialIteration(Grantlee::Context c)
         QLatin1String( "people_template" ) );
     QCOMPARE(
       t1->render( &c ),
-      QLatin1String( "Claire,Grant,Alan," ));
+      QLatin1String( "Claire,Grant,Alan," ) );
   }
 }
 
 template<typename Container>
-void testSequentialIndexing(Grantlee::Context c)
+void testSequentialIndexing( Grantlee::Context c )
 {
   Grantlee::Engine engine;
 
@@ -233,12 +233,12 @@ void testSequentialIndexing(Grantlee::Context c)
         QLatin1String( "people_template" ) );
     QCOMPARE(
       t1->render( &c ),
-      QLatin1String( "Claire,Grant,Alan," ));
+      QLatin1String( "Claire,Grant,Alan," ) );
   }
 }
 
 template<>
-void testSequentialIndexing<QLinkedList<QVariant> >(Grantlee::Context)
+void testSequentialIndexing<QLinkedList<QVariant> >( Grantlee::Context )
 {
   // No op
 }
@@ -248,14 +248,14 @@ void doTestSequentialContainer_Variant()
 {
   Grantlee::Context c;
 
-  insertPeopleVariants<Container>(c);
+  insertPeopleVariants<Container>( c );
 
-  testSequentialIteration<Container>(c);
-  testSequentialIndexing<Container>(c);
+  testSequentialIteration<Container>( c );
+  testSequentialIndexing<Container>( c );
 }
 
 template<typename Container>
-void testAssociativeValues(Grantlee::Context c, bool unordered = false)
+void testAssociativeValues( Grantlee::Context c, bool unordered = false )
 {
   Grantlee::Engine engine;
 
@@ -267,19 +267,19 @@ void testAssociativeValues(Grantlee::Context c, bool unordered = false)
         QLatin1String( "people_template" ) );
 
     QString result = t1->render( &c );
-    if (!unordered)
+    if ( !unordered )
       QCOMPARE( result, QLatin1String( "(Claire:23),(Grant:32),(Alan:50)," ) );
     else {
-      QVERIFY(result.size() == 33);
-      QVERIFY(result.contains(QLatin1String( "(Claire:23),")));
-      QVERIFY(result.contains(QLatin1String( "(Grant:32),")));
-      QVERIFY(result.contains(QLatin1String( "(Alan:50),")));
+      QVERIFY( result.size() == 33 );
+      QVERIFY( result.contains( QLatin1String( "(Claire:23)," ) ) );
+      QVERIFY( result.contains( QLatin1String( "(Grant:32)," ) ) );
+      QVERIFY( result.contains( QLatin1String( "(Alan:50)," ) ) );
     }
   }
 }
 
 template<typename Container>
-void testAssociativeItems(Grantlee::Context c, bool unordered )
+void testAssociativeItems( Grantlee::Context c, bool unordered )
 {
   Grantlee::Engine engine;
 
@@ -290,19 +290,19 @@ void testAssociativeItems(Grantlee::Context c, bool unordered )
         QLatin1String( "{% for item in people.items %}({{ item.1.name }}:{{ item.1.age }}),{% endfor %}" ),
         QLatin1String( "people_template" ) );
     QString result = t1->render( &c );
-    if (!unordered)
+    if ( !unordered )
       QCOMPARE( result, QLatin1String( "(Claire:23),(Grant:32),(Alan:50)," ) );
     else {
-      QVERIFY(result.size() == 33);
-      QVERIFY(result.contains(QLatin1String( "(Claire:23),")));
-      QVERIFY(result.contains(QLatin1String( "(Grant:32),")));
-      QVERIFY(result.contains(QLatin1String( "(Alan:50),")));
+      QVERIFY( result.size() == 33 );
+      QVERIFY( result.contains( QLatin1String( "(Claire:23)," ) ) );
+      QVERIFY( result.contains( QLatin1String( "(Grant:32)," ) ) );
+      QVERIFY( result.contains( QLatin1String( "(Alan:50)," ) ) );
     }
   }
 }
 
 template<typename Container>
-void doTestAssociativeContainer_Variant( bool unordered = false)
+void doTestAssociativeContainer_Variant( bool unordered = false )
 {
   Grantlee::Engine engine;
 
@@ -310,9 +310,9 @@ void doTestAssociativeContainer_Variant( bool unordered = false)
 
   Grantlee::Context c;
 
-  insertPeopleVariants<Container>(c);
-  testAssociativeValues<Container>(c, unordered);
-  testAssociativeItems<Container>(c, unordered);
+  insertPeopleVariants<Container>( c );
+  testAssociativeValues<Container>( c, unordered );
+  testAssociativeItems<Container>( c, unordered );
 }
 
 void TestGenericTypes::testSequentialContainer_Variant()
@@ -327,11 +327,11 @@ void TestGenericTypes::testSequentialContainer_Variant()
 void TestGenericTypes::testAssociativeContainer_Variant()
 {
   doTestAssociativeContainer_Variant<QVariantMap>();
-  doTestAssociativeContainer_Variant<QVariantHash>(true);
+  doTestAssociativeContainer_Variant<QVariantHash>( true );
 }
 
 template<typename SequentialContainer>
-void insertPeople(Grantlee::Context &c)
+void insertPeople( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
@@ -343,7 +343,7 @@ void insertPeople(Grantlee::Context &c)
 }
 
 template<>
-void insertPeople<QSet<Person> >(Grantlee::Context &c)
+void insertPeople<QSet<Person> >( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
@@ -356,7 +356,7 @@ void insertPeople<QSet<Person> >(Grantlee::Context &c)
 
 #ifndef GRANTLEE_NO_TR1
 template<>
-void insertPeople<ThreeArray<Person> >(Grantlee::Context &c)
+void insertPeople<ThreeArray<Person> >( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
@@ -369,7 +369,7 @@ void insertPeople<ThreeArray<Person> >(Grantlee::Context &c)
 #endif
 
 template<typename AssociativeContainer>
-void insertAssociatedPeople(Grantlee::Context &c)
+void insertAssociatedPeople( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
@@ -381,7 +381,7 @@ void insertAssociatedPeople(Grantlee::Context &c)
 }
 
 template<typename AssociativeContainer>
-void insertAssociatedPeople_Number(Grantlee::Context &c)
+void insertAssociatedPeople_Number( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
@@ -393,19 +393,19 @@ void insertAssociatedPeople_Number(Grantlee::Context &c)
 }
 
 template<>
-void testSequentialIndexing<QLinkedList<Person> >(Grantlee::Context)
+void testSequentialIndexing<QLinkedList<Person> >( Grantlee::Context )
 {
   // No op
 }
 
 template<>
-void testSequentialIndexing<QSet<Person> >(Grantlee::Context)
+void testSequentialIndexing<QSet<Person> >( Grantlee::Context )
 {
   // No op
 }
 
 template<>
-void testSequentialIndexing<std::list<Person> >(Grantlee::Context)
+void testSequentialIndexing<std::list<Person> >( Grantlee::Context )
 {
   // No op
 }
@@ -415,14 +415,14 @@ void doTestSequentialContainer_Type()
 {
   Grantlee::Context c;
 
-  insertPeople<Container>(c);
+  insertPeople<Container>( c );
 
-  testSequentialIteration<Container>(c);
-  testSequentialIndexing<Container>(c);
+  testSequentialIteration<Container>( c );
+  testSequentialIndexing<Container>( c );
 }
 
 template<typename Container>
-void doTestAssociativeContainer_Type(bool unordered = false)
+void doTestAssociativeContainer_Type( bool unordered = false )
 {
   Grantlee::Engine engine;
 
@@ -430,13 +430,13 @@ void doTestAssociativeContainer_Type(bool unordered = false)
 
   Grantlee::Context c;
 
-  insertAssociatedPeople<Container>(c);
-  testAssociativeValues<Container>(c, unordered);
-  testAssociativeItems<Container>(c, unordered);
+  insertAssociatedPeople<Container>( c );
+  testAssociativeValues<Container>( c, unordered );
+  testAssociativeItems<Container>( c, unordered );
 }
 
 template<typename Container>
-void doTestAssociativeContainer_Type_Number(bool unordered = false)
+void doTestAssociativeContainer_Type_Number( bool unordered = false )
 {
   Grantlee::Engine engine;
 
@@ -444,9 +444,9 @@ void doTestAssociativeContainer_Type_Number(bool unordered = false)
 
   Grantlee::Context c;
 
-  insertAssociatedPeople_Number<Container>(c);
-  testAssociativeValues<Container>(c, unordered);
-  testAssociativeItems<Container>(c, unordered);
+  insertAssociatedPeople_Number<Container>( c );
+  testAssociativeValues<Container>( c, unordered );
+  testAssociativeItems<Container>( c, unordered );
 }
 
 void TestGenericTypes::testSequentialContainer_Type()
@@ -474,13 +474,13 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<QMap<quint16, Person> >();
   doTestAssociativeContainer_Type_Number<QMap<quint32, Person> >();
   doTestAssociativeContainer_Type_Number<QMap<quint64, Person> >();
-  doTestAssociativeContainer_Type<QHash<QString, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QHash<qint16, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QHash<qint32, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QHash<qint64, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QHash<quint16, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QHash<quint32, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QHash<quint64, Person> >(true);
+  doTestAssociativeContainer_Type<QHash<QString, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QHash<qint16, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QHash<qint32, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QHash<qint64, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QHash<quint16, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QHash<quint32, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QHash<quint64, Person> >( true );
 
   doTestAssociativeContainer_Type<std::map<QString, Person> >();
   doTestAssociativeContainer_Type_Number<std::map<qint16, Person> >();
@@ -491,19 +491,19 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<std::map<quint64, Person> >();
 
 #ifndef GRANTLEE_NO_TR1
-  doTestAssociativeContainer_Type<QtUnorderedMap<QString, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint16, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint32, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint64, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint16, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint32, Person> >(true);
-  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint64, Person> >(true);
+  doTestAssociativeContainer_Type<QtUnorderedMap<QString, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint16, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint32, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<qint64, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint16, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint32, Person> >( true );
+  doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint64, Person> >( true );
 #endif
 }
 
-Q_DECLARE_METATYPE(QSharedPointer<PersonObject>)
+Q_DECLARE_METATYPE( QSharedPointer<PersonObject> )
 #ifndef GRANTLEE_NO_TR1
-Q_DECLARE_METATYPE(std::tr1::shared_ptr<PersonObject>)
+Q_DECLARE_METATYPE( std::tr1::shared_ptr<PersonObject> )
 #endif
 
 void TestGenericTypes::testSharedPointer()
@@ -549,28 +549,28 @@ void TestGenericTypes::testThirdPartySharedPointer()
 #endif
 }
 
-Q_DECLARE_METATYPE(QVector<qint16>)
+Q_DECLARE_METATYPE( QVector<qint16> )
 typedef QList<QVector<qint16> > ListVectorInt;
-Q_DECLARE_METATYPE(ListVectorInt)
+Q_DECLARE_METATYPE( ListVectorInt )
 typedef QMap<int, QList<QVector<qint16> > > MapListVectorInt;
-Q_DECLARE_METATYPE(MapListVectorInt)
+Q_DECLARE_METATYPE( MapListVectorInt )
 typedef QStack<QMap<int, QList<QVector<qint16> > > > StackMapListVectorInt;
-Q_DECLARE_METATYPE(StackMapListVectorInt)
+Q_DECLARE_METATYPE( StackMapListVectorInt )
 
 static QVector<qint16> getNumbers()
 {
   static int n = 0;
   QVector<qint16> nums;
-  nums.push_back(++n);
-  nums.push_back(++n);
+  nums.push_back( ++n );
+  nums.push_back( ++n );
   return nums;
 }
 
 static ListVectorInt getNumberLists()
 {
   ListVectorInt list;
-  for (int i = 0; i < 2; ++i ) {
-    list.append(getNumbers());
+  for ( int i = 0; i < 2; ++i ) {
+    list.append( getNumbers() );
   }
   return list;
 }
@@ -578,8 +578,8 @@ static ListVectorInt getNumberLists()
 static MapListVectorInt getNumberListMap()
 {
   MapListVectorInt map;
-  for (int i = 0; i < 2; ++i ) {
-    map.insert(i, getNumberLists());
+  for ( int i = 0; i < 2; ++i ) {
+    map.insert( i, getNumberLists() );
   }
   return map;
 }
@@ -587,8 +587,8 @@ static MapListVectorInt getNumberListMap()
 static StackMapListVectorInt getMapStack()
 {
   StackMapListVectorInt stack;
-  for (int i = 0; i < 2; ++i ) {
-    stack.push(getNumberListMap());
+  for ( int i = 0; i < 2; ++i ) {
+    stack.push( getNumberListMap() );
   }
   return stack;
 }

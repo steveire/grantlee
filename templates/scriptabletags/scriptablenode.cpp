@@ -111,7 +111,7 @@ void ScriptableNodeFactory::setScriptEngine( QScriptEngine *engine )
   m_scriptEngine = engine;
 }
 
-void ScriptableNodeFactory::setEngine(Engine* engine)
+void ScriptableNodeFactory::setEngine( Engine* engine )
 {
   m_scriptEngine->setProperty( "templateEngine", QVariant::fromValue( engine ) );
 }

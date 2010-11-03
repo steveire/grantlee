@@ -49,15 +49,16 @@ public:
   OtherClass( QObject *parent = 0 )
       : QObject( parent ) { }
 
-  enum Animals
-  {
+  enum Animals {
     Lions,
     Tigers,
     Bears
   };
 
-  Q_ENUMS(Animals)
-  Animals animals() const { return Tigers; }
+  Q_ENUMS( Animals )
+  Animals animals() const {
+    return Tigers;
+  }
 
   QString method() const {
     return QLatin1String( "OtherClass::method" );
@@ -75,21 +76,19 @@ class SomeClass : public QObject
   Q_PROPERTY( QVariant otherClass READ otherClass )
 
 public:
-  enum FirstEnum
-  {
+  enum FirstEnum {
     Employee,
     Employer,
     Manager
   };
 
-  enum SecondEnum
-  {
+  enum SecondEnum {
     Voter = 2,
     Consumer = 4,
     Citizen = 8
   };
 
-  Q_ENUMS(FirstEnum SecondEnum)
+  Q_ENUMS( FirstEnum SecondEnum )
 
   SomeClass( QObject *parent = 0 )
       : QObject( parent ), m_other( new OtherClass( this ) ) { }
@@ -120,7 +119,7 @@ public:
 
   }
 
-  NoEscapeOutputStream(QTextStream* stream)
+  NoEscapeOutputStream( QTextStream* stream )
     : OutputStream( stream )
   {
 
@@ -144,7 +143,7 @@ public:
 
   }
 
-  JSOutputStream(QTextStream* stream)
+  JSOutputStream( QTextStream* stream )
     : OutputStream( stream )
   {
 
@@ -1102,17 +1101,17 @@ void TestBuiltinSyntax::testTypeAccessors_data()
 
 #define SON(obj) obj->setObjectName( QLatin1String( #obj ) )
 
-  QObject *obj1 = new QObject(this);
-  SON(obj1);
-  QObject *obj2 = new QObject(this);
-  SON(obj2);
-  obj2->setParent(obj1);
-  QObject *obj3 = new QObject(this);
-  obj3->setParent(obj2);
-  SON(obj3);
-  QObject *obj4 = new QObject(this);
-  obj4->setParent(obj2);
-  SON(obj4);
+  QObject *obj1 = new QObject( this );
+  SON( obj1 );
+  QObject *obj2 = new QObject( this );
+  SON( obj2 );
+  obj2->setParent( obj1 );
+  QObject *obj3 = new QObject( this );
+  obj3->setParent( obj2 );
+  SON( obj3 );
+  QObject *obj4 = new QObject( this );
+  obj4->setParent( obj2 );
+  SON( obj4 );
 
   dict.insert( QLatin1String( "object" ), QVariant::fromValue( obj1 ) );
 

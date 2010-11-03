@@ -95,8 +95,7 @@ static QHash<QString, BlockNode*> createNodeMap( QList<BlockNode*> list )
   QList<BlockNode*>::const_iterator it = list.constBegin();
   const QList<BlockNode*>::const_iterator end = list.constEnd();
 
-  for ( ; it != end; ++it )
-  {
+  for ( ; it != end; ++it ) {
     map.insert( ( *it )->name(), *it );
   }
 

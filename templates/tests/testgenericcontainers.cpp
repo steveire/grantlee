@@ -30,33 +30,33 @@
 
 typedef QObject* QObjectStar;
 
-DECLARE_TYPE_CONTAINERS(qint32)
+DECLARE_TYPE_CONTAINERS( qint32 )
 #ifndef MINIMAL_CONTAINER_TESTS
-DECLARE_TYPE_CONTAINERS(QVariant)
-DECLARE_TYPE_CONTAINERS(qint16)
-DECLARE_TYPE_CONTAINERS(qint64)
-DECLARE_TYPE_CONTAINERS(quint16)
-DECLARE_TYPE_CONTAINERS(quint32)
-DECLARE_TYPE_CONTAINERS(quint64)
-DECLARE_TYPE_CONTAINERS(float)
-DECLARE_TYPE_CONTAINERS(double)
-DECLARE_TYPE_CONTAINERS(QString)
-DECLARE_TYPE_CONTAINERS(QDateTime)
-DECLARE_TYPE_CONTAINERS(QObjectStar)
+DECLARE_TYPE_CONTAINERS( QVariant )
+DECLARE_TYPE_CONTAINERS( qint16 )
+DECLARE_TYPE_CONTAINERS( qint64 )
+DECLARE_TYPE_CONTAINERS( quint16 )
+DECLARE_TYPE_CONTAINERS( quint32 )
+DECLARE_TYPE_CONTAINERS( quint64 )
+DECLARE_TYPE_CONTAINERS( float )
+DECLARE_TYPE_CONTAINERS( double )
+DECLARE_TYPE_CONTAINERS( QString )
+DECLARE_TYPE_CONTAINERS( QDateTime )
+DECLARE_TYPE_CONTAINERS( QObjectStar )
 #endif
 
 class TestGenericContainers : public QObject
 {
   Q_OBJECT
 public:
-  explicit TestGenericContainers(QObject* parent = 0);
+  explicit TestGenericContainers( QObject* parent = 0 );
 
 private slots:
   void testContainer_Builtins();
 };
 
-TestGenericContainers::TestGenericContainers(QObject* parent)
-  : QObject(parent)
+TestGenericContainers::TestGenericContainers( QObject* parent )
+  : QObject( parent )
 {
 
 }
@@ -65,9 +65,9 @@ template<typename T>
 QVector<T> getItems()
 {
   QVector<T> items;
-  items.push_back(9);
-  items.push_back(7);
-  items.push_back(5);
+  items.push_back( 9 );
+  items.push_back( 7 );
+  items.push_back( 5 );
   return items;
 }
 
@@ -75,8 +75,8 @@ template<>
 QVector<QString> getItems<QString>()
 {
   QVector<QString> items;
-  foreach(const int item, getItems<int>())
-    items.push_back(QString::number(item));
+  foreach( const int item, getItems<int>() )
+    items.push_back( QString::number( item ) );
   return items;
 }
 
@@ -84,8 +84,8 @@ template<>
 QVector<QVariant> getItems<QVariant>()
 {
   QVector<QVariant> items;
-  foreach(const int item, getItems<int>())
-    items.push_back(item);
+  foreach( const int item, getItems<int>() )
+    items.push_back( item );
   return items;
 }
 
@@ -93,12 +93,11 @@ template<>
 QVector<QDateTime> getItems<QDateTime>()
 {
   QVector<QDateTime> items;
-  for (int i = 0; i < 3; ++i)
-  {
+  for ( int i = 0; i < 3; ++i ) {
     QDateTime d;
-    d.setTime_t(0);
-    d = d.addDays(i);
-    items.push_back(d);
+    d.setTime_t( 0 );
+    d = d.addDays( i );
+    items.push_back( d );
   }
   return items;
 }
@@ -272,18 +271,18 @@ struct CleanupAssociativeContainer<std::map<T, QObject*>, QObject*>
 };
 
 template<typename Container>
-void cleanupSequential(Container c)
+void cleanupSequential( Container c )
 {
-  CleanupSequentialContainer<Container>::clean(c);
+  CleanupSequentialContainer<Container>::clean( c );
 }
 
 template<typename Container>
-void cleanupAssociative(Container c)
+void cleanupAssociative( Container c )
 {
-  CleanupAssociativeContainer<Container>::clean(c);
+  CleanupAssociativeContainer<Container>::clean( c );
 }
 
-void testContainer(const QString &stringTemplate, const QVariant &containerVariant, const QStringList &expectedResults, bool unordered)
+void testContainer( const QString &stringTemplate, const QVariant &containerVariant, const QStringList &expectedResults, bool unordered )
 {
   Grantlee::MetaType::init();
   Grantlee::Engine engine;
@@ -343,7 +342,7 @@ void doTestNonHashableContainers()
   doTestSequentialContainer<QStack<T> >();
   doTestAssociativeContainer<QMap<qint32, T> >();
   doTestAssociativeContainer<std::map<qint32, T> >();
-  doTestAssociativeContainer<QHash<qint32, T> >(true);
+  doTestAssociativeContainer<QHash<qint32, T> >( true );
 #ifndef MINIMAL_CONTAINER_TESTS
   doTestAssociativeContainer<QMap<qint16, T> >();
   doTestAssociativeContainer<QMap<qint64, T> >();
@@ -357,12 +356,12 @@ void doTestNonHashableContainers()
   doTestAssociativeContainer<std::map<quint32, T> >();
   doTestAssociativeContainer<std::map<quint64, T> >();
   doTestAssociativeContainer<std::map<QString, T> >();
-  doTestAssociativeContainer<QHash<qint16, T> >(true);
-  doTestAssociativeContainer<QHash<qint64, T> >(true);
-  doTestAssociativeContainer<QHash<quint16, T> >(true);
-  doTestAssociativeContainer<QHash<quint32, T> >(true);
-  doTestAssociativeContainer<QHash<quint64, T> >(true);
-  doTestAssociativeContainer<QHash<QString, T> >(true);
+  doTestAssociativeContainer<QHash<qint16, T> >( true );
+  doTestAssociativeContainer<QHash<qint64, T> >( true );
+  doTestAssociativeContainer<QHash<quint16, T> >( true );
+  doTestAssociativeContainer<QHash<quint32, T> >( true );
+  doTestAssociativeContainer<QHash<quint64, T> >( true );
+  doTestAssociativeContainer<QHash<QString, T> >( true );
 #endif
 }
 
@@ -370,7 +369,7 @@ template<typename T>
 void doTestContainers()
 {
   doTestNonHashableContainers<T>();
-  doTestSequentialContainer<QSet<T> >(true);
+  doTestSequentialContainer<QSet<T> >( true );
 }
 
 void TestGenericContainers::testContainer_Builtins()

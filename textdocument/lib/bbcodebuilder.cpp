@@ -76,7 +76,7 @@ void BBCodeBuilder::endForeground()
 
 void BBCodeBuilder::beginAnchor( const QString &href, const QString &name )
 {
-  Q_UNUSED(name)
+  Q_UNUSED( name )
   m_text.append( QString::fromLatin1( "[URL=%1]" ).arg( href ) );
 }
 void BBCodeBuilder::endAnchor()
@@ -140,7 +140,7 @@ void BBCodeBuilder::beginList( QTextListFormat::Style type )
   case QTextListFormat::ListDisc:
   case QTextListFormat::ListCircle:
   case QTextListFormat::ListSquare:
-    m_text.append( QLatin1String( "[LIST]\n"  ) );  // Unordered lists are all disc type in BBCode.
+    m_text.append( QLatin1String( "[LIST]\n" ) );   // Unordered lists are all disc type in BBCode.
     break;
   case QTextListFormat::ListDecimal:
     m_text.append( QLatin1String( "[LIST=1]\n" ) );

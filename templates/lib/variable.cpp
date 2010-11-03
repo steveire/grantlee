@@ -147,8 +147,7 @@ QVariant Variable::resolve( Context *c ) const
   QVariant var;
   if ( !d->m_lookups.isEmpty() ) {
     int i = 0;
-    if ( d->m_lookups.at( i ) == QLatin1String( "Qt" ) )
-    {
+    if ( d->m_lookups.at( i ) == QLatin1String( "Qt" ) ) {
       ++i;
       const QString nextPart = d->m_lookups.at( i );
       ++i;
@@ -159,27 +158,24 @@ QVariant Variable::resolve( Context *c ) const
       for ( int j = 0; j < globalMetaObject->enumeratorCount(); ++j ) {
         const QMetaEnum me = globalMetaObject->enumerator( j );
 
-        if ( QLatin1String( me.name() ) == nextPart)
-        {
-          const MetaEnumVariable mev(me);
-          var = QVariant::fromValue(mev);
+        if ( QLatin1String( me.name() ) == nextPart ) {
+          const MetaEnumVariable mev( me );
+          var = QVariant::fromValue( mev );
           break;
         }
 
-        for ( int k = 0; k < me.keyCount(); ++k )
-        {
-          if ( QLatin1String( me.key( k ) ) == nextPart )
-          {
-            const MetaEnumVariable mev(me, k);
-            var = QVariant::fromValue(mev);
+        for ( int k = 0; k < me.keyCount(); ++k ) {
+          if ( QLatin1String( me.key( k ) ) == nextPart ) {
+            const MetaEnumVariable mev( me, k );
+            var = QVariant::fromValue( mev );
             breakout = true;
             break;
           }
         }
-        if (breakout)
+        if ( breakout )
           break;
       }
-      if (!var.isValid())
+      if ( !var.isValid() )
         return QVariant();
 
     } else {
@@ -188,7 +184,7 @@ QVariant Variable::resolve( Context *c ) const
     while ( i < d->m_lookups.size() ) {
       var = MetaType::lookup( var, d->m_lookups.at( i++ ) );
       if ( !var.isValid() )
-        return var;
+        return QVariant();
     }
   } else {
     if ( isSafeString( var ) )

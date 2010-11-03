@@ -249,7 +249,7 @@ protected:
 
 #ifndef Q_QDOC
 private:
-  Q_DECLARE_PRIVATE(MarkupDirector)
+  Q_DECLARE_PRIVATE( MarkupDirector )
 #endif
 };
 

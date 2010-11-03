@@ -276,8 +276,7 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
 //   Q_D( MarkupDirector );
   QTextCharFormat charFormat = fragment.charFormat();
 
-  if ( charFormat.objectType() >= QTextFormat::UserObject )
-  {
+  if ( charFormat.objectType() >= QTextFormat::UserObject ) {
     processCustomFragment( fragment, doc );
     if ( !it.atEnd() )
       return ++it;
@@ -348,10 +347,10 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
   return it;
 }
 
-void MarkupDirector::processCustomFragment(const QTextFragment& fragment, const QTextDocument* doc)
+void MarkupDirector::processCustomFragment( const QTextFragment& fragment, const QTextDocument* doc )
 {
-  Q_UNUSED(fragment)
-  Q_UNUSED(doc)
+  Q_UNUSED( fragment )
+  Q_UNUSED( doc )
 }
 
 QTextFrame::iterator MarkupDirector::processObject( QTextFrame::iterator it, const QTextBlock &block, QTextObject *object )
