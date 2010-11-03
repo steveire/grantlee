@@ -17,6 +17,7 @@ remove_definitions(-DQT_NO_CAST_TO_ASCII)
 remove_definitions(-DQT_NO_CAST_FROM_ASCII)
 
 set (grantlee_core_SRCS
+  abstractlocalizer.cpp
   cachingloaderdecorator.cpp
   customtyperegistry.cpp
   context.cpp
@@ -26,8 +27,10 @@ set (grantlee_core_SRCS
   metatype.cpp
   node.cpp
   nodebuiltins.cpp
+  nulllocalizer.cpp
   outputstream.cpp
   parser.cpp
+  qtlocalizer.cpp
   rendercontext.cpp
   safestring.cpp
   template.cpp
@@ -83,6 +86,7 @@ install(TARGETS grantlee_core
 )
 
 install(FILES
+  abstractlocalizer.h
   cachingloaderdecorator.h
   containeraccessor.h
   context.h
@@ -96,6 +100,7 @@ install(FILES
   node.h
   outputstream.h
   parser.h
+  qtlocalizer.h
   rendercontext.h
   safestring.h
   taglibraryinterface.h

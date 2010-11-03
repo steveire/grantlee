@@ -21,6 +21,7 @@
 #ifndef GRANTLEE_H
 #define GRANTLEE_H
 
+#include "grantlee/abstractlocalizer.h"
 #include "grantlee/cachingloaderdecorator.h"
 #include "grantlee/containeraccessor.h"
 #include "grantlee/context.h"
@@ -34,6 +35,7 @@
 #include "grantlee/node.h"
 #include "grantlee/outputstream.h"
 #include "grantlee/parser.h"
+#include "grantlee/qtlocalizer.h"
 #include "grantlee/rendercontext.h"
 #include "grantlee/safestring.h"
 #include "grantlee/taglibraryinterface.h"
