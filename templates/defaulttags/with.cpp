@@ -49,7 +49,7 @@ Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 
-WithNode::WithNode( FilterExpression fe, const QString &name, QObject *parent )
+WithNode::WithNode( const FilterExpression &fe, const QString &name, QObject *parent )
     : Node( parent )
 {
   m_filterExpression = fe;

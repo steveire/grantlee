@@ -39,7 +39,7 @@ class WithNode : public Node
 {
   Q_OBJECT
 public:
-  WithNode( FilterExpression, const QString &name, QObject *parent = 0 );
+  WithNode( const FilterExpression &expression, const QString &name, QObject *parent = 0 );
 
   void setNodeList( NodeList nodeList );
 
