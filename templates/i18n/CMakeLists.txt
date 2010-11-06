@@ -17,6 +17,7 @@ grantlee_add_plugin(grantlee_i18ntags
    i18np
    i18ncp
    l10n_money
+   with_locale
 )
 
 install(TARGETS grantlee_i18ntags
