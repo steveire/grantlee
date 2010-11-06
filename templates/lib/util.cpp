@@ -115,6 +115,8 @@ static QList<int> getPrimitives()
              << QVariant::Bool
              << QVariant::Int
              << QVariant::Double
+             << QVariant::Date
+             << QVariant::Time
              << QVariant::DateTime;
   return primitives;
 }
