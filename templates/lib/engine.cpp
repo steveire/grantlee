@@ -224,14 +224,15 @@ EnginePrivate::EnginePrivate( Engine *engine )
 QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVersion ) const
 {
   int pluginIndex = 0;
+  const QString prefix = QLatin1Literal( "/grantlee/" )
+                       + QString::number( GRANTLEE_VERSION_MAJOR )
+                       + QLatin1Char( '.' )
+                       + QString::number( minorVersion )
+                       + QLatin1Char( '/' );
   while ( m_pluginDirs.size() > pluginIndex ) {
     const QString nextDir = m_pluginDirs.at( pluginIndex++ );
     const QString libFileName = nextDir
-                              + QLatin1Literal( "/grantlee/" )
-                              + QString::number( GRANTLEE_VERSION_MAJOR )
-                              + QLatin1Char( '.' )
-                              + QString::number( minorVersion )
-                              + QLatin1Char( '/' )
+                              + prefix
                               + name
                               + QLatin1Literal( ".qs" );
 
@@ -239,6 +240,17 @@ QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVers
     if ( !file.exists() )
       continue;
     return libFileName;
+  }
+  QList<AbstractTemplateLoader::Ptr>::const_iterator it = m_loaders.constBegin();
+  const QList<AbstractTemplateLoader::Ptr>::const_iterator end = m_loaders.constEnd();
+  for ( ; it != end; ++it ) {
+    const QPair<QString, QString> pair = ( *it )->getMediaUri( prefix
+                                                            + name
+                                                            + QLatin1Literal( ".qs" ) );
+
+    if ( !pair.first.isEmpty() && !pair.second.isEmpty() ) {
+      return pair.first + pair.second;
+    }
   }
   return QString();
 }
