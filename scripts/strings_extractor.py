@@ -60,36 +60,41 @@ def smart_split(text):
 # This only matches constant *strings* (things in quotes or marked for
 # translation). Numbers are treated as variables for implementation reasons
 # (so that they retain their type when passed to filters).
-constant_string = r"""
-(?:%(i18n_open)s%(strdq)s%(i18n_close)s|
-%(i18n_open)s%(strsq)s%(i18n_close)s|
-%(strdq)s|
-%(strsq)s)
-""" % {
+
+constant_string = r"(?:%(strdq)s|%(strsq)s)" % {
     'strdq': r'"[^"\\]*(?:\\.[^"\\]*)*"', # double-quoted string
     'strsq': r"'[^'\\]*(?:\\.[^'\\]*)*'", # single-quoted string
-    'i18n_open' : re.escape("_("),
-    'i18n_close' : re.escape(")"),
     }
-constant_string = constant_string.replace("\n", "")
+
+l10nable = r"""(?:%(constant)s|%(var_chars)s)""" % {
+    'constant': constant_string,
+    'var_chars': "[\w\.]*",
+    }
+
+l10nable = l10nable.replace("\n", "")
 
 filter_raw_string = r"""
 ^(?P<constant>%(constant)s)|
+^%(i18n_open)s(?P<l10nable>%(l10nable)s)%(i18n_close)s|
 ^(?P<var>[%(var_chars)s]+|%(num)s)|
  (?:%(filter_sep)s
      (?P<filter_name>\w+)
          (?:%(arg_sep)s
              (?:
               (?P<constant_arg>%(constant)s)|
+              %(i18n_open)s(?P<l10nable_arg>%(l10nable)s)%(i18n_close)s|
               (?P<var_arg>[%(var_chars)s]+|%(num)s)
              )
          )?
  )""" % {
     'constant': constant_string,
+    'l10nable': l10nable,
     'num': r'[-+\.]?\d[\d\.e]*',
     'var_chars': "\w\." ,
     'filter_sep': re.escape(FILTER_SEPARATOR),
     'arg_sep': re.escape(FILTER_ARGUMENT_SEPARATOR),
+    'i18n_open' : re.escape("_("),
+    'i18n_close' : re.escape(")"),
   }
 
 filter_re = re.compile(filter_raw_string, re.UNICODE|re.VERBOSE)
@@ -110,21 +115,21 @@ def get_translatable_filter_args(token):
             raise TemplateSyntaxError("Could not parse some characters: %s|%s|%s"  % \
                     (token[:upto], token[upto:start], token[start:]))
         if not var_obj:
-            var, constant = match.group("var", "constant")
+            l10nable = match.group("l10nable")
 
-            if constant and constant.startswith('_(') and constant.endswith(')'):
-                # The result of the lookup should be translated at rendering
-                # time.
-                plain_strings.append(constant[3:-2])
+            if l10nable:
+                if l10nable.startswith('"') and l10nable.endswith('"') or l10nable.startswith('"') and l10nable.endswith('"'):
+                    # The result of the lookup should be translated at rendering
+                    # time.
+                    plain_strings.append(l10nable[1:-1])
             var_obj = True
         else:
-            filter_name = match.group("filter_name")
-            args = []
-            constant_arg, var_arg = match.group("constant_arg", "var_arg")
-            if  constant_arg and constant_arg.startswith('_(') and constant_arg.endswith(')'):
-                # The result of the lookup should be translated at rendering
-                # time.
-                plain_strings.append(constant_arg[3:-2])
+            l10nable_arg = match.group("l10nable_arg")
+            if  l10nable_arg:
+                if l10nable_arg.startswith('"') and l10nable_arg.endswith('"') or l10nable_arg.startswith('"') and l10nable_arg.endswith('"'):
+                    # The result of the lookup should be translated at rendering
+                    # time.
+                    plain_strings.append(l10nable_arg[1:-1])
         upto = match.end()
     if upto != len(token):
         raise TemplateSyntaxError("Could not parse the remainder: '%s' from '%s'" % (token[upto:], token))
