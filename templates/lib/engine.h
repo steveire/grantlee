@@ -104,6 +104,11 @@ public:
   void addPluginPath( const QString &dir );
 
   /**
+    Removes all instances of @p dir from the list of plugin dirs.
+  */
+  void removePluginPath( const QString &dir );
+
+  /**
     Returns the currently configured plugin dirs
   */
   QStringList pluginPaths() const;

@@ -99,6 +99,12 @@ void Engine::addPluginPath( const QString &dir )
   d->m_pluginDirs = temp;
 }
 
+void Engine::removePluginPath( const QString &dir )
+{
+  Q_D( Engine );
+  d->m_pluginDirs.removeAll( dir );
+}
+
 QStringList Engine::pluginPaths() const
 {
   Q_D( const Engine );
