@@ -80,6 +80,7 @@ class EnginePrivate
   EnginePrivate( Engine *engine );
 
   TagLibraryInterface* loadLibrary( const QString &name, uint minorVersion );
+  QString getScriptLibraryName( const QString &name, uint minorVersion ) const;
   ScriptableLibraryContainer* loadScriptableLibrary( const QString &name, uint minorVersion );
   PluginPointer<TagLibraryInterface> loadCppLibrary( const QString& name, uint minorVersion );
 

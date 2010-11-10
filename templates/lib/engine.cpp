@@ -221,17 +221,9 @@ EnginePrivate::EnginePrivate( Engine *engine )
 {
 }
 
-ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
+QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVersion ) const
 {
   int pluginIndex = 0;
-  if ( !m_scriptableTagLibrary )
-    return 0;
-
-#if 0
-  if ( !m_libraries.contains( __scriptableLibName ) )
-    return 0;
-#endif
-
   while ( m_pluginDirs.size() > pluginIndex ) {
     const QString nextDir = m_pluginDirs.at( pluginIndex++ );
     const QString libFileName = nextDir
@@ -246,25 +238,42 @@ ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString 
     const QFile file( libFileName );
     if ( !file.exists() )
       continue;
+    return libFileName;
+  }
+  return QString();
+}
 
-    if ( m_scriptableLibraries.contains( libFileName ) ) {
-      ScriptableLibraryContainer *library = m_scriptableLibraries.value( libFileName );
-      library->setNodeFactories( m_scriptableTagLibrary->nodeFactories( libFileName ) );
-      library->setFilters( m_scriptableTagLibrary->filters( libFileName ) );
-      return library;
-    }
+ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
+{
+  if ( !m_scriptableTagLibrary )
+    return 0;
+
 #if 0
-    PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
+  if ( !m_libraries.contains( __scriptableLibName ) )
+    return 0;
 #endif
 
-    const QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
-    const QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
+  const QString libFileName = getScriptLibraryName( name, minorVersion );
 
-    ScriptableLibraryContainer *library = new ScriptableLibraryContainer( factories, filters );
-    m_scriptableLibraries.insert( libFileName, library );
+  if ( libFileName.isEmpty() )
+    return 0;
+
+  if ( m_scriptableLibraries.contains( libFileName ) ) {
+    ScriptableLibraryContainer *library = m_scriptableLibraries.value( libFileName );
+    library->setNodeFactories( m_scriptableTagLibrary->nodeFactories( libFileName ) );
+    library->setFilters( m_scriptableTagLibrary->filters( libFileName ) );
     return library;
   }
-  return 0;
+#if 0
+  PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
+#endif
+
+  const QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
+  const QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
+
+  ScriptableLibraryContainer *library = new ScriptableLibraryContainer( factories, filters );
+  m_scriptableLibraries.insert( libFileName, library );
+  return library;
 }
 
 PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion )
