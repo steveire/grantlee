@@ -66,3 +66,59 @@ add_custom_target(linguist_qm
   ${_LINGUIST_QM_ARGS}
 )
 
+find_package(KDE4)
+
+if (KDE4_FOUND)
+  set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+
+  find_package(Gettext)
+  add_executable(contacts_kde
+    main_kde.cpp
+    kdelocalizer.cpp
+    ${contacts_example_SRCS}
+  )
+
+  include_directories(
+    ${KDE_INCLUDES}
+  )
+
+  target_link_libraries(
+    contacts_kde
+    ${QT_QTGUI_LIBRARIES}
+    ${QT_QTWEBKIT_LIBRARIES}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KDEUI_LIBS}
+
+    ${Grantlee_CORE_LIBRARIES}
+  )
+
+  set( GETTEXT_PO_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_gettext.py" "${CMAKE_BINARY_DIR}/output.cpp"
+    "${CMAKE_SOURCE_DIR}/themes/gettext/bashful/*.html"
+    "${CMAKE_SOURCE_DIR}/themes/gettext/sneezy/*.html"
+    "${CMAKE_SOURCE_DIR}/themes/gettext/sleepy/*.html"
+                        COMMAND "${GETTEXT_XGETTEXT_EXECUTABLE}" "${CMAKE_BINARY_DIR}/output.cpp" "-o" ${CMAKE_SOURCE_DIR}/contacts.pot )
+
+  foreach(CONTACT_LOCALE ${CONTACTS_lOCALES})
+      set( GETTEXT_PO_ARGS ${GETTEXT_PO_ARGS} COMMAND "${CMAKE_COMMAND}" -E copy "${CMAKE_SOURCE_DIR}/contacts.pot" "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.po" )
+  endforeach()
+
+  add_custom_target(gettext_po
+    ${GETTEXT_PO_ARGS}
+  )
+
+  foreach(CONTACT_LOCALE ${CONTACTS_lOCALES})
+
+    set (GETTEXT_MO_ARGS ${GETTEXT_MO_ARGS}
+      COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE} --quiet --update --backup=none -s "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.po" "${CMAKE_SOURCE_DIR}/contacts.pot"
+      COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/${CONTACT_LOCALE}/LC_MESSAGES/"
+      COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} -o "${CMAKE_BINARY_DIR}/${CONTACT_LOCALE}/LC_MESSAGES/contacts_kde.mo" "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.po"
+    )
+
+    install(DIRECTORY "${CMAKE_BINARY_DIR}/${CONTACT_LOCALE}" DESTINATION share/locale)
+  endforeach()
+
+  add_custom_target(gettext_mo
+    ${GETTEXT_MO_ARGS}
+  )
+
+endif()
