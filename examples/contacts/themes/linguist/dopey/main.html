@@ -1,0 +1,27 @@
+
+{% load ratio_calculator %}
+<html>
+<h2>{% i18ncp "The total number of people displayed" "%n person" "%n people" contacts|length %}</h2>
+
+{% if contacts %}
+<table border="1" cellpadding="2">
+<tr>
+  <th>{% i18nc "The name of a person" "Name" %}</th>
+  <th>{% i18n "Email" %}</th>
+  <th>{% i18n "Birthday" %}</th>
+  <th>{% i18n "Salary" %}</th>
+  <th>{% i18n "Salary-age ratio" %}</th>
+</tr>
+{% for contact in contacts %}
+<tr>
+  <td nowrap>{{ contact.name }}</td>
+  <td>{{ contact.email }}</td>
+  <td>{{ _(contact.birthday) }}</td>
+  <td align="right" nowrap>{% l10n_money contact.salary contact.salaryCurrency %}</td>
+  <td align="right" nowrap>{% get_ratio contact.birthday contact.rating as ratio %}{{ _(ratio) }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+</html>

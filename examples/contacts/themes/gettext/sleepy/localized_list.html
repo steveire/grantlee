@@ -1,0 +1,21 @@
+
+
+<h2>{% i18np "%1 person" "%1 people" contacts|length %}</h2>
+<table border="1" cellpadding="2">
+<tr>
+  <th>{% i18n "Name" %}</th>
+  <th>{% i18n "Email" %}</th>
+  <th>{% i18n "Phone" %}</th>
+  <th>{{ _("Nickname") }}</th>
+  <th>{% i18n "Address" %}</th>
+</tr>
+{% for contact in contacts %}
+<tr>
+  <td>{{ contact.name }}</td>
+  <td>{{ contact.email }}</td>
+  <td>{{ contact.phone }}</td>
+  <td>{{ contact.nickname }}</td>
+  <td nowrap>{{ contact.address }}</td>
+</tr>
+{% endfor %}
+</table>

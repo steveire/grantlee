@@ -1,0 +1,87 @@
+<html>
+
+{% if contacts %}
+  <h2>{% i18np "%1 person" "%1 people" contacts|length %}</h2>
+  <table border="1" cellpadding="2">
+  <tr>
+    <th>
+      <img src="{% media_finder "us_flag.png" %}" />
+      <br /><img src="{% media_finder "de_flag.png" %}" />
+      <br /><img src="{% media_finder "fr_flag.png" %}" />
+    </th>
+    <th>
+    {% i18nc_var "The name of a person" "Name" as personName %}
+    {{ personName }}
+    {% with_locale "de_DE" %}
+      <br />{{ personName }}
+    {% endwith_locale %}
+    {% with_locale "fr_FR" %}
+      <br />{{ personName }}
+    {% endwith_locale %}
+    </th>
+    <th>
+    {% i18n "Email" %}
+    {% with_locale "de_DE" %}
+      <br />{% i18n "Email" %}
+    {% endwith_locale %}
+    {% with_locale "fr_FR" %}
+      <br />{% i18n "Email" %}
+    {% endwith_locale %}
+    </th>
+    <th>
+    {% i18n "Phone" %}
+    {% with_locale "de_DE" %}
+      <br />{% i18n "Phone" %}
+    {% endwith_locale %}
+    {% with_locale "fr_FR" %}
+      <br />{% i18n "Phone" %}
+    {% endwith_locale %}
+    </th>
+    <th>
+    {{ _("Nickname") }}
+    {% with_locale "de_DE" %}
+      <br />{{ _("Nickname") }}
+    {% endwith_locale %}
+    {% with_locale "fr_FR" %}
+      <br />{{ _("Nickname") }}
+    {% endwith_locale %}
+    </th>
+    <th>
+    {% i18n "Address" %}
+    {% with_locale "de_DE" %}
+      <br />{% i18n "Address" %}
+    {% endwith_locale %}
+    {% with_locale "fr_FR" %}
+      <br />{% i18n "Address" %}
+    {% endwith_locale %}
+    </th>
+    <th>
+    {% i18n "Birthday" %}
+    {% with_locale "de_DE" %}
+      <br />{% i18n "Birthday" %}
+    {% endwith_locale %}
+    {% with_locale "fr_FR" %}
+      <br />{% i18n "Birthday" %}
+    {% endwith_locale %}
+    </th>
+  </tr>
+{% for contact in contacts %}
+<tr>
+  <td></td>
+  <td>{{ contact.name }}</td>
+  <td>{{ contact.email }}</td>
+  <td>{{ contact.phone }}</td>
+  <td>{{ contact.nickname }}</td>
+  <td>{{ contact.address }}</td>
+  <td>{{ _(contact.birthday) }}
+    {% with_locale "de_DE" %}
+      <br />{{ _(contact.birthday) }}
+    {% endwith_locale %}
+    {% with_locale "fr_FR" %}
+      <br />{{ _(contact.birthday) }}
+    {% endwith_locale %}</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+</html>

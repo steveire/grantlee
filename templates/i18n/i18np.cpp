@@ -1,0 +1,143 @@
+/*
+  This file is part of the Grantlee template system.
+
+  Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either version
+  2 of the Licence, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+#include "i18np.h"
+
+#include <QtCore/QStringList>
+#include <QtPlugin>
+
+#include "abstractlocalizer.h"
+#include "parser.h"
+#include "template.h"
+#include "engine.h"
+#include "exception.h"
+
+#include <QtCore/QDebug>
+#include <util.h>
+#include <complex>
+
+I18npNodeFactory::I18npNodeFactory()
+{
+
+}
+
+Node* I18npNodeFactory::getNode( const QString& tagContent, Parser* p ) const
+{
+  QStringList expr = smartSplit( tagContent );
+
+  if ( expr.size() < 4 )
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18np tag takes at least three arguments" ) );
+
+  QString sourceText = expr.at( 1 );
+
+  if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
+       && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18np tag first argument must be a static string." ) );
+  }
+  sourceText = sourceText.mid( 1, sourceText.size() - 2 );
+
+  QString pluralText = expr.at( 2 );
+
+  if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
+       && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18np tag second argument must be a static string." ) );
+  }
+  pluralText = pluralText.mid( 1, pluralText.size() - 2 );
+
+  QList<FilterExpression> feList;
+  for ( int i = 3; i < expr.size(); ++i ) {
+    feList.append( FilterExpression( expr.at( i ), p ) );
+  }
+
+  return new I18npNode( sourceText, pluralText, feList );
+}
+
+
+I18npVarNodeFactory::I18npVarNodeFactory()
+{
+
+}
+
+Grantlee::Node* I18npVarNodeFactory::getNode( const QString& tagContent, Parser* p ) const
+{
+  QStringList expr = smartSplit( tagContent );
+
+  if ( expr.size() < 6 )
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18np_var tag takes at least five arguments" ) );
+
+  QString sourceText = expr.at( 1 );
+
+  if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
+       && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18np tag first argument must be a static string." ) );
+  }
+  sourceText = sourceText.mid( 1, sourceText.size() - 2 );
+
+  QString pluralText = expr.at( 2 );
+
+  if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
+       && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18np tag second argument must be a static string." ) );
+  }
+  pluralText = pluralText.mid( 1, pluralText.size() - 2 );
+
+  QList<FilterExpression> feList;
+  for ( int i = 3; i < expr.size() - 2; ++i ) {
+    feList.append( FilterExpression( expr.at( i ), p ) );
+  }
+
+  QString resultName = expr.last();
+
+  return new I18npVarNode( sourceText, pluralText, feList, resultName );
+}
+
+
+I18npNode::I18npNode( const QString &sourceText, const QString &pluralText, const QList<Grantlee::FilterExpression>& feList, QObject* parent )
+  : Node( parent ), m_sourceText( sourceText ), m_pluralText( pluralText ), m_filterExpressionList( feList )
+{
+
+}
+
+void I18npNode::render( OutputStream* stream, Context* c )
+{
+  QVariantList args;
+  foreach( const FilterExpression &fe, m_filterExpressionList )
+    args.append( fe.resolve( c ) );
+  QString resultString = c->localizer()->localizePluralString( m_sourceText, m_pluralText, args );
+
+  ( *stream ) << resultString;
+}
+
+I18npVarNode::I18npVarNode( const QString &sourceText, const QString &pluralText, const QList<Grantlee::FilterExpression>& feList, const QString &resultName, QObject* parent )
+  : Node( parent ), m_sourceText( sourceText ), m_pluralText( pluralText ), m_filterExpressionList( feList ), m_resultName( resultName )
+{
+
+}
+
+void I18npVarNode::render( OutputStream* stream, Context* c )
+{
+  Q_UNUSED( stream )
+  QVariantList args;
+  foreach( const FilterExpression &fe, m_filterExpressionList )
+    args.append( fe.resolve( c ) );
+  QString resultString = c->localizer()->localizePluralString( m_sourceText, m_pluralText, args );
+
+  c->insert( m_resultName, resultString );
+}

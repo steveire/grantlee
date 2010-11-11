@@ -1,0 +1,17 @@
+<html>
+
+<img src="{% media_finder "us_flag.png" %}" />{% include "localized_list.html" %}
+
+<br />
+<br />
+{% with_locale "de_DE" %}
+  <img src="{% media_finder "de_flag.png" %}" />{% include "localized_list.html" %}
+{% endwith_locale %}
+
+<br />
+<br />
+{% with_locale "fr_FR" %}
+  <img src="{% media_finder "fr_flag.png" %}" />{% include "localized_list.html" %}
+{% endwith_locale %}
+
+</html>

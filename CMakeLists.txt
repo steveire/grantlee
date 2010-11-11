@@ -2,11 +2,10 @@ project(Grantlee)
 
 cmake_minimum_required(VERSION 2.6)
 
-find_package(Qt4 4.5.0 REQUIRED)
-
-option( BUILD_CORE "Build the Grantlee core library" TRUE )
-option( BUILD_GUI "Build the Grantlee gui library" TRUE )
+option( BUILD_CORE "Build the Grantlee template library" TRUE )
+option( BUILD_GUI "Build the Grantlee textdocument library" TRUE )
 option( BUILD_MAIN_PLUGINS "Build the Grantlee plugins" TRUE )
+option( BUILD_I18N_PLUGIN "Build the i18n plugin" TRUE )
 option( BUILD_SCRIPT_PLUGIN "Build the Grantlee scriptable tags plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 
@@ -58,30 +57,13 @@ set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 if (BUILD_CORE)
   set(Grantlee_CORE_LIBRARY "grantlee_core")
   set(Grantlee_CORE_LIBRARIES ${Grantlee_CORE_LIBRARY} ${QT_QTCORE_LIBRARIES} )
-  add_subdirectory(corelib)
+  add_subdirectory(templates)
 endif()
 
 if (BUILD_GUI)
   set(Grantlee_GUI_LIBRARY "grantlee_gui")
   set(Grantlee_GUI_LIBRARIES ${Grantlee_GUI_LIBRARY} ${QT_QTGUI_LIBRARIES} )
-  add_subdirectory(gui)
-endif()
-
-if (BUILD_MAIN_PLUGINS)
-  add_subdirectory(loadertags)
-  add_subdirectory(defaulttags)
-
-  add_subdirectory(defaultfilters)
-
-  add_subdirectory(mutabletags)
-endif()
-
-if (BUILD_SCRIPT_PLUGIN)
-#  add_subdirectory(scriptabletags)
-endif()
-
-if (BUILD_TESTS)
-  add_subdirectory(tests)
+  add_subdirectory(textdocument)
 endif()
 
 configure_file(

@@ -94,13 +94,13 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = @CMAKE_SOURCE_DIR@/Mainpage.dox @CMAKE_SOURCE_DIR@/corelib @CMAKE_SOURCE_DIR@/gui @CMAKE_SOURCE_DIR@/dox
+INPUT                  = @CMAKE_SOURCE_DIR@/Mainpage.dox @CMAKE_SOURCE_DIR@/templates/lib @CMAKE_SOURCE_DIR@/textdocument @CMAKE_SOURCE_DIR@/dox
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h \
                          *.dox \
 
 RECURSIVE              = YES
-EXCLUDE                = @CMAKE_SOURCE_DIR@/corelib/grantlee_core_export.h @CMAKE_SOURCE_DIR@/gui/grantlee_gui_export.h
+EXCLUDE                = @CMAKE_SOURCE_DIR@/templates/lib/grantlee_core_export.h @CMAKE_SOURCE_DIR@/textdocument/grantlee_gui_export.h
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = .* \
                          *_p* \
