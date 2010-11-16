@@ -48,9 +48,9 @@ public:
   BlockNode( const QString &blockName, QObject *parent = 0 );
   ~BlockNode();
 
-  void setNodeList( const NodeList &list );
+  void setNodeList( const NodeList &list ) const;
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
   BlockNode* takeNodeParent();
 
@@ -70,9 +70,9 @@ public:
 
 private:
   const QString m_name;
-  NodeList m_list;
-  Context *m_context;
-  OutputStream *m_stream;
+  mutable NodeList m_list;
+  mutable Context *m_context;
+  mutable OutputStream *m_stream;
 
 };
 

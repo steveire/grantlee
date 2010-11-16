@@ -51,7 +51,7 @@ void ScriptableContext::pop()
   m_c->pop();
 }
 
-QString ScriptableContext::render( const QObjectList &list )
+QString ScriptableContext::render( const QObjectList &list ) const
 {
   NodeList nodeList;
   QListIterator<QObject *> it( list );

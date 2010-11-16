@@ -101,7 +101,7 @@ I18nNode::I18nNode( const QString &sourceText, const QList<Grantlee::FilterExpre
 
 }
 
-void I18nNode::render( OutputStream* stream, Context* c )
+void I18nNode::render( OutputStream* stream, Context* c ) const
 {
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
@@ -117,7 +117,7 @@ I18nVarNode::I18nVarNode( const QString &sourceText, const QList<Grantlee::Filte
 
 }
 
-void I18nVarNode::render( OutputStream* stream, Context* c )
+void I18nVarNode::render( OutputStream* stream, Context* c ) const
 {
   Q_UNUSED( stream )
   QVariantList args;

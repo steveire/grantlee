@@ -42,7 +42,7 @@ class CommentNode : public Node
 public:
   CommentNode( QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 };
 
 #endif

@@ -53,11 +53,11 @@ public:
   void setTrueList( NodeList trueList );
   void setFalseList( NodeList falseList );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 protected:
-  void renderTrueList( OutputStream *stream, Context *c );
-  void renderFalseList( OutputStream *stream, Context *c );
+  void renderTrueList( OutputStream *stream, Context *c ) const;
+  void renderFalseList( OutputStream *stream, Context *c ) const;
 
 private:
   QList<QPair<bool, FilterExpression > > m_boolVars;

@@ -93,7 +93,7 @@ void IfEqualNode::setFalseList( NodeList falseList )
   m_falseList = falseList;
 }
 
-void IfEqualNode::render( OutputStream *stream, Context *c )
+void IfEqualNode::render( OutputStream *stream, Context *c ) const
 {
   QVariant var1 = m_var1.resolve( c );
   QVariant var2 = m_var2.resolve( c );

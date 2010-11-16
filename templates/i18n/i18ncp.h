@@ -55,7 +55,7 @@ class I18ncpNode : public Node
   Q_OBJECT
 public:
   I18ncpNode( const QString &contextText, const QString &sourceText, const QString &pluralTex, const QList<FilterExpression> &feList, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   QString m_contextText;
@@ -69,7 +69,7 @@ class I18ncpVarNode : public Node
   Q_OBJECT
 public:
   I18ncpVarNode( const QString &contextText, const QString &sourceText, const QString &pluralText, const QList<FilterExpression> &feList, const QString &resultName, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   QString m_contextText;

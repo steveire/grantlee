@@ -71,7 +71,7 @@ void AutoescapeNode::setList( NodeList list )
   m_list = list;
 }
 
-void AutoescapeNode::render( OutputStream *stream, Context *c )
+void AutoescapeNode::render( OutputStream *stream, Context *c ) const
 {
   const bool old_setting = c->autoEscape();
   c->setAutoEscape( m_state == On );

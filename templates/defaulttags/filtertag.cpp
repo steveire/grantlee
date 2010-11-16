@@ -64,7 +64,7 @@ void FilterNode::setNodeList( NodeList filterList )
   m_filterList = filterList;
 }
 
-void FilterNode::render( OutputStream *stream, Context* c )
+void FilterNode::render( OutputStream *stream, Context* c ) const
 {
   QString output;
   QTextStream textStream( &output );

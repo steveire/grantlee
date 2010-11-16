@@ -95,13 +95,13 @@ public:
   /**
     Renders the template to a string given the Context @p c.
   */
-  virtual QString render( Context *c );
+  virtual QString render( Context *c ) const;
 
   /**
     Renders the Template to the OutputStream @p stream given the Context c.
   */
   // ### BIC make this const and non-virtual.
-  virtual OutputStream* render( OutputStream *stream, Context *c );
+  virtual OutputStream* render( OutputStream *stream, Context *c ) const;
 
 #ifndef Q_QDOC
   /**

@@ -49,9 +49,9 @@ BlockNode* BlockContext::pop( const QString& name )
   return list.takeLast();
 }
 
-void BlockContext::push( const QString& name, BlockNode* blockNode )
+void BlockContext::push( const QString& name, BlockNode const* blockNode ) const
 {
-  m_blocks[ name ].append( blockNode );
+  m_blocks[ name ].append( const_cast<BlockNode*>(blockNode) );
 }
 
 bool BlockContext::isEmpty()

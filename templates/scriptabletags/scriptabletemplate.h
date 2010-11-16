@@ -49,7 +49,7 @@ public:
   explicit ScriptableTemplate( Template t, QObject* parent = 0 );
 
 public Q_SLOTS:
-  QString render( ScriptableContext *c );
+  QString render( ScriptableContext *c ) const;
 
   QObjectList nodeList() const;
 

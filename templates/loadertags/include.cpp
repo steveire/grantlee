@@ -53,7 +53,7 @@ IncludeNode::IncludeNode( const FilterExpression &fe, QObject *parent )
 {
 }
 
-void IncludeNode::render( OutputStream *stream, Context *c )
+void IncludeNode::render( OutputStream *stream, Context *c ) const
 {
   QString filename = getSafeString( m_filterExpression.resolve( c ) );
 
@@ -79,7 +79,7 @@ ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
   m_name = name;
 }
 
-void ConstantIncludeNode::render( OutputStream *stream, Context *c )
+void ConstantIncludeNode::render( OutputStream *stream, Context *c ) const
 {
   TemplateImpl *ti = containerTemplate();
 

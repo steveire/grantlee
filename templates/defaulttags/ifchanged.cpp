@@ -67,7 +67,7 @@ void IfChangedNode::setFalseList( NodeList falseList )
   m_falseList = falseList;
 }
 
-void IfChangedNode::render( OutputStream *stream, Context *c )
+void IfChangedNode::render( OutputStream *stream, Context *c ) const
 {
   if ( c->lookup( QLatin1String( "forloop" ) ).isValid() && ( !c->lookup( QLatin1String( "forloop" ) ).toHash().contains( m_id ) ) ) {
     m_lastSeen = QVariant();

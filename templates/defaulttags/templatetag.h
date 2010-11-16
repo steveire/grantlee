@@ -46,7 +46,7 @@ public:
   */
   explicit TemplateTagNode( const QString &tagName, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
   static bool isKeyword( const QString &name );
 

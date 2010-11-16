@@ -126,7 +126,7 @@ void ForNode::insertLoopVariables( Context *c, int listSize, int i )
   c->insert( QLatin1String( forloop ), forloopHash );
 }
 
-void ForNode::renderLoop( OutputStream *stream, Context *c )
+void ForNode::renderLoop( OutputStream *stream, Context *c ) const
 {
   for ( int j = 0; j < m_loopNodeList.size();j++ ) {
     m_loopNodeList[j]->render( stream, c );
@@ -173,7 +173,7 @@ void ForNode::iterateHash( OutputStream *stream, Context *c, QVariantHash varHas
   }
 }
 
-void ForNode::render( OutputStream *stream, Context *c )
+void ForNode::render( OutputStream *stream, Context *c ) const
 {
   QVariantHash forloopHash;
 

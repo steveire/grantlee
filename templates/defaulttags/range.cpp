@@ -96,7 +96,7 @@ void RangeNode::setNodeList( NodeList list )
   m_list = list;
 }
 
-void RangeNode::render( OutputStream *stream, Context* c )
+void RangeNode::render( OutputStream *stream, Context* c ) const
 {
   int start;
   int stop;

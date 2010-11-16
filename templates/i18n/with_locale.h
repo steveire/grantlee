@@ -43,7 +43,7 @@ public:
 
   void setNodeList( NodeList nodeList );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   FilterExpression m_localeName;

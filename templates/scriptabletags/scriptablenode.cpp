@@ -83,7 +83,7 @@ void ScriptableNode::init( const QScriptValue &concreteNode,
   m_renderMethod = renderMethod;
 }
 
-void ScriptableNode::render( OutputStream *stream, Context *c )
+void ScriptableNode::render( OutputStream *stream, Context *c ) const
 {
   ScriptableContext sc( c );
   QScriptValue contextObject = m_scriptEngine->newQObject( &sc );
@@ -92,7 +92,7 @@ void ScriptableNode::render( OutputStream *stream, Context *c )
   args << contextObject;
 
   // Call the render method in the context of the concreteNode
-  QScriptValue value = m_renderMethod.call( m_concreteNode, args );
+  QScriptValue value = const_cast<QScriptValue&>(m_renderMethod).call( m_concreteNode, args );
 
   if ( value.isValid() && !value.isUndefined() )
     ( *stream ) << value.toString();

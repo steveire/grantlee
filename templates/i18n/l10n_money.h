@@ -55,7 +55,7 @@ class L10nMoneyNode : public Node
   Q_OBJECT
 public:
   L10nMoneyNode( const FilterExpression &value, const FilterExpression &currency, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   FilterExpression m_value;
@@ -67,7 +67,7 @@ class L10nMoneyVarNode : public Node
   Q_OBJECT
 public:
   L10nMoneyVarNode( const FilterExpression &value, const FilterExpression &currency, const QString &resultName, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   FilterExpression m_value;

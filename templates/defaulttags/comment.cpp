@@ -43,7 +43,7 @@ CommentNode::CommentNode( QObject *parent )
 
 }
 
-void CommentNode::render( OutputStream *stream, Context *c )
+void CommentNode::render( OutputStream *stream, Context *c ) const
 {
   Q_UNUSED( stream );
   Q_UNUSED( c );

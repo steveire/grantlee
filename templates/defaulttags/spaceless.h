@@ -44,10 +44,10 @@ public:
 
   void setList( NodeList nodeList );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
-  QString stripSpacesBetweenTags( const QString &input );
+  static QString stripSpacesBetweenTags( const QString &input );
 
   NodeList m_nodeList;
 

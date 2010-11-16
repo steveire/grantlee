@@ -68,7 +68,7 @@ bool RenderContext::contains( Node * const scopeNode ) const
   return d->m_variantHashStack.last().contains( scopeNode );
 }
 
-QVariant& RenderContext::data( Node * const scopeNode )
+QVariant& RenderContext::data( const Node * const scopeNode )
 {
   Q_D( RenderContext );
   Q_ASSERT( !d->m_variantHashStack.isEmpty() );

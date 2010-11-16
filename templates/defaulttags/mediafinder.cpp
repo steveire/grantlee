@@ -50,7 +50,7 @@ MediaFinderNode::MediaFinderNode( QList<FilterExpression> mediaExpressionList, Q
 {
 }
 
-void MediaFinderNode::render( OutputStream *stream, Context* c )
+void MediaFinderNode::render( OutputStream *stream, Context* c ) const
 {
   TemplateImpl *t = containerTemplate();
   Engine const *engine = t->engine();

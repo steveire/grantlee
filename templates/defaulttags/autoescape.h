@@ -48,7 +48,7 @@ public:
 
   void setList( NodeList list );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   NodeList m_list;

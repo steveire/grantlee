@@ -73,7 +73,7 @@ bool TemplateTagNode::isKeyword( const QString &name )
   return map.contains( name );
 }
 
-void TemplateTagNode::render( OutputStream *stream, Context *c )
+void TemplateTagNode::render( OutputStream *stream, Context *c ) const
 {
   Q_UNUSED( c )
   static QHash<QString, QString> map = getKeywordMap();

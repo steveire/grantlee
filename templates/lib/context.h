@@ -80,7 +80,7 @@ class ContextPrivate;
   the @gr_tag{with} tag render method is:
 
   @code
-    void WithNode::render( OutputStream *stream, Context *c )
+    void WithNode::render( OutputStream *stream, Context *c ) const
     {
       c->push();
       // {% with m_filterExpression as m_name %}

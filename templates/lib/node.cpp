@@ -64,7 +64,7 @@ Node::~Node()
   delete d_ptr;
 }
 
-void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Context* c )
+void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Context* c ) const
 {
   Grantlee::SafeString inputString;
   if ( input.type() == QVariant::List ) {
@@ -155,7 +155,7 @@ bool NodeList::containsNonText() const
   return m_containsNonText;
 }
 
-void NodeList::render( OutputStream *stream, Context *c )
+void NodeList::render( OutputStream *stream, Context *c ) const
 {
   for ( int i = 0; i < this->size(); ++i ) {
     this->at( i )->render( stream, c );

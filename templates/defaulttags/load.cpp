@@ -53,7 +53,7 @@ LoadNode::LoadNode( QObject *parent )
 {
 }
 
-void LoadNode::render( OutputStream *stream, Context *c )
+void LoadNode::render( OutputStream *stream, Context *c ) const
 {
   Q_UNUSED( stream )
   Q_UNUSED( c )

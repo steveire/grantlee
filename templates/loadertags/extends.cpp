@@ -99,7 +99,7 @@ void ExtendsNode::setNodeList( const NodeList &list )
   m_blocks = createNodeMap( blockList );
 }
 
-Template ExtendsNode::getParent( Context *c )
+Template ExtendsNode::getParent( Context *c ) const
 {
   const QVariant parentVar = m_filterExpression.resolve( c );
   if ( parentVar.userType() == qMetaTypeId<Grantlee::Template>() ) {
@@ -121,7 +121,7 @@ Template ExtendsNode::getParent( Context *c )
   return t;
 }
 
-void ExtendsNode::render( OutputStream *stream, Context *c )
+void ExtendsNode::render( OutputStream *stream, Context *c ) const
 {
   const Template parentTemplate = getParent( c );
 

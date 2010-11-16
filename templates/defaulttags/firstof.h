@@ -40,7 +40,7 @@ class FirstOfNode : public Node
 public:
   explicit FirstOfNode( QList<FilterExpression> list, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   QList<FilterExpression> m_variableList;

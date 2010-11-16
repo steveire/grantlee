@@ -61,7 +61,7 @@ public:
     BookWindow();
 
 protected Q_SLOTS:
-    void renderBooks();
+    void renderBooks() const;
 
 private:
     void showError(const QSqlError &err);

@@ -59,7 +59,7 @@ QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 }
 
 
-void SpacelessNode::render( OutputStream *stream, Context *c )
+void SpacelessNode::render( OutputStream *stream, Context *c ) const
 {
   QString output;
   QTextStream textStream( &output );

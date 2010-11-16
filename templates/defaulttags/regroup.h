@@ -42,7 +42,7 @@ class RegroupNode : public Node
 public:
   RegroupNode( FilterExpression target, FilterExpression expression, const QString &varName, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   FilterExpression m_target;

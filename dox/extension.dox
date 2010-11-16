@@ -123,7 +123,7 @@ namespace Grantlee
 
       }
 
-      void render( Grantlee::OutputStream *stream, Context *c)
+      void render( Grantlee::OutputStream *stream, Context *c) const
       {
         Q_UNUSED(c);
         return QDateTime::currentDateTime().toString();

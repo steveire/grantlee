@@ -58,7 +58,7 @@ RegroupNode::RegroupNode( FilterExpression target, FilterExpression expression, 
 
 }
 
-void RegroupNode::render( OutputStream *stream, Context *c )
+void RegroupNode::render( OutputStream *stream, Context *c ) const
 {
   Q_UNUSED( stream )
   QVariantList objList = m_target.toList( c );

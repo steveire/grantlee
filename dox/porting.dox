@@ -54,6 +54,12 @@ namespace Grantlee
 
   User code should simply remove the use of the macro.
 
+  @subsection render_const Grantlee::Node::render method is now const
+
+  The virtual method render on Grantlee::Node is now const. User code which
+  creates custom plugins and overrides the render method must be updated to
+  add the const too.
+
 */
 
 }

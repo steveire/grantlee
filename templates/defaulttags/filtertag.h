@@ -42,7 +42,7 @@ public:
 
   void setNodeList( NodeList filterList );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   FilterExpression m_fe;

@@ -59,7 +59,7 @@ public:
 
   QScriptEngine* engine();
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   QScriptEngine* m_scriptEngine;

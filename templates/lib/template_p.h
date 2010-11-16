@@ -41,13 +41,13 @@ class TemplatePrivate
 
   void parse();
   NodeList compileString( const QString &str );
-  void setError( Error type, const QString &message );
+  void setError( Error type, const QString &message ) const;
 
   Q_DECLARE_PUBLIC( TemplateImpl )
   TemplateImpl * const q_ptr;
 
-  Error m_error;
-  QString m_errorString;
+  mutable Error m_error;
+  mutable QString m_errorString;
   NodeList m_nodeList;
   bool m_smartTrim;
   QPointer<const Engine> m_engine;

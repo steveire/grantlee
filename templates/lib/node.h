@@ -94,8 +94,7 @@ public:
 
     This will also involve calling render on and child nodes.
   */
-  // This can't be const because CycleNode needs to change on each render.
-  virtual void render( OutputStream *stream, Context *c ) = 0;
+  virtual void render( OutputStream *stream, Context *c ) const = 0;
 
 #ifndef Q_QDOC
   /**
@@ -113,7 +112,7 @@ protected:
 
     This is only relevant to developing template tags.
   */
-  void streamValueInContext( OutputStream *stream, const QVariant &input, Grantlee::Context *c );
+  void streamValueInContext( OutputStream *stream, const QVariant &input, Grantlee::Context *c ) const;
 
   /**
     Returns a raw pointer to the Template this Node is in.
@@ -199,7 +198,7 @@ public:
   /**
     Renders the list of Nodes in the Context @p c.
   */
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   bool m_containsNonText;

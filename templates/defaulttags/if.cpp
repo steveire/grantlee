@@ -106,7 +106,7 @@ void IfNode::setFalseList( NodeList falseList )
   m_falseList = falseList;
 }
 
-void IfNode::render( OutputStream *stream, Context *c )
+void IfNode::render( OutputStream *stream, Context *c ) const
 {
   // Evaluate the expression. rendering variables with the context as needed. and processing nodes recursively
   // in either trueList or falseList as determined by booleanExpression.
@@ -153,12 +153,12 @@ void IfNode::render( OutputStream *stream, Context *c )
   renderFalseList( stream, c );
 }
 
-void IfNode::renderTrueList( OutputStream *stream, Context *c )
+void IfNode::renderTrueList( OutputStream *stream, Context *c ) const
 {
   return m_trueList.render( stream, c );
 }
 
-void IfNode::renderFalseList( OutputStream *stream, Context *c )
+void IfNode::renderFalseList( OutputStream *stream, Context *c ) const
 {
   return m_falseList.render( stream, c );
 }

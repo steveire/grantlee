@@ -41,7 +41,7 @@ DebugNode::DebugNode( QObject *parent )
 
 }
 
-void DebugNode::render( OutputStream *stream, Context *c )
+void DebugNode::render( OutputStream *stream, Context *c ) const
 {
   QString ret;
   int i = 0;

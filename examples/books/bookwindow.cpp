@@ -138,7 +138,7 @@ void BookWindow::showError(const QSqlError &err)
                 "Error initializing database: " + err.text());
 }
 
-void BookWindow::renderBooks()
+void BookWindow::renderBooks() const
 {
     int rows = model->rowCount();
     QVariantHash mapping;

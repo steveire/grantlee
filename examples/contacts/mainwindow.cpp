@@ -141,7 +141,7 @@ void MainWindow::initLocalizer()
 
 }
 
-void MainWindow::render()
+void MainWindow::render() const
 {
   const QList<QListWidgetItem*> list = m_list->selectedItems();
   QVariantList contacts;

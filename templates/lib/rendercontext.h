@@ -50,7 +50,7 @@ public:
   /**
     Returns the data for the node @p scopeNode.
    */
-  QVariant& data( Node * const scopeNode );
+  QVariant& data( const Node * const scopeNode );
 
   /**
     Returns whether the RenderContext contains data for @p scopeNode.

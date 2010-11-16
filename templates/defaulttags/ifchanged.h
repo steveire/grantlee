@@ -44,13 +44,13 @@ public:
   void setTrueList( NodeList trueList );
   void setFalseList( NodeList falseList );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   NodeList m_trueList;
   NodeList m_falseList;
   QList<FilterExpression> m_filterExpressions;
-  QVariant m_lastSeen;
+  mutable QVariant m_lastSeen;
   QString m_id;
 
 };

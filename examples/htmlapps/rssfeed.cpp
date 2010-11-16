@@ -71,7 +71,7 @@ void RssFeedNode::setChildNodes(QList< Grantlee::Node* > childNodes)
   m_childNodes = childNodes;
 }
 
-void RssFeedNode::render(Grantlee::OutputStream* stream, Grantlee::Context* c)
+void RssFeedNode::render(Grantlee::OutputStream* stream, Grantlee::Context* c) const
 {
   QNetworkAccessManager *mgr = new QNetworkAccessManager(this);
   QUrl url(Grantlee::getSafeString(m_url.resolve(c)));
@@ -158,7 +158,7 @@ static QString unescape(const QString &_input)
   return input;
 }
 
-void XmlRoleNode::render(Grantlee::OutputStream *stream, Grantlee::Context *c)
+void XmlRoleNode::render(Grantlee::OutputStream *stream, Grantlee::Context *c) const
 {
   QXmlQuery q = c->lookup("_q").value<QXmlQuery>();
   QHash<QString, QVariant> h = c->lookup("_ns").toHash();
@@ -199,7 +199,7 @@ XmlNamespaceNode::XmlNamespaceNode(const Grantlee::FilterExpression &query, cons
 
 }
 
-void XmlNamespaceNode::render(Grantlee::OutputStream *stream, Grantlee::Context *c)
+void XmlNamespaceNode::render(Grantlee::OutputStream *stream, Grantlee::Context *c) const
 {
   QString q = Grantlee::getSafeString(m_query.resolve(c));
   QHash<QString, QVariant> h = c->lookup("_ns").toHash();

@@ -55,7 +55,7 @@ public:
   void setTrueList( NodeList trueList );
   void setFalseList( NodeList falseList );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   FilterExpression m_var1;

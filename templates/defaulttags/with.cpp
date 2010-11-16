@@ -61,7 +61,7 @@ void WithNode::setNodeList( NodeList nodeList )
   m_list = nodeList;
 }
 
-void WithNode::render( OutputStream *stream, Context *c )
+void WithNode::render( OutputStream *stream, Context *c ) const
 {
   c->push();
   c->insert( m_name, m_filterExpression.resolve( c ) );

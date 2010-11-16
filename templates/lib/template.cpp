@@ -70,7 +70,7 @@ void TemplateImpl::setContent( const QString &templateString )
   }
 }
 
-QString TemplateImpl::render( Context *c )
+QString TemplateImpl::render( Context *c ) const
 {
   QString output;
   QTextStream textStream( &output );
@@ -79,9 +79,9 @@ QString TemplateImpl::render( Context *c )
   return output;
 }
 
-OutputStream* TemplateImpl::render( OutputStream *stream, Context *c )
+OutputStream* TemplateImpl::render( OutputStream *stream, Context *c ) const
 {
-  Q_D( Template );
+  Q_D( const Template );
 
   c->clearExternalMedia();
 
@@ -111,7 +111,7 @@ void TemplateImpl::setNodeList( const NodeList &list )
   d->m_nodeList = list;
 }
 
-void TemplatePrivate::setError( Error type, const QString &message )
+void TemplatePrivate::setError( Error type, const QString &message ) const
 {
   m_error = type;
   m_errorString = message;

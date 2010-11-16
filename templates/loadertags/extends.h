@@ -52,11 +52,11 @@ public:
 
   void setNodeList( const NodeList &list );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
   void appendNode( Node* node );
 
-  Template getParent( Context *c );
+  Template getParent( Context *c ) const;
 
   virtual bool mustBeFirst() {
     return true;

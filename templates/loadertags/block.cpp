@@ -86,12 +86,12 @@ BlockNode::~BlockNode()
 {
 }
 
-void BlockNode::setNodeList( const NodeList &list )
+void BlockNode::setNodeList( const NodeList &list ) const
 {
   m_list = list;
 }
 
-void BlockNode::render( OutputStream *stream, Context *c )
+void BlockNode::render( OutputStream *stream, Context *c ) const
 {
   QVariant &variant = c->renderContext()->data( BLOCK_CONTEXT_KEY );
   BlockContext blockContext = variant.value<BlockContext>();
@@ -101,13 +101,13 @@ void BlockNode::render( OutputStream *stream, Context *c )
   if ( blockContext.isEmpty() ) {
     m_context = c;
     m_stream = stream;
-    c->insert( QLatin1String( "block" ), QVariant::fromValue( static_cast<QObject *>( this ) ) );
+    c->insert( QLatin1String( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( this ) ) ) );
     m_list.render( stream, c );
     m_stream = 0;
   } else {
-    BlockNode *block = blockContext.pop( m_name );
+    BlockNode const * block = blockContext.pop( m_name );
     variant.setValue( blockContext );
-    BlockNode *push = block;
+    BlockNode const * push = block;
     if ( !block )
       block = this;
 
@@ -118,7 +118,7 @@ void BlockNode::render( OutputStream *stream, Context *c )
     block->setNodeList( list );
     block->m_context = c;
     block->m_stream = stream;
-    c->insert( QLatin1String( "block" ), QVariant::fromValue( static_cast<QObject *>( block ) ) );
+    c->insert( QLatin1String( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( block ) ) ) );
     list.render( stream, c );
 
     delete block;

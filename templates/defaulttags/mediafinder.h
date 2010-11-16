@@ -40,7 +40,7 @@ class MediaFinderNode : public Node
 public:
   explicit MediaFinderNode( QList<FilterExpression> mediaExpressionList, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   QList<FilterExpression> m_mediaExpressionList;

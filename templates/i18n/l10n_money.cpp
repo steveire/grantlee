@@ -83,7 +83,7 @@ L10nMoneyNode::L10nMoneyNode( const FilterExpression &value, const FilterExpress
 
 }
 
-void L10nMoneyNode::render( OutputStream* stream, Context* c )
+void L10nMoneyNode::render( OutputStream* stream, Context* c ) const
 {
   QString resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).toDouble(), getSafeString( m_currency.resolve( c ) ).get() );
 
@@ -96,7 +96,7 @@ L10nMoneyVarNode::L10nMoneyVarNode( const FilterExpression &value, const FilterE
 
 }
 
-void L10nMoneyVarNode::render( OutputStream* stream, Context* c )
+void L10nMoneyVarNode::render( OutputStream* stream, Context* c ) const
 {
   Q_UNUSED( stream )
   QString resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).toDouble(), getSafeString( m_currency.resolve( c ) ).get() );

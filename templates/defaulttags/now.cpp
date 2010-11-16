@@ -49,7 +49,7 @@ NowNode::NowNode( const QString &formatString, QObject *parent )
 {
 }
 
-void NowNode::render( OutputStream *stream, Context *c )
+void NowNode::render( OutputStream *stream, Context *c ) const
 {
   Q_UNUSED( c )
   ( *stream ) << QDateTime::currentDateTime().toString( m_formatString );

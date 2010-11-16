@@ -49,7 +49,7 @@ public:
 
   void setChildNodes(QList<Node*> childNodes);
 
-  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c);
+  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c) const;
 
 private:
   Grantlee::FilterExpression m_url;
@@ -73,7 +73,7 @@ class XmlRoleNode : public Grantlee::Node
 public:
   XmlRoleNode(const Grantlee::FilterExpression &query, QObject *parent = 0);
 
-  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c);
+  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c) const;
 
 private:
   Grantlee::FilterExpression m_name;
@@ -97,7 +97,7 @@ class XmlNamespaceNode : public Grantlee::Node
 public:
   XmlNamespaceNode(const Grantlee::FilterExpression &query, const QString &name, QObject *parent = 0);
 
-  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c);
+  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c) const;
 
 private:
   QString m_name;

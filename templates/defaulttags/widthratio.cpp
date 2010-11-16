@@ -60,7 +60,7 @@ int WidthRatioNode::round( qreal number )
   return intPart + 1;
 }
 
-void WidthRatioNode::render( OutputStream *stream, Context *c )
+void WidthRatioNode::render( OutputStream *stream, Context *c ) const
 {
   QVariant thisVal = m_valExpr.resolve( c );
   QVariant maxVal = m_maxExpr.resolve( c );

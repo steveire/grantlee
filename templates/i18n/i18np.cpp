@@ -120,7 +120,7 @@ I18npNode::I18npNode( const QString &sourceText, const QString &pluralText, cons
 
 }
 
-void I18npNode::render( OutputStream* stream, Context* c )
+void I18npNode::render( OutputStream* stream, Context* c ) const
 {
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
@@ -136,7 +136,7 @@ I18npVarNode::I18npVarNode( const QString &sourceText, const QString &pluralText
 
 }
 
-void I18npVarNode::render( OutputStream* stream, Context* c )
+void I18npVarNode::render( OutputStream* stream, Context* c ) const
 {
   Q_UNUSED( stream )
   QVariantList args;

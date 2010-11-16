@@ -61,7 +61,7 @@ void WithLocaleNode::setNodeList( NodeList nodeList )
   m_list = nodeList;
 }
 
-void WithLocaleNode::render( OutputStream *stream, Context *c )
+void WithLocaleNode::render( OutputStream *stream, Context *c ) const
 {
   const QString name = Grantlee::getSafeString( m_localeName.resolve( c ) ).get();
 

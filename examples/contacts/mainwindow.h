@@ -43,7 +43,7 @@ protected:
   virtual void initLocalizer();
 
 private Q_SLOTS:
-  void render();
+  void render() const;
   void delayedInit();
 
 protected:

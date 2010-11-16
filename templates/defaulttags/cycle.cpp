@@ -94,7 +94,7 @@ CycleNode::CycleNode( const QList<FilterExpression> &list, const QString &name, 
 {
 }
 
-void CycleNode::render( OutputStream *stream, Context *c )
+void CycleNode::render( OutputStream *stream, Context *c ) const
 {
   QVariant &variant = c->renderContext()->data( this );
 

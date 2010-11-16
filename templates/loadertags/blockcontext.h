@@ -33,14 +33,14 @@ public:
 
   BlockNode* pop( const QString &name );
 
-  void push( const QString &name, BlockNode *blockNode );
+  void push( const QString &name, BlockNode const *blockNode ) const;
 
   BlockNode* getBlock( const QString &name ) const;
 
   bool isEmpty();
 
 private:
-  QHash<QString, QList<BlockNode*> > m_blocks;
+  mutable QHash<QString, QList<BlockNode*> > m_blocks;
 
 };
 

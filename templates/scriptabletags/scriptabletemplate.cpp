@@ -51,7 +51,7 @@ ScriptableTemplate::ScriptableTemplate( Grantlee::Template t, QObject* parent )
 
 }
 
-QString ScriptableTemplate::render( ScriptableContext* c )
+QString ScriptableTemplate::render( ScriptableContext* c ) const
 {
   return m_template->render( c->context() );
 }

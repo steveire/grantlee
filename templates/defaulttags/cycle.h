@@ -82,7 +82,7 @@ class CycleNode : public Node
 public:
   CycleNode( const QList<FilterExpression> &list, const QString &name, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c );
+  void render( OutputStream *stream, Context *c ) const;
 
 private:
   const QList<FilterExpression> m_list;
