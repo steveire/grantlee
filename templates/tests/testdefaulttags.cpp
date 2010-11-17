@@ -636,6 +636,13 @@ void TestDefaultTags::testForTag_data()
   dict.insert( QLatin1String( "contact" ), obj );
   QTest::newRow( "for-tag05" ) << QString::fromLatin1( "{% for val in contact.emails %}({{ val }},){% endfor %}" ) << dict << QString() << NoError;
   list.clear();
+  dict.clear();
+  emails << QString::fromLatin1( "one" );
+  dict.insert( QLatin1String( "emails" ), emails );
+  QTest::newRow( "for-tag06" ) << QString::fromLatin1( "{% for val in emails %}({{ val }},){% endfor %}" ) << dict << QString::fromLatin1( "(one,)" ) << NoError;
+  list.clear();
+  dict.clear();
+
   list << 1 << 2 << 3;
   dict.insert( QLatin1String( "values" ), list );
   QTest::newRow( "for-tag-vars01" ) << QString::fromLatin1( "{% for val in values %}{{ forloop.counter }}{% endfor %}" ) << dict << QString::fromLatin1( "123" ) << NoError;
