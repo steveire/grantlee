@@ -20,6 +20,7 @@
 
 #include "qtlocalizer.h"
 #include "nulllocalizer_p.h"
+#include "engine.h"
 
 #include <QtCore/QScopedPointer>
 #include <QtTest/QtTest>
@@ -37,7 +38,8 @@ public:
       deLocalizer(new QtLocalizer(QLocale(QLocale::German, QLocale::Germany))),
       frLocalizer(new QtLocalizer(QLocale(QLocale::French, QLocale::France))),
       en_GBLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedKingdom))),
-      en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates)))
+      en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates))),
+      m_engine(new Engine(this))
   {
     {
       QTranslator *deTranslator = new QTranslator(this);
@@ -52,6 +54,7 @@ public:
       Q_ASSERT(result);
       frLocalizer->installTranslator(frTranslator, QLatin1String( "fr_FR" ) );
     }
+    m_engine->addDefaultLibrary(QLatin1String("grantlee_i18ntags"));
   }
 
 private slots:
@@ -61,6 +64,7 @@ private slots:
   void testDates();
   void testTimes();
   void testDateTimes();
+  void testLocalizedTemplate();
 
   void testStrings_data();
   void testIntegers_data();
@@ -68,6 +72,7 @@ private slots:
   void testDates_data();
   void testTimes_data();
   void testDateTimes_data();
+  void testLocalizedTemplate_data();
 
 private:
   const QSharedPointer<AbstractLocalizer> cLocalizer;
@@ -76,6 +81,8 @@ private:
   const QSharedPointer<QtLocalizer> frLocalizer;
   const QSharedPointer<AbstractLocalizer> en_GBLocalizer;
   const QSharedPointer<AbstractLocalizer> en_USLocalizer;
+
+  Grantlee::Engine *m_engine;
 };
 
 void TestInternationalization::testStrings()
@@ -222,6 +229,86 @@ void TestInternationalization::testStrings_data()
                              << QString()
                              << QString()
                              << (QVariantList() << 1000 << QDate(2005, 5, 7) << 0.6 << 4.8 );
+}
+
+typedef QHash<QString, QVariant> Dict;
+Q_DECLARE_METATYPE( Dict )
+
+void TestInternationalization::testLocalizedTemplate()
+{
+  QFETCH(QString, input);
+  QFETCH(QString, nullFragment);
+  QFETCH(QString, cFragment);
+  QFETCH(QString, en_USFragment);
+  QFETCH(QString, en_GBFragment);
+  QFETCH(QString, deFragment);
+  QFETCH(QString, frFragment);
+  QFETCH(Dict, dict);
+
+  Template t = m_engine->newTemplate( input, QString());
+  Context c(dict);
+  QCOMPARE(t->render(&c), nullFragment);
+  c.setLocalizer(cLocalizer);
+  QCOMPARE(t->render(&c), cFragment);
+  c.setLocalizer(en_USLocalizer);
+  QCOMPARE(t->render(&c), en_USFragment);
+  c.setLocalizer(en_GBLocalizer);
+  QCOMPARE(t->render(&c), en_GBFragment);
+  c.setLocalizer(deLocalizer);
+  QCOMPARE(t->render(&c), deFragment);
+  c.setLocalizer(frLocalizer);
+  QCOMPARE(t->render(&c), frFragment);
+}
+
+void TestInternationalization::testLocalizedTemplate_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<QString>("nullFragment");
+  QTest::addColumn<QString>("cFragment");
+  QTest::addColumn<QString>("en_USFragment");
+  QTest::addColumn<QString>("en_GBFragment");
+  QTest::addColumn<QString>("deFragment");
+  QTest::addColumn<QString>("frFragment");
+  QTest::addColumn<Dict>("dict");
+
+  Dict dict;
+  dict.insert(QLatin1String("date"), QDate(2005, 5, 7) );
+  QTest::newRow("fragment-01")
+    << QString::fromLatin1("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(1000) _(date) _(0.6) _(4.8) %}")
+    << QString::fromLatin1("1000 messages at Sat May 7 2005, fraction of total: 0.6. Rating : 4.8")
+    << QString::fromLatin1("1,000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
+    << QString::fromUtf8("1 000 messages au 07/05/05, la fraction du total: 0,60. Note: 4,80")
+    << dict;
+
+  dict.insert(QLatin1String("integer"), 1000);
+  dict.insert(QLatin1String("smallFloat"), 0.6);
+  dict.insert(QLatin1String("largeFloat"), 4.8);
+
+  QTest::newRow("fragment-02")
+    << QString::fromLatin1("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(integer) _(date) _(smallFloat) _(largeFloat) %}")
+    << QString::fromLatin1("1000 messages at Sat May 7 2005, fraction of total: 0.6. Rating : 4.8")
+    << QString::fromLatin1("1,000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
+    << QString::fromUtf8("1 000 messages au 07/05/05, la fraction du total: 0,60. Note: 4,80")
+    << dict;
+
+  dict.insert(QLatin1String("time"), QTime(4, 5, 6));
+  dict.insert(QLatin1String("dateTime"), QDateTime(QDate(2005, 5, 7), QTime(4, 5, 6)));
+
+  QTest::newRow("fragment-03")
+    << QString::fromLatin1("{{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}")
+    << QString::fromLatin1("1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005")
+    << QString::fromLatin1("1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06")
+    << QString::fromLatin1("1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM")
+    << QString::fromLatin1("1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05")
+    << QString::fromLatin1("1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+    << QString::fromUtf8("1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+    << dict;
 }
 
 void TestInternationalization::testDates()
