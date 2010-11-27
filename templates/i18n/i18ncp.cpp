@@ -42,8 +42,8 @@ Node* I18ncpNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
-  if ( expr.size() < 5 )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18ncp tag takes at least four arguments" ) );
+  if ( expr.size() < 4 )
+    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18ncp tag takes at least three arguments" ) );
 
   QString contextText = expr.at( 1 );
 
@@ -63,14 +63,17 @@ Node* I18ncpNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 
   QString pluralText = expr.at( 3 );
 
+  int argsStart = 4;
   if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
        && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18ncp tag third argument must be a static string." ) );
+    argsStart = 3;
+    pluralText = sourceText;
+  } else {
+    pluralText = pluralText.mid( 1, pluralText.size() - 2 );
   }
-  pluralText = pluralText.mid( 1, pluralText.size() - 2 );
 
   QList<FilterExpression> feList;
-  for ( int i = 4; i < expr.size(); ++i ) {
+  for ( int i = argsStart; i < expr.size(); ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
@@ -87,8 +90,9 @@ Grantlee::Node* I18ncpVarNodeFactory::getNode( const QString& tagContent, Parser
 {
   QStringList expr = smartSplit( tagContent );
 
-  if ( expr.size() < 6 )
+  if ( expr.size() < 6 ) {
     throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18ncp_var tag takes at least five arguments" ) );
+  }
 
   QString contextText = expr.at( 1 );
 
@@ -108,14 +112,17 @@ Grantlee::Node* I18ncpVarNodeFactory::getNode( const QString& tagContent, Parser
 
   QString pluralText = expr.at( 3 );
 
+  int argsStart = 4;
   if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
        && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18ncp_var tag third argument must be a static string." ) );
+    argsStart = 3;
+    pluralText = sourceText;
+  } else {
+    pluralText = pluralText.mid( 1, pluralText.size() - 2 );
   }
-  pluralText = pluralText.mid( 1, pluralText.size() - 2 );
 
   QList<FilterExpression> feList;
-  for ( int i = 4; i < expr.size() - 2; ++i ) {
+  for ( int i = argsStart; i < expr.size() - 2; ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
