@@ -21,6 +21,7 @@
 #include "spaceless.h"
 
 #include "parser.h"
+#include "util.h"
 
 SpacelessNodeFactory::SpacelessNodeFactory()
 {
@@ -64,6 +65,6 @@ void SpacelessNode::render( OutputStream *stream, Context *c )
   QTextStream textStream( &output );
   QSharedPointer<OutputStream> temp = stream->clone( &textStream );
   m_nodeList.render( temp.data(), c );
-  ( *stream ) << stripSpacesBetweenTags( output.trimmed() );
+  ( *stream ) << markSafe( stripSpacesBetweenTags( output.trimmed() ) );
 }
 

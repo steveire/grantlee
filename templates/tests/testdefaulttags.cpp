@@ -1148,6 +1148,11 @@ void TestDefaultTags::testSpacelessTag_data()
   QTest::newRow( "spaceless02" ) << "{% spaceless %} <b> \n <i> text </i> \n </b> {% endspaceless %}" << dict << QString::fromLatin1( "<b><i> text </i></b>" ) << NoError;
   QTest::newRow( "spaceless03" ) << QString::fromLatin1( "{% spaceless %}<b><i>text</i></b>{% endspaceless %}" ) << dict << QString::fromLatin1( "<b><i>text</i></b>" ) << NoError;
 
+  dict.insert(QLatin1String( "text" ), QString::fromLatin1( "This & that" ) );
+  QTest::newRow( "spaceless04" ) << QString::fromLatin1( "{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}" ) << dict << QString::fromLatin1( "<b><i>This &amp; that</i></b>" ) << NoError;
+  QTest::newRow( "spaceless05" ) << QString::fromLatin1( "{% autoescape off %}{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}{% endautoescape %}" ) << dict << QString::fromLatin1( "<b><i>This & that</i></b>" ) << NoError;
+  QTest::newRow( "spaceless06" ) << QString::fromLatin1( "{% spaceless %}<b>  <i>{{ text|safe }}</i>  </b>{% endspaceless %}" ) << dict << QString::fromLatin1( "<b><i>This & that</i></b>" ) << NoError;
+
 }
 
 void TestDefaultTags::testRegroupTag_data()
