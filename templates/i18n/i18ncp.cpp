@@ -145,7 +145,7 @@ void I18ncpNode::render( OutputStream* stream, Context* c )
     args.append( fe.resolve( c ) );
   QString resultString = c->localizer()->localizePluralContextString( m_sourceText, m_pluralText, m_contextText, args );
 
-  ( *stream ) << resultString;
+  streamValueInContext( stream, resultString, c );
 }
 
 I18ncpVarNode::I18ncpVarNode( const QString &contextText, const QString &sourceText, const QString &pluralText, const QList<Grantlee::FilterExpression> &feList, const QString &resultName, QObject* parent )

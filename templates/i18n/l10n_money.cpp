@@ -87,7 +87,7 @@ void L10nMoneyNode::render( OutputStream* stream, Context* c )
 {
   QString resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).toDouble(), getSafeString( m_currency.resolve( c ) ).get() );
 
-  ( *stream ) << resultString;
+  streamValueInContext( stream, resultString, c );
 }
 
 L10nMoneyVarNode::L10nMoneyVarNode( const FilterExpression &value, const FilterExpression &currency, const QString &resultName, QObject* parent )

@@ -128,7 +128,7 @@ void I18npNode::render( OutputStream* stream, Context* c )
     args.append( fe.resolve( c ) );
   QString resultString = c->localizer()->localizePluralString( m_sourceText, m_pluralText, args );
 
-  ( *stream ) << resultString;
+  streamValueInContext( stream, resultString, c );
 }
 
 I18npVarNode::I18npVarNode( const QString &sourceText, const QString &pluralText, const QList<Grantlee::FilterExpression>& feList, const QString &resultName, QObject* parent )
