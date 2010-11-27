@@ -46,7 +46,9 @@ public:
   FakeTemplateLoader()
     : Grantlee::InMemoryTemplateLoader()
   {
-    m_existingMedia << QString::fromLatin1( "existing_image.png" ) << QString::fromLatin1( "another_existing_image.png" );
+    m_existingMedia << QString::fromLatin1( "existing_image.png" )
+                    << QString::fromLatin1( "another_existing_image.png" )
+                    << QString::fromLatin1( "this&that.png" );
   }
 
   /* reimp */ QPair<QString, QString> getMediaUri( const QString &fileName ) const {
@@ -1435,6 +1437,15 @@ void TestDefaultTags::testMediaFinderTag_data()
   QTest::newRow( "media_finder-tag08" ) << QString::fromLatin1( "{% media_finder nonexisting_img existing_img %}" ) << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag09" ) << "{% media_finder \"existing_image.png\" \"another_existing_image.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag10" ) << "{% media_finder \"another_existing_image.png\" \"existing_image.png\" %}" << dict << QString::fromLatin1( "file:///path/to/another_existing_image.png" ) << NoError;
+
+  dict.insert( QLatin1String( "this_and_that_img" ), QLatin1String( "this&that.png" ) );
+
+  QTest::newRow( "media_finder-tag11" ) << "{% media_finder \"this&that.png\" %}" << dict << QString::fromLatin1( "file:///path/to/this&amp;that.png" ) << NoError;
+  QTest::newRow( "media_finder-tag12" ) << "{% media_finder this_and_that_img %}" << dict << QString::fromLatin1( "file:///path/to/this&amp;that.png" ) << NoError;
+  QTest::newRow( "media_finder-tag13" ) << "{% autoescape off %}{% media_finder \"this&that.png\" %}{% endautoescape %}" << dict << QString::fromLatin1( "file:///path/to/this&that.png" ) << NoError;
+  QTest::newRow( "media_finder-tag14" ) << "{% autoescape off %}{% media_finder this_and_that_img %}{% endautoescape %}" << dict << QString::fromLatin1( "file:///path/to/this&that.png" ) << NoError;
+
+
 }
 
 void TestDefaultTags::testRangeTag_data()
