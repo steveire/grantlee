@@ -28,6 +28,10 @@
 
 using namespace Grantlee;
 
+#define INIT_LOCALIZER(localizer)                                \
+localizer->setAppTranslatorPrefix(QLatin1String( "test_" ) );    \
+localizer->setAppTranslatorPath(QLatin1String( ":/" ) );         \
+
 class TestInternationalization : public QObject
 {
   Q_OBJECT
@@ -42,6 +46,11 @@ public:
       en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates))),
       m_engine(new Engine(this))
   {
+    INIT_LOCALIZER(cLocalizer)
+    INIT_LOCALIZER(deLocalizer)
+    INIT_LOCALIZER(frLocalizer)
+    INIT_LOCALIZER(en_GBLocalizer)
+    INIT_LOCALIZER(en_USLocalizer)
     {
       QTranslator *deTranslator = new QTranslator(this);
       const bool result = deTranslator->load( QLatin1String( ":/test_de_DE" ) );
@@ -80,12 +89,12 @@ private slots:
   void testFailure_data();
 
 private:
-  const QSharedPointer<AbstractLocalizer> cLocalizer;
+  const QSharedPointer<QtLocalizer> cLocalizer;
   const QSharedPointer<AbstractLocalizer> nullLocalizer;
   const QSharedPointer<QtLocalizer> deLocalizer;
   const QSharedPointer<QtLocalizer> frLocalizer;
-  const QSharedPointer<AbstractLocalizer> en_GBLocalizer;
-  const QSharedPointer<AbstractLocalizer> en_USLocalizer;
+  const QSharedPointer<QtLocalizer> en_GBLocalizer;
+  const QSharedPointer<QtLocalizer> en_USLocalizer;
 
   Grantlee::Engine *m_engine;
 };
@@ -313,6 +322,71 @@ void TestInternationalization::testLocalizedTemplate_data()
     << QString::fromLatin1("1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05")
     << QString::fromLatin1("1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << QString::fromUtf8("1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+    << dict;
+
+  QTest::newRow("fragment-04")
+    << QString::fromLatin1(
+      "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
+      "{% with_locale 'de_DE' %}"
+        "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
+      "{% endwith_locale %}"
+      "{% with_locale 'fr_FR' %}"
+        "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
+      "{% endwith_locale %}")
+    << QString::fromLatin1("Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005")
+    << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+    << QString::fromUtf8("Today"           " -- 1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+    << QString::fromUtf8("Today"           " -- 1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+    << QString::fromUtf8("Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+    << QString::fromUtf8("Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+    << dict;
+
+  QTest::newRow("fragment-05")
+    << QString::fromLatin1(
+      "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
+      "{% with_locale 'de_DE' %}"
+        "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
+        "{% with_locale 'fr_FR' %}"
+          "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
+        "{% endwith_locale %}"
+        "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
+      "{% endwith_locale %}")
+    << QString::fromLatin1("Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005")
+    << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+    << QString::fromUtf8("Today"           " -- 1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+    << QString::fromUtf8("Today"           " -- 1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+    << QString::fromUtf8("Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+    << QString::fromUtf8("Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << dict;
 }
 

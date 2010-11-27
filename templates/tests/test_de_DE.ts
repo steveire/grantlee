@@ -77,7 +77,7 @@
     <message>
         <location filename="test_input.cpp" line="12"/>
         <source>Today</source>
-        <translation type="unfinished"></translation>
+        <translation>Heute</translation>
     </message>
     <message>
         <location filename="test_input.cpp" line="13"/>
@@ -94,7 +94,6 @@
         <source>%n people today</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -109,7 +108,6 @@
         <oldsource>%n people visted today</oldsource>
         <comment>The number of people who have visited today</comment>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
