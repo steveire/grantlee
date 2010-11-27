@@ -39,7 +39,19 @@ public:
       en_GBLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedKingdom))),
       en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates)))
   {
+    {
+      QTranslator *deTranslator = new QTranslator(this);
+      const bool result = deTranslator->load( QLatin1String( ":/test_de_DE" ) );
+      Q_ASSERT(result);
+      deLocalizer->installTranslator(deTranslator, QLatin1String( "de_DE" ) );
+    }
 
+    {
+      QTranslator *frTranslator = new QTranslator(this);
+      const bool result = frTranslator->load( QLatin1String( ":/test_fr_FR.qm" ) );
+      Q_ASSERT(result);
+      frLocalizer->installTranslator(frTranslator, QLatin1String( "fr_FR" ) );
+    }
   }
 
 private slots:
@@ -60,19 +72,156 @@ private slots:
 private:
   const QSharedPointer<AbstractLocalizer> cLocalizer;
   const QSharedPointer<AbstractLocalizer> nullLocalizer;
-  const QSharedPointer<AbstractLocalizer> deLocalizer;
-  const QSharedPointer<AbstractLocalizer> frLocalizer;
+  const QSharedPointer<QtLocalizer> deLocalizer;
+  const QSharedPointer<QtLocalizer> frLocalizer;
   const QSharedPointer<AbstractLocalizer> en_GBLocalizer;
   const QSharedPointer<AbstractLocalizer> en_USLocalizer;
 };
 
 void TestInternationalization::testStrings()
 {
+  QFETCH(QString, input);
+  QFETCH(QString, de_output);
+  QFETCH(QString, fr_output);
+  QFETCH(QString, disambiguation);
+  QFETCH(QString, plural);
+  QFETCH(QVariantList, args);
 
+  if (!disambiguation.isEmpty()) {
+    if (!plural.isEmpty()) {
+      QCOMPARE(deLocalizer->localizePluralContextString(input, plural, disambiguation, args), de_output);
+      QCOMPARE(frLocalizer->localizePluralContextString(input, plural, disambiguation, args), fr_output);
+      return;
+    }
+    QCOMPARE(deLocalizer->localizeContextString(input, disambiguation, args), de_output);
+    QCOMPARE(frLocalizer->localizeContextString(input, disambiguation, args), fr_output);
+    return;
+  }
+  if (!plural.isEmpty()) {
+    QCOMPARE(deLocalizer->localizePluralString(input, plural, args), de_output);
+    QCOMPARE(frLocalizer->localizePluralString(input, plural, args), fr_output);
+    return;
+  }
+  QCOMPARE(deLocalizer->localizeString(input, args), de_output);
+  QCOMPARE(frLocalizer->localizeString(input, args), fr_output);
 }
 
 void TestInternationalization::testStrings_data()
 {
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<QString>("de_output");
+  QTest::addColumn<QString>("fr_output");
+  QTest::addColumn<QString>("disambiguation");
+  QTest::addColumn<QString>("plural");
+  QTest::addColumn<QVariantList>("args");
+
+  // Translations here are not meant to be accurate, but are meant
+  // only to test for example that disambiguation and arg reordering works.
+
+  QTest::newRow("string-01") << "Birthday"
+                             << "Geburtstag"
+                             << "Anniversaire"
+                             << QString()
+                             << QString()
+                             << QVariantList();
+
+  QTest::newRow("string-02") << "%n People"
+                             << "1 Person"
+                             << "1 Personne"
+                             << QString()
+                             << QString::fromLatin1("%n People")
+                             << (QVariantList() << 1);
+
+  QTest::newRow("string-03") << "%n People"
+                             << "2 Personen"
+                             << "2 Personnes"
+                             << QString()
+                             << QString::fromLatin1("%n People")
+                             << (QVariantList() << 2);
+
+  QTest::newRow("string-04") << "Name"
+                             << "Name eines Buches"
+                             << "Nom d'un livre"
+                             << QString::fromLatin1("Name of a Book")
+                             << QString()
+                             << QVariantList();
+
+  QTest::newRow("string-05") << "Name"
+                             << "Namen einer Person"
+                             << "Nom d'une personne"
+                             << QString::fromLatin1("Name of a Person")
+                             << QString()
+                             << QVariantList();
+
+  QTest::newRow("string-06") << "%n People"
+                             << "1 Person angemeldet"
+                             << QString::fromUtf8("1 Personne connecté")
+                             << QString::fromLatin1("%n people are logged in")
+                             << QString::fromLatin1("%n People")
+                             << (QVariantList() << 1);
+
+  QTest::newRow("string-07") << "%n People"
+                             << "2 Personen angemeldet"
+                             << QString::fromUtf8("2 Personnes connecté")
+                             << QString::fromLatin1("%n people are logged in")
+                             << QString::fromLatin1("%n People")
+                             << (QVariantList() << 2);
+
+  QTest::newRow("string-08") << "%n file(s) copied to %1"
+                             << "1 Datei in destinationFolder kopiert"
+                             << QString::fromUtf8("1 fichier copié dans destinationFolder")
+                             << QString()
+                             << QString::fromLatin1("%n files copied to %1")
+                             << (QVariantList() << 1 << QString::fromLatin1("destinationFolder") );
+
+  QTest::newRow("string-09") << "%n file(s) copied to %1"
+                             << "2 Datein in destinationFolder kopiert"
+                             << QString::fromUtf8("2 fichiers copiés dans destinationFolder")
+                             << QString()
+                             << QString::fromLatin1("%n files copied to %1")
+                             << (QVariantList() << 2 << QString::fromLatin1("destinationFolder") );
+
+  QTest::newRow("string-10") << "%n to %1"
+                             << "1 Datei wird nach destinationFolder kopiert"
+                             << QString::fromUtf8("1 fichier est copié sur destinationFolder")
+                             << QString::fromLatin1("Files are being copied")
+                             << QString::fromLatin1("%n copied to %1")
+                             << (QVariantList() << 1 << QString::fromLatin1("destinationFolder"));
+
+  QTest::newRow("string-11") << "%n to %1"
+                             << "1 Datei war nach destinationFolder kopiert"
+                             << QString::fromUtf8("1 fichier a été copié à destinationFolder")
+                             << QString::fromLatin1("Files have already been copied")
+                             << QString::fromLatin1("%n copied to %1")
+                             << (QVariantList() << 1 << QString::fromLatin1("destinationFolder"));
+
+  QTest::newRow("string-12") << "%n to %1"
+                             << "2 Datein wird nach destinationFolder kopiert"
+                             << QString::fromUtf8("2 fichiers sont copiés à destinationFolder")
+                             << QString::fromLatin1("Files are being copied")
+                             << QString::fromLatin1("%n copied to %1")
+                             << (QVariantList() << 2 << QString::fromLatin1("destinationFolder"));
+
+  QTest::newRow("string-13") << "%n to %1"
+                             << "2 Datein war nach destinationFolder kopiert"
+                             << QString::fromUtf8("2 fichiers ont été copiés sur destinationFolder")
+                             << QString::fromLatin1("Files have already been copied")
+                             << QString::fromLatin1("%n copied to %1")
+                             << (QVariantList() << 2 << QString::fromLatin1("destinationFolder"));
+
+  QTest::newRow("string-14") << "from %1 to %2"
+                             << "nach destinationFolder von sourceFolder"
+                             << QString::fromUtf8("à partir de sourceFolder destinationFolder")
+                             << QString::fromLatin1("Files are being copied from %1 to %2")
+                             << QString()
+                             << (QVariantList() << QString::fromLatin1("sourceFolder") << QString::fromLatin1("destinationFolder"));
+
+  QTest::newRow("string-15") << "%1 messages at %2, fraction of total: %3. Rating : %4"
+                             << "1000 Nachrichten am 2005-05-07, ratio: 0.6. Bemessungen : 4.8"
+                             << QString::fromUtf8("1000 messages au 2005-05-07, la fraction du total: 0.6. Note: 4.8")
+                             << QString()
+                             << QString()
+                             << (QVariantList() << 1000 << QDate(2005, 5, 7) << 0.6 << 4.8 );
 }
 
 void TestInternationalization::testDates()
