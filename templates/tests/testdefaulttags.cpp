@@ -1424,12 +1424,11 @@ void TestDefaultTags::testMediaFinderTag_data()
   QTest::newRow( "media_finder-tag01" ) << "{% media_finder \"existing_image.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag02" ) << "{% media_finder \"does_not_exist.png\" %}" << dict << QString() << NoError;
   QTest::newRow( "media_finder-tag03" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
-  QTest::newRow( "media_finder-tag04" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
 
   dict.insert( QLatin1String( "existing_img" ), QLatin1String( "existing_image.png" ) );
   dict.insert( QLatin1String( "nonexisting_img" ), QLatin1String( "does_not_exist.png" ) );
 
-  QTest::newRow( "media_finder-tag05" ) << QString::fromLatin1( "{% media_finder %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "media_finder-tag04" ) << QString::fromLatin1( "{% media_finder %}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "media_finder-tag05" ) << QString::fromLatin1( "{% media_finder existing_img %}" ) << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag06" ) << QString::fromLatin1( "{% media_finder nonexisting_img %}" ) << dict << QString() << NoError;
   QTest::newRow( "media_finder-tag07" ) << "{% media_finder \"does_not_exist.png\" existing_img %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
