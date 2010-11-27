@@ -74,5 +74,44 @@
         <source>%1 messages at %2, fraction of total: %3. Rating : %4</source>
         <translation>%1 messages au %2, la fraction du total: %3. Note: %4</translation>
     </message>
+    <message>
+        <location filename="test_input.cpp" line="12"/>
+        <source>Today</source>
+        <translation>Aujourd&apos;hui</translation>
+    </message>
+    <message>
+        <location filename="test_input.cpp" line="13"/>
+        <source>Today is %1</source>
+        <translation>Aujourd&apos;hui est %1</translation>
+    </message>
+    <message>
+        <location filename="test_input.cpp" line="14"/>
+        <source>Today &amp;amp; tomorrow</source>
+        <translation>Aujourd&apos;hui &amp;amp; demain</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="test_input.cpp" line="15"/>
+        <source>%n people today</source>
+        <translation>
+            <numerusform>%n personne aujourd&apos;hui</numerusform>
+            <numerusform>%n personnes aujourd&apos;hui</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="test_input.cpp" line="16"/>
+        <source>Today is</source>
+        <comment>The current day is</comment>
+        <translation>Aujourd&apos;hui est</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="test_input.cpp" line="17"/>
+        <source>%n people visited today</source>
+        <oldsource>%n people visted today</oldsource>
+        <comment>The number of people who have visited today</comment>
+        <translation>
+            <numerusform>%n personne a visité aujourd&apos;hui</numerusform>
+            <numerusform>%n personnes a visité aujourd&apos;hui</numerusform>
+        </translation>
+    </message>
 </context>
 </TS>

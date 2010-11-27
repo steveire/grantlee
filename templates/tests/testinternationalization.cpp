@@ -21,6 +21,7 @@
 #include "qtlocalizer.h"
 #include "nulllocalizer_p.h"
 #include "engine.h"
+#include "util.h"
 
 #include <QtCore/QScopedPointer>
 #include <QtTest/QtTest>
@@ -65,6 +66,8 @@ private slots:
   void testTimes();
   void testDateTimes();
   void testLocalizedTemplate();
+  void testSafeContent();
+  void testFailure();
 
   void testStrings_data();
   void testIntegers_data();
@@ -73,6 +76,8 @@ private slots:
   void testTimes_data();
   void testDateTimes_data();
   void testLocalizedTemplate_data();
+  void testSafeContent_data();
+  void testFailure_data();
 
 private:
   const QSharedPointer<AbstractLocalizer> cLocalizer;
@@ -309,6 +314,238 @@ void TestInternationalization::testLocalizedTemplate_data()
     << QString::fromLatin1("1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << QString::fromUtf8("1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
     << dict;
+}
+
+void TestInternationalization::testSafeContent()
+{
+  QFETCH(QString, input);
+  QFETCH(QString, nullFragment);
+  QFETCH(QString, frFragment);
+  QFETCH(Dict, dict);
+
+  Template t = m_engine->newTemplate( input, QString());
+  Context c(dict);
+  QCOMPARE(t->render(&c), nullFragment);
+  c.setLocalizer(frLocalizer);
+  QCOMPARE(t->render(&c), frFragment);
+
+}
+
+void TestInternationalization::testSafeContent_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<QString>("nullFragment");
+  QTest::addColumn<QString>("frFragment");
+  QTest::addColumn<Dict>("dict");
+
+  Dict dict;
+  dict.insert(QLatin1String("date"), QDate(2005, 5, 7) );
+
+  QTest::newRow("safe-01")
+    << QString::fromLatin1("{% i18n 'Today is %1' _(date) %}")
+    << QString::fromLatin1("Today is Sat May 7 2005")
+    << QString::fromUtf8("Aujourd&#39;hui est 07/05/05")
+    << dict;
+
+  QTest::newRow("safe-02")
+    << QString::fromLatin1("{% autoescape off %}{% i18n 'Today is %1' _(date) %}{% endautoescape %}")
+    << QString::fromLatin1("Today is Sat May 7 2005")
+    << QString::fromUtf8("Aujourd'hui est 07/05/05")
+    << dict;
+
+  QTest::newRow("safe-03")
+    << QString::fromLatin1("{% i18n_var 'Today is %1' _(date) as today_greeting %}-{{ today_greeting }}-")
+    << QString::fromLatin1("-Today is Sat May 7 2005-")
+    << QString::fromUtf8("-Aujourd&#39;hui est 07/05/05-")
+    << dict;
+
+  QTest::newRow("safe-04")
+    << QString::fromLatin1("{% autoescape off %}{% i18n_var 'Today is %1' _(date) as today_greeting %}-{{ today_greeting }}-{% endautoescape %}")
+    << QString::fromLatin1("-Today is Sat May 7 2005-")
+    << QString::fromUtf8("-Aujourd'hui est 07/05/05-")
+    << dict;
+
+  QTest::newRow("safe-05")
+    << QString::fromLatin1("{% with 'Today' as rawText %}-{{ _(rawText) }}-{% endwith %}")
+    << QString::fromLatin1("-Today-")
+    << QString::fromUtf8("-Aujourd&#39;hui-")
+    << dict;
+
+  QTest::newRow("safe-06")
+    << QString::fromLatin1("{% autoescape off %}{% with 'Today' as rawText %}-{{ _(rawText) }}-{% endwith %}{% endautoescape %}")
+    << QString::fromLatin1("-Today-")
+    << QString::fromUtf8("-Aujourd'hui-")
+    << dict;
+
+  dict.insert( QLatin1String( "today_text" ), QLatin1String( "Today" ) );
+
+  QTest::newRow("safe-07")
+    << QString::fromLatin1("-{{ _(today_text) }}-")
+    << QString::fromLatin1("-Today-")
+    << QString::fromUtf8("-Aujourd&#39;hui-")
+    << dict;
+
+  QTest::newRow("safe-08")
+    << QString::fromLatin1("{% autoescape off %}-{{ _(today_text) }}-{% endautoescape %}")
+    << QString::fromLatin1("-Today-")
+    << QString::fromUtf8("-Aujourd'hui-")
+    << dict;
+
+  dict.insert( QLatin1String( "today_and_tomorrow_text" ), markSafe( QString::fromLatin1( "Today &amp; tomorrow" ) ) );
+
+  QTest::newRow("safe-09")
+    << QString::fromLatin1("-{{ _(today_and_tomorrow_text) }}-")
+    << QString::fromLatin1("-Today &amp;amp; tomorrow-")
+    << QString::fromUtf8("-Aujourd&#39;hui &amp;amp; demain-")
+    << dict;
+
+  QTest::newRow("safe-10")
+    << QString::fromLatin1("{% autoescape off %}-{{ _(today_and_tomorrow_text) }}-{% endautoescape %}")
+    << QString::fromLatin1("-Today &amp; tomorrow-")
+    << QString::fromUtf8("-Aujourd'hui &amp; demain-")
+    << dict;
+
+  QTest::newRow("safe-11")
+    << QString::fromLatin1("{% i18nc 'The current day is' 'Today is' %}")
+    << QString::fromLatin1("Today is")
+    << QString::fromUtf8("Aujourd&#39;hui est")
+    << dict;
+
+  QTest::newRow("safe-12")
+    << QString::fromLatin1("{% autoescape off %}{% i18nc 'The current day is' 'Today is' %}{% endautoescape %}")
+    << QString::fromLatin1("Today is")
+    << QString::fromUtf8("Aujourd'hui est")
+    << dict;
+
+  QTest::newRow("safe-13")
+    << QString::fromLatin1("{% i18nc_var 'The current day is' 'Today is' as today_greeting %}-{{ today_greeting }}-")
+    << QString::fromLatin1("-Today is-")
+    << QString::fromUtf8("-Aujourd&#39;hui est-")
+    << dict;
+
+  QTest::newRow("safe-14")
+    << QString::fromLatin1("{% autoescape off %}{% i18nc_var 'The current day is' 'Today is' as today_greeting %}-{{ today_greeting }}-{% endautoescape %}")
+    << QString::fromLatin1("-Today is-")
+    << QString::fromUtf8("-Aujourd'hui est-")
+    << dict;
+
+  QTest::newRow("safe-15")
+    << QString::fromLatin1("{% i18np '%n people today' 1 %}")
+    << QString::fromLatin1("1 people today") // Not really testing English here.
+    << QString::fromUtf8("1 personne aujourd&#39;hui")
+    << dict;
+
+  QTest::newRow("safe-16")
+    << QString::fromLatin1("{% i18np '%n people today' 2 %}")
+    << QString::fromLatin1("2 people today")
+    << QString::fromUtf8("2 personnes aujourd&#39;hui")
+    << dict;
+
+  QTest::newRow("safe-17")
+    << QString::fromLatin1("{% autoescape off %}{% i18np '%n people today' 1 %}{% endautoescape %}")
+    << QString::fromLatin1("1 people today") // Not really testing English here.
+    << QString::fromUtf8("1 personne aujourd'hui")
+    << dict;
+
+  QTest::newRow("safe-18")
+    << QString::fromLatin1("{% autoescape off %}{% i18np '%n people today' 2 %}{% endautoescape %}")
+    << QString::fromLatin1("2 people today")
+    << QString::fromUtf8("2 personnes aujourd'hui")
+    << dict;
+
+  QTest::newRow("safe-19")
+    << QString::fromLatin1("{% i18np_var '%n people today' 1 as num_people %}-{{ num_people }}-")
+    << QString::fromLatin1("-1 people today-") // Not really testing English here.
+    << QString::fromUtf8("-1 personne aujourd&#39;hui-")
+    << dict;
+
+  QTest::newRow("safe-20")
+    << QString::fromLatin1("{% i18np_var '%n people today' 2 as num_people %}-{{ num_people }}-")
+    << QString::fromLatin1("-2 people today-")
+    << QString::fromUtf8("-2 personnes aujourd&#39;hui-")
+    << dict;
+
+  QTest::newRow("safe-21")
+    << QString::fromLatin1("{% autoescape off %}{% i18np_var '%n people today' 1 as num_people %}-{{ num_people }}-{% endautoescape %}")
+    << QString::fromLatin1("-1 people today-") // Not really testing English here.
+    << QString::fromUtf8("-1 personne aujourd'hui-")
+    << dict;
+
+  QTest::newRow("safe-22")
+    << QString::fromLatin1("{% autoescape off %}{% i18np_var '%n people today' 2 as num_people %}-{{ num_people }}-{% endautoescape %}")
+    << QString::fromLatin1("-2 people today-")
+    << QString::fromUtf8("-2 personnes aujourd'hui-")
+    << dict;
+
+  QTest::newRow("safe-23")
+    << QString::fromLatin1("{% i18ncp 'The number of people who have visited today' '%n people visited today' 1 %}")
+    << QString::fromLatin1("1 people visited today") // Not really testing English here.
+    << QString::fromUtf8("1 personne a visité aujourd&#39;hui")
+    << dict;
+
+  QTest::newRow("safe-24")
+    << QString::fromLatin1("{% i18ncp 'The number of people who have visited today' '%n people visited today' 2 %}")
+    << QString::fromLatin1("2 people visited today")
+    << QString::fromUtf8("2 personnes a visité aujourd&#39;hui")
+    << dict;
+
+  QTest::newRow("safe-25")
+    << QString::fromLatin1("{% autoescape off %}{% i18ncp 'The number of people who have visited today' '%n people visited today' 1 %}{% endautoescape %}")
+    << QString::fromLatin1("1 people visited today") // Not really testing English here.
+    << QString::fromUtf8("1 personne a visité aujourd'hui")
+    << dict;
+
+  QTest::newRow("safe-26")
+    << QString::fromLatin1("{% autoescape off %}{% i18ncp 'The number of people who have visited today' '%n people visited today' 2 %}{% endautoescape %}")
+    << QString::fromLatin1("2 people visited today")
+    << QString::fromUtf8("2 personnes a visité aujourd'hui")
+    << dict;
+
+  QTest::newRow("safe-27")
+    << QString::fromLatin1("{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 1 as num_people %}-{{ num_people }}-")
+    << QString::fromLatin1("-1 people visited today-") // Not really testing English here.
+    << QString::fromUtf8("-1 personne a visité aujourd&#39;hui-")
+    << dict;
+
+  QTest::newRow("safe-28")
+    << QString::fromLatin1("{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 2 as num_people %}-{{ num_people }}-")
+    << QString::fromLatin1("-2 people visited today-")
+    << QString::fromUtf8("-2 personnes a visité aujourd&#39;hui-")
+    << dict;
+
+  QTest::newRow("safe-29")
+    << QString::fromLatin1("{% autoescape off %}{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 1 as num_people %}-{{ num_people }}-{% endautoescape %}")
+    << QString::fromLatin1("-1 people visited today-") // Not really testing English here.
+    << QString::fromUtf8("-1 personne a visité aujourd'hui-")
+    << dict;
+
+  QTest::newRow("safe-30")
+    << QString::fromLatin1("{% autoescape off %}{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 2 as num_people %}-{{ num_people }}-{% endautoescape %}")
+    << QString::fromLatin1("-2 people visited today-")
+    << QString::fromUtf8("-2 personnes a visité aujourd'hui-")
+    << dict;
+}
+
+void TestInternationalization::testFailure()
+{
+  QFETCH(QString, input);
+
+  Template t = m_engine->newTemplate( input, QString());
+  QVERIFY(t->error() != NoError);
+}
+
+void TestInternationalization::testFailure_data()
+{
+  QTest::addColumn<QString>("input");
+
+  QTest::newRow("fail-01")
+    << QString::fromLatin1("{% i18np_var '%n people visited today' as num_people %}");
+  QTest::newRow("fail-02")
+    << QString::fromLatin1("{% i18ncp_var 'The number of people who have visited today' '%n people visited today' as num_people %}");
+  QTest::newRow("fail-03")
+    << QString::fromLatin1("{% i18np '%n people visited today' %}");
+  QTest::newRow("fail-04")
+    << QString::fromLatin1("{% i18ncp 'The number of people who have visited today' '%n people visited today' %}");
 }
 
 void TestInternationalization::testDates()

@@ -74,5 +74,44 @@
         <source>%1 messages at %2, fraction of total: %3. Rating : %4</source>
         <translation>%1 Nachrichten am %2, ratio: %3. Bemessungen : %4</translation>
     </message>
+    <message>
+        <location filename="test_input.cpp" line="12"/>
+        <source>Today</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="test_input.cpp" line="13"/>
+        <source>Today is %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="test_input.cpp" line="14"/>
+        <source>Today &amp;amp; tomorrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="test_input.cpp" line="15"/>
+        <source>%n people today</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="test_input.cpp" line="16"/>
+        <source>Today is</source>
+        <comment>The current day is</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="test_input.cpp" line="17"/>
+        <source>%n people visited today</source>
+        <oldsource>%n people visted today</oldsource>
+        <comment>The number of people who have visited today</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 </TS>
