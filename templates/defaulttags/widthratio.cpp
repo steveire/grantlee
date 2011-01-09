@@ -80,6 +80,6 @@ void WidthRatioNode::render( OutputStream *stream, Context *c )
   result = round( result );
 
   // TODO put integral streamers in OutputStream?
-  streamValueInContext( stream, QString::number( result ), c );
+  ( *stream ) << QString::number( result );
 }
 
