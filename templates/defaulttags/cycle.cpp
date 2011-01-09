@@ -120,6 +120,6 @@ void CycleNode::render( OutputStream *stream, Context *c )
   if ( !m_name.isEmpty() ) {
     c->insert( m_name, value );
   }
-  streamValueInContext( stream, value, c );
+  ( *stream ) << value;
 }
 
