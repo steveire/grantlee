@@ -25,6 +25,8 @@
 
 class KLocale;
 
+class QStringList;
+
 class KDELocalizerPrivate;
 
 class KDELocalizer : public Grantlee::AbstractLocalizer
@@ -34,6 +36,8 @@ public:
   virtual ~KDELocalizer();
 
   // Right to left?
+
+  void insertApplicationCatalogs(const QStringList &catalogs);
 
   virtual QString currentLocale() const;
   virtual void pushLocale(const QString &localeName);
