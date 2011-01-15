@@ -35,6 +35,7 @@ set (grantlee_templates_SRCS
   safestring.cpp
   template.cpp
   templateloader.cpp
+  textprocessingmachine.cpp
   typeaccessors.cpp
   util.cpp
   variable.cpp
