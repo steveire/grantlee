@@ -243,6 +243,9 @@ private Q_SLOTS:
   void testDynamicProperties_data();
   void testDynamicProperties() { doTest(); }
 
+  void testGarbageInput_data();
+  void testGarbageInput();
+
   void cleanupTestCase();
 
 private:
@@ -1159,6 +1162,114 @@ void TestBuiltinSyntax::testDynamicProperties_data()
 
 }
 
+void TestBuiltinSyntax::testGarbageInput()
+{
+  QFETCH( QString, input );
+
+  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+
+  Dict dict;
+
+  Context context( dict );
+
+  QString result = t->render( &context );
+
+  QCOMPARE( t->error(), NoError );
+
+  QCOMPARE( result, input );
+}
+
+void TestBuiltinSyntax::testGarbageInput_data()
+{
+
+  QTest::addColumn<QString>( "input" );
+
+  Dict dict;
+
+  QTest::newRow( "garbage-input01" ) << QString::fromLatin1( "content %}" );
+  QTest::newRow( "garbage-input02" ) << QString::fromLatin1( " content %}" );
+  QTest::newRow( "garbage-input03" ) << QString::fromLatin1( "content #}" );
+  QTest::newRow( "garbage-input04" ) << QString::fromLatin1( " content #}" );
+  QTest::newRow( "garbage-input05" ) << QString::fromLatin1( "content }}" );
+  QTest::newRow( "garbage-input06" ) << QString::fromLatin1( " content }}" );
+  QTest::newRow( "garbage-input07" ) << QString::fromLatin1( "% content %}" );
+  QTest::newRow( "garbage-input08" ) << QString::fromLatin1( "# content #}" );
+  QTest::newRow( "garbage-input09" ) << QString::fromLatin1( "{ content }}" );
+  QTest::newRow( "garbage-input10" ) << QString::fromLatin1( "{% content }" );
+  QTest::newRow( "garbage-input11" ) << QString::fromLatin1( "{% content %" );
+  QTest::newRow( "garbage-input12" ) << QString::fromLatin1( "{# content }" );
+  QTest::newRow( "garbage-input13" ) << QString::fromLatin1( "{# content #" );
+  QTest::newRow( "garbage-input14" ) << QString::fromLatin1( "{{ content }" );
+  QTest::newRow( "garbage-input15" ) << QString::fromLatin1( "{{ content }" );
+  QTest::newRow( "garbage-input16" ) << QString::fromLatin1( "{{ content %}" );
+  QTest::newRow( "garbage-input17" ) << QString::fromLatin1( "{% content }}" );
+  QTest::newRow( "garbage-input18" ) << QString::fromLatin1( "{{ content #}" );
+  QTest::newRow( "garbage-input19" ) << QString::fromLatin1( "{# content }}" );
+  QTest::newRow( "garbage-input20" ) << QString::fromLatin1( "{{ con #} tent #}" );
+  QTest::newRow( "garbage-input21" ) << QString::fromLatin1( "{{ con %} tent #}" );
+  QTest::newRow( "garbage-input22" ) << QString::fromLatin1( "{{ con #} tent %}" );
+  QTest::newRow( "garbage-input23" ) << QString::fromLatin1( "{{ con %} tent %}" );
+  QTest::newRow( "garbage-input24" ) << QString::fromLatin1( "{% con #} tent #}" );
+  QTest::newRow( "garbage-input25" ) << QString::fromLatin1( "{% con }} tent #}" );
+  QTest::newRow( "garbage-input26" ) << QString::fromLatin1( "{% con #} tent }}" );
+  QTest::newRow( "garbage-input27" ) << QString::fromLatin1( "{% con }} tent }}" );
+  QTest::newRow( "garbage-input28" ) << QString::fromLatin1( "{# con %} tent %}" );
+  QTest::newRow( "garbage-input29" ) << QString::fromLatin1( "{# con }} tent %}" );
+  QTest::newRow( "garbage-input30" ) << QString::fromLatin1( "{# con %} tent }}" );
+  QTest::newRow( "garbage-input31" ) << QString::fromLatin1( "{# con }} tent }}" );
+  QTest::newRow( "garbage-input32" ) << QString::fromLatin1( "{# con {# tent }}" );
+  QTest::newRow( "garbage-input33" ) << QString::fromLatin1( "{# con {% tent }}" );
+  QTest::newRow( "garbage-input34" ) << QString::fromLatin1( "{% con {% tent }}" );
+  QTest::newRow( "garbage-input35" ) << QString::fromLatin1( "{ { content }}" );
+  QTest::newRow( "garbage-input36" ) << QString::fromLatin1( "{ % content %}" );
+  QTest::newRow( "garbage-input37" ) << QString::fromLatin1( "{ # content #}" );
+  QTest::newRow( "garbage-input38" ) << QString::fromLatin1( "{\n{ content }}" );
+  QTest::newRow( "garbage-input39" ) << QString::fromLatin1( "{\n# content #}" );
+  QTest::newRow( "garbage-input40" ) << QString::fromLatin1( "{\n% content %}" );
+  QTest::newRow( "garbage-input41" ) << QString::fromLatin1( "{{\n content }}" );
+  QTest::newRow( "garbage-input42" ) << QString::fromLatin1( "{#\n content #}" );
+  QTest::newRow( "garbage-input43" ) << QString::fromLatin1( "{%\n content %}" );
+  QTest::newRow( "garbage-input44" ) << QString::fromLatin1( "{{ content \n}}" );
+  QTest::newRow( "garbage-input45" ) << QString::fromLatin1( "{# content \n#}" );
+  QTest::newRow( "garbage-input46" ) << QString::fromLatin1( "{% content \n%}" );
+  QTest::newRow( "garbage-input47" ) << QString::fromLatin1( "{{ content }\n}" );
+  QTest::newRow( "garbage-input48" ) << QString::fromLatin1( "{# content #\n}" );
+  QTest::newRow( "garbage-input49" ) << QString::fromLatin1( "{% content %\n}" );
+  QTest::newRow( "garbage-input50" ) << QString::fromLatin1( "{{ content } }" );
+  QTest::newRow( "garbage-input51" ) << QString::fromLatin1( "{% content % }" );
+  QTest::newRow( "garbage-input52" ) << QString::fromLatin1( "{# content # }" );
+  QTest::newRow( "garbage-input53" ) << QString::fromLatin1( "{ { content } }" );
+  QTest::newRow( "garbage-input54" ) << QString::fromLatin1( "{ % content % }" );
+  QTest::newRow( "garbage-input55" ) << QString::fromLatin1( "{ # content # }" );
+  QTest::newRow( "garbage-input56" ) << QString::fromLatin1( "{{ content }%" );
+  QTest::newRow( "garbage-input57" ) << QString::fromLatin1( "{# content #%" );
+  QTest::newRow( "garbage-input58" ) << QString::fromLatin1( "{% content %%" );
+  QTest::newRow( "garbage-input59" ) << QString::fromLatin1( "{{ content }A" );
+  QTest::newRow( "garbage-input60" ) << QString::fromLatin1( "{# content #A" );
+  QTest::newRow( "garbage-input61" ) << QString::fromLatin1( "{% content %A" );
+  QTest::newRow( "garbage-input62" ) << QString::fromLatin1( "{{ content A}" );
+  QTest::newRow( "garbage-input63" ) << QString::fromLatin1( "{# content A#" );
+  QTest::newRow( "garbage-input64" ) << QString::fromLatin1( "{% content A%" );
+  QTest::newRow( "garbage-input65" ) << QString::fromLatin1( "{# content A}" );
+  QTest::newRow( "garbage-input66" ) << QString::fromLatin1( "{% content A}" );
+  QTest::newRow( "garbage-input67" ) << QString::fromLatin1( "A{ content }}" );
+  QTest::newRow( "garbage-input68" ) << QString::fromLatin1( "A# content #}" );
+  QTest::newRow( "garbage-input69" ) << QString::fromLatin1( "A% content %}" );
+  QTest::newRow( "garbage-input60" ) << QString::fromLatin1( "{A content }}" );
+  QTest::newRow( "garbage-input71" ) << QString::fromLatin1( "{A content #}" );
+  QTest::newRow( "garbage-input72" ) << QString::fromLatin1( "{A content %}" );
+  QTest::newRow( "garbage-input73" ) << QString::fromLatin1( "{A content #}" );
+  QTest::newRow( "garbage-input74" ) << QString::fromLatin1( "{A content %}" );
+  QTest::newRow( "garbage-input75" ) << QString::fromLatin1( "{A content A}" );
+  QTest::newRow( "garbage-input76" ) << QString::fromLatin1( "}} content }}" );
+  QTest::newRow( "garbage-input77" ) << QString::fromLatin1( "}} content {{" );
+  QTest::newRow( "garbage-input78" ) << QString::fromLatin1( "#} content #}" );
+  QTest::newRow( "garbage-input79" ) << QString::fromLatin1( "#} content {#" );
+  QTest::newRow( "garbage-input80" ) << QString::fromLatin1( "%} content %}" );
+  QTest::newRow( "garbage-input81" ) << QString::fromLatin1( "%} content {%" );
+  QTest::newRow( "garbage-input82" ) << QString::fromLatin1( "#{ content }#" );
+  QTest::newRow( "garbage-input83" ) << QString::fromLatin1( "%{ content }%" );
+}
 
 
 QTEST_MAIN( TestBuiltinSyntax )
