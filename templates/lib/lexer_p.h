@@ -39,11 +39,14 @@ public:
 
   void markStartSyntax();
   void markEndSyntax();
+  void markNewline();
   void clearMarkers();
   void finalizeToken();
+  void finalizeTokenWithTrimmedWhitespace();
 
 private:
   void reset();
+  void finalizeToken( int nextPosition, bool processSyntax );
 
 private:
   QString m_templateString;
@@ -53,7 +56,7 @@ private:
   int m_processedUpto;
   int m_startSyntaxPosition;
   int m_endSyntaxPosition;
-
+  int m_newlinePosition;
 };
 
 struct NullLexerAction
@@ -101,9 +104,32 @@ struct TokenFinalizer
   }
 };
 
+struct TokenFinalizerWithTrimming
+{
+  static void doAction( Lexer *lexer ) {
+    lexer->finalizeTokenWithTrimmedWhitespace();
+  }
+};
+
+struct TokenFinalizerWithTrimmingAndNewline
+{
+  static void doAction( Lexer *lexer ) {
+    lexer->finalizeTokenWithTrimmedWhitespace();
+    lexer->markNewline();
+  }
+};
+
 struct MarkStartSyntax
 {
   static void doAction( Lexer *lexer ) {
+    lexer->markStartSyntax();
+  }
+};
+
+struct FinalizeAndMarkStartSyntax
+{
+  static void doAction( Lexer *lexer ) {
+    lexer->finalizeToken();
     lexer->markStartSyntax();
   }
 };
@@ -119,6 +145,13 @@ struct MarkEndSyntax
 {
   static void doAction( Lexer *lexer ) {
     lexer->markEndSyntax();
+  }
+};
+
+struct MarkNewline
+{
+  static void doAction( Lexer *lexer ) {
+    lexer->markNewline();
   }
 };
 

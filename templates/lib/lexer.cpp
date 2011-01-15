@@ -29,14 +29,17 @@ typedef TextProcessingMachine::Transition TextProcessingTransition;
 typedef LexerObject<TextProcessingState, NullTest, MarksClearer> ChurningState;
 typedef LexerObject<TextProcessingState, NullTest, TokenFinalizer> FinalizeTokenState;
 typedef LexerObject<TextProcessingTransition, NullTest, TokenFinalizer> EofHandler;
+typedef LexerObject<TextProcessingTransition, NullTest, TokenFinalizerWithTrimming> EofHandlerWithTrimming;
 
-typedef CharacterTransition<'{', MarkStartSyntax> MaybeTemplateSyntaxHandler;
+typedef CharacterTransition<'{'> MaybeTemplateSyntaxHandler;
 
-typedef CharacterTransition<'%'> TagHandler;
-typedef CharacterTransition<'#'> CommentHandler;
-typedef CharacterTransition<'{'> BeginValueHandler;
+typedef CharacterTransition<'%', MarkStartSyntax> TagStartHandler;
+typedef CharacterTransition<'#', MarkStartSyntax> CommentStartHandler;
+typedef CharacterTransition<'%'> TagEndHandler;
+typedef CharacterTransition<'#'> CommentEndHandler;
+typedef CharacterTransition<'{', MarkStartSyntax> BeginValueHandler;
 typedef CharacterTransition<'}'> MaybeEndValueHandler;
-typedef CharacterTransition<'\n'> NewlineHandler;
+typedef CharacterTransition<'\n', MarkNewline> NewlineHandler;
 typedef CharacterTransition<'}', MarkEndSyntax> EndTemplateSyntaxHandler;
 typedef NegateCharacterTransition<'}'> NotEndTemplateSyntaxHandler;
 
@@ -46,6 +49,37 @@ typedef LexerObject<TextProcessingTransition,
                 OrTest<CharacterTest<'#'>,
                        CharacterTest<'%'> > > > > NotBeginTemplateSyntaxHandler;
 
+typedef LexerObject<TextProcessingTransition,
+            Negate<
+                OrTest<CharacterTest<'{'>,
+                OrTest<CharacterTest<'#'>,
+                OrTest<CharacterTest<'%'>,
+                       CharacterTest<'\n'> > > > > > NotBeginTemplateSyntaxOrNewlineHandler;
+
+typedef LexerObject<TextProcessingTransition,
+            Negate<
+                OrTest<CharacterTest<'#'>,
+                OrTest<CharacterTest<'%'>,
+                       CharacterTest<'\n'> > > > > NotTagCommentOrNewlineHandler;
+
+typedef LexerObject<TextProcessingTransition,
+            Negate<
+                OrTest<IsSpace,
+                       CharacterTest<'{'> > > > NonWhitespaceLineTextHandler;
+
+typedef LexerObject<TextProcessingTransition,
+            AndTest<Negate<CharacterTest<'\n'> >,
+                    IsSpace> > WhitespaceNonNewlineHandler;
+
+typedef LexerObject<TextProcessingTransition,
+            Negate<
+                OrTest<CharacterTest<'{'>,
+                       IsSpace> >,
+            TokenFinalizer> FinalizingLineTextHandler;
+
+typedef CharacterTransition<'\n', TokenFinalizerWithTrimmingAndNewline> SyntaxBoundaryNewlineHandler;
+typedef CharacterTransition<'{', FinalizeAndMarkStartSyntax> SyntaxBoundaryHandler;
+
 template<typename Transition>
 void addTransition( TextProcessingState *source, Lexer*lexer, TextProcessingState *target )
 {
@@ -53,7 +87,7 @@ void addTransition( TextProcessingState *source, Lexer*lexer, TextProcessingStat
   tr->setTargetState( target );
 }
 
-TextProcessingMachine* createMachine( Lexer *lexer )
+TextProcessingMachine* createMachine( Lexer *lexer, bool trim = false )
 {
   TextProcessingMachine *machine = new TextProcessingMachine;
 
@@ -62,52 +96,107 @@ TextProcessingMachine* createMachine( Lexer *lexer )
   machine->setInitialState( notFinished );
 
   TextProcessingState *processingText = new ChurningState( lexer, notFinished );
+  TextProcessingState *processingPostNewline = new TextProcessingState( notFinished );
   TextProcessingState *processingBeginTemplateSyntax = new TextProcessingState( notFinished );
   TextProcessingState *processingTag = new TextProcessingState( notFinished );
   TextProcessingState *processingComment = new TextProcessingState( notFinished );
   TextProcessingState *processingValue = new TextProcessingState( notFinished );
+  TextProcessingState *maybeProcessingValue = new TextProcessingState( notFinished );
   TextProcessingState *processingEndTag = new TextProcessingState( notFinished );
   TextProcessingState *processingEndComment = new TextProcessingState( notFinished );
   TextProcessingState *processingEndValue = new TextProcessingState( notFinished );
-  TextProcessingState *processingPostTemplateSyntax = new FinalizeTokenState( lexer, notFinished );
+  TextProcessingState *processingPostTemplateSyntax;
+  if ( trim )
+    processingPostTemplateSyntax = new TextProcessingState( notFinished );
+  else
+    processingPostTemplateSyntax = new FinalizeTokenState( lexer, notFinished );
+  TextProcessingState *processingPostTemplateSyntaxWhitespace = new TextProcessingState( notFinished );
 
-  notFinished->setInitialState( processingText );
+  if ( trim )
+    notFinished->setInitialState( processingPostNewline );
+  else
+    notFinished->setInitialState( processingText );
 
+  if ( trim ) {
+    addTransition<NewlineHandler>(               processingText, lexer, processingPostNewline );
+
+    addTransition<NewlineHandler>(               processingPostNewline, lexer, processingPostNewline );
+    addTransition<MaybeTemplateSyntaxHandler>(   processingPostNewline, lexer, processingBeginTemplateSyntax );
+    addTransition<NonWhitespaceLineTextHandler>( processingPostNewline, lexer, processingText );
+  }
   addTransition<MaybeTemplateSyntaxHandler>( processingText, lexer, processingBeginTemplateSyntax );
 
-  addTransition<TagHandler>(                    processingBeginTemplateSyntax, lexer, processingTag );
-  addTransition<CommentHandler>(                processingBeginTemplateSyntax, lexer, processingComment );
-  addTransition<BeginValueHandler>(             processingBeginTemplateSyntax, lexer, processingValue );
-  addTransition<NotBeginTemplateSyntaxHandler>( processingBeginTemplateSyntax, lexer, processingText );
+  addTransition<TagStartHandler>(                    processingBeginTemplateSyntax, lexer, processingTag );
+  addTransition<CommentStartHandler>(                processingBeginTemplateSyntax, lexer, processingComment );
+  addTransition<BeginValueHandler>(             processingBeginTemplateSyntax, lexer, maybeProcessingValue );
 
-  addTransition<NewlineHandler>( processingTag, lexer, processingText );
-  addTransition<TagHandler>(     processingTag, lexer, processingEndTag );
+  if ( trim ) {
+    addTransition<NotBeginTemplateSyntaxOrNewlineHandler>( processingBeginTemplateSyntax, lexer, processingText );
+    addTransition<NewlineHandler>(                processingBeginTemplateSyntax, lexer, processingPostNewline );
+  } else {
+    addTransition<NotBeginTemplateSyntaxHandler>( processingBeginTemplateSyntax, lexer, processingText );
+  }
 
-  addTransition<NewlineHandler>( processingComment, lexer, processingText );
-  addTransition<CommentHandler>( processingComment, lexer, processingEndComment );
+  addTransition<NewlineHandler>( processingTag, lexer, trim ? processingPostNewline : processingText );
+  addTransition<TagEndHandler>(     processingTag, lexer, processingEndTag );
 
-  addTransition<NewlineHandler>(       processingValue, lexer, processingText );
+  addTransition<NewlineHandler>( processingComment, lexer, trim ? processingPostNewline : processingText );
+  addTransition<CommentEndHandler>( processingComment, lexer, processingEndComment );
+
+  addTransition<TagStartHandler>(                    maybeProcessingValue, lexer, processingTag );
+  addTransition<CommentStartHandler>(                maybeProcessingValue, lexer, processingComment );
+  addTransition<NotTagCommentOrNewlineHandler>(       maybeProcessingValue, lexer, processingValue );
+  addTransition<NewlineHandler>(       maybeProcessingValue, lexer, trim ? processingPostNewline : processingText );
+
+  addTransition<NewlineHandler>(       processingValue, lexer, trim ? processingPostNewline : processingText );
   addTransition<MaybeEndValueHandler>( processingValue, lexer, processingEndValue );
 
-  addTransition<NewlineHandler>(              processingEndTag, lexer, processingText );
+  addTransition<NewlineHandler>(              processingEndTag, lexer, processingPostNewline );
   addTransition<NotEndTemplateSyntaxHandler>( processingEndTag, lexer, processingTag );
   addTransition<EndTemplateSyntaxHandler>(    processingEndTag, lexer, processingPostTemplateSyntax );
 
-  addTransition<NewlineHandler>(              processingEndComment, lexer, processingText );
+  addTransition<NewlineHandler>(              processingEndComment, lexer, processingPostNewline );
   addTransition<NotEndTemplateSyntaxHandler>( processingEndComment, lexer, processingComment );
   addTransition<EndTemplateSyntaxHandler>(    processingEndComment, lexer, processingPostTemplateSyntax );
 
-  addTransition<NewlineHandler>(              processingEndValue, lexer, processingText );
+  addTransition<NewlineHandler>(              processingEndValue, lexer, processingPostNewline );
   addTransition<NotEndTemplateSyntaxHandler>( processingEndValue, lexer, processingValue );
   addTransition<EndTemplateSyntaxHandler>(    processingEndValue, lexer, processingPostTemplateSyntax );
 
-  processingPostTemplateSyntax->setUnconditionalTransition( processingText );
+  if (!trim) {
+    processingPostTemplateSyntax->setUnconditionalTransition( processingText );
+  } else {
+    addTransition<SyntaxBoundaryNewlineHandler>( processingPostTemplateSyntax, lexer, processingPostNewline );
+    addTransition<WhitespaceNonNewlineHandler>(  processingPostTemplateSyntax, lexer, processingPostTemplateSyntaxWhitespace );
+    addTransition<FinalizingLineTextHandler>(    processingPostTemplateSyntax, lexer, processingText );
+    addTransition<SyntaxBoundaryHandler>(        processingPostTemplateSyntax, lexer, processingBeginTemplateSyntax );
+
+    // NOTE: We only have to transition to this if there was whitespace before the opening tag.
+    // Maybe store that in an external state property?
+    // Actually, this may be a bug if we try to finalize with trimming and there is no leading whitespace.
+    addTransition<SyntaxBoundaryNewlineHandler>( processingPostTemplateSyntaxWhitespace, lexer, processingPostNewline );
+    addTransition<FinalizingLineTextHandler>(    processingPostTemplateSyntaxWhitespace, lexer, processingText );
+    addTransition<SyntaxBoundaryHandler>(        processingPostTemplateSyntaxWhitespace, lexer, processingBeginTemplateSyntax );
+  }
+
   {
     EofHandler *handler = new EofHandler( lexer, notFinished );
     handler->setTargetState( finished );
     notFinished->setEndTransition( handler );
   }
 
+  if ( trim ) {
+    {
+      EofHandlerWithTrimming *handler = new EofHandlerWithTrimming( lexer, processingPostTemplateSyntaxWhitespace );
+      handler->setTargetState( finished );
+      processingPostTemplateSyntaxWhitespace->setEndTransition( handler );
+    }
+    {
+      EofHandlerWithTrimming *handler = new EofHandlerWithTrimming( lexer, processingPostTemplateSyntax );
+      handler->setTargetState( finished );
+      processingPostTemplateSyntax->setEndTransition( handler );
+    }
+  }
   return machine;
 }
 
@@ -125,6 +214,7 @@ void Lexer::clearMarkers()
 {
   m_startSyntaxPosition = -1;
   m_endSyntaxPosition = -1;
+  m_newlinePosition = -1;
 }
 
 void Lexer::reset()
@@ -167,14 +257,37 @@ void Lexer::markEndSyntax()
   m_endSyntaxPosition = m_upto + 1;
 }
 
+void Lexer::markNewline()
+{
+  m_newlinePosition = m_upto;
+}
+
 void Lexer::finalizeToken()
 {
   int nextPosition = m_upto;
-  const bool validSyntax = m_endSyntaxPosition > m_startSyntaxPosition;
-  if ( validSyntax && m_startSyntaxPosition >= 0 ) {
-    nextPosition = qMin( m_startSyntaxPosition, m_upto );
-  }
+  const bool validSyntax = m_endSyntaxPosition > m_startSyntaxPosition && ( m_startSyntaxPosition >= m_processedUpto );
 
+  if ( validSyntax && m_startSyntaxPosition >= 0 ) {
+    nextPosition = m_startSyntaxPosition - 1;
+  }
+  finalizeToken( nextPosition, validSyntax );
+}
+
+void Lexer::finalizeTokenWithTrimmedWhitespace()
+{
+  int nextPosition = m_upto;
+  const bool validSyntax = m_endSyntaxPosition > m_startSyntaxPosition;
+  if ( validSyntax && m_startSyntaxPosition > 0 ) {
+    if ( m_newlinePosition >= 0 && m_newlinePosition >= m_processedUpto )
+      nextPosition = qMin( m_startSyntaxPosition - 1, m_newlinePosition );
+    else
+      nextPosition = m_startSyntaxPosition - 1;
+  }
+  finalizeToken( nextPosition, validSyntax );
+}
+
+void Lexer::finalizeToken( int nextPosition, bool processSyntax )
+{
   {
     Token token;
     token.content = m_templateString.mid( m_processedUpto, nextPosition - m_processedUpto );
@@ -184,20 +297,22 @@ void Lexer::finalizeToken()
 
   m_processedUpto = nextPosition;
 
-  if ( !validSyntax )
+  if ( !processSyntax )
     return;
-
-  const QString syntaxContent = m_templateString.mid( m_startSyntaxPosition, m_endSyntaxPosition - m_startSyntaxPosition );
 
   m_processedUpto = m_endSyntaxPosition;
-  Token syntaxToken;
-  syntaxToken.content = syntaxContent.mid( 2, syntaxContent.size() - 4 ).trimmed();
-  if ( syntaxContent.startsWith( QLatin1String( "{{" ) ) ) {
-    syntaxToken.tokenType = VariableToken;
-  } else if ( syntaxContent.startsWith( QLatin1String( "{%" ) ) ) {
-    syntaxToken.tokenType = BlockToken;
-  } else if ( syntaxContent.startsWith( QLatin1String( "{#" ) ) ) {
+
+  const QChar differentiator = *( m_templateString.constData() + m_startSyntaxPosition );
+  if ( differentiator == QLatin1Char( '#' ) )
     return;
+
+  Token syntaxToken;
+  syntaxToken.content = m_templateString.mid( m_startSyntaxPosition + 1, m_endSyntaxPosition - m_startSyntaxPosition - 3 ).trimmed();
+
+  if ( differentiator == QLatin1Char( '{' ) ) {
+    syntaxToken.tokenType = VariableToken;
+  } else if ( differentiator == QLatin1Char( '%' ) ) {
+    syntaxToken.tokenType = BlockToken;
   }
   m_tokenList.append( syntaxToken );
 }
