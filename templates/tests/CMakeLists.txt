@@ -49,6 +49,7 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
                   ${moc_output_file}
                   ${_testresource_rcc_src}
                   ${PROJECT_SOURCE_DIR}/../lib/lexer.cpp
+                  ${PROJECT_SOURCE_DIR}/../lib/textprocessingmachine.cpp
                   ${PROJECT_SOURCE_DIR}/../lib/nulllocalizer.cpp )
     add_test(${_testname} ${_testname}_exec )
     target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${Grantlee_TEMPLATES_LIBRARIES} )

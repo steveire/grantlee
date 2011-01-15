@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2009,2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2009,2010,2011 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,40 +21,94 @@
 
 #include "lexer_p.h"
 
-#include "grantlee_latin1literal_p.h"
-#include "grantlee_tags_p.h"
-
-#include <QtCore/QRegExp>
-#include <QtCore/QStringList>
-
 using namespace Grantlee;
 
-static QRegExp getTagRe()
+typedef State<TextProcessingMachine::Type> TextProcessingState;
+typedef TextProcessingMachine::Transition TextProcessingTransition;
+
+typedef LexerObject<TextProcessingState, NullTest, MarksClearer> ChurningState;
+typedef LexerObject<TextProcessingState, NullTest, TokenFinalizer> FinalizeTokenState;
+typedef LexerObject<TextProcessingTransition, NullTest, TokenFinalizer> EofHandler;
+
+typedef CharacterTransition<'{', MarkStartSyntax> MaybeTemplateSyntaxHandler;
+
+typedef CharacterTransition<'%'> TagHandler;
+typedef CharacterTransition<'#'> CommentHandler;
+typedef CharacterTransition<'{'> BeginValueHandler;
+typedef CharacterTransition<'}'> MaybeEndValueHandler;
+typedef CharacterTransition<'\n'> NewlineHandler;
+typedef CharacterTransition<'}', MarkEndSyntax> EndTemplateSyntaxHandler;
+typedef NegateCharacterTransition<'}'> NotEndTemplateSyntaxHandler;
+
+typedef LexerObject<TextProcessingTransition,
+            Negate<
+                OrTest<CharacterTest<'{'>,
+                OrTest<CharacterTest<'#'>,
+                       CharacterTest<'%'> > > > > NotBeginTemplateSyntaxHandler;
+
+template<typename Transition>
+void addTransition( TextProcessingState *source, Lexer*lexer, TextProcessingState *target )
 {
+  Transition *tr = new Transition( lexer, source );
+  tr->setTargetState( target );
+}
 
-  // In python regex, '.' matches any character except newline, whereas it QRegExp,
-  // it matches any character including newline. We match 'not newline' instead.
+TextProcessingMachine* createMachine( Lexer *lexer )
+{
+  TextProcessingMachine *machine = new TextProcessingMachine;
 
-  static const QLatin1Literal notEndOfLine( "[^\\n]*" );
+  TextProcessingState *notFinished = new TextProcessingState( machine );
+  TextProcessingState *finished = new TextProcessingState( machine );
+  machine->setInitialState( notFinished );
 
-  static const QString tagString = QLatin1Char( '(' )
-                                 + QRegExp::escape( QLatin1String( BLOCK_TAG_START ) )
-                                 + notEndOfLine
-                                 + QRegExp::escape( QLatin1String( BLOCK_TAG_END ) )
-                                 + QLatin1Char( '|' )
-                                 + QRegExp::escape( QLatin1String( VARIABLE_TAG_START ) )
-                                 + notEndOfLine
-                                 + QRegExp::escape( QLatin1String( VARIABLE_TAG_END ) )
-                                 + QLatin1Char( '|' )
-                                 + QRegExp::escape( QLatin1String( COMMENT_TAG_START ) )
-                                 + notEndOfLine
-                                 + QRegExp::escape( QLatin1String( COMMENT_TAG_END ) )
-                                 + QLatin1Char( ')' );
+  TextProcessingState *processingText = new ChurningState( lexer, notFinished );
+  TextProcessingState *processingBeginTemplateSyntax = new TextProcessingState( notFinished );
+  TextProcessingState *processingTag = new TextProcessingState( notFinished );
+  TextProcessingState *processingComment = new TextProcessingState( notFinished );
+  TextProcessingState *processingValue = new TextProcessingState( notFinished );
+  TextProcessingState *processingEndTag = new TextProcessingState( notFinished );
+  TextProcessingState *processingEndComment = new TextProcessingState( notFinished );
+  TextProcessingState *processingEndValue = new TextProcessingState( notFinished );
+  TextProcessingState *processingPostTemplateSyntax = new FinalizeTokenState( lexer, notFinished );
 
-  static QRegExp sTagRe( tagString );
+  notFinished->setInitialState( processingText );
 
-  sTagRe.setMinimal( true ); // Can't use '?', eg '.*?', Have to setMinimal instead
-  return sTagRe;
+  addTransition<MaybeTemplateSyntaxHandler>( processingText, lexer, processingBeginTemplateSyntax );
+
+  addTransition<TagHandler>(                    processingBeginTemplateSyntax, lexer, processingTag );
+  addTransition<CommentHandler>(                processingBeginTemplateSyntax, lexer, processingComment );
+  addTransition<BeginValueHandler>(             processingBeginTemplateSyntax, lexer, processingValue );
+  addTransition<NotBeginTemplateSyntaxHandler>( processingBeginTemplateSyntax, lexer, processingText );
+
+  addTransition<NewlineHandler>( processingTag, lexer, processingText );
+  addTransition<TagHandler>(     processingTag, lexer, processingEndTag );
+
+  addTransition<NewlineHandler>( processingComment, lexer, processingText );
+  addTransition<CommentHandler>( processingComment, lexer, processingEndComment );
+
+  addTransition<NewlineHandler>(       processingValue, lexer, processingText );
+  addTransition<MaybeEndValueHandler>( processingValue, lexer, processingEndValue );
+
+  addTransition<NewlineHandler>(              processingEndTag, lexer, processingText );
+  addTransition<NotEndTemplateSyntaxHandler>( processingEndTag, lexer, processingTag );
+  addTransition<EndTemplateSyntaxHandler>(    processingEndTag, lexer, processingPostTemplateSyntax );
+
+  addTransition<NewlineHandler>(              processingEndComment, lexer, processingText );
+  addTransition<NotEndTemplateSyntaxHandler>( processingEndComment, lexer, processingComment );
+  addTransition<EndTemplateSyntaxHandler>(    processingEndComment, lexer, processingPostTemplateSyntax );
+
+  addTransition<NewlineHandler>(              processingEndValue, lexer, processingText );
+  addTransition<NotEndTemplateSyntaxHandler>( processingEndValue, lexer, processingValue );
+  addTransition<EndTemplateSyntaxHandler>(    processingEndValue, lexer, processingPostTemplateSyntax );
+
+  processingPostTemplateSyntax->setUnconditionalTransition( processingText );
+  {
+    EofHandler *handler = new EofHandler( lexer, notFinished );
+    handler->setTargetState( finished );
+    notFinished->setEndTransition( handler );
+  }
+
+  return machine;
 }
 
 Lexer::Lexer( const QString &templateString )
@@ -67,48 +121,83 @@ Lexer::~Lexer()
 {
 }
 
-QList<Token> Lexer::tokenize() const
+void Lexer::clearMarkers()
 {
-  const QRegExp tagRe = getTagRe();
-
-  QList<Token> tokenList;
-
-  int pos = 0;
-  int oldPosition = 0;
-  int linecount = 0;
-  while ( ( pos = tagRe.indexIn( m_templateString, pos ) ) != -1 ) {
-    tokenList << createToken( m_templateString.mid( oldPosition, pos - oldPosition ), NotInTag, &linecount );
-    tokenList << createToken( tagRe.cap( 1 ), InTag, &linecount );
-    pos += tagRe.matchedLength();
-    oldPosition = pos;
-  }
-  tokenList << createToken( m_templateString.right( m_templateString.size() - oldPosition ), NotInTag, &linecount );
-
-  return tokenList;
+  m_startSyntaxPosition = -1;
+  m_endSyntaxPosition = -1;
 }
 
-Token Lexer::createToken( const QString &fragment, State inTag, int *linecount ) const
+void Lexer::reset()
 {
-  Token token;
-  token.linenumber = ( *linecount ) + 1;
-  if ( inTag == NotInTag ) {
-    ( *linecount ) += fragment.count( QLatin1Char( '\n' ) );
-    token.content = fragment;
-    token.tokenType = TextToken;
-  } else {
-    static const int startTagSize = 2;
-    static const int endTagSize = 2;
-    QString content = fragment.mid( startTagSize, fragment.size() - startTagSize - endTagSize );
-    if ( fragment.startsWith( QLatin1String( VARIABLE_TAG_START ) ) ) {
-      token.tokenType = VariableToken;
-      token.content = content.trimmed();
-    } else if ( fragment.startsWith( QLatin1String( BLOCK_TAG_START ) ) ) {
-      token.tokenType = BlockToken;
-      token.content = content.trimmed();
-    } else if ( fragment.startsWith( QLatin1String( COMMENT_TAG_START ) ) ) {
-      token.tokenType = CommentToken;
-      return token;
-    }
+  m_tokenList.clear();
+  m_upto = 0;
+  m_processedUpto = 0;
+  clearMarkers();
+}
+
+QList<Token> Lexer::tokenize()
+{
+  TextProcessingMachine* machine = createMachine( this );
+
+  machine->start();
+
+  QString::const_iterator it = m_templateString.constBegin();
+  const QString::const_iterator end = m_templateString.constEnd();
+
+  reset();
+  for ( ; it != end; ++it, ++m_upto )
+    machine->processCharacter( it );
+
+  machine->finished();
+
+  machine->stop();
+
+  delete machine;
+
+  return m_tokenList;
+}
+
+void Lexer::markStartSyntax()
+{
+  m_startSyntaxPosition = m_upto;
+}
+
+void Lexer::markEndSyntax()
+{
+  m_endSyntaxPosition = m_upto + 1;
+}
+
+void Lexer::finalizeToken()
+{
+  int nextPosition = m_upto;
+  const bool validSyntax = m_endSyntaxPosition > m_startSyntaxPosition;
+  if ( validSyntax && m_startSyntaxPosition >= 0 ) {
+    nextPosition = qMin( m_startSyntaxPosition, m_upto );
   }
-  return token;
+
+  {
+    Token token;
+    token.content = m_templateString.mid( m_processedUpto, nextPosition - m_processedUpto );
+    token.tokenType = TextToken;
+    m_tokenList.append( token );
+  }
+
+  m_processedUpto = nextPosition;
+
+  if ( !validSyntax )
+    return;
+
+  const QString syntaxContent = m_templateString.mid( m_startSyntaxPosition, m_endSyntaxPosition - m_startSyntaxPosition );
+
+  m_processedUpto = m_endSyntaxPosition;
+  Token syntaxToken;
+  syntaxToken.content = syntaxContent.mid( 2, syntaxContent.size() - 4 ).trimmed();
+  if ( syntaxContent.startsWith( QLatin1String( "{{" ) ) ) {
+    syntaxToken.tokenType = VariableToken;
+  } else if ( syntaxContent.startsWith( QLatin1String( "{%" ) ) ) {
+    syntaxToken.tokenType = BlockToken;
+  } else if ( syntaxContent.startsWith( QLatin1String( "{#" ) ) ) {
+    return;
+  }
+  m_tokenList.append( syntaxToken );
 }

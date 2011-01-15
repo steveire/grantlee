@@ -22,7 +22,7 @@
 
 using namespace Grantlee;
 
-void TextProcessingMachine::processCharacter( QChar character )
+void TextProcessingMachine::processCharacter( QString::const_iterator character )
 {
   State<CharTransitionInterface> *s = currentState();
   while ( s ) {
@@ -34,7 +34,7 @@ void TextProcessingMachine::processCharacter( QChar character )
   }
 }
 
-bool TextProcessingMachine::doProcessCharacter( QChar character, State<CharTransitionInterface> *state )
+bool TextProcessingMachine::doProcessCharacter( QString::const_iterator character, State<CharTransitionInterface> *state )
 {
   const QVector<Transition*> transitions = state->transitions();
   QVector<Transition*>::const_iterator it = transitions.constBegin();

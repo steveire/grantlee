@@ -28,7 +28,7 @@ namespace Grantlee
 
 struct CharTransitionInterface
 {
-  virtual bool characterTest( QChar )
+  virtual bool characterTest( QString::const_iterator )
   {
     return false;
   }
@@ -42,15 +42,15 @@ protected:
 class TextProcessingMachine : public StateMachine<CharTransitionInterface>
 {
 public:
-  void processCharacter( QChar character );
+  void processCharacter( QString::const_iterator character );
 protected:
-  bool doProcessCharacter( QChar character, State<CharTransitionInterface> *state );
+  bool doProcessCharacter( QString::const_iterator character, State<CharTransitionInterface> *state );
 };
 
 template<bool b>
 struct BooleanTest
 {
-  static bool characterTest( QChar ) { return b; }
+  static bool characterTest( QString::const_iterator ) { return b; }
 };
 
 typedef BooleanTest<false> FalseTest;
@@ -60,7 +60,7 @@ typedef BooleanTest<true> TrueTest;
 template<typename T, typename U>
 struct AndTest
 {
-  static bool characterTest( QChar ch )
+  static bool characterTest( QString::const_iterator ch )
   {
     return T::characterTest( ch ) && U::characterTest( ch );
   }
@@ -69,7 +69,7 @@ struct AndTest
 template<typename T, typename U>
 struct OrTest
 {
-  static bool characterTest( QChar ch )
+  static bool characterTest( QString::const_iterator ch )
   {
     return T::characterTest( ch ) || U::characterTest( ch );
   }
@@ -78,7 +78,7 @@ struct OrTest
 template<typename T>
 struct Negate
 {
-  static bool characterTest( QChar ch )
+  static bool characterTest( QString::const_iterator ch )
   {
     return !T::characterTest( ch );
   }
@@ -86,18 +86,18 @@ struct Negate
 
 struct IsSpace
 {
-  static bool characterTest( QChar ch )
+  static bool characterTest( QString::const_iterator ch )
   {
-    return ch.isSpace();
+    return ch->isSpace();
   }
 };
 
 template<char c>
 struct CharacterTest
 {
-  static bool characterTest( QChar ch )
+  static bool characterTest( QString::const_iterator ch )
   {
-    return ch == QLatin1Char( c );
+    return *ch == QLatin1Char( c );
   }
 };
 
