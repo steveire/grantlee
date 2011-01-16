@@ -220,6 +220,7 @@ void Lexer::clearMarkers()
 void Lexer::reset()
 {
   m_tokenList.clear();
+  m_lineCount = 0;
   m_upto = 0;
   m_processedUpto = 0;
   clearMarkers();
@@ -260,6 +261,7 @@ void Lexer::markEndSyntax()
 void Lexer::markNewline()
 {
   m_newlinePosition = m_upto;
+  ++m_lineCount;
 }
 
 void Lexer::finalizeToken()
@@ -292,6 +294,7 @@ void Lexer::finalizeToken( int nextPosition, bool processSyntax )
     Token token;
     token.content = m_templateString.mid( m_processedUpto, nextPosition - m_processedUpto );
     token.tokenType = TextToken;
+    token.linenumber = m_lineCount;
     m_tokenList.append( token );
   }
 
@@ -308,6 +311,7 @@ void Lexer::finalizeToken( int nextPosition, bool processSyntax )
 
   Token syntaxToken;
   syntaxToken.content = m_templateString.mid( m_startSyntaxPosition + 1, m_endSyntaxPosition - m_startSyntaxPosition - 3 ).trimmed();
+  syntaxToken.linenumber = m_lineCount;
 
   if ( differentiator == QLatin1Char( '{' ) ) {
     syntaxToken.tokenType = VariableToken;

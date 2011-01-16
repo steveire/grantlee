@@ -52,6 +52,7 @@ private:
   QString m_templateString;
 
   QList<Token> m_tokenList;
+  int m_lineCount;
   int m_upto;
   int m_processedUpto;
   int m_startSyntaxPosition;
