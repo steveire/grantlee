@@ -44,8 +44,6 @@ NodeList TemplatePrivate::compileString( const QString &str )
 TemplateImpl::TemplateImpl( Engine const *engine, QObject *parent )
     : QObject( parent ), d_ptr( new TemplatePrivate( engine, this ) )
 {
-  Q_D( Template );
-  d->m_settingsToken = reinterpret_cast<qint64>( this );
 }
 
 TemplateImpl::~TemplateImpl()
