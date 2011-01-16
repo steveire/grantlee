@@ -87,7 +87,7 @@ void addTransition( TextProcessingState *source, Lexer*lexer, TextProcessingStat
   tr->setTargetState( target );
 }
 
-TextProcessingMachine* createMachine( Lexer *lexer, bool trim = false )
+TextProcessingMachine* createMachine( Lexer *lexer, Lexer::TrimType type )
 {
   TextProcessingMachine *machine = new TextProcessingMachine;
 
@@ -106,18 +106,19 @@ TextProcessingMachine* createMachine( Lexer *lexer, bool trim = false )
   TextProcessingState *processingEndComment = new TextProcessingState( notFinished );
   TextProcessingState *processingEndValue = new TextProcessingState( notFinished );
   TextProcessingState *processingPostTemplateSyntax;
-  if ( trim )
+
+  if ( type == Lexer::SmartTrim )
     processingPostTemplateSyntax = new TextProcessingState( notFinished );
   else
     processingPostTemplateSyntax = new FinalizeTokenState( lexer, notFinished );
   TextProcessingState *processingPostTemplateSyntaxWhitespace = new TextProcessingState( notFinished );
 
-  if ( trim )
+  if ( type == Lexer::SmartTrim )
     notFinished->setInitialState( processingPostNewline );
   else
     notFinished->setInitialState( processingText );
 
-  if ( trim ) {
+  if ( type == Lexer::SmartTrim ) {
     addTransition<NewlineHandler>(               processingText, lexer, processingPostNewline );
 
     addTransition<NewlineHandler>(               processingPostNewline, lexer, processingPostNewline );
@@ -130,25 +131,25 @@ TextProcessingMachine* createMachine( Lexer *lexer, bool trim = false )
   addTransition<CommentStartHandler>(                processingBeginTemplateSyntax, lexer, processingComment );
   addTransition<BeginValueHandler>(             processingBeginTemplateSyntax, lexer, maybeProcessingValue );
 
-  if ( trim ) {
+  if ( type == Lexer::SmartTrim ) {
     addTransition<NotBeginTemplateSyntaxOrNewlineHandler>( processingBeginTemplateSyntax, lexer, processingText );
     addTransition<NewlineHandler>(                processingBeginTemplateSyntax, lexer, processingPostNewline );
   } else {
     addTransition<NotBeginTemplateSyntaxHandler>( processingBeginTemplateSyntax, lexer, processingText );
   }
 
-  addTransition<NewlineHandler>( processingTag, lexer, trim ? processingPostNewline : processingText );
+  addTransition<NewlineHandler>( processingTag, lexer, type == Lexer::SmartTrim ? processingPostNewline : processingText );
   addTransition<TagEndHandler>(     processingTag, lexer, processingEndTag );
 
-  addTransition<NewlineHandler>( processingComment, lexer, trim ? processingPostNewline : processingText );
+  addTransition<NewlineHandler>( processingComment, lexer, type == Lexer::SmartTrim ? processingPostNewline : processingText );
   addTransition<CommentEndHandler>( processingComment, lexer, processingEndComment );
 
   addTransition<TagStartHandler>(                    maybeProcessingValue, lexer, processingTag );
   addTransition<CommentStartHandler>(                maybeProcessingValue, lexer, processingComment );
   addTransition<NotTagCommentOrNewlineHandler>(       maybeProcessingValue, lexer, processingValue );
-  addTransition<NewlineHandler>(       maybeProcessingValue, lexer, trim ? processingPostNewline : processingText );
+  addTransition<NewlineHandler>(       maybeProcessingValue, lexer, type == Lexer::SmartTrim ? processingPostNewline : processingText );
 
-  addTransition<NewlineHandler>(       processingValue, lexer, trim ? processingPostNewline : processingText );
+  addTransition<NewlineHandler>(       processingValue, lexer, type == Lexer::SmartTrim ? processingPostNewline : processingText );
   addTransition<MaybeEndValueHandler>( processingValue, lexer, processingEndValue );
 
   addTransition<NewlineHandler>(              processingEndTag, lexer, processingPostNewline );
@@ -163,7 +164,7 @@ TextProcessingMachine* createMachine( Lexer *lexer, bool trim = false )
   addTransition<NotEndTemplateSyntaxHandler>( processingEndValue, lexer, processingValue );
   addTransition<EndTemplateSyntaxHandler>(    processingEndValue, lexer, processingPostTemplateSyntax );
 
-  if (!trim) {
+  if ( type != Lexer::SmartTrim ) {
     processingPostTemplateSyntax->setUnconditionalTransition( processingText );
   } else {
     addTransition<SyntaxBoundaryNewlineHandler>( processingPostTemplateSyntax, lexer, processingPostNewline );
@@ -185,7 +186,7 @@ TextProcessingMachine* createMachine( Lexer *lexer, bool trim = false )
     notFinished->setEndTransition( handler );
   }
 
-  if ( trim ) {
+  if ( type == Lexer::SmartTrim ) {
     {
       EofHandlerWithTrimming *handler = new EofHandlerWithTrimming( lexer, processingPostTemplateSyntaxWhitespace );
       handler->setTargetState( finished );
@@ -226,9 +227,9 @@ void Lexer::reset()
   clearMarkers();
 }
 
-QList<Token> Lexer::tokenize()
+QList<Token> Lexer::tokenize(TrimType type)
 {
-  TextProcessingMachine* machine = createMachine( this );
+  TextProcessingMachine* machine = createMachine( this, type );
 
   machine->start();
 

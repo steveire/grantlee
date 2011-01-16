@@ -246,6 +246,9 @@ private Q_SLOTS:
   void testGarbageInput_data();
   void testGarbageInput();
 
+  void testInsignificantWhitespace_data();
+  void testInsignificantWhitespace();
+
   void cleanupTestCase();
 
 private:
@@ -1271,6 +1274,260 @@ void TestBuiltinSyntax::testGarbageInput_data()
   QTest::newRow( "garbage-input83" ) << QString::fromLatin1( "%{ content }%" );
 }
 
+void TestBuiltinSyntax::testInsignificantWhitespace()
+{
+  QFETCH( QString, input );
+  QFETCH( Dict, dict );
+  QFETCH( QString, stripped_output );
+  QFETCH( QString, unstripped_output );
+
+  Context context( dict );
+
+  m_engine->setSmartTrimEnabled(true);
+
+  {
+    Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+
+    QString result = t->render( &context );
+
+    QCOMPARE( t->error(), NoError );
+
+    QCOMPARE( result, stripped_output );
+  }
+  m_engine->setSmartTrimEnabled(false);
+  {
+    Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+
+    QString result = t->render( &context );
+
+    QCOMPARE( t->error(), NoError );
+
+    QCOMPARE( result, unstripped_output );
+  }
+}
+
+void TestBuiltinSyntax::testInsignificantWhitespace_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "stripped_output" );
+  QTest::addColumn<QString>( "unstripped_output" );
+
+  Dict dict;
+
+  QTest::newRow( "insignificant-whitespace01" ) << QString::fromLatin1( "\n {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "{%\n" )
+                        << QString::fromLatin1( "\n {%\n" );
+
+  QTest::newRow( "insignificant-whitespace02" ) << QString::fromLatin1( "\n{% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "{%\n" )
+                        << QString::fromLatin1( "\n{%\n" );
+
+  QTest::newRow( "insignificant-whitespace03" ) << QString::fromLatin1( "{% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "{%\n" )
+                        << QString::fromLatin1( "{%\n" );
+
+  QTest::newRow( "insignificant-whitespace04" ) << QString::fromLatin1( "\n\t \t {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "{%\n" )
+                        << QString::fromLatin1( "\n\t \t {%\n" );
+
+  // Leading whitespace with text before single template tag
+  QTest::newRow( "insignificant-whitespace05" ) << QString::fromLatin1( "\n some\ttext {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "\n some\ttext {%\n" )
+                        << QString::fromLatin1( "\n some\ttext {%\n" );
+
+  // Leading line with text before single template tag
+  QTest::newRow( "insignificant-whitespace06" ) << QString::fromLatin1( "\n some\ttext\n {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "\n some\ttext{%\n" )
+                        << QString::fromLatin1( "\n some\ttext\n {%\n" );
+  QTest::newRow( "insignificant-whitespace07" ) << QString::fromLatin1( "\n some\ttext \n \t {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "\n some\ttext {%\n" )
+                        << QString::fromLatin1( "\n some\ttext \n \t {%\n" );
+
+  // whitespace leading /before/ the newline is not stripped.
+  QTest::newRow( "insignificant-whitespace08" ) << QString::fromLatin1( "\n some\ttext \t \n {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "\n some\ttext \t {%\n" )
+                        << QString::fromLatin1( "\n some\ttext \t \n {%\n" );
+
+  // Multiple text lines before tag
+  QTest::newRow( "insignificant-whitespace09" ) << QString::fromLatin1( "\n some\ntext \t \n {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "\n some\ntext \t {%\n" )
+                        << QString::fromLatin1( "\n some\ntext \t \n {%\n" );
+  QTest::newRow( "insignificant-whitespace10" ) << QString::fromLatin1( "\n some \t \n \t text \t \n {% templatetag openblock %}\n" ) << dict
+                        << QString::fromLatin1( "\n some \t \n \t text \t {%\n" )
+                        << QString::fromLatin1( "\n some \t \n \t text \t \n {%\n" );
+
+  // Leading whitespace before tag, some text after
+  QTest::newRow( "insignificant-whitespace11" ) << QString::fromLatin1( "\n   \t {% templatetag openblock %} some text\n" ) << dict
+                        << QString::fromLatin1( "\n   \t {% some text\n" )
+                        << QString::fromLatin1( "\n   \t {% some text\n" );
+
+  // Leading whitespace before tag, some text with trailing whitespace after
+  QTest::newRow( "insignificant-whitespace12" ) << QString::fromLatin1( "\n   \t {% templatetag openblock %} some text  \t \n" ) << dict
+                        << QString::fromLatin1( "\n   \t {% some text  \t \n" )
+                        << QString::fromLatin1( "\n   \t {% some text  \t \n" );
+
+  // Whitespace after tag is not removed
+  QTest::newRow( "insignificant-whitespace13" ) << QString::fromLatin1( "\n \t {% templatetag openblock %} \t \n \t some text  \t \n" ) << dict
+                        << QString::fromLatin1( "{% \t \n \t some text  \t \n" )
+                        << QString::fromLatin1( "\n \t {% \t \n \t some text  \t \n" );
+
+  // Multiple lines of leading whitespace. Only one leading newline is removed
+  QTest::newRow( "insignificant-whitespace14" ) << QString::fromLatin1( "\n\n\n{% templatetag openblock %}\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n{%\n some text\n" )
+                        << QString::fromLatin1( "\n\n\n{%\n some text\n" );
+
+  // Trailing whitespace after tag
+  QTest::newRow( "insignificant-whitespace15" ) << QString::fromLatin1( "\n\n\n{% templatetag openblock %}\t \t \t\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n{%\t \t \t\n some text\n" )
+                        << QString::fromLatin1( "\n\n\n{%\t \t \t\n some text\n" );
+
+  // Removable newline followed by leading whitespace
+  QTest::newRow( "insignificant-whitespace16" ) << QString::fromLatin1( "\n\n\n\t \t \t{% templatetag openblock %}\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n{%\n some text\n" )
+                        << QString::fromLatin1( "\n\n\n\t \t \t{%\n some text\n" );
+
+  // Removable leading whitespace and trailing whitespace
+  QTest::newRow( "insignificant-whitespace17" ) << QString::fromLatin1( "\n\n\n\t \t \t{% templatetag openblock %}\t \t \t\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n{%\t \t \t\n some text\n" )
+                        << QString::fromLatin1( "\n\n\n\t \t \t{%\t \t \t\n some text\n" );
+
+  // Multiple lines of trailing whitespace. No trailing newline is removed.
+  QTest::newRow( "insignificant-whitespace18" ) << QString::fromLatin1( "\n{% templatetag openblock %}\n\n\n some text\n" ) << dict
+                        << QString::fromLatin1( "{%\n\n\n some text\n" )
+                        << QString::fromLatin1( "\n{%\n\n\n some text\n" );
+  QTest::newRow( "insignificant-whitespace19" ) << QString::fromLatin1( "\n{% templatetag openblock %}\t \n\n\n some text\n" ) << dict
+                        << QString::fromLatin1( "{%\t \n\n\n some text\n" )
+                        << QString::fromLatin1( "\n{%\t \n\n\n some text\n" );
+
+  // Consecutive trimmed lines with tags strips one newline each
+  QTest::newRow( "insignificant-whitespace20" )
+      << QString::fromLatin1( "\n{% templatetag openblock %}\n{% templatetag openblock %}\n{% templatetag openblock %}\n some text\n" ) << dict
+                        << QString::fromLatin1( "{%{%{%\n some text\n" )
+                        << QString::fromLatin1( "\n{%\n{%\n{%\n some text\n" );
+
+  // Consecutive trimmed lines with tags strips one newline each. Intermediate newlines are preserved
+  QTest::newRow( "insignificant-whitespace21" )
+      << QString::fromLatin1( "\n\n{% templatetag openblock %}\n\n{% templatetag openblock %}\n\n{% templatetag openblock %}\n\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n{%\n{%\n{%\n\n some text\n" )
+                        << QString::fromLatin1( "\n\n{%\n\n{%\n\n{%\n\n some text\n" );
+
+  // Consecutive trimmed lines with tags strips one newline each. Leading whitespace is stripped but trailing is not
+  QTest::newRow( "insignificant-whitespace22" )
+      << QString::fromLatin1( "\n\n\t {% templatetag openblock %}\t \n\n\t {% templatetag openblock %}\t \n\n\t {% templatetag openblock %}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n{%\t \n{%\t \n{%\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n\t {%\t \n\n\t {%\t \n\n\t {%\t \n some text\n" );
+
+  // Consecutive trimmed lines with tags strips one newline each. Intermediate whitespace is stripped
+  QTest::newRow( "insignificant-whitespace23" )
+      << QString::fromLatin1( "\n\t {% templatetag openblock %}\t \n\t {% templatetag openblock %}\t \n\t {% templatetag openblock %}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "{%\t {%\t {%\t \n some text\n" )
+                        << QString::fromLatin1( "\n\t {%\t \n\t {%\t \n\t {%\t \n some text\n" );
+
+  // Intermediate whitespace on one line is preserved
+  // Consecutive tags on one line do not have intermediate whitespace or leading whitespace stripped
+  QTest::newRow( "insignificant-whitespace24" )
+      << QString::fromLatin1( "\n\t {% templatetag openblock %}\t \t {% templatetag openblock %}\t \t {% templatetag openblock %}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\t {%\t \t {%\t \t {%\t \n some text\n" )
+                        << QString::fromLatin1( "\n\t {%\t \t {%\t \t {%\t \n some text\n" );
+
+  // Still, only one leading newline is removed.
+  QTest::newRow( "insignificant-whitespace25" )
+      << QString::fromLatin1( "\n\n {% templatetag openblock %}\n \t {% templatetag openblock %}\n \t {% templatetag openblock %}\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n{%{%{%\n some text\n" )
+                        << QString::fromLatin1( "\n\n {%\n \t {%\n \t {%\n some text\n" );
+
+  // Lines with {# comments #} have the same stripping behavior
+  QTest::newRow( "insignificant-whitespace26" )
+      << QString::fromLatin1( "\n\n {% templatetag openblock %}\n \t {# some comment #}\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n{%\n some text\n" )
+                        << QString::fromLatin1( "\n\n {%\n \t \n some text\n" );
+
+  // Only {# comments #}
+  QTest::newRow( "insignificant-whitespace27" )
+      << QString::fromLatin1( "\n\n {# a comment #}\n \t {# some comment #}\n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n some text\n" )
+                        << QString::fromLatin1( "\n\n \n \t \n some text\n" );
+
+  // Consecutive newlines with tags and comments
+  QTest::newRow( "insignificant-whitespace28" )
+      << QString::fromLatin1( "\n\t {% templatetag openblock %}\t \n\t {# some comment #}\t \n\t {% templatetag openblock %}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "{%\t \t {%\t \n some text\n" )
+                        << QString::fromLatin1( "\n\t {%\t \n\t \t \n\t {%\t \n some text\n" );
+
+  dict.insert( QLatin1String( "spam" ), QLatin1String( "ham" ) );
+  // Lines with only {{ values }} have the same stripping behavior
+  QTest::newRow( "insignificant-whitespace29" )
+      << QString::fromLatin1( "\n {% templatetag openblock %}\t\n \t {{ spam }}\t \n \t {% templatetag openblock %}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "{%\tham\t {%\t \n some text\n" )
+                        << QString::fromLatin1( "\n {%\t\n \t ham\t \n \t {%\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace30" )
+      << QString::fromLatin1( "\n\n {% templatetag openblock %}\t\n\n \t {{ spam }}\t \n\n \t {% templatetag openblock %}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n{%\t\nham\t \n{%\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {%\t\n\n \t ham\t \n\n \t {%\t \n some text\n" );
+
+  // Leading whitespace not stripped when followed by anything. See templatetag-whitespace24
+  QTest::newRow( "insignificant-whitespace31" )
+      << QString::fromLatin1( "\n {% templatetag openblock %}\t \t {{ spam }}\t \t {% templatetag openblock %}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n {%\t \t ham\t \t {%\t \n some text\n" )
+                        << QString::fromLatin1( "\n {%\t \t ham\t \t {%\t \n some text\n" );
+
+  // {{ value }} {% tag %} {{ value }} this time
+  QTest::newRow( "insignificant-whitespace32" )
+      << QString::fromLatin1( "\n {{ spam }}\t\n \t {% templatetag openblock %}\t \n \t {{ spam }}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "ham\t{%\t ham\t \n some text\n" )
+                        << QString::fromLatin1( "\n ham\t\n \t {%\t \n \t ham\t \n some text\n" );
+
+  // Invalid stuff is still invalid
+  // Newlines inside begin-end tokens, even in {# comments #}, make it not a tag.
+  QTest::newRow( "insignificant-whitespace33" )
+      << QString::fromLatin1( "\n\n {# \n{% templatetag openblock #}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {# \n{% templatetag openblock #}\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {# \n{% templatetag openblock #}\t \n some text\n" );
+
+  // Complete comment matching tags on one line are processed
+  QTest::newRow( "insignificant-whitespace34" )
+      << QString::fromLatin1( "\n\n {# \n{# templatetag openblock #}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {# \t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {# \n\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace35" )
+      << QString::fromLatin1( "\n\n {# \n{# templatetag openblock\n #}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {# \n{# templatetag openblock\n #}\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {# \n{# templatetag openblock\n #}\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace36" )
+      << QString::fromLatin1( "\n\n {# \n{{ some comment #}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {# \n{{ some comment #}\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {# \n{{ some comment #}\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace37" )
+      << QString::fromLatin1( "\n\n {# \n \t {% templatetag openblock #}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {# \n \t {% templatetag openblock #}\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {# \n \t {% templatetag openblock #}\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace38" )
+      << QString::fromLatin1( "\n\n {# templatetag openblock #\n}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {# templatetag openblock #\n}\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {# templatetag openblock #\n}\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace39" )
+      << QString::fromLatin1( "\n\n {% templatetag openblock %\n}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {% templatetag openblock %\n}\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {% templatetag openblock %\n}\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace40" )
+      << QString::fromLatin1( "\n\n {{ templatetag openblock }\n}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {{ templatetag openblock }\n}\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {{ templatetag openblock }\n}\t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace41" )
+      << QString::fromLatin1( "\n\n {\n# {# templatetag openblock #}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {\n# \t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {\n# \t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace42" )
+      << QString::fromLatin1( "\n\n {\n {# templatetag openblock #}\t \n some text\n" ) << dict
+                        << QString::fromLatin1( "\n\n {\t \n some text\n" )
+                        << QString::fromLatin1( "\n\n {\n \t \n some text\n" );
+  QTest::newRow( "insignificant-whitespace43" )
+      << QString::fromLatin1("\n{{# foo #};{# bar #}\n" ) << dict
+                        << QString::fromLatin1("\n{;\n")
+                        << QString::fromLatin1("\n{;\n");
+
+}
 
 QTEST_MAIN( TestBuiltinSyntax )
 #include "testbuiltins.moc"

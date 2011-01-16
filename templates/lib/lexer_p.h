@@ -35,7 +35,12 @@ public:
   Lexer( const QString &templateString );
   ~Lexer();
 
-  QList<Token> tokenize();
+  enum TrimType {
+    NoSmartTrim,
+    SmartTrim
+  };
+
+  QList<Token> tokenize( TrimType type = NoSmartTrim );
 
   void markStartSyntax();
   void markEndSyntax();

@@ -133,6 +133,7 @@ public:
 #ifndef Q_QDOC
 protected:
   TemplateImpl( Engine const *engine, QObject *parent = 0 );
+  TemplateImpl( Engine const *engine, bool smartTrim, QObject *parent = 0 );
 
   void setContent( const QString &templateString );
 #endif

@@ -154,6 +154,9 @@ public:
   */
   void removeDefaultLibrary( const QString &libName );
 
+  bool smartTrimEnabled() const;
+  void setSmartTrimEnabled( bool enabled );
+
 #ifndef Q_QDOC
   /**
     @internal

@@ -94,6 +94,7 @@ class EnginePrivate
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
   ScriptableTagLibrary *m_scriptableTagLibrary;
+  bool m_smartTrimEnabled;
 };
 
 }

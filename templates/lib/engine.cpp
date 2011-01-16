@@ -217,7 +217,7 @@ TagLibraryInterface* EnginePrivate::loadLibrary( const QString &name, uint minor
 }
 
 EnginePrivate::EnginePrivate( Engine *engine )
-  : q_ptr( engine ), m_scriptableTagLibrary( 0 )
+  : q_ptr( engine ), m_scriptableTagLibrary( 0 ), m_smartTrimEnabled( false )
 {
 }
 
@@ -348,11 +348,23 @@ Template Engine::loadByName( const QString &name ) const
 
 Template Engine::newTemplate( const QString &content, const QString &name ) const
 {
-  Template t = Template( new TemplateImpl( this ) );
+  Q_D( const Engine );
+  Template t = Template( new TemplateImpl( this, d->m_smartTrimEnabled ) );
   t->setObjectName( name );
   t->setContent( content );
   return t;
 }
 
-#include "engine.moc"
+void Engine::setSmartTrimEnabled( bool enabled )
+{
+  Q_D( Engine );
+  d->m_smartTrimEnabled = enabled;
+}
 
+bool Engine::smartTrimEnabled() const
+{
+  Q_D( const Engine );
+  return d->m_smartTrimEnabled;
+}
+
+#include "engine.moc"

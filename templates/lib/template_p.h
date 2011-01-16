@@ -35,8 +35,8 @@ class Engine;
 
 class TemplatePrivate
 {
-  TemplatePrivate( Engine const *engine, TemplateImpl *t )
-      : q_ptr( t ), m_error( NoError )
+  TemplatePrivate( Engine const *engine, bool smartTrim, TemplateImpl *t )
+      : q_ptr( t ), m_error( NoError ), m_smartTrim( smartTrim )
 #if QT_VERSION >= 0x040600
       , m_engine( engine )
 #endif
@@ -56,6 +56,7 @@ class TemplatePrivate
   Error m_error;
   QString m_errorString;
   NodeList m_nodeList;
+  bool m_smartTrim;
 #if QT_VERSION < 0x040600
   QPointer<Engine> m_engine;
 #else
