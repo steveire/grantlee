@@ -316,7 +316,13 @@ void TestInternationalization::testLocalizedTemplate_data()
 
   QTest::newRow("fragment-03")
     << QString::fromLatin1("{{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}")
-    << QString::fromLatin1("1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005")
+    << QString::fromLatin1("1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                          " 04:05:06 2005")
     << QString::fromLatin1("1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06")
     << QString::fromLatin1("1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM")
     << QString::fromLatin1("1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05")
@@ -333,9 +339,27 @@ void TestInternationalization::testLocalizedTemplate_data()
       "{% with_locale 'fr_FR' %}"
         "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
       "{% endwith_locale %}")
-    << QString::fromLatin1("Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
-                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
-                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005")
+    << QString::fromLatin1("Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                " 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                " 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                " 04:05:06 2005")
     << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
@@ -363,10 +387,34 @@ void TestInternationalization::testLocalizedTemplate_data()
         "{% endwith_locale %}"
         "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
       "{% endwith_locale %}")
-    << QString::fromLatin1("Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
-                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
-                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005"
-                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- Sat May 7 04:05:06 2005")
+    << QString::fromLatin1("Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                " 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                " 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                " 04:05:06 2005"
+                           "Today -- 1000 -- Sat May 7 2005 -- 0.6 -- 4.8 -- 04:05:06 -- "
+#ifdef Q_OS_WIN
+                                                                                "Sat 7. May"
+#else
+                                                                                "Sat May 7"
+#endif
+                                                                                " 04:05:06 2005")
     << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
@@ -841,7 +889,13 @@ void TestInternationalization::testDateTimes_data()
 
   QTest::newRow("datetime-01")
     << QDateTime(QDate(2005, 6, 7), QTime(5, 6, 7))
-    << QString::fromLatin1("Tue Jun 7 05:06:07 2005")
+    << QString::fromLatin1(
+#ifdef Q_OS_WIN
+           "Tue 7. Jun 05:06:07 2005"
+#else
+           "Tue Jun 7 05:06:07 2005"
+#endif
+            )
     << QString::fromLatin1("7 Jun 2005 05:06:07")
     << QString::fromLatin1("6/7/05 5:06 AM")
     << QString::fromLatin1("07/06/2005 05:06")
@@ -850,7 +904,13 @@ void TestInternationalization::testDateTimes_data()
 
   QTest::newRow("datetime-02")
     << QDateTime(QDate(2005, 6, 7), QTime(11, 12, 13))
-    << QString::fromLatin1("Tue Jun 7 11:12:13 2005")
+    << QString::fromLatin1(
+#ifdef Q_OS_WIN
+            "Tue 7. Jun 11:12:13 2005"
+#else
+            "Tue Jun 7 11:12:13 2005"
+#endif
+            )
     << QString::fromLatin1("7 Jun 2005 11:12:13")
     << QString::fromLatin1("6/7/05 11:12 AM")
     << QString::fromLatin1("07/06/2005 11:12")
@@ -859,7 +919,13 @@ void TestInternationalization::testDateTimes_data()
 
   QTest::newRow("datetime-03")
     << QDateTime(QDate(2005, 6, 7), QTime(15, 12, 13))
-    << QString::fromLatin1("Tue Jun 7 15:12:13 2005")
+    << QString::fromLatin1(
+#ifdef Q_OS_WIN
+            "Tue 7. Jun 15:12:13 2005"
+#else
+            "Tue Jun 7 15:12:13 2005"
+#endif
+            )
     << QString::fromLatin1("7 Jun 2005 15:12:13")
     << QString::fromLatin1("6/7/05 3:12 PM")
     << QString::fromLatin1("07/06/2005 15:12")
@@ -868,7 +934,13 @@ void TestInternationalization::testDateTimes_data()
 
   QTest::newRow("datetime-04")
     << QDateTime(QDate(2005, 10, 11), QTime(5, 6, 7))
-    << QString::fromLatin1("Tue Oct 11 05:06:07 2005")
+    << QString::fromLatin1(
+#ifdef Q_OS_WIN
+            "Tue 11. Oct 05:06:07 2005"
+#else
+            "Tue Oct 11 05:06:07 2005"
+#endif
+            )
     << QString::fromLatin1("11 Oct 2005 05:06:07")
     << QString::fromLatin1("10/11/05 5:06 AM")
     << QString::fromLatin1("11/10/2005 05:06")
@@ -877,7 +949,13 @@ void TestInternationalization::testDateTimes_data()
 
   QTest::newRow("datetime-05")
     << QDateTime(QDate(2005, 10, 11), QTime(11, 12, 13))
-    << QString::fromLatin1("Tue Oct 11 11:12:13 2005")
+    << QString::fromLatin1(
+#ifdef Q_OS_WIN
+            "Tue 11. Oct 11:12:13 2005"
+#else
+            "Tue Oct 11 11:12:13 2005"
+#endif
+            )
     << QString::fromLatin1("11 Oct 2005 11:12:13")
     << QString::fromLatin1("10/11/05 11:12 AM")
     << QString::fromLatin1("11/10/2005 11:12")
@@ -886,7 +964,13 @@ void TestInternationalization::testDateTimes_data()
 
   QTest::newRow("datetime-06")
     << QDateTime(QDate(2005, 10, 11), QTime(15, 12, 13))
-    << QString::fromLatin1("Tue Oct 11 15:12:13 2005")
+    << QString::fromLatin1(
+#ifdef Q_OS_WIN
+            "Tue 11. Oct 15:12:13 2005"
+#else
+            "Tue Oct 11 15:12:13 2005"
+#endif
+            )
     << QString::fromLatin1("11 Oct 2005 15:12:13")
     << QString::fromLatin1("10/11/05 3:12 PM")
     << QString::fromLatin1("11/10/2005 15:12")
