@@ -80,6 +80,7 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags flags)
   m_engine = new Grantlee::Engine(this);
   m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH << ":/plugins" );
   m_engine->addDefaultLibrary( "grantlee_scriptabletags" );
+  m_engine->setSmartTrimEnabled(true);
 
   m_loader = Grantlee::FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader );
   m_loader->setTemplateDirs( QStringList() << ":/templates" );
