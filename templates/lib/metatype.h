@@ -333,10 +333,20 @@ Q_GLOBAL_STATIC( BuiltinRegister, builtinRegister )
 
 }
 
+struct MetaTypeInitializer {
+  static inline int initialize()
+  {
+      static const BuiltinRegister *br = builtinRegister();
+      br->registerBuiltinContainers();
+      return 0;
+  }
+};
+
+#define GRANTLEE_METATYPE_INITIALIZE static const int i = Grantlee::MetaTypeInitializer::initialize(); Q_UNUSED(i)
+
 inline int MetaType::init()
 {
-  static const BuiltinRegister *br = builtinRegister();
-  br->registerBuiltinContainers();
+  GRANTLEE_METATYPE_INITIALIZE
   return 0;
 }
 
@@ -379,7 +389,7 @@ template<typename RealType, typename HandleAs>
 int registerMetaType()
 {
   {
-    static const int i = MetaType::initBuiltins();
+    GRANTLEE_METATYPE_INITIALIZE
     Q_UNUSED( i )
   }
   MetaType::internalLock();
