@@ -112,7 +112,7 @@ public:
   /**
     Initializes the MetaType system with built in types and containers.
    */
-  static int init();
+  static inline int init();
 
 #ifndef Q_QDOC
   /**
