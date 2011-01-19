@@ -16,11 +16,6 @@ configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_
 remove_definitions(-DQT_NO_CAST_TO_ASCII)
 remove_definitions(-DQT_NO_CAST_FROM_ASCII)
 
-set( grantlee_core_private_SRCS
-  lexer.cpp
-  nulllocalizer.cpp
-)
-
 set (grantlee_core_SRCS
   abstractlocalizer.cpp
   cachingloaderdecorator.cpp
@@ -28,9 +23,11 @@ set (grantlee_core_SRCS
   context.cpp
   engine.cpp
   filterexpression.cpp
+  lexer.cpp
   metatype.cpp
   node.cpp
   nodebuiltins.cpp
+  nulllocalizer.cpp
   outputstream.cpp
   parser.cpp
   qtlocalizer.cpp
@@ -63,11 +60,7 @@ set(Grantlee_CORE_LIB_SOVERSION 0)
 
 set(moc_SRCS ${grantlee_core_SRCS} ${scriptabletags_SRCS})
 
-qt4_automoc( moc_SRCS_OUPTUT ${moc_SRCS})
-
-add_library(grantlee_core_private
-  ${grantlee_core_private_SRCS}
-)
+qt4_automoc(${moc_SRCS})
 
 add_library(grantlee_core SHARED
   ${grantlee_core_SRCS}
@@ -75,7 +68,6 @@ add_library(grantlee_core SHARED
 )
 
 target_link_libraries(grantlee_core
-  grantlee_core_private
   ${QT_QTCORE_LIBRARY}
   ${QT_QTSCRIPT_LIBRARY}
 )

@@ -47,9 +47,11 @@ macro(GRANTLEE_CORE_UNIT_TESTS)
     add_executable(${_testname}_exec
                   ${_testSrcs}
                   ${moc_output_file}
-                  ${_testresource_rcc_src} )
+                  ${_testresource_rcc_src}
+                  ${PROJECT_SOURCE_DIR}/../lib/lexer.cpp
+                  ${PROJECT_SOURCE_DIR}/../lib/nulllocalizer.cpp )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${Grantlee_CORE_LIBRARIES} grantlee_core_private )
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${Grantlee_CORE_LIBRARIES} )
   endforeach(_testname)
 endmacro(GRANTLEE_CORE_UNIT_TESTS)
 
