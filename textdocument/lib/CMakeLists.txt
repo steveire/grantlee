@@ -1,4 +1,4 @@
-project(grantlee_gui)
+project(grantlee_textdocument)
 
 include_directories(
   ${QT_INCLUDES}
@@ -7,7 +7,7 @@ include_directories(
 
 include(${QT_USE_FILE})
 
-set (grantlee_gui_SRCS
+set (grantlee_textdocument_SRCS
   bbcodebuilder.cpp
   markupdirector.cpp
   plaintextmarkupbuilder.cpp
@@ -15,12 +15,12 @@ set (grantlee_gui_SRCS
   mediawikimarkupbuilder.cpp
 )
 
-set(Grantlee_GUI_LIB_SOVERSION 0)
+set(Grantlee_TEXTDOCUMENT_LIB_SOVERSION 0)
 
-qt4_automoc(${grantlee_gui_SRCS})
+qt4_automoc(${grantlee_textdocument_SRCS})
 
 add_library(grantlee_gui SHARED
-  ${grantlee_gui_SRCS}
+  ${grantlee_textdocument_SRCS}
 )
 
 target_link_libraries(grantlee_gui
@@ -30,8 +30,8 @@ target_link_libraries(grantlee_gui
 
 set_target_properties(grantlee_gui PROPERTIES
   VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
-  SOVERSION  ${Grantlee_GUI_LIB_SOVERSION}
-  DEFINE_SYMBOL GRANTLEE_GUI_LIB_MAKEDLL
+  SOVERSION  ${Grantlee_TEXTDOCUMENT_LIB_SOVERSION}
+  DEFINE_SYMBOL GRANTLEE_TEXTDOCUMENT_LIB_MAKEDLL
 )
 
 install(TARGETS grantlee_gui

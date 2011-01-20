@@ -40,10 +40,11 @@ target_link_libraries(
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${PROJECT_SOURCE_DIR}/../../scripts" "${PROJECT_SOURCE_DIR}/scripts")
 
-set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_linguist.py" "${CMAKE_BINARY_DIR}/output.cpp"
+set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_linguist.py"
   "${CMAKE_SOURCE_DIR}/themes/linguist/bashful/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sneezy/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sleepy/*.html"
+  "> ${CMAKE_BINARY_DIR}/output.cpp"
   COMMAND "${QT_LUPDATE_EXECUTABLE}" "${CMAKE_BINARY_DIR}/output.cpp" "-ts" )
 
 set (CONTACTS_LOCALES "fr_FR" "de_DE" )
@@ -92,10 +93,11 @@ if (KDE4_FOUND)
     ${Grantlee_CORE_LIBRARIES}
   )
 
-  set( GETTEXT_PO_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_gettext.py" "${CMAKE_BINARY_DIR}/output.cpp"
+  set( GETTEXT_PO_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_gettext.py"
     "${CMAKE_SOURCE_DIR}/themes/gettext/bashful/*.html"
     "${CMAKE_SOURCE_DIR}/themes/gettext/sneezy/*.html"
     "${CMAKE_SOURCE_DIR}/themes/gettext/sleepy/*.html"
+    "> ${CMAKE_BINARY_DIR}/output.cpp"
                         COMMAND "${GETTEXT_XGETTEXT_EXECUTABLE}" "${CMAKE_BINARY_DIR}/output.cpp" "-o" ${CMAKE_SOURCE_DIR}/contacts.pot )
 
   foreach(CONTACT_LOCALE ${CONTACTS_LOCALES})

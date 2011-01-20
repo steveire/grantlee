@@ -39,7 +39,7 @@ configure_file(testresource.qrc.cmake "${PROJECT_BINARY_DIR}/testresource.qrc")
 set (_rcc_file "${PROJECT_BINARY_DIR}/testresource.qrc")
 qt4_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
 
-macro(GRANTLEE_CORE_UNIT_TESTS)
+macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
   foreach(_testname ${ARGN})
     set(_testSrcs ${_testname}.cpp)
     set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
@@ -51,11 +51,11 @@ macro(GRANTLEE_CORE_UNIT_TESTS)
                   ${PROJECT_SOURCE_DIR}/../lib/lexer.cpp
                   ${PROJECT_SOURCE_DIR}/../lib/nulllocalizer.cpp )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${Grantlee_CORE_LIBRARIES} )
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${Grantlee_TEMPLATES_LIBRARIES} )
   endforeach(_testname)
-endmacro(GRANTLEE_CORE_UNIT_TESTS)
+endmacro(GRANTLEE_TEMPLATES_UNIT_TESTS)
 
-grantlee_core_unit_tests(
+grantlee_templates_unit_tests(
   testsafestring
   testbuiltins
   testloadertags
