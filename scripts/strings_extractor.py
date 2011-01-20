@@ -281,7 +281,11 @@ class TranslationOutputter:
               token.get_plain_strings()
           if token.token_type == TOKEN_BLOCK:
               token.get_contextual_strings()
+      global context_strings
+      global plain_strings
       self.createOutput(plain_strings, context_strings, outputfile)
+      context_strings = []
+      plain_strings = []
 
   def createOutput(self, plain_strings, context_strings, outputfile):
     pass
