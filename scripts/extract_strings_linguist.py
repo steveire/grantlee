@@ -32,17 +32,15 @@ import os, sys, glob, operator
 if __name__ == "__main__":
   ex = LinguistExtractStrings()
 
-  outputfile = open(sys.argv[1], "w")
+  outputfile = sys.stdout
 
-  files = reduce(operator.add, map(glob.glob, sys.argv[2:]))
+  files = reduce(operator.add, map(glob.glob, sys.argv[1:]))
 
   for filename in files:
     f = open(filename, "r")
-    stri = f.read()
-    ex.translate(stri, outputfile)
+    ex.translate(f, outputfile)
 
   outputfile.write("\n")
-  outputfile.close()
 
 
 

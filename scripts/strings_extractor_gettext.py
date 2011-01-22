@@ -29,11 +29,9 @@
 from strings_extractor import TranslationOutputter
 
 class GettextExtractStrings(TranslationOutputter):
-  def createOutput(self, plain_strings, context_strings, outputfile):
-
-    for plain_string in plain_strings:
-      outputfile.write("gettext(\"" + plain_string + "\");\n")
+  def createOutput(self, template_filename, context_strings, outputfile):
     for context_string in context_strings:
+      outputfile.write("// i18n: file: " + template_filename + "\n")
       if context_string.context:
         if not context_string.plural:
           outputfile.write("pgettext(\"" + context_string.context + "\", \"" + context_string._string + "\");\n")
