@@ -202,9 +202,9 @@ class TemplateSyntaxError(Exception):
     pass
 
 plain_strings = []
-context_strings = []
+translatable_strings = []
 
-class ContextString:
+class TranslatableString:
     _string = ''
     context = ''
     plural = ''
@@ -227,9 +227,9 @@ def get_translatable_filter_args(token):
             # Make sure it's a quoted string
             if l10nable.startswith('"') and l10nable.endswith('"') \
                     or l10nable.startswith("'") and l10nable.endswith("'"):
-                ts = ContextString()
+                ts = TranslatableString()
                 ts._string = l10nable[1:-1]
-                context_strings.append(ts)
+                translatable_strings.append(ts)
 
 class Token(object):
     def __init__(self, token_type, contents):
@@ -256,9 +256,9 @@ class Token(object):
             if not _bit.endswith(sentinal):
                 return
 
-            context_string = ContextString()
-            context_string._string = _bit[1:-1]
-            context_strings.append(context_string)
+            translatable_string = TranslatableString()
+            translatable_string._string = _bit[1:-1]
+            translatable_strings.append(translatable_string)
         elif _bit =="i18nc" or _bit == "i18nc_var":
             # {% i18nc "An email send operation failed." "%1 Failed!" var1 %}
             # {% i18nc_var "An email send operation failed." "%1 Failed!" var1 as result %}
@@ -270,11 +270,11 @@ class Token(object):
             if not _bit.endswith(sentinal):
                 return
 
-            context_string = ContextString()
-            context_string.context = _bit[1:-1]
+            translatable_string = TranslatableString()
+            translatable_string.context = _bit[1:-1]
             _bit = _bits.next()
-            context_string._string = _bit[1:-1]
-            context_strings.append(context_string)
+            translatable_string._string = _bit[1:-1]
+            translatable_strings.append(translatable_string)
         elif _bit =="i18np" or _bit =="i18np_var":
             # {% i18np "An email send operation failed." "%1 email send operations failed. Error : % 2." count count errorMsg %}
             # {% i18np_var "An email send operation failed." "%1 email send operations failed. Error : % 2." count count errorMsg as result %}
@@ -286,11 +286,11 @@ class Token(object):
             if not _bit.endswith(sentinal):
                 return
 
-            context_string = ContextString()
-            context_string._string = _bit[1:-1]
+            translatable_string = TranslatableString()
+            translatable_string._string = _bit[1:-1]
             _bit = _bits.next()
-            context_string.plural = _bit[1:-1]
-            context_strings.append(context_string)
+            translatable_string.plural = _bit[1:-1]
+            translatable_strings.append(translatable_string)
         elif _bit =="i18ncp" or _bit =="i18ncp_var":
             # {% i18np "The user tried to send an email, but that failed." "An email send operation failed." "%1 email send operation failed." count count %}
             # {% i18np_var "The user tried to send an email, but that failed." "An email send operation failed." "%1 email send operation failed." count count as result %}
@@ -303,13 +303,13 @@ class Token(object):
             if not _bit.endswith(sentinal):
                 return
 
-            context_string = ContextString()
-            context_string.context = _bit[1:-1]
+            translatable_string = TranslatableString()
+            translatable_string.context = _bit[1:-1]
             _bit = _bits.next()
-            context_string._string = _bit[1:-1]
+            translatable_string._string = _bit[1:-1]
             _bit = _bits.next()
-            context_string.plural = _bit[1:-1]
-            context_strings.append(context_string)
+            translatable_string.plural = _bit[1:-1]
+            translatable_strings.append(translatable_string)
         else:
           return
 
@@ -363,9 +363,9 @@ class TranslationOutputter:
               token.get_plain_strings()
           if token.token_type == TOKEN_BLOCK:
               token.get_contextual_strings()
-      global context_strings
-      self.createOutput(os.path.relpath(template_file.name), context_strings, outputfile)
-      context_strings = []
+      global translatable_strings
+      self.createOutput(os.path.relpath(template_file.name), translatable_strings, outputfile)
+      translatable_strings = []
 
-  def createOutput(self, template_filename, context_strings, outputfile):
+  def createOutput(self, template_filename, translatable_strings, outputfile):
     pass
