@@ -201,9 +201,6 @@ filter_re = re.compile(filter_raw_string, re.UNICODE|re.VERBOSE)
 class TemplateSyntaxError(Exception):
     pass
 
-plain_strings = []
-translatable_strings = []
-
 class TranslatableString:
     _string = ''
     context = ''
@@ -211,25 +208,6 @@ class TranslatableString:
 
     def __repr__(self):
         return "String('%s', '%s', '%s')" % (self._string, self.context, self.plural)
-
-
-def get_translatable_filter_args(token):
-    """
-    Find the filter expressions in token and extract the strings in it.
-    """
-    matches = filter_re.finditer(token)
-    upto = 0
-    var_obj = False
-    for match in matches:
-        l10nable = match.group("l10nable")
-
-        if l10nable:
-            # Make sure it's a quoted string
-            if l10nable.startswith('"') and l10nable.endswith('"') \
-                    or l10nable.startswith("'") and l10nable.endswith("'"):
-                ts = TranslatableString()
-                ts._string = l10nable[1:-1]
-                translatable_strings.append(ts)
 
 class Token(object):
     def __init__(self, token_type, contents):
@@ -240,92 +218,6 @@ class Token(object):
         return '<%s token: "%s...">' % \
             ({TOKEN_TEXT: 'Text', TOKEN_VAR: 'Var', TOKEN_BLOCK: 'Block', TOKEN_COMMENT: 'Comment'}[self.token_type],
             self.contents[:20].replace('\n', ''))
-
-    def get_contextual_strings(self):
-        split = []
-        _bits = smart_split(self.contents)
-        _bit = _bits.next()
-        if _bit =="i18n" or _bit == "i18n_var":
-            # {% i18n "A one %1, a two %2, a three %3" var1 var2 var3 %}
-            # {% i18n_var "A one %1, a two %2, a three %3" var1 var2 var3 as result %}
-            _bit = _bits.next()
-            if not _bit.startswith("'") and not _bit.startswith('"'):
-                return
-
-            sentinal = _bit[0]
-            if not _bit.endswith(sentinal):
-                return
-
-            translatable_string = TranslatableString()
-            translatable_string._string = _bit[1:-1]
-            translatable_strings.append(translatable_string)
-        elif _bit =="i18nc" or _bit == "i18nc_var":
-            # {% i18nc "An email send operation failed." "%1 Failed!" var1 %}
-            # {% i18nc_var "An email send operation failed." "%1 Failed!" var1 as result %}
-            _bit = _bits.next()
-            if not _bit.startswith("'") and not _bit.startswith('"'):
-                return
-
-            sentinal = _bit[0]
-            if not _bit.endswith(sentinal):
-                return
-
-            translatable_string = TranslatableString()
-            translatable_string.context = _bit[1:-1]
-            _bit = _bits.next()
-            translatable_string._string = _bit[1:-1]
-            translatable_strings.append(translatable_string)
-        elif _bit =="i18np" or _bit =="i18np_var":
-            # {% i18np "An email send operation failed." "%1 email send operations failed. Error : % 2." count count errorMsg %}
-            # {% i18np_var "An email send operation failed." "%1 email send operations failed. Error : % 2." count count errorMsg as result %}
-            _bit = _bits.next()
-            if not _bit.startswith("'") and not _bit.startswith('"'):
-                return
-
-            sentinal = _bit[0]
-            if not _bit.endswith(sentinal):
-                return
-
-            translatable_string = TranslatableString()
-            translatable_string._string = _bit[1:-1]
-            _bit = _bits.next()
-            translatable_string.plural = _bit[1:-1]
-            translatable_strings.append(translatable_string)
-        elif _bit =="i18ncp" or _bit =="i18ncp_var":
-            # {% i18np "The user tried to send an email, but that failed." "An email send operation failed." "%1 email send operation failed." count count %}
-            # {% i18np_var "The user tried to send an email, but that failed." "An email send operation failed." "%1 email send operation failed." count count as result %}
-
-            _bit = _bits.next()
-            if not _bit.startswith("'") and not _bit.startswith('"'):
-                return
-
-            sentinal = _bit[0]
-            if not _bit.endswith(sentinal):
-                return
-
-            translatable_string = TranslatableString()
-            translatable_string.context = _bit[1:-1]
-            _bit = _bits.next()
-            translatable_string._string = _bit[1:-1]
-            _bit = _bits.next()
-            translatable_string.plural = _bit[1:-1]
-            translatable_strings.append(translatable_string)
-        else:
-          return
-
-        for _bit in _bits:
-
-            if (_bit == "as"):
-                return
-            get_translatable_filter_args(_bit)
-
-
-
-    def get_plain_strings(self):
-        split = []
-        bits = iter(smart_split(self.contents))
-        for bit in bits:
-            get_translatable_filter_args(bit)
 
 def create_token(token_string, in_tag):
     """
@@ -355,17 +247,119 @@ def tokenize(template_string):
     return result
 
 class TranslationOutputter:
+    translatable_strings = []
 
-  def translate(self, template_file, outputfile):
-      template_string = template_file.read()
-      for token in tokenize(template_string):
-          if token.token_type == TOKEN_VAR or token.token_type == TOKEN_BLOCK:
-              token.get_plain_strings()
-          if token.token_type == TOKEN_BLOCK:
-              token.get_contextual_strings()
-      global translatable_strings
-      self.createOutput(os.path.relpath(template_file.name), translatable_strings, outputfile)
-      translatable_strings = []
+    def get_translatable_filter_args(self, token):
+        """
+        Find the filter expressions in token and extract the strings in it.
+        """
+        matches = filter_re.finditer(token)
+        upto = 0
+        var_obj = False
+        for match in matches:
+            l10nable = match.group("l10nable")
 
-  def createOutput(self, template_filename, translatable_strings, outputfile):
-    pass
+            if l10nable:
+                # Make sure it's a quoted string
+                if l10nable.startswith('"') and l10nable.endswith('"') \
+                        or l10nable.startswith("'") and l10nable.endswith("'"):
+                    ts = TranslatableString()
+                    ts._string = l10nable[1:-1]
+                    self.translatable_strings.append(ts)
+
+    def get_contextual_strings(self, token):
+        split = []
+        _bits = smart_split(token.contents)
+        _bit = _bits.next()
+        if _bit =="i18n" or _bit == "i18n_var":
+            # {% i18n "A one %1, a two %2, a three %3" var1 var2 var3 %}
+            # {% i18n_var "A one %1, a two %2, a three %3" var1 var2 var3 as result %}
+            _bit = _bits.next()
+            if not _bit.startswith("'") and not _bit.startswith('"'):
+                return
+
+            sentinal = _bit[0]
+            if not _bit.endswith(sentinal):
+                return
+
+            translatable_string = TranslatableString()
+            translatable_string._string = _bit[1:-1]
+            self.translatable_strings.append(translatable_string)
+        elif _bit =="i18nc" or _bit == "i18nc_var":
+            # {% i18nc "An email send operation failed." "%1 Failed!" var1 %}
+            # {% i18nc_var "An email send operation failed." "%1 Failed!" var1 as result %}
+            _bit = _bits.next()
+            if not _bit.startswith("'") and not _bit.startswith('"'):
+                return
+
+            sentinal = _bit[0]
+            if not _bit.endswith(sentinal):
+                return
+
+            translatable_string = TranslatableString()
+            translatable_string.context = _bit[1:-1]
+            _bit = _bits.next()
+            translatable_string._string = _bit[1:-1]
+            self.translatable_strings.append(translatable_string)
+        elif _bit =="i18np" or _bit =="i18np_var":
+            # {% i18np "An email send operation failed." "%1 email send operations failed. Error : % 2." count count errorMsg %}
+            # {% i18np_var "An email send operation failed." "%1 email send operations failed. Error : % 2." count count errorMsg as result %}
+            _bit = _bits.next()
+            if not _bit.startswith("'") and not _bit.startswith('"'):
+                return
+
+            sentinal = _bit[0]
+            if not _bit.endswith(sentinal):
+                return
+
+            translatable_string = TranslatableString()
+            translatable_string._string = _bit[1:-1]
+            _bit = _bits.next()
+            translatable_string.plural = _bit[1:-1]
+            self.translatable_strings.append(translatable_string)
+        elif _bit =="i18ncp" or _bit =="i18ncp_var":
+            # {% i18np "The user tried to send an email, but that failed." "An email send operation failed." "%1 email send operation failed." count count %}
+            # {% i18np_var "The user tried to send an email, but that failed." "An email send operation failed." "%1 email send operation failed." count count as result %}
+
+            _bit = _bits.next()
+            if not _bit.startswith("'") and not _bit.startswith('"'):
+                return
+
+            sentinal = _bit[0]
+            if not _bit.endswith(sentinal):
+                return
+
+            translatable_string = TranslatableString()
+            translatable_string.context = _bit[1:-1]
+            _bit = _bits.next()
+            translatable_string._string = _bit[1:-1]
+            _bit = _bits.next()
+            translatable_string.plural = _bit[1:-1]
+            self.translatable_strings.append(translatable_string)
+        else:
+          return
+
+        for _bit in _bits:
+
+            if (_bit == "as"):
+                return
+            self.get_translatable_filter_args(_bit)
+
+    def get_plain_strings(self, token):
+        split = []
+        bits = iter(smart_split(token.contents))
+        for bit in bits:
+            self.get_translatable_filter_args(bit)
+
+    def translate(self, template_file, outputfile):
+        template_string = template_file.read()
+        self.translatable_strings = []
+        for token in tokenize(template_string):
+            if token.token_type == TOKEN_VAR or token.token_type == TOKEN_BLOCK:
+                self.get_plain_strings(token)
+            if token.token_type == TOKEN_BLOCK:
+                self.get_contextual_strings(token)
+        self.createOutput(os.path.relpath(template_file.name), self.translatable_strings, outputfile)
+
+    def createOutput(self, template_filename, translatable_strings, outputfile):
+      pass
