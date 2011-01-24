@@ -181,27 +181,27 @@ static KLocalizedString substituteArguments(const KLocalizedString &_string, con
 QString KDELocalizer::localizeContextString(const QString& string, const QString& context, const QVariantList &arguments ) const
 {
   Q_D(const KDELocalizer);
-  KLocalizedString localizedString = ki18nc(context.toLatin1(), string.toLatin1());
+  KLocalizedString localizedString = ki18nc(context.toUtf8(), string.toUtf8());
   return substituteArguments(localizedString, arguments).toString(d->m_locale);
 }
 
 QString KDELocalizer::localizePluralContextString(const QString& string, const QString& pluralForm, const QString& context, const QVariantList &arguments ) const
 {
   Q_D(const KDELocalizer);
-  KLocalizedString localizedString = ki18ncp(context.toLatin1(), string.toLatin1(), pluralForm.toLatin1());
+  KLocalizedString localizedString = ki18ncp(context.toUtf8(), string.toUtf8(), pluralForm.toUtf8());
   return substituteArguments(localizedString, arguments).toString(d->m_locale);
 }
 
 QString KDELocalizer::localizePluralString(const QString& string, const QString& pluralForm, const QVariantList &arguments ) const
 {
   Q_D(const KDELocalizer);
-  KLocalizedString localizedString = ki18np(string.toLatin1(), pluralForm.toLatin1());
+  KLocalizedString localizedString = ki18np(string.toUtf8(), pluralForm.toUtf8());
   return substituteArguments(localizedString, arguments).toString(d->m_locale);
 }
 
 QString KDELocalizer::localizeString(const QString& string, const QVariantList &arguments ) const
 {
   Q_D(const KDELocalizer);
-  KLocalizedString localizedString = ki18n(string.toLatin1());
+  KLocalizedString localizedString = ki18n(string.toUtf8());
   return substituteArguments(localizedString, arguments).toString(d->m_locale);
 }
