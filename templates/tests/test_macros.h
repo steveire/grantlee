@@ -27,7 +27,12 @@
 
 #ifndef GRANTLEE_NO_TR1
 #include "qtunorderedmap.h"
+
+#ifdef Q_CC_MSVC
+#include <array>
+#else
 #include <tr1/array>
+#endif
 
 template <typename T>
 struct ThreeArray : public std::tr1::array<T, 3>

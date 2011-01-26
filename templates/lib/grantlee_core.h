@@ -18,34 +18,10 @@
 
 */
 
-#ifndef GRANTLEE_H
-#define GRANTLEE_H
+#ifndef GRANTLEE_CORE_H
+#define GRANTLEE_CORE_H
 
-#include "grantlee/abstractlocalizer.h"
-#include "grantlee/cachingloaderdecorator.h"
-#include "grantlee/containeraccessor.h"
-#include "grantlee/context.h"
-#include "grantlee/engine.h"
-#include "grantlee/exception.h"
-#include "grantlee/filter.h"
-#include "grantlee/filterexpression.h"
-#include "grantlee/grantlee_core_export.h"
-#include "grantlee/grantlee_version.h"
-#include "grantlee/metatype.h"
-#include "grantlee/mutabletemplate.h"
-#include "grantlee/node.h"
-#include "grantlee/outputstream.h"
-#include "grantlee/parser.h"
-#include "grantlee/qtlocalizer.h"
-#include "grantlee/rendercontext.h"
-#include "grantlee/safestring.h"
-#include "grantlee/taglibraryinterface.h"
-#include "grantlee/template.h"
-#include "grantlee/templateloader.h"
-#include "grantlee/typeaccessor.h"
-#include "grantlee/token.h"
-#include "grantlee/util.h"
-#include "grantlee/variable.h"
+#include "grantlee_templates.h"
 
 #endif
 

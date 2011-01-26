@@ -166,6 +166,9 @@ public:
   */
   void setTemplateDirs( const QStringList &dirs );
 
+  /**
+    The directories this TemplateLoader looks in for template files.
+   */
   QStringList templateDirs() const;
 
 private:

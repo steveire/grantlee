@@ -122,7 +122,7 @@ void I18ncNode::render( OutputStream* stream, Context* c )
     args.append( fe.resolve( c ) );
   QString resultString = c->localizer()->localizeContextString( m_sourceText, m_context, args );
 
-  ( *stream ) << resultString;
+  streamValueInContext( stream, resultString, c );
 }
 
 I18ncVarNode::I18ncVarNode( const QString &sourceText, const QString &context, const QList<Grantlee::FilterExpression>& feList, const QString &resultName, QObject* parent )

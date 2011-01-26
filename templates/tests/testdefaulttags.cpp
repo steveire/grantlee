@@ -46,7 +46,9 @@ public:
   FakeTemplateLoader()
     : Grantlee::InMemoryTemplateLoader()
   {
-    m_existingMedia << QString::fromLatin1( "existing_image.png" ) << QString::fromLatin1( "another_existing_image.png" );
+    m_existingMedia << QString::fromLatin1( "existing_image.png" )
+                    << QString::fromLatin1( "another_existing_image.png" )
+                    << QString::fromLatin1( "this&that.png" );
   }
 
   /* reimp */ QPair<QString, QString> getMediaUri( const QString &fileName ) const {
@@ -636,6 +638,13 @@ void TestDefaultTags::testForTag_data()
   dict.insert( QLatin1String( "contact" ), obj );
   QTest::newRow( "for-tag05" ) << QString::fromLatin1( "{% for val in contact.emails %}({{ val }},){% endfor %}" ) << dict << QString() << NoError;
   list.clear();
+  dict.clear();
+  emails << QString::fromLatin1( "one" );
+  dict.insert( QLatin1String( "emails" ), emails );
+  QTest::newRow( "for-tag06" ) << QString::fromLatin1( "{% for val in emails %}({{ val }},){% endfor %}" ) << dict << QString::fromLatin1( "(one,)" ) << NoError;
+  list.clear();
+  dict.clear();
+
   list << 1 << 2 << 3;
   dict.insert( QLatin1String( "values" ), list );
   QTest::newRow( "for-tag-vars01" ) << QString::fromLatin1( "{% for val in values %}{{ forloop.counter }}{% endfor %}" ) << dict << QString::fromLatin1( "123" ) << NoError;
@@ -1133,6 +1142,11 @@ void TestDefaultTags::testSpacelessTag_data()
   QTest::newRow( "spaceless02" ) << "{% spaceless %} <b> \n <i> text </i> \n </b> {% endspaceless %}" << dict << QString::fromLatin1( "<b><i> text </i></b>" ) << NoError;
   QTest::newRow( "spaceless03" ) << QString::fromLatin1( "{% spaceless %}<b><i>text</i></b>{% endspaceless %}" ) << dict << QString::fromLatin1( "<b><i>text</i></b>" ) << NoError;
 
+  dict.insert(QLatin1String( "text" ), QString::fromLatin1( "This & that" ) );
+  QTest::newRow( "spaceless04" ) << QString::fromLatin1( "{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}" ) << dict << QString::fromLatin1( "<b><i>This &amp; that</i></b>" ) << NoError;
+  QTest::newRow( "spaceless05" ) << QString::fromLatin1( "{% autoescape off %}{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}{% endautoescape %}" ) << dict << QString::fromLatin1( "<b><i>This & that</i></b>" ) << NoError;
+  QTest::newRow( "spaceless06" ) << QString::fromLatin1( "{% spaceless %}<b>  <i>{{ text|safe }}</i>  </b>{% endspaceless %}" ) << dict << QString::fromLatin1( "<b><i>This & that</i></b>" ) << NoError;
+
 }
 
 void TestDefaultTags::testRegroupTag_data()
@@ -1417,18 +1431,26 @@ void TestDefaultTags::testMediaFinderTag_data()
   QTest::newRow( "media_finder-tag01" ) << "{% media_finder \"existing_image.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag02" ) << "{% media_finder \"does_not_exist.png\" %}" << dict << QString() << NoError;
   QTest::newRow( "media_finder-tag03" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
-  QTest::newRow( "media_finder-tag04" ) << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
 
   dict.insert( QLatin1String( "existing_img" ), QLatin1String( "existing_image.png" ) );
   dict.insert( QLatin1String( "nonexisting_img" ), QLatin1String( "does_not_exist.png" ) );
 
-  QTest::newRow( "media_finder-tag05" ) << QString::fromLatin1( "{% media_finder %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "media_finder-tag04" ) << QString::fromLatin1( "{% media_finder %}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "media_finder-tag05" ) << QString::fromLatin1( "{% media_finder existing_img %}" ) << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag06" ) << QString::fromLatin1( "{% media_finder nonexisting_img %}" ) << dict << QString() << NoError;
   QTest::newRow( "media_finder-tag07" ) << "{% media_finder \"does_not_exist.png\" existing_img %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag08" ) << QString::fromLatin1( "{% media_finder nonexisting_img existing_img %}" ) << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag09" ) << "{% media_finder \"existing_image.png\" \"another_existing_image.png\" %}" << dict << QString::fromLatin1( "file:///path/to/existing_image.png" ) << NoError;
   QTest::newRow( "media_finder-tag10" ) << "{% media_finder \"another_existing_image.png\" \"existing_image.png\" %}" << dict << QString::fromLatin1( "file:///path/to/another_existing_image.png" ) << NoError;
+
+  dict.insert( QLatin1String( "this_and_that_img" ), QLatin1String( "this&that.png" ) );
+
+  QTest::newRow( "media_finder-tag11" ) << "{% media_finder \"this&that.png\" %}" << dict << QString::fromLatin1( "file:///path/to/this&amp;that.png" ) << NoError;
+  QTest::newRow( "media_finder-tag12" ) << "{% media_finder this_and_that_img %}" << dict << QString::fromLatin1( "file:///path/to/this&amp;that.png" ) << NoError;
+  QTest::newRow( "media_finder-tag13" ) << "{% autoescape off %}{% media_finder \"this&that.png\" %}{% endautoescape %}" << dict << QString::fromLatin1( "file:///path/to/this&that.png" ) << NoError;
+  QTest::newRow( "media_finder-tag14" ) << "{% autoescape off %}{% media_finder this_and_that_img %}{% endautoescape %}" << dict << QString::fromLatin1( "file:///path/to/this&that.png" ) << NoError;
+
+
 }
 
 void TestDefaultTags::testRangeTag_data()

@@ -40,15 +40,16 @@ target_link_libraries(
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${PROJECT_SOURCE_DIR}/../../scripts" "${PROJECT_SOURCE_DIR}/scripts")
 
-set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_linguist.py" "${CMAKE_BINARY_DIR}/output.cpp"
+set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_linguist.py"
   "${CMAKE_SOURCE_DIR}/themes/linguist/bashful/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sneezy/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sleepy/*.html"
+  "> ${CMAKE_BINARY_DIR}/output.cpp"
   COMMAND "${QT_LUPDATE_EXECUTABLE}" "${CMAKE_BINARY_DIR}/output.cpp" "-ts" )
 
-set (CONTACTS_lOCALES "fr_FR" "de_DE" )
+set (CONTACTS_LOCALES "fr_FR" "de_DE" )
 
-foreach(CONTACT_LOCALE ${CONTACTS_lOCALES})
+foreach(CONTACT_LOCALE ${CONTACTS_LOCALES})
     set( LINGUIST_TS_ARGS ${LINGUIST_TS_ARGS} "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.ts" )
 endforeach()
 
@@ -58,7 +59,7 @@ add_custom_target(linguist_ts
 
 set( LINGUIST_QM_ARGS COMMAND "${QT_LRELEASE_EXECUTABLE}" )
 
-foreach(CONTACT_LOCALE ${CONTACTS_lOCALES})
+foreach(CONTACT_LOCALE ${CONTACTS_LOCALES})
     set( _LINGUIST_QM_ARGS ${_LINGUIST_QM_ARGS} ${LINGUIST_QM_ARGS} "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.ts" "-qm" "${CMAKE_BINARY_DIR}/contacts_${CONTACT_LOCALE}.qm" )
 endforeach()
 
@@ -92,13 +93,14 @@ if (KDE4_FOUND)
     ${Grantlee_CORE_LIBRARIES}
   )
 
-  set( GETTEXT_PO_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_gettext.py" "${CMAKE_BINARY_DIR}/output.cpp"
+  set( GETTEXT_PO_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_gettext.py"
     "${CMAKE_SOURCE_DIR}/themes/gettext/bashful/*.html"
     "${CMAKE_SOURCE_DIR}/themes/gettext/sneezy/*.html"
     "${CMAKE_SOURCE_DIR}/themes/gettext/sleepy/*.html"
+    "> ${CMAKE_BINARY_DIR}/output.cpp"
                         COMMAND "${GETTEXT_XGETTEXT_EXECUTABLE}" "${CMAKE_BINARY_DIR}/output.cpp" "-o" ${CMAKE_SOURCE_DIR}/contacts.pot )
 
-  foreach(CONTACT_LOCALE ${CONTACTS_lOCALES})
+  foreach(CONTACT_LOCALE ${CONTACTS_LOCALES})
       set( GETTEXT_PO_ARGS ${GETTEXT_PO_ARGS} COMMAND "${CMAKE_COMMAND}" -E copy "${CMAKE_SOURCE_DIR}/contacts.pot" "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.po" )
   endforeach()
 
@@ -106,7 +108,7 @@ if (KDE4_FOUND)
     ${GETTEXT_PO_ARGS}
   )
 
-  foreach(CONTACT_LOCALE ${CONTACTS_lOCALES})
+  foreach(CONTACT_LOCALE ${CONTACTS_LOCALES})
 
     set (GETTEXT_MO_ARGS ${GETTEXT_MO_ARGS}
       COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE} --quiet --update --backup=none -s "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.po" "${CMAKE_SOURCE_DIR}/contacts.pot"

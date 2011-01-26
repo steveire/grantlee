@@ -1,0 +1,155 @@
+
+namespace Grantlee
+{
+
+/**
+  @page i18n_l10n Internationalization and Localization
+
+  %Grantlee provides tools to make it possible to create templated content in multiple languages
+  and locales. This is known as the concepts of localization and internationalization.
+
+  %Grantlee can use either the QLocale and QTranslator API provided with Qt, or the KLocale API provided as part of the KDE platform.
+
+  For an introduction to Internationalization and Localization see http://techbase.kde.org/Development/Tutorials/Localization/i18n.
+
+  Using internationalization and localization in %Grantlee involves several steps:
+
+  @li @ref preparing_templates
+  @li @ref extracting_strings
+  @li @ref building_translation_catalogs
+  @li @ref consuming_translations
+  @li @ref third_party_extended_translations
+
+  @section preparing_templates Preparing templates for localization
+
+  The content of templates which is made up of strings, numbers, dates, times and monetary values may be localized.
+
+  For strings, this means marking the string as translatable in the template, and using a translation when rendering the template. Strings
+  may be have different structure, pluralization or disambiguation when translated. Strings are marked for translation using the template tags @gr_tag{i18n}, @gr_tag{i18nc}, @gr_tag{i18np} and @gr_tag{i18ncp}. Additionally, @gr_tag{i18n_var}, @gr_tag{i18nc_var}, @gr_tag{i18np_var} and @gr_tag{i18ncp_var} may be used to insert a translated string into the context.
+
+  @verbatim
+    <h1>{% i18n "Subject" %}</h1>
+    <h1>{% i18n "My name is %1" personName %}</h1>
+    <h1>{% i18nc "Subject of an email" "Subject" %}</h1>
+    <h1>{% i18np "%n email(s)" numEmails %}</h1> <!-- Qt plural form -->
+    <h1>{% i18np "%n email" "%n emails" numEmails %}</h1> <!-- KDE plural form -->
+
+    {% i18n_var "Subject" as subj %}
+    <h1>{{ subj }}</h1>
+    {% i18n_var "Subject of an email" "Subject" as subj %}
+    <h1>{{ subj }}</h1>
+
+    ... etc.
+  @endverbatim
+
+  Each of the template tags may take additional arguments which will be substituted into the finalized string.
+
+  The QLocale and KLocale systems are notably different in how they process plurals. Both forms are supported by %Grantlee, but
+  only one form can be used for a particular application for consistency.
+
+  As a shortcut to the i18n tag with no arguments, the _() syntax may be used. Substitution arguments, disambiguation context, and plurals cannot be used in this case. The _() form can be used with any variable and may form part of a filter expression.
+
+  @verbatim
+    <h1>{{ _("Subject") }}</h1>
+
+    {% i18n "The %1 is %2" _("Subject") messageSubject %}
+
+    <h1>{{ _("Subject")|lower }}</h1>
+
+    {% with someList|join:_("some i18n'd var") as result %}
+    {{ result }}
+  @endverbatim
+
+  Dates and times, numbers and monetary values are represented differently in different countries and locales.
+  For example, in the US, dates are represented as m/d/yy, so that the 4th May 2006 is written as 5/4/06.
+  In British locales however, dates are represented as dd/mm/yyyy, for example 04/05/2006. Other locales are
+  different again, such as Germany which would write the same date as 04.05.06. Similarly, the use of thousand separators
+  and decimal separators is different between locales, such that 100,001 means "One hundred thousand and one" in English locales,
+  but it means "one hundred point zero zero one" in German locales. "One hundred thousand and one" in German locales would be written as
+  100.001.
+
+  The _() syntax can also be used to localize any data object to format it correctly for the target locale.
+
+  @verbatim
+    {% i18n "The date of the message is %1, the time of the message is %2" _(messageDate) _(messageTime) %}
+
+    {{ _(10000) }}, {{ _(someNumber) }}
+  @endverbatim
+
+  Some features of the %Grantlee i18n and l10n system are aimed at KLocale API which is not available with Qt. For example, the QLocale
+  system does not have a machanism for formatting monetary values, but KLocale does. %Grantlee provides support for that in the form
+  of the l10n_money template tag.
+
+  @verbatim
+    {% l10n_money 10000 "USD" %}
+
+    {% l10n_money someValue "EUR" %}
+  @endverbatim
+
+  @section extracting_strings Extracting translatable strings from templates.
+
+  %Grantlee provides scripts for extracting translatable strings from templates. The scripts generate C++ files as output, which can then be processed with standad tools such as lupdate or xgettext. The lrelease and xgettext executables create <tt>.ts</tt> and <tt>.po</tt> language respectively. It is quite simple to automate the extraction of translatable strings in your build process.
+
+  @section building_translation_catalogs Building distributable translation catalogs.
+
+  Translators use standard tools for translating strings, such as Qt Linguist, or Lokalize for translating in gettext based systems.
+
+  Translation catalogs are built using standard tools, such as lrelease or msgfmt. Description of these tools is out of scope of %Grantlee, but are described elsewhere.
+
+  @section consuming_translations Consuming translations in your application.
+
+  Internationalized data can be accessed and used in applications by setting an AbstractLocalizer
+  object on the Context used to render the Template.
+
+  @code
+    Template t = getTemplate();
+    Context c = getContext();
+
+    QLocale deLocale(QLocale::German, QLocale::Germany);
+    QtLocalizer::Ptr deLocalizer(new QtLocalizer(deLocale));
+
+    c.setLocalizer(deLocalizer);
+    t->render(&c); // Render the template with the de locale.
+
+    QLocale frLocale(QLocale::French, QLocale::France);
+    QtLocalizer::Ptr frLocalizer(new QtLocalizer(frLocale));
+
+    c.setLocalizer(frLocalizer);
+    t->render(&c); // Render the same template with the fr locale.
+  @endcode
+
+  @section third_party_extended_translations Third party translation extensions.
+
+  Third party providers of templates, such as themes may wish to add their own translatable content.
+
+  In such cases, it is necessary for the theme writer to provide the translation files along with their templates.
+
+  To consume such third party templates it is necessary to set the localizer on the FileSystemTemplateLoader.
+
+  @note The same localizer object must be used with the template loader and the Context object. It can therefore be useful to store them as members.
+
+  @code
+    SomeClass::SomeClass()
+    {
+      m_deLocalizer(new QtLocalizer(deLocale));
+
+      m_loader(new FileSystemTemplateLoader);
+
+      // ...
+    }
+
+    QString SomeClass::render()
+    {
+      Context c = getContext();
+      Template t = getTemplate();
+
+      m_loader.setLocalizer(m_deLocalizer);
+      c.setLocalizer(m_deLocalizer);
+
+      return t->render(&c);
+    }
+  @endcode
+
+*/
+
+}

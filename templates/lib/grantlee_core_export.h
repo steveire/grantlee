@@ -18,12 +18,12 @@
 
 */
 
-#ifndef GRANTLEE_CORE_EXPORT_H
-#define GRANTLEE_CORE_EXPORT_H
+#ifndef GRANTLEE_TEMPLATES_EXPORT_H
+#define GRANTLEE_TEMPLATES_EXPORT_H
 
 #if defined(_WIN32) || defined(_WIN64)
 #  ifndef GRANTLEE_CORE_EXPORT
-#    if defined(GRANTLEE_CORE_LIB_MAKEDLL)
+#    if defined(GRANTLEE_TEMPLATES_LIB_MAKEDLL)
 #      define GRANTLEE_CORE_EXPORT __declspec(dllexport)
 #    else
 #      define GRANTLEE_CORE_EXPORT __declspec(dllimport)

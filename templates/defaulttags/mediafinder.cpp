@@ -63,10 +63,10 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
       QString uri = QUrl::fromLocalFile( fileUrl.first ).toString();
       c->addExternalMedia( uri, fileUrl.second );
       if ( c->urlType() == Context::AbsoluteUrls )
-        ( *stream ) << uri;
+        streamValueInContext( stream, uri, c );
       else if ( !c->relativeMediaPath().isEmpty() )
-        ( *stream ) << ( c->relativeMediaPath() + QLatin1Char( '/' ) );
-      ( *stream ) << fileUrl.second;
+        streamValueInContext( stream, c->relativeMediaPath() + QLatin1Char( '/' ), c );
+      streamValueInContext( stream, fileUrl.second, c );
       return;
     }
   }

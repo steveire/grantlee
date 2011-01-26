@@ -18,12 +18,12 @@
 
 */
 
-#ifndef GRANTLEE_GUI_EXPORT_H
-#define GRANTLEE_GUI_EXPORT_H
+#ifndef GRANTLEE_TEXTDOCUMENT_EXPORT_H
+#define GRANTLEE_TEXTDOCUMENT_EXPORT_H
 
 #if defined(_WIN32) || defined(_WIN64)
 #  ifndef GRANTLEE_GUI_EXPORT
-#    if defined(GRANTLEE_GUI_LIB_MAKEDLL)
+#    if defined(GRANTLEE_TEXTDOCUMENT_LIB_MAKEDLL)
 #      define GRANTLEE_GUI_EXPORT __declspec(dllexport)
 #    else
 #      define GRANTLEE_GUI_EXPORT __declspec(dllimport)

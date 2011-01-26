@@ -53,7 +53,6 @@ class TemplatePrivate
   Q_DECLARE_PUBLIC( TemplateImpl )
   TemplateImpl * const q_ptr;
 
-  qint64 m_settingsToken;
   Error m_error;
   QString m_errorString;
   NodeList m_nodeList;

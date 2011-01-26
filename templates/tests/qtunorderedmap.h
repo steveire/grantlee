@@ -23,7 +23,11 @@
 
 #include <QtCore/QHash>
 
+#ifdef Q_CC_MSVC
+#include <unordered_map>
+#else
 #include <tr1/unordered_map>
+#endif
 
 template <typename Key>
 struct QtHasher {

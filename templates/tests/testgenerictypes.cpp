@@ -33,7 +33,12 @@
 #include <string>
 
 #ifndef GRANTLEE_NO_TR1
+
+#ifdef Q_CC_MSVC
+#include <memory>
+#else
 #include <tr1/memory>
+#endif
 
 GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER        (ThreeArray)
 GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR   (ThreeArray)

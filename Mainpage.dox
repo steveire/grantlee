@@ -7,22 +7,18 @@
 namespace Grantlee
 {
 
-/** @mainpage The Grantlee Template System
+/** @mainpage The Grantlee Libraries
 
   @section overview Overview
 
-  %Grantlee is a Free Software, Open Source string template system based on the <a href="http://docs.djangoproject.com/en/dev/topics/templates/">Django template system</a> from the <a href="http://www.djangoproject.com">Django project</a>. The syntax and design of %Grantlee is intended to be the same as the Django syntax, such that many Django templates should be source-compatible with %Grantlee templates.
+  %Grantlee is a Free Software, Open Source set of Qt based libraries.
 
   %Grantlee is covered by the GNU Lesser General Public Licence version 2.1 or, at your option, any later version.
 
   @note This version of %Grantlee is experimental API. There will likely be minor backwards source and binary incompatible changes in the next minor version.
 
-  @section start_howto How to use Grantlee
-
-  %Grantlee allows application developers to make it very easy to create themes for exported data by separating the data to export from the structure of how it is presented. As such, there are two separate roles to use %Grantlee. See @ref for_app_dev and @ref for_themers.
-
   <table class="main_api" >
-    <tr><th class="library" colspan="3">%Grantlee Core</th></tr>
+    <tr><th class="library" colspan="3">%Grantlee Templates</th></tr>
     <tr><th class="section" >Application API</th><th class="section">%Plugin API</th><th class="section">Guides</th></tr>
     <tr><td>
       - Context
@@ -32,6 +28,8 @@ namespace Grantlee
       - AbstractTemplateLoader
       - FileSystemTemplateLoader
       - MetaType
+      - AbstractLocalizer
+      - QtLocalizer
     </td><td>
       - AbstractNodeFactory
       - Exception
@@ -53,8 +51,9 @@ namespace Grantlee
       - @ref using_and_deploying
       - @ref internals
       - @ref generic_types_and_templates
+      - @ref i18n_l10n
     </td></tr>
-      <tr><th class="library" colspan="3">%Grantlee GUI</th></tr>
+      <tr><th class="library" colspan="3">%Grantlee TextDocument</th></tr>
     <tr><td colspan="2">
       - AbstractMarkupBuilder
       - MarkupDirector
@@ -64,6 +63,7 @@ namespace Grantlee
       - @ref custom_qtextobject
     </td></tr>
   </table>
+  <br />
 
   @image html grantlee_deps.png "Dependency Graph for Grantlee"
 
@@ -71,7 +71,7 @@ namespace Grantlee
 
   The %Grantlee project mailing list is kde-pim@kde.org, and the IRC channel is \#grantlee on freenode.
 
-  The source repository is located at http://gitorious.org/grantlee.
+  The source repository is located at http://gitorious.org/grantlee
 
   - Existing bugs https://bugs.kde.org/buglist.cgi?product=grantlee
   - File new bug https://bugs.kde.org/enter_bug.cgi?product=grantlee

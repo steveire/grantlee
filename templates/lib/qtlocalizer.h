@@ -30,16 +30,67 @@ namespace Grantlee
 
 class QtLocalizerPrivate;
 
+/**
+  @brief Provides internationalization based on QLocale and QTranslator.
+
+  This class implements access to the Qt Localization system. Localizaable types such
+  as strings, numbers, dates and times can be processed.
+
+  @code
+    Template t = m_engine->loadTemplate(someTemplate);
+    Context c = getContext();
+
+    // Render with the German locale
+    c.setLocalizer(m_de_Localizer);
+    QString deText = t->render(&c);
+    de_display->setText(deText);
+
+    // Render with the French locale
+    c.setLocalizer(m_fr_Localizer);
+    QString frText = t->render(&c);
+    fr_display->setText(frText);
+  @endcode
+
+*/
 class GRANTLEE_CORE_EXPORT QtLocalizer : public AbstractLocalizer
 {
 public:
+#ifndef Q_QDOC
   typedef QSharedPointer<QtLocalizer> Ptr;
+#endif
+  /**
+    Constructs a new QtLocalizer using the @p locale
+  */
   QtLocalizer( const QLocale &locale = QLocale::system() );
+
+  /**
+    Destructor
+   */
   virtual ~QtLocalizer();
 
-  void setAppTranslatorPrefix( const QString &prefix );
+  /**
+    Set the path to look for translations of the application strings.
+   */
   void setAppTranslatorPath( const QString &path );
 
+  /**
+    Set the prefix of translation files. For example, if the German translation file is called <tt>myapp_de_DE.qm</tt>,
+    the prefix should be set to <tt>myapp_</tt>.
+   */
+  void setAppTranslatorPrefix( const QString &prefix );
+
+  /**
+    Install a @p translator to use for a particular @p localeName.
+
+    @code
+      QTranslator *deTranslator = new QTranslator(this);
+      bool loaded = deTranslator->load("myapp_de_DE");
+      if (!loaded)
+        return;
+
+      de_localizer->installTranslator(deTranslator, "de_DE");
+    @endcode
+   */
   void installTranslator( QTranslator *translator, const QString &localeName = QLocale::system().name() );
 
   virtual QString currentLocale() const;

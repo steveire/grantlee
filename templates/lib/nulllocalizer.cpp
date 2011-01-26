@@ -68,6 +68,30 @@ QString NullLocalizer::localizeMonetaryValue( qreal value, const QString& curren
   return QString::number( value );
 }
 
+static void replacePercentN( QString *result, int n )
+{
+  if ( n >= 0 ) {
+    int percentPos = 0;
+    int len = 0;
+    while ( ( percentPos = result->indexOf( QLatin1Char( '%' ), percentPos + len ) ) != -1 ) {
+      len = 1;
+      QString fmt;
+      if ( result->at( percentPos + len ) == QLatin1Char( 'L' ) ) {
+        ++len;
+        fmt = QLatin1String( "%L1" );
+      } else {
+        fmt = QLatin1String( "%1" );
+      }
+      if ( result->at( percentPos + len ) == QLatin1Char( 'n' ) ) {
+        fmt = fmt.arg( n );
+        ++len;
+        result->replace( percentPos, len, fmt );
+        len = fmt.length();
+      }
+    }
+  }
+}
+
 static QString substituteArguments( const QString &input, const QVariantList &arguments )
 {
   QString string = input;
@@ -90,11 +114,19 @@ QString NullLocalizer::localizeContextString( const QString& string, const QStri
   return substituteArguments( string, arguments );
 }
 
-QString NullLocalizer::localizePluralContextString( const QString& string, const QString& pluralForm, const QString& context, const QVariantList &arguments ) const
+QString NullLocalizer::localizePluralContextString( const QString& _string, const QString& _pluralForm, const QString& context, const QVariantList &_arguments ) const
 {
   Q_UNUSED( context )
-  Q_UNUSED( pluralForm )
-  return substituteArguments( string, arguments );
+  const int count = _arguments.first().toInt();
+  QVariantList arguments = _arguments;
+  QString string = _string;
+  QString pluralForm = _pluralForm;
+  if ( _string.contains( QLatin1String( "%n" ) ) ) {
+    arguments.removeFirst();
+    replacePercentN( &string, count );
+    replacePercentN( &pluralForm, count );
+  }
+  return count > 0 ? substituteArguments( pluralForm, arguments ) : substituteArguments( string, arguments );
 }
 
 QString NullLocalizer::localizeString( const QString& string, const QVariantList &arguments ) const
@@ -102,10 +134,19 @@ QString NullLocalizer::localizeString( const QString& string, const QVariantList
   return substituteArguments( string, arguments );
 }
 
-QString NullLocalizer::localizePluralString( const QString& string, const QString& pluralForm, const QVariantList &arguments ) const
+QString NullLocalizer::localizePluralString( const QString& _string, const QString& _pluralForm, const QVariantList &_arguments ) const
 {
-  const int count = arguments.first().toInt();
+  const int count = _arguments.first().toInt();
+  QVariantList arguments = _arguments;
+  QString string = _string;
+  QString pluralForm = _pluralForm;
+  if ( _string.contains( QLatin1String( "%n" ) ) ) {
+    arguments.removeFirst();
+    replacePercentN( &string, count );
+    replacePercentN( &pluralForm, count );
+  }
   return count > 0 ? substituteArguments( pluralForm, arguments ) : substituteArguments( string, arguments );
+
 }
 
 QString NullLocalizer::currentLocale() const
