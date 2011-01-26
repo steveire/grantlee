@@ -57,8 +57,8 @@ static const char FILTER_ARGUMENT_SEPARATOR = ':';
 
 static QRegExp getFilterRegexp()
 {
-  const QString filterSep( QRegExp::escape( QChar( FILTER_SEPARATOR ) ) );
-  const QString argSep( QRegExp::escape( QChar( FILTER_ARGUMENT_SEPARATOR ) ) );
+  const QString filterSep( QRegExp::escape( QChar::fromLatin1( FILTER_SEPARATOR ) ) );
+  const QString argSep( QRegExp::escape( QChar::fromLatin1( FILTER_ARGUMENT_SEPARATOR ) ) );
 
   const QLatin1Literal varChars( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_." );
   const QLatin1Literal numChars( "[-+\\.]?\\d[\\d\\.e]*" );
@@ -122,7 +122,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
             QString::fromLatin1( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
       }
 
-      if ( subString.startsWith( FILTER_SEPARATOR ) ) {
+      if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) ) {
         subString = subString.right( ssSize - 1 );
         Filter::Ptr f = parser->getFilter( subString );
 
@@ -131,7 +131,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
         d->m_filterNames << subString;
         d->m_filters << qMakePair<Filter::Ptr, Variable>( f, Variable() );
 
-      } else if ( subString.startsWith( FILTER_ARGUMENT_SEPARATOR ) ) {
+      } else if ( subString.startsWith( QLatin1Char( FILTER_ARGUMENT_SEPARATOR ) ) ) {
         subString = subString.right( ssSize - 1 );
         const int lastFilter = d->m_filters.size();
         if ( subString.isEmpty() )
