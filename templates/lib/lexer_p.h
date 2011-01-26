@@ -23,8 +23,6 @@
 
 #include "token.h"
 
-// #include <QtCore/QList>
-
 template <typename T> class QList;
 
 namespace Grantlee
