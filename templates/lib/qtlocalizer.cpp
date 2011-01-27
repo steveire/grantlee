@@ -129,13 +129,13 @@ QString QtLocalizerPrivate::translate( const QString& input, const QString& cont
 
   Locale *locale = m_locales.last();
   Q_FOREACH( QTranslator *translator, locale->themeTranslators ) {
-    result = translator->translate( "GR_FILENAME", input.toLatin1(), context.toLatin1(), count );
+    result = translator->translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), count );
   }
   if ( result.isEmpty() ) {
     if ( locale->systemTranslators.isEmpty() )
-      return QCoreApplication::translate( "GR_FILENAME", input.toLatin1(), context.toLatin1(), QCoreApplication::CodecForTr, count );
+      return QCoreApplication::translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), QCoreApplication::CodecForTr, count );
     Q_FOREACH( QTranslator *translator, locale->systemTranslators ) {
-      result = translator->translate( "GR_FILENAME", input.toLatin1(), context.toLatin1(), count );
+      result = translator->translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), count );
       if ( !result.isEmpty() )
         break;
     }

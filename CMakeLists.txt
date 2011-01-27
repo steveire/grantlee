@@ -36,6 +36,7 @@ add_definitions(-DQT_NO_CAST_TO_ASCII)
 add_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_definitions(-DQT_STRICT_ITERATORS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+add_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
 
 set(Grantlee_VERSION_MAJOR 0)
 set(Grantlee_VERSION_MINOR 1)
