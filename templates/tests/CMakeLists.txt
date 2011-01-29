@@ -66,7 +66,7 @@ grantlee_templates_unit_tests(
   testgenerictypes
   testgenericcontainers
   testinternationalization
-  benchmarks
+#   benchmarks
 )
 
 add_subdirectory(pluginpointertest)
