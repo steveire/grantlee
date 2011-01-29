@@ -1,0 +1,34 @@
+
+{% extends "shared/base.html" %}
+
+{% block head %}
+<script>
+ $(document).ready(function() {
+  $(".accordion table").click(function(){
+    $(this).find(".bigurl").slideToggle("slow")
+    $(this).siblings("table:visible").find(".bigurl").slideUp("slow");
+    $(this).toggleClass("active");
+    $(this).siblings("table").removeClass("active");
+  });
+ });
+</script>
+{% endblock %}
+
+{% block content %}
+  <div class="accordion">
+  {% rssfeed "http://api.flickr.com/services/feeds/photos_public.gne?format=rss2" "/rss/channel/item" %}
+    {% xmlns "http://search.yahoo.com/mrss/" as media %}
+    <table class="imagerow" style="background-color:{% cycle "#E3E4FA" "#E9CFEC" "#C8BBBE" %}" width="100%">
+    <tr><td><img src="{% xmlrole "media:thumbnail/@url/string()" %}" /></td>
+    <td>
+      <p>Title: {% xmlrole "title/string()" %}
+      <p>Tags: {% xmlrole "media:category/string()" %}
+      <p>photoAuthor: {% xmlrole "author/string()" %}
+      <p>photoDate: {% xmlrole "pubDate/string()" %}
+      <div class="bigurl"><img src="{% filter resize %}{% xmlrole "media:thumbnail/@url/string()" %}{% endfilter %}" /></div>
+    </td>
+    </tr>
+    </table>
+  {% endrssfeed %}
+  </div>
+{% endblock %}
