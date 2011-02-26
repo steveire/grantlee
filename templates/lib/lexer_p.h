@@ -70,12 +70,12 @@ struct NullLexerAction
   static void doAction( Lexer * ) {}
 };
 
-template<typename Type, typename Test, typename Action1 = NullLexerAction, typename Action2 = NullLexerAction>
-class LexerObject : public Type
+template<typename TType, typename Test, typename Action1 = NullLexerAction, typename Action2 = NullLexerAction>
+class LexerObject : public TType
 {
 public:
-  LexerObject( Lexer* lexer, State<typename Type::Type>* sourceState = 0 )
-    : Type( sourceState ), m_lexer( lexer )
+  LexerObject( Lexer* lexer, State<typename TType::Type>* sourceState = 0 )
+    : TType( sourceState ), m_lexer( lexer )
   {
 
   }
