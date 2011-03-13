@@ -27,11 +27,9 @@
 
 #include "audiotextdocumentoutputter.h"
 
-Q_DECLARE_METATYPE(QTextDocument*)
-
 QVariant CleanHtmlFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
 {
-  QTextDocument *document = input.value<QTextDocument*>();
+  QTextDocument *document = qobject_cast<QTextDocument*>(input.value<QObject*>());
 
   if (!document)
     return QString();
@@ -48,7 +46,7 @@ QVariant CleanHtmlFilter::doFilter(const QVariant& input, const QVariant& argume
 
 QVariant PlainTextFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
 {
-  QTextDocument *document = input.value<QTextDocument*>();
+  QTextDocument *document = qobject_cast<QTextDocument*>(input.value<QObject*>());
 
   if (!document)
     return QString();

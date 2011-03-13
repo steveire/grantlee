@@ -592,8 +592,6 @@ void TextEdit::filePrintPdf()
 #endif
 }
 
-Q_DECLARE_METATYPE(QTextDocument*)
-
 void TextEdit::exportThemedHtml()
 {
     Grantlee::Engine *engine = new Grantlee::Engine();
@@ -611,8 +609,8 @@ void TextEdit::exportThemedHtml()
     Grantlee::Template t = engine->loadByName(themeName);
     Grantlee::Context c;
 
-    c.insert("abstract", QVariant::fromValue( abstractTextEdit->document() ) );
-    c.insert("content", QVariant::fromValue( textEdit->document() ) );
+    c.insert("abstract", abstractTextEdit->document() );
+    c.insert("content", textEdit->document() );
 
     QString result = t->render(&c);
 
@@ -634,8 +632,8 @@ void TextEdit::exportPlainText()
     Grantlee::Template t = engine->loadByName(themeName);
     Grantlee::Context c;
 
-    c.insert("abstract", QVariant::fromValue( abstractTextEdit->document() ) );
-    c.insert("content", QVariant::fromValue( textEdit->document() ) );
+    c.insert("abstract", abstractTextEdit->document() );
+    c.insert("content", textEdit->document() );
 
     QString result = t->render(&c);
 
