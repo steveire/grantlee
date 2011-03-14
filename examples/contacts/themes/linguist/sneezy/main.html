@@ -72,7 +72,7 @@
   <td>{{ contact.email }}</td>
   <td>{{ contact.phone }}</td>
   <td>{{ contact.nickname }}</td>
-  <td>{{ contact.address }}</td>
+  <td>{{ contact.address.houseNumber }} {{ contact.address.streetName }}<br/>{{ contact.address.city }}</td>
   <td>{{ _(contact.birthday) }}
     {% with_locale "de_DE" %}
       <br />{{ _(contact.birthday) }}
