@@ -67,8 +67,9 @@ MainWindow::MainWindow(const QString &templateDir, QWidget *parent, Qt::WindowFl
 
   const int numContacts = sizeof(contacts) / sizeof(*contacts);
 
-  Grantlee::registerSequentialContainer<QList<Contact*> >();
+  Grantlee::registerSequentialContainer<QList<QObject*> >();
 
+  QList<Contact *> contactList;
   for (int i = 0; i < numContacts; ++i)
   {
     Contact *c = new Contact(this);
@@ -85,7 +86,20 @@ MainWindow::MainWindow(const QString &templateDir, QWidget *parent, Qt::WindowFl
     c->setSalary(contacts[i].salary);
     c->setRating(contacts[i].rating);
     c->setBirthday(QDate::currentDate().addDays(-contacts[i].daysOld));
-    m_list->addItem(c);
+    contactList.append(c);
+  }
+
+  for (int i = 0; i < numContacts; ++i)
+  {
+    Contact *friend1 = contactList[(i + 1) % numContacts];
+    Contact *friend2 = contactList[(i + 2) % numContacts];
+    Contact *friend3 = contactList[(i + 3) % numContacts];
+    QList<QObject*> friends = QList<QObject*>() << friend1 << friend2 << friend3;
+    contactList[i]->setFriends(friends);
+  }
+
+  Q_FOREACH(Contact *contact, contactList) {
+    m_list->addItem(contact);
   }
 
   connect(m_list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(render()) );

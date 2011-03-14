@@ -159,5 +159,16 @@ QVariant Contact::data(int role) const
   return m_name;
 }
 
+QVariant Contact::friends() const
+{
+  return QVariant::fromValue(m_friends);
+}
+
+void Contact::setFriends(const QList<QObject*> &friends)
+{
+  m_friends = friends;
+}
+
+
 #include "contact.moc"
 

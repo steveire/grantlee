@@ -61,6 +61,7 @@ class Contact : public QObject, public QListWidgetItem
   Q_PROPERTY(QString salaryCurrency READ salaryCurrency)
   Q_PROPERTY(double  rating READ rating)
   Q_PROPERTY(QDate   birthday READ birthday)
+  Q_PROPERTY(QVariant friends READ friends)
 
 public:
   Contact(QObject* parent = 0);
@@ -92,6 +93,9 @@ public:
   QDate birthday() const;
   void setBirthday(const QDate &birthday);
 
+  QVariant friends() const;
+  void setFriends(const QList<QObject*> &friends);
+
   /* reimp */ QVariant data(int role) const;
 
 private:
@@ -104,10 +108,12 @@ private:
   double m_salary;
   double m_rating;
   QDate m_birthday;
+  QList<QObject*> m_friends;
 };
 
 Q_DECLARE_METATYPE(Contact*)
 Q_DECLARE_METATYPE(QList<Contact*>)
+Q_DECLARE_METATYPE(QList<QObject*>)
 
 #endif
 
