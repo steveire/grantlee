@@ -141,6 +141,52 @@ struct LookupTrait
   }
 };
 
+template<typename T>
+struct IsQObjectStar
+{
+  enum { Yes = false };
+};
+
+template<typename T>
+struct IsQObjectStar<T*>
+{
+  typedef int yes_type;
+  typedef char no_type;
+
+  static yes_type check(QObject*);
+  static no_type check(...);
+  enum { Yes = sizeof(check(static_cast<T*>(0))) == sizeof(yes_type) };
+};
+
+template<typename T, bool>
+struct LookupPointer
+{
+  static QVariant doLookUp( const QVariant &object, const QString &property )
+  {
+    typedef typename Grantlee::TypeAccessor<T> Accessor;
+    return Accessor::lookUp( object.value<T>(), property );
+  }
+};
+
+template<typename T>
+struct LookupPointer<T, true>
+{
+  static QVariant doLookUp( const QVariant &object, const QString &property )
+  {
+    typedef typename Grantlee::TypeAccessor<QObject*> Accessor;
+    return Accessor::lookUp( object.value<T>(), property );
+  }
+};
+
+template<typename RealType>
+struct LookupTrait<RealType*, RealType*>
+{
+  static QVariant doLookUp( const QVariant &object, const QString &property )
+  {
+    return LookupPointer<RealType*, IsQObjectStar<RealType*>::Yes>::doLookUp(object, property);
+  }
+};
+
 template<typename RealType, typename HandleAs>
 struct LookupTrait<RealType&, HandleAs&>
 {
