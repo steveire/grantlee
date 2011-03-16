@@ -27,13 +27,13 @@ namespace Grantlee
 
 class PumpPrivate
 {
-  PumpPrivate( Pump *pump )
-    : q_ptr( pump )
+  PumpPrivate(Pump *pump)
+    : q_ptr(pump)
   {
 
   }
 
-  Q_DECLARE_PUBLIC( Pump )
+  Q_DECLARE_PUBLIC(Pump)
   Pump * const q_ptr;
 
   void pumpFromSource();
@@ -48,51 +48,51 @@ using namespace Grantlee;
 
 void PumpPrivate::pumpFromSource()
 {
-  Q_Q( Pump );
-  if( !source || !target ) {
+  Q_Q(Pump);
+  if (!source || !target) {
     return;
   }
   target.data()->write( source.data()->readAll() );
 }
 
 
-Pump::Pump( QObject* parent )
-  : QObject( parent ), d_ptr( new PumpPrivate( this ) )
+Pump::Pump(QObject* parent)
+  : QObject(parent), d_ptr(new PumpPrivate(this))
 {
 
 }
 
-void Pump::setSource( QIODevice* sourceDevice )
+void Pump::setSource(QIODevice* sourceDevice)
 {
-  Q_D( Pump );
-  if( d->source )
-    d->source.data()->disconnect( this );
+  Q_D(Pump);
+  if ( d->source )
+      d->source.data()->disconnect(this);
   d->source = sourceDevice;
-  if( sourceDevice && d->target.data() ) {
-    d->target.data()->write( sourceDevice->readAll() );
-    connect( d->source.data(), SIGNAL( readyRead() ), SLOT( pumpFromSource() ) );
+  if (sourceDevice && d->target.data()) {
+    d->target.data()->write(sourceDevice->readAll());
+    connect( d->source.data(), SIGNAL(readyRead()), SLOT(pumpFromSource()) );
   }
 }
 
-void Pump::setTarget( QIODevice* targetDevice )
+void Pump::setTarget(QIODevice* targetDevice)
 {
-  Q_D( Pump );
+  Q_D(Pump);
   d->target = targetDevice;
-  if( d->source && d->target ) {
-    d->target.data()->write( d->source.data()->readAll() );
-    connect( d->source.data(), SIGNAL( readyRead() ), SLOT( pumpFromSource() ) );
+  if (d->source && d->target) {
+    d->target.data()->write(d->source.data()->readAll());
+    connect( d->source.data(), SIGNAL(readyRead()), SLOT(pumpFromSource()) );
   }
 }
 
 QIODevice* Pump::source() const
 {
-  Q_D( const Pump );
+  Q_D(const Pump);
   return d->source.data();
 }
 
 QIODevice* Pump::target() const
 {
-  Q_D( const Pump );
+  Q_D(const Pump);
   return d->target.data();
 }
 
