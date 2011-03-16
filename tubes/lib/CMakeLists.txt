@@ -11,7 +11,6 @@ set (grantlee_tubes_SRCS
 
 set(Grantlee_TUBES_LIB_SOVERSION 0)
 
-qt4_automoc(${grantlee_tubes_SRCS})
 
 add_library(grantlee_tubes SHARED
   ${grantlee_tubes_SRCS}

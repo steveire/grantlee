@@ -30,11 +30,12 @@ namespace Grantlee
 
 class TeePrivate
 {
-  TeePrivate( Tee *qq )
-    : q_ptr( qq ) {
+  TeePrivate(Tee *qq)
+    : q_ptr(qq)
+  {
 
   }
-  Q_DECLARE_PUBLIC( Tee )
+  Q_DECLARE_PUBLIC(Tee)
   Tee * const q_ptr;
 
   QVector<QWeakPointer<QIODevice> > m_targets;
@@ -44,8 +45,8 @@ class TeePrivate
 
 using namespace Grantlee;
 
-Tee::Tee( QObject* parent )
-  : QIODevice( parent ), d_ptr( new TeePrivate( this ) )
+Tee::Tee(QObject* parent)
+  : QIODevice(parent), d_ptr(new TeePrivate(this))
 {
 }
 
@@ -56,25 +57,25 @@ Tee::~Tee()
 
 void Tee::appendTarget( QIODevice* target )
 {
-  Q_D( Tee );
+  Q_D(Tee);
   d->m_targets.append( target );
 }
 
-void Tee::setTargets( const QList<QIODevice*>& targets )
+void Tee::setTargets(const QList<QIODevice*>& targets)
 {
-  Q_D( Tee );
+  Q_D(Tee);
   d->m_targets.clear();
-  foreach( QIODevice * target, targets )
-  d->m_targets.append( target );
+  foreach(QIODevice *target, targets)
+    d->m_targets.append(target);
 }
 
 QList<QIODevice*> Tee::targets() const
 {
-  Q_D( const Tee );
+  Q_D(const Tee);
   QList<QIODevice *> targets;
-  foreach( const QWeakPointer<QIODevice> &target, d->m_targets ) {
-    if( target )
-      targets.append( target.data() );
+  foreach(const QWeakPointer<QIODevice> &target, d->m_targets) {
+    if (target)
+      targets.append(target.data());
   }
   return targets;
 }
@@ -84,31 +85,31 @@ bool Tee::isSequential() const
   return true;
 }
 
-qint64 Tee::readData( char* data, qint64 maxlen )
+qint64 Tee::readData(char* data, qint64 maxlen)
 {
   return -1;
 }
 
-qint64 Tee::writeData( const char* data, qint64 maxSize )
+qint64 Tee::writeData(const char* data, qint64 maxSize)
 {
-  Q_D( Tee );
+  Q_D(Tee);
   QVector<QWeakPointer<QIODevice> >::iterator it = d->m_targets.begin();
 
-  while( it != d->m_targets.end() ) {
-    if( *it ) {
-      const int bytesWritten = it->data()->write( data, maxSize );
-      if( bytesWritten != maxSize ) {
+  while ( it != d->m_targets.end() ) {
+    if ( *it ) {
+      const int bytesWritten = it->data()->write(data, maxSize);
+      if ( bytesWritten != maxSize ) {
         // TODO: Define error strings somewhere.
         // TODO: Add QIODevice API for error codes.
         // TODO: Close the device?
-        setErrorString( QLatin1String( "Write Error" ) );
+        setErrorString( QLatin1String("Write Error") );
         return -1;
       }
       ++it;
     } else {
       it = d->m_targets.erase( it );
       // TODO: Close the device?
-      setErrorString( QLatin1String( "Write Error" ) );
+      setErrorString( QLatin1String("Write Error") );
       return -1;
     }
   }
@@ -116,10 +117,10 @@ qint64 Tee::writeData( const char* data, qint64 maxSize )
   return maxSize;
 }
 
-bool Tee::open( QIODevice::OpenMode mode )
+bool Tee::open(QIODevice::OpenMode mode)
 {
-  if( mode == QIODevice::WriteOnly || mode == QIODevice::NotOpen )
-    return QIODevice::open( mode );
+  if (mode == QIODevice::WriteOnly || mode == QIODevice::NotOpen)
+    return QIODevice::open(mode);
   return false;
 }
 

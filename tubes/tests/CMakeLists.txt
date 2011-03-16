@@ -7,10 +7,12 @@ macro(GRANTLEE_TUBES_UNIT_TESTS)
     set(_testSrcs ${_testname}.cpp)
     set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
     qt4_generate_moc(${_testname}.cpp ${moc_output_file})
-    add_executable(${_testname}_exec ${_testSrcs} ${moc_output_file} )
+    add_executable(${_testname}_exec
+                  ${_testSrcs}
+                  ${moc_output_file}
+    )
     add_test(${_testname} ${_testname}_exec )
     target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_tubes )
-    set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)
 endmacro(GRANTLEE_TUBES_UNIT_TESTS)
 
