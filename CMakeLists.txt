@@ -14,6 +14,7 @@ endif()
 
 option( BUILD_TEMPLATES "Build the Grantlee template library" TRUE )
 option( BUILD_TEXTDOCUMENT "Build the Grantlee textdocument library" TRUE )
+option( BUILD_TUBES "Build the Grantlee tubes library" TRUE )
 option( BUILD_MAIN_PLUGINS "Build the Grantlee Templates plugins" TRUE )
 option( BUILD_I18N_PLUGIN "Build the Grantlee Templates i18n plugin" TRUE )
 option( BUILD_SCRIPT_PLUGIN "Build the Grantlee Templates scriptable tags plugin" TRUE )
@@ -109,6 +110,10 @@ endif()
 
 if (BUILD_TEXTDOCUMENT)
   add_subdirectory(textdocument)
+endif()
+
+if (BUILD_TUBES)
+  add_subdirectory(tubes)
 endif()
 
 set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/Grantlee${Grantlee_VERSION_MAJOR}" )
@@ -355,6 +360,7 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING.LIB")
 set(CPACK_COMPONENT_COMMON_DISPLAY_NAME "Grantlee Common files")
 set(CPACK_COMPONENT_TEMPLATES_DISPLAY_NAME "Grantlee String Templates")
 set(CPACK_COMPONENT_TEXTDOCUMENT_DISPLAY_NAME "Grantlee TextDocument framework")
+set(CPACK_COMPONENT_TUBES_DISPLAY_NAME "Grantlee Tubes framework")
 
 set(CPACK_COMPONENT_COMMON_DESCRIPTION
   "Files needed by all Grantlee frameworks")
@@ -362,9 +368,12 @@ set(CPACK_COMPONENT_TEMPLATES_DESCRIPTION
   "A string template system for Qt based on Django syntax")
 set(CPACK_COMPONENT_TEXTDOCUMENT_DESCRIPTION
   "A framework for QTextDocument related tasks")
+set(CPACK_COMPONENT_TUBES_DESCRIPTION
+  "A framework for QIODevice related tasks")
 
 set(CPACK_COMPONENT_TEMPLATES_DEPENDS Common)
 set(CPACK_COMPONENT_TEXTDOCUMENT_DEPENDS Common)
+set(CPACK_COMPONENT_TUBES_DEPENDS Common)
 set(CPACK_COMPONENT_COMMON_REQUIRED ON)
 
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)

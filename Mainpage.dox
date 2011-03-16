@@ -60,6 +60,12 @@ namespace Grantlee
     </td><td>
       - @ref custom_qtextobject
     </td></tr>
+
+    <tr><th class="library" colspan="3">%Grantlee Tubes</th></tr>
+    <tr><td colspan="2">
+      - Tee
+    </td><td>
+    </td></tr>
   </table>
   <br />
 

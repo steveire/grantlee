@@ -7,8 +7,10 @@ digraph GG {
   "node28" [ label="libQtScript.so" shape="ellipse"];
   "node2" [ label="grantlee_templates" shape="polygon"];
   "node19" [ label="grantlee_textdocument" shape="polygon"];
+  "node20" [ label="grantlee_tubes" shape="polygon"];
   "node2" -> "node27"
   "node2" -> "node28"
   "node19" -> "node27"
   "node19" -> "node30"
+  "node20" -> "node27"
 }

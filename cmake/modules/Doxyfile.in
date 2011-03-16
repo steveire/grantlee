@@ -94,7 +94,12 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = @CMAKE_SOURCE_DIR@/Mainpage.dox @CMAKE_SOURCE_DIR@/templates/lib @CMAKE_SOURCE_DIR@/textdocument @CMAKE_SOURCE_DIR@/dox
+INPUT                  = @CMAKE_SOURCE_DIR@/Mainpage.dox    \
+                         @CMAKE_SOURCE_DIR@/templates/lib   \
+                         @CMAKE_SOURCE_DIR@/textdocument/lib \
+                         @CMAKE_SOURCE_DIR@/tubes/lib       \
+                         @CMAKE_SOURCE_DIR@/dox             \
+
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h \
                          *.dox \
