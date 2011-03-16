@@ -16,6 +16,7 @@ endmacro(GRANTLEE_TUBES_UNIT_TESTS)
 
 grantlee_tubes_unit_tests(
   testtee
+  testpump
 )
 
 
