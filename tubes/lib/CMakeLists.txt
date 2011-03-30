@@ -2,6 +2,7 @@
 project(grantlee_tubes)
 
 set (grantlee_tubes_SRCS
+  cat.cpp
   pump.cpp
   tee.cpp
 )
@@ -39,6 +40,7 @@ install(TARGETS grantlee_tubes EXPORT grantlee_targets
 )
 
 install(FILES
+  cat.h
   pump.h
   tee.h
   ${PROJECT_BINARY_DIR}/grantlee_tubes_export.h
