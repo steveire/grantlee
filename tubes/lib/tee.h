@@ -109,22 +109,22 @@ public:
   /**
    * Opens the Tee device.
    */
-  virtual bool open(OpenMode mode);
+  virtual bool open( OpenMode mode );
 
 protected:
 #ifndef Q_QDOC
   /**
    * @internal
    */
-  virtual qint64 readData(char* data, qint64 maxlen);
+  virtual qint64 readData( char* data, qint64 maxlen );
 
   /**
    * @internal Writes @p data to each device.
    */
-  virtual qint64 writeData(const char* data, qint64 maxSize);
+  virtual qint64 writeData( const char* data, qint64 maxSize );
 #endif
 private:
-  Q_DECLARE_PRIVATE(Tee)
+  Q_DECLARE_PRIVATE( Tee )
   TeePrivate * const d_ptr;
 };
 
