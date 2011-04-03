@@ -64,6 +64,7 @@ namespace Grantlee
     <tr><th class="library" colspan="3">%Grantlee Tubes</th></tr>
     <tr><td colspan="2">
       - Cat
+      - Channel
       - Pump
       - Tee
     </td><td>
