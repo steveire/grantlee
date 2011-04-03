@@ -64,23 +64,23 @@ public:
   Pump( QObject *parent = 0 );
 
   /**
-   * Sets the device to read from to @p sourceDevice.
-   */
+    Sets the device to read from to @p sourceDevice.
+  */
   void setSource( QIODevice *sourceDevice );
 
   /**
-   * Returns the device being read from.
-   */
+    Returns the device being read from.
+  */
   QIODevice *source() const;
 
   /**
-   * Sets the device to write to to @p targetDevice.
-   */
+    Sets the device to write to to @p targetDevice.
+  */
   void setTarget( QIODevice *targetDevice );
 
   /**
-   * Returns the device being written to.
-   */
+    Returns the device being written to.
+  */
   QIODevice *target() const;
 
 private:

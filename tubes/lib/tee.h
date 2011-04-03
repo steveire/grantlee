@@ -87,40 +87,40 @@ public:
   virtual ~Tee();
 
   /**
-   * Appends @p target to the list of targets written to by Tee.
-   */
+    Appends @p target to the list of targets written to by Tee.
+  */
   void appendTarget( QIODevice *target );
 
   /**
-   * Returns the list of targets written to by Tee.
-   */
+    Returns the list of targets written to by Tee.
+  */
   QList<QIODevice*> targets() const;
 
   /**
-   * Set the targets written to by Tee to @p targets.
-   */
+    Set the targets written to by Tee to @p targets.
+  */
   void setTargets( const QList<QIODevice*> &targets );
 
   /**
-   * Returns true. Tee is always sequential.
-   */
+    Returns true. Tee is always sequential.
+  */
   bool isSequential() const;
 
   /**
-   * Opens the Tee device.
-   */
+    Opens the Tee device.
+  */
   virtual bool open( OpenMode mode );
 
 protected:
 #ifndef Q_QDOC
   /**
-   * @internal
-   */
+    @internal
+  */
   virtual qint64 readData( char* data, qint64 maxlen );
 
   /**
-   * @internal Writes @p data to each device.
-   */
+    @internal Writes @p data to each device.
+  */
   virtual qint64 writeData( const char* data, qint64 maxSize );
 #endif
 private:
