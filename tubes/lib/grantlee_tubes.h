@@ -20,6 +20,7 @@
 
 #include "grantlee/cat.h"
 #include "grantlee/channel.h"
+#include "grantlee/checksum.h"
 #include "grantlee/pump.h"
 #include "grantlee/tee.h"
 

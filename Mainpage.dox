@@ -65,6 +65,7 @@ namespace Grantlee
     <tr><td colspan="2">
       - Cat
       - Channel
+      - Checksum
       - Pump
       - Tee
     </td><td>
