@@ -61,7 +61,7 @@ RegroupNode::RegroupNode( FilterExpression target, FilterExpression expression, 
 void RegroupNode::render( OutputStream *stream, Context *c )
 {
   Q_UNUSED( stream )
-  QVariantList objList = m_target.resolve( c ).toList();
+  QVariantList objList = m_target.toList( c );
   if ( objList.isEmpty() ) {
     c->insert( m_varName, QVariantHash() );
     return;

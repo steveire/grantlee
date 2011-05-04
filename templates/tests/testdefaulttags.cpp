@@ -29,10 +29,13 @@
 #include "context.h"
 #include "util.h"
 #include "grantlee_paths.h"
+#include "metatype.h"
 
+typedef QList<QVariantList> Table;
 typedef QHash<QString, QVariant> Dict;
 typedef QPair<QString, QString> StringPair;
 
+Q_DECLARE_METATYPE( Table )
 Q_DECLARE_METATYPE( Dict )
 Q_DECLARE_METATYPE( StringPair )
 Q_DECLARE_METATYPE( Grantlee::Error )
@@ -183,6 +186,8 @@ void TestDefaultTags::initTestCase()
   FakeTemplateLoader::Ptr loader1 = FakeTemplateLoader::Ptr( new FakeTemplateLoader() );
 
   m_engine->addTemplateLoader( loader1 );
+
+  Grantlee::registerMetaType<Table>();
 }
 
 void TestDefaultTags::cleanupTestCase()
@@ -1236,6 +1241,47 @@ void TestDefaultTags::testRegroupTag_data()
       "{% endfor %},"
       "{% endfor %}" ) << dict << QString::fromLatin1( "2:ab,3:x,1:cd," ) << NoError;
 
+
+  dict.clear();
+  hash.clear();
+  list.clear();
+
+  Table table;
+
+  QVariantList row;
+  row.append( 1 );
+  row.append( QLatin1String( "a" ) );
+  table.append( row  );
+
+  row.clear();
+  row.append( 1 );
+  row.append( QLatin1String( "b" ) );
+  table.append( row );
+
+  row.clear();
+  row.append( 2 );
+  row.append( QLatin1String( "a" ) );
+  table.append( row );
+
+  row.clear();
+  row.append( 3 );
+  row.append( QLatin1String( "c" ) );
+  table.append( row );
+
+  row.clear();
+  row.append( 3 );
+  row.append( QLatin1String( "d" ) );
+  table.append( row );
+
+  dict.insert( QLatin1String( "data" ), QVariant::fromValue( table ) );
+
+  QTest::newRow( "regroup03" ) << QString::fromLatin1( "{% regroup data by 0 as grouped %}"
+      "{% for group in grouped %}"
+      "{{ group.grouper }}:"
+      "{% for item in group.list %}"
+      "{{ item.1 }}"
+      "{% endfor %},"
+      "{% endfor %}" ) << dict << QString::fromLatin1( "1:ab,2:a,3:cd," ) << NoError;
 }
 
 void TestDefaultTags::testIfChangedTag_data()
