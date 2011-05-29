@@ -71,6 +71,8 @@ private Q_SLOTS:
   void testSharedPointer();
   void testThirdPartySharedPointer();
   void testNestedContainers();
+
+  void testCustomQObjectDerived();
 }; // class TestGenericTypes
 
 class Person
@@ -626,6 +628,78 @@ void TestGenericTypes::testNestedContainers()
   );
 
   QCOMPARE(result, expectedResult);
+}
+
+class CustomObject : public QObject
+{
+  Q_OBJECT
+public:
+  explicit CustomObject(QObject* parent = 0)
+    : QObject(parent)
+  {
+
+  }
+};
+
+Q_DECLARE_METATYPE(CustomObject*)
+
+class OtherObject : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(CustomObject* custom READ custom)
+public:
+  explicit OtherObject(QObject* parent = 0)
+    : QObject(parent), m_custom(new CustomObject(this))
+  {
+    m_custom->setProperty("nestedProp", QLatin1String("nestedValue"));
+  }
+
+  CustomObject* custom()
+  {
+    return m_custom;
+  }
+
+private:
+  CustomObject *m_custom;
+};
+
+void TestGenericTypes::testCustomQObjectDerived()
+{
+  Grantlee::Engine engine;
+
+  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+
+  CustomObject *customObject = new CustomObject(this);
+  customObject->setProperty("someProp", QLatin1String("propValue"));
+
+  Grantlee::registerMetaType<CustomObject*>();
+
+  Grantlee::Context c;
+  c.insert( QLatin1String( "custom" ), QVariant::fromValue( customObject ) );
+
+  {
+    Grantlee::Template t1 = engine.newTemplate(
+      QLatin1String( "{{ custom.someProp }}"), QLatin1String( "template1" ) );
+
+    QString result = t1->render( &c );
+    QString expectedResult = QLatin1String("propValue");
+
+    QCOMPARE(result, expectedResult);
+  }
+
+  QObject *other = new OtherObject(this);
+
+  c.insert(QLatin1String("other"), other);
+
+  {
+    Grantlee::Template t1 = engine.newTemplate(
+      QLatin1String( "{{ other.custom.nestedProp }}"), QLatin1String( "template1" ) );
+
+    QString result = t1->render( &c );
+    QString expectedResult = QLatin1String("nestedValue");
+
+    QCOMPARE(result, expectedResult);
+  }
 }
 
 QTEST_MAIN( TestGenericTypes )
