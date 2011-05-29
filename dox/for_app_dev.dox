@@ -108,7 +108,7 @@ namespace Grantlee
 
     PersonWrapper *linda = new PersonWrapper("Linda", 21);
 
-    QVariant lindaVar = QVariant::fromValue(linda);
+    QVariant lindaVar = QVariant::fromValue<QObject*>(linda);
 
     mapping.insert("person", lindaVar);
 
@@ -127,6 +127,8 @@ namespace Grantlee
   @endverbatim
 
   to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects. In the case of dynamic properties, the property name must be UTF-8 encoded.
+
+  Finally, note that the person object (Linda) is inserted into the QVariant as a QObject*, not as a PersonWrapper*. Otherwise, the compiler would generate an error message about an unregistered datatype PersonWrapper*. While using Q_DECLARE_METATYPE(PersonWrapper*) would make the compiler error go away, it would still not be possible to use the Linda object in %Grantlee templates. @see @ref custom_object_properties.
 
   If you already have QObjects in your application which would be suitable for use in templates, you only need to add some Q_PROPERTY entries to the classes to make them accessible to %Grantlee.
 
@@ -201,6 +203,29 @@ namespace Grantlee
 
   In this example, we leave the home() method intact because we may want to use the Home* type from C++, but we add a scriptableHome()
   method which returns a QObject* instead of a Home*. This method is then used in the READ component of the Q_PROPERTY.
+
+  The above is the recommended method of using Q_PROPERTY with QObject derived types, however, if the class containing the Q_PROPERTY (MyPersonWrapper in the example above) can not be modified, it is still possible to make the property accessible to %Grantlee by using
+  the Grantlee::registerMetaType() method near the start of the program.
+
+  @code
+    // Somewhere among other initializers
+    Grantlee::registerMetaType<Home*>();
+
+    // ...
+    // Creating the context.
+
+    MyPersonWrapper *person = new MyPersonWrapper;
+
+    context.insert("person", person);
+
+    t->render(&c);
+
+    // ...
+    // Template can now use home property as normal. Eg
+     Street: {{ person.home.streetName }}
+  @endcode
+
+  Note that prior to %Grantlee version 0.1.9, Grantlee::registerMetaType&lt;Home*, QObject*&gt;(); must be used instead.
 
   Using containers such as QList with Q_PROPERTY macro is also possible.
 
