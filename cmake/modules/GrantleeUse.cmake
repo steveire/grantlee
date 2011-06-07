@@ -1,7 +1,6 @@
 
 # Set up the include directories and link directories
 include_directories(${Grantlee_INCLUDE_DIRS})
-link_directories(${Grantlee_LIBRARY_DIRS})
 
 # Set up the deps needed to use Grantlee
 find_package(Qt4 REQUIRED)
