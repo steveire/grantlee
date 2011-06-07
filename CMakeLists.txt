@@ -73,13 +73,13 @@ endif()
 configure_file(
   "${Grantlee_MODULE_DIR}/GrantleeConfig.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
-  IMMEDIATE @ONLY
+  @ONLY
 )
 
 configure_file(
   "${Grantlee_MODULE_DIR}/GrantleeConfigVersion.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
-  IMMEDIATE @ONLY
+  @ONLY
 )
 
 install(FILES
@@ -116,7 +116,7 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
   configure_file(
     "${Grantlee_MODULE_DIR}/Doxyfile.in"
     "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-    IMMEDIATE @ONLY)
+    @ONLY)
 
   # Add support for a Qt assistant docs target
   # qttags.tag is too big to distribute with Grantlee. Get it
@@ -135,7 +135,7 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
     configure_file(
       "${Grantlee_MODULE_DIR}/Doxyfile.in"
       "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.qt"
-      IMMEDIATE @ONLY)
+      @ONLY)
   endif()
 
   set( DOCS_ARGS ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile" )
