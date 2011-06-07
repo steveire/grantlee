@@ -24,9 +24,6 @@ target_link_libraries(grantlee_scriptabletags
 )
 
 install(TARGETS grantlee_scriptabletags
-         RUNTIME DESTINATION ${PLUGIN_INSTALL_DIR}
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-         COMPONENT Devel
 )
 

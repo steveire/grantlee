@@ -32,10 +32,7 @@ grantlee_add_plugin ( grantlee_defaulttags
 )
 
 install(TARGETS grantlee_defaulttags
-        RUNTIME DESTINATION ${PLUGIN_INSTALL_DIR}
         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
-        ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-        COMPONENT Devel
 )
 
 
