@@ -15,7 +15,8 @@ if (BUILD_TESTS)
   enable_testing()
 endif()
 
-set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
+set(Grantlee_MODULE_DIR ${Grantlee_SOURCE_DIR}/cmake/modules)
+set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
@@ -70,13 +71,13 @@ if (BUILD_GUI AND BUILD_TEXTDOCUMENT)
 endif()
 
 configure_file(
-  "${CMAKE_MODULE_PATH}/GrantleeConfig.cmake.in"
+  "${Grantlee_MODULE_DIR}/GrantleeConfig.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
   IMMEDIATE @ONLY
 )
 
 configure_file(
-  "${CMAKE_MODULE_PATH}/GrantleeConfigVersion.cmake.in"
+  "${Grantlee_MODULE_DIR}/GrantleeConfigVersion.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
   IMMEDIATE @ONLY
 )
@@ -87,13 +88,13 @@ install(FILES
   DESTINATION "${LIB_INSTALL_DIR}/grantlee")
 
 install(FILES
-  "${CMAKE_MODULE_PATH}/GrantleeUse.cmake"
+  "${Grantlee_MODULE_DIR}/GrantleeUse.cmake"
   DESTINATION "${PLUGIN_INSTALL_DIR}"
 )
 
 # Add support for an uninstall target
 configure_file(
-  "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+  "${Grantlee_MODULE_DIR}/cmake_uninstall.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 
@@ -113,7 +114,7 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
   set(TAGFILES "${QTTAGFILE} ${STLTAGFILE}")
   set(DOCS_OUTPUT_DIRECTORY "@CMAKE_BINARY_DIR@")
   configure_file(
-    "${CMAKE_MODULE_PATH}/Doxyfile.in"
+    "${Grantlee_MODULE_DIR}/Doxyfile.in"
     "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
     IMMEDIATE @ONLY)
 
@@ -132,7 +133,7 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
     set(GENERATE_QHP "yes")
 
     configure_file(
-      "${CMAKE_MODULE_PATH}/Doxyfile.in"
+      "${Grantlee_MODULE_DIR}/Doxyfile.in"
       "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.qt"
       IMMEDIATE @ONLY)
   endif()
