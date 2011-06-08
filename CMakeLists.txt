@@ -73,6 +73,8 @@ if (BUILD_GUI AND BUILD_TEXTDOCUMENT)
   add_subdirectory(textdocument)
 endif()
 
+set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/grantlee" )
+
 configure_file(
   "${Grantlee_MODULE_DIR}/GrantleeConfig.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
@@ -88,11 +90,11 @@ configure_file(
 install(FILES
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
-  DESTINATION "${LIB_INSTALL_DIR}/grantlee")
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}")
 
 install(FILES
   "${Grantlee_MODULE_DIR}/GrantleeUse.cmake"
-  DESTINATION "${PLUGIN_INSTALL_DIR}"
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
 )
 
 # Add support for an uninstall target
