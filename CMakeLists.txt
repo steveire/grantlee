@@ -54,7 +54,10 @@ set( PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/grantlee/${Gran
 set( BIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/bin )
 set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
 set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
+
+# set up RPATH/install_name_dir
 set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
 
