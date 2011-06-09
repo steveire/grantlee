@@ -15,11 +15,11 @@ set(Grantlee_INCLUDE_DIRS   "${rootDir}/@INCLUDE_INSTALL_DIR@")
 
 if (MINGW)
   set(Grantlee_LIBRARY_DIR   "${rootDir}/@BIN_INSTALL_DIR@")
-  set(Grantlee_PLUGIN_DIR    "${rootDir}/@LIB_INSTALL_DIR@")
 else ()
   set(Grantlee_LIBRARY_DIR   "${rootDir}/@LIB_INSTALL_DIR@")
-  set(Grantlee_PLUGIN_DIR    "${Grantlee_LIBRARY_DIR}/")
 endif ()
+
+set(Grantlee_PLUGIN_DIR    "${rootDir}/@LIB_INSTALL_DIR@")
 
 if (UNIX)
   if (APPLE)
