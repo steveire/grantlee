@@ -11,13 +11,13 @@ set(Grantlee_VERSION_MINOR "@Grantlee_VERSION_MINOR@")
 set(Grantlee_VERSION_PATCH "@Grantlee_VERSION_PATCH@")
 
 set(Grantlee_INSTALL_PREFIX "${rootDir}")
-set(Grantlee_INCLUDE_DIRS   "${rootDir}/include")
+set(Grantlee_INCLUDE_DIRS   "${rootDir}/@INCLUDE_INSTALL_DIR@")
 
 if (MINGW)
-  set(Grantlee_LIBRARY_DIR   "${rootDir}/bin")
-  set(Grantlee_PLUGIN_DIR    "${rootDir}/lib")
+  set(Grantlee_LIBRARY_DIR   "${rootDir}/@BIN_INSTALL_DIR@")
+  set(Grantlee_PLUGIN_DIR    "${rootDir}/@LIB_INSTALL_DIR@")
 else ()
-  set(Grantlee_LIBRARY_DIR   "${rootDir}/lib@LIB_SUFFIX@")
+  set(Grantlee_LIBRARY_DIR   "${rootDir}/@LIB_INSTALL_DIR@")
   set(Grantlee_PLUGIN_DIR    "${Grantlee_LIBRARY_DIR}/")
 endif ()
 
