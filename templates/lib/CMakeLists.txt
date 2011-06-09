@@ -88,7 +88,7 @@ set_target_properties(grantlee_core PROPERTIES
   DEFINE_SYMBOL GRANTLEE_TEMPLATES_LIB_MAKEDLL
 )
 
-install(TARGETS grantlee_core
+install(TARGETS grantlee_core EXPORT grantlee_targets
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}
          LIBRARY DESTINATION ${LIB_INSTALL_DIR}
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR}

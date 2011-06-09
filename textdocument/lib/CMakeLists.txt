@@ -34,7 +34,7 @@ set_target_properties(grantlee_gui PROPERTIES
   DEFINE_SYMBOL GRANTLEE_TEXTDOCUMENT_LIB_MAKEDLL
 )
 
-install(TARGETS grantlee_gui
+install(TARGETS grantlee_gui EXPORT grantlee_targets
          RUNTIME DESTINATION ${BIN_INSTALL_DIR}
          LIBRARY DESTINATION ${LIB_INSTALL_DIR}
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR}

@@ -99,6 +99,8 @@ install(FILES
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
 )
 
+install(EXPORT grantlee_targets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE GrantleeTargets.cmake )
+
 # Add support for an uninstall target
 configure_file(
   "${Grantlee_MODULE_DIR}/cmake_uninstall.cmake.in"
