@@ -59,7 +59,7 @@ set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
 set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
 set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
+set(Grantlee_USE_FILE "${Grantlee_MODULE_DIR}/GrantleeUse.cmake")
 
 if (BUILD_CORE AND BUILD_TEMPLATES)
   set(Grantlee_TEMPLATES_LIBRARY "grantlee_core")
