@@ -75,6 +75,8 @@ endif()
 
 set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/grantlee" )
 
+file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
+
 configure_file(
   "${Grantlee_MODULE_DIR}/GrantleeConfig.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"

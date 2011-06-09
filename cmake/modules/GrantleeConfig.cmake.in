@@ -2,18 +2,22 @@
 
 # Any changes in this file will be overwritten by CMake.
 
+get_filename_component(myDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the directory where I myself am
+get_filename_component(rootDir ${myDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
+
+
 set(Grantlee_VERSION_MAJOR "@Grantlee_VERSION_MAJOR@")
 set(Grantlee_VERSION_MINOR "@Grantlee_VERSION_MINOR@")
 set(Grantlee_VERSION_PATCH "@Grantlee_VERSION_PATCH@")
 
-set(Grantlee_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
-set(Grantlee_INCLUDE_DIRS   "@CMAKE_INSTALL_PREFIX@/include")
+set(Grantlee_INSTALL_PREFIX "${rootDir}")
+set(Grantlee_INCLUDE_DIRS   "${rootDir}/include")
 
 if (MINGW)
-  set(Grantlee_LIBRARY_DIR   "@CMAKE_INSTALL_PREFIX@/bin")
-  set(Grantlee_PLUGIN_DIR    "@CMAKE_INSTALL_PREFIX@/lib")
+  set(Grantlee_LIBRARY_DIR   "${rootDir}/bin")
+  set(Grantlee_PLUGIN_DIR    "${rootDir}/lib")
 else ()
-  set(Grantlee_LIBRARY_DIR   "@CMAKE_INSTALL_PREFIX@/lib@LIB_SUFFIX@")
+  set(Grantlee_LIBRARY_DIR   "${rootDir}/lib@LIB_SUFFIX@")
   set(Grantlee_PLUGIN_DIR    "${Grantlee_LIBRARY_DIR}/")
 endif ()
 
@@ -46,5 +50,5 @@ set(Grantlee_GUI_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARIES})
 set(Grantlee_PLUGIN_PATH ${Grantlee_PLUGIN_DIR})
 
 # Now for the use file, which contains useful functions, sets up the project
-set(Grantlee_USE_FILE "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/cmake/grantlee/GrantleeUse.cmake")
+set(Grantlee_USE_FILE "${myDir}/GrantleeUse.cmake")
 
