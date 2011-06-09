@@ -65,7 +65,11 @@ namespace Grantlee
   </table>
   <br />
 
-  @image html grantlee_deps.png "Dependency Graph for Grantlee"
+  <center>
+  <b>
+  @dotfile "moduledeps.dot" "Dependency Graph for Grantlee"
+  </b>
+  </center>
 
   @section start_community Community
 

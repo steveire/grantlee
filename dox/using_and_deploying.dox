@@ -204,9 +204,15 @@ namespace Grantlee
 
   It is possible to build only parts of %Grantlee if your application is a QCoreApplication that depends only on QtCore
 
-  @image html grantlee_deps.png "Dependency Graph for Grantlee"
+  <center>
+  <b>
+  @dotfile "moduledeps.dot" "Dependency Graph for Grantlee"
+  </b>
 
-  @image html plugin_deps.png "Dependency Graph for Grantlee plugins"
+  <b>
+  @dotfile "plugindeps.dot" "Dependency Graph for Grantlee plugins"
+  </b>
+  </center>
 
   The appropriate options may be specified in the cmake gui, or on the command line.
 
