@@ -36,6 +36,7 @@ grantlee_add_plugin(customplugin
 target_link_libraries(customplugin
   ${Grantlee_CORE_LIBRARIES}
   ${QT_QTXMLPATTERNS_LIBRARIES}
+  ${QT_QTNETWORK_LIBRARIES}
 )
 
 add_executable(htmlapps
