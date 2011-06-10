@@ -6,7 +6,8 @@ add_subdirectory(lib)
 include(${Grantlee_USE_FILE})
 
 include_directories(
-  lib
+  ${CMAKE_CURRENT_BINARY_DIR}/lib
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
 
 if (BUILD_MAIN_PLUGINS)

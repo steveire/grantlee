@@ -23,6 +23,8 @@ add_library(grantlee_gui SHARED
   ${grantlee_textdocument_SRCS}
 )
 
+grantlee_generate_export_header(grantlee_gui)
+
 target_link_libraries(grantlee_gui
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
@@ -31,7 +33,6 @@ target_link_libraries(grantlee_gui
 set_target_properties(grantlee_gui PROPERTIES
   VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
   SOVERSION  ${Grantlee_TEXTDOCUMENT_LIB_SOVERSION}
-  DEFINE_SYMBOL GRANTLEE_TEXTDOCUMENT_LIB_MAKEDLL
 )
 
 install(TARGETS grantlee_gui EXPORT grantlee_targets
@@ -48,6 +49,6 @@ install(FILES
   plaintextmarkupbuilder.h
   texthtmlbuilder.h
   mediawikimarkupbuilder.h
-  grantlee_gui_export.h
+  ${PROJECT_BINARY_DIR}/grantlee_gui_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
 )

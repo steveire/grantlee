@@ -18,11 +18,13 @@ endif()
 set(Grantlee_MODULE_DIR ${Grantlee_SOURCE_DIR}/cmake/modules)
 set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
+include(GrantleeGenerateExportHeader)
+
 if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic-errors")
   if (NOT MINGW)
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+    enable_gcc_hidden_visibility()
   else ()
     # http://mail.kde.org/pipermail/kde-windows/2007-December/001692.html
     # http://lists.trolltech.com/pipermail/qt-interest/2009-July/009829.html

@@ -71,6 +71,8 @@ add_library(grantlee_core SHARED
   ${scriptabletags_SRCS}
 )
 
+grantlee_generate_export_header(grantlee_core)
+
 target_link_libraries(grantlee_core
   ${QT_QTCORE_LIBRARY}
   ${QT_QTSCRIPT_LIBRARY}
@@ -85,7 +87,6 @@ target_link_libraries(grantlee_core
 set_target_properties(grantlee_core PROPERTIES
   VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
   SOVERSION  ${Grantlee_TEMPLATES_LIB_SOVERSION}
-  DEFINE_SYMBOL GRANTLEE_TEMPLATES_LIB_MAKEDLL
 )
 
 install(TARGETS grantlee_core EXPORT grantlee_targets
@@ -104,7 +105,7 @@ install(FILES
   exception.h
   filter.h
   filterexpression.h
-  grantlee_core_export.h
+  ${PROJECT_BINARY_DIR}/grantlee_core_export.h
   ${PROJECT_BINARY_DIR}/grantlee_version.h
   metatype.h
   node.h
