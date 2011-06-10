@@ -62,14 +62,10 @@ set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(Grantlee_USE_FILE "${Grantlee_MODULE_DIR}/GrantleeUse.cmake")
 
 if (BUILD_CORE AND BUILD_TEMPLATES)
-  set(Grantlee_TEMPLATES_LIBRARY "grantlee_core")
-  set(Grantlee_TEMPLATES_LIBRARIES ${Grantlee_TEMPLATES_LIBRARY} ${QT_QTCORE_LIBRARIES} )
   add_subdirectory(templates)
 endif()
 
 if (BUILD_GUI AND BUILD_TEXTDOCUMENT)
-  set(Grantlee_TEXTDOCUMENT_LIBRARY "grantlee_gui")
-  set(Grantlee_TEXTDOCUMENT_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARY} ${QT_QTGUI_LIBRARIES} )
   add_subdirectory(textdocument)
 endif()
 

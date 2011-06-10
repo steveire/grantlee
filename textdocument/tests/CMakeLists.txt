@@ -15,7 +15,7 @@ macro(GRANTLEE_TEXTDOCUMENT_UNIT_TESTS)
     qt4_generate_moc(${_testname}.cpp ${moc_output_file})
     add_executable(${_testname}_exec ${_testSrcs} ${moc_output_file} )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} ${Grantlee_TEXTDOCUMENT_LIBRARY} )
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY} grantlee_gui )
   endforeach(_testname)
 endmacro(GRANTLEE_TEXTDOCUMENT_UNIT_TESTS)
 
