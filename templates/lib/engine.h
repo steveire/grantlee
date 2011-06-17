@@ -63,6 +63,48 @@ class EnginePrivate;
 
   Different Engine objects can be used to create templates with differing configurations.
 
+  @section smart_trim Insignificant whitespace
+
+  The output of rendering a template depends on the content of the template. In some cases when generating content in which whitespace is
+  significant, this can have undesired effects. For example, given a template to generate C++ code like:
+
+  @verbatim
+    class MyClass {
+    {# This loop creates the  #}
+    {# methods in the class   #}
+    {% for method in methods %}
+      {% if method.hasDox %}
+        {{ method.dox }}
+      {% endif %}
+        {{ method.signature }}
+    {% endfor %}
+    };
+  @endverbatim
+
+  The output would have a lot of whitespace which is not necessarily wanted.
+
+  @code
+    class MyClass {
+
+
+
+
+      void foo() const;
+
+    };
+  @endcode
+
+  It is possible to strip insignificant whitespace by enabling the smartTrim feature with setSmartTrimEnabled. When enabled
+  the output will not contain a newline for any line in the template which has only one token of template syntax, such
+  as a comment, tag or variable.
+
+  @code
+    class MyClass {
+
+      void foo() const;
+    };
+  @endcode
+
   @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_CORE_EXPORT Engine : public QObject
@@ -154,7 +196,20 @@ public:
   */
   void removeDefaultLibrary( const QString &libName );
 
+  /**
+    Returns whether the smart trim feature is enabled for newly loaded templates.
+
+    @see smart_trim
+
+    This is false by default.
+   */
   bool smartTrimEnabled() const;
+
+  /**
+    Sets whether the smart trim feature is enabled for newly loaded templates.
+
+    @see smart_trim
+   */
   void setSmartTrimEnabled( bool enabled );
 
 #ifndef Q_QDOC
