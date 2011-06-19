@@ -1,9 +1,5 @@
 project(grantlee_defaultfilters)
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-)
-
 grantlee_add_plugin(grantlee_defaultfilters
   defaultfilters
 

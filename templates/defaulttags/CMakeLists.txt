@@ -1,9 +1,5 @@
 project(grantlee_defaulttags)
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-)
-
 grantlee_add_plugin ( grantlee_defaulttags
   defaulttags
 

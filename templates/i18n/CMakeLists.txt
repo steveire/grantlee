@@ -2,11 +2,6 @@ project(grantlee_i18ntags)
 
 include(${Grantlee_USE_FILE})
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/../corelib
-)
-
 grantlee_add_plugin(grantlee_i18ntags
   i18ntags
 

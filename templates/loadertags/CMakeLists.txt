@@ -1,9 +1,5 @@
 project(grantlee_loadertags)
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-)
-
 set_source_files_properties(blockcontext.h PROPERTIES SKIP_AUTOMOC TRUE)
 
 grantlee_add_plugin(grantlee_loadertags
