@@ -199,3 +199,14 @@ if(LCOV_FOUND)
   )
 endif()
 
+find_package(Cccc)
+if (CCCC_FOUND)
+  get_property(CCCC_FILES GLOBAL PROPERTY SOURCE_LIST)
+
+  set( cccc_ARGS ${CCCC_EXECUTABLE} ${CCCC_FILES} --outdir=${CMAKE_BINARY_DIR}/cccc --html_outfile=${CMAKE_BINARY_DIR}/cccc/index.html)
+
+  add_custom_target(cccc
+    ${cccc_ARGS}
+  )
+endif()
+

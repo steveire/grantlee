@@ -71,6 +71,15 @@ add_library(grantlee_core SHARED
   ${scriptabletags_SRCS}
 )
 
+foreach(file ${grantlee_templates_SRCS})
+  set(grantlee_templates_FULLPATHS ${grantlee_templates_FULLPATHS} ${CMAKE_SOURCE_DIR}/templates/lib/${file})
+endforeach()
+
+set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
+  ${grantlee_templates_FULLPATHS}
+  ${scriptabletags_SRCS}
+)
+
 grantlee_generate_export_header(grantlee_core)
 
 target_link_libraries(grantlee_core
