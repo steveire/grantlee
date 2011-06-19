@@ -1,5 +1,5 @@
 
-find_package(Qt4 4.5.0 REQUIRED QtGui)
+find_package(Qt4 4.5.0 REQUIRED QtCore QtGui QtTest)
 
 add_subdirectory(lib)
 
