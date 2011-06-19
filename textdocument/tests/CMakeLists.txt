@@ -1,7 +1,5 @@
 project(grantlee_textdocument_tests)
 
-include(${QT_USE_FILE})
-
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 macro(GRANTLEE_TEXTDOCUMENT_UNIT_TESTS)

@@ -1,6 +1,8 @@
 
 find_package(Qt4 4.5.0 REQUIRED QtCore QtGui QtTest)
 
+include(${QT_USE_FILE})
+
 add_subdirectory(lib)
 
 include_directories(

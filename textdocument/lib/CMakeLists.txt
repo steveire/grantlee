@@ -1,7 +1,5 @@
 project(grantlee_textdocument)
 
-include(${QT_USE_FILE})
-
 set (grantlee_textdocument_SRCS
   bbcodebuilder.cpp
   markupdirector.cpp
