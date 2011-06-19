@@ -1,7 +1,6 @@
 project(grantlee_loadertags)
 
 include_directories(
-  ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
 )
 

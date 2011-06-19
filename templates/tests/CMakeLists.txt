@@ -1,6 +1,6 @@
 project(grantlee_templates_tests)
 
-include_directories( ${QT_INCLUDES}
+include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 

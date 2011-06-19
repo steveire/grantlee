@@ -2,7 +2,7 @@ project(grantlee_textdocument_tests)
 
 include(${QT_USE_FILE})
 
-include_directories( ${QT_INCLUDES}
+include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 

@@ -1,7 +1,6 @@
 project(grantlee_scriptabletags)
 
 include_directories(
-  ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
 )
 
