@@ -53,6 +53,8 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
                   ${PROJECT_SOURCE_DIR}/../lib/nulllocalizer.cpp )
     add_test(${_testname} ${_testname}_exec )
     target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_core )
+
+    set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)
 endmacro(GRANTLEE_TEMPLATES_UNIT_TESTS)
 

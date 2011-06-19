@@ -20,6 +20,14 @@ set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
 include(GrantleeGenerateExportHeader)
 
+# create coverage build type
+set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+              "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
+set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+set(CMAKE_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+
 if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic-errors")
@@ -152,6 +160,42 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
 
   add_custom_target(docs
     ${DOCS_ARGS}
+  )
+endif()
+
+find_package(LCov)
+
+if(LCOV_FOUND)
+  get_property(UNITTESTS GLOBAL PROPERTY TEST_COVERAGE)
+
+  set(coverageDir ${CMAKE_BINARY_DIR})
+
+  foreach(_testpath ${UNITTESTS})
+    set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -z -d ${coverageDir})
+
+    get_filename_component(_test ${_testpath} NAME)
+
+    set(coverage_ARGS ${coverage_ARGS} COMMAND ${_testpath})
+    set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -c -t ${_test} -d ${coverageDir} -o ${CMAKE_BINARY_DIR}/test_${_test}.info)
+    set(infoFiles ${infoFiles} -a ${CMAKE_BINARY_DIR}/test_${_test}.info)
+  endforeach()
+
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} ${infoFiles} -o test_all.info)
+
+  # For an unknown reason lcov does not work with absolute paths such as ${CMAKE_BINARY_DIR}
+  file(RELATIVE_PATH relBinaryDir / ${CMAKE_BINARY_DIR})
+
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -r test_all.info *${relBinaryDir}*
+                                                                -r test_all.info *pluginpointer*
+                                                                -r test_all.info *usr/include*
+                                                                -o test_all.info
+  )
+
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${CMAKE_COMMAND} -E remove_directory coverage)
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${GENHTML_EXECUTABLE} -o coverage/ -s --demangle-cpp -f test_all.info)
+
+  add_custom_target(coverage
+    ${coverage_ARGS}
   )
 endif()
 
