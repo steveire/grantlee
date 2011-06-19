@@ -1,7 +1,5 @@
 project(grantlee_i18ntags)
 
-include(${Grantlee_USE_FILE})
-
 grantlee_add_plugin(grantlee_i18ntags
   i18ntags
 

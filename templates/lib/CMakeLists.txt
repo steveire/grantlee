@@ -7,8 +7,6 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/../scriptabletags
 )
 
-include(${QT_USE_FILE})
-
 configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
 
 set(Grantlee_PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} )
