@@ -49,6 +49,10 @@ add_definitions(-DQT_STRICT_ITERATORS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 add_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
 
+# Always include the source and build directories in the include path
+# to save doing so manually in every subdirectory.
+SET( CMAKE_INCLUDE_CURRENT_DIR ON )
+
 set(Grantlee_VERSION_MAJOR 0)
 set(Grantlee_VERSION_MINOR 1)
 set(Grantlee_VERSION_PATCH 9)

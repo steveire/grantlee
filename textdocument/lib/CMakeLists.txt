@@ -1,9 +1,5 @@
 project(grantlee_textdocument)
 
-include_directories(
-  ${PROJECT_BINARY_DIR}
-)
-
 include(${QT_USE_FILE})
 
 set (grantlee_textdocument_SRCS
