@@ -36,10 +36,9 @@ set_target_properties(grantlee_gui PROPERTIES
 )
 
 install(TARGETS grantlee_gui EXPORT grantlee_targets
-         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-         COMPONENT Devel
+         RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT TextDocument
+         LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
+         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
 )
 
 install(FILES
@@ -50,5 +49,5 @@ install(FILES
   texthtmlbuilder.h
   mediawikimarkupbuilder.h
   ${PROJECT_BINARY_DIR}/grantlee_gui_export.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
+  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT TextDocument
 )

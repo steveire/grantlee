@@ -13,5 +13,5 @@ grantlee_add_plugin(grantlee_i18ntags
 )
 
 install(TARGETS grantlee_i18ntags
-         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
+         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )

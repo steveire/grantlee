@@ -102,14 +102,21 @@ configure_file(
 install(FILES
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
-  DESTINATION "${CMAKECONFIG_INSTALL_DIR}")
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  COMPONENT Common
+)
 
 install(FILES
   "${Grantlee_MODULE_DIR}/GrantleeUse.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  COMPONENT Common
 )
 
-install(EXPORT grantlee_targets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE GrantleeTargets.cmake )
+install(EXPORT grantlee_targets
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  FILE GrantleeTargets.cmake
+  COMPONENT Common
+)
 
 # Add support for an uninstall target
 configure_file(

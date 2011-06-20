@@ -13,5 +13,5 @@ grantlee_add_plugin(grantlee_defaultfilters
 )
 
 install(TARGETS grantlee_defaultfilters
-         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
+         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )

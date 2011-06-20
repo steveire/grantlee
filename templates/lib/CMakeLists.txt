@@ -96,10 +96,9 @@ set_target_properties(grantlee_core PROPERTIES
 )
 
 install(TARGETS grantlee_core EXPORT grantlee_targets
-         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-         COMPONENT Devel
+         RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT Templates
+         LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
+         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
 )
 
 install(FILES
@@ -127,12 +126,12 @@ install(FILES
   token.h
   util.h
   variable.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
+  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Templates
 )
 
 install(FILES
   grantlee_core.h
   grantlee_templates.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Templates
 )
 
