@@ -221,3 +221,28 @@ if (CCCC_FOUND)
   )
 endif()
 
+# http://www.vtk.org/Wiki/CMake:Component_Install_With_CPack
+set(CPACK_PACKAGE_NAME "grantlee")
+set(CPACK_PACKAGE_VERSION_MAJOR ${Grantlee_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${Grantlee_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${Grantlee_VERSION_PATCH})
+set(CPACK_PACKAGE_CONTACT "Stephen Kelly <steveire@gmail.com>")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A set of frameworks for use with Qt")
+set(CPACK_GENERATOR "TGZ" )
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
+
+set(CPACK_COMPONENT_COMMON_DISPLAY_NAME "Grantlee Common files")
+set(CPACK_COMPONENT_TEMPLATES_DISPLAY_NAME "Grantlee String Templates")
+set(CPACK_COMPONENT_TEXTDOCUMENT_DISPLAY_NAME "Grantlee TextDocument framework")
+
+set(CPACK_COMPONENT_TEMPLATES_DESCRIPTION
+  "A string template system for Qt based on Django syntax")
+set(CPACK_COMPONENT_TEXTDOCUMENT_DESCRIPTION
+  "A framework for QTextDocument related tasks")
+
+set(CPACK_COMPONENT_TEMPLATES_DEPENDS Common)
+set(CPACK_COMPONENT_TEXTDOCUMENT_DEPENDS Common)
+
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+
+include(CPack)
