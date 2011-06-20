@@ -49,7 +49,7 @@ function(GRANTLEE_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     set(DEFINE_IMPORT)
     set(DEFINE_NO_EXPORT)
 
-    if (MSVC OR CYGWIN)
+    if (MSVC OR CYGWIN OR MINGW)
         set(DEFINE_DEPRECATED "__declspec(deprecated)")
         set(DEFINE_EXPORT "__declspec(dllexport)")
         set(DEFINE_IMPORT "__declspec(dllimport)")
