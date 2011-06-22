@@ -43,6 +43,11 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   endif ()
 endif()
 
+# Tell FindQt4.cmake to point the QT_QTFOO_LIBRARY targets at the imported targets
+# for the Qt libraries, so we get full handling of release and debug versions of the
+# Qt libs and are flexible regarding the install location of Qt under Windows
+set(QT_USE_IMPORTED_TARGETS TRUE)
+
 add_definitions(-DQT_NO_CAST_TO_ASCII)
 add_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_definitions(-DQT_STRICT_ITERATORS)
