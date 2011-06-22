@@ -3,7 +3,6 @@
 include_directories(${Grantlee_INCLUDE_DIRS})
 
 # Set up the deps needed to use Grantlee
-find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
 include(CMakeParseArguments)
