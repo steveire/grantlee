@@ -100,7 +100,7 @@ FILE_PATTERNS          = *.h \
                          *.dox \
 
 RECURSIVE              = YES
-EXCLUDE                = @CMAKE_SOURCE_DIR@/templates/lib/grantlee_core_export.h @CMAKE_SOURCE_DIR@/textdocument/grantlee_gui_export.h
+EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = .* \
                          *_p* \
