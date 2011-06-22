@@ -8,7 +8,7 @@ if (MINGW)
   if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build,
   options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release
-  RelWithDebInfo MinSizeRel Coverage.")
+  RelWithDebInfo MinSizeRel Coverage." FORCE)
   endif()
 endif()
 
