@@ -1,6 +1,16 @@
+
 project(Grantlee)
 
 cmake_minimum_required(VERSION 2.6.4)
+
+# Workaround for http://public.kitware.com/Bug/view.php?id=12301
+if (MINGW)
+  if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build,
+  options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release
+  RelWithDebInfo MinSizeRel Coverage.")
+  endif()
+endif()
 
 option( BUILD_CORE "Build the Grantlee template library. Deprecated. Use BUILD_TEMPLATES instead" TRUE )
 option( BUILD_GUI "Build the Grantlee textdocument library. Deprecated. Use BUILD_TEXTDOCUMENT instead" TRUE )
@@ -33,13 +43,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic-errors")
   if (NOT MINGW)
     enable_gcc_hidden_visibility()
-  else ()
-    # http://mail.kde.org/pipermail/kde-windows/2007-December/001692.html
-    # http://lists.trolltech.com/pipermail/qt-interest/2009-July/009829.html
-    # qt is always compiled with QT_NO_DEBUG under mingw,
-    # so we need to compile stuff linked against it
-    # the same or otherwise QPluginLoader rejects plugins
-    add_definitions(-DQT_NO_DEBUG)
   endif ()
 endif()
 
