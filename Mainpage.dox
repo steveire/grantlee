@@ -27,7 +27,6 @@ namespace Grantlee
       - Template
       - AbstractTemplateLoader
       - FileSystemTemplateLoader
-      - MetaType
       - AbstractLocalizer
       - QtLocalizer
     </td><td>

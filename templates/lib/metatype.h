@@ -43,6 +43,7 @@ namespace Grantlee
 
 /// @headerfile metatype.h grantlee/metatype.h
 
+#ifndef Q_QDOC
 /**
   @brief The MetaType is the interface to the Grantlee introspection system.
 
@@ -57,7 +58,6 @@ namespace Grantlee
 class GRANTLEE_CORE_EXPORT MetaType
 {
 public:
-#ifndef Q_QDOC
   /**
     @internal The signature for a property lookup method
    */
@@ -107,23 +107,21 @@ public:
     @internal
    */
   static bool toListAlreadyRegistered( int id );
-#endif
 
   /**
     Initializes the MetaType system with built in types and containers.
    */
   static inline int init();
 
-#ifndef Q_QDOC
   /**
     @internal
    */
   static int initBuiltins() { return init(); }
-#endif
 
 private:
   MetaType();
 };
+#endif
 
 namespace
 {
@@ -379,6 +377,7 @@ Q_GLOBAL_STATIC( BuiltinRegister, builtinRegister )
 
 }
 
+#ifndef Q_QDOC
 struct MetaTypeInitializer {
   static inline int initialize()
   {
@@ -387,14 +386,22 @@ struct MetaTypeInitializer {
       return 0;
   }
 };
+#endif
 
+/**
+  Macro to initialize the metatype system.
+
+  @see @ref generic_types
+ */
 #define GRANTLEE_METATYPE_INITIALIZE static const int i = Grantlee::MetaTypeInitializer::initialize(); Q_UNUSED(i)
 
+#ifndef Q_QDOC
 inline int MetaType::init()
 {
   GRANTLEE_METATYPE_INITIALIZE
   return 0;
 }
+#endif
 
 /**
   @brief Registers the type RealType with the metatype system.
