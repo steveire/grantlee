@@ -6,31 +6,71 @@ namespace Grantlee
 
   @page examples Examples of Grantlee use
 
-  @section books Books
+  @section books_example Books
 
   The Books application from Qt Demos is modified to export the available data to a rendered html file. The example shows a use of the extends tag to override some parts of a base template. The templates can be edited to change the exported content without any recompiling. The themer has broad control over how the data os rendered and can even alter the structure of the presented data.
 
+  <center><b>
   @image html grantlee_book_simple.png "A simple export of the data"
+  <br/>
   @image html grantlee_book_coloured.png "A coloured export of the data showing the use of the &quot;cycle&quot; tag."
+  <br/>
   @image html grantlee_book_coloured_grouped.png "A restructured export of the data showing the use of the &quot;ifchanged&quot; tag."
+  </b></center>
 
-  @section dbus_chat Chat
+  @section codegen_example Codegen
 
-  The D-Bus Chat example from Qt has been modified to show the use of the MutableTemplate to render a template multiple times, modifying it each time. In this case, a new chat item is added to the rendered template each time. Again, the themer has complete control over the rendering of the template.
+  The codegen example shows how to use %Grantlee for code generation in multiple languages. The application can be used to generate classes in C++, python and ruby based on the content of the dialog. The user can define properties, which are generated appropriately to the language. For C++ it uses the Q_PROPERTY macro and creates an accessor a mutator and a notify signal. It can also be used to generate methods with arguments of any type in each language.
 
-  @image html grantlee_chat_plain.png "Simple chat view. Mostly the same as the original Qt version."
-  @image html grantlee_chat_coloured.png "Simple version with some colouring."
-  @image html grantlee_chat_boxes.png "A version with content in boxes."
+  <center><b>
+  @image html codegen.png "The property and method configuration UI"
+  <br/>
+  @image html codegen-output.png "The output of the codegen tool"
+  </b></center>
 
-  @section kjots KJots Rewrite.
-  (see playground/pim/akonadi)
-  KJots shows a use of %Grantlee by retrieving items from a Model using a custom role, and allows arbitrary nesting by recursively including templates.
+  @subsection codegen_blogs Related blog article
+  <a href="http://steveire.wordpress.com/2010/04/06/using-grantlee-for-code-generation/">Using Grantlee for code generation</a>
 
-  @section akonadi_mail Akonadi Mail
+  @section contacts_example Contacts
 
-  The example_mail %Akonadi application demonstrates a custom written AkonadiTemplateLoader to retrieve Templates from %Akonadi. This allows, among other features, instant updates of the rendering in the application when the template is modified externally.
+  The contacts application demostrates the use of the internationalization and localization features in %Grantlee. The user can select several contacts, whose details are formatted in templates for display in different themes. All strings in the templates are translatable, and the numbers, dates and currencies can be localized. The Contacts example can be used with the Qt or the KDE localization systems.
+
+  <center><b>
+  @image html contacts_multi_lang_tables.png "A theme showing selected contacts in localized tables"
+  <br/>
+  @image html contacts_multi_lang_headers.png "An alternative theme showing a single table with localized headers."
+  </b></center>
+
+
+  @subsection contacts_blogs Related blog article
+  <a href="http://steveire.wordpress.com/2010/11/11/localization-tricky-issue/">Localization: Tricky issue</a>
+
+  @section htmlapps_example Html application framework
+
+  The htmlapps example demonstrates how string templates can form part of a larger platform for html based applications. The application consists of a an extensible set of templates containing html applications, a %Grantlee plugin to extract data from rss feeds, and various infrastructure to handle local and remote network requests and render the result in WebKit.
+
+  Several html applications are part of the example, such as capabilities for showing weather information, flickr feeds, identica microblogging etc.
+
+  <center><b>
+  @image html htmlapps.png "A weather application written in HTML"
+  <br/>
+  @image html htmlapps1.png "A flickr application written in HTML"
+  </b></center>
+
+  @subsection htmlapps_blogs Related blog article
+  <a href="http://steveire.wordpress.com/2011/02/06/templating-html-applications-with-grantlee/">Templating HTML Applications with Grantlee</a>
+
+  @section textedit_example Textedit application example
+
+  The textedit application example is a modified version of the same example which is bundled with Qt. The example shows how a custom type can be used in a text document and processed with the Grantlee::Textdocument library. It further demostrates how to add theming to the output using the Grantlee::Templates library.
+
+  @subsection textedit_blogs Related blog article
+  <a href="http://steveire.wordpress.com/2010/04/05/grantleerichtextbuilders/">Grantlee::RichTextBuilders</a>
+
+  @section kdepim KDE PIM 4.6
+
+  KDE PIM started using %Grantlee in its 4.6.0 release. The applications KJots and KAddressBook already use Grantlee::Templates to render content for user consumption.
 
 */
 
 }
-
