@@ -35,14 +35,19 @@ using namespace Grantlee;
 NodeList TemplatePrivate::compileString( const QString &str )
 {
   Q_Q( TemplateImpl );
-  const Lexer l( str );
-  Parser p( l.tokenize(), q );
+  Lexer l( str );
+  Parser p( l.tokenize( m_smartTrim ? Lexer::SmartTrim : Lexer::NoSmartTrim ), q );
 
   return p.parse( q );
 }
 
 TemplateImpl::TemplateImpl( Engine const *engine, QObject *parent )
-    : QObject( parent ), d_ptr( new TemplatePrivate( engine, this ) )
+    : QObject( parent ), d_ptr( new TemplatePrivate( engine, false, this ) )
+{
+}
+
+TemplateImpl::TemplateImpl( Engine const *engine, bool smartTrim, QObject *parent )
+    : QObject( parent ), d_ptr( new TemplatePrivate( engine, smartTrim, this ) )
 {
 }
 

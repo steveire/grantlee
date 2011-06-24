@@ -1,12 +1,5 @@
 project(grantlee_textdocument)
 
-include_directories(
-  ${QT_INCLUDES}
-  ${PROJECT_BINARY_DIR}
-)
-
-include(${QT_USE_FILE})
-
 set (grantlee_textdocument_SRCS
   bbcodebuilder.cpp
   markupdirector.cpp
@@ -23,6 +16,15 @@ add_library(grantlee_gui SHARED
   ${grantlee_textdocument_SRCS}
 )
 
+foreach(file ${grantlee_textdocument_SRCS})
+  set(grantlee_textdocument_SRCS_FULLPATHS ${grantlee_textdocument_SRCS_FULLPATHS} ${CMAKE_CURRENT_SOURCE_DIR}/${file})
+endforeach()
+set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
+  ${grantlee_textdocument_SRCS_FULLPATHS}
+)
+
+grantlee_generate_export_header(grantlee_gui)
+
 target_link_libraries(grantlee_gui
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
@@ -31,14 +33,12 @@ target_link_libraries(grantlee_gui
 set_target_properties(grantlee_gui PROPERTIES
   VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
   SOVERSION  ${Grantlee_TEXTDOCUMENT_LIB_SOVERSION}
-  DEFINE_SYMBOL GRANTLEE_TEXTDOCUMENT_LIB_MAKEDLL
 )
 
-install(TARGETS grantlee_gui
-         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-         COMPONENT Devel
+install(TARGETS grantlee_gui EXPORT grantlee_targets
+         RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT TextDocument
+         LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
+         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
 )
 
 install(FILES
@@ -48,6 +48,6 @@ install(FILES
   plaintextmarkupbuilder.h
   texthtmlbuilder.h
   mediawikimarkupbuilder.h
-  grantlee_gui_export.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
+  ${PROJECT_BINARY_DIR}/grantlee_gui_export.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT TextDocument
 )

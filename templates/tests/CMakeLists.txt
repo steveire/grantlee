@@ -1,9 +1,5 @@
 project(grantlee_templates_tests)
 
-include_directories( ${QT_INCLUDES}
-  ${CMAKE_CURRENT_BINARY_DIR}
-)
-
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/" )
@@ -49,9 +45,12 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
                   ${moc_output_file}
                   ${_testresource_rcc_src}
                   ${PROJECT_SOURCE_DIR}/../lib/lexer.cpp
+                  ${PROJECT_SOURCE_DIR}/../lib/textprocessingmachine.cpp
                   ${PROJECT_SOURCE_DIR}/../lib/nulllocalizer.cpp )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${Grantlee_TEMPLATES_LIBRARIES} )
+    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_core )
+
+    set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)
 endmacro(GRANTLEE_TEMPLATES_UNIT_TESTS)
 
@@ -66,7 +65,7 @@ grantlee_templates_unit_tests(
   testgenericcontainers
   testmutabletags
   testinternationalization
-  benchmarks
+#   benchmarks
 )
 
 add_subdirectory(pluginpointertest)

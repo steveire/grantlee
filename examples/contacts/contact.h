@@ -25,18 +25,43 @@
 #include <QListWidget>
 #include <QDate>
 
+class Address : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(int houseNumber READ houseNumber)
+  Q_PROPERTY(QString streetName READ streetName)
+  Q_PROPERTY(QString city READ city)
+public:
+  Address(QObject *parent = 0);
+
+  int houseNumber() const;
+  void setHouseNumber(int houseNumber);
+
+  QString streetName();
+  void setStreetName(const QString &streetName);
+
+  QString city();
+  void setCity(const QString &city);
+
+private:
+  int m_houseNumber;
+  QString m_streetName;
+  QString m_city;
+};
+
 class Contact : public QObject, public QListWidgetItem
 {
   Q_OBJECT
   Q_PROPERTY(QString name READ name)
   Q_PROPERTY(QString email READ email)
   Q_PROPERTY(QString phone READ phone)
-  Q_PROPERTY(QString address READ address)
+  Q_PROPERTY(QObject* address READ address)
   Q_PROPERTY(QString nickname READ nickname)
   Q_PROPERTY(double  salary READ salary)
   Q_PROPERTY(QString salaryCurrency READ salaryCurrency)
   Q_PROPERTY(double  rating READ rating)
   Q_PROPERTY(QDate   birthday READ birthday)
+  Q_PROPERTY(QVariant friends READ friends)
 
 public:
   Contact(QObject* parent = 0);
@@ -50,8 +75,8 @@ public:
   QString phone() const;
   void setPhone(const QString &phone);
 
-  QString address() const;
-  void setAddress(const QString &address);
+  QObject* address() const;
+  void setAddress(Address *address);
 
   QString nickname() const;
   void setNickname(const QString& nickname);
@@ -68,19 +93,27 @@ public:
   QDate birthday() const;
   void setBirthday(const QDate &birthday);
 
+  QVariant friends() const;
+  void setFriends(const QList<QObject*> &friends);
+
   /* reimp */ QVariant data(int role) const;
 
 private:
   QString m_name;
   QString m_email;
   QString m_phone;
-  QString m_address;
+  Address *m_address;
   QString m_nickname;
   QString m_salaryCurrency;
   double m_salary;
   double m_rating;
   QDate m_birthday;
+  QList<QObject*> m_friends;
 };
+
+Q_DECLARE_METATYPE(Contact*)
+Q_DECLARE_METATYPE(QList<Contact*>)
+Q_DECLARE_METATYPE(QList<QObject*>)
 
 #endif
 

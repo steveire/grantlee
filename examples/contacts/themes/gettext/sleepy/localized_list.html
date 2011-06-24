@@ -15,7 +15,7 @@
   <td>{{ contact.email }}</td>
   <td>{{ contact.phone }}</td>
   <td>{{ contact.nickname }}</td>
-  <td nowrap>{{ contact.address }}</td>
+  <td nowrap>{{ contact.address.houseNumber }} {{ contact.address.streetName }}<br/>{{ contact.address.city }}</td>
 </tr>
 {% endfor %}
 </table>

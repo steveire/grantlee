@@ -153,6 +153,13 @@ void Context::insert( const QString &name, const QVariant &variant )
   d->m_variantHashStack[0].insert( name, variant );
 }
 
+void Context::insert( const QString &name, QObject *object )
+{
+  Q_D( Context );
+
+  d->m_variantHashStack[0].insert( name, QVariant::fromValue(object));
+}
+
 QHash<QString, QVariant> Context::stackHash( int depth ) const
 {
   Q_D( const Context );

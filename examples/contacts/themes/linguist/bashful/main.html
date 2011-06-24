@@ -12,6 +12,7 @@
   <th>{% i18n "Birthday" %}</th>
   <th>{% i18n "Salary" %}</th>
   <th>{% i18n "Rating" %}</th>
+  <th>{% i18n "Friends" %}</th>
 </tr>
 {% for contact in contacts %}
 <tr>
@@ -19,10 +20,11 @@
   <td>{{ contact.email }}</td>
   <td>{{ contact.phone }}</td>
   <td nowrap>{{ contact.nickname }}</td>
-  <td nowrap>{{ contact.address }}</td>
+  <td nowrap>{{ contact.address.houseNumber }} {{ contact.address.streetName }}<br/>{{ contact.address.city }}</td>
   <td>{{ _(contact.birthday) }}</td>
   <td align="right" nowrap>{% l10n_money contact.salary contact.salaryCurrency %}</td>
   <td align="right" nowrap>{{ _(contact.rating) }}</td>
+  <td align="right" nowrap>{% for friend in contact.friends %}{{ friend.name }}({{ friend.nickname }})<br/>{% endfor %}</td>
 </tr>
 {% endfor %}
 </table>

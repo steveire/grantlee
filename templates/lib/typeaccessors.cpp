@@ -164,7 +164,7 @@ QVariant doQobjectLookUp( const QObject * const object, const QString &property 
     if ( childList.isEmpty() )
       return QVariant();
     QVariantList children;
-    foreach( QObject *object, childList )
+    Q_FOREACH( QObject *object, childList )
       children.append( QVariant::fromValue( object ) );
     return children;
   }
@@ -200,7 +200,7 @@ QVariant doQobjectLookUp( const QObject * const object, const QString &property 
       return QVariant::fromValue( mev );
     }
 
-    const int value = me.keyToValue( property.toLatin1() );
+    const int value = me.keyToValue( property.toLatin1().constData() );
 
     if ( value < 0 )
       continue;
@@ -209,7 +209,7 @@ QVariant doQobjectLookUp( const QObject * const object, const QString &property 
 
     return QVariant::fromValue( mev );
   }
-  return object->property( property.toUtf8() );
+  return object->property( property.toUtf8().constData() );
 }
 
 template <>

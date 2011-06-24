@@ -89,12 +89,12 @@ namespace Grantlee
   @code
     #include "myperson.h"
 
-    class MyPersonWrapper : public QObject
+    class PersonWrapper : public QObject
     {
       Q_OBJECT
       Q_PROPERTY(QString name READ name)
     public:
-      MyPersonWrapper(const QString &name, int age);
+      PersonWrapper(const QString &name, int age);
 
       QString name() const;
 
@@ -108,7 +108,7 @@ namespace Grantlee
 
     PersonWrapper *linda = new PersonWrapper("Linda", 21);
 
-    QVariant lindaVar = QVariant::fromValue(linda);
+    QVariant lindaVar = QVariant::fromValue<QObject*>(linda);
 
     mapping.insert("person", lindaVar);
 
@@ -128,11 +128,132 @@ namespace Grantlee
 
   to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects. In the case of dynamic properties, the property name must be UTF-8 encoded.
 
+  Finally, note that the person object (Linda) is inserted into the QVariant as a QObject*, not as a PersonWrapper*. Otherwise, the compiler would generate an error message about an unregistered datatype PersonWrapper*. While using Q_DECLARE_METATYPE(PersonWrapper*) would make the compiler error go away, it would still not be possible to use the Linda object in %Grantlee templates. Using Grantlee::registerMetaType&lt;PersonWrapper*&gt;() would work, but it is recommended to use QObject* instead. See also @ref custom_object_properties.
+
   If you already have QObjects in your application which would be suitable for use in templates, you only need to add some Q_PROPERTY entries to the classes to make them accessible to %Grantlee.
 
   @note If you are familiar with Django you may be aware of the alters_data attribute for methods. This method of using wrappers and const is the equivalent to the alters_data attribute. You the wrapper writer choose the properties which will be accessible from the templates and makes them const, so there's no need to mark other methods as alters_data.
 
   For most uses of %Grantlee, this is enough to get make an application themable easily and quickly. For more advanced usage, see @ref extension. For some example uses of %Grantlee, see @ref examples.
+
+  @subsection custom_object_properties Custom Object Properties
+
+  In Qt4 there are some limitations regarding the types that may be used in Q_PROPERTY entries which should be read by %Grantlee.
+
+  We might define a Home object like this:
+
+  @code
+    class Home : public QObject
+    {
+        Q_OBJECT
+        Q_PROPERTY(int houseNumber READ houseNumber)
+        Q_PROPERTY(QString streetName READ streetName)
+        Q_PROPERTY(QString city READ city)
+    public:
+        // ...
+    };
+    Q_DECLARE_METATYPE(Home*)
+  @endcode
+
+  And we may wish to use it in our PersonWrapper object:
+
+  @code
+    class PersonWrapper : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString name READ name)
+      Q_PROPERTY(Home* home READ home)
+    public:
+      PersonWrapper(const QString &name, int age, Home *home);
+
+      Home* home() const;
+
+      // ...
+    }
+  @endcode
+
+  And then use it in a template:
+
+  @code
+    <h1>{{ person.name }}</h1>
+    House number: {{ person.home.houseNumber }}
+    Street: {{ person.home.streetName }}
+  @endcode
+
+  This will not work with Qt4. The home property will not be
+  readable and there will be a message about an unregistered datatype 'Home*'.
+
+  The workaround is to specify the type of the home property to be a QObject* instead of a Home*:
+
+  @code
+    class PersonWrapper : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString name READ name)
+      Q_PROPERTY(QObject* home READ scriptableHome)
+    public:
+      PersonWrapper(const QString &name, int age, Home *home);
+
+      QObject* home() const { return home(); }
+      Home* home() const;
+
+      // ...
+    }
+  @endcode
+
+  In this example, we leave the home() method intact because we may want to use the Home* type from C++, but we add a scriptableHome()
+  method which returns a QObject* instead of a Home*. This method is then used in the READ component of the Q_PROPERTY.
+
+  The above is the recommended method of using Q_PROPERTY with QObject derived types, however, if the class containing the Q_PROPERTY (PersonWrapper in the example above) can not be modified, it is still possible to make the property accessible to %Grantlee by using
+  the Grantlee::registerMetaType() method near the start of the program.
+
+  @code
+    // Somewhere among other initializers
+    Grantlee::registerMetaType<Home*>();
+
+    // ...
+    // Creating the context.
+
+    PersonWrapper *person = new PersonWrapper;
+
+    context.insert("person", person);
+
+    t->render(&c);
+
+    // ...
+    // Template can now use home property as normal. Eg
+     Street: {{ person.home.streetName }}
+  @endcode
+
+  Note that prior to %Grantlee version 0.1.9, Grantlee::registerMetaType&lt;Home*, QObject*&gt;(); must be used instead.
+
+  Using containers such as QList with Q_PROPERTY macro is also possible.
+
+  @code
+    class PersonWrapper : public QObject
+    {
+      Q_OBJECT
+      Q_PROPERTY(QString name READ name)
+      Q_PROPERTY(QVariant friends READ friends)
+    public:
+      PersonWrapper(const QString &name, int age, Home *home);
+
+      QVariant friends() const { return QVariant::fromValue(m_friends); }
+      void setFriends(const QList<QObject*> friends) { m_friends = friends; }
+
+      // ...
+
+    private:
+      QList<QObject*> m_friends;
+    };
+    Q_DECLARE_METATYPE(QList<QObject*>)
+  @endcode
+
+  It is also necessary to register QList<QObject*> with the Qt metatype system and with Grantlee
+
+  @code
+    Grantlee::registerSequentialContainer<QList<QObject*> >();
+  @endcode
 
   @subsection generic_variables
 

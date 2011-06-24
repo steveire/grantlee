@@ -2,47 +2,48 @@
 
 # Any changes in this file will be overwritten by CMake.
 
+get_filename_component(myDir ${CMAKE_CURRENT_LIST_FILE} PATH) # get the directory where I myself am
+get_filename_component(rootDir ${myDir}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
+
+if (Grantlee_FIND_COMPONENTS)
+  foreach( component ${Grantlee_FIND_COMPONENTS})
+    if (component STREQUAL "Textdocument")
+      set(RequiredQtComponents ${RequiredQtComponents} QtCore QtGui)
+    endif()
+    if (component STREQUAL "Templates")
+      set(RequiredQtComponents ${RequiredQtComponents} QtCore)
+    endif()
+  endforeach()
+  find_package(Qt4 REQUIRED ${RequiredQtComponents})
+else()
+  find_package(Qt4 REQUIRED)
+endif()
+
 set(Grantlee_VERSION_MAJOR "@Grantlee_VERSION_MAJOR@")
 set(Grantlee_VERSION_MINOR "@Grantlee_VERSION_MINOR@")
 set(Grantlee_VERSION_PATCH "@Grantlee_VERSION_PATCH@")
 
-set(Grantlee_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
-set(Grantlee_INCLUDE_DIRS   "@CMAKE_INSTALL_PREFIX@/include")
+set(Grantlee_INSTALL_PREFIX "${rootDir}")
+set(Grantlee_INCLUDE_DIRS   "${rootDir}/@INCLUDE_INSTALL_DIR@")
 
-if (MINGW)
-  set(Grantlee_LIBRARY_DIR   "@CMAKE_INSTALL_PREFIX@/bin")
-  set(Grantlee_PLUGIN_PATH   "@CMAKE_INSTALL_PREFIX@/lib")
-else ()
-  set(Grantlee_LIBRARY_DIR   "@CMAKE_INSTALL_PREFIX@/lib@LIB_SUFFIX@")
-  set(Grantlee_PLUGIN_PATH   "${Grantlee_LIBRARY_DIR}/")
-endif ()
+set(Grantlee_LIBRARY_DIR    "${rootDir}/@LIB_INSTALL_DIR@")
 
-if (UNIX)
-  if (APPLE)
-    set(Grantlee_TEMPLATES_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_core.dylib")
-    set(Grantlee_TEXTDOCUMENT_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_gui.dylib")
-  else (APPLE)
-    set(Grantlee_TEMPLATES_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_core.so")
-    set(Grantlee_TEXTDOCUMENT_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_gui.so")
-  endif (APPLE)
-else (UNIX)
-  if (MINGW)
-    set(Grantlee_TEMPLATES_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_core.dll")
-    set(Grantlee_TEXTDOCUMENT_LIBRARY "${Grantlee_LIBRARY_DIR}/libgrantlee_gui.dll")
-  else(MINGW)
-    set(Grantlee_TEMPLATES_LIBRARY "${Grantlee_LIBRARY_DIR}/grantlee_core.lib")
-    set(Grantlee_TEXTDOCUMENT_LIBRARY "${Grantlee_LIBRARY_DIR}/grantlee_gui.lib")
-  endif(MINGW)
-endif (UNIX)
+set(Grantlee_PLUGIN_DIR     "${Grantlee_LIBRARY_DIR}")
 
-set(Grantlee_TEMPLATES_LIBRARIES ${Grantlee_TEMPLATES_LIBRARY} ${QT_QTCORE_LIBRARIES} )
-set(Grantlee_TEXTDOCUMENT_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARY} ${QT_QTGUI_LIBRARIES} )
+set(Grantlee_TEMPLATES_LIBRARY grantlee_core)
+set(Grantlee_TEXTDOCUMENT_LIBRARY grantlee_gui)
 
+set(Grantlee_TEMPLATES_LIBRARIES ${Grantlee_TEMPLATES_LIBRARY} )
+set(Grantlee_TEXTDOCUMENT_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARY} )
+
+# For backwards compatibility
 set(Grantlee_CORE_LIBRARY ${Grantlee_TEMPLATES_LIBRARY})
 set(Grantlee_CORE_LIBRARIES ${Grantlee_TEMPLATES_LIBRARIES})
 set(Grantlee_GUI_LIBRARY ${Grantlee_TEXTDOCUMENT_LIBRARY})
 set(Grantlee_GUI_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARIES})
+set(Grantlee_PLUGIN_PATH ${Grantlee_PLUGIN_DIR})
 
 # Now for the use file, which contains useful functions, sets up the project
-set(Grantlee_USE_FILE "${Grantlee_PLUGIN_PATH}/grantlee/@Grantlee_VERSION_MAJOR@.@Grantlee_VERSION_MINOR@/GrantleeUse.cmake")
+set(Grantlee_USE_FILE "${myDir}/GrantleeUse.cmake")
 
+include(${myDir}/GrantleeTargets.cmake)

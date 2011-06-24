@@ -1,0 +1,18 @@
+
+{% extends "shared/base.html" %}
+
+{% block content %}
+  {% rssfeed "http://identi.ca/rss" "/rdf:RDF/item" %}
+    <table class="imagerow" style="background-color:{% cycle "#E3E4FA" "#E9CFEC" "#C8BBBE" %}" width="100%">
+    <tr><td>
+    {% xmlns "http://www.w3.org/1999/02/22-rdf-syntax-ns#" as rdf %}
+    {% xmlns "http://purl.org/rss/1.0/" %}
+    {% xmlns "http://purl.org/dc/elements/1.1/" as dc %}
+    {% xmlns "http://purl.org/rss/1.0/modules/content/" as content %}
+    <p>Creator: {% xmlrole "dc:creator/string()" %}
+    <p>Content: {% xmlrole "content:encoded/string()" %}
+    </td></tr></table>
+  {% endrssfeed %}
+{% endblock %}
+http://identi.ca/rss
+http://identi.ca/search/notice/rss?q=banana

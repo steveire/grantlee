@@ -141,7 +141,7 @@ I18ncpNode::I18ncpNode( const QString &contextText, const QString &sourceText, c
 void I18ncpNode::render( OutputStream* stream, Context* c )
 {
   QVariantList args;
-  foreach( const FilterExpression &fe, m_filterExpressionList )
+  Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
   QString resultString = c->localizer()->localizePluralContextString( m_sourceText, m_pluralText, m_contextText, args );
 
@@ -158,7 +158,7 @@ void I18ncpVarNode::render( OutputStream* stream, Context* c )
 {
   Q_UNUSED( stream )
   QVariantList args;
-  foreach( const FilterExpression &fe, m_filterExpressionList )
+  Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
   QString resultString = c->localizer()->localizePluralContextString( m_sourceText, m_pluralText, m_contextText, args );
 

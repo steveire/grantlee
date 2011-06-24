@@ -20,6 +20,8 @@
 
 #include "qtlocalizer.h"
 
+#include "grantlee_latin1literal_p.h"
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
@@ -127,13 +129,13 @@ QString QtLocalizerPrivate::translate( const QString& input, const QString& cont
 
   Locale *locale = m_locales.last();
   Q_FOREACH( QTranslator *translator, locale->themeTranslators ) {
-    result = translator->translate( "GR_FILENAME", input.toLatin1(), context.toLatin1(), count );
+    result = translator->translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), count );
   }
   if ( result.isEmpty() ) {
     if ( locale->systemTranslators.isEmpty() )
-      return QCoreApplication::translate( "GR_FILENAME", input.toLatin1(), context.toLatin1(), QCoreApplication::CodecForTr, count );
+      return QCoreApplication::translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), QCoreApplication::CodecForTr, count );
     Q_FOREACH( QTranslator *translator, locale->systemTranslators ) {
-      result = translator->translate( "GR_FILENAME", input.toLatin1(), context.toLatin1(), count );
+      result = translator->translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), count );
       if ( !result.isEmpty() )
         break;
     }
@@ -243,14 +245,14 @@ static QString substituteArguments( const QString &input, const QVariantList &ar
 QString QtLocalizer::localizeContextString( const QString& string, const QString& context, const QVariantList &arguments ) const
 {
   Q_D( const QtLocalizer );
-  const QString translated = d->translate( string.toLatin1(), context.toLatin1() );
+  const QString translated = d->translate( string, context );
   return substituteArguments( translated, arguments );
 }
 
 QString QtLocalizer::localizeString( const QString& string, const QVariantList &arguments ) const
 {
   Q_D( const QtLocalizer );
-  const QString translated = d->translate( string.toLatin1(), QString() );
+  const QString translated = d->translate( string, QString() );
   return substituteArguments( translated, arguments );
 }
 
@@ -260,7 +262,7 @@ QString QtLocalizer::localizePluralContextString( const QString& string, const Q
   Q_D( const QtLocalizer );
   QVariantList arguments = _arguments;
   const int N = arguments.takeFirst().toInt();
-  const QString translated = d->translate( string.toLatin1(), context.toLatin1(), N );
+  const QString translated = d->translate( string, context, N );
   return substituteArguments( translated, arguments );
 }
 
@@ -270,7 +272,7 @@ QString QtLocalizer::localizePluralString( const QString& string, const QString&
   Q_D( const QtLocalizer );
   QVariantList arguments = _arguments;
   const int N = arguments.takeFirst().toInt();
-  const QString translated = d->translate( string.toLatin1(), QString(), N );
+  const QString translated = d->translate( string, QString(), N );
   return substituteArguments( translated, arguments );
 }
 
@@ -287,7 +289,7 @@ void QtLocalizer::pushLocale( const QString& localeName )
   if ( !d->m_availableLocales.contains( localeName ) ) {
     localeStruct = new Locale( QLocale( localeName ) );
     QTranslator *qtTranslator = new QTranslator;
-    qtTranslator->load( "qt_" + localeName,
+    qtTranslator->load( QLatin1Literal( "qt_" ) + localeName,
                         QLibraryInfo::location( QLibraryInfo::TranslationsPath ) );
     localeStruct->systemTranslators.append( qtTranslator );
     QTranslator *appTranslator = new QTranslator;
@@ -333,7 +335,7 @@ void QtLocalizer::unloadCatalog( const QString& catalog )
   for ( ; it != end; ++it ) {
     QVector<QTranslator*>::iterator tranIt = ( *it )->themeTranslators.begin();
     while ( tranIt != ( *it )->themeTranslators.end() ) {
-      if ( ( *tranIt )->objectName() == catalog.toLatin1() ) {
+      if ( ( *tranIt )->objectName() == catalog ) {
         delete *tranIt;
         tranIt = ( *it )->themeTranslators.erase( tranIt );
       } else {

@@ -6,22 +6,23 @@ require 'Qt4'
 
 class {{ className }} {% if baseClass %} < {{ baseClass.type }}{% endif %}
 
-    {% for property in properties %}
-    {% if property.readonly %}
+{% for property in properties %}
+  {% if property.readonly %}
     attr_reader :{{property.name}}
-    {% else %}
+  {% else %}
     attr_accessor :{{property.name}}
-    {% endif %}
-    {% endfor %}
+  {% endif %}
 
+{% endfor %}
     def initialize
         super
     end
 
-    {% with "true" as default %}{% for method in methods %}
+{% with "true" as default %}
+  {% for method in methods %}
     def {{ method.name }}{% if method.args %}({% include "args.rb" %}){% endif %}
     end
-    {% endfor %}{% endwith %}
 
+  {% endfor %}
+{% endwith %}
 end
-

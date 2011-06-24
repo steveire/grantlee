@@ -4,19 +4,22 @@
 #ifndef {{ className.upper }}_H_{{ rand }}
 #define {{ className.upper }}_H_{{ rand }}
 
-{% block includes %}{% endblock %}{% comment %}
-
-{% endcomment %}{% block forward_decls %}{% endblock %}{% comment %}
-
-{% endcomment %}{% block apidox %}/**
+{% block includes %}
+{% endblock %}
+{% block forward_decls %}
+{% endblock %}
+{% block apidox %}
+/**
   @brief The {{ className }} class
 
   @author {{ author }}
   @date {% now "MMM yyyy" %}
-*/{% endblock %}
+*/
+{% endblock %}
 class {{ className }}{% if baseClass %} : {{ baseClass.access }} {{ baseClass.type }} {% endif %}
 {
-{% block class_content %}{% endblock %}
+{% block class_content %}
+{% endblock %}
 };
 
 #endif // {{ className.upper }}_H_{{ rand }}

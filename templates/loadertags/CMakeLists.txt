@@ -1,10 +1,5 @@
 project(grantlee_loadertags)
 
-include_directories(
-  ${QT_INCLUDES}
-  ${PROJECT_BINARY_DIR}
-)
-
 set_source_files_properties(blockcontext.h PROPERTIES SKIP_AUTOMOC TRUE)
 
 grantlee_add_plugin(grantlee_loadertags
@@ -18,8 +13,5 @@ grantlee_add_plugin(grantlee_loadertags
 )
 
 install(TARGETS grantlee_loadertags
-         RUNTIME DESTINATION ${PLUGIN_INSTALL_DIR}
-         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-         COMPONENT Devel
+         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )

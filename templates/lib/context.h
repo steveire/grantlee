@@ -156,6 +156,11 @@ public:
   QVariant lookup( const QString &str ) const;
 
   /**
+    Insert the context object @p object identified by @p name into the Context.
+  */
+  void insert( const QString &name, QObject *object );
+
+  /**
     Insert the context object @p variant identified by @p name into the Context.
   */
   void insert( const QString &name, const QVariant &variant );

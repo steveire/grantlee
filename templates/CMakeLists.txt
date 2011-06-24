@@ -1,12 +1,13 @@
 
-find_package(Qt4 4.5.0 REQUIRED QtCore QtScript)
-
-add_subdirectory(lib)
+find_package(Qt4 4.5.0 REQUIRED QtCore QtScript QtTest)
 
 include(${Grantlee_USE_FILE})
 
+add_subdirectory(lib)
+
 include_directories(
-  lib
+  ${CMAKE_CURRENT_BINARY_DIR}/lib
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
 
 if (BUILD_MAIN_PLUGINS)

@@ -36,7 +36,9 @@ static const struct {
   const char *name;
   const char *email;
   const char *phone;
-  const char *address;
+  int houseNumber;
+  const char *street;
+  const char *city;
   const char *nickname;
   const char *salaryCurrency;
   double salary;
@@ -44,13 +46,13 @@ static const struct {
   int daysOld;
 } contacts[] =
 {
-  { "Alice Murphy", "alice@wonderland.com", "+12345", "123 Fake St", "dreamer", "EUR", 45000.45, 234.4, 7500 },
-  { "Bob Murphy", "bob@murphy.com", "+34567", "456 Fake St", "bobby", "EUR", 560000.56, 2340.4, 8500 },
-  { "Carly Carlson", "carly@carlson.com", "+56789", "123 No St", "carlie", "USD", 67000.67, 23400.4, 8000 },
-  { "David Doyle", "david@doyle.com", "+77894", "456 No St", "doyler", "USD", 78000.78, 234000.4, 7575 },
-  { "Emma Stevenson", "emma@stevenson.com", "+65432", "89 Fake St", "emms", "EUR", 5400000.54, 2340000.4, 8080 },
-  { "Frank Fischer", "frank@fischer.com", "+54321", "321 Fake St", "fish", "EUR", 89000.89, 234000.4, 8754 },
-  { "Gina Jameson", "gina@jameson.com", "+98765", "123 Other St", "genes", "EUR", 430000, 23400000.4, 9000  }
+  { "Alice Murphy", "alice@wonderland.com", "+12345", 123, "Fake St", "New York", "dreamer", "EUR", 45000.45, 234.4, 7500 },
+  { "Bob Murphy", "bob@murphy.com", "+34567", 456, "Fake St", "Paris", "bobby", "EUR", 560000.56, 2340.4, 8500 },
+  { "Carly Carlson", "carly@carlson.com", "+56789", 123, "No St", "London", "carlie", "USD", 67000.67, 23400.4, 8000 },
+  { "David Doyle", "david@doyle.com", "+77894", 456, "No St", "Berlin", "doyler", "USD", 78000.78, 234000.4, 7575 },
+  { "Emma Stevenson", "emma@stevenson.com", "+65432", 89, "Fake St", "Syndey", "emms", "EUR", 5400000.54, 2340000.4, 8080 },
+  { "Frank Fischer", "frank@fischer.com", "+54321", 321, "Fake St", "Tokyo", "fish", "EUR", 89000.89, 234000.4, 8754 },
+  { "Gina Jameson", "gina@jameson.com", "+98765", 123, "Other St", "Beijing", "genes", "EUR", 430000, 23400000.4, 9000  }
 };
 
 MainWindow::MainWindow(const QString &templateDir, QWidget *parent, Qt::WindowFlags flags)
@@ -65,19 +67,39 @@ MainWindow::MainWindow(const QString &templateDir, QWidget *parent, Qt::WindowFl
 
   const int numContacts = sizeof(contacts) / sizeof(*contacts);
 
+  Grantlee::registerSequentialContainer<QList<QObject*> >();
+
+  QList<Contact *> contactList;
   for (int i = 0; i < numContacts; ++i)
   {
     Contact *c = new Contact(this);
     c->setName(contacts[i].name);
     c->setEmail(contacts[i].email);
     c->setPhone(contacts[i].phone);
-    c->setAddress(contacts[i].address);
+    Address *address = new Address(c);
+    address->setHouseNumber(contacts[i].houseNumber);
+    address->setStreetName(contacts[i].street);
+    address->setCity(contacts[i].city);
+    c->setAddress(address);
     c->setNickname(contacts[i].nickname);
     c->setSalaryCurrency(contacts[i].salaryCurrency);
     c->setSalary(contacts[i].salary);
     c->setRating(contacts[i].rating);
     c->setBirthday(QDate::currentDate().addDays(-contacts[i].daysOld));
-    m_list->addItem(c);
+    contactList.append(c);
+  }
+
+  for (int i = 0; i < numContacts; ++i)
+  {
+    Contact *friend1 = contactList[(i + 1) % numContacts];
+    Contact *friend2 = contactList[(i + 2) % numContacts];
+    Contact *friend3 = contactList[(i + 3) % numContacts];
+    QList<QObject*> friends = QList<QObject*>() << friend1 << friend2 << friend3;
+    contactList[i]->setFriends(friends);
+  }
+
+  Q_FOREACH(Contact *contact, contactList) {
+    m_list->addItem(contact);
   }
 
   connect(m_list->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(render()) );

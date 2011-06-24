@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/shared/base.css" type="text/css" />
+    <script src="/shared/jquery-1.5.min.js"></script>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">
+        {% block header %}
+        {% include "shared/navbar.html" %}
+        {% endblock %}
+      </div>
+      <div id="border">
+        <div id="content">
+        {% block content %}
+        Main Content
+        {% endblock %}
+        </div>
+      </div>
+      <div id="footer">
+        {% block footer %}
+        {% endblock %}
+      </div>
+    </div>
+  </body>
+</html>

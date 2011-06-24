@@ -51,7 +51,7 @@ class TestGenericContainers : public QObject
 public:
   explicit TestGenericContainers( QObject* parent = 0 );
 
-private slots:
+private Q_SLOTS:
   void testContainer_Builtins();
 };
 
@@ -75,7 +75,7 @@ template<>
 QVector<QString> getItems<QString>()
 {
   QVector<QString> items;
-  foreach( const int item, getItems<int>() )
+  Q_FOREACH( const int item, getItems<int>() )
     items.push_back( QString::number( item ) );
   return items;
 }
@@ -84,7 +84,7 @@ template<>
 QVector<QVariant> getItems<QVariant>()
 {
   QVector<QVariant> items;
-  foreach( const int item, getItems<int>() )
+  Q_FOREACH( const int item, getItems<int>() )
     items.push_back( item );
   return items;
 }
@@ -121,13 +121,13 @@ struct ContainerPopulator
 {
   static void populateSequential( Container &container )
   {
-    foreach(const typename Container::value_type item, getItems<typename Container::value_type>())
+    Q_FOREACH(const typename Container::value_type item, getItems<typename Container::value_type>())
       container.push_back(item);
   }
   static void populateAssociative( Container &container )
   {
     int i = 0;
-    foreach(const typename Container::mapped_type item, getItems<typename Container::mapped_type>())
+    Q_FOREACH(const typename Container::mapped_type item, getItems<typename Container::mapped_type>())
       container[i++] = item;
   }
 };
@@ -137,7 +137,7 @@ struct ContainerPopulator<QSet<T> >
 {
   static void populateSequential( QSet<T> &container )
   {
-    foreach(const T item, getItems<T>())
+    Q_FOREACH(const T item, getItems<T>())
       container.insert(item);
   }
 };
@@ -148,7 +148,7 @@ struct ContainerPopulator<QMap<QString, T> >
   static void populateAssociative( QMap<QString, T> &container )
   {
     int i = 0;
-    foreach(const T item, getItems<T>())
+    Q_FOREACH(const T item, getItems<T>())
       container.insert(QString::number(i++), item);
   }
 };
@@ -159,7 +159,7 @@ struct ContainerPopulator<QHash<QString, T> >
   static void populateAssociative( QHash<QString, T> &container )
   {
     int i = 0;
-    foreach(const T item, getItems<T>())
+    Q_FOREACH(const T item, getItems<T>())
       container.insert(QString::number(i++), item);
   }
 };
@@ -170,7 +170,7 @@ struct ContainerPopulator<std::map<QString, T> >
   static void populateAssociative( std::map<QString, T> &container )
   {
     int i = 0;
-    foreach(const T item, getItems<T>())
+    Q_FOREACH(const T item, getItems<T>())
       container[QString::number(i++)] = item;
   }
 };
@@ -299,7 +299,7 @@ void testContainer( const QString &stringTemplate, const QVariant &containerVari
     QCOMPARE(result, expectedResults.join(QString()));
   else {
     QVERIFY(result.size() == expectedResults.join(QString()).size());
-    foreach (const QString &expectedResult, expectedResults)
+    Q_FOREACH (const QString &expectedResult, expectedResults)
       QVERIFY(result.contains(expectedResult));
   }
 }

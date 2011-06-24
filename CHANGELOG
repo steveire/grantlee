@@ -5,6 +5,83 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 0.1.9 --
+-------------------
+* Port the lexer to a state machine based string parser
+* Add feature to trim insignificant whitespace
+* Build with stricter Qt flags QT_NO_KEYWORDS and QT_NO_CAST_FROM_BYTEARRAY
+* Add example application for a html based templated application framework
+* Add documentation and convenience functions for QObject and Q_PROPERTY introspection
+* Modernise the CMake build system including creation of EXPORT targets and fixing of various cross-platform issues.
+* Add a componentized CPack packaging system for binary tarballs and windows install wizards.
+* Ability to use COMPONENTS argument to find_package with Grantlee.
+* Add a build target for generating code coverage information.
+* Platform fixes for MIPS, ARM and MinGW
+* Add more documentation for example applications shipped with the Grantlee source.
+* Add the changelog for prior versions of Grantlee
+
+-- Version 0.1.8 --
+-------------------
+* Add support for internationalization and localization features.
+* A new contacts/address book application
+* Support for outputting QDate and QTime objects.
+* Automatic loading of QtScript based plugins
+
+-- Version 0.1.7 --
+-------------------
+* Ability to iterate or introspect any type in a QVariant.
+* License compliance update in header sections
+* Documentation of remaining API
+* Updates to build and release scripts.
+
+-- Version 0.1.6 --
+-------------------
+* Fix crash on Windows in release mode
+* Fix multiple memory leaks when QtScript based plugins are used.
+* Several maintenance patches
+* Some new unit tests
+
+-- Version 0.1.5 --
+-------------------
+* Make it possible to implement template tags in a re-entrant way.
+* Make compiled Template objects cacheable
+* Make it possible for the scripted filters to inject QObjects and arrays to
+scripts.
+* More code maintainability improvements.
+* Build Grantlee properly in release mode on Windows
+* Make Grantlee build against Qt 4.5 (regression since v0.1.4)
+* Several release system improvements
+
+-- Version 0.1.4 --
+-------------------
+* Use explicit latin1 encoding for literals internally in Grantlee
+* Make it possible to compile Grantlee against a Qt built with
+QT_NO_CAST_FROM_ASCII
+* Support for accessing more QObject properties such as children() and
+objectName()
+* Add the {% title %} tag to the default plugin library
+* Minor features, bugfixes and tests ported from Django version 1.2
+* Built-in support for finding default plugins from the installed location
+
+-- Version 0.1.3 --
+-------------------
+* Fix parsing of literal string arguments in template tags
+* Support QStringList as an input argument.
+* Add ruby output support to the code generator example
+
+-- Version 0.1.2 --
+-------------------
+* Find templates in multiple directories specified in setTemplatePaths.
+* Support the use of enumerations in templates
+
+-- Version 0.1.1 --
+-------------------
+* Workaround applications segfaulting on close when using scriptable tags with Qt 4.7
+    (https://bugs.webkit.org/show_bug.cgi?id=38193)
+    Script support now compiled directly into the core library.
+* Add a 'make test' target for running tests.
+* Images sometimes not found in template paths.
+
 -- Version 0.1.0 --
 -------------------
 Initial release. Features:

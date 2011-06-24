@@ -46,8 +46,8 @@ QString AbstractLocalizer::localize( const QVariant& variant ) const
     return localizeDateTime( variant.toDateTime() );
   else if ( isSafeString( variant ) )
     return localizeString( getSafeString( variant ).get() );
-  else if ( variant.type() == QVariant::Double )
-    return localizeNumber( variant.toDouble() );
+  else if ( variant.type() == QVariant::Double || variant.userType() == QMetaType::Float )
+    return localizeNumber( variant.toReal() );
   else if ( variant.canConvert( QVariant::LongLong ) )
     return localizeNumber( variant.toInt() );
   return QString();

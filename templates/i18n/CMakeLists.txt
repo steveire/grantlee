@@ -1,13 +1,5 @@
 project(grantlee_i18ntags)
 
-include(${Grantlee_USE_FILE})
-
-include_directories(
-  ${QT_INCLUDES}
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}/../corelib
-)
-
 grantlee_add_plugin(grantlee_i18ntags
   i18ntags
 
@@ -21,8 +13,5 @@ grantlee_add_plugin(grantlee_i18ntags
 )
 
 install(TARGETS grantlee_i18ntags
-         RUNTIME DESTINATION ${PLUGIN_INSTALL_DIR}
-         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-         COMPONENT Devel
+         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )

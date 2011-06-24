@@ -1,6 +1,16 @@
+
 project(Grantlee)
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6.4)
+
+# Workaround for http://public.kitware.com/Bug/view.php?id=12301
+if (MINGW)
+  if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build,
+  options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release
+  RelWithDebInfo MinSizeRel Coverage." FORCE)
+  endif()
+endif()
 
 option( BUILD_CORE "Build the Grantlee template library. Deprecated. Use BUILD_TEMPLATES instead" TRUE )
 option( BUILD_GUI "Build the Grantlee textdocument library. Deprecated. Use BUILD_TEXTDOCUMENT instead" TRUE )
@@ -15,27 +25,46 @@ if (BUILD_TESTS)
   enable_testing()
 endif()
 
-set(CMAKE_MODULE_PATH ${Grantlee_SOURCE_DIR}/cmake/modules)
+set(Grantlee_MODULE_DIR ${Grantlee_SOURCE_DIR}/cmake/modules)
+set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
+
+include(GrantleeGenerateExportHeader)
+
+# create coverage build type
+set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+              "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
+set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+set(CMAKE_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
 
 if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic-errors")
+
+  set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
+  set ( CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined ${CMAKE_MODULE_LINKER_FLAGS}")
+
   if (NOT MINGW)
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-  else ()
-    # http://mail.kde.org/pipermail/kde-windows/2007-December/001692.html
-    # http://lists.trolltech.com/pipermail/qt-interest/2009-July/009829.html
-    # qt is always compiled with QT_NO_DEBUG under mingw,
-    # so we need to compile stuff linked against it
-    # the same or otherwise QPluginLoader rejects plugins
-    add_definitions(-DQT_NO_DEBUG)
+    enable_gcc_hidden_visibility()
   endif ()
 endif()
+
+# Tell FindQt4.cmake to point the QT_QTFOO_LIBRARY targets at the imported targets
+# for the Qt libraries, so we get full handling of release and debug versions of the
+# Qt libs and are flexible regarding the install location of Qt under Windows
+set(QT_USE_IMPORTED_TARGETS TRUE)
 
 add_definitions(-DQT_NO_CAST_TO_ASCII)
 add_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_definitions(-DQT_STRICT_ITERATORS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
+add_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
+add_definitions(-DQT_NO_KEYWORDS)
+
+# Always include the source and build directories in the include path
+# to save doing so manually in every subdirectory.
+SET( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 set(Grantlee_VERSION_MAJOR 0)
 set(Grantlee_VERSION_MINOR 2)
@@ -47,52 +76,64 @@ set(Grantlee_VERSION_STRING "${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}
 
 set (LIB_SUFFIX "" CACHE STRING "Define suffix of library directory name (eg. '64')")
 
-set( LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
-set( PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING} )
-set( BIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/bin )
-set( INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include )
-set( DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/apps )
-set( CMAKE_INSTALL_NAME_DIR ${LIB_INSTALL_DIR})
+set( LIB_INSTALL_DIR lib${LIB_SUFFIX} )
+set( PLUGIN_INSTALL_DIR lib${LIB_SUFFIX}/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING} )
+set( BIN_INSTALL_DIR bin )
+set( INCLUDE_INSTALL_DIR include )
+set( DATA_INSTALL_DIR share/apps )
 
-set(Grantlee_USE_FILE "${Grantlee_SOURCE_DIR}/cmake/modules/GrantleeUse.cmake")
+# set up RPATH/install_name_dir
+set( CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
+set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+set(Grantlee_USE_FILE "${Grantlee_MODULE_DIR}/GrantleeUse.cmake")
 
 if (BUILD_CORE AND BUILD_TEMPLATES)
-  set(Grantlee_TEMPLATES_LIBRARY "grantlee_core")
-  set(Grantlee_TEMPLATES_LIBRARIES ${Grantlee_TEMPLATES_LIBRARY} ${QT_QTCORE_LIBRARIES} )
   add_subdirectory(templates)
 endif()
 
 if (BUILD_GUI AND BUILD_TEXTDOCUMENT)
-  set(Grantlee_TEXTDOCUMENT_LIBRARY "grantlee_gui")
-  set(Grantlee_TEXTDOCUMENT_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARY} ${QT_QTGUI_LIBRARIES} )
   add_subdirectory(textdocument)
 endif()
 
+set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/grantlee" )
+
+file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
+
 configure_file(
-  "${CMAKE_MODULE_PATH}/GrantleeConfig.cmake.in"
+  "${Grantlee_MODULE_DIR}/GrantleeConfig.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
-  IMMEDIATE @ONLY
+  @ONLY
 )
 
 configure_file(
-  "${CMAKE_MODULE_PATH}/GrantleeConfigVersion.cmake.in"
+  "${Grantlee_MODULE_DIR}/GrantleeConfigVersion.cmake.in"
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
-  IMMEDIATE @ONLY
+  @ONLY
 )
 
 install(FILES
   "${Grantlee_BINARY_DIR}/GrantleeConfig.cmake"
   "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
-  DESTINATION "${LIB_INSTALL_DIR}/grantlee")
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  COMPONENT Common
+)
 
 install(FILES
-  "${CMAKE_MODULE_PATH}/GrantleeUse.cmake"
-  DESTINATION "${PLUGIN_INSTALL_DIR}"
+  "${Grantlee_MODULE_DIR}/GrantleeUse.cmake"
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  COMPONENT Common
+)
+
+install(EXPORT grantlee_targets
+  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  FILE GrantleeTargets.cmake
+  COMPONENT Common
 )
 
 # Add support for an uninstall target
 configure_file(
-  "${CMAKE_MODULE_PATH}/cmake_uninstall.cmake.in"
+  "${Grantlee_MODULE_DIR}/cmake_uninstall.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 
@@ -112,9 +153,9 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
   set(TAGFILES "${QTTAGFILE} ${STLTAGFILE}")
   set(DOCS_OUTPUT_DIRECTORY "@CMAKE_BINARY_DIR@")
   configure_file(
-    "${CMAKE_MODULE_PATH}/Doxyfile.in"
+    "${Grantlee_MODULE_DIR}/Doxyfile.in"
     "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile"
-    IMMEDIATE @ONLY)
+    @ONLY)
 
   # Add support for a Qt assistant docs target
   # qttags.tag is too big to distribute with Grantlee. Get it
@@ -131,9 +172,9 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
     set(GENERATE_QHP "yes")
 
     configure_file(
-      "${CMAKE_MODULE_PATH}/Doxyfile.in"
+      "${Grantlee_MODULE_DIR}/Doxyfile.in"
       "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.qt"
-      IMMEDIATE @ONLY)
+      @ONLY)
   endif()
 
   set( DOCS_ARGS ${DOXYGEN_EXECUTABLE} "${CMAKE_CURRENT_BINARY_DIR}/Doxyfile" )
@@ -146,3 +187,84 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
   )
 endif()
 
+find_package(LCov)
+
+if(LCOV_FOUND)
+  get_property(UNITTESTS GLOBAL PROPERTY TEST_COVERAGE)
+
+  set(coverageDir ${CMAKE_BINARY_DIR})
+
+  foreach(_testpath ${UNITTESTS})
+    set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -z -d ${coverageDir})
+
+    get_filename_component(_test ${_testpath} NAME)
+
+    set(coverage_ARGS ${coverage_ARGS} COMMAND ${_testpath})
+    set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -c -t ${_test} -d ${coverageDir} -o ${CMAKE_BINARY_DIR}/test_${_test}.info)
+    set(infoFiles ${infoFiles} -a ${CMAKE_BINARY_DIR}/test_${_test}.info)
+  endforeach()
+
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} ${infoFiles} -o test_all.info)
+
+  # For an unknown reason lcov does not work with absolute paths such as ${CMAKE_BINARY_DIR}
+  file(RELATIVE_PATH relBinaryDir / ${CMAKE_BINARY_DIR})
+
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -r test_all.info *${relBinaryDir}*
+                                                                -r test_all.info *pluginpointer*
+                                                                -r test_all.info *usr/include*
+                                                                -o test_all.info
+  )
+
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${CMAKE_COMMAND} -E remove_directory coverage)
+  set(coverage_ARGS ${coverage_ARGS} COMMAND ${GENHTML_EXECUTABLE} -o coverage/ -s --demangle-cpp -f test_all.info)
+
+  add_custom_target(coverage
+    ${coverage_ARGS}
+  )
+endif()
+
+find_package(Cccc)
+if (CCCC_FOUND)
+  get_property(CCCC_FILES GLOBAL PROPERTY SOURCE_LIST)
+
+  set( cccc_ARGS ${CCCC_EXECUTABLE} ${CCCC_FILES} --outdir=${CMAKE_BINARY_DIR}/cccc --html_outfile=${CMAKE_BINARY_DIR}/cccc/index.html)
+
+  add_custom_target(cccc
+    ${cccc_ARGS}
+  )
+endif()
+
+# http://www.vtk.org/Wiki/CMake:Component_Install_With_CPack
+set(CPACK_PACKAGE_NAME "grantlee")
+set(CPACK_PACKAGE_VERSION_MAJOR ${Grantlee_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${Grantlee_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${Grantlee_VERSION_PATCH})
+set(CPACK_PACKAGE_CONTACT "Stephen Kelly <steveire@gmail.com>")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A set of frameworks for use with Qt")
+set(CPACK_GENERATOR "TGZ" )
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING.LIB")
+
+set(CPACK_COMPONENT_COMMON_DISPLAY_NAME "Grantlee Common files")
+set(CPACK_COMPONENT_TEMPLATES_DISPLAY_NAME "Grantlee String Templates")
+set(CPACK_COMPONENT_TEXTDOCUMENT_DISPLAY_NAME "Grantlee TextDocument framework")
+
+set(CPACK_COMPONENT_COMMON_DESCRIPTION
+  "Files needed by all Grantlee frameworks")
+set(CPACK_COMPONENT_TEMPLATES_DESCRIPTION
+  "A string template system for Qt based on Django syntax")
+set(CPACK_COMPONENT_TEXTDOCUMENT_DESCRIPTION
+  "A framework for QTextDocument related tasks")
+
+set(CPACK_COMPONENT_TEMPLATES_DEPENDS Common)
+set(CPACK_COMPONENT_TEXTDOCUMENT_DEPENDS Common)
+set(CPACK_COMPONENT_COMMON_REQUIRED ON)
+
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+
+if (WIN32)
+  set(CPACK_NSIS_MODIFY_PATH ON)
+  set(CPACK_GENERATOR ${CPACK_GENERATOR} "NSIS" )
+endif()
+
+include(CPack)

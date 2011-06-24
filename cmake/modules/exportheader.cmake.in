@@ -1,0 +1,23 @@
+
+#ifndef @INCLUDE_GUARD_NAME@
+#define @INCLUDE_GUARD_NAME@
+
+#ifndef @EXPORT_MACRO_NAME@
+#  ifdef @EXPORT_IMPORT_CONDITION@
+   /* We are building this library */
+#    define @EXPORT_MACRO_NAME@ @DEFINE_EXPORT@
+#  else
+   /* We are using this library */
+#    define @EXPORT_MACRO_NAME@ @DEFINE_IMPORT@
+#  endif
+#endif
+
+#ifndef @NO_EXPORT_MACRO_NAME@
+#  define @NO_EXPORT_MACRO_NAME@ @DEFINE_NO_EXPORT@
+#endif
+
+#ifndef @DEPRECATED_NAME@
+#  define @DEPRECATED_NAME@ @DEFINE_DEPRECATED@ @EXPORT_MACRO_NAME@
+#endif
+
+#endif // @INCLUDE_GUARD_NAME@

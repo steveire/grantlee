@@ -1,7 +1,7 @@
 /*
-  This file is part of the Grantlee template system.
+  This file is part of Grantlee.
 
-  Copyright (c) 2009,2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2011 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,20 +18,15 @@
 
 */
 
-#ifndef GRANTLEE_TEMPLATES_EXPORT_H
-#define GRANTLEE_TEMPLATES_EXPORT_H
+#ifndef GRANTLEE_TEXTDOCUMENT_H
+#define GRANTLEE_TEXTDOCUMENT_H
 
-#if defined(_WIN32) || defined(_WIN64)
-#  ifndef GRANTLEE_CORE_EXPORT
-#    if defined(GRANTLEE_TEMPLATES_LIB_MAKEDLL)
-#      define GRANTLEE_CORE_EXPORT __declspec(dllexport)
-#    else
-#      define GRANTLEE_CORE_EXPORT __declspec(dllimport)
-#    endif
-#  endif
-#else
-#  define GRANTLEE_CORE_EXPORT __attribute__((visibility("default")))
-#endif
+#include "grantlee/abstractmarkupbuilder.h"
+#include "grantlee/bbcodebuilder.h"
+#include "grantlee/markupdirector.h"
+#include "grantlee/plaintextmarkupbuilder.h"
+#include "grantlee/texthtmlbuilder.h"
+#include "grantlee/mediawikimarkupbuilder.h"
+#include "grantlee/grantlee_gui_export.h"
 
 #endif
-

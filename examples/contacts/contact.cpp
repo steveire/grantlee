@@ -20,10 +20,46 @@
 
 #include "contact.h"
 
-Contact::Contact(QObject* parent)
+Address::Address(QObject* parent)
   : QObject(parent)
 {
 
+}
+
+int Address::houseNumber() const
+{
+  return m_houseNumber;
+}
+
+QString Address::city()
+{
+  return m_city;
+}
+
+QString Address::streetName()
+{
+  return m_streetName;
+}
+
+void Address::setCity(const QString& city)
+{
+  m_city = city;
+}
+
+void Address::setHouseNumber(int houseNumber)
+{
+  m_houseNumber = houseNumber;
+}
+
+void Address::setStreetName(const QString& streetName)
+{
+  m_streetName = streetName;
+}
+
+
+Contact::Contact(QObject* parent)
+  : QObject(parent), m_address(0)
+{
 }
 
 QString Contact::name() const
@@ -56,12 +92,12 @@ void Contact::setPhone(const QString& phone)
   m_phone = phone;
 }
 
-QString Contact::address() const
+QObject* Contact::address() const
 {
   return m_address;
 }
 
-void Contact::setAddress(const QString& address)
+void Contact::setAddress(Address *address)
 {
   m_address = address;
 }
@@ -122,6 +158,17 @@ QVariant Contact::data(int role) const
     return QListWidgetItem::data(role);
   return m_name;
 }
+
+QVariant Contact::friends() const
+{
+  return QVariant::fromValue(m_friends);
+}
+
+void Contact::setFriends(const QList<QObject*> &friends)
+{
+  m_friends = friends;
+}
+
 
 #include "contact.moc"
 

@@ -124,6 +124,9 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
 }
 
 #ifndef Q_QDOC
+template <>
+QVariant GRANTLEE_CORE_EXPORT TypeAccessor<QObject*>::lookUp( const QObject * const object, const QString &property );
+
 /**
  * @internal Looks up the property @p property from QObject @p object.
  */

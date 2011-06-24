@@ -2,14 +2,14 @@ project(grantlee_templates)
 
 include_directories(
   ${QT_INCLUDES}
-  ${PROJECT_BINARY_DIR}
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/../scriptabletags
 )
 
-include(${QT_USE_FILE})
-
 configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
+
+set(Grantlee_PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} )
+
 configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_p.h)
 
 # BIC: remove
@@ -36,6 +36,7 @@ set (grantlee_templates_SRCS
   safestring.cpp
   template.cpp
   templateloader.cpp
+  textprocessingmachine.cpp
   typeaccessors.cpp
   util.cpp
   variable.cpp
@@ -68,22 +69,37 @@ add_library(grantlee_core SHARED
   ${scriptabletags_SRCS}
 )
 
+foreach(file ${grantlee_templates_SRCS})
+  set(grantlee_templates_FULLPATHS ${grantlee_templates_FULLPATHS} ${CMAKE_SOURCE_DIR}/templates/lib/${file})
+endforeach()
+
+set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
+  ${grantlee_templates_FULLPATHS}
+  ${scriptabletags_SRCS}
+)
+
+grantlee_generate_export_header(grantlee_core)
+
 target_link_libraries(grantlee_core
   ${QT_QTCORE_LIBRARY}
   ${QT_QTSCRIPT_LIBRARY}
 )
 
+# QtScript shouldn't be part of the link interface of grantlee_core.
+target_link_libraries(grantlee_core
+  LINK_INTERFACE_LIBRARIES
+  ${QT_QTCORE_LIBRARY}
+)
+
 set_target_properties(grantlee_core PROPERTIES
   VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
   SOVERSION  ${Grantlee_TEMPLATES_LIB_SOVERSION}
-  DEFINE_SYMBOL GRANTLEE_TEMPLATES_LIB_MAKEDLL
 )
 
-install(TARGETS grantlee_core
-         RUNTIME DESTINATION ${BIN_INSTALL_DIR}
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-         COMPONENT Devel
+install(TARGETS grantlee_core EXPORT grantlee_targets
+         RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT Templates
+         LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
+         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
 )
 
 install(FILES
@@ -95,7 +111,7 @@ install(FILES
   exception.h
   filter.h
   filterexpression.h
-  grantlee_core_export.h
+  ${PROJECT_BINARY_DIR}/grantlee_core_export.h
   ${PROJECT_BINARY_DIR}/grantlee_version.h
   metatype.h
   mutabletemplate.h
@@ -112,12 +128,12 @@ install(FILES
   token.h
   util.h
   variable.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Devel
+  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Templates
 )
 
 install(FILES
   grantlee_core.h
   grantlee_templates.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Templates
 )
 

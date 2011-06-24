@@ -1,0 +1,9 @@
+
+{% extends "shared/base.html" %}
+
+{% block content %}
+  {% rssfeed "http://rss.weather.com/weather/rss/local/GMXX0007?cm_ven=LWO&cm_cat=rss&par=LWO_rss" "/rss/channel/item" %}
+  <h2><a href="{% xmlrole "link/string()" %}">{% xmlrole "title/string()" %}</a></h2>
+  {% xmlrole "description/string()" %}
+  {% endrssfeed %}
+{% endblock %}

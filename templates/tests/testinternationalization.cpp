@@ -67,7 +67,7 @@ public:
     m_engine->addDefaultLibrary(QLatin1String("grantlee_i18ntags"));
   }
 
-private slots:
+private Q_SLOTS:
   void testStrings();
   void testIntegers();
   void testFloats();
@@ -766,7 +766,7 @@ void TestInternationalization::testIntegers_data()
 
 void TestInternationalization::testFloats()
 {
-  QFETCH(double, floatingPoint);
+  QFETCH(qreal, floatingPoint);
   QFETCH(QString, nullFloatingPoint);
   QFETCH(QString, cFloatingPoint);
   QFETCH(QString, en_USFloatingPoint);
@@ -784,7 +784,7 @@ void TestInternationalization::testFloats()
 
 void TestInternationalization::testFloats_data()
 {
-  QTest::addColumn<double>("floatingPoint");
+  QTest::addColumn<qreal>("floatingPoint");
   QTest::addColumn<QString>("nullFloatingPoint");
   QTest::addColumn<QString>("cFloatingPoint");
   QTest::addColumn<QString>("en_USFloatingPoint");
