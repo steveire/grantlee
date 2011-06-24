@@ -67,7 +67,7 @@ public:
     m_engine->addDefaultLibrary(QLatin1String("grantlee_i18ntags"));
   }
 
-private slots:
+private Q_SLOTS:
   void testStrings();
   void testIntegers();
   void testFloats();

@@ -60,6 +60,7 @@ add_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_definitions(-DQT_STRICT_ITERATORS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 add_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
+add_definitions(-DQT_NO_KEYWORDS)
 
 # Always include the source and build directories in the include path
 # to save doing so manually in every subdirectory.

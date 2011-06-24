@@ -166,7 +166,7 @@ private:
   void performEnter( State<TransitionInterface>* toState )
   {
     toState->enter();
-    forever if ( toState->initialState() ) {
+    Q_FOREVER if ( toState->initialState() ) {
       toState = toState->initialState();
       Q_ASSERT( toState );
       toState->enter();

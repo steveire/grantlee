@@ -105,7 +105,7 @@ I18nNode::I18nNode( const QString &sourceText, const QList<Grantlee::FilterExpre
 void I18nNode::render( OutputStream* stream, Context* c )
 {
   QVariantList args;
-  foreach( const FilterExpression &fe, m_filterExpressionList )
+  Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
   const QString resultString = c->localizer()->localizeString( m_sourceText, args );
 
@@ -122,7 +122,7 @@ void I18nVarNode::render( OutputStream* stream, Context* c )
 {
   Q_UNUSED( stream )
   QVariantList args;
-  foreach( const FilterExpression &fe, m_filterExpressionList )
+  Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
   QString resultString = c->localizer()->localizeString( m_sourceText, args );
 

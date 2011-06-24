@@ -164,7 +164,7 @@ QVariant doQobjectLookUp( const QObject * const object, const QString &property 
     if ( childList.isEmpty() )
       return QVariant();
     QVariantList children;
-    foreach( QObject *object, childList )
+    Q_FOREACH( QObject *object, childList )
       children.append( QVariant::fromValue( object ) );
     return children;
   }
