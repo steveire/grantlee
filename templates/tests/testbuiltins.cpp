@@ -791,9 +791,9 @@ void TestBuiltinSyntax::testEscaping_data()
   dict.insert( QLatin1String( "varList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
   QTest::newRow( "escape05" ) << "{{ varList|join:\" & \" }}" << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
-  // Same with variable args.
+  // Unlike variable args.
   dict.insert( QLatin1String( "amp" ), QLatin1String( " & " ) );
-  QTest::newRow( "escape06" ) << QString::fromLatin1( "{{ varList|join:amp }}" ) << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
+  QTest::newRow( "escape06" ) << QString::fromLatin1( "{{ varList|join:amp }}" ) << dict << QString::fromLatin1( "Tom &amp; Dick &amp; Harry" ) << NoError;
 
   // Literal strings are safe.
   QTest::newRow( "escape07" ) << "{{ \"this & that\" }}" << dict << QString::fromLatin1( "this & that" ) << NoError;
