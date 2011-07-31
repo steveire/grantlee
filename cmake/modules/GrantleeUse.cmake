@@ -5,7 +5,7 @@ include_directories(${Grantlee_INCLUDE_DIRS})
 # Set up the deps needed to use Grantlee
 include(${QT_USE_FILE})
 
-include(CMakeParseArguments)
+include(GrantleeParseArguments)
 
 # Add the Grantlee modules directory to the CMake module path
 set(CMAKE_MODULE_PATH ${Grantlee_PLUGIN_DIR}/cmake ${CMAKE_MODULE_PATH})
@@ -15,7 +15,7 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
   set(oneValueArgs TAGS FILTERS)
   set(multiValueArgs)
 
-  cmake_parse_arguments(_PLUGIN "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+  grantlee_parse_arguments(_PLUGIN "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   foreach(_filename ${_PLUGIN_UNPARSED_ARGUMENTS})
     get_source_file_property(_skip ${_filename}.h SKIP_AUTOMOC)

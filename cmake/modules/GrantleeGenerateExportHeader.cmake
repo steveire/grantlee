@@ -68,7 +68,7 @@
 #   set_target_properties(static_variant PROPERTIES DEFINE_SYMBOL LIBSHARED_AND_STATIC_STATIC_DEFINE)
 #
 
-include(CMakeParseArguments)
+include(GrantleeParseArguments)
 include(CheckCXXCompilerFlag)
 
 # Workaround for http://public.kitware.com/Bug/view.php?id=12265
@@ -110,7 +110,7 @@ macro(_DO_GENERATE_EXPORT_HEADER TARGET_LIBRARY)
     set(oneValueArgs BASE_NAME EXPORT_MACRO_NAME EXPORT_FILE_NAME DEPRECATED_NAME NO_EXPORT_MACRO_NAME STATIC_DEFINE)
     set(multiValueArgs)
 
-    cmake_parse_arguments(_GEH "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    grantlee_parse_arguments(_GEH "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     set(BASE_NAME "${TARGET_LIBRARY}")
 
@@ -176,7 +176,7 @@ function(grantlee_enable_gcc_hidden_visibility)
   set(oneValueArgs FATAL_WARNINGS)
   set(multiValueArgs)
 
-  cmake_parse_arguments(_EGHV "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+  grantlee_parse_arguments(_EGHV "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   set(MESSAGE_TYPE WARNING)
 
