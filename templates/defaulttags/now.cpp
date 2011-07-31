@@ -20,7 +20,7 @@
 
 #include "now.h"
 
-#include "exception.h"
+#include "../lib/exception.h"
 #include "parser.h"
 
 #include <QtCore/QDateTime>

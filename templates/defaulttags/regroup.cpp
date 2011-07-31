@@ -20,7 +20,7 @@
 
 #include "regroup.h"
 
-#include "exception.h"
+#include "../lib/exception.h"
 #include "parser.h"
 #include "util.h"
 

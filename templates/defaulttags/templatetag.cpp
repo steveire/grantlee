@@ -20,7 +20,7 @@
 
 #include "templatetag.h"
 
-#include "exception.h"
+#include "../lib/exception.h"
 #include "grantlee_tags_p.h"
 #include "parser.h"
 
