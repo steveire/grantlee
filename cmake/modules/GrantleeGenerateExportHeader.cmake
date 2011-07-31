@@ -72,7 +72,7 @@ include(CMakeParseArguments)
 include(CheckCXXCompilerFlag)
 
 # Workaround for http://public.kitware.com/Bug/view.php?id=12265
-set(myDir ${CMAKE_CURRENT_LIST_DIR})
+get_filename_component(myDir ${CMAKE_CURRENT_LIST_FILE} PATH)
 
 macro(_DO_SET_MACRO_VALUES TARGET_LIBRARY)
     set(DEFINE_DEPRECATED)
