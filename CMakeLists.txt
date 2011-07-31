@@ -48,7 +48,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   endif ()
 
   if (NOT MINGW)
-    enable_gcc_hidden_visibility()
+    grantlee_enable_gcc_hidden_visibility()
   endif ()
 endif()
 
