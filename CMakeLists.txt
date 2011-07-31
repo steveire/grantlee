@@ -32,8 +32,10 @@ include(GrantleeGenerateExportHeader)
 
 # create coverage build type
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-              "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
+if (${CMAKE_VERSION} VERSION_GREATER 2.8.2)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
+endif()
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
 set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
 set(CMAKE_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
