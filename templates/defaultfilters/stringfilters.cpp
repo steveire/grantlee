@@ -18,7 +18,7 @@
 
 */
 
-#include "strings.h"
+#include "stringfilters.h"
 
 #include "util.h"
 

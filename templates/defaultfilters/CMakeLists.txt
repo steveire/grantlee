@@ -9,7 +9,7 @@ grantlee_add_plugin(grantlee_defaultfilters
     lists
     logic
     misc
-    strings
+    stringfilters
 )
 
 install(TARGETS grantlee_defaultfilters
