@@ -803,6 +803,19 @@ void TestFilters::testListFilters_data()
   QTest::newRow( "join03" ) << "{{ a|join:\" &amp; \" }}" << dict << QString::fromLatin1( "alpha &amp; beta &amp; me" ) << NoError;
   QTest::newRow( "join04" ) << "{% autoescape off %}{{ a|join:\" &amp; \" }}{% endautoescape %}" << dict << QString::fromLatin1( "alpha &amp; beta & me" ) << NoError;
 
+  // Test that joining with unsafe joiners don't result in unsafe strings (#11377)
+  dict.insert( QLatin1String( "var" ), QLatin1String( " & " ) );
+  QTest::newRow( "join05" ) << "{{ a|join:var }}" << dict << QString::fromLatin1( "alpha &amp; beta &amp; me") << NoError;
+  dict.insert( QLatin1String( "var" ), Grantlee::markSafe( QString::fromLatin1( " & " ) ) );
+  QTest::newRow( "join06" ) << "{{ a|join:var }}" << dict << QString::fromLatin1( "alpha & beta &amp; me") << NoError;
+  dict.insert( QLatin1String( "a" ), QVariantList() << QString::fromLatin1( "Alpha" ) << QString::fromLatin1( "Beta & Me" ) );
+  dict.insert( QLatin1String( "var" ), QLatin1String( " & " ) );
+  QTest::newRow( "join07" ) << "{{ a|join:var|lower }}" << dict << QString::fromLatin1( "alpha &amp; beta &amp; me") << NoError;
+
+  dict.insert( QLatin1String( "a" ), QVariantList() << QString::fromLatin1( "Alpha" ) << QString::fromLatin1( "Beta & Me" ) );
+  dict.insert( QLatin1String( "var" ), Grantlee::markSafe( QString::fromLatin1( " & " ) ) );
+  QTest::newRow( "join08" ) << "{{ a|join:var|lower }}" << dict << QString::fromLatin1( "alpha & beta &amp; me") << NoError;
+
   // arguments to filters are intended to be used unescaped.
 //   dict.clear();
 //   dict.insert( QLatin1String( "a" ), QVariantList() << QString::fromLatin1( "alpha" ) << QString::fromLatin1( "beta & me" ) );

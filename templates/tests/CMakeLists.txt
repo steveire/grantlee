@@ -1,5 +1,12 @@
 project(grantlee_templates_tests)
 
+#building on Solaris with Sun Studio uses stdcxx which does not have TR1 fully implemented
+#take it from boost
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+  find_package(Boost REQUIRED)
+  include_directories(${Boost_INCLUDE_DIR} ${Boost_INCLUDE_DIR}/boost/tr1)
+endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
+
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/" )
