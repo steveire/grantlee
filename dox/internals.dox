@@ -19,7 +19,7 @@ namespace Grantlee
 
   Plugins can return Filters as well as AbstractNodeFactories. Filters can manipulate Variables in some way before rendering them to the output.
 
-  Loading templates to include or extend is accomplished using the load{Mutable,}ByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins.
+  Loading templates to include or extend is accomplished using the loadByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins.
 
 */
 

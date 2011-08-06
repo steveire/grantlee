@@ -21,7 +21,6 @@
 #ifndef GRANTLEE_ENGINE_H
 #define GRANTLEE_ENGINE_H
 
-#include "mutabletemplate.h"
 #include "template.h"
 #include "templateloader.h"
 
@@ -36,7 +35,7 @@ class EnginePrivate;
 /**
   @brief Grantlee::Engine is the main entry point for creating %Grantlee Templates.
 
-  The Grantlee::Engine is responsible for configuring and creating Template and MutableTemplate objects.
+  The Grantlee::Engine is responsible for configuring and creating Template objects.
   In typical use, one or more TemplateLoader objects will be added to the Engine to load template objects, and
   plugin directories will be set to enable finding template tags and filters.
 
@@ -181,20 +180,6 @@ public:
     The secondary Templates and plugins loaded will be determined by the Engine configuration.
   */
   Template newTemplate( const QString &content, const QString &name ) const;
-
-  /**
-    Load the MutableTemplate identified by @p name.
-
-    The Templates and plugins loaded and will be determined by the Engine configuration.
-  */
-  MutableTemplate loadMutableByName( const QString &name ) const;
-
-  /**
-    Create a new MutableTemplate with the content @p content identified by @p name.
-
-    The secondary Templates and plugins loaded will be determined by the Engine configuration.
-  */
-  MutableTemplate newMutableTemplate( const QString &content, const QString &name ) const;
 
   /**
     Returns the libraries available by default to new Templates.

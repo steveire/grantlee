@@ -922,12 +922,6 @@ void TestBuiltinSyntax::testTemplatePathSafety()
   else
     QCOMPARE( t->render( &c ), inputPath );
 
-  MutableTemplate mt = loader->loadMutableByName( inputPath, m_engine );
-  if ( output.isEmpty() )
-    QVERIFY( !mt );
-  else
-    QCOMPARE( mt->render( &c ), inputPath );
-
   delete loader;
   f.remove();
 }

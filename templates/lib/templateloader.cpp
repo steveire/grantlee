@@ -98,35 +98,6 @@ bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
   return true;
 }
 
-// TODO Refactor these two.
-MutableTemplate FileSystemTemplateLoader::loadMutableByName( const QString &fileName, Engine const *engine ) const
-{
-  int i = 0;
-  QFile file;
-
-  while ( !file.exists() ) {
-    if ( i >= m_templateDirs.size() )
-      break;
-
-    file.setFileName( m_templateDirs.at( i ) + '/' + m_themeName + '/' + fileName );
-
-    QFileInfo fi( file );
-    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
-      return MutableTemplate();
-    ++i;
-  }
-
-  if ( !file.exists() || !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template from %1. File does not exist." ).arg( fileName ) );
-  }
-
-  QString content;
-  content = file.readAll();
-
-  MutableTemplate t = engine->newMutableTemplate( content, fileName );
-  return t;
-}
-
 Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine const *engine ) const
 {
   int i = 0;
@@ -199,15 +170,6 @@ Template InMemoryTemplateLoader::loadByName( const QString& name, Engine const *
     return engine->newTemplate( m_namedTemplates.value( name ), name );
   }
   throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Couldn't load template %1. Template does not exist." ).arg( name ) );
-}
-
-MutableTemplate InMemoryTemplateLoader::loadMutableByName( const QString& name, Engine const *engine ) const
-{
-  if ( m_namedTemplates.contains( name ) ) {
-    MutableTemplate t = engine->newMutableTemplate( m_namedTemplates.value( name ), name );
-    return t;
-  }
-  throw Grantlee::Exception( TagSyntaxError, QString( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }
 
 QPair<QString, QString> InMemoryTemplateLoader::getMediaUri( const QString& fileName ) const

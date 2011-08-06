@@ -63,7 +63,6 @@ grantlee_templates_unit_tests(
   testfilters
   testgenerictypes
   testgenericcontainers
-  testmutabletags
   testinternationalization
 #   benchmarks
 )

@@ -20,7 +20,7 @@
 
 #include "cycle.h"
 
-#include "exception.h"
+#include "../lib/exception.h"
 #include "parser.h"
 #include "rendercontext.h"
 #include "util.h"

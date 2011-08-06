@@ -97,22 +97,6 @@ public:
   // This can't be const because CycleNode needs to change on each render.
   virtual void render( OutputStream *stream, Context *c ) = 0;
 
-  /**
-    Reimplement this to return whether the node is persistent.
-    @see mutable_templates
-  */
-  virtual bool isPersistent() { // krazy:exclude:inline
-    return isRepeatable();
-  }
-
-  /**
-    Reimplement this to return whether the node is repeatable.
-    @see mutable_templates
-  */
-  virtual bool isRepeatable() { // krazy:exclude:inline
-    return false;
-  }
-
 #ifndef Q_QDOC
   /**
     @internal
@@ -216,12 +200,6 @@ public:
     Renders the list of Nodes in the Context @p c.
   */
   void render( OutputStream *stream, Context *c );
-
-protected:
-  /**
-    Renders the list of Nodes in the Context @p c, possibly mutating the nodes contained in it.
-  */
-  void mutableRender( OutputStream *stream, Context *c );
 
 private:
   bool m_containsNonText;

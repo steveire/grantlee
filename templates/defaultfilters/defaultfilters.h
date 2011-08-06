@@ -26,7 +26,7 @@
 #include "lists.h"
 #include "logic.h"
 #include "misc.h"
-#include "strings.h"
+#include "stringfilters.h"
 
 #include "taglibraryinterface.h"
 

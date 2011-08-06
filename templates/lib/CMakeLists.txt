@@ -25,7 +25,6 @@ set (grantlee_templates_SRCS
   filterexpression.cpp
   lexer.cpp
   metatype.cpp
-  mutabletemplate.cpp
   node.cpp
   nodebuiltins.cpp
   nulllocalizer.cpp
@@ -114,7 +113,6 @@ install(FILES
   ${PROJECT_BINARY_DIR}/grantlee_core_export.h
   ${PROJECT_BINARY_DIR}/grantlee_version.h
   metatype.h
-  mutabletemplate.h
   node.h
   outputstream.h
   parser.h

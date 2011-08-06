@@ -39,7 +39,7 @@ QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, 
     ret.append( s );
     if ( i.hasNext() ) {
       SafeString argString = getSafeString( argument );
-      ret.append( argString );
+      ret.append( conditionalEscape( argString ) );
     }
   }
   return markSafe( ret );
