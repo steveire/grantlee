@@ -212,10 +212,12 @@ if(LCOV_FOUND)
 
   # For an unknown reason lcov does not work with absolute paths such as ${CMAKE_BINARY_DIR}
   file(RELATIVE_PATH relBinaryDir / ${CMAKE_BINARY_DIR})
+  file(RELATIVE_PATH relQtDir / ${QT_HEADERS_DIR})
 
   set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -r test_all.info *${relBinaryDir}*
                                                                 -r test_all.info *pluginpointer*
                                                                 -r test_all.info *usr/include*
+                                                                -r test_all.info *${relQtDir}*
                                                                 -o test_all.info
   )
 
