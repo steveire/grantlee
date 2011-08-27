@@ -71,6 +71,7 @@ tar -czf $oldDir/cccc.tar.gz cccc
 echo Building with Coverage
 cmake -DCMAKE_BUILD_TYPE=Coverage -DCMAKE_INSTALL_PREFIX=../prefix ..
 make
+make install
 make coverage
 tar -czf $oldDir/coverage.tar.gz coverage
 
