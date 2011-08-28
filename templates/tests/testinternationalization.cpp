@@ -21,6 +21,7 @@
 #include "qtlocalizer.h"
 #include "nulllocalizer_p.h"
 #include "engine.h"
+#include "grantlee_paths.h"
 #include "util.h"
 
 #include <QtCore/QScopedPointer>
@@ -46,6 +47,7 @@ public:
       en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates))),
       m_engine(new Engine(this))
   {
+    m_engine->setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
     INIT_LOCALIZER(cLocalizer)
     INIT_LOCALIZER(deLocalizer)
     INIT_LOCALIZER(frLocalizer)
