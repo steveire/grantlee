@@ -26,12 +26,13 @@
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextEdit>
 
+#include "coverageobject.h"
 #include "markupdirector.h"
 #include "texthtmlbuilder.h"
 
 using namespace Grantlee;
 
-class TestHtmlOutput: public QObject
+class TestHtmlOutput: public CoverageObject
 {
   Q_OBJECT
 private Q_SLOTS:

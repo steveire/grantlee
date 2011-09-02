@@ -44,12 +44,13 @@ qt4_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
 
 macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
   foreach(_testname ${ARGN})
-    set(_testSrcs ${_testname}.cpp)
+    set(_testSrcs ${_testname}.cpp )
     set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
     qt4_generate_moc(${_testname}.cpp ${moc_output_file})
+    qt4_generate_moc(coverageobject.h "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc")
     add_executable(${_testname}_exec
-                  ${_testSrcs}
-                  ${moc_output_file}
+                  ${_testSrcs}  coverageobject.cpp
+                  ${moc_output_file} "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc"
                   ${_testresource_rcc_src}
                   ${PROJECT_SOURCE_DIR}/../lib/lexer.cpp
                   ${PROJECT_SOURCE_DIR}/../lib/textprocessingmachine.cpp

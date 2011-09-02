@@ -31,6 +31,7 @@
 #include <QtCore/QMetaType>
 
 #include <string>
+#include "coverageobject.h"
 
 #ifndef GRANTLEE_NO_TR1
 
@@ -55,7 +56,7 @@ Q_DECLARE_METATYPE( QStack<QVariant> )
 Q_DECLARE_METATYPE( QQueue<QVariant> )
 Q_DECLARE_METATYPE( QLinkedList<QVariant> )
 
-class TestGenericTypes : public QObject
+class TestGenericTypes : public CoverageObject
 {
   Q_OBJECT
 

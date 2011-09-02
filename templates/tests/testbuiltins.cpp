@@ -29,6 +29,7 @@
 #include "context.h"
 #include "filterexpression.h"
 #include "grantlee_paths.h"
+#include "coverageobject.h"
 
 typedef QHash<QString, QVariant> Dict;
 
@@ -184,7 +185,7 @@ public:
   }
 };
 
-class TestBuiltinSyntax : public QObject
+class TestBuiltinSyntax : public CoverageObject
 {
   Q_OBJECT
 

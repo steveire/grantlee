@@ -32,6 +32,7 @@
 #include "filterexpression.h"
 #include "parser.h"
 #include "grantlee_paths.h"
+#include "../../coverageobject.h"
 
 typedef QHash<QString, QVariant> Dict;
 
@@ -40,7 +41,7 @@ Q_DECLARE_METATYPE( Grantlee::Error )
 
 using namespace Grantlee;
 
-class Benchmarking : public QObject
+class Benchmarking : public CoverageObject
 {
   Q_OBJECT
 

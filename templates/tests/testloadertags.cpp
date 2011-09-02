@@ -28,6 +28,7 @@
 #include "engine.h"
 #include "context.h"
 #include "grantlee_paths.h"
+#include "coverageobject.h"
 
 
 typedef QHash<QString, QVariant> Dict;
@@ -37,7 +38,7 @@ Q_DECLARE_METATYPE( Grantlee::Error )
 
 using namespace Grantlee;
 
-class TestLoaderTags : public QObject
+class TestLoaderTags : public CoverageObject
 {
   Q_OBJECT
 

@@ -30,6 +30,7 @@
 #include "util.h"
 #include "grantlee_paths.h"
 #include "metatype.h"
+#include "coverageobject.h"
 
 typedef QList<QVariantList> Table;
 typedef QHash<QString, QVariant> Dict;
@@ -66,7 +67,7 @@ private:
 
 using namespace Grantlee;
 
-class TestDefaultTags : public QObject
+class TestDefaultTags : public CoverageObject
 {
   Q_OBJECT
 

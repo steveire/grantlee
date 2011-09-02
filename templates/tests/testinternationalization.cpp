@@ -26,6 +26,7 @@
 
 #include <QtCore/QScopedPointer>
 #include <QtTest/QtTest>
+#include "coverageobject.h"
 
 using namespace Grantlee;
 
@@ -33,12 +34,12 @@ using namespace Grantlee;
 localizer->setAppTranslatorPrefix(QLatin1String( "test_" ) );    \
 localizer->setAppTranslatorPath(QLatin1String( ":/" ) );         \
 
-class TestInternationalization : public QObject
+class TestInternationalization : public CoverageObject
 {
   Q_OBJECT
 public:
   explicit TestInternationalization(QObject* parent = 0)
-    : QObject(parent),
+    : CoverageObject(parent),
       cLocalizer(new QtLocalizer(QLocale::c())),
       nullLocalizer(new NullLocalizer()),
       deLocalizer(new QtLocalizer(QLocale(QLocale::German, QLocale::Germany))),

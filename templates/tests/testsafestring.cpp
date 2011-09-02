@@ -26,10 +26,11 @@
 
 #include "safestring.h"
 #include "outputstream.h"
+#include "coverageobject.h"
 
 using namespace Grantlee;
 
-class TestSafeString : public QObject
+class TestSafeString : public CoverageObject
 {
   Q_OBJECT
 private Q_SLOTS:

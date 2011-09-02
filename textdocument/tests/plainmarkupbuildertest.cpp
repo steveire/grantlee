@@ -29,10 +29,11 @@
 #include "markupdirector.h"
 #include "plaintextmarkupbuilder.h"
 #include "texthtmlbuilder.h"
+#include "coverageobject.h"
 
 using namespace Grantlee;
 
-class TestPlainMarkupOutput: public QObject
+class TestPlainMarkupOutput: public CoverageObject
 {
     Q_OBJECT
 private Q_SLOTS:

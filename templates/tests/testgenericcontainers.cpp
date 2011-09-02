@@ -27,6 +27,7 @@
 
 #include <QtTest/QtTest>
 #include <QtCore/QVariant>
+#include "coverageobject.h"
 
 typedef QObject* QObjectStar;
 
@@ -45,7 +46,7 @@ DECLARE_TYPE_CONTAINERS( QDateTime )
 DECLARE_TYPE_CONTAINERS( QObjectStar )
 #endif
 
-class TestGenericContainers : public QObject
+class TestGenericContainers : public CoverageObject
 {
   Q_OBJECT
 public:
@@ -56,7 +57,7 @@ private Q_SLOTS:
 };
 
 TestGenericContainers::TestGenericContainers( QObject* parent )
-  : QObject( parent )
+  : CoverageObject(parent )
 {
 
 }
