@@ -54,8 +54,11 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
 
-  if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
-      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpedandic-errors")
+  if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
+    # Needed on 64 bit
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --cs-libgen=-fPIC")
+  else()
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpedandic-errors")
   endif()
 
   if (NOT APPLE)
