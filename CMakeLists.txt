@@ -252,7 +252,7 @@ if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
   set(testcocoon_ARGS)
 
   foreach(_testpath ${UNITTESTS})
-    set(testcocoon_ARGS ${testcocoon_ARGS} COMMAND "${coverageDir}${_testpath}")
+    set(testcocoon_ARGS ${testcocoon_ARGS} COMMAND "${_testpath}")
   endforeach()
 
   find_program(TESTCOCOON_CMMERGE_EXECUTABLE cmmerge)
