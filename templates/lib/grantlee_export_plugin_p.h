@@ -20,25 +20,25 @@
 
 #include <QtCore/QtPlugin>
 
-#ifndef __COVERAGESCANNER__
+// #ifndef __COVERAGESCANNER__
 #define GRANTLEE_EXPORT_PLUGIN(PLUGIN, PLUGINCLASS)                 \
   Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)                             \
 
-#else
-#define GRANTLEE_EXPORT_PLUGIN(PLUGIN, PLUGINCLASS)                 \
-  Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)                             \
-  static void plugin_load(void)   __attribute__ ((constructor));    \
-  static void plugin_unload(void) __attribute__ ((destructor));     \
-                                                                    \
-  static void plugin_load(void)                                     \
-  {                                                                 \
-    __coveragescanner_filename(#PLUGIN);                            \
-  }                                                                 \
-                                                                    \
-  static void plugin_unload(void)                                   \
-  {                                                                 \
-    __coveragescanner_save();                                       \
-  }                                                                 \
-
-#endif
+// #else
+// #define GRANTLEE_EXPORT_PLUGIN(PLUGIN, PLUGINCLASS)                 \
+//   Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)                             \
+//   static void plugin_load(void)   __attribute__ ((constructor));    \
+//   static void plugin_unload(void) __attribute__ ((destructor));     \
+//                                                                     \
+//   static void plugin_load(void)                                     \
+//   {                                                                 \
+//     __coveragescanner_filename(#PLUGIN);                            \
+//   }                                                                 \
+//                                                                     \
+//   static void plugin_unload(void)                                   \
+//   {                                                                 \
+//     __coveragescanner_save();                                       \
+//   }                                                                 \
+//
+// #endif
 
