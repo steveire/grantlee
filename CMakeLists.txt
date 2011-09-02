@@ -276,7 +276,7 @@ if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
 
   set(testcocoon_ARGS ${testcocoon_ARGS}
     COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_gui.so.csmes"
-    -i "${coverageDir}/templates/lib/libgrantlee_gui.so.csmes" "${coverageDir}/unittests.csmes"
+    -i "${coverageDir}/textdocument/lib/libgrantlee_gui.so.csmes" "${coverageDir}/unittests.csmes"
   )
 
   add_custom_target(testcocoon
