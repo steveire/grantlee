@@ -288,7 +288,14 @@ if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
       COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/${_plugin}.so.csmes"
       -i "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes" "${coverageDir}/unittests.csmes"
     )
+  endforeach()
 
+  find_program(TESTCOCOON_CMREPORT_EXECUTABLE cmreport)
+  set(_csmes_files ${_plugins} "libgrantlee_gui" "libgrantlee_core")
+  foreach(_csmes_file ${_csmes_files})
+    set(testcocoon_ARGS ${testcocoon_ARGS}
+      COMMAND echo -n \"${_csmes_file}\" COMMAND ${TESTCOCOON_CMREPORT_EXECUTABLE} -s '.*' -m "${_csmes_file}.so.csmes"
+    )
   endforeach()
 
   add_custom_target(testcocoon
