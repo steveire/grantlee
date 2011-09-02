@@ -20,7 +20,7 @@
 
 #include "loadertags.h"
 
-#include <QtCore/QtPlugin>
+#include "grantlee_export_plugin_p.h"
 
-Q_EXPORT_PLUGIN2( grantlee_loadertags_library, LoaderTagLibrary )
+GRANTLEE_EXPORT_PLUGIN( grantlee_loadertags_library, LoaderTagLibrary )
 

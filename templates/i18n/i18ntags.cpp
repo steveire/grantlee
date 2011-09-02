@@ -20,7 +20,7 @@
 
 #include "i18ntags.h"
 
-#include <QtCore/QtPlugin>
+#include "grantlee_export_plugin_p.h"
 
-Q_EXPORT_PLUGIN2( grantlee_i18ntags_library, I18nTagLibrary )
+GRANTLEE_EXPORT_PLUGIN( grantlee_i18ntags_library, I18nTagLibrary )
 

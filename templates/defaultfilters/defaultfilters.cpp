@@ -20,7 +20,7 @@
 
 #include "defaultfilters.h"
 
-#include <QtCore/QtPlugin>
+#include "grantlee_export_plugin_p.h"
 
-Q_EXPORT_PLUGIN2( grantlee_defaultfilters_library, DefaultFiltersLibrary )
+GRANTLEE_EXPORT_PLUGIN( grantlee_defaultfilters_library, DefaultFiltersLibrary )
 
