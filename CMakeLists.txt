@@ -34,17 +34,29 @@ include(GrantleeGenerateExportHeader)
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
 if (${CMAKE_VERSION} VERSION_GREATER 2.8.2)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
+                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage", "TestCocoon")
 endif()
+
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 set(CMAKE_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 set(CMAKE_STATIC_LINKER_FLAGS_COVERAGE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 
+set(TESTCOCOON_ARGS "--cs-on --cs-count --cs-include-file-abs-regex=${CMAKE_SOURCE_DIR}/.* --cs-include-file-regex=qrc_* --cs-qt4")
+set(CMAKE_CXX_FLAGS_TESTCOCOON "${CMAKE_CXX_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
+set(CMAKE_C_FLAGS_TESTCOCOON "${CMAKE_C_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
+set(CMAKE_EXE_LINKER_FLAGS_TESTCOCOON "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
+set(CMAKE_SHARED_LINKER_FLAGS_TESTCOCOON "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
+set(CMAKE_STATIC_LINKER_FLAGS_TESTCOCOON "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
+
 if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic-errors")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
+
+  if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpedandic-errors")
+  endif()
 
   if (NOT APPLE)
     set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
@@ -228,6 +240,47 @@ if(LCOV_FOUND)
 
   add_custom_target(coverage
     ${coverage_ARGS}
+  )
+endif()
+
+if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
+
+  get_property(UNITTESTS GLOBAL PROPERTY TEST_COVERAGE)
+
+  set(coverageDir ${CMAKE_BINARY_DIR})
+
+  set(testcocoon_ARGS)
+
+  foreach(_testpath ${UNITTESTS})
+    set(testcocoon_ARGS ${testcocoon_ARGS} COMMAND "${coverageDir}${_testpath}")
+  endforeach()
+
+  find_program(TESTCOCOON_CMMERGE_EXECUTABLE cmmerge)
+  find_program(TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE cmcsexeimport)
+
+  set(testcocoon_ARGS ${testcocoon_ARGS} COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o unittests.csmes)
+  foreach(_testpath ${UNITTESTS})
+    set(testcocoon_ARGS ${testcocoon_ARGS} ${_testpath}.csmes)
+  endforeach()
+
+  set(testcocoon_ARGS ${testcocoon_ARGS}
+    COMMAND ${TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE}
+    -m unittests.csmes -t "target" -p
+    merge -e "${coverageDir}/coverage.csexe"
+  )
+
+  set(testcocoon_ARGS ${testcocoon_ARGS}
+    COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_core.so.csmes"
+    -i "${coverageDir}/templates/lib/libgrantlee_core.so.csmes" "${coverageDir}/unittests.csmes"
+  )
+
+  set(testcocoon_ARGS ${testcocoon_ARGS}
+    COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_gui.so.csmes"
+    -i "${coverageDir}/templates/lib/libgrantlee_gui.so.csmes" "${coverageDir}/unittests.csmes"
+  )
+
+  add_custom_target(testcocoon
+    ${testcocoon_ARGS}
   )
 endif()
 

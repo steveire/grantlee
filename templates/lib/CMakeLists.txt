@@ -90,10 +90,12 @@ target_link_libraries(grantlee_core
   ${QT_QTCORE_LIBRARY}
 )
 
-set_target_properties(grantlee_core PROPERTIES
-  VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
-  SOVERSION  ${Grantlee_TEMPLATES_LIB_SOVERSION}
-)
+if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
+  set_target_properties(grantlee_core PROPERTIES
+    VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
+    SOVERSION  ${Grantlee_TEMPLATES_LIB_SOVERSION}
+  )
+endif()
 
 install(TARGETS grantlee_core EXPORT grantlee_targets
          RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT Templates
