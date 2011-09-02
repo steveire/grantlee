@@ -282,6 +282,15 @@ if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
     -i "${coverageDir}/textdocument/lib/libgrantlee_gui.so.csmes" "${coverageDir}/unittests.csmes"
   )
 
+  set(_plugins "grantlee_defaultfilters" "grantlee_defaulttags" "grantlee_i18ntags" "grantlee_loadertags")
+  foreach(_plugin ${_plugins})
+    set(testcocoon_ARGS ${testcocoon_ARGS}
+      COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/${_plugin}.so.csmes"
+      -i "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes" "${coverageDir}/unittests.csmes"
+    )
+
+  endforeach()
+
   add_custom_target(testcocoon
     ${testcocoon_ARGS}
   )
