@@ -268,7 +268,7 @@ if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
 
   set(testcocoon_ARGS ${testcocoon_ARGS}
     COMMAND ${TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE}
-    -m unittests.csmes -t "target" -p
+    -m unittests.csmes -t "\"target\"" -p
     merge -e "${coverageDir}/coverage.csexe"
   )
 
