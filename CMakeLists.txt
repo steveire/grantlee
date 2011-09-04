@@ -58,7 +58,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
     # Needed on 64 bit
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --cs-libgen=-fPIC")
   else()
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpedandic-errors")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic-errors")
   endif()
 
   if (NOT APPLE)
