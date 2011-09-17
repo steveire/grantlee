@@ -11,5 +11,9 @@ class CoverageObject : public QObject
   protected Q_SLOTS:
     void init() ;
     void cleanup();
+  private:
+    void saveCoverageData(const QString &plg);
+    void saveCoverageData();
+    QString generateTestName() const;
 };
 #endif
