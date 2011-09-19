@@ -315,7 +315,7 @@ void TestFilters::testDateBasedFilters_data()
   dict.insert( QLatin1String( "d" ), d );
 
   QTest::newRow( "date01" ) << "{{ d|date:\"MM\" }}" << dict << QString::fromLatin1( "01" ) << NoError;
-  QTest::newRow( "date02" ) << QString::fromLatin1( "{{ d|date }}" ) << dict << QString::fromLatin1( "Jan. 1, 2008" ) << NoError;
+  QTest::newRow( "date02" ) << QString::fromLatin1( "{{ d|date }}" ) << dict << d.toString( QLatin1String( "MMM. d, yyyy" ) ) << NoError;
 
   dict.clear();
   dict.insert( QLatin1String( "d" ), QLatin1String( "fail_string" ) );
