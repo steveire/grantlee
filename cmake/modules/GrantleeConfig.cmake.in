@@ -27,6 +27,7 @@ set(Grantlee_INSTALL_PREFIX "${rootDir}")
 set(Grantlee_INCLUDE_DIRS   "${rootDir}/@INCLUDE_INSTALL_DIR@")
 
 set(Grantlee_LIBRARY_DIR    "${rootDir}/@LIB_INSTALL_DIR@")
+set(Grantlee_MODULE_DIR     "${Grantlee_LIBRARY_DIR}/cmake/grantlee")
 
 set(Grantlee_PLUGIN_DIR     "${Grantlee_LIBRARY_DIR}")
 

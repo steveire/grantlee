@@ -5,10 +5,10 @@ include_directories(${Grantlee_INCLUDE_DIRS})
 # Set up the deps needed to use Grantlee
 include(${QT_USE_FILE})
 
-include(GrantleeParseArguments)
-
 # Add the Grantlee modules directory to the CMake module path
-set(CMAKE_MODULE_PATH ${Grantlee_PLUGIN_DIR}/cmake ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR} ${CMAKE_MODULE_PATH})
+
+include(GrantleeParseArguments)
 
 macro(GRANTLEE_ADD_PLUGIN pluginname)
   set(options)
