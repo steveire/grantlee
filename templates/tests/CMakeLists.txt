@@ -7,6 +7,18 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
   include_directories(${Boost_INCLUDE_DIR} ${Boost_INCLUDE_DIR}/boost/tr1)
 endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
 
+include(CheckIncludeFileCXX)
+check_include_file_cxx("tr1/unordered_map" HAVE_TR1_UNORDERED_MAP)
+check_include_file_cxx("tr1/array" HAVE_TR1_ARRAY)
+check_include_file_cxx("tr1/memory" HAVE_TR1_MEMORY)
+
+if(NOT HAVE_TR1_UNORDERED_MAP OR NOT HAVE_TR1_ARRAY OR NOT HAVE_TR1_MEMORY)
+  message(STATUS "Not enabling TR1 container tests")
+  set(GRANTLEE_NO_TR1 True)
+else()
+  message(STATUS "Enabling TR1 container tests")
+endif()
+
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/" )
