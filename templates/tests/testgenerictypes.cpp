@@ -368,10 +368,11 @@ void insertPeople<ThreeArray<Person> >( Grantlee::Context &c )
 {
   QMap<int, Person> people = getPeople();
   QMap<int, Person>::const_iterator it = people.constBegin();
-  const QMap<int, Person>::const_iterator end = people.constEnd();
   ThreeArray<Person> container;
-  for ( int i = 0; i < 3; ++i, ++it )
+  for ( int i = 0; i < 3; ++i, ++it ) {
+    Q_ASSERT( it != people.constEnd() );
     container[i] = it.value();
+  }
   c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
 }
 #endif
