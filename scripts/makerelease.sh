@@ -50,6 +50,7 @@ make && make install
 
 echo "Testing"
 make test
+LC_ALL=de make test
 
 echo Copying archive to $oldDir/grantlee-$name_fragment.tar.gz
 cp $tempDir/grantlee-$name_fragment.tar.gz $oldDir
