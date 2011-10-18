@@ -77,4 +77,4 @@ make coverage
 tar -czf $oldDir/coverage.tar.gz coverage
 
 cd $oldDir
-gpg --detach-sign --armor grantlee-$name_fragment.tar.gz
+gpg -u D02D6509 --detach-sign --armor grantlee-$name_fragment.tar.gz
