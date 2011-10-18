@@ -34,7 +34,7 @@ include(GrantleeGenerateExportHeader)
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
 if (${CMAKE_VERSION} VERSION_GREATER 2.8.2)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage", "TestCocoon")
+                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage" "TestCocoon")
 endif()
 
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
