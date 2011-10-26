@@ -54,19 +54,19 @@ configure_file(testresource.qrc.cmake "${PROJECT_BINARY_DIR}/testresource.qrc")
 set (_rcc_file "${PROJECT_BINARY_DIR}/testresource.qrc")
 qt4_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
 
+qt4_generate_moc(coverageobject.h "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc")
 macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
   foreach(_testname ${ARGN})
     set(_testSrcs ${_testname}.cpp )
     set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
     qt4_generate_moc(${_testname}.cpp ${moc_output_file})
-    qt4_generate_moc(coverageobject.h "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc")
     add_executable(${_testname}_exec
-                  ${_testSrcs}  coverageobject.cpp
-                  ${moc_output_file} "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc"
+                  ${_testSrcs}
+                  coverageobject.cpp
+                  "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc"
+                  ${moc_output_file}
                   ${_testresource_rcc_src}
-                  ${PROJECT_SOURCE_DIR}/../lib/lexer.cpp
-                  ${PROJECT_SOURCE_DIR}/../lib/textprocessingmachine.cpp
-                  ${PROJECT_SOURCE_DIR}/../lib/nulllocalizer.cpp )
+    )
     add_test(${_testname} ${_testname}_exec )
     target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_core )
 
