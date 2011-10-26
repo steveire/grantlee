@@ -20,25 +20,10 @@
 
 #include <QtCore/QtPlugin>
 
-// #ifndef __COVERAGESCANNER__
+#ifndef GRANTLEE_EXPORT_PLUGIN_H
+#define GRANTLEE_EXPORT_PLUGIN_H
+
 #define GRANTLEE_EXPORT_PLUGIN(PLUGIN, PLUGINCLASS)                 \
   Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)                             \
 
-// #else
-// #define GRANTLEE_EXPORT_PLUGIN(PLUGIN, PLUGINCLASS)                 \
-//   Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)                             \
-//   static void plugin_load(void)   __attribute__ ((constructor));    \
-//   static void plugin_unload(void) __attribute__ ((destructor));     \
-//                                                                     \
-//   static void plugin_load(void)                                     \
-//   {                                                                 \
-//     __coveragescanner_filename(#PLUGIN);                            \
-//   }                                                                 \
-//                                                                     \
-//   static void plugin_unload(void)                                   \
-//   {                                                                 \
-//     __coveragescanner_save();                                       \
-//   }                                                                 \
-//
-// #endif
-
+#endif
