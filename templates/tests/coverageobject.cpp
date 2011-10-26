@@ -90,6 +90,8 @@ void CoverageObject::saveCoverageData(const QString &plg)
   }
   else
     qDebug() << "Plugin "<<plg<< " is not existing";
+#else
+  Q_UNUSED(plg);
 #endif
 }
 
