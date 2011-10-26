@@ -12,8 +12,8 @@ include(GrantleeParseArguments)
 
 macro(GRANTLEE_ADD_PLUGIN pluginname)
   set(options)
-  set(oneValueArgs TAGS FILTERS)
-  set(multiValueArgs)
+  set(oneValueArgs)
+  set(multiValueArgs TAGS FILTERS)
 
   grantlee_parse_arguments(_PLUGIN "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
