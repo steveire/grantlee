@@ -7,6 +7,8 @@
 #include <QtDebug>
 #include <QLibrary>
 
+#include "grantlee_paths.h"
+
 void CoverageObject::init()
 {
   initTest();
@@ -96,10 +98,10 @@ void CoverageObject::cleanup()
   cleanupTest();
   saveCoverageData();
 
-  saveCoverageData(QString::fromAscii("grantlee/0.2/grantlee_defaulttags.so"));
-  saveCoverageData(QString::fromAscii("grantlee/0.2/grantlee_defaultfilters.so"));
-  saveCoverageData(QString::fromAscii("grantlee/0.2/grantlee_loadertags.so"));
-  saveCoverageData(QString::fromAscii("grantlee/0.2/grantlee_i18ntags.so"));
+  saveCoverageData(QString::fromAscii(GRANTLEE_PLUGIN_PATH "/grantlee/0.2/grantlee_defaulttags.so"));
+  saveCoverageData(QString::fromAscii(GRANTLEE_PLUGIN_PATH "/grantlee/0.2/grantlee_defaultfilters.so"));
+  saveCoverageData(QString::fromAscii(GRANTLEE_PLUGIN_PATH "/grantlee/0.2/grantlee_loadertags.so"));
+  saveCoverageData(QString::fromAscii(GRANTLEE_PLUGIN_PATH "/grantlee/0.2/grantlee_i18ntags.so"));
 }
 
 #include "coverageobject.moc"
