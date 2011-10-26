@@ -79,6 +79,16 @@ set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
 
 grantlee_generate_export_header(grantlee_core)
 
+if (BUILD_TESTS)
+  set(GRANTLEE_TESTS_EXPORT "GRANTLEE_CORE_EXPORT")
+endif()
+
+configure_file(grantlee_test_export.h.in "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h")
+
+file(READ "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h" _content)
+
+file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_core_export.h" "${_content}")
+
 target_link_libraries(grantlee_core
   ${QT_QTCORE_LIBRARY}
   ${QT_QTSCRIPT_LIBRARY}
