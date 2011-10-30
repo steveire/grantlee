@@ -312,9 +312,13 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
     if ( list.isEmpty() )
       continue;
 
-    PluginPointer<TagLibraryInterface> plugin = PluginPointer<TagLibraryInterface>( pluginDir.absoluteFilePath( list.first() ) );
+    QString pluginPath=pluginDir.absoluteFilePath( list.first() );
+    PluginPointer<TagLibraryInterface> plugin = PluginPointer<TagLibraryInterface>( pluginPath );
 
     if ( plugin ) {
+#ifdef __COVERAGESCANNER__
+      __coveragescanner_register_library(pluginPath.toAscii().data());
+#endif
       m_libraries.insert( name, plugin );
       return plugin;
     }
