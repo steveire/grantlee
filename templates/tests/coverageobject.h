@@ -12,7 +12,6 @@ class CoverageObject : public QObject
     void init() ;
     void cleanup();
   private:
-    void saveCoverageData(const QString &plg);
     void saveCoverageData();
     QString generateTestName() const;
 };

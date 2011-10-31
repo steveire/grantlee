@@ -15,7 +15,7 @@ void CoverageObject::cleanup()
 {
   cleanupTest();
 #ifdef __COVERAGESCANNER__
-  QString test_name=QString::fromAscii("unittest/");
+  QString test_name;
   test_name+=QString::fromAscii(metaObject()->className());
   test_name+=QString::fromAscii("/");
   test_name+=QString::fromAscii(QTest::currentTestFunction());
