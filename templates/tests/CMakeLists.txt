@@ -12,7 +12,22 @@ check_include_file_cxx("tr1/unordered_map" HAVE_TR1_UNORDERED_MAP)
 check_include_file_cxx("tr1/array" HAVE_TR1_ARRAY)
 check_include_file_cxx("tr1/memory" HAVE_TR1_MEMORY)
 
-if(NOT HAVE_TR1_UNORDERED_MAP OR NOT HAVE_TR1_ARRAY OR NOT HAVE_TR1_MEMORY)
+check_cxx_source_compiles("
+
+#include <tr1/unordered_map>
+
+typedef std::tr1::unordered_map<int, int> std_unordered_mapintint;
+
+int main(int, char **)
+{
+  std_unordered_mapintint m1;
+  std_unordered_mapintint m2(m1);
+  return 0;
+}
+
+" HAVE_WORKING_TR1_UNORDERED_MAP)
+
+if(NOT HAVE_TR1_UNORDERED_MAP OR NOT HAVE_TR1_ARRAY OR NOT HAVE_TR1_MEMORY OR NOT HAVE_WORKING_TR1_UNORDERED_MAP)
   message(STATUS "Not enabling TR1 container tests")
   set(GRANTLEE_NO_TR1 True)
 else()
