@@ -49,4 +49,7 @@ set(Grantlee_PLUGIN_PATH ${Grantlee_PLUGIN_DIR})
 # Now for the use file, which contains useful functions, sets up the project
 set(Grantlee_USE_FILE "${myDir}/GrantleeUse.cmake")
 
-include(${myDir}/GrantleeTargets.cmake)
+if (NOT _grantlee_targets_included)
+  set(_grantlee_targets_included 1)
+  include(${myDir}/GrantleeTargets.cmake)
+endif()
