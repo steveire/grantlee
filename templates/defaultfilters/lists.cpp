@@ -259,7 +259,6 @@ QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argume
   QVariantList resultList;
   QList<QPair<QVariant, QVariant> > keyList;
   const QVariantList inList = MetaType::toVariantList( input );
-  int counter;
   Q_FOREACH(const QVariant &item, inList) {
     QVariant var = item;
 
