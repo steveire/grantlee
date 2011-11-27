@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2009,2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2009,2010,2011 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
 
 #include "metatype.h"
 #include "util.h"
+#include "variable.h"
 
 #include <QtCore/QDateTime>
 
@@ -199,3 +200,90 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
   return output.join( QChar::fromLatin1( '\n' ) );
 }
 
+struct DictSortLessThan
+{
+  bool operator()(const QPair<QVariant, QVariant> &lp, const QPair<QVariant, QVariant> &rp) const
+  {
+    const QVariant l = lp.first;
+    const QVariant r = rp.first;
+    switch (l.userType()) {
+    case QVariant::Invalid:
+        return (r.type() != QVariant::Invalid);
+    case QVariant::Int:
+        return l.toInt() < r.toInt();
+    case QVariant::UInt:
+        return l.toUInt() < r.toUInt();
+    case QVariant::LongLong:
+        return l.toLongLong() < r.toLongLong();
+    case QVariant::ULongLong:
+        return l.toULongLong() < r.toULongLong();
+    case QMetaType::Float:
+        return l.toFloat() < r.toFloat();
+    case QVariant::Double:
+        return l.toDouble() < r.toDouble();
+    case QVariant::Char:
+        return l.toChar() < r.toChar();
+    case QVariant::Date:
+        return l.toDate() < r.toDate();
+    case QVariant::Time:
+        return l.toTime() < r.toTime();
+    case QVariant::DateTime:
+        return l.toDateTime() < r.toDateTime();
+    case QMetaType::QObjectStar:
+        return l.value<QObject*>() < r.value<QObject*>();
+    }
+    if ( l.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
+      if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
+        return l.value<Grantlee::SafeString>().get() < r.value<Grantlee::SafeString>().get();
+      } else if ( r.userType() == QVariant::String ) {
+        return l.value<Grantlee::SafeString>().get() < r.toString();
+      }
+    } else if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
+      if ( l.userType() == QVariant::String ) {
+        return l.toString() < r.value<Grantlee::SafeString>().get();
+      }
+    } else if ( l.userType() == QVariant::String ) {
+      if ( r.userType() == QVariant::String ) {
+        return l.toString() < r.toString();
+      }
+    }
+    return false;
+  }
+};
+
+QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+{
+  Q_UNUSED( autoescape )
+
+  QVariant result;
+  QVariantList resultList;
+  QList<QPair<QVariant, QVariant> > keyList;
+  const QVariantList inList = MetaType::toVariantList( input );
+  int counter;
+  Q_FOREACH(const QVariant &item, inList) {
+    QVariant var = item;
+
+    const Variable v(getSafeString(argument));
+
+    if (v.literal().isValid()) {
+      var = MetaType::lookup(var, v.literal().toString());
+    } else {
+      const QStringList lookups = v.lookups();
+      Q_FOREACH(const QString &lookup, lookups) {
+        var = MetaType::lookup(var, lookup);
+      }
+    }
+    keyList << qMakePair(var, item);
+  }
+
+  DictSortLessThan lt;
+  qStableSort(keyList.begin(), keyList.end(), lt);
+
+  QVariantList outList;
+  QList<QPair<QVariant, QVariant> >::const_iterator it = keyList.constBegin();
+  const QList<QPair<QVariant, QVariant> >::const_iterator end = keyList.constEnd();
+  for ( ; it != end; ++it) {
+    outList << it->second;
+  }
+  return outList;
+}

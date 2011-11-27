@@ -22,6 +22,8 @@ namespace Grantlee
 
   Django performs string escaping on the assumption that the output string is HTML. In %Grantlee it is possible to implement escaping for other markups and text outputs by reimplementing OutputStream::escape.
 
+  The Django dictsort filter only works on a list of dictionary-like-objects. In %Grantlee, is is possible to sort a list of any kinds of objects by any property of the objects. For example a list of QObjects can be sorted by a certain property, a list of lists can be sorted by size etc.
+
   The Django cache system makes a lot of sense where templates are rendered in a fire-and-forget manner for a stateless protocol. It is not implemented in %Grantlee because we're generally not rendering similar templates from scratch multiple times and the templates can keep state for multiple uses.
 
 */

@@ -1,7 +1,7 @@
 /*
   This file is part of the Grantlee template system.
 
-  Copyright (c) 2009,2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2009,2010,2011 Stephen Kelly <steveire@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -110,6 +110,16 @@ public:
 protected:
   SafeString processList( const QVariantList &list, int tabs, bool autoescape ) const;
 
+};
+
+class DictSortFilter : public Filter
+{
+public:
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+
+  bool isSafe() const {
+    return false;
+  }
 };
 
 #endif

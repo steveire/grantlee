@@ -841,6 +841,67 @@ void TestFilters::testListFilters_data()
 //   dict.insert( QLatin1String( "var" ), QVariant::fromValue( markSafe( QString::fromLatin1( " & " ) ) ) );
 //
 //   QTest::newRow( "join08" ) << QString::fromLatin1( "{{ a|join:var|lower }}" ) << dict << QString::fromLatin1( "alpha & beta &amp; me" ) << NoError;
+
+  dict.clear();
+
+  QVariantList mapList;
+  const QStringList cities = QStringList() << QString::fromLatin1("London")
+                                           << QString::fromLatin1("Berlin")
+                                           << QString::fromLatin1("Paris")
+                                           << QString::fromLatin1("Dublin");
+  Q_FOREACH(const QString &city, cities) {
+    QVariantHash map;
+    map.insert(QLatin1String("city"), city);
+    mapList << map;
+  }
+
+  dict.insert(QLatin1String("mapList"), mapList);
+
+  QTest::newRow( "dictsort01" ) << "{% with mapList|dictsort:'city' as result %}{% for item in result %}{{ item.city }},{% endfor %}{% endwith %}" << dict
+                                << "Berlin,Dublin,London,Paris," << NoError;
+
+  {
+    // Test duplication works
+    QVariantHash map;
+    map.insert(QLatin1String("city"), QLatin1String("Berlin"));
+    mapList << map;
+  }
+  dict.insert(QLatin1String("mapList"), mapList);
+
+  QTest::newRow( "dictsort02" ) << "{% with mapList|dictsort:'city' as result %}{% for item in result %}{{ item.city }},{% endfor %}{% endwith %}" << dict
+                                << "Berlin,Berlin,Dublin,London,Paris," << NoError;
+
+  dict.clear();
+
+  QVariantList listList;
+
+  const QStringList countries = QStringList() << QString::fromLatin1("England")
+                                              << QString::fromLatin1("Germany")
+                                              << QString::fromLatin1("France")
+                                              << QString::fromLatin1("Ireland");
+
+
+  const QStringList languages = QStringList() << QString::fromLatin1("English")
+                                              << QString::fromLatin1("German")
+                                              << QString::fromLatin1("French")
+                                              << QString::fromLatin1("Irish");
+
+  for (int i = 0; i < cities.size(); ++i) {
+    QVariantList data;
+    data << cities.at(i);
+    data << countries.at(i);
+    data << languages.at(i);
+    listList << QVariant(data);
+  }
+
+  dict.insert(QLatin1String("listList"), listList);
+
+  QTest::newRow( "dictsort03" ) << "{% with listList|dictsort:'0' as result %}{% for item in result %}{{ item.0 }};{{ item.1 }};{{ item.2 }},{% endfor %}{% endwith %}" << dict
+                                << "Berlin;Germany;German,Dublin;Ireland;Irish,London;England;English,Paris;France;French," << NoError;
+
+  QTest::newRow( "dictsort04" ) << "{% with listList|dictsort:'1' as result %}{% for item in result %}{{ item.0 }};{{ item.1 }};{{ item.2 }},{% endfor %}{% endwith %}" << dict
+                                << "London;England;English,Paris;France;French,Berlin;Germany;German,Dublin;Ireland;Irish," << NoError;
+
 }
 
 void TestFilters::testLogicFilters_data()

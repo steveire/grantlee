@@ -59,6 +59,7 @@ public:
     filters.insert( QLatin1String( "date" ), new DateFilter() );
     filters.insert( QLatin1String( "default" ), new DefaultFilter() );
     filters.insert( QLatin1String( "default_if_none" ), new DefaultIfNoneFilter() );
+    filters.insert( QLatin1String( "dictsort" ), new DictSortFilter() );
     filters.insert( QLatin1String( "divisibleby" ), new DivisibleByFilter() );
     filters.insert( QLatin1String( "escape" ), new EscapeFilter() );
     filters.insert( QLatin1String( "escapejs" ), new EscapeJsFilter() );
