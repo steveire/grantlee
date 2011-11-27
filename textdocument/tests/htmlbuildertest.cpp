@@ -24,7 +24,6 @@
 #include <QtCore/QRegExp>
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextDocument>
-#include <QtGui/QTextEdit>
 
 #include "coverageobject.h"
 #include "markupdirector.h"
@@ -59,7 +58,7 @@ private Q_SLOTS:
   void testEachFormatTagSingly();
   void testHorizontalRule();
   void testNewlines();
-  void testNewlinesThroughQTextEdit();
+  void testNewlinesThroughQTextCursor();
 
 };
 
@@ -514,11 +513,10 @@ void TestHtmlOutput::testNewlines()
     QVERIFY(regex.exactMatch(result));
 }
 
-void TestHtmlOutput::testNewlinesThroughQTextEdit()
+void TestHtmlOutput::testNewlinesThroughQTextCursor()
 {
-
-    QTextEdit *te = new QTextEdit();
-    QTextCursor cursor = te->textCursor();
+    QTextDocument *doc = new QTextDocument(this);
+    QTextCursor cursor(doc);
     cursor.movePosition(QTextCursor::Start);
     cursor.insertText( QLatin1String( "Foo" ) );
     cursor.insertText( QLatin1String( "\n" ) );
@@ -528,7 +526,7 @@ void TestHtmlOutput::testNewlinesThroughQTextEdit()
 
     TextHTMLBuilder *hb = new TextHTMLBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->processDocument(te->document());
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp( QLatin1String( "^<p>Foo</p>\\n<p>&nbsp;<p>&nbsp;<p>Bar</p>\\n$" ) );

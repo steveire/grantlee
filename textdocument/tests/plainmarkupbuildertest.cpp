@@ -24,7 +24,6 @@
 #include <QtCore/QRegExp>
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextDocument>
-#include <QtGui/QTextEdit>
 
 #include "markupdirector.h"
 #include "plaintextmarkupbuilder.h"
@@ -61,7 +60,7 @@ private Q_SLOTS:
     void testHorizontalRule();
     void testNewlines();
     void testEmptyParagraphs();
-    void testNewlinesThroughQTextEdit();
+    void testNewlinesThroughQTextCursor();
     void testBrInsideParagraph();
 
 };
@@ -542,11 +541,10 @@ void TestPlainMarkupOutput::testEmptyParagraphs()
     QVERIFY(regex.exactMatch(result));
 }
 
-void TestPlainMarkupOutput::testNewlinesThroughQTextEdit()
+void TestPlainMarkupOutput::testNewlinesThroughQTextCursor()
 {
-
-    QTextEdit *te = new QTextEdit();
-    QTextCursor cursor = te->textCursor();
+    QTextDocument *doc = new QTextDocument(this);
+    QTextCursor cursor(doc);
     cursor.movePosition(QTextCursor::Start);
     cursor.insertText( QLatin1String( "Foo" ) );
     cursor.insertText( QLatin1String( "\n" ) );
@@ -556,7 +554,7 @@ void TestPlainMarkupOutput::testNewlinesThroughQTextEdit()
 
     PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
     MarkupDirector *md = new MarkupDirector(hb);
-    md->processDocument(te->document());
+    md->processDocument(doc);
     QString result = hb->getResult();
 
     QRegExp regex = QRegExp( QLatin1String( "^Foo\\n\\n\\nBar\\n$" ) );
