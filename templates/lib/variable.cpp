@@ -138,6 +138,24 @@ bool Variable::isTrue( Context *c ) const
   return variantIsTrue( resolve( c ) );
 }
 
+bool Variable::isLocalized() const
+{
+  Q_D( const Variable );
+  return d->m_localize;
+}
+
+QVariant Variable::literal() const
+{
+  Q_D( const Variable );
+  return d->m_literal;
+}
+
+QStringList Variable::lookups() const
+{
+  Q_D( const Variable );
+  return d->m_lookups;
+}
+
 class StaticQtMetaObject : public QObject
 {
 public:

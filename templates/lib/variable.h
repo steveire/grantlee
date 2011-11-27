@@ -100,6 +100,21 @@ public:
   */
   bool isConstant() const;
 
+  /**
+    Returns whether this variable is localized, that is, if it is wrapped with _(). @see @ref i18n_l10n
+   */
+  bool isLocalized() const;
+
+  /**
+    Returns whether this variable is a literal string or number. A literal Variable does not have any lookup components.
+   */
+  QVariant literal() const;
+
+  /**
+    Returns the lookup components of this variable.
+   */
+  QStringList lookups() const;
+
 private:
   Q_DECLARE_PRIVATE( Variable )
   VariablePrivate * const d_ptr;
