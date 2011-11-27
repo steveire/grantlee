@@ -845,17 +845,17 @@ void TestFilters::testListFilters_data()
   dict.clear();
 
   QVariantList mapList;
-  const QStringList cities = QStringList() << QString::fromLatin1("London")
-                                           << QString::fromLatin1("Berlin")
-                                           << QString::fromLatin1("Paris")
-                                           << QString::fromLatin1("Dublin");
-  Q_FOREACH(const QString &city, cities) {
+  const QStringList cities = QStringList() << QString::fromLatin1( "London" )
+                                           << QString::fromLatin1( "Berlin" )
+                                           << QString::fromLatin1( "Paris" )
+                                           << QString::fromLatin1( "Dublin" );
+  Q_FOREACH( const QString &city, cities ) {
     QVariantHash map;
-    map.insert(QLatin1String("city"), city);
+    map.insert( QLatin1String( "city" ), city );
     mapList << map;
   }
 
-  dict.insert(QLatin1String("mapList"), mapList);
+  dict.insert( QLatin1String( "mapList" ), mapList );
 
   QTest::newRow( "dictsort01" ) << "{% with mapList|dictsort:'city' as result %}{% for item in result %}{{ item.city }},{% endfor %}{% endwith %}" << dict
                                 << "Berlin,Dublin,London,Paris," << NoError;
@@ -863,10 +863,10 @@ void TestFilters::testListFilters_data()
   {
     // Test duplication works
     QVariantHash map;
-    map.insert(QLatin1String("city"), QLatin1String("Berlin"));
+    map.insert( QLatin1String( "city" ), QLatin1String( "Berlin" ) );
     mapList << map;
   }
-  dict.insert(QLatin1String("mapList"), mapList);
+  dict.insert( QLatin1String( "mapList" ), mapList );
 
   QTest::newRow( "dictsort02" ) << "{% with mapList|dictsort:'city' as result %}{% for item in result %}{{ item.city }},{% endfor %}{% endwith %}" << dict
                                 << "Berlin,Berlin,Dublin,London,Paris," << NoError;
@@ -875,26 +875,26 @@ void TestFilters::testListFilters_data()
 
   QVariantList listList;
 
-  const QStringList countries = QStringList() << QString::fromLatin1("England")
-                                              << QString::fromLatin1("Germany")
-                                              << QString::fromLatin1("France")
-                                              << QString::fromLatin1("Ireland");
+  const QStringList countries = QStringList() << QString::fromLatin1( "England" )
+                                              << QString::fromLatin1( "Germany" )
+                                              << QString::fromLatin1( "France" )
+                                              << QString::fromLatin1( "Ireland" );
 
 
-  const QStringList languages = QStringList() << QString::fromLatin1("English")
-                                              << QString::fromLatin1("German")
-                                              << QString::fromLatin1("French")
-                                              << QString::fromLatin1("Irish");
+  const QStringList languages = QStringList() << QString::fromLatin1( "English" )
+                                              << QString::fromLatin1( "German" )
+                                              << QString::fromLatin1( "French" )
+                                              << QString::fromLatin1( "Irish" );
 
-  for (int i = 0; i < cities.size(); ++i) {
+  for ( int i = 0; i < cities.size(); ++i ) {
     QVariantList data;
-    data << cities.at(i);
-    data << countries.at(i);
-    data << languages.at(i);
-    listList << QVariant(data);
+    data << cities.at( i );
+    data << countries.at( i );
+    data << languages.at( i );
+    listList << QVariant( data );
   }
 
-  dict.insert(QLatin1String("listList"), listList);
+  dict.insert( QLatin1String( "listList" ), listList );
 
   QTest::newRow( "dictsort03" ) << "{% with listList|dictsort:'0' as result %}{% for item in result %}{{ item.0 }};{{ item.1 }};{{ item.2 }},{% endfor %}{% endwith %}" << dict
                                 << "Berlin;Germany;German,Dublin;Ireland;Irish,London;England;English,Paris;France;French," << NoError;

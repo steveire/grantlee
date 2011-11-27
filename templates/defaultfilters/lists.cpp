@@ -202,11 +202,11 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
 
 struct DictSortLessThan
 {
-  bool operator()(const QPair<QVariant, QVariant> &lp, const QPair<QVariant, QVariant> &rp) const
+  bool operator()( const QPair<QVariant, QVariant> &lp, const QPair<QVariant, QVariant> &rp ) const
   {
     const QVariant l = lp.first;
     const QVariant r = rp.first;
-    switch (l.userType()) {
+    switch ( l.userType() ) {
     case QVariant::Invalid:
         return (r.type() != QVariant::Invalid);
     case QVariant::Int:
@@ -259,29 +259,29 @@ QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argume
   QVariantList resultList;
   QList<QPair<QVariant, QVariant> > keyList;
   const QVariantList inList = MetaType::toVariantList( input );
-  Q_FOREACH(const QVariant &item, inList) {
+  Q_FOREACH( const QVariant &item, inList ) {
     QVariant var = item;
 
-    const Variable v(getSafeString(argument));
+    const Variable v( getSafeString( argument ) );
 
-    if (v.literal().isValid()) {
-      var = MetaType::lookup(var, v.literal().toString());
+    if ( v.literal().isValid() ) {
+      var = MetaType::lookup( var, v.literal().toString() );
     } else {
       const QStringList lookups = v.lookups();
-      Q_FOREACH(const QString &lookup, lookups) {
-        var = MetaType::lookup(var, lookup);
+      Q_FOREACH( const QString &lookup, lookups ) {
+        var = MetaType::lookup( var, lookup );
       }
     }
-    keyList << qMakePair(var, item);
+    keyList << qMakePair( var, item );
   }
 
   DictSortLessThan lt;
-  qStableSort(keyList.begin(), keyList.end(), lt);
+  qStableSort( keyList.begin(), keyList.end(), lt );
 
   QVariantList outList;
   QList<QPair<QVariant, QVariant> >::const_iterator it = keyList.constBegin();
   const QList<QPair<QVariant, QVariant> >::const_iterator end = keyList.constEnd();
-  for ( ; it != end; ++it) {
+  for ( ; it != end; ++it ) {
     outList << it->second;
   }
   return outList;

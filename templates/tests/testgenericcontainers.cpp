@@ -215,13 +215,13 @@ QString getAssociativeTemplate<QObject*>()
 template <typename T>
 QStringList getResults()
 {
-  return QStringList() << QLatin1String("3;3;") << QLatin1String( "9," ) << QLatin1String( "7," ) << QLatin1String( "5," );
+  return QStringList() << QLatin1String( "3;3;" ) << QLatin1String( "9," ) << QLatin1String( "7," ) << QLatin1String( "5," );
 }
 
 template<>
 QStringList getResults<QDateTime>()
 {
-  return QStringList() << QLatin1String("3;3;") << QLatin1String( "Jan. 1, 1970," ) << QLatin1String( "Jan. 2, 1970," ) << QLatin1String( "Jan. 3, 1970," );
+  return QStringList() << QLatin1String( "3;3;" ) << QLatin1String( "Jan. 1, 1970," ) << QLatin1String( "Jan. 2, 1970," ) << QLatin1String( "Jan. 3, 1970," );
 }
 
 template<typename Container, typename T = typename Container::value_type>

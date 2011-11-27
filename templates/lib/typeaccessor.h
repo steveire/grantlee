@@ -66,8 +66,8 @@ struct SequentialContainerLookup
 {
   static QVariant doLookUp( const Container &container, const QString &property )
   {
-    if ( property == QLatin1String( "size" ) || property == QLatin1String( "count" )) {
-      return QVariant::fromValue<int>(std::distance(container.begin(), container.end()));
+    if ( property == QLatin1String( "size" ) || property == QLatin1String( "count" ) ) {
+      return QVariant::fromValue<int>( std::distance( container.begin(), container.end() ) );
     }
 
     bool ok = false;
@@ -89,8 +89,8 @@ QVariant doAssociativeContainerLookup( const Container &object, const QString &p
     if ( it != object.end() )
       return QVariant::fromValue( MappedValueGetter<Container>::get( it ) );
   }
-  if ( property == QLatin1String( "size" ) || property == QLatin1String( "count" )) {
-      return QVariant::fromValue<int>(std::distance(object.begin(), object.end()));
+  if ( property == QLatin1String( "size" ) || property == QLatin1String( "count" ) ) {
+      return QVariant::fromValue<int>( std::distance( object.begin(), object.end() ) );
   }
   if ( property == QLatin1String( "items" ) ) {
     typename Container::const_iterator it = object.begin();
@@ -156,9 +156,9 @@ struct TypeAccessor<Container<T>&>                                    \
   static QVariant lookUp( const Container<T> &c, const QString &p)    \
   {                                                                   \
     if ( p == QLatin1String( "size" )                                 \
-      || p == QLatin1String( "count" )) {                             \
+      || p == QLatin1String( "count" ) ) {                            \
       return QVariant::fromValue<int>(                                \
-          std::distance(c.begin(), c.end()));                         \
+          std::distance( c.begin(), c.end() ) );                      \
     }                                                                 \
     return QVariant();                                                \
   }                                                                   \
