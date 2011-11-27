@@ -179,49 +179,49 @@ struct ContainerPopulator<std::map<QString, T> >
 template<typename T>
 QString getTemplate()
 {
-  return QLatin1String( "{% for item in container %}{{ item }},{% endfor %}" );
+  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item }},{% endfor %}" );
 }
 
 template<>
 QString getTemplate<QDateTime>()
 {
-  return QLatin1String( "{% for item in container %}{{ item|date }},{% endfor %}" );
+  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item|date }},{% endfor %}" );
 }
 
 template<>
 QString getTemplate<QObject*>()
 {
-  return QLatin1String( "{% for item in container %}{{ item.objectName }},{% endfor %}" );
+  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item.objectName }},{% endfor %}" );
 }
 
 template<typename T>
 QString getAssociativeTemplate()
 {
-  return QLatin1String( "{% for item in container.values %}{{ item }},{% endfor %}" );
+  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item }},{% endfor %}" );
 }
 
 template<>
 QString getAssociativeTemplate<QDateTime>()
 {
-  return QLatin1String( "{% for item in container.values %}{{ item|date }},{% endfor %}" );
+  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item|date }},{% endfor %}" );
 }
 
 template<>
 QString getAssociativeTemplate<QObject*>()
 {
-  return QLatin1String( "{% for item in container.values %}{{ item.objectName }},{% endfor %}" );
+  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item.objectName }},{% endfor %}" );
 }
 
 template <typename T>
 QStringList getResults()
 {
-  return QStringList() << QLatin1String( "9," ) << QLatin1String( "7," ) << QLatin1String( "5," );
+  return QStringList() << QLatin1String("3;3;") << QLatin1String( "9," ) << QLatin1String( "7," ) << QLatin1String( "5," );
 }
 
 template<>
 QStringList getResults<QDateTime>()
 {
-  return QStringList() << QLatin1String( "Jan. 1, 1970," ) << QLatin1String( "Jan. 2, 1970," ) << QLatin1String( "Jan. 3, 1970," );
+  return QStringList() << QLatin1String("3;3;") << QLatin1String( "Jan. 1, 1970," ) << QLatin1String( "Jan. 2, 1970," ) << QLatin1String( "Jan. 3, 1970," );
 }
 
 template<typename Container, typename T = typename Container::value_type>
