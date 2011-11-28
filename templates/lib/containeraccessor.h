@@ -142,7 +142,9 @@ QVariantList getList( const QVariant &obj )
   typename Getter::Container::const_iterator it = c.begin();
   const typename Getter::Container::const_iterator end = c.end();
   QVariantList list;
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
   list.reserve( static_cast<int>( std::distance( it, end ) ) );
+#endif
   for ( ; it != end; ++it ) {
     list << QVariant::fromValue( Getter::get( it ) );
   }
