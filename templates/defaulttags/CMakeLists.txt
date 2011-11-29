@@ -20,7 +20,6 @@ grantlee_add_plugin ( grantlee_defaulttags
     range
     regroup
     spaceless
-    ssi
     templatetag
     widthratio
     with

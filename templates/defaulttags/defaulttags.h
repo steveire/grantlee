@@ -37,7 +37,6 @@
 #include "range.h"
 #include "regroup.h"
 #include "spaceless.h"
-// #include "ssi.h"
 #include "templatetag.h"
 #include "widthratio.h"
 #include "with.h"
@@ -83,8 +82,6 @@ public:
     nodeFactories.insert( QLatin1String( "range" ), new RangeNodeFactory() );
     nodeFactories.insert( QLatin1String( "regroup" ), new RegroupNodeFactory() );
     nodeFactories.insert( QLatin1String( "spaceless" ), new SpacelessNodeFactory() );
-    // Disabled for security reasons.
-//     nodeFactories.insert( QLatin1String( "ssi" ), new SsiNodeFactory() );
     nodeFactories.insert( QLatin1String( "templatetag" ), new TemplateTagNodeFactory() );
     nodeFactories.insert( QLatin1String( "widthratio" ), new WidthRatioNodeFactory() );
     nodeFactories.insert( QLatin1String( "with" ), new WithNodeFactory() );
