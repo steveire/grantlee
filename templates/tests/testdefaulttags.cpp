@@ -928,6 +928,8 @@ void TestDefaultTags::testIfEqualTag_data()
 
   QTest::newRow( "ifequal-filter05" ) << "{% ifequal x|slice:\"1\"|upper \"A\" %}x{% endifequal %}" << dict << QString::fromLatin1( "x" ) << NoError;
 
+  QTest::newRow( "ifequal-error01" ) << "{% ifequal x|slice:\"1\"|upper %}x{% endifequal %}" << dict << QString() << TagSyntaxError;
+
 }
 
 void TestDefaultTags::testIfNotEqualTag_data()
