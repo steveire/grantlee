@@ -1289,7 +1289,9 @@ void TestBuiltinSyntax::testInsignificantWhitespace()
 
   Context context( dict );
 
+  QVERIFY(!m_engine->smartTrimEnabled());
   m_engine->setSmartTrimEnabled(true);
+  QVERIFY(m_engine->smartTrimEnabled());
 
   {
     Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
