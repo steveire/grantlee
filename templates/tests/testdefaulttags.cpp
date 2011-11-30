@@ -657,6 +657,10 @@ void TestDefaultTags::testForTag_data()
   list.clear();
   dict.clear();
 
+  QTest::newRow( "for-tag07" ) << QString::fromLatin1( "{% for %}{% endfor %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "for-tag08" ) << QString::fromLatin1( "{% for foo bar bat %}{% endfor %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "for-tag09" ) << QString::fromLatin1( "{% for foo bar '' %}{% endfor %}" ) << dict << QString() << TagSyntaxError;
+
   list << 1 << 2 << 3;
   dict.insert( QLatin1String( "values" ), list );
   QTest::newRow( "for-tag-vars01" ) << QString::fromLatin1( "{% for val in values %}{{ forloop.counter }}{% endfor %}" ) << dict << QString::fromLatin1( "123" ) << NoError;
