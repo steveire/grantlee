@@ -266,9 +266,9 @@ private:
 void TestBuiltinSyntax::initTestCase()
 {
   m_engine = getEngine();
-
   m_loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
   m_engine->addTemplateLoader( m_loader );
+  QVERIFY( m_engine->templateLoaders().contains( m_loader ) );
 }
 
 Engine* TestBuiltinSyntax::getEngine()
