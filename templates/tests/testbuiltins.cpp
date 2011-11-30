@@ -1098,6 +1098,7 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   dict.insert( QLatin1String( "str3" ), QLatin1String( "my string" ) );
   dict.insert( QLatin1String( "str4" ), QLatin1String( "my String" ) );
   dict.insert( QLatin1String( "str5" ), QLatin1String( "My string" ) );
+  dict.insert( QLatin1String( "str6" ), QLatin1String( "123" ) );
 
   QTest::newRow( "type-accessors-string34" ) << QString::fromLatin1( "{{ str1.title }}" ) << dict << QString::fromLatin1( "My String" ) << NoError;
   QTest::newRow( "type-accessors-string35" ) << QString::fromLatin1( "{{ str2.title }}" ) << dict << QString::fromLatin1( "Mystring" ) << NoError;
@@ -1108,6 +1109,10 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   QTest::newRow( "type-accessors-string39" ) << QString::fromLatin1( "{{ str1.upper }}" ) << dict << QString::fromLatin1( "MY STRING" ) << NoError;
   QTest::newRow( "type-accessors-string40" ) << QString::fromLatin1( "{{ str2.upper }}" ) << dict << QString::fromLatin1( "MYSTRING" ) << NoError;
   QTest::newRow( "type-accessors-string41" ) << QString::fromLatin1( "{{ str3.upper }}" ) << dict << QString::fromLatin1( "MY STRING" ) << NoError;
+  QTest::newRow( "type-accessors-string42" ) << QString::fromLatin1( "{{ str3.dne }}" ) << dict << QString() << NoError;
+  QTest::newRow( "type-accessors-string43" ) << QString::fromLatin1( "{{ str2.isalpha }}" ) << dict << QString::fromLatin1( "True" ) << NoError;
+  QTest::newRow( "type-accessors-string44" ) << QString::fromLatin1( "{{ str3.isalpha }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
+  QTest::newRow( "type-accessors-string45" ) << QString::fromLatin1( "{{ str6.isalpha }}" ) << dict << QString::fromLatin1( "False" ) << NoError;
 
   dict.clear();
 
