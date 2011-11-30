@@ -1547,6 +1547,8 @@ void TestDefaultTags::testRangeTag_data()
   QTest::newRow( "range-tag04" ) << QString::fromLatin1( "{% range values.0 values.1 values.2 as i %}{{ i }};{% endrange %}" ) << dict << QString::fromLatin1( "10;12;14;" ) << NoError;
 
   QTest::newRow( "range-tag05" ) << QString::fromLatin1( "{% range 5 %}Foo;{% endrange %}" ) << dict << QString::fromLatin1( "Foo;Foo;Foo;Foo;Foo;" ) << NoError;
+  QTest::newRow( "range-tag06" ) << QString::fromLatin1( "{% range 5 6 %}Foo;{% endrange %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "range-tag07" ) << QString::fromLatin1( "{% range 5 6 7 %}Foo;{% endrange %}" ) << dict << QString() << TagSyntaxError;
 }
 
 void TestDefaultTags::testDebugTag_data()
