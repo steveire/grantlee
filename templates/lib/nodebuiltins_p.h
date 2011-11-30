@@ -42,12 +42,8 @@ public:
     ( *stream ) << m_content;
   }
 
-  void appendContent( const QString &content ) { // krazy:exclude:inline
-    m_content += content;
-  }
-
 private:
-  QString m_content;
+  const QString m_content;
 };
 
 /**
