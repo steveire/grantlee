@@ -74,6 +74,9 @@ private Q_SLOTS:
   void testNestedContainers();
 
   void testCustomQObjectDerived();
+
+  void testUnregistered();
+  void testPointerNonQObject();
 }; // class TestGenericTypes
 
 class Person
@@ -704,6 +707,97 @@ void TestGenericTypes::testCustomQObjectDerived()
   }
 }
 
+struct UnregisteredType
+{
+
+};
+
+Q_DECLARE_METATYPE(UnregisteredType)
+
+struct RegisteredNotListType
+{
+
+};
+
+Q_DECLARE_METATYPE(RegisteredNotListType)
+
+GRANTLEE_BEGIN_LOOKUP(RegisteredNotListType)
+  Q_UNUSED( object )
+  if ( property == QLatin1String( "property" ) )
+    return 42;
+GRANTLEE_END_LOOKUP
+
+static QVariantList dummy( const QVariant& )
+{
+  return QVariantList() << 42;
+}
+
+QVariant dummyLookup( const QVariant &, const QString & )
+{
+  return 42;
+}
+
+void TestGenericTypes::testUnregistered()
+{
+
+  {
+    UnregisteredType unregType;
+    QVariant v = QVariant::fromValue( unregType );
+
+    QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
+    QVERIFY( !result.isValid() );
+
+    QVariantList resultList = Grantlee::MetaType::toVariantList( v );
+    QVERIFY( resultList.isEmpty() );
+  }
+
+  Grantlee::registerMetaType<RegisteredNotListType>();
+
+  {
+    RegisteredNotListType nonListType;
+    QVariant v = QVariant::fromValue( nonListType );
+    QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
+    QVERIFY( result.isValid() );
+    QVariantList resultList = Grantlee::MetaType::toVariantList( v );
+    QVERIFY( resultList.isEmpty() );
+  }
+
+  {
+    Grantlee::MetaType::registerToVariantListOperator(qMetaTypeId<UnregisteredType>(), dummy);
+    UnregisteredType unregType;
+    QVariant v = QVariant::fromValue( unregType );
+    QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
+    QVERIFY( !result.isValid() );
+  }
+
+  // Only do this in release mode?
+//   Grantlee::MetaType::registerLookUpOperator(0, dummyLookup);
+//   Grantlee::MetaType::registerToVariantListOperator(0, dummy);
+}
+
+
+Q_DECLARE_METATYPE( Person* )
+
+GRANTLEE_BEGIN_LOOKUP_PTR(Person)
+  if ( property == QLatin1String( "name" ) )
+    return QString::fromStdString( object->name );
+  else if ( property == QLatin1String( "age" ) )
+    return object->age;
+GRANTLEE_END_LOOKUP
+
+void TestGenericTypes::testPointerNonQObject()
+{
+  Person *p = new Person( "Adele", 21 );
+  QVariant v = QVariant::fromValue(p);
+
+  Grantlee::registerMetaType<Person*>();
+
+  QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "name" ) );
+
+  QCOMPARE( result.toString(), QLatin1String( "Adele" ) );
+
+  delete p;
+}
+
 QTEST_MAIN( TestGenericTypes )
 #include "testgenerictypes.moc"
-
