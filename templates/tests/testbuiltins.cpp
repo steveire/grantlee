@@ -555,6 +555,8 @@ void TestBuiltinSyntax::testEnums_data()
                                       "{% endwith %}" )
                                    << dict << QString::fromLatin1( "2,4,8,Voter,Consumer,Citizen,,SomeClass" ) << NoError;
 
+  QTest::newRow( "class-enums36" ) << QString::fromLatin1( "{% ifequal var.Employee 2 %}{% endifequal %}" ) << dict << QString() << NoError;
+
   dict.insert( QLatin1String( "var" ), QVariant::fromValue( otherClass ) );
 
   QTest::newRow( "enums-loops01" ) << QString::fromLatin1( "{% for enum in var.Animals %}{% ifequal enum var.Tigers %}"
