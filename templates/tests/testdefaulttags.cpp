@@ -1490,6 +1490,7 @@ void TestDefaultTags::testAutoescapeTag_data()
   dict.clear();
   dict.insert( QLatin1String( "first" ), QLatin1String( "<a>" ) );
   QTest::newRow( "autoescape-filtertag01" ) << QString::fromLatin1( "{{ first }}{% filter safe %}{{ first }} x<y{% endfilter %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "autoescape-filtertag02" ) << QString::fromLatin1( "{{ first }}{% filter escape %}{{ first }} x<y{% endfilter %}" ) << dict << QString() << TagSyntaxError;
 }
 
 
