@@ -1476,6 +1476,10 @@ void TestDefaultTags::testAutoescapeTag_data()
   dict.clear();
   dict.insert( QLatin1String( "var" ), QVariant() );
   QTest::newRow( "autoescape-tag08" ) << "{% autoescape on %}{{ var|default_if_none:\"endquote\\\" hah\" }}{% endautoescape %}" << dict << "endquote\" hah" << NoError;
+
+  QTest::newRow( "autoescape-tag09" ) << "{% autoescape on extra %}{{ var|default_if_none:\"endquote\\\" hah\" }}{% endautoescape %}" << dict << "" << TagSyntaxError;
+  QTest::newRow( "autoescape-tag10" ) << "{% autoescape bad %}{{ var|default_if_none:\"endquote\\\" hah\" }}{% endautoescape %}" << dict << "" << TagSyntaxError;
+
   // Objects which return safe strings as their __unicode__ method
   // won't get double-escaped.
 //   'autoescape-tag09': (r'{{ unsafe }}', {'unsafe': filters.UnsafeClass()}, 'you &amp; me'),
