@@ -303,6 +303,12 @@ void testContainer( const QString &stringTemplate, const QVariant &containerVari
     Q_FOREACH (const QString &expectedResult, expectedResults)
       QVERIFY(result.contains(expectedResult));
   }
+
+  Grantlee::Template t2 = engine.newTemplate( QLatin1String( "-{{ container.doesnotexist }}-" ), QLatin1String( "template2" ) );
+
+  QString result2 = t2->render( &c );
+
+  QCOMPARE( result2, QLatin1String( "--" ) );
 }
 
 template<typename Container>
