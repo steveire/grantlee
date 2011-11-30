@@ -561,6 +561,7 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow( "if-tag-error03" ) << QString::fromLatin1( "{% if foo or %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "if-tag-error04" ) << QString::fromLatin1( "{% if not foo and %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "if-tag-error05" ) << QString::fromLatin1( "{% if not foo or %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error06" ) << QString::fromLatin1( "{% if %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
 
   // Truthiness
   dict.clear();
