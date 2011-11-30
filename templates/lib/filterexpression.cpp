@@ -134,7 +134,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
       } else if ( subString.startsWith( QLatin1Char( FILTER_ARGUMENT_SEPARATOR ) ) ) {
         subString = subString.right( ssSize - 1 );
         const int lastFilter = d->m_filters.size();
-        if ( subString.isEmpty() )
+        if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) )
           throw Grantlee::Exception( EmptyVariableError,
               QString::fromLatin1( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
 

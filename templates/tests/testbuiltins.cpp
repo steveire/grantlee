@@ -726,6 +726,9 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   dict.clear();
   QTest::newRow( "filter-syntax20" ) << "{{ \"\"|default_if_none:\"was none\" }}" << dict << QString() << NoError;
 
+
+  QTest::newRow( "filter-syntax21" ) << "{{ \"\"|default_if_none:|truncatewords }}" << dict << QString() << EmptyVariableError;
+
 }
 
 void TestBuiltinSyntax::testCommentSyntax_data()
