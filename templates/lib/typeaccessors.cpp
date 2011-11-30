@@ -66,6 +66,8 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
   if ( property == QLatin1String( "isalpha" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
+    if ( it == s.constEnd() )
+      return falseString;
     while ( it != s.constEnd() ) {
       if ( !it->isLetter() )
         return falseString;
