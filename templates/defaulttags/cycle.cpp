@@ -36,7 +36,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
-  if ( expr.size() < 1 ) {
+  if ( expr.size() < 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expects at least one argument" ).arg( expr.first() ) );
   }
 

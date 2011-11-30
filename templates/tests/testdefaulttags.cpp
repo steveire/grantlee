@@ -1033,6 +1033,9 @@ void TestDefaultTags::testCycleTag_data()
   dict.insert( QLatin1String( "one" ), QLatin1String( "A" ) );
   dict.insert( QLatin1String( "two" ), QLatin1String( "2" ) );
   QTest::newRow( "cycle16" ) << QString::fromLatin1( "{% cycle one|lower two as foo %}{% cycle foo %}" ) << dict << QString::fromLatin1( "a2" ) << NoError;
+
+  QTest::newRow( "cycle17" ) << QString::fromLatin1( "{% cycle %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "cycle18" ) << QString::fromLatin1( "{% cycle var %}" ) << dict << QString() << TagSyntaxError;
 }
 
 void TestDefaultTags::testWidthRatioTag_data()
