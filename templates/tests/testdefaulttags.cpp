@@ -1346,6 +1346,7 @@ void TestDefaultTags::testIfChangedTag_data()
   dict.insert( QLatin1String( "numx" ), QVariantList() << 2 << 2 << 2 );
   dict.insert( QLatin1String( "numy" ), QVariantList() << 3 << 3 << 3 );
   QTest::newRow( "ifchanged07" ) << QString::fromLatin1( "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% for y in numy %}{% ifchanged %}{{ y }}{% endifchanged %}{% endfor %}{% endfor %}{% endfor %}" ) << dict << QString::fromLatin1( "1233323332333" ) << NoError;
+  QTest::newRow( "ifchanged08" ) << QString::fromLatin1( "{% ifchanged %}{{ num.0 }}{% endifchanged %}" ) << dict << QString::fromLatin1( "1" ) << NoError;
 
   // datalist': [[(1, 'a'), (1, 'a'), (0, 'b'), (1, 'c')], [(0, 'a'), (1, 'c'), (1, 'd'), (1, 'd'), (0, 'e')]]}
   dict.clear();
