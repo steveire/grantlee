@@ -202,11 +202,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       if ( token.content.isEmpty() ) {
         // Error. Empty variable
         QString message;
-        if ( q->hasNextToken() )
-          message = QString::fromLatin1( "Empty variable before \"%1\", line %2, %3" ).arg( q->takeNextToken().content.left( 20 ) ).arg( token.linenumber ).arg( q->parent()->objectName() );
-        else
-          message = QLatin1String( "Empty variable at end of input." );
-
+        message = QString::fromLatin1( "Empty variable before \"%1\", line %2, %3" ).arg( q->takeNextToken().content.left( 20 ) ).arg( token.linenumber ).arg( q->parent()->objectName() );
         throw Grantlee::Exception( EmptyVariableError, message );
       }
 
