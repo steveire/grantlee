@@ -216,7 +216,8 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       }
 
       nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
-    } else if ( token.tokenType == BlockToken ) {
+    } else {
+      Q_ASSERT( token.tokenType == BlockToken );
       if ( stopAt.contains( token.content ) ) {
         // put the token back.
         q->prependToken( token );
