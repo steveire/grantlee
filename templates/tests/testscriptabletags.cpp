@@ -150,7 +150,7 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
   dict.insert( QLatin1String( "amp" ), QLatin1String( " & " ) );
   QTest::newRow( "scriptable-tags11" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ booList|join2:amp }}" ) << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
-
+  QTest::newRow( "scriptable-load-error01" ) << QString::fromLatin1( "{% load %}{{ booList|join2:amp }}" ) << dict << QString() << TagSyntaxError;
 
   dict.clear();
 }
