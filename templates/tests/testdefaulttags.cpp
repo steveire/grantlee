@@ -165,6 +165,11 @@ private Q_SLOTS:
     doTest();
   }
 
+  void testDebugTag_data();
+  void testDebugTag() {
+    doTest();
+  }
+
   void testUrlTypes_data();
   void testUrlTypes();
 
@@ -1529,6 +1534,21 @@ void TestDefaultTags::testRangeTag_data()
   QTest::newRow( "range-tag04" ) << QString::fromLatin1( "{% range values.0 values.1 values.2 as i %}{{ i }};{% endrange %}" ) << dict << QString::fromLatin1( "10;12;14;" ) << NoError;
 
   QTest::newRow( "range-tag05" ) << QString::fromLatin1( "{% range 5 %}Foo;{% endrange %}" ) << dict << QString::fromLatin1( "Foo;Foo;Foo;Foo;Foo;" ) << NoError;
+}
+
+void TestDefaultTags::testDebugTag_data()
+{
+
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QTest::newRow( "debug-tag01" ) << QString::fromLatin1( "{% debug %}" ) << dict << QString::fromLatin1( "\n\nContext:\nEnd context:\n\n" ) << NoError;
+  dict.insert( QLatin1String( "answer" ), 42 );
+  QTest::newRow( "debug-tag02" ) << QString::fromLatin1( "{% debug %}" ) << dict << QString::fromLatin1( "\n\nContext:\nkey answer, type int\nEnd context:\n\n" ) << NoError;
 }
 
 void TestDefaultTags::testUrlTypes_data()
