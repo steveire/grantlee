@@ -250,6 +250,7 @@ void TestDefaultTags::testCommentTag_data()
   QTest::newRow( "comment-tag03" ) << QString::fromLatin1( "foo{% comment %} {% if %} {% endcomment %}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
   QTest::newRow( "comment-tag04" ) << QString::fromLatin1( "foo{% comment %} {% endblock %} {% endcomment %}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
   QTest::newRow( "comment-tag05" ) << QString::fromLatin1( "foo{% comment %} {% somerandomtag %} {% endcomment %}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+  QTest::newRow( "comment-tag06" ) << QString::fromLatin1( "{% comment %}yes" ) << dict << QString() << UnclosedBlockTagError;
 }
 
 void TestDefaultTags::testFirstOfTag_data()
