@@ -319,6 +319,9 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   Dict dict;
 
+  QTest::newRow( "basic-syntax00" ) << QString() << dict << QString() << NoError;
+
+
   // Plain text should go through the template parser untouched
   QTest::newRow( "basic-syntax01" ) << QString::fromLatin1( "something cool" ) << dict << QString::fromLatin1( "something cool" ) << NoError;
 
