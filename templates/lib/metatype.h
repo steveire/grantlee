@@ -132,11 +132,7 @@ namespace
 template<typename RealType, typename HandleAs>
 struct LookupTrait
 {
-  static QVariant doLookUp( const QVariant &object, const QString &property )
-  {
-    typedef typename Grantlee::TypeAccessor<HandleAs> Accessor;
-    return Accessor::lookUp( static_cast<HandleAs>( object.value<RealType>() ), property );
-  }
+  static QVariant doLookUp( const QVariant &object, const QString &property );
 };
 
 template<typename T>
