@@ -170,6 +170,11 @@ private Q_SLOTS:
     doTest();
   }
 
+  void testLoadTag_data();
+  void testLoadTag() {
+    doTest();
+  }
+
   void testUrlTypes_data();
   void testUrlTypes();
 
@@ -1564,6 +1569,19 @@ void TestDefaultTags::testDebugTag_data()
   QTest::newRow( "debug-tag01" ) << QString::fromLatin1( "{% debug %}" ) << dict << QString::fromLatin1( "\n\nContext:\nEnd context:\n\n" ) << NoError;
   dict.insert( QLatin1String( "answer" ), 42 );
   QTest::newRow( "debug-tag02" ) << QString::fromLatin1( "{% debug %}" ) << dict << QString::fromLatin1( "\n\nContext:\nkey answer, type int\nEnd context:\n\n" ) << NoError;
+}
+
+void TestDefaultTags::testLoadTag_data()
+{
+
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QTest::newRow( "load-tag01" ) << QString::fromLatin1( "{% load does_not_exist %}foo" ) << dict << QString() << TagSyntaxError;
 }
 
 void TestDefaultTags::testUrlTypes_data()
