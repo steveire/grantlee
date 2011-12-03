@@ -316,7 +316,8 @@ void Lexer::finalizeToken( int nextPosition, bool processSyntax )
 
   if ( differentiator == QLatin1Char( '{' ) ) {
     syntaxToken.tokenType = VariableToken;
-  } else if ( differentiator == QLatin1Char( '%' ) ) {
+  } else {
+    Q_ASSERT( differentiator == QLatin1Char( '%' ) );
     syntaxToken.tokenType = BlockToken;
   }
   m_tokenList.append( syntaxToken );
