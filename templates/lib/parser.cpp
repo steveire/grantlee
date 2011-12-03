@@ -75,8 +75,7 @@ void ParserPrivate::openLibrary( TagLibraryInterface *library )
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( q->parent() );
 
   Engine const *cengine = ti->engine();
-  if ( !cengine )
-    return;
+  Q_ASSERT( cengine );
   Engine *engine = const_cast<Engine *>( cengine );
 
   while ( nodeIt.hasNext() ) {
@@ -100,8 +99,8 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent );
 
   Engine const *cengine = ti->engine();
-  if ( !cengine )
-    return;
+  Q_ASSERT( cengine );
+
   Engine *engine = const_cast<Engine *>( cengine );
   engine->loadDefaultLibraries();
   Q_FOREACH( const QString &libraryName, engine->defaultLibraries() ) {
@@ -133,8 +132,7 @@ void Parser::loadLib( const QString &name )
   Q_D( Parser );
   TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
   Engine const *cengine = ti->engine();
-  if ( !cengine )
-    return;
+  Q_ASSERT( cengine );
   Engine *engine = const_cast<Engine *>( cengine );
   TagLibraryInterface *library = engine->loadLibrary( name );
   if ( !library )
