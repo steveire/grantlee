@@ -1546,6 +1546,11 @@ void TestBuiltinSyntax::testInsignificantWhitespace_data()
                         << QString::fromLatin1("\n{;\n")
                         << QString::fromLatin1("\n{;\n");
 
+  QTest::newRow( "insignificant-whitespace44" )
+      << QString::fromLatin1("\n{{ foo }} " ) << dict
+                        << QString()
+                        << QString::fromLatin1("\n ");
+
 }
 
 QTEST_MAIN( TestBuiltinSyntax )
