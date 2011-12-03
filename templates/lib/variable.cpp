@@ -92,7 +92,9 @@ Variable::Variable( const QString &var )
 
   QVariant v( var );
   QString localVar = var;
-  if ( var.startsWith( QLatin1String( "_(" ) ) && var.endsWith( QLatin1Char( ')' ) ) ) {
+  if ( var.startsWith( QLatin1String( "_(" ) ) ) {
+    // The FilterExpression parser ensures this:
+    Q_ASSERT( var.endsWith( QLatin1Char( ')' ) ) );
     d->m_localize = true;
     localVar = var.mid( 2, var.size() - 3 );
     v = localVar;
@@ -106,8 +108,9 @@ Variable::Variable( const QString &var )
       d->m_literal = v.toInt();
     }
   } else {
-    if (( localVar.startsWith( QLatin1Char( '"' ) ) && localVar.endsWith( QLatin1Char( '"' ) ) )
-        || ( localVar.startsWith( QLatin1Char( '\'' ) ) && localVar.endsWith( QLatin1Char( '\'' ) ) ) ) {
+    if ( localVar.startsWith( QLatin1Char( '"' ) ) || localVar.startsWith( QLatin1Char( '\'' ) ) ) {
+      // The FilterExpression parser ensures this:
+      Q_ASSERT(localVar.endsWith( QLatin1Char( '\'' ) ) || localVar.endsWith( QLatin1Char( '"' ) ) );
       const QString unesc = unescapeStringLiteral( localVar );
       const Grantlee::SafeString ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
