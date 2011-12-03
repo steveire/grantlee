@@ -590,6 +590,7 @@ void TestBuiltinSyntax::testEnums_data()
   QTest::newRow( "qt-enums04" ) << QString::fromLatin1( "{{ Qt.AlignRight.value }}" ) << dict << QString::fromLatin1( "2" ) << NoError;
   QTest::newRow( "qt-enums05" ) << QString::fromLatin1( "{{ Qt.AlignRight.key }}" ) << dict << QString::fromLatin1( "AlignRight" ) << NoError;
   QTest::newRow( "qt-enums06" ) << QString::fromLatin1( "{{ Qt.Alignment.2.key }}" ) << dict << QString::fromLatin1( "AlignRight" ) << NoError;
+  QTest::newRow( "qt-enums06" ) << QString::fromLatin1( "{{ Qt.DoesNotExist }}" ) << dict << QString() << NoError;
 }
 
 void TestBuiltinSyntax::testListIndex_data()
