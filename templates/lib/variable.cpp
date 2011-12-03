@@ -223,13 +223,9 @@ QVariant Variable::resolve( Context *c ) const
   // QStringList with size == 1 is special cased to be convertible to QString.
   // We make sure we don't accidentally invoke that.
   if ( var.type() != QVariant::StringList && var.canConvert( QVariant::String ) ) {
-    if ( var.convert( QVariant::String ) ) {
-      if ( d->m_localize ) {
-        return QVariant::fromValue<Grantlee::SafeString>( c->localizer()->localize( var ) );
-      }
-      return QVariant::fromValue<Grantlee::SafeString>( var.toString() );
-    }
-    return QVariant();
+    if ( d->m_localize )
+      return QVariant::fromValue<Grantlee::SafeString>( c->localizer()->localize( var ) );
+    return QVariant::fromValue<Grantlee::SafeString>( var.toString() );
   }
   // Could be a list, hash or enum.
   return var;
