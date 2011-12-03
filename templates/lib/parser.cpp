@@ -222,8 +222,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         return nodeList;
       }
 
-      const QStringList tagContents = token.content.split( QLatin1Char( ' ' ) );
-      if ( tagContents.size() == 0 ) {
+      if ( token.content.isEmpty() ) {
         QString message;
         if ( q->hasNextToken() )
           message = QString::fromLatin1( "Empty block tag before \"%1\", line %2, %3" ).arg( token.content.left( 20 ) ).arg( token.linenumber ).arg( q->parent()->objectName() );
@@ -232,6 +231,8 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
 
         throw Grantlee::Exception( EmptyBlockTagError, message );
       }
+
+      const QStringList tagContents = token.content.split( QLatin1Char( ' ' ) );
       const QString command = tagContents.first();
       AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
 

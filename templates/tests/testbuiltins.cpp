@@ -677,7 +677,7 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   // Raise TemplateSyntaxError for invalid block tags
   QTest::newRow( "filter-syntax07" ) << QString::fromLatin1( "{% nothing_to_see_here %}" ) << dict << QString() << InvalidBlockTagError;
   // Raise TemplateSyntaxError for empty block tags
-  QTest::newRow( "filter-syntax08" ) << QString::fromLatin1( "{% %}" ) << dict << QString() << InvalidBlockTagError;
+  QTest::newRow( "filter-syntax08" ) << QString::fromLatin1( "{% %}" ) << dict << QString() << EmptyBlockTagError;
 
   // Chained filters, with an argument to the first one
   dict.insert( QLatin1String( "var" ), QLatin1String( "<b><i>Yes</i></b>" ) );
