@@ -459,6 +459,15 @@ void doTestAssociativeContainer_Type_Number( bool unordered = false )
   insertAssociatedPeople_Number<Container>( c );
   testAssociativeValues<Container>( c, unordered );
   testAssociativeItems<Container>( c, unordered );
+
+  {
+    Grantlee::Template t1 = engine.newTemplate(
+        QLatin1String( "{{ people.23.name }}" ),
+        QLatin1String( "claire_template" ) );
+    QString result = t1->render( &c );
+    QCOMPARE( result, QLatin1String( "Claire" ) );
+  }
+
 }
 
 void TestGenericTypes::testSequentialContainer_Type()

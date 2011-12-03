@@ -116,7 +116,7 @@ struct Finder
     }
 
     QVariant v = nextPart;
-    if ( !v.canConvert<typename Container::key_type>() || !v.convert( QVariant::Double ) )
+    if ( !v.convert( QVariant::Double ) )
       return container.end();
     typename Container::key_type key = v.value<typename Container::key_type>();
     return container.find( key );
