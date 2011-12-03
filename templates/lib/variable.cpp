@@ -208,7 +208,7 @@ QVariant Variable::resolve( Context *c ) const
         return QVariant();
     }
   } else {
-    if ( isSafeString( var ) )
+    if ( isSafeString( d->m_literal ) )
       var = QVariant::fromValue( getSafeString( d->m_literal ) );
     else
       var = d->m_literal;
