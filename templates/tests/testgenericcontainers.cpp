@@ -347,6 +347,7 @@ void doTestNonHashableContainers()
   doTestSequentialContainer<QLinkedList<T> >();
   doTestSequentialContainer<QQueue<T> >();
   doTestSequentialContainer<QStack<T> >();
+  doTestSequentialContainer<std::list<T> >();
   doTestAssociativeContainer<QMap<qint32, T> >();
   doTestAssociativeContainer<std::map<qint32, T> >();
   doTestAssociativeContainer<QHash<qint32, T> >( true );
