@@ -47,15 +47,7 @@ protected:
   bool doProcessCharacter( QString::const_iterator character, State<CharTransitionInterface> *state );
 };
 
-template<bool b>
-struct BooleanTest
-{
-  static bool characterTest( QString::const_iterator ) { return b; }
-};
-
-typedef BooleanTest<false> FalseTest;
-typedef BooleanTest<false> NullTest;
-typedef BooleanTest<true> TrueTest;
+typedef CharTransitionInterface NullTest;
 
 template<typename T, typename U>
 struct AndTest
