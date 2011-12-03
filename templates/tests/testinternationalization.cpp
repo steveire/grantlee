@@ -378,6 +378,15 @@ void TestInternationalization::testLocalizedTemplate_data()
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << dict;
+
+  dict.insert( QLatin1String( "list" ), QVariantList() << 1000);
+  QTest::newRow("fragment-06")
+    << QString::fromLatin1("{{ _(list.0) }}")
+      << QString::fromUtf8( "1,000" )
+      << QString::fromUtf8( "1,000" )
+      << QString::fromUtf8( "1,000" )
+      << QString::fromUtf8( "1.000" )
+      << QString::fromUtf8( "1 000" ) << dict;
 }
 
 void TestInternationalization::testSafeContent()
