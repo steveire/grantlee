@@ -112,6 +112,7 @@ static QList<int> getPrimitives()
 {
   QList<int> primitives;
   primitives << qMetaTypeId<Grantlee::SafeString>()
+             << QVariant::String
              << QVariant::Bool
              << QVariant::Int
              << QVariant::Double
