@@ -162,9 +162,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 FilterExpression::FilterExpression( const FilterExpression &other )
     : d_ptr( new FilterExpressionPrivate( this ) )
 {
-  d_ptr->m_variable = other.d_ptr->m_variable;
-  d_ptr->m_filters = other.d_ptr->m_filters;
-  d_ptr->m_filterNames = other.d_ptr->m_filterNames;
+  *this = other;
 }
 
 FilterExpression::FilterExpression()
@@ -191,6 +189,8 @@ Variable FilterExpression::variable() const
 
 FilterExpression &FilterExpression::operator=( const FilterExpression & other )
 {
+  if (&other == this)
+    return *this;
   d_ptr->m_variable = other.d_ptr->m_variable;
   d_ptr->m_filters = other.d_ptr->m_filters;
   d_ptr->m_filterNames = other.d_ptr->m_filterNames;

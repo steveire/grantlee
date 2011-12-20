@@ -192,6 +192,8 @@ class TestBuiltinSyntax : public CoverageObject
 private Q_SLOTS:
   void initTestCase();
 
+  void testObjects();
+
   void testBasicSyntax_data();
   void testBasicSyntax() {
     doTest();
@@ -262,6 +264,38 @@ private:
   void doTest();
 
 };
+
+void TestBuiltinSyntax::testObjects()
+{
+  Context c1, c2;
+  c1 = c1;
+  c1 = c2;
+  Context c3(c1);
+  Q_UNUSED(c3);
+
+  FilterExpression f1, f2;
+  f1 = f1;
+  f1 = f2;
+  FilterExpression f3(f1);
+  Q_UNUSED(f3);
+
+  Variable v1;
+  v1 = v1;
+  v1 = f1.variable();
+  Variable v3(v1);
+  Q_UNUSED(v3);
+  QVERIFY(!v1.isTrue(&c1));
+  QVERIFY(!v1.isLocalized());
+
+  c1.setMutating(true);
+  QVERIFY(c1.isMutating());
+
+  SafeString s1, s2;
+  s1 = s1;
+  s2 = s1;
+  SafeString s3(s1);
+  Q_UNUSED(s3);
+}
 
 void TestBuiltinSyntax::initTestCase()
 {

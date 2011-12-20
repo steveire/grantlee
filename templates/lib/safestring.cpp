@@ -95,6 +95,8 @@ SafeString::NestedString::NestedString( const QString &content, SafeString *safe
 
 SafeString& SafeString::operator=( const SafeString &str )
 {
+  if (&str == this)
+    return *this;
   m_nestedString = str.m_nestedString;
   m_nestedString.m_safeString = this;
   m_safety = str.m_safety;

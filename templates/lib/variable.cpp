@@ -59,10 +59,7 @@ public:
 Variable::Variable( const Variable &other )
     : d_ptr( new VariablePrivate( this ) )
 {
-  d_ptr->m_varString = other.d_ptr->m_varString;
-  d_ptr->m_literal = other.d_ptr->m_literal;
-  d_ptr->m_lookups = other.d_ptr->m_lookups;
-  d_ptr->m_localize = other.d_ptr->m_localize;
+  *this = other;
 }
 
 Variable::Variable()
@@ -77,6 +74,8 @@ Variable::~Variable()
 
 Variable &Variable::operator=( const Variable & other )
 {
+  if (&other == this)
+    return *this;
   d_ptr->m_varString = other.d_ptr->m_varString;
   d_ptr->m_literal = other.d_ptr->m_literal;
   d_ptr->m_lookups = other.d_ptr->m_lookups;
