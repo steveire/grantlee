@@ -71,6 +71,7 @@ public:
   }
 
 private Q_SLOTS:
+  void testContext();
   void testStrings();
   void testIntegers();
   void testFloats();
@@ -101,6 +102,16 @@ private:
 
   Grantlee::Engine *m_engine;
 };
+
+void TestInternationalization::testContext()
+{
+  Context c;
+  QVERIFY(c.localizer());
+  c.setLocalizer(cLocalizer);
+  QVERIFY(c.localizer());
+  c.setLocalizer(QSharedPointer<Grantlee::AbstractLocalizer>());
+  QVERIFY(c.localizer());
+}
 
 void TestInternationalization::testStrings()
 {
