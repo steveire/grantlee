@@ -888,7 +888,7 @@ void TestDefaultTags::testIfEqualTag_data()
   dict.clear();
   dict.insert( QLatin1String( "x" ), 2 );
 
-  QTest::newRow( "ifequal-numeric07" ) << QString::fromLatin1( "{% ifequal x 2. %}yes{% endifequal %}" ) << dict << QString() << NoError;
+  QTest::newRow( "ifequal-numeric07" ) << QString::fromLatin1( "{% ifequal x 2. %}yes{% endifequal %}" ) << dict << QString() << TagSyntaxError;
 
   dict.clear();
   dict.insert( QLatin1String( "x" ), 5 );

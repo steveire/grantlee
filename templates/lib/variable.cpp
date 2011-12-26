@@ -89,24 +89,30 @@ Variable::Variable( const QString &var )
   Q_D( Variable );
   d->m_varString = var;
 
-  QVariant v( var );
   QString localVar = var;
   if ( var.startsWith( QLatin1String( "_(" ) ) ) {
     // The FilterExpression parser ensures this:
     Q_ASSERT( var.endsWith( QLatin1Char( ')' ) ) );
     d->m_localize = true;
     localVar = var.mid( 2, var.size() - 3 );
-    v = localVar;
   }
-  if ( v.convert( QVariant::Double ) ) {
-    d->m_literal = v;
-    if ( !var.contains( QLatin1Char( '.' ) ) && !var.contains( QLatin1Char( 'e' ) ) ) {
-      if ( var.endsWith( QLatin1Char( '.' ) ) ) {
-//         throw Grantlee::Exception( VariableSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( v.toString() ) );
+  if ( localVar.endsWith( QLatin1Char( '.' ) ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( localVar ) );
+  }
+
+  bool processedNumber = false;
+  {
+    const int intResult = QLocale::c().toInt(localVar, &processedNumber);
+    if (processedNumber) {
+      d->m_literal = intResult;
+    } else {
+      const double doubleResult = QLocale::c().toDouble(localVar, &processedNumber);
+      if (processedNumber) {
+        d->m_literal = doubleResult;
       }
-      d->m_literal = v.toInt();
     }
-  } else {
+  }
+  if (!processedNumber) {
     if ( localVar.startsWith( QLatin1Char( '"' ) ) || localVar.startsWith( QLatin1Char( '\'' ) ) ) {
       // The FilterExpression parser ensures this:
       Q_ASSERT(localVar.endsWith( QLatin1Char( '\'' ) ) || localVar.endsWith( QLatin1Char( '"' ) ) );
