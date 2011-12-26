@@ -398,6 +398,30 @@ void TestInternationalization::testLocalizedTemplate_data()
       << QString::fromUtf8( "1,000" )
       << QString::fromUtf8( "1.000" )
       << QString::fromUtf8( "1 000" ) << dict;
+
+  dict.clear();
+  dict.insert(QLatin1String("longlong"), (qlonglong)1000);
+  dict.insert(QLatin1String("float"), (float)0.6);
+  dict.insert(QLatin1String("double"), (float)4.8);
+  dict.insert(QLatin1String("hash"), QVariantHash());
+
+  QTest::newRow("fragment-07")
+    << QString::fromLatin1("{{ _(longlong) }} {{ _(float) }} {{ _(double) }}{{ _(hash) }}")
+    << QString::fromLatin1("1,000 0.60 4.80")
+    << QString::fromLatin1("1,000 0.60 4.80")
+    << QString::fromLatin1("1,000 0.60 4.80")
+    << QString::fromLatin1("1.000 0,60 4,80")
+    << QString::fromUtf8("1 000 0,60 4,80")
+    << dict;
+
+  QTest::newRow("fragment-08")
+    << QString::fromLatin1("{{ 'this'|cut:_(\"i\") }}")
+    << QString::fromLatin1("ths")
+    << QString::fromLatin1("ths")
+    << QString::fromLatin1("ths")
+    << QString::fromLatin1("ths")
+    << QString::fromUtf8("ths")
+    << dict;
 }
 
 void TestInternationalization::testSafeContent()
