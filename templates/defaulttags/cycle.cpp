@@ -60,14 +60,10 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Node not found: %1" ).arg( name ) );
     }
     QVariant nodeVariant = hash.value( name );
-    if ( nodeVariant.userType() != QMetaType::QObjectStar ) {
-      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Invalid object in node cycle list" ) );
-    }
+    Q_ASSERT( nodeVariant.userType() == QMetaType::QObjectStar );
     QObject *obj = nodeVariant.value<QObject*>();
     Node *node = qobject_cast<Node*>( obj );
-    if ( !node ) {
-      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Invalid object in node cycle list" ) );
-    }
+    Q_ASSERT( node );
     return node;
   }
 
