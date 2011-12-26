@@ -191,7 +191,8 @@ private:
         return;
       }
       childState = childState->parent();
-    } while ( childState && childState != enteredState );
+      Q_ASSERT( childState != enteredState );
+    } while ( childState );
   }
 
   bool handleFinished( State<TransitionInterface> *state )
