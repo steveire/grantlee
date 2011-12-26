@@ -81,7 +81,7 @@ typedef CharacterTransition<'\n', TokenFinalizerWithTrimmingAndNewline> SyntaxBo
 typedef CharacterTransition<'{', FinalizeAndMarkStartSyntax> SyntaxBoundaryHandler;
 
 template<typename Transition>
-void addTransition( TextProcessingState *source, Lexer*lexer, TextProcessingState *target )
+void addTransition( TextProcessingState *source, Lexer *lexer, TextProcessingState *target )
 {
   Transition *tr = new Transition( lexer, source );
   tr->setTargetState( target );
