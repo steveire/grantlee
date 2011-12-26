@@ -56,8 +56,6 @@ public:
     m_pluginLoader = QSharedPointer<QPluginLoader>( new QPluginLoader( fileName ), _deleter );
 
     m_object = m_pluginLoader->instance();
-    if ( !m_object )
-      return;
 
     m_plugin = qobject_cast<PluginType*>( m_object );
   }
