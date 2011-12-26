@@ -232,6 +232,10 @@ void TestDefaultTags::doTest()
   QCOMPARE( t->error(), NoError );
 
   QCOMPARE( result, output );
+
+  if ( !result.isEmpty() && QString::fromLatin1( QTest::currentTestFunction() ) == QLatin1String( "testMediaFinderTag" ) ) {
+    QVERIFY( !context.externalMedia().isEmpty() );
+  }
 }
 
 void TestDefaultTags::testCommentTag_data()
