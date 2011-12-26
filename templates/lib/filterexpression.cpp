@@ -41,7 +41,7 @@ class FilterExpressionPrivate
   }
 
   Variable m_variable;
-  QList<ArgFilter> m_filters;
+  QVector<ArgFilter> m_filters;
   QStringList m_filterNames;
 
   Q_DECLARE_PUBLIC( FilterExpression )
@@ -202,8 +202,8 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
   Q_D( const FilterExpression );
   QVariant var = d->m_variable.resolve( c );
 
-  QList<ArgFilter>::const_iterator it = d->m_filters.constBegin();
-  const QList<ArgFilter>::const_iterator end = d->m_filters.constEnd();
+  QVector<ArgFilter>::const_iterator it = d->m_filters.constBegin();
+  const QVector<ArgFilter>::const_iterator end = d->m_filters.constEnd();
   for ( ; it != end; ++it ) {
     Filter::Ptr filter = it->first;
     filter->setStream( stream );
