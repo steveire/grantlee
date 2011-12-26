@@ -164,7 +164,7 @@ private:
       m_currentState = toState;
     } else {
       Q_ASSERT( toState->children().isEmpty() );
-      return;
+      break;
     }
   }
 
