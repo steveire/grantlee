@@ -270,7 +270,8 @@ void Lexer::finalizeToken()
   int nextPosition = m_upto;
   const bool validSyntax = m_endSyntaxPosition > m_startSyntaxPosition && ( m_startSyntaxPosition >= m_processedUpto );
 
-  if ( validSyntax && m_startSyntaxPosition >= 0 ) {
+  if ( validSyntax ) {
+    Q_ASSERT( m_startSyntaxPosition >= 0 );
     nextPosition = m_startSyntaxPosition - 1;
   }
   finalizeToken( nextPosition, validSyntax );
@@ -279,14 +280,19 @@ void Lexer::finalizeToken()
 void Lexer::finalizeTokenWithTrimmedWhitespace()
 {
   int nextPosition = m_upto;
-  const bool validSyntax = m_endSyntaxPosition > m_startSyntaxPosition;
-  if ( validSyntax && m_startSyntaxPosition > 0 ) {
-    if ( m_newlinePosition >= 0 && m_newlinePosition >= m_processedUpto )
-      nextPosition = qMin( m_startSyntaxPosition - 1, m_newlinePosition );
-    else
-      nextPosition = m_startSyntaxPosition - 1;
-  }
-  finalizeToken( nextPosition, validSyntax );
+  // We know this to be true because the state machine has already guaranteed
+  // it. This method is only called from transition and state actions which
+  // occur after valid syntax.
+  // TODO Investigate performance and other implications of changing the state
+  // machine to assure similar in finalizeToken()
+  Q_ASSERT( m_endSyntaxPosition > m_startSyntaxPosition );
+
+  Q_ASSERT( m_startSyntaxPosition >= 0 );
+  if ( m_newlinePosition >= 0 && m_newlinePosition >= m_processedUpto )
+    nextPosition = qMin( m_startSyntaxPosition - 1, m_newlinePosition );
+  else
+    nextPosition = m_startSyntaxPosition - 1;
+  finalizeToken( nextPosition, true );
 }
 
 void Lexer::finalizeToken( int nextPosition, bool processSyntax )
