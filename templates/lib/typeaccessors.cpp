@@ -109,8 +109,10 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
   if ( property == QLatin1String( "splitlines" ) ) {
     const QStringList strings = object.get().split( QLatin1Char( '\n' ) );
     QVariantList list;
-    Q_FOREACH( const QString &string, strings )
-      list << string;
+    QStringList::const_iterator it = strings.constBegin();
+    const QStringList::const_iterator end = strings.constEnd();
+    for ( ; it != end; ++it )
+      list << *it;
     return list;
   }
   if ( property == QLatin1String( "strip" ) ) {
@@ -162,12 +164,15 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
 QVariant doQobjectLookUp( const QObject * const object, const QString &property )
 {
   if ( property == QLatin1String( "children" ) ) {
-    QObjectList childList = object->children();
+    const QObjectList childList = object->children();
     if ( childList.isEmpty() )
       return QVariant();
     QVariantList children;
-    Q_FOREACH( QObject *object, childList )
-      children.append( QVariant::fromValue( object ) );
+
+    QObjectList::const_iterator it = childList.constBegin();
+    const QObjectList::const_iterator end = childList.constEnd();
+    for ( ; it != end; ++it )
+      children.append( QVariant::fromValue( *it ) );
     return children;
   }
 
