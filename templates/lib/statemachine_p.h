@@ -67,16 +67,6 @@ public:
   QVector<State<TransitionInterface>*> children() const { return m_children; }
   State<TransitionInterface>* parent() const { return m_parent; }
 
-  void setStateName( const QString& stateName )
-  {
-    m_stateName = stateName;
-  }
-
-  QString stateName() const
-  {
-    return m_stateName;
-  }
-
   void setInitialState( State<TransitionInterface> *state ) { m_initialState = state; }
   State<TransitionInterface>* initialState() { return m_initialState; }
 
