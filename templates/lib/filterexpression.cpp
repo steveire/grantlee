@@ -202,10 +202,12 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
   Q_D( const FilterExpression );
   QVariant var = d->m_variable.resolve( c );
 
-  Q_FOREACH( const ArgFilter &argfilter, d->m_filters ) {
-    Filter::Ptr filter = argfilter.first;
+  QList<ArgFilter>::const_iterator it = d->m_filters.constBegin();
+  const QList<ArgFilter>::const_iterator end = d->m_filters.constEnd();
+  for ( ; it != end; ++it ) {
+    Filter::Ptr filter = it->first;
     filter->setStream( stream );
-    const Variable argVar = argfilter.second;
+    const Variable argVar = it->second;
     QVariant arg = argVar.resolve( c );
 
     if ( arg.isValid() ) {
