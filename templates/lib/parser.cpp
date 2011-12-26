@@ -282,8 +282,7 @@ Token Parser::takeNextToken()
 void Parser::removeNextToken()
 {
   Q_D( Parser );
-  if ( !d->m_tokenList.isEmpty() )
-    d->m_tokenList.removeFirst();;
+  d->m_tokenList.removeFirst();
 }
 
 void Parser::prependToken( const Token &token )
