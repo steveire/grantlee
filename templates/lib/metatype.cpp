@@ -44,10 +44,7 @@ void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
 {
   Q_ASSERT( id > 0 );
   Q_ASSERT( f );
-  if ( id < 0 ) {
-    qWarning() << "registerTypeOperators() called with invalid arguments";
-    return;
-  }
+
   customTypes()->registerLookupOperator( id, f );
 }
 
@@ -55,10 +52,7 @@ void Grantlee::MetaType::registerToVariantListOperator( int id, ToVariantListFun
 {
   Q_ASSERT( id > 0 );
   Q_ASSERT( f );
-  if ( id < 0 ) {
-    qWarning() << "registerTypeOperators() called with invalid arguments";
-    return;
-  }
+
   customTypes()->registerToListOperator( id, f );
 }
 
