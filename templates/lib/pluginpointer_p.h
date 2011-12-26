@@ -43,14 +43,8 @@ class PluginPointer
 {
   class _Dummy;
 public:
-  PluginPointer()
-    : m_plugin( 0 )
-  {
-
-  }
-
   // This allows returning 0 from a function returning a PluginType*
-  PluginPointer( _Dummy* )
+  PluginPointer( _Dummy* = 0 )
     : m_plugin( 0 )
   {
 
