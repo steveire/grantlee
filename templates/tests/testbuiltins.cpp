@@ -30,6 +30,7 @@
 #include "filterexpression.h"
 #include "grantlee_paths.h"
 #include "coverageobject.h"
+#include <metaenumvariable_p.h>
 
 typedef QHash<QString, QVariant> Dict;
 
@@ -295,6 +296,8 @@ void TestBuiltinSyntax::testObjects()
   s2 = s1;
   SafeString s3(s1);
   Q_UNUSED(s3);
+
+  QMetaType::construct(qMetaTypeId<MetaEnumVariable>(), 0);
 }
 
 void TestBuiltinSyntax::initTestCase()
