@@ -117,11 +117,12 @@ public:
   void finished()
   {
     State<TransitionInterface> *s = m_currentState;
-    while ( s ) {
+    Q_FOREVER {
+      Q_ASSERT( s );
       if ( !handleFinished( s ) )
         s = s->parent();
       else
-        return;
+        break;
     }
   }
 
