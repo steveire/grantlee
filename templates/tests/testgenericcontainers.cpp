@@ -25,7 +25,7 @@
 #include "metatype.h"
 #include "test_macros.h"
 
-#include <QtTest/QtTest>
+#include <QtTest/QTest>
 #include <QtCore/QVariant>
 #include "coverageobject.h"
 

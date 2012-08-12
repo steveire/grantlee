@@ -21,8 +21,10 @@
 #ifndef SCRIPTABLETAGSTEST_H
 #define SCRIPTABLETAGSTEST_H
 
-#include <QtTest>
-#include <QtCore/QObject>
+#include <QtTest/QTest>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
+#include <QtCore/QDebug>
 
 #include "template.h"
 #include "engine.h"

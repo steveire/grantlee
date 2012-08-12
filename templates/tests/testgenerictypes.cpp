@@ -25,7 +25,7 @@
 #include "template.h"
 #include "test_macros.h"
 
-#include <QtTest/QtTest>
+#include <QtTest/QTest>
 #include <QtCore/QVariant>
 #include <QtCore/QVariantHash>
 #include <QtCore/QMetaType>

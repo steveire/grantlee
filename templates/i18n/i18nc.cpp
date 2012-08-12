@@ -21,7 +21,6 @@
 #include "i18nc.h"
 
 #include <QtCore/QStringList>
-#include <QtPlugin>
 
 #include "abstractlocalizer.h"
 #include "parser.h"

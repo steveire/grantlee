@@ -26,8 +26,6 @@
 #include "template.h"
 #include "util.h"
 
-#include <QtCore/QtPlugin>
-
 IncludeNodeFactory::IncludeNodeFactory()
 {
 

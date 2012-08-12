@@ -21,8 +21,9 @@
 #ifndef BUILTINSTEST_H
 #define BUILTINSTEST_H
 
-#include <QtTest>
-#include <QtCore/QObject>
+#include <QtTest/QTest>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDebug>
 
 #include "template.h"
 #include "engine.h"

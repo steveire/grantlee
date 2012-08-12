@@ -25,7 +25,8 @@
 #include "util.h"
 
 #include <QtCore/QScopedPointer>
-#include <QtTest/QtTest>
+#include <QtCore/QTranslator>
+#include <QtTest/QTest>
 #include "coverageobject.h"
 
 using namespace Grantlee;

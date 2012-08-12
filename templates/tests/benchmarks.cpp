@@ -21,8 +21,7 @@
 #ifndef BENCHMARKING_H
 #define BENCHMARKING_H
 
-#include <QtTest>
-#include <QtCore>
+#include <QtTest/QTest>
 #include <QtCore/QObject>
 
 #include "lexer_p.h"
