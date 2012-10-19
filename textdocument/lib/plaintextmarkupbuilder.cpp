@@ -316,6 +316,7 @@ void PlainTextMarkupBuilder::endListItem()
 {
   Q_D( PlainTextMarkupBuilder );
   d->currentListItemNumbers.last() = d->currentListItemNumbers.last() + 1;
+  d->m_text.append( QLatin1Char('\n') );
 }
 
 void PlainTextMarkupBuilder::beginSuperscript()
