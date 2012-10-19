@@ -40,6 +40,8 @@ public:
   */
   QString getLetterString( int itemNumber );
 
+  QString getRomanString(int itemNumber);
+
   /**
     Gets a block of references in the body of the text.
     This is an ordered list of links and images in the text.
@@ -63,6 +65,48 @@ public:
 }
 
 using namespace Grantlee;
+
+QString PlainTextMarkupBuilderPrivate::getRomanString(int item)
+{
+  QString result;
+  //Code based to gui/text/qtextlist.cpp
+  if (item < 5000) {
+      QString romanNumeral;
+
+      // works for up to 4999 items
+      QString romanSymbols = QLatin1String("iiivixxxlxcccdcmmmm");
+      int c[] = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+      int n = item;
+      for (int i = 12; i >= 0; n %= c[i], i--) {
+          int q = n / c[i];
+          if (q > 0) {
+              int startDigit = i + (i+3)/4;
+              int numDigits;
+              if (i % 4) {
+                  // c[i] == 4|5|9|40|50|90|400|500|900
+                  if ((i-2) % 4) {
+                      // c[i] == 4|9|40|90|400|900 => with subtraction (IV, IX, XL, XC, ...)
+                      numDigits = 2;
+                  }
+                  else {
+                      // c[i] == 5|50|500 (V, L, D)
+                      numDigits = 1;
+                  }
+              }
+              else {
+                  // c[i] == 1|10|100|1000 (I, II, III, X, XX, ...)
+                  numDigits = q;
+              }
+
+              romanNumeral.append(romanSymbols.mid(startDigit, numDigits));
+          }
+      }
+      result = romanNumeral;
+  } else {
+      result = QLatin1String("?");
+  }
+  return result;
+}
 
 QString PlainTextMarkupBuilderPrivate::getLetterString( int itemNumber )
 {
@@ -256,6 +300,12 @@ void PlainTextMarkupBuilder::beginListItem()
     break;
   case QTextListFormat::ListUpperAlpha:
     d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getLetterString( itemNumber ).toUpper() ) );
+    break;
+  case QTextListFormat::ListLowerRoman:
+    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getRomanString( itemNumber +1 ) ) );
+    break;
+  case QTextListFormat::ListUpperRoman:
+    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getRomanString( itemNumber +1 ).toUpper() ) );
     break;
   default:
     break;

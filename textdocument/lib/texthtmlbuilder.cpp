@@ -325,6 +325,12 @@ void TextHTMLBuilder::beginList( QTextListFormat::Style type )
   case QTextListFormat::ListUpperAlpha:
     d->m_text.append( QLatin1String( "\n<ol type=\"A\">\n" ) );
     break;
+  case QTextListFormat::ListLowerRoman:
+    d->m_text.append( QLatin1String("\n<ol type=\"i\">\n") );
+    break;
+  case QTextListFormat::ListUpperRoman:
+    d->m_text.append( QLatin1String("\n<ol type=\"I\">\n") );
+    break;
   default:
     break;
   }
@@ -341,6 +347,8 @@ void TextHTMLBuilder::endList()
   case QTextListFormat::ListDecimal:
   case QTextListFormat::ListLowerAlpha:
   case QTextListFormat::ListUpperAlpha:
+  case QTextListFormat::ListLowerRoman:
+  case QTextListFormat::ListUpperRoman:
     d->m_text.append( QLatin1String( "</ol>\n" ) );
     break;
   default:
