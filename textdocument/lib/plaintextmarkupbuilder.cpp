@@ -237,7 +237,6 @@ void PlainTextMarkupBuilder::beginListItem()
   }
 
   int itemNumber = d->currentListItemNumbers.last();
-  QString letterString;
 
   switch ( d->currentListItemStyles.last() ) {
   case QTextListFormat::ListDisc:

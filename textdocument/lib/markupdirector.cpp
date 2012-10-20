@@ -193,8 +193,6 @@ void MarkupDirector::processTableCell( const QTextTableCell &tableCell, QTextTab
 
 QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame::iterator it, const QTextBlock &_block, QTextList *list )
 {
-  QList<QTextList*> lists;
-
   QTextListFormat::Style style = list->format().style();
   m_builder->beginList( style );
   QTextBlock block = _block;
