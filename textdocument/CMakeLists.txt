@@ -1,5 +1,5 @@
 
-find_package(Qt4 4.5.0 REQUIRED QtCore QtGui QtTest)
+find_package(Qt4 4.5.0 REQUIRED QtCore QtGui)
 
 include(${QT_USE_FILE})
 

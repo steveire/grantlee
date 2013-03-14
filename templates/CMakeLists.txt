@@ -1,5 +1,5 @@
 
-find_package(Qt4 4.5.0 REQUIRED QtCore QtScript QtTest)
+find_package(Qt4 4.5.0 REQUIRED QtCore QtScript)
 
 include(${Grantlee_USE_FILE})
 
