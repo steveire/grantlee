@@ -88,7 +88,7 @@ add_definitions(-DQT_NO_KEYWORDS)
 SET( CMAKE_INCLUDE_CURRENT_DIR ON )
 
 set(Grantlee_VERSION_MAJOR 0)
-set(Grantlee_VERSION_MINOR 3)
+set(Grantlee_VERSION_MINOR 4)
 set(Grantlee_VERSION_PATCH 0)
 set(Grantlee_MIN_PLUGIN_VERSION 1)
 
