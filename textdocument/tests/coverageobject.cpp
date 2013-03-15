@@ -26,11 +26,11 @@ void CoverageObject::cleanup()
   }
   __coveragescanner_testname(test_name.toStdString().c_str());
   if (QTest::currentTestFailed())
-    __coveragescanner_teststate("FAILED"); 
-  else 
-    __coveragescanner_teststate("PASSED") ; 
+    __coveragescanner_teststate("FAILED");
+  else
+    __coveragescanner_teststate("PASSED") ;
   __coveragescanner_save();
-  __coveragescanner_testname(""); 
+  __coveragescanner_testname("");
   __coveragescanner_clear();
 #endif
 }
