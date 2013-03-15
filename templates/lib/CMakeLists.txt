@@ -67,6 +67,7 @@ add_library(grantlee_core SHARED
   ${grantlee_templates_SRCS}
   ${scriptabletags_SRCS}
 )
+generate_export_header(grantlee_core)
 
 foreach(file ${grantlee_templates_SRCS})
   set(grantlee_templates_FULLPATHS ${grantlee_templates_FULLPATHS} ${CMAKE_SOURCE_DIR}/templates/lib/${file})
@@ -76,8 +77,6 @@ set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
   ${grantlee_templates_FULLPATHS}
   ${scriptabletags_SRCS}
 )
-
-grantlee_generate_export_header(grantlee_core)
 
 if (BUILD_TESTS)
   set(GRANTLEE_TESTS_EXPORT "GRANTLEE_CORE_EXPORT")

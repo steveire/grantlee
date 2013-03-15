@@ -15,6 +15,7 @@ qt4_automoc(${grantlee_textdocument_SRCS})
 add_library(grantlee_gui SHARED
   ${grantlee_textdocument_SRCS}
 )
+generate_export_header(grantlee_gui)
 
 foreach(file ${grantlee_textdocument_SRCS})
   set(grantlee_textdocument_SRCS_FULLPATHS ${grantlee_textdocument_SRCS_FULLPATHS} ${CMAKE_CURRENT_SOURCE_DIR}/${file})
@@ -22,8 +23,6 @@ endforeach()
 set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
   ${grantlee_textdocument_SRCS_FULLPATHS}
 )
-
-grantlee_generate_export_header(grantlee_gui)
 
 target_link_libraries(grantlee_gui
   ${QT_QTCORE_LIBRARY}

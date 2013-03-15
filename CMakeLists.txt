@@ -28,7 +28,7 @@ endif()
 set(Grantlee_MODULE_DIR ${Grantlee_SOURCE_DIR}/cmake/modules)
 set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
-include(GrantleeGenerateExportHeader)
+include(GenerateExportHeader)
 
 # create coverage build type
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
@@ -67,7 +67,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   endif ()
 
   if (NOT MINGW)
-    grantlee_enable_gcc_hidden_visibility()
+    add_compiler_export_flags()
   endif ()
 endif()
 
