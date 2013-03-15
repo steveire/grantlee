@@ -129,10 +129,10 @@ configure_file(
   @ONLY
 )
 
-configure_file(
-  "${Grantlee_MODULE_DIR}/GrantleeConfigVersion.cmake.in"
-  "${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
-  @ONLY
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file("${Grantlee_BINARY_DIR}/GrantleeConfigVersion.cmake"
+  VERSION ${Grantlee_VERSION_STRING}
+  COMPATIBILITY AnyNewerVersion
 )
 
 install(FILES
