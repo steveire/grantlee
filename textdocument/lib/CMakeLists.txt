@@ -23,8 +23,7 @@ set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
 )
 
 target_link_libraries(grantlee_gui
-  ${QT_QTCORE_LIBRARY}
-  ${QT_QTGUI_LIBRARY}
+  LINK_PUBLIC Qt4::QtGui Qt4::QtCore
 )
 
 if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
