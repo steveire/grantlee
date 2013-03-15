@@ -317,7 +317,7 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
 
     if ( plugin ) {
 #ifdef __COVERAGESCANNER__
-      __coveragescanner_register_library(pluginPath.toAscii().data());
+      __coveragescanner_register_library(pluginPath.toLatin1().data());
 #endif
       m_libraries.insert( name, plugin );
       return plugin;

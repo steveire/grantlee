@@ -17,13 +17,13 @@ void CoverageObject::init()
 QString CoverageObject::generateTestName() const
 {
   QString test_name;
-  test_name+=QString::fromAscii(metaObject()->className());
-  test_name+=QString::fromAscii("/");
-  test_name+=QString::fromAscii(QTest::currentTestFunction());
+  test_name+=QString::fromLatin1(metaObject()->className());
+  test_name+=QString::fromLatin1("/");
+  test_name+=QString::fromLatin1(QTest::currentTestFunction());
   if (QTest::currentDataTag())
   {
-    test_name+=QString::fromAscii("/");
-    test_name+=QString::fromAscii(QTest::currentDataTag());
+    test_name+=QString::fromLatin1("/");
+    test_name+=QString::fromLatin1(QTest::currentDataTag());
   }
   return test_name;
 }
