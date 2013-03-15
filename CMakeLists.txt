@@ -142,7 +142,6 @@ install(FILES
 
 install(FILES
   "${Grantlee_MODULE_DIR}/GrantleeUse.cmake"
-  "${Grantlee_MODULE_DIR}/GrantleeParseArguments.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Common
 )
