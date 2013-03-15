@@ -10,8 +10,6 @@ set (grantlee_textdocument_SRCS
 
 set(Grantlee_TEXTDOCUMENT_LIB_SOVERSION 0)
 
-qt4_automoc(${grantlee_textdocument_SRCS})
-
 add_library(grantlee_gui SHARED
   ${grantlee_textdocument_SRCS}
 )

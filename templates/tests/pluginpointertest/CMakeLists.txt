@@ -11,8 +11,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/../../coreli
 set(myplugin_headers myobject.h)
 set(myplugin_sources myobject.cpp)
 
-qt4_wrap_cpp(_plugin_moc_srcs ${myplugin_headers})
-
 add_library(myplugin SHARED ${myplugin_sources} ${_plugin_moc_srcs})
 set_target_properties(myplugin
   PROPERTIES PREFIX ""

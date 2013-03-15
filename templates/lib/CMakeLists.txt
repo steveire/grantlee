@@ -59,10 +59,6 @@ endforeach()
 
 set(Grantlee_TEMPLATES_LIB_SOVERSION 0)
 
-set(moc_SRCS ${grantlee_templates_SRCS} ${scriptabletags_SRCS})
-
-qt4_automoc(${moc_SRCS})
-
 add_library(grantlee_core SHARED
   ${grantlee_templates_SRCS}
   ${scriptabletags_SRCS}

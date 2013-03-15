@@ -85,7 +85,9 @@ add_definitions(-DQT_NO_KEYWORDS)
 
 # Always include the source and build directories in the include path
 # to save doing so manually in every subdirectory.
-SET( CMAKE_INCLUDE_CURRENT_DIR ON )
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 set(Grantlee_VERSION_MAJOR 0)
 set(Grantlee_VERSION_MINOR 4)

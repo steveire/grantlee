@@ -32,7 +32,9 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
     set(_sources ${_sources} ${_filename}.cpp)
   endforeach()
 
-  qt4_wrap_cpp(_plugin_moc_srcs ${_headers})
+  if (NOT CMAKE_AUTOMOC)
+    qt4_wrap_cpp(_plugin_moc_srcs ${_headers})
+  endif()
 
   add_library(${pluginname} MODULE ${_sources} ${_plugin_moc_srcs})
 
