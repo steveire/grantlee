@@ -32,7 +32,7 @@ include(GenerateExportHeader)
 
 # create coverage build type
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
-if (${CMAKE_VERSION} VERSION_GREATER 2.8.2)
+if (${CMAKE_VERSION} VERSION_GREATER 2.8.2 AND CMAKE_GENERATOR STREQUAL "Unix Makefiles")
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
                 "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage" "TestCocoon")
 endif()
