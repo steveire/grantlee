@@ -235,6 +235,8 @@ private Q_SLOTS:
   void testTypeAccessors() {
     doTest();
   }
+  void testTypeAccessorsUnordered_data();
+  void testTypeAccessorsUnordered();
 
   void testMultipleStates();
   void testAlternativeEscaping();
@@ -1016,6 +1018,69 @@ void TestBuiltinSyntax::testMediaPathSafety()
   f.remove();
 }
 
+void TestBuiltinSyntax::testTypeAccessorsUnordered()
+{
+  QFETCH( QString, input );
+  QFETCH( Dict, dict );
+  QFETCH( QStringList, output );
+  QFETCH( Grantlee::Error, error );
+
+  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+
+  Context context( dict );
+
+  QString result = t->render( &context );
+  if ( t->error() != NoError ) {
+    if ( t->error() != error )
+      qDebug() << t->errorString();
+    QCOMPARE( t->error(), error );
+    return;
+  }
+
+  QCOMPARE( t->error(), NoError );
+
+  // Didn't catch any errors, so make sure I didn't expect any.
+  QCOMPARE( NoError, error );
+
+  qDebug() << result << output;
+  Q_FOREACH(const QString &s, output) {
+    QVERIFY( result.contains(s) );
+  }
+
+  QCOMPARE(result.length(), output.join(QString()).length());
+}
+
+void TestBuiltinSyntax::testTypeAccessorsUnordered_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QStringList>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QVariantHash itemsHash;
+  itemsHash.insert( QLatin1String( "one" ), 1 );
+  itemsHash.insert( QLatin1String( "two" ), 2 );
+  itemsHash.insert( QLatin1String( "three" ), 3 );
+
+  dict.insert( QLatin1String( "hash" ), itemsHash );
+
+  QTest::newRow( "type-accessors-hash-unordered01" ) << QString::fromLatin1( "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}" )
+                                      << dict << (QStringList() << QString::fromLatin1("one:1;")
+                                                                << QString::fromLatin1("two:2;")
+                                                                << QString::fromLatin1("three:3;")) << NoError;
+  QTest::newRow( "type-accessors-hash-unordered02" ) << QString::fromLatin1( "{% for key in hash.keys %}{{ key }};{% endfor %}" )
+                                      << dict << (QStringList() << QString::fromLatin1("one;")
+                                                                << QString::fromLatin1("two;")
+                                                                << QString::fromLatin1("three;")) << NoError;
+  QTest::newRow( "type-accessors-hash-unordered03" ) << QString::fromLatin1( "{% for value in hash.values %}{{ value }};{% endfor %}" )
+                                      << dict << (QStringList() << QString::fromLatin1("1;")
+                                                                << QString::fromLatin1("2;")
+                                                                << QString::fromLatin1("3;")) << NoError;
+}
+
+
 void TestBuiltinSyntax::testTypeAccessors_data()
 {
   QTest::addColumn<QString>( "input" );
@@ -1033,14 +1098,8 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   dict.insert( QLatin1String( "hash" ), itemsHash );
 
   QTest::newRow( "type-accessors-hash01" ) << QString::fromLatin1( "{{ hash.items|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
-  QTest::newRow( "type-accessors-hash02" ) << QString::fromLatin1( "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}" )
-                                      << dict << QString::fromLatin1( "one:1;two:2;three:3;" ) << NoError;
-  QTest::newRow( "type-accessors-hash03" ) << QString::fromLatin1( "{{ hash.keys|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
-  QTest::newRow( "type-accessors-hash04" ) << QString::fromLatin1( "{% for key in hash.keys %}{{ key }};{% endfor %}" )
-                                      << dict << QString::fromLatin1( "one;two;three;" ) << NoError;
-  QTest::newRow( "type-accessors-hash05" ) << QString::fromLatin1( "{{ hash.values|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
-  QTest::newRow( "type-accessors-hash06" ) << QString::fromLatin1( "{% for value in hash.values %}{{ value }};{% endfor %}" )
-                                      << dict << QString::fromLatin1( "1;2;3;" ) << NoError;
+  QTest::newRow( "type-accessors-hash02" ) << QString::fromLatin1( "{{ hash.keys|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
+  QTest::newRow( "type-accessors-hash03" ) << QString::fromLatin1( "{{ hash.values|length }}" ) << dict << QString::fromLatin1( "3" ) << NoError;
 
   dict.clear();
   dict.insert( QLatin1String( "str1" ), QLatin1String( "my string" ) );
