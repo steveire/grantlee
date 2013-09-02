@@ -28,7 +28,6 @@ add_executable(contacts_linguist
 
 target_link_libraries(
   contacts_linguist
-  Qt4::QtGui
   Qt4::QtWebKit
   ${Grantlee_TEMPLATES_LIBRARIES}
 )

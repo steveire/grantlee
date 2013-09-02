@@ -76,6 +76,7 @@ add_library(template_test_builtins STATIC coverageobject.cpp
   coverageobject.cpp
   ${_testresource_rcc_src}
 )
+target_link_libraries(template_test_builtins Qt4::QtTest)
 
 macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
   foreach(_testname ${ARGN})
@@ -83,7 +84,7 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
                   ${_testname}.cpp
     )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec Qt4::QtTest grantlee_core template_test_builtins)
+    target_link_libraries(${_testname}_exec grantlee_core template_test_builtins)
 
     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)

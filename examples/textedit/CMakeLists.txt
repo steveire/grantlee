@@ -56,8 +56,6 @@ add_executable(textedit
 
 target_link_libraries(
   textedit
-  Qt4::QtCore
-  Qt4::QtGui
   Qt4::QtWebKit
   Qt4::phonon
   ${Grantlee_TEMPLATES_LIBRARIES}

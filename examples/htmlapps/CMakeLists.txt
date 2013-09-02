@@ -41,8 +41,5 @@ add_executable(htmlapps
 
 target_link_libraries(htmlapps
   ${Grantlee_TEMPLATES_LIBRARIES}
-  Qt4::QtCore
-  Qt4::QtGui
   Qt4::QtWebKit
-  Qt4::QtNetwork
 )

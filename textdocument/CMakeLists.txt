@@ -1,5 +1,5 @@
 
-find_package(Qt4 4.5.0 REQUIRED QtCore QtGui)
+find_package(Qt4 4.5.0 REQUIRED QtGui)
 
 include(${QT_USE_FILE})
 
