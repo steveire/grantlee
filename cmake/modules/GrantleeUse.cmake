@@ -53,4 +53,4 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
   target_link_libraries(${pluginname}
     grantlee_core
   )
-endmacro(GRANTLEE_ADD_PLUGIN)
+endmacro()
