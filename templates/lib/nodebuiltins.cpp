@@ -40,4 +40,4 @@ void VariableNode::render( OutputStream *stream, Context *c )
   streamValueInContext( stream, v, c );
 }
 
-#include "nodebuiltins_p.moc"
+#include "moc_nodebuiltins_p.cpp"

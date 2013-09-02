@@ -87,7 +87,6 @@ add_definitions(-DQT_NO_KEYWORDS)
 # to save doing so manually in every subdirectory.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 set(Grantlee_VERSION_MAJOR 0)
 set(Grantlee_VERSION_MINOR 4)

@@ -100,5 +100,5 @@ QSize ComboBoxDelegate::sizeHint(const QStyleOptionViewItem& option, const QMode
 }
 
 
-#include "comboboxdelegate.moc"
-#include "comboboxdelegate_p.moc"
+#include "moc_comboboxdelegate.cpp"
+#include "moc_comboboxdelegate_p.cpp"
