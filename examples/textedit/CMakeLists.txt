@@ -2,7 +2,6 @@ project(textedit_grantlee)
 
 cmake_minimum_required(VERSION 2.6)
 
-find_package(Qt4 REQUIRED)
 find_package(Grantlee REQUIRED)
 
 add_definitions(${QT_DEFINITIONS})

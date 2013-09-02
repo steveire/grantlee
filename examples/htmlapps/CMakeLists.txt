@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.6)
 
 project(htmlapps)
 
-find_package(Qt4 REQUIRED)
 find_package(Grantlee REQUIRED)
 
 include(${Grantlee_USE_FILE})
