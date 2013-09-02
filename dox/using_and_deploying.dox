@@ -40,7 +40,7 @@ namespace Grantlee
 
     target_link_libraries(
       my_application
-      ${QT_QTGUI_LIBRARIES}
+      Qt4::QtGui
       ${Grantlee_CORE_LIBRARIES}
     )
   @endcode

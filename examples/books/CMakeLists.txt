@@ -10,8 +10,6 @@ ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
 
 include_directories(
   ${QT_INCLUDES}
-  ${QT_QTGUI_INCLUDE_DIR}
-  ${QT_QTSQL_INCLUDE_DIR}
   ${Grantlee_INCLUDE_DIRS}
   ${PROJECT_BINARY_DIR}
 )
@@ -50,8 +48,8 @@ add_executable(books
 
 target_link_libraries(
   books
-  ${QT_QTGUI_LIBRARIES}
-  ${QT_QTSQL_LIBRARIES}
+  Qt4::QtGui
+  Qt4::QtSql
   ${Grantlee_CORE_LIBRARIES}
 )
 

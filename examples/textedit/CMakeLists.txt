@@ -58,10 +58,10 @@ add_executable(textedit
 
 target_link_libraries(
   textedit
-  ${QT_QTCORE_LIBRARIES}
-  ${QT_QTGUI_LIBRARIES}
-  ${QT_QTWEBKIT_LIBRARIES}
-  ${QT_PHONON_LIBRARIES}
+  Qt4::QtCore
+  Qt4::QtGui
+  Qt4::QtWebKit
+  Qt4::phonon
   ${Grantlee_CORE_LIBRARIES}
 )
 

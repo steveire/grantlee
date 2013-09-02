@@ -16,10 +16,10 @@ set_target_properties(myplugin
   PROPERTIES PREFIX ""
 )
 target_link_libraries(myplugin
-  ${QT_QTCORE_LIBRARIES}
+  Qt4::QtCore
 )
 
 add_executable(main_app main.cpp ${myplugin_sources} ${_plugin_moc_srcs})
 target_link_libraries(main_app
-  ${QT_QTCORE_LIBRARIES}
+  Qt4::QtCore
 )

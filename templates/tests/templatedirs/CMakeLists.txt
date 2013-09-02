@@ -30,7 +30,7 @@ add_executable(template_dirs_test
 
 target_link_libraries(
   template_dirs_test
-  ${QT_QTCORE_LIBRARIES}
+  Qt4::QtCore
   ${Grantlee_TEMPLATES_LIBRARIES}
 )
 

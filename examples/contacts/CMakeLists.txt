@@ -9,8 +9,6 @@ add_definitions(-DQT_NO_KEYWORDS)
 
 include_directories(
   ${QT_INCLUDES}
-  ${QT_QTGUI_INCLUDE_DIR}
-  ${QT_QTSQL_INCLUDE_DIR}
   ${Grantlee_INCLUDE_DIRS}
   ${PROJECT_BINARY_DIR}
 )
@@ -31,8 +29,8 @@ add_executable(contacts_linguist
 
 target_link_libraries(
   contacts_linguist
-  ${QT_QTGUI_LIBRARIES}
-  ${QT_QTWEBKIT_LIBRARIES}
+  Qt4::QtGui
+  Qt4::QtWebKit
   ${Grantlee_CORE_LIBRARIES}
 )
 
@@ -83,8 +81,8 @@ if (KDE4_FOUND)
 
   target_link_libraries(
     contacts_kde
-    ${QT_QTGUI_LIBRARIES}
-    ${QT_QTWEBKIT_LIBRARIES}
+    Qt4::QtGui
+    Qt4::QtWebKit
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
 

@@ -32,8 +32,8 @@ grantlee_add_plugin(customplugin
 
 target_link_libraries(customplugin
   ${Grantlee_CORE_LIBRARIES}
-  ${QT_QTXMLPATTERNS_LIBRARIES}
-  ${QT_QTNETWORK_LIBRARIES}
+  Qt4::QtXmlPatterns
+  Qt4::QtNetwork
 )
 
 add_executable(htmlapps
@@ -42,8 +42,8 @@ add_executable(htmlapps
 
 target_link_libraries(htmlapps
   ${Grantlee_TEMPLATES_LIBRARIES}
-  ${QT_QTCORE_LIBRARIES}
-  ${QT_QTGUI_LIBRARIES}
-  ${QT_QTWEBKIT_LIBRARIES}
-  ${QT_QTNETWORK_LIBRARIES}
+  Qt4::QtCore
+  Qt4::QtGui
+  Qt4::QtWebKit
+  Qt4::QtNetwork
 )

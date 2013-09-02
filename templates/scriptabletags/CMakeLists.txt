@@ -15,7 +15,7 @@ grantlee_add_plugin(grantlee_scriptabletags
 )
 
 target_link_libraries(grantlee_scriptabletags
-  ${QT_QTSCRIPT_LIBRARY}
+  Qt4::QtScript
 )
 
 install(TARGETS grantlee_scriptabletags
