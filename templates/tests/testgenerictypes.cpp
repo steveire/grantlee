@@ -775,8 +775,7 @@ void TestGenericTypes::testUnregistered()
     QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
     QVERIFY( !result.isValid() );
 
-    QVariantList resultList = Grantlee::MetaType::toVariantList( v );
-    QVERIFY( resultList.isEmpty() );
+    QVERIFY( !v.canConvert<QVariantList>() );
   }
 
   Grantlee::registerMetaType<RegisteredNotListType>();
@@ -786,8 +785,7 @@ void TestGenericTypes::testUnregistered()
     QVariant v = QVariant::fromValue( nonListType );
     QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
     QVERIFY( result.isValid() );
-    QVariantList resultList = Grantlee::MetaType::toVariantList( v );
-    QVERIFY( resultList.isEmpty() );
+    QVERIFY( !v.canConvert<QVariantList>() );
   }
 
   {

@@ -22,6 +22,7 @@
 
 #include "../lib/exception.h"
 #include "parser.h"
+#include "metaenumvariable_p.h"
 
 ForNodeFactory::ForNodeFactory()
 {
@@ -195,27 +196,48 @@ void ForNode::render( OutputStream *stream, Context *c )
 //     return result;
 //   }
 
-  // If it's an iterable type, iterate, otherwise it's a list of one.
-  QVariantList varList = m_filterExpression.toList( c );
-  NodeList nodeList;
-  int listSize = varList.size();
+  QVariant varFE = m_filterExpression.resolve( c );
 
+  if (varFE.userType() == qMetaTypeId<MetaEnumVariable>())
+  {
+    const MetaEnumVariable mev = varFE.value<MetaEnumVariable>();
+
+    if ( mev.value != -1 ) {
+      c->pop();
+      return m_emptyNodeList.render( stream, c );
+    }
+
+    QVariantList list;
+    for ( int row = 0; row < mev.enumerator.keyCount(); ++row ) {
+      list << QVariant::fromValue( MetaEnumVariable( mev.enumerator, row ) );
+    }
+    varFE = list;
+  }
+
+  if (!varFE.canConvert<QVariantList>()) {
+    c->pop();
+    return m_emptyNodeList.render( stream, c );
+  }
+
+  QSequentialIterable iter = varFE.value<QSequentialIterable>();
+  const int listSize = iter.size();
+
+  // If it's an iterable type, iterate, otherwise it's a list of one.
   if ( listSize < 1 ) {
     c->pop();
     return m_emptyNodeList.render( stream, c );
   }
 
-  for ( int i = 0; i < listSize; i++ ) {
+  int i = 0;
+  for (QSequentialIterable::const_iterator it = m_isReversed == IsReversed ? iter.end() -1 : iter.begin();
+       m_isReversed == IsReversed ? it != iter.begin() - 1: it != iter.end();
+       m_isReversed == IsReversed ? --it : ++it) {
+    const QVariant v = *it;
     insertLoopVariables( c, listSize, i );
 
-    int index = i;
-    if ( m_isReversed == IsReversed ) {
-      index = listSize - i - 1;
-    }
-
     if ( unpack ) {
-      if ( varList[index].type() == QVariant::List ) {
-        QVariantList vList = varList[index].toList();
+      if ( v.type() == QVariant::List ) {
+        QVariantList vList = v.toList();
         int varsSize = qMin( m_loopVars.size(), vList.size() );
         int j = 0;
         for ( ; j < varsSize; ++j ) {
@@ -233,16 +255,17 @@ void ForNode::render( OutputStream *stream, Context *c )
         // Probably have a list of objects that we're taking properties from.
         Q_FOREACH( const QString &loopVar, m_loopVars ) {
           c->push();
-          c->insert( QLatin1String( "var" ), varList[index] );
+          c->insert( QLatin1String( "var" ), v );
           QVariant v = FilterExpression( QLatin1String( "var." ) + loopVar, 0 ).resolve( c );
           c->pop();
           c->insert( loopVar, v );
         }
       }
     } else {
-      c->insert( m_loopVars[0], varList[index] );
+      c->insert( m_loopVars[0], v );
     }
     renderLoop( stream, c );
+    ++i;
   }
   c->pop();
 }

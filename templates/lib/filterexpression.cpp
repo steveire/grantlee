@@ -257,7 +257,9 @@ QVariant FilterExpression::resolve( Context *c ) const
 QVariantList FilterExpression::toList( Context *c ) const
 {
   const QVariant var = resolve( c );
-  return MetaType::toVariantList( var );
+  if (!var.canConvert<QVariantList>())
+    return QVariantList();
+  return var.value<QVariantList>();
 }
 
 bool FilterExpression::isTrue( Context *c ) const

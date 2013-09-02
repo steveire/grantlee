@@ -61,12 +61,78 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
   if (object.canConvert<QObject*>()) {
     return doQobjectLookUp(object.value<QObject*>(), property);
   }
+  if (object.canConvert<QVariantList>()) {
+    QSequentialIterable iter = object.value<QSequentialIterable>();
+    if (property == QLatin1String("size") || property == QLatin1String( "count" ) ) {
+      return iter.size();
+    }
+
+    bool ok = false;
+    const int listIndex = property.toInt( &ok );
+
+    if ( !ok || listIndex >= iter.size() ) {
+      return QVariant();
+    }
+
+    return iter.at(listIndex);
+  }
+  if (object.canConvert<QVariantHash>()) {
+
+    QAssociativeIterable iter = object.value<QAssociativeIterable>();
+
+    QVariant mappedValue = iter.value(property);
+    if(mappedValue.isValid())
+      return mappedValue;
+
+    if (property == QLatin1String("size") || property == QLatin1String( "count" ) )
+    {
+      return iter.size();
+    }
+
+    if ( property == QLatin1String( "items" ) ) {
+      QAssociativeIterable::const_iterator it = iter.begin();
+      const QAssociativeIterable::const_iterator end = iter.end();
+      QVariantList list;
+      for ( ; it != end; ++it ) {
+        QVariantList nested;
+        nested.push_back( it.key() );
+        nested.push_back( it.value() );
+        list.push_back( nested );
+      }
+      return list;
+    }
+
+    if ( property == QLatin1String( "keys" ) ) {
+      QAssociativeIterable::const_iterator it = iter.begin();
+      const QAssociativeIterable::const_iterator end = iter.end();
+      QVariantList list;
+      for ( ; it != end; ++it ) {
+        list.push_back( it.key() );
+      }
+      return list;
+    }
+
+    if ( property == QLatin1String( "values" ) ) {
+      QAssociativeIterable::const_iterator it = iter.begin();
+      const QAssociativeIterable::const_iterator end = iter.end();
+      QVariantList list;
+      for ( ; it != end; ++it ) {
+        list.push_back( it.value() );
+      }
+      return list;
+    }
+
+    return QVariant();
+  }
   return customTypes()->lookup( object, property );
 }
 
-QVariantList Grantlee::MetaType::toVariantList( const QVariant &obj )
+QVariantList Grantlee::MetaType::toVariantList( const QVariant &object )
 {
-  return customTypes()->toVariantList( obj );
+  if (object.canConvert<QVariantList>())
+    return object.value<QVariantList>();
+
+  return customTypes()->toVariantList( object );
 }
 
 bool Grantlee::MetaType::lookupAlreadyRegistered( int id )
