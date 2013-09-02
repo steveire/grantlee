@@ -1,6 +1,6 @@
 project(contacts_grantlee)
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.11)
 
 find_package(Grantlee REQUIRED)
 

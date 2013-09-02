@@ -25,7 +25,7 @@ namespace Grantlee
   @code
     project(my_application)
 
-    cmake_minimum_required(VERSION 2.8.9)
+    cmake_minimum_required(VERSION 2.8.11)
 
     find_package(Qt4 REQUIRED)
     find_package(Grantlee REQUIRED)
