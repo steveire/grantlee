@@ -201,11 +201,11 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
   uint minorVersion = GRANTLEE_VERSION_MINOR;
   while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION ) {
     TagLibraryInterface* library = d->loadLibrary( name, minorVersion );
+    if ( library )
+      return library;
     if (minorVersion == 0)
       break;
     minorVersion--;
-    if ( library )
-      return library;
   }
   throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Plugin library '%1' not found." ).arg( name ) );
   return 0;
