@@ -150,8 +150,6 @@ void TestGenericTypes::initTestCase()
   // Register the handler for our custom type
   Grantlee::registerMetaType<Person>();
 #ifndef GRANTLEE_NO_TR1
-  GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF( QtUnorderedMap, Person )
-  GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF( ThreeArray, Person )
   Grantlee::registerMetaType<std::tr1::shared_ptr<PersonObject> >();
 #endif
   Grantlee::registerMetaType<QSharedPointer<PersonObject> >();

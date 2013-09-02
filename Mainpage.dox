@@ -51,6 +51,7 @@ namespace Grantlee
       - @ref internals
       - @ref generic_types_and_templates
       - @ref i18n_l10n
+      - @ref porting_from_qt4
     </td></tr>
       <tr><th class="library" colspan="3">%Grantlee TextDocument</th></tr>
     <tr><td colspan="2">

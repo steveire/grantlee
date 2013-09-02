@@ -55,7 +55,6 @@ namespace Grantlee
 
     void someInitializer()
     {
-      GRANTLEE_METATYPE_INITIALIZE
       // Register the Person type with the %Grantlee introspection system.
       Grantlee::registerMetaType<Person>();
     }
@@ -100,7 +99,6 @@ namespace Grantlee
   @li All containers are supported. (See @ref generic_containers)
   @li The GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros help to define the introspection of the type. Between them is the definition of a method with the signature QVariant getProperty(const Type &object, const QString &property).
   @li Grantlee::registerMetaType must be called at some point in the program before attempting to use the type in a Context.
-  @li If no custom type is registered with registerMetaType, then GRANTLEE_METATYPE_INITIALIZE must be used at some point to use the metatype system.
   @li The Context is created and used as normal.
 
   @section generic_containers Generic container support
@@ -201,7 +199,6 @@ namespace Grantlee
 
     void someInitializer()
     {
-      GRANTLEE_METATYPE_INITIALIZE
       // QObject* already has built in support. No need to register the types
       // with Grantlee::registerMetaType
     }

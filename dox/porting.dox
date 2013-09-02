@@ -1,0 +1,21 @@
+
+namespace Grantlee
+{
+
+/**
+
+  @page porting_from_qt4 Porting from Qt4-based Grantlee
+
+  Several porting steps are necessary when porting code from %Grantlee 0.5 to
+  %Grantlee 5.0.
+
+  @section cpp_porting C++ porting
+
+  @subsection initialize_removed GRANTLEE_METATYPE_INITIALIZE macro removed
+
+  User code should simply remove the use of the macro.
+
+*/
+
+}
+

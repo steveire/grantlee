@@ -286,7 +286,6 @@ void cleanupAssociative( Container c )
 
 void testContainer( const QString &stringTemplate, const QVariant &containerVariant, const QStringList &expectedResults, bool unordered )
 {
-  GRANTLEE_METATYPE_INITIALIZE
   Grantlee::Engine engine;
 
   engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
