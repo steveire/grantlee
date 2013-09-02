@@ -5,7 +5,6 @@ cmake_minimum_required(VERSION 2.6)
 find_package(Grantlee REQUIRED)
 
 add_definitions(${QT_DEFINITIONS})
-add_definitions(-DQT_GUI_LIB)
 add_definitions(-DQT_NO_KEYWORDS)
 
 include_directories(
