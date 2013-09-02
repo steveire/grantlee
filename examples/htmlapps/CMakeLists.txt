@@ -7,8 +7,6 @@ find_package(Grantlee REQUIRED)
 
 include(${Grantlee_USE_FILE})
 
-add_definitions(${QT_DEFINITIONS})
-
 include_directories(
   ${QT_INCLUDES}
   ${PROJECT_BINARY_DIR}
