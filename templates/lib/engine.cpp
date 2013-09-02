@@ -177,7 +177,10 @@ void Engine::loadDefaultLibraries()
         break;
       }
 
-      PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( libName, minorVersion-- );
+      PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( libName, minorVersion );
+      if ( minorVersion == 0)
+        break;
+      minorVersion--;
       if ( library )
         break;
     }
@@ -197,7 +200,10 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 
   uint minorVersion = GRANTLEE_VERSION_MINOR;
   while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION ) {
-    TagLibraryInterface* library = d->loadLibrary( name, minorVersion-- );
+    TagLibraryInterface* library = d->loadLibrary( name, minorVersion );
+    if (minorVersion == 0)
+      break;
+    minorVersion--;
     if ( library )
       return library;
   }
