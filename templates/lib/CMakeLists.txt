@@ -57,7 +57,7 @@ foreach(file ${scriptabletags_FILES})
   list(APPEND scriptabletags_SRCS ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
 endforeach()
 
-set(Grantlee_TEMPLATES_LIB_SOVERSION 0)
+set(Grantlee_TEMPLATES_LIB_SOVERSION ${Grantlee_VERSION_MAJOR})
 
 add_library(grantlee_core SHARED
   ${grantlee_templates_SRCS}

@@ -8,7 +8,7 @@ set (grantlee_textdocument_SRCS
   mediawikimarkupbuilder.cpp
 )
 
-set(Grantlee_TEXTDOCUMENT_LIB_SOVERSION 0)
+set(Grantlee_TEXTDOCUMENT_LIB_SOVERSION ${Grantlee_VERSION_MAJOR})
 
 add_library(grantlee_gui SHARED
   ${grantlee_textdocument_SRCS}
