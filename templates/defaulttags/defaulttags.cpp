@@ -19,7 +19,3 @@
 */
 
 #include "defaulttags.h"
-
-#include "grantlee_export_plugin_p.h"
-
-GRANTLEE_EXPORT_PLUGIN( grantlee_defaulttags_library, DefaultTagLibrary )

@@ -37,7 +37,3 @@ int MyObject::double_it( int input )
 {
   return input * 2;
 }
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-Q_EXPORT_PLUGIN2( myplugin, MyObject )
-#endif

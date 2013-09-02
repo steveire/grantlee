@@ -196,7 +196,3 @@ void ScriptableTagLibrary::addFilter( const QString &filterName )
 {
   m_filterNames << filterName;
 }
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-Q_EXPORT_PLUGIN2( grantlee_scriptabletags_library, ScriptableTagLibrary )
-#endif

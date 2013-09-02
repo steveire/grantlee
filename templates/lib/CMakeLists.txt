@@ -61,7 +61,6 @@ set(header_only_sources
   exception.h
   filter.h
   grantlee_core.h
-  grantlee_export_plugin_p.h
   grantlee_latin1literal_p.h
   grantlee_tags_p.h
   grantlee_templates.h

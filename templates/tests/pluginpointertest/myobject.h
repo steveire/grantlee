@@ -24,10 +24,6 @@
 #include <QtCore/QObject>
 #include "myinterface.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-#define Q_PLUGIN_METADATA(p)
-#endif
-
 class MyObject : public QObject, public MyInterface
 {
   Q_OBJECT
