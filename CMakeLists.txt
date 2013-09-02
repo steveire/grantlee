@@ -158,7 +158,7 @@ install(EXPORT grantlee_targets
 configure_file(
   "${Grantlee_MODULE_DIR}/cmake_uninstall.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-  IMMEDIATE @ONLY)
+  @ONLY)
 
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P
