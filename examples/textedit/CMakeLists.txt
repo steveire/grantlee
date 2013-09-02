@@ -4,8 +4,6 @@ cmake_minimum_required(VERSION 2.6)
 
 find_package(Grantlee REQUIRED)
 
-add_definitions(-DQT_NO_KEYWORDS)
-
 include(${Grantlee_USE_FILE})
 
 include_directories(
