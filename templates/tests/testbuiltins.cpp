@@ -1042,7 +1042,6 @@ void TestBuiltinSyntax::testTypeAccessorsUnordered()
   // Didn't catch any errors, so make sure I didn't expect any.
   QCOMPARE( NoError, error );
 
-  qDebug() << result << output;
   Q_FOREACH(const QString &s, output) {
     QVERIFY( result.contains(s) );
   }
