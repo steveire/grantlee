@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.8.9)
 find_package(Grantlee REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
 
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_GUI_LIB)
@@ -30,8 +31,6 @@ set(books_example_RCSS
 set(books_example_UI
   bookwindow.ui
 )
-
-qt4_automoc( books_example_MOC_SRCS ${books_example_SRCS} )
 
 QT4_WRAP_UI(books_example_UI_SRCS ${books_example_UI})
 

@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.8.9)
 find_package(Grantlee REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
 
 include(${Grantlee_USE_FILE})
 
@@ -37,8 +38,6 @@ set(textedit_example_SRCS
   audioobject.cpp
   textedit.cpp
 )
-
-qt4_automoc( textedit_example_MOC_SRCS ${textedit_example_SRCS} )
 
 set(textedit_example_RCSS
   textedit.qrc

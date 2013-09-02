@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.8.9)
 find_package(Grantlee REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
 
 add_definitions(${QT_DEFINITIONS})
 
@@ -24,8 +25,6 @@ set(codegen_example_SRCS
   propertytablewidget.cpp
   mainwindow.cpp
 )
-
-qt4_automoc( codegen_example_MOC_SRCS ${codegen_example_SRCS} )
 
 set(codegen_example_RCSS
   codegen.qrc

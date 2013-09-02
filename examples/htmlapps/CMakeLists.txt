@@ -6,6 +6,7 @@ project(htmlapps)
 find_package(Grantlee REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
 
 include(${Grantlee_USE_FILE})
 
@@ -21,8 +22,6 @@ set(htmlapps_SRCS
   localrequestmanager.cpp
   templatereply.cpp
 )
-
-qt4_automoc( htmlapps_MOC_SRCS ${htmlapps_SRCS} )
 
 grantlee_add_plugin(customplugin
   customplugin

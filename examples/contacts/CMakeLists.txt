@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.8.9)
 find_package(Grantlee REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
 
 add_definitions(${QT_DEFINITIONS})
 
@@ -19,8 +20,6 @@ set(contacts_example_SRCS
   mainwindow.cpp
   contact.cpp
 )
-
-qt4_automoc( contacts_example_MOC_SRCS ${contacts_example_SRCS} )
 
 add_executable(contacts_linguist
   main_linguist.cpp
