@@ -23,7 +23,15 @@
 #ifndef GRANTLEE_EXPORT_PLUGIN_H
 #define GRANTLEE_EXPORT_PLUGIN_H
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+
 #define GRANTLEE_EXPORT_PLUGIN(PLUGIN, PLUGINCLASS)                 \
   Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)                             \
+
+#else
+
+#define GRANTLEE_EXPORT_PLUGIN(PLUGIN, PLUGINCLASS)
+
+#endif
 
 #endif

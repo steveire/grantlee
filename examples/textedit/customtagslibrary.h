@@ -32,6 +32,7 @@ class CustomTagsLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
   Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
   CustomTagsLibrary( QObject *parent = 0 )
       : QObject( parent ) {
