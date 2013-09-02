@@ -30,6 +30,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QStack>
 #include <QtCore/QQueue>
+#include <QtCore/QDateTime>
 
 #include <deque>
 #include <list>
