@@ -6,7 +6,6 @@ find_package(Qt4 REQUIRED)
 find_package(Grantlee REQUIRED)
 
 add_definitions(${QT_DEFINITIONS})
-ADD_DEFINITIONS(-DQT_NO_KEYWORDS)
 
 include_directories(
   ${QT_INCLUDES}
