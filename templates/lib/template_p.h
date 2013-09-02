@@ -24,9 +24,7 @@
 #include "engine.h"
 #include "template.h"
 
-#if QT_VERSION < 0x040600 || QT_VERSION > 0x050000
 #include <QtCore/QPointer>
-#endif
 
 namespace Grantlee
 {
@@ -37,13 +35,8 @@ class TemplatePrivate
 {
   TemplatePrivate( Engine const *engine, bool smartTrim, TemplateImpl *t )
       : q_ptr( t ), m_error( NoError ), m_smartTrim( smartTrim )
-#if QT_VERSION >= 0x040600 || QT_VERSION >= 0x050000
       , m_engine( engine )
-#endif
   {
-#if QT_VERSION < 0x040600
-    m_engine = const_cast<Engine *>( engine );
-#endif
   }
 
   void parse();
@@ -57,15 +50,7 @@ class TemplatePrivate
   QString m_errorString;
   NodeList m_nodeList;
   bool m_smartTrim;
-#if QT_VERSION < 0x040600 || QT_VERSION >= 0x050000
-  QPointer<Engine
-#if QT_VERSION >= 0x050000
-  const
-#endif
-  > m_engine;
-#else
-  QWeakPointer<Engine const> m_engine;
-#endif
+  QPointer<const Engine> m_engine;
 
   friend class Grantlee::Engine;
   friend class Parser;
