@@ -29,6 +29,8 @@ set(Grantlee_MODULE_DIR ${Grantlee_SOURCE_DIR}/cmake/modules)
 set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
 include(GenerateExportHeader)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 # create coverage build type
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
@@ -64,10 +66,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   if (NOT APPLE)
     set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
     set ( CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined ${CMAKE_MODULE_LINKER_FLAGS}")
-  endif ()
-
-  if (NOT MINGW)
-    add_compiler_export_flags()
   endif ()
 endif()
 
