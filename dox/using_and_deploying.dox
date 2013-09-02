@@ -27,14 +27,10 @@ namespace Grantlee
 
     cmake_minimum_required(VERSION 2.8.11)
 
-    find_package(Qt4 REQUIRED)
-    find_package(Grantlee REQUIRED)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-    include_directories(
-      ${QT_INCLUDES}
-      ${Grantlee_INCLUDE_DIRS}
-      ${PROJECT_BINARY_DIR} # Usually this is needed to find moc files.
-    )
+    find_package(Grantlee REQUIRED)
 
     # ... Application sources etc.
 
