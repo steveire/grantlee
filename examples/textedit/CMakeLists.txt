@@ -9,12 +9,6 @@ set(CMAKE_AUTOMOC ON)
 
 include(${Grantlee_USE_FILE})
 
-include_directories(
-  ${QT_INCLUDES}
-  ${QT_QTGUI_INCLUDE_DIR}
-  ${Grantlee_INCLUDE_DIRS}
-)
-
 ## Grantlee plugin
 
 grantlee_add_plugin(customtags

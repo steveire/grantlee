@@ -10,10 +10,6 @@ set(CMAKE_AUTOMOC ON)
 
 include(${Grantlee_USE_FILE})
 
-include_directories(
-  ${QT_INCLUDES}
-)
-
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 set(htmlapps_SRCS

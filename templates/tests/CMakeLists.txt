@@ -1,7 +1,6 @@
 project(grantlee_templates_tests)
 
 find_package(Qt4 4.5.0 REQUIRED QtTest)
-include_directories(${QT_INCLUDES})
 
 #building on Solaris with Sun Studio uses stdcxx which does not have TR1 fully implemented
 #take it from boost

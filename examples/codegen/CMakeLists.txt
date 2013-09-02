@@ -7,13 +7,6 @@ find_package(Grantlee REQUIRED)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-add_definitions(${QT_DEFINITIONS})
-
-include_directories(
-  ${QT_INCLUDES}
-  ${Grantlee_INCLUDE_DIRS}
-)
-
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 set(codegen_example_SRCS

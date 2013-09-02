@@ -3,15 +3,7 @@ project(template_dirs_test)
 cmake_minimum_required(VERSION 2.8.11)
 
 find_package(Grantlee REQUIRED)
-
-add_definitions(${QT_DEFINITIONS})
-
-include_directories(
-  ${QT_INCLUDES}
-  ${QT_QTCORE_INCLUDE_DIR}
-  ${Grantlee_INCLUDE_DIRS}
-  ${PROJECT_BINARY_DIR}
-)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 

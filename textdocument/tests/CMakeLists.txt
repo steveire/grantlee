@@ -1,7 +1,6 @@
 project(grantlee_textdocument_tests)
 
 find_package(Qt4 4.5.0 REQUIRED QtTest)
-include_directories(${QT_INCLUDES})
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
