@@ -71,7 +71,8 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   endif ()
 endif()
 
-add_definitions(-DQT_NO_CAST_TO_ASCII
+add_definitions(
+  -DQT_NO_CAST_TO_ASCII
   -DQT_NO_CAST_FROM_ASCII
   -DQT_STRICT_ITERATORS
   -DQT_NO_URL_CAST_FROM_STRING
