@@ -446,13 +446,7 @@ void TextHTMLBuilder::endTableCell()
 void TextHTMLBuilder::appendLiteralText( const QString &text )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append(
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-              Qt::escape( text )
-#else
-              text.toHtmlEscaped()
-#endif
-              );
+  d->m_text.append( text.toHtmlEscaped() );
 }
 
 void TextHTMLBuilder::appendRawText( const QString &text )
