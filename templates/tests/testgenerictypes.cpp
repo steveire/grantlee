@@ -248,11 +248,72 @@ void testSequentialIndexing( Grantlee::Context c )
   }
 }
 
-template<>
-void testSequentialIndexing<QLinkedList<QVariant> >( Grantlee::Context )
+template<typename Container>
+struct SequentialContainerTester
 {
-  // No op
-}
+  static void iteration(Grantlee::Context c)
+  {
+    testSequentialIteration<Container>(c);
+  }
+
+  static void indexing(Grantlee::Context c)
+  {
+    testSequentialIndexing<Container>(c);
+  }
+};
+
+template<typename T>
+struct SequentialContainerTester<QSet<T> >
+{
+  static void iteration(Grantlee::Context c)
+  {
+    Grantlee::Engine engine;
+
+    engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+
+    Grantlee::Template t1 = engine.newTemplate(
+        QLatin1String( "{% for person in people %}{{ person.name }},{% endfor %}" ),
+        QLatin1String( "people_template" ) );
+    QString result = t1->render( &c );
+    QStringList output;
+    output << QString::fromLatin1("Claire,") << QString::fromLatin1("Grant,") << QString::fromLatin1("Alan,");
+    Q_FOREACH(const QString &s, output) {
+      QVERIFY( result.contains(s) );
+    }
+
+    QCOMPARE(result.length(), output.join(QString()).length());
+  }
+
+  static void indexing(Grantlee::Context)
+  {
+  }
+};
+
+template<typename T>
+struct SequentialContainerTester<QLinkedList<T> >
+{
+  static void iteration(Grantlee::Context c)
+  {
+    testSequentialIteration<QLinkedList<T> >(c);
+  }
+
+  static void indexing(Grantlee::Context)
+  {
+  }
+};
+
+template<typename T>
+struct SequentialContainerTester<std::list<T> >
+{
+  static void iteration(Grantlee::Context c)
+  {
+    testSequentialIteration<std::list<T> >(c);
+  }
+
+  static void indexing(Grantlee::Context)
+  {
+  }
+};
 
 template<typename Container>
 void doTestSequentialContainer_Variant()
@@ -261,8 +322,8 @@ void doTestSequentialContainer_Variant()
 
   insertPeopleVariants<Container>( c );
 
-  testSequentialIteration<Container>( c );
-  testSequentialIndexing<Container>( c );
+  SequentialContainerTester<Container>::iteration( c );
+  SequentialContainerTester<Container>::indexing( c );
 }
 
 template<typename Container>
@@ -404,24 +465,6 @@ void insertAssociatedPeople_Number( Grantlee::Context &c )
   c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
 }
 
-template<>
-void testSequentialIndexing<QLinkedList<Person> >( Grantlee::Context )
-{
-  // No op
-}
-
-template<>
-void testSequentialIndexing<QSet<Person> >( Grantlee::Context )
-{
-  // No op
-}
-
-template<>
-void testSequentialIndexing<std::list<Person> >( Grantlee::Context )
-{
-  // No op
-}
-
 template<typename Container>
 void doTestSequentialContainer_Type()
 {
@@ -429,8 +472,8 @@ void doTestSequentialContainer_Type()
 
   insertPeople<Container>( c );
 
-  testSequentialIteration<Container>( c );
-  testSequentialIndexing<Container>( c );
+  SequentialContainerTester<Container>::iteration( c );
+  SequentialContainerTester<Container>::indexing( c );
 }
 
 template<typename Container>
