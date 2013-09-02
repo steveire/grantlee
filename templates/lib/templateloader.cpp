@@ -207,6 +207,7 @@ LocalizedFileSystemTemplateLoader::~LocalizedFileSystemTemplateLoader()
 {
   Q_FOREACH( const QString &dir, templateDirs() )
     d_ptr->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
+  delete d_ptr;
 }
 
 void LocalizedFileSystemTemplateLoader::setTemplateDirs( const QStringList& dirs )
