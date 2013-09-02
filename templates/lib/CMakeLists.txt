@@ -64,6 +64,7 @@ add_library(grantlee_core SHARED
   ${scriptabletags_SRCS}
 )
 generate_export_header(grantlee_core)
+target_include_directories(grantlee_core PRIVATE ../scriptabletags)
 
 if (BUILD_TESTS)
   set(GRANTLEE_TESTS_EXPORT "GRANTLEE_CORE_EXPORT")
