@@ -91,6 +91,7 @@ install(TARGETS grantlee_core EXPORT grantlee_targets
          RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT Templates
          LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
+         INCLUDES DESTINATION include
 )
 
 install(FILES

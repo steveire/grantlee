@@ -30,6 +30,7 @@ install(TARGETS grantlee_gui EXPORT grantlee_targets
          RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT TextDocument
          LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
+         INCLUDES DESTINATION include
 )
 
 install(FILES
