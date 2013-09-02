@@ -4,12 +4,13 @@ cmake_minimum_required(VERSION 2.6)
 
 find_package(Grantlee REQUIRED)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 include(${Grantlee_USE_FILE})
 
 include_directories(
   ${QT_INCLUDES}
   ${QT_QTGUI_INCLUDE_DIR}
-  ${PROJECT_BINARY_DIR}
   ${Grantlee_INCLUDE_DIRS}
 )
 

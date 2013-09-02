@@ -5,12 +5,12 @@ project(htmlapps)
 
 find_package(Grantlee REQUIRED)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 include(${Grantlee_USE_FILE})
 
 include_directories(
   ${QT_INCLUDES}
-  ${PROJECT_BINARY_DIR}
-  ${PROJECT_SOURCE_DIR}
 )
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
