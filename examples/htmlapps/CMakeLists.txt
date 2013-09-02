@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(htmlapps)
 
-find_package(Grantlee REQUIRED)
+find_package(Grantlee5 REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -24,7 +24,7 @@ grantlee_adjust_plugin_name(customplugin)
 find_package(Qt5 REQUIRED XmlPatterns Network)
 
 target_link_libraries(customplugin
-  Grantlee::Templates
+  Grantlee5::Templates
   Qt5::XmlPatterns
   Qt5::Network
 )

@@ -2,7 +2,7 @@ project(template_dirs_test)
 
 cmake_minimum_required(VERSION 2.8.11)
 
-find_package(Grantlee REQUIRED)
+find_package(Grantlee5 REQUIRED)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)

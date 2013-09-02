@@ -75,7 +75,7 @@ add_library(Grantlee_Templates SHARED
   ${grantlee_templates_SRCS}
   ${scriptabletags_SRCS}
 )
-add_library(Grantlee::Templates ALIAS Grantlee_Templates)
+add_library(Grantlee5::Templates ALIAS Grantlee_Templates)
 generate_export_header(Grantlee_Templates)
 set_property(TARGET Grantlee_Templates PROPERTY EXPORT_NAME Templates)
 target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)

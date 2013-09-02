@@ -2,8 +2,8 @@
 
 # Any changes in this file will be overwritten by CMake.
 
-if (Grantlee_FIND_COMPONENTS)
-  foreach( component ${Grantlee_FIND_COMPONENTS})
+if (Grantlee@Grantlee_VERSION_MAJOR@_FIND_COMPONENTS)
+  foreach( component ${Grantlee@Grantlee_VERSION_MAJOR@_FIND_COMPONENTS})
     if (component STREQUAL "Textdocument")
       set(RequiredQtComponents ${RequiredQtComponents} Gui)
     endif()

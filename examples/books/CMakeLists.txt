@@ -2,7 +2,7 @@ project(books_grantlee)
 
 cmake_minimum_required(VERSION 3.0)
 
-find_package(Grantlee REQUIRED)
+find_package(Grantlee5 REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -29,7 +29,7 @@ add_executable(books
 
 target_link_libraries(
   books
-  Grantlee::Templates
+  Grantlee5::Templates
   Qt5::Widgets
   Qt5::Sql
 

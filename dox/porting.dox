@@ -40,12 +40,28 @@ namespace Grantlee
   Idiomatic use of %Grantlee in the buildsystem is now similar to:
 
   @verbatim
-  find_package(Grantlee REQUIRED)
+  find_package(Grantlee5 REQUIRED)
 
   add_executable(main main.cpp)
   target_link_libraries(main
-    Grantlee::Templates
+    Grantlee5::Templates
   )
+  @endverbatim
+
+  @subsection package_numbered CMake Package name changed
+
+  The previous major release of %Grantlee shipped a CMake package findable
+  with
+
+  @verbatim
+  find_package(Grantlee REQUIRED)
+  @endverbatim
+
+  For %Grantlee 5.0 the package was renamed to include the major version
+  number:
+
+  @verbatim
+  find_package(Grantlee5 REQUIRED)
   @endverbatim
 
   @section cpp_porting C++ porting

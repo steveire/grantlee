@@ -10,7 +10,7 @@ add_library(grantlee_i18ntags MODULE
   with_locale.cpp
 )
 set_property(TARGET grantlee_i18ntags PROPERTY EXPORT_NAME i18ntags)
-target_link_libraries(grantlee_i18ntags Grantlee::Templates)
+target_link_libraries(grantlee_i18ntags Grantlee5::Templates)
 grantlee_adjust_plugin_name(grantlee_i18ntags)
 
 install(TARGETS grantlee_i18ntags EXPORT grantlee_targets

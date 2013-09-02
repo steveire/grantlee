@@ -2,7 +2,7 @@ project(contacts_grantlee)
 
 cmake_minimum_required(VERSION 2.8.11)
 
-find_package(Grantlee REQUIRED)
+find_package(Grantlee5 REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -24,7 +24,7 @@ find_package(Qt5LinguistTools REQUIRED)
 
 target_link_libraries(
   contacts_linguist
-  Grantlee::Templates
+  Grantlee5::Templates
   Qt5::WebKitWidgets
 )
 

@@ -88,7 +88,7 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
                   ${_testname}.cpp
     )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec Grantlee::Templates template_test_builtins)
+    target_link_libraries(${_testname}_exec Grantlee5::Templates template_test_builtins)
 
     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)

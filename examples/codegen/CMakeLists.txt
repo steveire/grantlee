@@ -2,7 +2,7 @@ project(codegen_grantlee)
 
 cmake_minimum_required(VERSION 3.0)
 
-find_package(Grantlee REQUIRED)
+find_package(Grantlee5 REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,7 +19,7 @@ configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 qt5_add_resources(
   codegen_example_RCS_SRCS
   custom_tags.qrc
-  OPTIONS -root "/plugins/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}/"
+  OPTIONS -root "/plugins/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}/"
 )
 
 add_executable(codegen
@@ -39,6 +39,6 @@ find_package(Qt5Widgets REQUIRED)
 
 target_link_libraries(
   codegen
-  Grantlee::Templates
+  Grantlee5::Templates
   Qt5::Widgets
 )

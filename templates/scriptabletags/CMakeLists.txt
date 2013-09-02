@@ -14,7 +14,7 @@ add_library(grantlee_scriptabletags MODULE
 grantlee_adjust_plugin_name(grantlee_scriptabletags)
 
 target_link_libraries(grantlee_scriptabletags
-  Grantlee::Templates
+  Grantlee5::Templates
   Qt4::QtScript
 )
 

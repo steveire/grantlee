@@ -18,7 +18,7 @@ namespace Grantlee
 
   @section finding_with_cmake Finding Grantlee with CMake
 
-  %Grantlee uses the <a href="http://www.cmake.org/">CMake</a> cross platform build system, and installs a cmake file called GrantleeConfig.cmake. This config file is automatically searched for by CMake and contains the information needed for other CMake based applications to find headers and link against %Grantlee libraries.
+  %Grantlee uses the <a href="http://www.cmake.org/">CMake</a> cross platform build system, and installs a cmake file called Grantlee5Config.cmake. This config file is automatically searched for by CMake and contains the information needed for other CMake based applications to find headers and link against %Grantlee libraries.
 
   When creating an application using CMake that depends on %Grantlee, first issue the find_package command, and then use the CMake <tt>target_link_libraries</tt> command link to and use the libraries.
 
@@ -30,14 +30,14 @@ namespace Grantlee
     set(CMAKE_AUTOMOC ON)
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-    find_package(Grantlee REQUIRED)
+    find_package(Grantlee5 REQUIRED)
 
     # ... Application sources etc.
 
     target_link_libraries(
       my_application
       Qt5::Widgets
-      Grantlee::Templates
+      Grantlee5::Templates
     )
   @endcode
 
