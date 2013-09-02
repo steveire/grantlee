@@ -212,32 +212,33 @@ if(LCOV_FOUND)
   get_property(UNITTESTS GLOBAL PROPERTY TEST_COVERAGE)
 
   set(coverageDir ${CMAKE_BINARY_DIR})
+  set(coverage_ARGS)
 
   foreach(_testpath ${UNITTESTS})
-    set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -z -d ${coverageDir})
+    list(APPEND coverage_ARGS COMMAND ${LCOV_EXECUTABLE} -z -d ${coverageDir})
 
     get_filename_component(_test ${_testpath} NAME)
 
-    set(coverage_ARGS ${coverage_ARGS} COMMAND ${_testpath})
-    set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -c -t ${_test} -d ${coverageDir} -o ${CMAKE_BINARY_DIR}/test_${_test}.info)
+    list(APPEND coverage_ARGS COMMAND ${_testpath})
+    list(APPEND coverage_ARGS COMMAND ${LCOV_EXECUTABLE} -c -t ${_test} -d ${coverageDir} -o ${CMAKE_BINARY_DIR}/test_${_test}.info)
     set(infoFiles ${infoFiles} -a ${CMAKE_BINARY_DIR}/test_${_test}.info)
   endforeach()
 
-  set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} ${infoFiles} -o test_all.info)
+  list(APPEND coverage_ARGS COMMAND ${LCOV_EXECUTABLE} ${infoFiles} -o test_all.info)
 
   # For an unknown reason lcov does not work with absolute paths such as ${CMAKE_BINARY_DIR}
   file(RELATIVE_PATH relBinaryDir / ${CMAKE_BINARY_DIR})
   file(RELATIVE_PATH relQtDir / ${QT_HEADERS_DIR})
 
-  set(coverage_ARGS ${coverage_ARGS} COMMAND ${LCOV_EXECUTABLE} -r test_all.info *${relBinaryDir}*
+  list(APPEND coverage_ARGS COMMAND ${LCOV_EXECUTABLE} -r test_all.info *${relBinaryDir}*
                                                                 -r test_all.info *pluginpointer*
                                                                 -r test_all.info *usr/include*
                                                                 -r test_all.info *${relQtDir}*
                                                                 -o test_all.info
   )
 
-  set(coverage_ARGS ${coverage_ARGS} COMMAND ${CMAKE_COMMAND} -E remove_directory coverage)
-  set(coverage_ARGS ${coverage_ARGS} COMMAND ${GENHTML_EXECUTABLE} -o coverage/ -s --demangle-cpp -f test_all.info)
+  list(APPEND coverage_ARGS COMMAND ${CMAKE_COMMAND} -E remove_directory coverage)
+  list(APPEND coverage_ARGS COMMAND ${GENHTML_EXECUTABLE} -o coverage/ -s --demangle-cpp -f test_all.info)
 
   add_custom_target(coverage
     ${coverage_ARGS}
@@ -253,40 +254,40 @@ if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
   set(testcocoon_ARGS)
 
   foreach(_testpath ${UNITTESTS})
-    set(testcocoon_ARGS ${testcocoon_ARGS} COMMAND "${_testpath}")
+    list(APPEND testcocoon_ARGS COMMAND "${_testpath}")
   endforeach()
 
   find_program(TESTCOCOON_CMMERGE_EXECUTABLE cmmerge)
   find_program(TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE cmcsexeimport)
 
-  set(testcocoon_ARGS ${testcocoon_ARGS} COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o unittests.csmes)
+  list(APPEND testcocoon_ARGS COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o unittests.csmes)
   foreach(_testpath ${UNITTESTS})
-    set(testcocoon_ARGS ${testcocoon_ARGS} ${_testpath}.csmes)
+    list(APPEND testcocoon_ARGS ${_testpath}.csmes)
   endforeach()
   set(_plugins "grantlee_defaultfilters" "grantlee_defaulttags" "grantlee_i18ntags" "grantlee_loadertags")
   foreach(_plugin ${_plugins})
-    set(testcocoon_ARGS ${testcocoon_ARGS} "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes")
+    list(APPEND testcocoon_ARGS "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes")
   endforeach()
-  set(testcocoon_ARGS ${testcocoon_ARGS} "${coverageDir}/templates/lib/libgrantlee_core.so.csmes")
+  list(APPEND testcocoon_ARGS "${coverageDir}/templates/lib/libgrantlee_core.so.csmes")
 
-  set(testcocoon_ARGS ${testcocoon_ARGS}
+  list(APPEND testcocoon_ARGS
     COMMAND ${TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE}
     -m unittests.csmes -t "\"--unnamed--\"" -p
     merge -e "${coverageDir}/coverage.csexe"
   )
 
-  set(testcocoon_ARGS ${testcocoon_ARGS}
+  list(APPEND testcocoon_ARGS
     COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_core.so.csmes"
     -i "${coverageDir}/templates/lib/libgrantlee_core.so.csmes" "${coverageDir}/unittests.csmes"
   )
 
-  set(testcocoon_ARGS ${testcocoon_ARGS}
+  list(APPEND testcocoon_ARGS
     COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_gui.so.csmes"
     -i "${coverageDir}/textdocument/lib/libgrantlee_gui.so.csmes" "${coverageDir}/unittests.csmes"
   )
 
   foreach(_plugin ${_plugins})
-    set(testcocoon_ARGS ${testcocoon_ARGS}
+    list(APPEND testcocoon_ARGS
       COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/${_plugin}.so.csmes"
       -i "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes" "${coverageDir}/unittests.csmes"
     )
@@ -295,7 +296,7 @@ if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
   find_program(TESTCOCOON_CMREPORT_EXECUTABLE cmreport)
   set(_csmes_files ${_plugins} "libgrantlee_gui" "libgrantlee_core")
   foreach(_csmes_file ${_csmes_files})
-    set(testcocoon_ARGS ${testcocoon_ARGS}
+    list(APPEND testcocoon_ARGS
       COMMAND echo -n \"${_csmes_file}\" COMMAND ${TESTCOCOON_CMREPORT_EXECUTABLE} -s '.*' -m "${_csmes_file}.so.csmes"
     )
   endforeach()

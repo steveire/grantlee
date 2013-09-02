@@ -54,7 +54,7 @@ set(scriptabletags_FILES
 )
 
 foreach(file ${scriptabletags_FILES})
-  set(scriptabletags_SRCS ${scriptabletags_SRCS} ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
+  list(APPEND scriptabletags_SRCS ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
 endforeach()
 
 set(Grantlee_TEMPLATES_LIB_SOVERSION 0)
@@ -66,7 +66,7 @@ add_library(grantlee_core SHARED
 generate_export_header(grantlee_core)
 
 foreach(file ${grantlee_templates_SRCS})
-  set(grantlee_templates_FULLPATHS ${grantlee_templates_FULLPATHS} ${CMAKE_SOURCE_DIR}/templates/lib/${file})
+  list(APPEND grantlee_templates_FULLPATHS ${CMAKE_SOURCE_DIR}/templates/lib/${file})
 endforeach()
 
 set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
