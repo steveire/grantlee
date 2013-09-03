@@ -20,7 +20,7 @@
 
 #include "rssfeed.h"
 
-#include <grantlee_core.h>
+#include <grantlee_templates.h>
 
 #include "../../templates/lib/grantlee_latin1literal_p.h"
 

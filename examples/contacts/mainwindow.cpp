@@ -30,7 +30,7 @@
 #include <QTimer>
 
 #include "grantlee_paths.h"
-#include "grantlee_core.h"
+#include "grantlee_templates.h"
 
 static const struct {
   const char *name;

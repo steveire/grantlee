@@ -22,7 +22,7 @@
 
 #include <QtGui>
 
-#include <grantlee_core.h>
+#include <grantlee_templates.h>
 
 #include "grantlee_paths.h"
 

@@ -5,7 +5,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtWebKit/QWebView>
 
-#include <grantlee_core.h>
+#include <grantlee_templates.h>
 #include "grantlee_paths.h"
 
 #include "localrequestmanager.h"
