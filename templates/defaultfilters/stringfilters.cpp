@@ -41,7 +41,7 @@ QVariant CapFirstFilter::doFilter( const QVariant& input, const QVariant &argume
   if ( safeString.get().isEmpty() )
     return QString();
 
-  return safeString.get().at( 0 ).toUpper() + safeString.get().right( safeString.get().size() - 1 );
+  return QVariant(safeString.get().at( 0 ).toUpper() + static_cast<QString>(safeString.get().right( safeString.get().size() - 1 )));
 }
 
 

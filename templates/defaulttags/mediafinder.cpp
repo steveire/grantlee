@@ -65,7 +65,7 @@ void MediaFinderNode::render( OutputStream *stream, Context* c )
       if ( c->urlType() == Context::AbsoluteUrls )
         streamValueInContext( stream, uri, c );
       else if ( !c->relativeMediaPath().isEmpty() )
-        streamValueInContext( stream, c->relativeMediaPath() + QLatin1Char( '/' ), c );
+        streamValueInContext( stream, QVariant(c->relativeMediaPath() + QLatin1Char( '/' )), c );
       streamValueInContext( stream, fileUrl.second, c );
       return;
     }

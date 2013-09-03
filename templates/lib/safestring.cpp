@@ -106,14 +106,14 @@ SafeString& SafeString::operator=( const SafeString &str )
 
 SafeString SafeString::operator+( const QString &str )
 {
-  return SafeString( m_nestedString + str, IsNotSafe );
+  return SafeString( static_cast<QString>(m_nestedString) + str, IsNotSafe );
 }
 
 SafeString SafeString::operator+( const SafeString &str )
 {
   if ( !str.isSafe() )
-    return SafeString( m_nestedString + str.get(), IsNotSafe );
-  return SafeString( m_nestedString + str.get(), m_safety );
+    return SafeString( static_cast<QString>(m_nestedString) + static_cast<QString>(str.get()), IsNotSafe );
+  return SafeString( static_cast<QString>(m_nestedString) + static_cast<QString>(str.get()), m_safety );
 }
 
 SafeString &SafeString::operator+=( const QString &str )
