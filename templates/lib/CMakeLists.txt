@@ -76,15 +76,14 @@ set(header_only_sources
 )
 list(APPEND grantlee_templates_SRCS ${header_only_sources})
 
-add_library(grantlee_core SHARED
+add_library(Grantlee_Templates SHARED
   ${grantlee_templates_SRCS}
   ${scriptabletags_SRCS}
 )
-generate_export_header(grantlee_core
-  EXPORT_MACRO_NAME GRANTLEE_TEMPLATES_EXPORT
-  EXPORT_FILE_NAME grantlee_templates_export.h
-)
-target_include_directories(grantlee_core PRIVATE ../scriptabletags)
+add_library(Grantlee::Templates ALIAS Grantlee_Templates)
+generate_export_header(Grantlee_Templates)
+set_property(TARGET Grantlee_Templates PROPERTY EXPORT_NAME Templates)
+target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
 
 if (BUILD_TESTS)
   set(GRANTLEE_TESTS_EXPORT "GRANTLEE_TEMPLATES_EXPORT")
@@ -96,19 +95,19 @@ file(READ "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h" _content)
 
 file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h" "${_content}")
 
-target_link_libraries(grantlee_core
+target_link_libraries(Grantlee_Templates
   LINK_PUBLIC Qt5::Core
   LINK_PRIVATE Qt5::Script
 )
 
 if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
-  set_target_properties(grantlee_core PROPERTIES
+  set_target_properties(Grantlee_Templates PROPERTIES
     VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
     SOVERSION  ${Grantlee_TEMPLATES_LIB_SOVERSION}
   )
 endif()
 
-install(TARGETS grantlee_core EXPORT grantlee_targets
+install(TARGETS Grantlee_Templates EXPORT grantlee_targets
          RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT Templates
          LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates

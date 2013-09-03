@@ -18,7 +18,4 @@ endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/GrantleeTargets.cmake")
 
-set(Grantlee_TEMPLATES_LIBRARIES grantlee_core )
-set(Grantlee_TEXTDOCUMENT_LIBRARIES grantlee_gui )
-
 include("${CMAKE_CURRENT_LIST_DIR}/GrantleeMacros.cmake")

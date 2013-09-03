@@ -12,8 +12,6 @@ if (MINGW)
   endif()
 endif()
 
-option( BUILD_CORE "Build the Grantlee template library. Deprecated. Use BUILD_TEMPLATES instead" TRUE )
-option( BUILD_GUI "Build the Grantlee textdocument library. Deprecated. Use BUILD_TEXTDOCUMENT instead" TRUE )
 option( BUILD_TEMPLATES "Build the Grantlee template library" TRUE )
 option( BUILD_TEXTDOCUMENT "Build the Grantlee textdocument library" TRUE )
 option( BUILD_MAIN_PLUGINS "Build the Grantlee Templates plugins" TRUE )
@@ -104,11 +102,11 @@ set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 include("${Grantlee_MODULE_DIR}/GrantleeMacros.cmake")
 
-if (BUILD_CORE AND BUILD_TEMPLATES)
+if (BUILD_TEMPLATES)
   add_subdirectory(templates)
 endif()
 
-if (BUILD_GUI AND BUILD_TEXTDOCUMENT)
+if (BUILD_TEXTDOCUMENT)
   add_subdirectory(textdocument)
 endif()
 
@@ -141,6 +139,7 @@ install(FILES
 
 install(EXPORT grantlee_targets
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+  NAMESPACE Grantlee::
   FILE GrantleeTargets.cmake
   COMPONENT Common
 )
@@ -327,8 +326,8 @@ if (CCCC_FOUND)
   endmacro()
 
 
-  append_target_sources(grantlee_core)
-  append_target_sources(grantlee_gui)
+  append_target_sources(Grantlee_Templates)
+  append_target_sources(Grantlee_TextDocument)
   append_target_sources(grantlee_defaultfilters)
   append_target_sources(grantlee_defaulttags)
   append_target_sources(grantlee_loadertags)

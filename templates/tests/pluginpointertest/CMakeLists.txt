@@ -17,7 +17,7 @@ target_link_libraries(myplugin
 add_executable(main_app main.cpp ${myplugin_sources} ${_plugin_moc_srcs})
 target_include_directories(main_app
   PRIVATE
-    $<TARGET_PROPERTY:grantlee_core,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Grantlee::Templates,INTERFACE_INCLUDE_DIRECTORIES>
 )
 target_link_libraries(main_app
   Qt5::Core

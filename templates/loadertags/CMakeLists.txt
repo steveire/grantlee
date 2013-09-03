@@ -9,7 +9,7 @@ add_library(grantlee_loadertags MODULE
   extends.cpp
   include.cpp
 )
-target_link_libraries(grantlee_loadertags grantlee_core)
+target_link_libraries(grantlee_loadertags Grantlee::Templates)
 grantlee_adjust_plugin_name(grantlee_loadertags)
 
 install(TARGETS grantlee_loadertags EXPORT grantlee_targets

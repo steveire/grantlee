@@ -39,6 +39,6 @@ find_package(Qt5Widgets REQUIRED)
 
 target_link_libraries(
   codegen
-  ${Grantlee_TEMPLATES_LIBRARIES}
+  Grantlee::Templates
   Qt5::Widgets
 )

@@ -24,7 +24,7 @@ find_package(Qt5LinguistTools REQUIRED)
 
 target_link_libraries(
   contacts_linguist
-  ${Grantlee_TEMPLATES_LIBRARIES}
+  Grantlee::Templates
   Qt5::WebKitWidgets
 )
 

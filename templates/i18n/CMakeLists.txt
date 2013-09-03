@@ -9,7 +9,7 @@ add_library(grantlee_i18ntags MODULE
   l10n_money.cpp
   with_locale.cpp
 )
-target_link_libraries(grantlee_i18ntags grantlee_core)
+target_link_libraries(grantlee_i18ntags Grantlee::Templates)
 grantlee_adjust_plugin_name(grantlee_i18ntags)
 
 install(TARGETS grantlee_i18ntags EXPORT grantlee_targets

@@ -24,7 +24,7 @@ grantlee_adjust_plugin_name(customplugin)
 find_package(Qt5 REQUIRED XmlPatterns Network)
 
 target_link_libraries(customplugin
-  ${Grantlee_TEMPLATES_LIBRARIES}
+  Grantlee::Templates
   Qt5::XmlPatterns
   Qt5::Network
 )
@@ -39,6 +39,6 @@ add_executable(htmlapps
 find_package(Qt5WebKitWidgets REQUIRED)
 
 target_link_libraries(htmlapps
-  ${Grantlee_TEMPLATES_LIBRARIES}
+  Grantlee::Templates
   Qt5::WebKitWidgets
 )

@@ -29,6 +29,25 @@ namespace Grantlee
 
   from their buildsystems.
 
+  @subsection use_imported_targets Use IMPORTED targets
+
+  The CMake <a href="http://www.cmake.org/cmake/help/v3.0/manual/cmake-packages.7.html">packages</a>
+  shipped with %Grantlee contain
+  <a href="http://www.cmake.org/cmake/help/v3.0/manual/cmake-buildsystem.7.html#imported-targets">IMPORTED targets</a>
+  which should be used with the <tt>target_link_libraries</tt> command. Variables such
+  as <tt>Grantlee_TEMPLATES_LIBRARIES</tt> are no longer provided.
+
+  Idiomatic use of %Grantlee in the buildsystem is now similar to:
+
+  @verbatim
+  find_package(Grantlee REQUIRED)
+
+  add_executable(main main.cpp)
+  target_link_libraries(main
+    Grantlee::Templates
+  )
+  @endverbatim
+
   @section cpp_porting C++ porting
 
   @subsection initialize_removed GRANTLEE_METATYPE_INITIALIZE macro removed

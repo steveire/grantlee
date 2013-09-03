@@ -29,7 +29,7 @@ add_executable(books
 
 target_link_libraries(
   books
-  ${Grantlee_TEMPLATES_LIBRARIES}
+  Grantlee::Templates
   Qt5::Widgets
   Qt5::Sql
 
