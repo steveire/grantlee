@@ -456,16 +456,11 @@ namespace Grantlee
   QObjects are automatically introspected for their Q_PROPERTYs (See @ref custom_objects).
 
   If you have QSharedPointer&lt;PersonObject&gt; where PersonObject is derived from QObject it will be automatically
-  introspected just like a QObject* is without requiring the GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros.
+  introspected just like a QObject* is without requiring the GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros,
+  the Q_DECLARE_METATYPE macro, or registration with the %Grantlee metatype system. All of the access registration
+  is handled by Qt.
 
   @code
-    Q_DECLARE_METATYPE(QSharedPointer<PersonObject>)
-
-    void someInitializer()
-    {
-      Grantlee::registerMetaType<QSharedPointer<PersonObject> >();
-    }
-
     void getContext()
     {
       Grantlee::Context c;
@@ -485,19 +480,11 @@ namespace Grantlee
     }
   @endcode
 
-  Note that Grantlee::registerMetaType must be used for the specialized shared pointer type.
-
   The same technique can be used to support QObject derived types in third party shared pointers, but that requires
-  an extra macro, GRANTLEE_SMART_PTR_ACCESSOR.
+  an extra macro, Q_DECLARE_SMART_POINTER_METATYPE.
 
   @code
-    Q_DECLARE_METATYPE(boost::shared_ptr<PersonObject>)
-    GRANTLEE_SMART_PTR_ACCESSOR(boost::shared_ptr)
-
-    void someInitializer()
-    {
-      Grantlee::registerMetaType<boost::shared_ptr<PersonObject> >();
-    }
+    Q_DECLARE_SMART_POINTER_METATYPE(boost::shared_ptr)
 
     void getContext()
     {

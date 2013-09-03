@@ -56,8 +56,7 @@ Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE(QtUnorderedMap)
 Q_DECLARE_SEQUENTIAL_CONTAINER_METATYPE(std::deque)
 #endif
 
-GRANTLEE_SMART_PTR_ACCESSOR(std::tr1::shared_ptr)
-
+Q_DECLARE_SMART_POINTER_METATYPE(std::tr1::shared_ptr)
 #endif
 
 Q_DECLARE_METATYPE( QVector<QVariant> )
@@ -149,10 +148,6 @@ void TestGenericTypes::initTestCase()
 {
   // Register the handler for our custom type
   Grantlee::registerMetaType<Person>();
-#ifndef GRANTLEE_NO_TR1
-  Grantlee::registerMetaType<std::tr1::shared_ptr<PersonObject> >();
-#endif
-  Grantlee::registerMetaType<QSharedPointer<PersonObject> >();
 }
 
 void TestGenericTypes::testGenericClassType()
@@ -571,11 +566,6 @@ void TestGenericTypes::testAssociativeContainer_Type()
   doTestAssociativeContainer_Type_Number<QtUnorderedMap<quint64, Person> >( true );
 #endif
 }
-
-Q_DECLARE_METATYPE( QSharedPointer<PersonObject> )
-#ifndef GRANTLEE_NO_TR1
-Q_DECLARE_METATYPE( std::tr1::shared_ptr<PersonObject> )
-#endif
 
 void TestGenericTypes::testSharedPointer()
 {

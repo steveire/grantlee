@@ -58,6 +58,9 @@ void Grantlee::MetaType::registerToVariantListOperator( int id, ToVariantListFun
 
 QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &property )
 {
+  if (object.canConvert<QObject*>()) {
+    return doQobjectLookUp(object.value<QObject*>(), property);
+  }
   return customTypes()->lookup( object, property );
 }
 
