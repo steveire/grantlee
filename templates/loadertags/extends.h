@@ -68,7 +68,6 @@ private:
   QString m_name;
   NodeList m_list;
   QHash<QString, BlockNode*> m_blocks;
-  Template m_parentTemplate;
 };
 
 #endif

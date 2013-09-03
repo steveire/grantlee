@@ -139,9 +139,9 @@ Template ExtendsNode::getParent( Context *c )
 
 void ExtendsNode::render( OutputStream *stream, Context *c )
 {
-  m_parentTemplate = getParent( c );
+  const Template parentTemplate = getParent( c );
 
-  if ( !m_parentTemplate ) {
+  if ( !parentTemplate ) {
     throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Cannot load template '%1'" ).arg( m_name ) );
   }
 
@@ -150,9 +150,9 @@ void ExtendsNode::render( OutputStream *stream, Context *c )
   blockContext.addBlocks( m_blocks );
   variant.setValue( blockContext );
 
-  const NodeList nodeList = m_parentTemplate->nodeList();
+  const NodeList nodeList = parentTemplate->nodeList();
 
-  const QHash<QString, BlockNode*> parentBlocks = createNodeMap( m_parentTemplate->findChildren<BlockNode*>() );
+  const QHash<QString, BlockNode*> parentBlocks = createNodeMap( parentTemplate->findChildren<BlockNode*>() );
   QListIterator<Node*> i( nodeList );
 
   while ( i.hasNext() ) {
@@ -168,7 +168,7 @@ void ExtendsNode::render( OutputStream *stream, Context *c )
     }
   }
   variant.setValue( blockContext );
-  m_parentTemplate->nodeList().render( stream, c );
+  parentTemplate->nodeList().render( stream, c );
 }
 
 void ExtendsNode::appendNode( Node *node )
