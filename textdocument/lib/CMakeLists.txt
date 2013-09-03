@@ -49,3 +49,8 @@ install(FILES
   ${PROJECT_BINARY_DIR}/grantlee_gui_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT TextDocument
 )
+
+install(FILES
+  grantlee_textdocument.h
+  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT TextDocument
+)
