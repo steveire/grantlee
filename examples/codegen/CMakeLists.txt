@@ -60,5 +60,5 @@ add_executable(codegen
 target_link_libraries(
   codegen
   Qt4::QtGui
-  ${Grantlee_CORE_LIBRARIES}
+  ${Grantlee_TEMPLATES_LIBRARIES}
 )

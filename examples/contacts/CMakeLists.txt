@@ -30,7 +30,7 @@ target_link_libraries(
   contacts_linguist
   Qt4::QtGui
   Qt4::QtWebKit
-  ${Grantlee_CORE_LIBRARIES}
+  ${Grantlee_TEMPLATES_LIBRARIES}
 )
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${PROJECT_SOURCE_DIR}/../../scripts" "${PROJECT_SOURCE_DIR}/scripts")
@@ -85,7 +85,7 @@ if (KDE4_FOUND)
     ${KDE4_KIO_LIBS}
     ${KDE4_KDEUI_LIBS}
 
-    ${Grantlee_CORE_LIBRARIES}
+    ${Grantlee_TEMPLATES_LIBRARIES}
   )
 
   set( GETTEXT_PO_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_gettext.py"

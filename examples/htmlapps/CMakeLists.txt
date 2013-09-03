@@ -30,7 +30,7 @@ grantlee_add_plugin(customplugin
 )
 
 target_link_libraries(customplugin
-  ${Grantlee_CORE_LIBRARIES}
+  ${Grantlee_TEMPLATES_LIBRARIES}
   Qt4::QtXmlPatterns
   Qt4::QtNetwork
 )

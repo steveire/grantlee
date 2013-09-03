@@ -49,7 +49,7 @@ target_link_libraries(
   books
   Qt4::QtGui
   Qt4::QtSql
-  ${Grantlee_CORE_LIBRARIES}
+  ${Grantlee_TEMPLATES_LIBRARIES}
 )
 
 

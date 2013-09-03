@@ -41,15 +41,15 @@ namespace Grantlee
     target_link_libraries(
       my_application
       Qt4::QtGui
-      ${Grantlee_CORE_LIBRARIES}
+      ${Grantlee_TEMPLATES_LIBRARIES}
     )
   @endcode
 
   When %Grantlee is found correctly, it makes the following CMake variables available:
   - Grantlee_FOUND - Set to true if found, false otherwise.
   - Grantlee_INCLUDE_DIR - Set to the directory where the %Grantlee headers are located. Applications can then \#include &lt;grantlee/engine.h&gt;
-  - Grantlee_CORE_LIBRARIES - Set to the location of the installed version of the grantlee_core library.
-  - Grantlee_GUI_LIBRARIES - Set to the location of the installed version of the grantlee_gui library.
+  - Grantlee_TEMPLATES_LIBRARIES - Set to the location of the installed version of the grantlee_core library.
+  - Grantlee_TEXTDOCUMENT_LIBRARIES - Set to the location of the installed version of the grantlee_gui library.
   - Grantlee_USE_FILE - Set to the path to the GrantleeUse.cmake file.
   - Grantlee_VERSION_MAJOR - The major version number of %Grantlee.
   - Grantlee_VERSION_MINOR - The minor version number of %Grantlee.

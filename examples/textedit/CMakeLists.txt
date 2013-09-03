@@ -25,7 +25,7 @@ grantlee_add_plugin(customtags
     filters
 )
 
-target_link_libraries(customtags ${Grantlee_GUI_LIBRARIES})
+target_link_libraries(customtags ${Grantlee_TEXTDOCUMENT_LIBRARIES})
 
 
 ## Application
@@ -60,7 +60,7 @@ target_link_libraries(
   Qt4::QtGui
   Qt4::QtWebKit
   Qt4::phonon
-  ${Grantlee_CORE_LIBRARIES}
+  ${Grantlee_TEMPLATES_LIBRARIES}
 )
 
 
