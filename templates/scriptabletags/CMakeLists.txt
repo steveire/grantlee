@@ -1,20 +1,20 @@
 project(grantlee_scriptabletags)
 
-grantlee_add_plugin(grantlee_scriptabletags
-  scriptablecontext
-  scriptablefilterexpression
-  scriptablenode
-  scriptableparser
-  scriptablesafestring
-  scriptabletags
-  scriptabletemplate
-  scriptablevariable
-
-  FILTERS
-    scriptablefilter
+add_library(grantlee_scriptabletags MODULE
+  scriptablecontext.cpp
+  scriptablefilterexpression.cpp
+  scriptablenode.cpp
+  scriptableparser.cpp
+  scriptablesafestring.cpp
+  scriptabletags.cpp
+  scriptabletemplate.cpp
+  scriptablevariable.cpp
+  scriptablefilter.cpp
 )
+grantlee_adjust_plugin_name(grantlee_scriptabletags)
 
 target_link_libraries(grantlee_scriptabletags
+  grantlee_core
   Qt4::QtScript
 )
 

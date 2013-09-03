@@ -12,15 +12,17 @@ include(${Grantlee_USE_FILE})
 
 ## Grantlee plugin
 
-grantlee_add_plugin(customtags
-  customtagslibrary
-  audiotextdocumentoutputter
-
-  FILTERS
-    filters
+add_library(customtags MODULE
+  customtagslibrary.cpp
+  audiotextdocumentoutputter.cpp
+  filters.cpp
 )
+grantlee_adjust_plugin_name(customtags)
 
-target_link_libraries(customtags ${Grantlee_TEXTDOCUMENT_LIBRARIES})
+target_link_libraries(customtags
+  ${Grantlee_TEMPLATES_LIBRARIES}
+  ${Grantlee_TEXTDOCUMENT_LIBRARIES}
+)
 
 
 ## Application

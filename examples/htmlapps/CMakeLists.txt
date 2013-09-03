@@ -12,11 +12,11 @@ include(${Grantlee_USE_FILE})
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-grantlee_add_plugin(customplugin
-  customplugin
-  TAGS
-    rssfeed
+add_library(customplugin MODULE
+  customplugin.cpp
+  rssfeed.cpp
 )
+grantlee_adjust_plugin_name(customplugin)
 
 find_package(Qt5 REQUIRED XmlPatterns Network)
 

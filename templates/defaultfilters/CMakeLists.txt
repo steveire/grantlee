@@ -1,16 +1,16 @@
 project(grantlee_defaultfilters)
 
-grantlee_add_plugin(grantlee_defaultfilters
-  defaultfilters
-
-  FILTERS
-    datetime
-    integers
-    lists
-    logic
-    misc
-    stringfilters
+add_library(grantlee_defaultfilters MODULE
+  defaultfilters.cpp
+  datetime.cpp
+  integers.cpp
+  lists.cpp
+  logic.cpp
+  misc.cpp
+  stringfilters.cpp
 )
+target_link_libraries(grantlee_defaultfilters grantlee_core)
+grantlee_adjust_plugin_name(grantlee_defaultfilters)
 
 install(TARGETS grantlee_defaultfilters EXPORT grantlee_targets
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates

@@ -9,6 +9,15 @@ namespace Grantlee
   Several porting steps are necessary when porting code from %Grantlee 0.5 to
   %Grantlee 5.0.
 
+  @section buildsystem_changes Buildsystem changes
+
+  @subsection grantlee_add_plugin_removed grantlee_add_plugin Removed
+
+  The <tt>grantlee_add_plugin</tt> CMake macro has been removed. Users should
+  now use the CMake command <tt>add_library(MODULE)</tt>, link to the %Grantlee
+  Templates library, and use the <tt>grantlee_adjust_plugin_name</tt> macro
+  with the created target.
+
   @section cpp_porting C++ porting
 
   @subsection initialize_removed GRANTLEE_METATYPE_INITIALIZE macro removed
