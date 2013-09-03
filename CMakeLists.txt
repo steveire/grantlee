@@ -308,9 +308,26 @@ endif()
 
 find_package(Cccc)
 if (CCCC_FOUND)
-  get_property(CCCC_FILES GLOBAL PROPERTY SOURCE_LIST)
+  macro(append_target_sources target)
+    get_target_property(_tar_files ${target} SOURCES)
+    foreach(f ${_tar_files})
+      if(IS_ABSOLUTE f)
+        list(APPEND target_files ${f})
+      else()
+        list(APPEND target_files ${${target}_SOURCE_DIR}/${f})
+      endif()
+    endforeach()
+  endmacro()
 
-  set( cccc_ARGS ${CCCC_EXECUTABLE} ${CCCC_FILES} --outdir=${CMAKE_BINARY_DIR}/cccc --html_outfile=${CMAKE_BINARY_DIR}/cccc/index.html)
+
+  append_target_sources(grantlee_core)
+  append_target_sources(grantlee_gui)
+  append_target_sources(grantlee_defaultfilters)
+  append_target_sources(grantlee_defaulttags)
+  append_target_sources(grantlee_loadertags)
+  append_target_sources(grantlee_i18ntags)
+
+  set(cccc_ARGS ${CCCC_EXECUTABLE} ${target_files} --outdir=${CMAKE_BINARY_DIR}/cccc --html_outfile=${CMAKE_BINARY_DIR}/cccc/index.html)
 
   add_custom_target(cccc
     ${cccc_ARGS}

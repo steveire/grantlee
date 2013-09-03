@@ -38,13 +38,6 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
 
   add_library(${pluginname} MODULE ${_sources} ${_plugin_moc_srcs})
 
-  foreach(file ${_sources})
-    set(_sources_FULLPATHS ${_sources_FULLPATHS} ${CMAKE_CURRENT_SOURCE_DIR}/${file})
-  endforeach()
-  set_property(GLOBAL APPEND PROPERTY SOURCE_LIST
-    ${_sources_FULLPATHS}
-  )
-
   set_target_properties(${pluginname}
     PROPERTIES PREFIX ""
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}"
