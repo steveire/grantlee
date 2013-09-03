@@ -25,6 +25,11 @@ target_link_libraries(customtags
 
 ## Application
 
+get_property(Grantlee_PLUGIN_DIR TARGET grantlee_defaulttags PROPERTY LOCATION)
+get_filename_component(Grantlee_PLUGIN_DIR ${Grantlee_PLUGIN_DIR} PATH)
+get_filename_component(Grantlee_PLUGIN_DIR ${Grantlee_PLUGIN_DIR} PATH)
+get_filename_component(Grantlee_PLUGIN_DIR ${Grantlee_PLUGIN_DIR} PATH)
+
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 

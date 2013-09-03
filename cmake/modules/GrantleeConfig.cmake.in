@@ -2,8 +2,6 @@
 
 # Any changes in this file will be overwritten by CMake.
 
-get_filename_component(GrantleeRootDir ${CMAKE_CURRENT_LIST_DIR}/@relInstallDir@ ABSOLUTE) # get the chosen install prefix
-
 if (Grantlee_FIND_COMPONENTS)
   foreach( component ${Grantlee_FIND_COMPONENTS})
     if (component STREQUAL "Textdocument")
@@ -18,29 +16,9 @@ else()
   find_package(Qt5Gui REQUIRED)
 endif()
 
-set(Grantlee_MIN_PLUGIN_VERSION "@Grantlee_VERSION_MAJOR@.@Grantlee_MIN_PLUGIN_VERSION@")
+include("${CMAKE_CURRENT_LIST_DIR}/GrantleeTargets.cmake")
 
-set(Grantlee_INSTALL_PREFIX "${GrantleeRootDir}")
-set(Grantlee_INCLUDE_DIRS   "${GrantleeRootDir}/@INCLUDE_INSTALL_DIR@")
-
-set(Grantlee_LIBRARY_DIR    "${GrantleeRootDir}/@LIB_INSTALL_DIR@")
-set(Grantlee_MODULE_DIR     "${Grantlee_LIBRARY_DIR}/cmake/grantlee")
-
-set(Grantlee_PLUGIN_DIR     "${Grantlee_LIBRARY_DIR}")
-
-set(Grantlee_TEMPLATES_LIBRARY grantlee_core)
-set(Grantlee_TEXTDOCUMENT_LIBRARY grantlee_gui)
-
-set(Grantlee_TEMPLATES_LIBRARIES ${Grantlee_TEMPLATES_LIBRARY} )
-set(Grantlee_TEXTDOCUMENT_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARY} )
-
-# For backwards compatibility
-set(Grantlee_CORE_LIBRARY ${Grantlee_TEMPLATES_LIBRARY})
-set(Grantlee_CORE_LIBRARIES ${Grantlee_TEMPLATES_LIBRARIES})
-set(Grantlee_GUI_LIBRARY ${Grantlee_TEXTDOCUMENT_LIBRARY})
-set(Grantlee_GUI_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARIES})
-set(Grantlee_PLUGIN_PATH ${Grantlee_PLUGIN_DIR})
+set(Grantlee_TEMPLATES_LIBRARIES grantlee_core )
+set(Grantlee_TEXTDOCUMENT_LIBRARIES grantlee_gui )
 
 include("${CMAKE_CURRENT_LIST_DIR}/GrantleeMacros.cmake")
-
-include(${CMAKE_CURRENT_LIST_DIR}/GrantleeTargets.cmake)
