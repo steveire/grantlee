@@ -117,15 +117,15 @@ void TemplatePrivate::setError( Error type, const QString &message ) const
   m_errorString = message;
 }
 
-Error TemplateImpl::error()
+Error TemplateImpl::error() const
 {
-  Q_D( Template );
+  Q_D( const Template );
   return d->m_error;
 }
 
-QString TemplateImpl::errorString()
+QString TemplateImpl::errorString() const
 {
-  Q_D( Template );
+  Q_D( const Template );
   return d->m_errorString;
 }
 

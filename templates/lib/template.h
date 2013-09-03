@@ -118,12 +118,12 @@ public:
   /**
     Returns an error code for the error encountered.
   */
-  Error error();
+  Error error() const;
 
   /**
     Returns more information to developers in the form of a string.
   */
-  QString errorString();
+  QString errorString() const;
 
   /**
     Returns the Engine that created this Template.
