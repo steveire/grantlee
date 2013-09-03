@@ -129,6 +129,18 @@ void Engine::removeDefaultLibrary( const QString &libName )
   d->m_defaultLibraries.removeAll( libName );
 }
 
+template<uint v>
+bool acceptableVersion(uint minorVersion)
+{
+  return minorVersion >= v;
+}
+
+template<>
+bool acceptableVersion<0>(uint)
+{
+  return true;
+}
+
 void Engine::loadDefaultLibraries()
 {
   Q_D( Engine );
@@ -168,7 +180,7 @@ void Engine::loadDefaultLibraries()
     // The C++ plugins are different because although they are loaded, their NodeFactories
     // and Filters are accessed only by the Parser, which manages them after that.
     uint minorVersion = GRANTLEE_VERSION_MINOR;
-    while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION ) {
+    while ( acceptableVersion<GRANTLEE_MIN_PLUGIN_VERSION>(minorVersion) ) {
       // Although we don't use scripted libaries here, we need to recognize them being first
       // in the search path and not load a c++ plugin of the same name in that case.
       ScriptableLibraryContainer* scriptableLibrary = d->loadScriptableLibrary( libName, minorVersion );
@@ -199,7 +211,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
     return d->m_libraries.value( name ).data();
 
   uint minorVersion = GRANTLEE_VERSION_MINOR;
-  while ( minorVersion >= GRANTLEE_MIN_PLUGIN_VERSION ) {
+  while ( acceptableVersion<GRANTLEE_MIN_PLUGIN_VERSION>(minorVersion) ) {
     TagLibraryInterface* library = d->loadLibrary( name, minorVersion );
     if ( library )
       return library;
