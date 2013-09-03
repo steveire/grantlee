@@ -29,8 +29,6 @@
 #include "exception.h"
 #include "parser.h"
 
-Q_DECLARE_METATYPE( Engine* )
-
 QScriptValue nodeToScriptValue( QScriptEngine *engine, Node* const &node )
 {
   return engine->newQObject( node );

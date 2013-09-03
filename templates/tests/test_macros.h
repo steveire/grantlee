@@ -39,9 +39,6 @@ struct ThreeArray : public std::tr1::array<T, 3>
 {
 
 };
-#endif
-
-using std::map;
 
 #define DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, KeyType, ValueType)           \
   typedef ContainerType<KeyType, ValueType> ContainerType##KeyType##ValueType;     \
@@ -59,45 +56,11 @@ using std::map;
   DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, quint64,    ValueType)      \
   DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, QString,    ValueType)      \
 
-#define DECLARE_ASSOCIATIVE_CONTAINERS_ALL(Type)          \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL( QMap,  Type )  \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL( QHash, Type )  \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL( map,   Type )  \
-
-#define DECLARE_ASSOCIATIVE_CONTAINERS_MINIMAL(Type)          \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL( QMap,  Type )  \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL( QHash, Type )  \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL( map,   Type )  \
-
 #ifndef MINIMAL_CONTAINER_TESTS
 #  define DECLARE_ASSOCIATIVE_CONTAINER_TYPES DECLARE_ASSOCIATIVE_CONTAINER_TYPES_ALL
 #else
 #  define DECLARE_ASSOCIATIVE_CONTAINER_TYPES DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL
 #endif
-
-#define DECLARE_BUILTIN_TYPE_CONTAINERS(Type)                  \
-  Q_DECLARE_METATYPE( QList      < Type > )                    \
-  Q_DECLARE_METATYPE( QVector    < Type > )                    \
-  Q_DECLARE_METATYPE( QQueue     < Type > )                    \
-  Q_DECLARE_METATYPE( QStack     < Type > )                    \
-  Q_DECLARE_METATYPE( QLinkedList< Type > )                    \
-  Q_DECLARE_METATYPE( QSet       < Type > )                    \
-  Q_DECLARE_METATYPE( std::vector< Type > )                    \
-  Q_DECLARE_METATYPE( std::deque < Type > )                    \
-  Q_DECLARE_METATYPE( std::list  < Type > )                    \
-                                                               \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES( QMap,           Type )  \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES( QHash,          Type )  \
-  DECLARE_ASSOCIATIVE_CONTAINER_TYPES( map,            Type )  \
-
-#ifndef GRANTLEE_NO_TR1
-#  define DECLARE_TR1_TYPE_CONTAINERS(Type)                       \
-     DECLARE_ASSOCIATIVE_CONTAINER_TYPES( QtUnorderedMap, Type )  \
-     Q_DECLARE_METATYPE( ThreeArray < Type > )                    \
-
-#  define DECLARE_TYPE_CONTAINERS(Type)                           \
-     DECLARE_BUILTIN_TYPE_CONTAINERS(Type)                        \
-     DECLARE_TR1_TYPE_CONTAINERS(Type)                            \
 
 namespace Grantlee {
 
@@ -120,11 +83,6 @@ struct MappedValueGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T
 };
 
 }
-
-#else
-
-#  define DECLARE_TYPE_CONTAINERS(Type)                          \
-     DECLARE_BUILTIN_TYPE_CONTAINERS(Type)                       \
 
 #endif
 

@@ -30,23 +30,6 @@
 #include <QtCore/QLinkedList>
 #include "coverageobject.h"
 
-typedef QObject* QObjectStar;
-
-DECLARE_TYPE_CONTAINERS( qint32 )
-#ifndef MINIMAL_CONTAINER_TESTS
-DECLARE_TYPE_CONTAINERS( QVariant )
-DECLARE_TYPE_CONTAINERS( qint16 )
-DECLARE_TYPE_CONTAINERS( qint64 )
-DECLARE_TYPE_CONTAINERS( quint16 )
-DECLARE_TYPE_CONTAINERS( quint32 )
-DECLARE_TYPE_CONTAINERS( quint64 )
-DECLARE_TYPE_CONTAINERS( float )
-DECLARE_TYPE_CONTAINERS( double )
-DECLARE_TYPE_CONTAINERS( QString )
-DECLARE_TYPE_CONTAINERS( QDateTime )
-DECLARE_TYPE_CONTAINERS( QObjectStar )
-#endif
-
 class TestGenericContainers : public CoverageObject
 {
   Q_OBJECT

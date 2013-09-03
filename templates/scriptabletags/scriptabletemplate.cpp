@@ -28,8 +28,6 @@
 #include "node.h"
 #include "scriptablecontext.h"
 
-Q_DECLARE_METATYPE( Engine* )
-
 QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
     QScriptEngine *engine )
 {

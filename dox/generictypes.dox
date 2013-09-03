@@ -42,8 +42,6 @@ namespace Grantlee
 
     // Make it possible to put Person in a QVariant.
     Q_DECLARE_METATYPE(Person)
-    // Make it possible to put QList<Person> in a QVariant.
-    Q_DECLARE_METATYPE(QList<Person>)
 
     // Read-only introspection of Person object.
     GRANTLEE_BEGIN_LOOKUP(Person)
@@ -94,8 +92,7 @@ namespace Grantlee
   @endcode
 
   There are several necessary steps and consequences.
-  @li The type must be registered as a QMetaType with Q_DECLARE_METATYPE
-  @li If you want to use a Container of the type it too must be registered with Q_DECLARE_METATYPE.
+  @li The type must be registered as a QMetaType with Q_DECLARE_METATYPE. Note that this is not needed for QObject derived types.
   @li All containers are supported. (See @ref generic_containers)
   @li The GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros help to define the introspection of the type. Between them is the definition of a method with the signature QVariant getProperty(const Type &object, const QString &property).
   @li Grantlee::registerMetaType must be called at some point in the program before attempting to use the type in a Context.
@@ -160,10 +157,9 @@ namespace Grantlee
   Note that QSet&lt;T&gt; is an exception and will only work with types for which qHash(T) is defined. This means that QSet&lt;QVariant&gt;
   is not possible for example.
 
-  Note also that containers of pointers to QObject derived types can be stored in containers of QObject* (that is QVector&lt;QObject*&gt;
-  instead of QVector&lt;PersonObject*&gt;), and they do not need to be explicitly registered with %Grantlee. Where the class has sufficient
-  Q_PROPERTYs defined, the introspection method described above with GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP is also not
-  necessary. Note also that any type or container can be used through a Q_PROPERTY.
+  Note also that containers of pointers to QObject derived types can be stored in containers, and they do not need to be explicitly
+  registered with %Grantlee. Where the class has sufficient Q_PROPERTYs defined, the introspection method described above with
+  GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP is also not necessary. Note also that any type or container can be used through a Q_PROPERTY.
 
   @code
     class PersonObject : public QObject
@@ -177,10 +173,6 @@ namespace Grantlee
       QString name() const;
       int age() const;
     };
-
-    // Make it possible to put the containers in a QVariant
-    Q_DECLARE_METATYPE<QSet<QObject*>)
-    Q_DECLARE_METATYPE<std::vector<QObject*>)
 
     class SportsClub : public QObject
     {
@@ -278,21 +270,15 @@ namespace Grantlee
       </ul>
   @endverbatim
 
-  Of course, it is possible to use containers of pointers to concrete QObject subclasses, such as QSet&lt;PersonObject*&gt; and std::vector&lt;SportsClub*&gt;
-  but then it is necessary to register them with %Grantlee using Grantlee::registerMetaType&lt;PersonObject*&gt;()
-  and Grantlee::registerMetaType&lt;SportsClub*&gt;(). The use of GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP is still not required in
-  that case.
+  Of course, it is possible to use containers of pointers to concrete QObject subclasses, such as QSet&lt;PersonObject*&gt; and std::vector&lt;SportsClub*&gt; too.
 
   Because any supported container can also be used as a contained type, nested containers are also supported.
 
   Note that if a type is registered with Grantlee::registerMetaType, built in containers of that type do not also need to be registered.
-  They will be registered automatically by %Grantlee. Third party containers do need to be registered however (See @ref third_party_containers)
+  Third party containers do need to be registered however (See @ref third_party_containers)
 
   @code
     Q_DECLARE_METATYPE(Person)
-    Q_DECLARE_METATYPE(QVector<Person>)
-    Q_DECLARE_METATYPE(QList<QVector<Person> >)
-    Q_DECLARE_METATYPE(QStack<QList<QVector<Person> > >)
 
     void someInitializer()
     {

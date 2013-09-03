@@ -36,7 +36,6 @@
 
 typedef QHash<QString, QVariant> Dict;
 
-Q_DECLARE_METATYPE( Dict )
 Q_DECLARE_METATYPE( Grantlee::Error )
 
 using namespace Grantlee;

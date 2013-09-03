@@ -51,11 +51,6 @@ Q_DECLARE_SEQUENTIAL_CONTAINER_METATYPE(std::deque)
 Q_DECLARE_SMART_POINTER_METATYPE(std::tr1::shared_ptr)
 #endif
 
-Q_DECLARE_METATYPE( QVector<QVariant> )
-Q_DECLARE_METATYPE( QStack<QVariant> )
-Q_DECLARE_METATYPE( QQueue<QVariant> )
-Q_DECLARE_METATYPE( QLinkedList<QVariant> )
-
 class TestGenericTypes : public CoverageObject
 {
   Q_OBJECT
@@ -105,7 +100,7 @@ int qHash( const Person &p )
   return p.uid;
 }
 
-Q_DECLARE_METATYPE( Person )
+Q_DECLARE_METATYPE(Person)
 
 GRANTLEE_BEGIN_LOOKUP(Person)
   if ( property == QLatin1String( "name" ) )
@@ -133,8 +128,6 @@ private:
   const QString m_name;
   const int m_age; // Yeah, you wish...
 };
-
-DECLARE_TYPE_CONTAINERS( Person )
 
 void TestGenericTypes::initTestCase()
 {
@@ -602,13 +595,9 @@ void TestGenericTypes::testThirdPartySharedPointer()
 #endif
 }
 
-Q_DECLARE_METATYPE( QVector<qint16> )
 typedef QList<QVector<qint16> > ListVectorInt;
-Q_DECLARE_METATYPE( ListVectorInt )
 typedef QMap<int, QList<QVector<qint16> > > MapListVectorInt;
-Q_DECLARE_METATYPE( MapListVectorInt )
 typedef QStack<QMap<int, QList<QVector<qint16> > > > StackMapListVectorInt;
-Q_DECLARE_METATYPE( StackMapListVectorInt )
 
 static QVector<qint16> getNumbers()
 {
@@ -686,8 +675,6 @@ public:
 
   }
 };
-
-Q_DECLARE_METATYPE(CustomObject*)
 
 class OtherObject : public QObject
 {

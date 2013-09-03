@@ -36,9 +36,6 @@ typedef QList<QVariantList> Table;
 typedef QHash<QString, QVariant> Dict;
 typedef QPair<QString, QString> StringPair;
 
-Q_DECLARE_METATYPE( Table )
-Q_DECLARE_METATYPE( Dict )
-Q_DECLARE_METATYPE( StringPair )
 Q_DECLARE_METATYPE( Grantlee::Error )
 
 class FakeTemplateLoader : public Grantlee::InMemoryTemplateLoader

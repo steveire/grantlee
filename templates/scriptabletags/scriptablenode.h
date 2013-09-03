@@ -40,8 +40,6 @@ typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
 
 using namespace Grantlee;
 
-Q_DECLARE_METATYPE( Grantlee::Node* )
-
 QScriptValue ScriptableNodeConstructor( QScriptContext *context,
                                         QScriptEngine *engine );
 
