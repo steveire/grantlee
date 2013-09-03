@@ -18,7 +18,7 @@ else()
   find_package(Qt4 REQUIRED)
 endif()
 
-set(Grantlee_MIN_PLUGIN_VERSION "0.@Grantlee_MIN_PLUGIN_VERSION@")
+set(Grantlee_MIN_PLUGIN_VERSION "@Grantlee_VERSION_MAJOR@.@Grantlee_MIN_PLUGIN_VERSION@")
 
 set(Grantlee_INSTALL_PREFIX "${GrantleeRootDir}")
 set(Grantlee_INCLUDE_DIRS   "${GrantleeRootDir}/@INCLUDE_INSTALL_DIR@")
