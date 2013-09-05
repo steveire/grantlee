@@ -163,6 +163,8 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
 
 QVariant doQobjectLookUp( const QObject * const object, const QString &property )
 {
+  if (!object)
+    return QVariant();
   if ( property == QLatin1String( "children" ) ) {
     const QObjectList childList = object->children();
     if ( childList.isEmpty() )
