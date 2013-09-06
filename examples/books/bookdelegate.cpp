@@ -41,7 +41,9 @@
 
 #include "bookdelegate.h"
 
-#include <QtGui>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QSpinBox>
 
 BookDelegate::BookDelegate(QObject *parent)
     : QSqlRelationalDelegate(parent), star(QPixmap(":images/star.png"))

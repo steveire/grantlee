@@ -47,7 +47,9 @@
 #include "initdb.h"
 #include "grantlee_paths.h"
 
-#include <QtSql>
+#include <QMessageBox>
+#include <QDataWidgetMapper>
+#include <QInputDialog>
 
 #include <grantlee_templates.h>
 

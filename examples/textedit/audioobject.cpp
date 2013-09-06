@@ -20,7 +20,7 @@
 
 #include "audioobject.h"
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include <QDebug>
 

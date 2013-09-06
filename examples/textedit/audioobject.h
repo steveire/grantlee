@@ -23,7 +23,7 @@
 #define AUDIOOBJECT_H
 
 #include <QtCore/QObject>
-#include <QtGui/QTextObjectInterface>
+#include <QTextObjectInterface>
 
 enum CustomType
 {

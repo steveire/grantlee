@@ -2,7 +2,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class MainWindow : public QWidget
 {

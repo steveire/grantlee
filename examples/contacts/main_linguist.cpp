@@ -20,7 +20,9 @@
 
 #include "mainwindow.h"
 
-#include <QtGui>
+#include <QApplication>
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #include <grantlee_templates.h>
 

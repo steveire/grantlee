@@ -2,8 +2,8 @@
 #include "mainwindow.h"
 
 #include <QtCore/QDebug>
-#include <QtGui/QHBoxLayout>
-#include <QtWebKit/QWebView>
+#include <QHBoxLayout>
+#include <QWebView>
 
 #include <grantlee_templates.h>
 #include "grantlee_paths.h"

@@ -42,10 +42,12 @@
 #ifndef BOOKWINDOW_H
 #define BOOKWINDOW_H
 
-#include <QtGui>
-#include <QtSql>
+#include <QMainWindow>
 
 #include "ui_bookwindow.h"
+
+class QSqlRelationalTableModel;
+class QSqlError;
 
 namespace Grantlee
 {
