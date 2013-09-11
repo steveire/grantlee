@@ -62,28 +62,6 @@ struct ThreeArray : public std::tr1::array<T, 3>
 #  define DECLARE_ASSOCIATIVE_CONTAINER_TYPES DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL
 #endif
 
-namespace Grantlee {
-
-template<typename T, typename U>
-struct KeyGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T, U> >
-{
-  static T get(typename QtUnorderedMap<T, U>::const_iterator it)
-  {
-    return it->first;
-  }
-};
-
-template<typename T, typename U>
-struct MappedValueGetter<QtUnorderedMap<T, U> > : public Getter<QtUnorderedMap<T, U> >
-{
-  static U get(typename QtUnorderedMap<T, U>::const_iterator it)
-  {
-    return it->second;
-  }
-};
-
-}
-
 #endif
 
 #endif

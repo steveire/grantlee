@@ -55,7 +55,6 @@ set(Grantlee_TEMPLATES_LIB_SOVERSION ${Grantlee_VERSION_MAJOR})
 
 # Help IDEs find some non-compiled files.
 set(header_only_sources
-  containeraccessor.h
   customtyperegistry_p.h
   engine_p.h
   exception.h
@@ -117,7 +116,6 @@ install(TARGETS grantlee_core EXPORT grantlee_targets
 install(FILES
   abstractlocalizer.h
   cachingloaderdecorator.h
-  containeraccessor.h
   context.h
   engine.h
   exception.h

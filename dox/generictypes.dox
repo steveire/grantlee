@@ -326,58 +326,6 @@ namespace Grantlee
 
   For associative containers Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE is needed.
 
-  It might also be necessary, depending on the API of the container to define additional accessors for keys and
-  values from a %const_iterator. By default, %Grantlee uses iter.key() and iter.value() (The Qt default) to
-  access them. Grantlee::KeyGetter and Grantlee::MappedValueGetter can be specialized for custom access.
-  Note that they must be defined in the Grantlee namespace
-
-  @code
-    namespace {
-    // Make it possible to put Qt types in a std::hash_map
-    template <typename Key>
-    struct QtHasher
-    {
-      size_t operator()(Key k) const
-      { return qHash(k); }
-    };
-
-    // std::hash_map capable of storing Qt types.
-    template<typename Key, typename Value>
-    struct QtHashMap : public std::hash_map<Key, Value, QtHasher<Key> >
-    {
-
-    };
-
-    }
-
-    // Register the container with Grantlee
-    Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE(QtHashMap)
-
-    namespace Grantlee {
-
-    // Specialize for getting the key from the iterator
-    template<typename T, typename U>
-    struct KeyGetter<QtHashMap<T, U> > : public Getter<QtHashMap<T, U> >
-    {
-      static T get(typename QtHashMap<T, U>::const_iterator it)
-      {
-        return it->first;
-      }
-    };
-
-    // Specialize for getting the value from the iterator
-    template<typename T, typename U>
-    struct MappedValueGetter<QtHashMap<T, U> > : public Getter<QtHashMap<T, U> >
-    {
-      static U get(typename QtHashMap<T, U>::const_iterator it)
-      {
-        return it->second;
-      }
-    };
-    }
-
-  @endcode
-
   @section smart_pointers Smart Pointers
 
   Shared pointer types containing a custom type should be introspected as normal using GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP

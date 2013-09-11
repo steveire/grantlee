@@ -27,15 +27,6 @@
 #include "typeaccessor.h"
 
 #include <QtCore/QVariant>
-#include <QtCore/QStringList>
-#include <QtCore/QStack>
-#include <QtCore/QQueue>
-#include <QtCore/QDateTime>
-
-#include <deque>
-#include <list>
-#include <map>
-#include <vector>
 
 /// @file
 
@@ -65,19 +56,9 @@ public:
   typedef QVariant ( *LookupFunction )( const QVariant &, const QString & );
 
   /**
-    @internal The signature for a object to list method
-   */
-  typedef QVariantList ( *ToVariantListFunction )( const QVariant & );
-
-  /**
     @internal Registers a property lookup method
    */
   static void registerLookUpOperator( int id, LookupFunction f );
-
-  /**
-    @internal Registers a object to list method
-   */
-  static void registerToVariantListOperator( int id, ToVariantListFunction f );
 
   /**
     @internal
@@ -97,17 +78,7 @@ public:
   /**
     @internal
    */
-  static QVariantList toVariantList( const QVariant &obj );
-
-  /**
-    @internal
-   */
   static bool lookupAlreadyRegistered( int id );
-
-  /**
-    @internal
-   */
-  static bool toListAlreadyRegistered( int id );
 
 private:
   MetaType();
@@ -123,52 +94,10 @@ namespace
 template<typename RealType, typename HandleAs>
 struct LookupTrait
 {
-  static QVariant doLookUp( const QVariant &object, const QString &property );
-};
-
-template<typename T>
-struct IsQObjectStar
-{
-  enum { Yes = false };
-};
-
-template<typename T>
-struct IsQObjectStar<T*>
-{
-  typedef int yes_type;
-  typedef char no_type;
-
-  static yes_type check(QObject*);
-  static no_type check(...);
-  enum { Yes = sizeof(check(static_cast<T*>(0))) == sizeof(yes_type) };
-};
-
-template<typename T, bool>
-struct LookupPointer
-{
   static QVariant doLookUp( const QVariant &object, const QString &property )
   {
-    typedef typename Grantlee::TypeAccessor<T> Accessor;
-    return Accessor::lookUp( object.value<T>(), property );
-  }
-};
-
-template<typename T>
-struct LookupPointer<T, true>
-{
-  static QVariant doLookUp( const QVariant &object, const QString &property )
-  {
-    typedef typename Grantlee::TypeAccessor<QObject*> Accessor;
-    return Accessor::lookUp( object.value<T>(), property );
-  }
-};
-
-template<typename RealType>
-struct LookupTrait<RealType*, RealType*>
-{
-  static QVariant doLookUp( const QVariant &object, const QString &property )
-  {
-    return LookupPointer<RealType*, IsQObjectStar<RealType*>::Yes>::doLookUp(object, property);
+    typedef typename Grantlee::TypeAccessor<RealType> Accessor;
+    return Accessor::lookUp( object.value<RealType>(), property );
   }
 };
 
@@ -178,7 +107,7 @@ struct LookupTrait<RealType&, HandleAs&>
   static QVariant doLookUp( const QVariant &object, const QString &property )
   {
     typedef typename Grantlee::TypeAccessor<HandleAs&> Accessor;
-    return Accessor::lookUp( static_cast<HandleAs>( object.value<RealType>() ), property );
+    return Accessor::lookUp( object.value<HandleAs>(), property );
   }
 };
 
@@ -216,61 +145,7 @@ struct InternalRegisterType<RealType*, HandleAs*>
   }
 };
 
-template<typename Container, typename HandleAs>
-int registerSequentialContainer()
-{
-  const int id = InternalRegisterType<Container, HandleAs>::doReg();
-
-  if ( MetaType::toListAlreadyRegistered( id ) )
-    return id;
-
-  QVariantList ( *tlf )( const QVariant& ) = SequentialContainerAccessor<Container>::doToList;
-  MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );
-  return id;
 }
-
-template<typename Container>
-int registerSequentialContainer()
-{
-  return registerSequentialContainer<Container, Container>();
-}
-
-template<typename Container, typename HandleAs>
-int registerAssociativeContainer()
-{
-  const int id = InternalRegisterType<Container, HandleAs>::doReg();
-
-  if ( MetaType::toListAlreadyRegistered( id ) )
-    return id;
-
-  QVariantList ( *tlf )( const QVariant& ) = AssociativeContainerAccessor<Container>::doToList;
-  MetaType::registerToVariantListOperator( id, reinterpret_cast<MetaType::ToVariantListFunction>( tlf ) );
-  return id;
-}
-
-template<typename Container>
-int registerAssociativeContainer()
-{
-  return registerAssociativeContainer<Container, Container>();
-}
-
-}
-
-#ifndef Q_QDOC
-/**
-  @internal Registers a Type with the system so that containers of the type declared as a QMetaType can be used.
-
-  This is an implementation detail. GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF or GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF
-  should be used instead.
- */
-template<typename RealType, int n>
-struct RegisterTypeContainer
-{
-  static void reg()
-  {
-  }
-};
-#endif
 
 /**
   @brief Registers the type RealType with the metatype system.
@@ -332,68 +207,8 @@ int registerMetaType()
   return registerMetaType<Type, Type>();
 }
 
-// http://catb.org/jargon/html/magic-story.html
-enum {
-  Magic,
-  MoreMagic
-};
-
 #endif
 } // namespace Grantlee
-
-/**
-  Registers Container so that it can be accessed by %Grantlee.
-
-  @see @ref third_party_containers
-*/
-#define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER(Container)             \
-namespace Grantlee {                                                  \
-template<typename T>                                                  \
-struct RegisterTypeContainer<Container<T>, MoreMagic>                 \
-{                                                                     \
-  static int reg()                                                    \
-  {                                                                   \
-    const int id = registerSequentialContainer<Container<T> >();      \
-    return id;                                                        \
-  }                                                                   \
-};                                                                    \
-}                                                                     \
-
-/**
-  Registers Container so that it can be accessed by %Grantlee.
-
-  @see @ref third_party_containers
-*/
-#define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER(Container)                     \
-namespace Grantlee {                                                           \
-template<typename T, typename U>                                               \
-struct RegisterTypeContainer<Container<T, U>, MoreMagic>                       \
-{                                                                              \
-  static int reg()                                                             \
-  {                                                                            \
-    const int id = registerAssociativeContainer<Container<T, U> >();           \
-    return id;                                                                 \
-  }                                                                            \
-};                                                                             \
-}                                                                              \
-
-#ifndef Q_QDOC
-/**
-  @internal
- */
-#define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_AS(Container, As)               \
-namespace Grantlee {                                                           \
-template<typename T>                                                           \
-struct RegisterTypeContainer<Container<T>, MoreMagic>                          \
-{                                                                              \
-  static int reg()                                                             \
-  {                                                                            \
-    return registerSequentialContainer<Container<T>, As<T> >();                \
-  }                                                                            \
-};                                                                             \
-}                                                                              \
-
-#endif
 
 /**
   Top boundary of a lookup function for Type.

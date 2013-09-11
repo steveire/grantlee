@@ -48,14 +48,6 @@ void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
   customTypes()->registerLookupOperator( id, f );
 }
 
-void Grantlee::MetaType::registerToVariantListOperator( int id, ToVariantListFunction f )
-{
-  Q_ASSERT( id > 0 );
-  Q_ASSERT( f );
-
-  customTypes()->registerToListOperator( id, f );
-}
-
 QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &property )
 {
   if (object.canConvert<QObject*>()) {
@@ -127,20 +119,7 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
   return customTypes()->lookup( object, property );
 }
 
-QVariantList Grantlee::MetaType::toVariantList( const QVariant &object )
-{
-  if (object.canConvert<QVariantList>())
-    return object.value<QVariantList>();
-
-  return customTypes()->toVariantList( object );
-}
-
 bool Grantlee::MetaType::lookupAlreadyRegistered( int id )
 {
   return customTypes()->lookupAlreadyRegistered( id );
-}
-
-bool Grantlee::MetaType::toListAlreadyRegistered( int id )
-{
-  return customTypes()->toListAlreadyRegistered( id );
 }

@@ -40,12 +40,6 @@ namespace Grantlee
 GRANTLEE_CORE_EXPORT bool variantIsTrue( const QVariant &variant );
 
 /**
-  @deprecated Use MetaType::toVariantList instead.
-  Converts the @p variant into a list.
-*/
-GRANTLEE_CORE_EXPORT QVariantList variantToList( const QVariant &variant );
-
-/**
   Converts the @p input into its unescaped form.
 
   Double slashes are converted to single slashes, \\&quot is converted to &quot etc.

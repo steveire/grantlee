@@ -31,59 +31,17 @@
 
 using namespace Grantlee;
 
-namespace Grantlee
-{
-
-template<>
-QVariantList VariantToList<MetaEnumVariable>::doConvert( const QVariant &obj )
-{
-  const MetaEnumVariable mev = obj.value<MetaEnumVariable>();
-
-  if ( mev.value != -1 )
-    return QVariantList();
-
-  QVariantList list;
-  for ( int row = 0; row < mev.enumerator.keyCount(); ++row ) {
-    list << QVariant::fromValue( MetaEnumVariable( mev.enumerator, row ) );
-  }
-  return list;
-}
-
-template<>
-int CustomTypeRegistry::registerBuiltInMetatype<QObject*>()
-{
-  QVariant ( *lf )( const QVariant&, const QString& ) = LookupTrait<QObject*, QObject*>::doLookUp;
-
-  const int id = qMetaTypeId<QObject*>();
-
-  registerLookupOperator( id, reinterpret_cast<MetaType::LookupFunction>( lf ) );
-
-  return id;
-}
-
-}
-
 CustomTypeRegistry::CustomTypeRegistry()
 {
-  registerBuiltInMetatype<QObject*>();
-
   // Grantlee Types
   registerBuiltInMetatype<SafeString>();
   registerBuiltInMetatype<MetaEnumVariable>();
-
-  registerVariantToList<MetaEnumVariable>();
 }
 
 void CustomTypeRegistry::registerLookupOperator( int id, MetaType::LookupFunction f )
 {
   CustomTypeInfo &info = types[id];
   info.lookupFunction = f;
-}
-
-void CustomTypeRegistry::registerToListOperator( int id, MetaType::ToVariantListFunction f )
-{
-  CustomTypeInfo &info = types[id];
-  info.toVariantListFunction = f;
 }
 
 QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &property ) const
@@ -95,16 +53,6 @@ QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &prop
 
   {
     if ( !types.contains( id ) ) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-      if (object.userType() == qMetaTypeId<QVariantHash>()) {
-        // Workaround QTBUG-41403
-        return doAssociativeContainerLookup( object.value<QVariantHash>(), property );
-      } else if (object.canConvert<QVariantMap>()) {
-        return doAssociativeContainerLookup( object.value<QVariantMap>(), property );
-      } else if (object.canConvert<QVariantList>()) {
-        return SequentialContainerLookup<QVariantList >::doLookUp( object.value<QVariantList>(), property );
-      }
-#endif
       qWarning() << "Don't know how to handle metatype" << QMetaType::typeName( id );
       // :TODO: Print out error message
       return QVariant();
@@ -124,51 +72,7 @@ QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &prop
   return lf( object, property );
 }
 
-QVariantList CustomTypeRegistry::toVariantList( const QVariant &variant ) const
-{
-  if ( !variant.isValid() )
-    return QVariantList();
-
-  const int id = variant.userType();
-  MetaType::ToVariantListFunction tvlf;
-
-  {
-    if ( !types.contains( id ) ) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-      if (variant.canConvert<QVariantList>()) {
-        return variant.value<QVariantList>();
-      }
-#endif
-      qWarning() << "Don't know how to handle metatype for list" << QMetaType::typeName( id );
-      // :TODO: Print out error message
-      return QVariantList();
-    }
-
-    const CustomTypeInfo &info = types[id];
-    if ( !info.toVariantListFunction ) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-      if (variant.canConvert<QVariantList>()) {
-        return variant.value<QVariantList>();
-      }
-#endif
-      qWarning() << "No toList function for metatype" << QMetaType::typeName( id );
-      tvlf = 0;
-      // :TODO: Print out error message
-      return QVariantList();
-    }
-
-    tvlf = info.toVariantListFunction;
-  }
-
-  return tvlf( variant );
-}
-
 bool CustomTypeRegistry::lookupAlreadyRegistered( int id ) const
 {
   return types.contains( id ) && types.value( id ).lookupFunction != 0;
-}
-
-bool CustomTypeRegistry::toListAlreadyRegistered( int id ) const
-{
-  return types.value( id ).toVariantListFunction != 0;
 }

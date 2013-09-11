@@ -222,12 +222,6 @@ QVariant doQobjectLookUp( const QObject * const object, const QString &property 
 }
 
 template <>
-QVariant TypeAccessor<QObject*>::lookUp( const QObject * const object, const QString &property )
-{
-  return doQobjectLookUp( object, property );
-}
-
-template <>
 QVariant TypeAccessor<MetaEnumVariable&>::lookUp( const MetaEnumVariable &object, const QString &property )
 {
   if ( property == QLatin1String( "name" ) )

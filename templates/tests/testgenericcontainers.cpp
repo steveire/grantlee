@@ -27,6 +27,8 @@
 
 #include <QtTest/QTest>
 #include <QtCore/QVariant>
+#include <QtCore/QQueue>
+#include <QtCore/QStack>
 #include <QtCore/QLinkedList>
 #include "coverageobject.h"
 

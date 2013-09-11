@@ -73,11 +73,6 @@ bool Grantlee::variantIsTrue( const QVariant &variant )
   return !getSafeString( variant ).get().isEmpty();
 }
 
-QVariantList Grantlee::variantToList( const QVariant &var )
-{
-  return MetaType::toVariantList( var );
-}
-
 Grantlee::SafeString Grantlee::markSafe( const Grantlee::SafeString &input )
 {
   Grantlee::SafeString sret = input;

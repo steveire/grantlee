@@ -194,8 +194,6 @@ void TestDefaultTags::initTestCase()
   FakeTemplateLoader::Ptr loader1 = FakeTemplateLoader::Ptr( new FakeTemplateLoader() );
 
   m_engine->addTemplateLoader( loader1 );
-
-  Grantlee::registerMetaType<Table>();
 }
 
 void TestDefaultTags::cleanupTestCase()

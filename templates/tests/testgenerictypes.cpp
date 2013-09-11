@@ -27,11 +27,14 @@
 
 #include <QtTest/QTest>
 #include <QtCore/QVariant>
+#include <QtCore/QStack>
+#include <QtCore/QQueue>
 #include <QtCore/QVariantHash>
 #include <QtCore/QMetaType>
 #include <QtCore/QLinkedList>
 
 #include <string>
+#include <deque>
 #include "coverageobject.h"
 
 #ifndef GRANTLEE_NO_TR1
@@ -705,7 +708,6 @@ void TestGenericTypes::testCustomQObjectDerived()
   CustomObject *customObject = new CustomObject(this);
   customObject->setProperty("someProp", QLatin1String("propValue"));
 
-  Grantlee::registerMetaType<CustomObject*>();
 
   Grantlee::Context c;
   c.insert( QLatin1String( "custom" ), QVariant::fromValue( customObject ) );
@@ -755,7 +757,7 @@ GRANTLEE_BEGIN_LOOKUP(RegisteredNotListType)
     return 42;
 GRANTLEE_END_LOOKUP
 
-static QVariantList dummy( const QVariant& )
+static QVariantList dummy( const UnregisteredType& )
 {
   return QVariantList() << 42;
 }
@@ -789,7 +791,7 @@ void TestGenericTypes::testUnregistered()
   }
 
   {
-    Grantlee::MetaType::registerToVariantListOperator(qMetaTypeId<UnregisteredType>(), dummy);
+    QMetaType::registerConverter<UnregisteredType, QVariantList>(&dummy);
     UnregisteredType unregType;
     QVariant v = QVariant::fromValue( unregType );
     QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
