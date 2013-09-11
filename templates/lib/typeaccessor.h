@@ -49,13 +49,6 @@ struct TypeAccessor<T&>
   static QVariant lookUp( const T &object, const QString &property );
 };
 #endif
-
-#ifndef Q_QDOC
-/**
- * @internal Looks up the property @p property from QObject @p object.
- */
-QVariant GRANTLEE_CORE_EXPORT doQobjectLookUp( const QObject * const object, const QString& property );
-#endif
 }
 
 #endif

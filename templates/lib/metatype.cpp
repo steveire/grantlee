@@ -22,6 +22,7 @@
 #include "metatype.h"
 
 #include "customtyperegistry_p.h"
+#include "metaenumvariable_p.h"
 
 #include <QtCore/QDebug>
 
@@ -46,6 +47,66 @@ void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
   Q_ASSERT( f );
 
   customTypes()->registerLookupOperator( id, f );
+}
+
+static QVariant doQobjectLookUp( const QObject * const object, const QString &property )
+{
+  if (!object)
+    return QVariant();
+  if ( property == QLatin1String( "children" ) ) {
+    const QObjectList childList = object->children();
+    if ( childList.isEmpty() )
+      return QVariant();
+    QVariantList children;
+
+    QObjectList::const_iterator it = childList.constBegin();
+    const QObjectList::const_iterator end = childList.constEnd();
+    for ( ; it != end; ++it )
+      children.append( QVariant::fromValue( *it ) );
+    return children;
+  }
+
+  if ( property == QLatin1String( "objectName" ) ) {
+    return object->objectName();
+  }
+  // Can't be const because of invokeMethod.
+  const QMetaObject *metaObj = object->metaObject();
+
+  QMetaProperty mp;
+  for ( int i = 0; i < metaObj->propertyCount(); ++i ) {
+    // TODO only read-only properties should be allowed here.
+    // This might also handle the variant messing I hit before.
+    mp = metaObj->property( i );
+
+    if ( QString::fromUtf8( mp.name() ) != property )
+      continue;
+
+    if ( mp.isEnumType() ) {
+      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).toInt() );
+      return QVariant::fromValue( mev );
+    }
+
+    return mp.read( object );
+  }
+  QMetaEnum me;
+  for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
+    me = metaObj->enumerator( i );
+
+    if ( QLatin1String( me.name() ) == property ) {
+      MetaEnumVariable mev( me );
+      return QVariant::fromValue( mev );
+    }
+
+    const int value = me.keyToValue( property.toLatin1().constData() );
+
+    if ( value < 0 )
+      continue;
+
+    const MetaEnumVariable mev( me, value );
+
+    return QVariant::fromValue( mev );
+  }
+  return object->property( property.toUtf8().constData() );
 }
 
 QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &property )
