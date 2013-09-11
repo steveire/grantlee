@@ -29,6 +29,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QVariantHash>
 #include <QtCore/QMetaType>
+#include <QtCore/QLinkedList>
 
 #include <string>
 #include "coverageobject.h"

@@ -27,6 +27,7 @@
 
 #include <QtTest/QTest>
 #include <QtCore/QVariant>
+#include <QtCore/QLinkedList>
 #include "coverageobject.h"
 
 typedef QObject* QObjectStar;
