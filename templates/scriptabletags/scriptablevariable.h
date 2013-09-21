@@ -40,6 +40,7 @@ class ScriptableVariable : public QObject
   Q_OBJECT
 public:
   ScriptableVariable( QObject *parent = 0 );
+  ScriptableVariable( QScriptEngine *engine, QObject *parent = 0 );
 
   void setContent( const QString &content );
 
@@ -50,6 +51,7 @@ public Q_SLOTS:
 
 private:
   Variable m_variable;
+  QScriptEngine *m_engine;
 };
 
 #endif

@@ -96,3 +96,24 @@ var JoinFilter = function(input, filterArgument)
 JoinFilter.filterName = "join2";
 JoinFilter.isSafe = true;
 Library.addFilter("JoinFilter");
+
+
+function ResolverNode(content1, content2)
+{
+  this.content1 = content1;
+  this.content2 = content2;
+
+  this.render = function(context)
+  {
+    return this.content1.resolve(context).rawString() + " - " + this.content2.resolve(context).rawString();
+  };
+}
+
+function ResolverNodeFactory(tagContent, parser)
+{
+  var content = AbstractNodeFactory.smartSplit(tagContent);
+  return new Node("ResolverNode", FilterExpression(content[1]), Variable(content[2]));
+}
+
+ResolverNodeFactory.tagName = "resolver";
+Library.addFactory("ResolverNodeFactory", "resolver");

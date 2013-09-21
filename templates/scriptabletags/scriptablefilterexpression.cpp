@@ -24,6 +24,7 @@
 
 #include "parser.h"
 #include "scriptablecontext.h"
+#include "scriptablesafestring.h"
 #include "util.h"
 
 using namespace Grantlee;
@@ -45,7 +46,13 @@ QScriptValue ScriptableFilterExpressionConstructor( QScriptContext *context,
 
 
 ScriptableFilterExpression::ScriptableFilterExpression( QObject *parent )
-    : QObject( parent )
+    : QObject( parent ), m_engine( 0 )
+{
+
+}
+
+ScriptableFilterExpression::ScriptableFilterExpression( QScriptEngine *engine, QObject *parent )
+    : QObject( parent ), m_engine( engine )
 {
 
 }
@@ -58,7 +65,14 @@ void ScriptableFilterExpression::init( const QString& content, Grantlee::Parser*
 
 QVariant ScriptableFilterExpression::resolve( ScriptableContext* c )
 {
-  return m_filterExpression.resolve( c->context() );
+  QVariant var = m_filterExpression.resolve( c->context() );
+
+  if ( Grantlee::isSafeString( var ) ) {
+      ScriptableSafeString *ssObj = new ScriptableSafeString( m_engine );
+      ssObj->setContent( getSafeString( var ) );
+      return m_engine->newQObject( ssObj ).toVariant();
+  }
+  return var;
 }
 
 bool ScriptableFilterExpression::isTrue( ScriptableContext* c )
@@ -73,4 +87,3 @@ bool ScriptableFilterExpression::equals( ScriptableFilterExpression* other, Scri
 }
 
 #include "scriptablefilterexpression.moc"
-

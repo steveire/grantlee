@@ -40,6 +40,7 @@ class ScriptableFilterExpression : public QObject
   Q_OBJECT
 public:
   ScriptableFilterExpression( QObject *parent = 0 );
+  ScriptableFilterExpression( QScriptEngine *engine, QObject *parent = 0 );
 
   void init( const QString &content, Grantlee::Parser *parser );
 
@@ -54,6 +55,7 @@ public Q_SLOTS:
 
 private:
   Grantlee::FilterExpression m_filterExpression;
+  QScriptEngine *m_engine;
 };
 
 #endif

@@ -52,6 +52,11 @@ private Q_SLOTS:
     doTest();
   }
 
+  void testResolve_data();
+  void testResolve() {
+    doTest();
+  }
+
   void cleanupTestCase();
 
 private:
@@ -156,6 +161,21 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
 
   dict.clear();
 }
+
+void TestScriptableTagsSyntax::testResolve_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+  dict.insert( QLatin1String( "boo" ), QLatin1String( "Far" ) );
+  dict.insert( QLatin1String( "zing" ), QLatin1String( "Bang" ) );
+
+  QTest::newRow( "resolve-01" ) << "{% load scripteddefaults %}{% resolver boo zing %}" << dict << QString::fromLatin1( "Far - Bang" ) << NoError;
+}
+
 
 QTEST_MAIN( TestScriptableTagsSyntax )
 #include "testscriptabletags.moc"
