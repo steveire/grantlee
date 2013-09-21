@@ -20,7 +20,7 @@ bool TemplateReply::atEnd() const
 
 qint64 TemplateReply::bytesAvailable() const
 {
-  return m_buffer->bytesAvailable();
+  return m_buffer->bytesAvailable() + QNetworkReply::bytesAvailable();
 }
 
 bool TemplateReply::canReadLine() const
@@ -76,7 +76,7 @@ void TemplateReply::setReadBufferSize(qint64 size)
 
 qint64 TemplateReply::size() const
 {
-  return m_buffer->size();
+  return m_buffer->size() + QNetworkReply::size();
 }
 
 bool TemplateReply::waitForReadyRead(int msecs)
