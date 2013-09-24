@@ -72,21 +72,18 @@ configure_file(testresource.qrc.cmake "${PROJECT_BINARY_DIR}/testresource.qrc")
 set (_rcc_file "${PROJECT_BINARY_DIR}/testresource.qrc")
 qt4_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
 
-qt4_generate_moc(coverageobject.h "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc")
+add_library(template_test_builtins STATIC coverageobject.cpp
+  coverageobject.cpp
+  ${_testresource_rcc_src}
+)
+
 macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
   foreach(_testname ${ARGN})
-    set(_testSrcs ${_testname}.cpp )
-    set(moc_output_file "${CMAKE_CURRENT_BINARY_DIR}/${_testname}.moc")
-    qt4_generate_moc(${_testname}.cpp ${moc_output_file})
     add_executable(${_testname}_exec
-                  ${_testSrcs}
-                  coverageobject.cpp
-                  "${CMAKE_CURRENT_BINARY_DIR}/coverageobject.moc"
-                  ${moc_output_file}
-                  ${_testresource_rcc_src}
+                  ${_testname}.cpp
     )
     add_test(${_testname} ${_testname}_exec )
-    target_link_libraries(${_testname}_exec Qt4::QtTest grantlee_core )
+    target_link_libraries(${_testname}_exec Qt4::QtTest grantlee_core template_test_builtins)
 
     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)
