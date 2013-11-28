@@ -805,7 +805,7 @@ void TestInternationalization::testFloats_data()
   QTest::addColumn<QString>("frFloatingPoint");
 
   QTest::newRow("float-01")
-    << 7.4
+    << qreal(7.4)
     << QString::fromLatin1("7.4")
     << QString::fromLatin1("7.40")
     << QString::fromLatin1("7.40")
