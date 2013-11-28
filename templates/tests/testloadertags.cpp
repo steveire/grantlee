@@ -69,6 +69,8 @@ private:
 
 void TestLoaderTags::initTestCase()
 {
+  Q_INIT_RESOURCE(testresource);
+
   m_engine = new Engine( this );
 
   loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );

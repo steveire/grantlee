@@ -72,6 +72,8 @@ public:
   }
 
 private Q_SLOTS:
+  void initTestCase();
+
   void testContext();
   void testStrings();
   void testIntegers();
@@ -103,6 +105,11 @@ private:
 
   Grantlee::Engine *m_engine;
 };
+
+void TestInternationalization::initTestCase()
+{
+  Q_INIT_RESOURCE(testresource);
+}
 
 void TestInternationalization::testContext()
 {
