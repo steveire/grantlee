@@ -49,6 +49,9 @@ bool Grantlee::variantIsTrue( const QVariant &variant )
   case QVariant::Double: {
     return ( variant.toDouble() > 0 );
   }
+  case QMetaType::Float: {
+    return ( variant.toFloat() > 0 );
+  }
   case QMetaType::QObjectStar: {
     QObject *obj = variant.value<QObject *>();
     if ( !obj )
@@ -116,6 +119,7 @@ static QList<int> getPrimitives()
              << QVariant::Bool
              << QVariant::Int
              << QVariant::Double
+             << QMetaType::Float
              << QVariant::Date
              << QVariant::Time
              << QVariant::DateTime;
@@ -175,6 +179,7 @@ Grantlee::SafeString Grantlee::toString( const QVariantList &list )
     if ( ( item.type() == QVariant::Int )
       || ( item.type() == QVariant::UInt )
       || ( item.type() == QVariant::Double )
+      || ( item.userType() == QMetaType::Float )
       || ( item.type() == QVariant::LongLong )
       || ( item.type() == QVariant::ULongLong )
     ) {

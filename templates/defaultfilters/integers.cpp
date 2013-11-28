@@ -56,8 +56,8 @@ QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, b
     return input;
   }
 
-  if ( input.type() == QVariant::Double ) {
-    if ( argument.type() == QVariant::Double )
+  if ( input.canConvert( QVariant::Double ) ) {
+    if ( argument.canConvert( QVariant::Double ) )
       return input.toDouble() + argument.toDouble();
     return input;
   }
