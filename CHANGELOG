@@ -5,6 +5,24 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 0.3.0 --
+-------------------
+* Implement dictsort filter.
+* Implement convenience to get the size and count from a container.
+* Add many unit tests to improve coverage.
+* Remove some dead code reported by coverage analysis
+* Add roman numerals as list item output format.
+
+-- Version 0.2.0 --
+-------------------
+* Escape separator in the join tag
+* Fix build on solaris and similar buildsystems.
+* Fix build on OSX
+* Pass unit tests if run before installation
+* Add a testcocoon target for generating coverage data.
+* Run tests in alternative locale as part of release process.
+
+
 -- Version 0.1.9 --
 -------------------
 * Port the lexer to a state machine based string parser
