@@ -5,6 +5,17 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 0.4.0 --
+-------------------
+* Bump Grantlee CMake requirement to 2.8.9.
+* Use the CMAKE_AUTOMOC feature in Grantlee.
+* Clean up all CMake code.
+* Fix memory leak when deleting a localized template loader.
+* Clean up C++ code in preparation for Qt 5.
+* Update jQuery version used in example to the latest release.
+* Add API for resolving variables to strings in QtScript.
+* Fix tests on ARM and other platforms which use float for qreal.
+
 -- Version 0.3.0 --
 -------------------
 * Implement dictsort filter.
