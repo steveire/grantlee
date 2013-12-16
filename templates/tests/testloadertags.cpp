@@ -344,7 +344,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   QTest::newRow( "inheritance41" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "_new1_new2_new3_" ) << NoError;
 
-  dict.insert( QLatin1String( "list" ), QVariantList() << QString::fromLatin1( "One" ) << QString::fromLatin1( "Two" ) << QString::fromLatin1( "Three" ) );
+  QTest::newRow( "inheritance42" ) << QString::fromLatin1( "{% extends 'inheritance02'|cut:' ' %}" ) << dict << QString::fromLatin1( "1234" ) << NoError;
 
   /*
   // Tags that affect rendering have no afftect outside of a block in an extension template

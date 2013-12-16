@@ -47,19 +47,9 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   if ( expr.size() != 2 )
     throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: Include tag takes only one argument" ) );
 
-  QString parentName = expr.at( 1 );
-  FilterExpression fe;
-  const int size = parentName.size();
+  FilterExpression fe( expr.at( 1 ), p );
 
-  if (( parentName.startsWith( QLatin1Char( '"' ) ) && parentName.endsWith( QLatin1Char( '\"' ) ) )
-      || ( parentName.startsWith( QLatin1Char( '\'' ) ) && parentName.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    parentName = parentName.mid( 1, size - 2 );
-  } else {
-    fe = FilterExpression( parentName, p );
-    parentName.clear();
-  }
-
-  ExtendsNode *n = new ExtendsNode( parentName, fe, p );
+  ExtendsNode *n = new ExtendsNode( fe, p );
 
   TemplateImpl *t = qobject_cast<TemplateImpl *>( p->parent() );
 
@@ -76,10 +66,9 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   return n;
 }
 
-ExtendsNode::ExtendsNode( const QString &name, FilterExpression fe, QObject *parent )
+ExtendsNode::ExtendsNode( FilterExpression fe, QObject *parent )
     : Node( parent ),
-    m_filterExpression( fe ),
-    m_name( name )
+    m_filterExpression( fe )
 {
 }
 
@@ -112,17 +101,12 @@ void ExtendsNode::setNodeList( const NodeList &list )
 
 Template ExtendsNode::getParent( Context *c )
 {
-  QString parentName;
-  if ( m_name.isEmpty() ) {
-    const QVariant parentVar = m_filterExpression.resolve( c );
-    if ( parentVar.userType() == qMetaTypeId<Grantlee::Template>() ) {
-      return parentVar.value<Template>();
-    }
-
-    parentName = getSafeString( parentVar );
-  } else {
-    parentName = m_name;
+  const QVariant parentVar = m_filterExpression.resolve( c );
+  if ( parentVar.userType() == qMetaTypeId<Grantlee::Template>() ) {
+    return parentVar.value<Template>();
   }
+
+  QString parentName = getSafeString( parentVar );
 
   TemplateImpl *ti = containerTemplate();
 
@@ -142,7 +126,7 @@ void ExtendsNode::render( OutputStream *stream, Context *c )
   const Template parentTemplate = getParent( c );
 
   if ( !parentTemplate ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Cannot load template '%1'" ).arg( m_name ) );
+    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Cannot load template." ) );
   }
 
   QVariant &variant = c->renderContext()->data( 0 );

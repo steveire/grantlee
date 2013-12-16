@@ -47,7 +47,7 @@ class ExtendsNode : public Node
 {
   Q_OBJECT
 public:
-  ExtendsNode( const QString &filename, FilterExpression fe, QObject *parent = 0 );
+  ExtendsNode( FilterExpression fe, QObject *parent = 0 );
   ~ExtendsNode();
 
   void setNodeList( const NodeList &list );
@@ -65,7 +65,6 @@ public:
 
 private:
   FilterExpression m_filterExpression;
-  QString m_name;
   NodeList m_list;
   QHash<QString, BlockNode*> m_blocks;
 };
