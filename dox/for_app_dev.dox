@@ -194,7 +194,7 @@ namespace Grantlee
     public:
       PersonWrapper(const QString &name, int age, Home *home);
 
-      QObject* home() const { return home(); }
+      QObject* scriptableHome() const { return home(); }
       Home* home() const;
 
       // ...
