@@ -1,28 +1,22 @@
 project(books_grantlee)
 
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0)
 
 find_package(Grantlee REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
-
-QT4_WRAP_UI(books_example_UI_SRCS bookwindow.ui)
-
-qt4_add_resources(
-  books_example_RCS_SRCS
-  books.qrc
-)
 
 add_executable(books
   main.cpp
   bookwindow.cpp
   bookwrapper.cpp
   bookdelegate.cpp
-  ${books_example_RCS_SRCS}
-  ${books_example_UI_SRCS}
+  books.qrc
 )
 
 target_link_libraries(
