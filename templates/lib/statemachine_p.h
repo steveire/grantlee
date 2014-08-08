@@ -192,6 +192,7 @@ private:
       }
       childState = childState->parent();
       Q_ASSERT( childState != enteredState );
+      Q_UNUSED( enteredState );
     } while ( childState );
   }
 
