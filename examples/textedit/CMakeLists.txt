@@ -26,26 +26,17 @@ target_link_libraries(customtags ${Grantlee_TEXTDOCUMENT_LIBRARIES})
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-set(textedit_example_SRCS
+qt4_add_resources(
+  textedit_example_RCS_SRCS
+  textedit.qrc
+)
+
+add_executable(textedit
   main.cpp
   audiotextedit.cpp
   audioobject.cpp
   textedit.cpp
-)
-
-set(textedit_example_RCSS
-  textedit.qrc
-)
-
-qt4_add_resources(
-  textedit_example_RCS_SRCS
-  ${textedit_example_RCSS}
-)
-
-add_executable(textedit
-  ${textedit_example_SRCS}
   ${textedit_example_RCS_SRCS}
-  ${textedit_example_UI_SRCS}
 )
 
 target_link_libraries(

@@ -9,7 +9,20 @@ set(CMAKE_AUTOMOC ON)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-set(codegen_example_SRCS
+qt4_add_resources(
+  codegen_example_RCS_SRCS
+  codegen.qrc
+)
+
+qt4_add_resources(
+  codegen_example_RCS_SRCS
+  custom_tags.qrc
+  OPTIONS -root "/plugins/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}/"
+)
+
+qt4_wrap_ui(codegen_example_UI_SRCS designwidget.ui)
+
+add_executable(codegen
   comboboxdelegate.cpp
   main.cpp
   methodmodel.cpp
@@ -17,35 +30,6 @@ set(codegen_example_SRCS
   designwidget.cpp
   propertytablewidget.cpp
   mainwindow.cpp
-)
-
-set(codegen_example_RCSS
-  codegen.qrc
-)
-
-qt4_add_resources(
-  codegen_example_RCS_SRCS
-  ${codegen_example_RCSS}
-)
-
-set(codegen_example_tags_RCSS
-  custom_tags.qrc
-)
-
-qt4_add_resources(
-  codegen_example_RCS_SRCS
-  ${codegen_example_tags_RCSS}
-  OPTIONS -root "/plugins/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}/"
-)
-
-set(codegen_example_UI
-  designwidget.ui
-)
-
-qt4_wrap_ui(codegen_example_UI_SRCS ${codegen_example_UI})
-
-add_executable(codegen
-  ${codegen_example_SRCS}
   ${codegen_example_RCS_SRCS}
   ${codegen_example_UI_SRCS}
 )

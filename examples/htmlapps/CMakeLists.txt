@@ -12,13 +12,6 @@ include(${Grantlee_USE_FILE})
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-set(htmlapps_SRCS
-  main.cpp
-  mainwindow.cpp
-  localrequestmanager.cpp
-  templatereply.cpp
-)
-
 grantlee_add_plugin(customplugin
   customplugin
   TAGS
@@ -32,7 +25,10 @@ target_link_libraries(customplugin
 )
 
 add_executable(htmlapps
-  ${htmlapps_SRCS}
+  main.cpp
+  mainwindow.cpp
+  localrequestmanager.cpp
+  templatereply.cpp
 )
 
 target_link_libraries(htmlapps
