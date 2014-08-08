@@ -45,5 +45,3 @@ QVariant ArgsModel::headerData(int section, Qt::Orientation orientation, int rol
   }
   return QSortFilterProxyModel::headerData(section, orientation, role);
 }
-
-#include "methodmodel.moc"

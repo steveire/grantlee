@@ -194,6 +194,3 @@ QString DesignWidget::outputType() const
 {
   return ui.language_combo->currentText();
 }
-
-
-#include "designwidget.moc"

@@ -34,5 +34,3 @@ void CoverageObject::cleanup()
   __coveragescanner_clear();
 #endif
 }
-
-#include "coverageobject.moc"

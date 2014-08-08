@@ -66,5 +66,3 @@ QString ScriptableContext::render( const QObjectList &list )
   nodeList.render( &stream, m_c );
   return ret;
 }
-
-#include "scriptablecontext.moc"

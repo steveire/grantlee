@@ -42,5 +42,3 @@ QNetworkReply* LocalRequestManager::createRequest(QNetworkAccessManager::Operati
 
   return reply;
 }
-
-#include "localrequestmanager.moc"

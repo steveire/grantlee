@@ -59,5 +59,3 @@ AudioFormat::AudioFormat()
 {
   setObjectType( AudioType );
 }
-
-#include "audioobject.moc"

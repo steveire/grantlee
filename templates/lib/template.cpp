@@ -134,6 +134,3 @@ Engine const * TemplateImpl::engine() const
   Q_D( const Template );
   return d->m_engine.data();
 }
-
-#include "template.moc"
-

@@ -81,5 +81,3 @@ void PropertyTableWidget::slotClear()
   for (int row = rowCount() - 1; row >= 0; --row )
     removeRow(row);
 }
-
-#include "propertytablewidget.moc"

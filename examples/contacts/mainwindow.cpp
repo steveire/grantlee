@@ -172,6 +172,3 @@ void MainWindow::render()
 
   m_webView->setHtml(result);
 }
-
-#include "mainwindow.moc"
-

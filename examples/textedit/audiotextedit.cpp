@@ -62,5 +62,3 @@ bool AudioTextEdit::eventFilter(QObject* obj, QEvent* event)
 
   return true;
 }
-
-#include "audiotextedit.moc"

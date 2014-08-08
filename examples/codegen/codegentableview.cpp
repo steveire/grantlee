@@ -62,5 +62,3 @@ ArgsTableView::ArgsTableView(QWidget* parent)
   horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
 }
-
-#include "codegentableview.moc"

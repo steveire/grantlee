@@ -214,6 +214,3 @@ QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
 
   return l;
 }
-
-#include "node.moc"
-

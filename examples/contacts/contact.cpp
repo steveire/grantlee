@@ -168,7 +168,3 @@ void Contact::setFriends(const QList<QObject*> &friends)
 {
   m_friends = friends;
 }
-
-
-#include "contact.moc"
-

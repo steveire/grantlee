@@ -72,6 +72,3 @@ QObjectList ScriptableParser::parse( QObject *parent, const QStringList& stopAt 
   }
   return objList;
 }
-
-
-#include "scriptableparser.moc"

@@ -93,5 +93,3 @@ qint64 TemplateReply::readData(char* data, qint64 maxlen)
 {
   return m_buffer->read(data, maxlen);
 }
-
-#include "templatereply.moc"

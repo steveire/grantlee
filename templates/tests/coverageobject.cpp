@@ -50,5 +50,3 @@ void CoverageObject::cleanup()
   cleanupTest();
   saveCoverageData();
 }
-
-#include "coverageobject.moc"

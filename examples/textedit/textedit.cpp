@@ -842,5 +842,3 @@ void TextEdit::addAudio()
 
   textEdit->textCursor().insertText(QString(QChar::ObjectReplacementCharacter), audioFormat);
 }
-
-#include "textedit.moc"
