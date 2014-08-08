@@ -23,7 +23,7 @@
 #ifndef GRANTLEE_FILTER_H
 #define GRANTLEE_FILTER_H
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 #include "outputstream.h"
 #include "safestring.h"
 
@@ -49,7 +49,7 @@ namespace Grantlee
 
   @see @ref filters
 */
-class GRANTLEE_CORE_EXPORT Filter
+class GRANTLEE_TEMPLATES_EXPORT Filter
 {
 public:
 #ifndef Q_QDOC

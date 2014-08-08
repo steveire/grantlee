@@ -45,7 +45,7 @@ class ParserPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_CORE_EXPORT Parser : public QObject
+class GRANTLEE_TEMPLATES_EXPORT Parser : public QObject
 {
   Q_OBJECT
 public:

@@ -26,7 +26,7 @@
 #endif
 
 #include "abstractmarkupbuilder.h"
-#include "grantlee_gui_export.h"
+#include "grantlee_textdocument_export.h"
 #include "markupdirector.h"
 
 
@@ -87,7 +87,7 @@ class TextHTMLBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT TextHTMLBuilder : virtual public AbstractMarkupBuilder
+class GRANTLEE_TEXTDOCUMENT_EXPORT TextHTMLBuilder : virtual public AbstractMarkupBuilder
 {
 public:
 

@@ -23,7 +23,7 @@
 
 #include "variable.h"
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 namespace Grantlee
 {
@@ -102,7 +102,7 @@ class FilterExpressionPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_CORE_EXPORT FilterExpression
+class GRANTLEE_TEMPLATES_EXPORT FilterExpression
 {
 public:
   /**

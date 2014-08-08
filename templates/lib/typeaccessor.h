@@ -21,7 +21,7 @@
 #ifndef GRANTLEE_TYPEACCESSOR_H
 #define GRANTLEE_TYPEACCESSOR_H
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 #include <QtCore/QObject>
 

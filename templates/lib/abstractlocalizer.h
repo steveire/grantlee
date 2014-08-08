@@ -21,7 +21,7 @@
 #ifndef GRANTLEE_ABSTRACTLOCALIZER_H
 #define GRANTLEE_ABSTRACTLOCALIZER_H
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 #include <QtCore/QLocale>
 #include <QtCore/QSharedPointer>
@@ -38,7 +38,7 @@ namespace Grantlee
   This class defines an interface for accessing an internationalization, such as
   QLocale/QTranslator or gettext/KLocale.
 */
-class GRANTLEE_CORE_EXPORT AbstractLocalizer
+class GRANTLEE_TEMPLATES_EXPORT AbstractLocalizer
 {
 public:
   /**

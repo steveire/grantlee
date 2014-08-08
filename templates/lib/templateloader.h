@@ -22,7 +22,7 @@
 #define GRANTLEE_TEMPLATELOADER_H
 
 #include "template.h"
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 #include <QtCore/QSharedPointer>
 
@@ -43,7 +43,7 @@ class AbstractLocalizer;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_CORE_EXPORT AbstractTemplateLoader
+class GRANTLEE_TEMPLATES_EXPORT AbstractTemplateLoader
 {
 public:
   /**
@@ -120,7 +120,7 @@ public:
   @see @ref deploying_templates
 
 */
-class GRANTLEE_CORE_EXPORT FileSystemTemplateLoader : public AbstractTemplateLoader
+class GRANTLEE_TEMPLATES_EXPORT FileSystemTemplateLoader : public AbstractTemplateLoader
 {
 public:
 #ifndef Q_QDOC
@@ -177,7 +177,7 @@ class LocalizedFileSystemTemplateLoaderPrivate;
   This template loader not only loads templates from the file system, but also loads translation
   catalogs for themes.
 */
-class GRANTLEE_CORE_EXPORT LocalizedFileSystemTemplateLoader : public FileSystemTemplateLoader
+class GRANTLEE_TEMPLATES_EXPORT LocalizedFileSystemTemplateLoader : public FileSystemTemplateLoader
 {
 public:
 #ifndef Q_QDOC
@@ -218,7 +218,7 @@ private:
 
   Templates can be made available using the setTemplate method, and will then be retrieved by the Grantlee::Engine as appropriate.
 */
-class GRANTLEE_CORE_EXPORT InMemoryTemplateLoader : public AbstractTemplateLoader
+class GRANTLEE_TEMPLATES_EXPORT InMemoryTemplateLoader : public AbstractTemplateLoader
 {
 public:
 #ifndef Q_QDOC

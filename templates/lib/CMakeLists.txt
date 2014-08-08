@@ -81,18 +81,21 @@ add_library(grantlee_core SHARED
   ${grantlee_templates_SRCS}
   ${scriptabletags_SRCS}
 )
-generate_export_header(grantlee_core)
+generate_export_header(grantlee_core
+  EXPORT_MACRO_NAME GRANTLEE_TEMPLATES_EXPORT
+  EXPORT_FILE_NAME grantlee_templates_export.h
+)
 target_include_directories(grantlee_core PRIVATE ../scriptabletags)
 
 if (BUILD_TESTS)
-  set(GRANTLEE_TESTS_EXPORT "GRANTLEE_CORE_EXPORT")
+  set(GRANTLEE_TESTS_EXPORT "GRANTLEE_TEMPLATES_EXPORT")
 endif()
 
 configure_file(grantlee_test_export.h.in "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h")
 
 file(READ "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h" _content)
 
-file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_core_export.h" "${_content}")
+file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h" "${_content}")
 
 target_link_libraries(grantlee_core
   LINK_PUBLIC Qt5::Core
@@ -121,7 +124,7 @@ install(FILES
   exception.h
   filter.h
   filterexpression.h
-  ${PROJECT_BINARY_DIR}/grantlee_core_export.h
+  ${PROJECT_BINARY_DIR}/grantlee_templates_export.h
   ${PROJECT_BINARY_DIR}/grantlee_version.h
   metatype.h
   node.h

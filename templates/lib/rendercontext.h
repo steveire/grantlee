@@ -21,7 +21,7 @@
 #ifndef GRANTLEE_RENDERCONTEXT_H
 #define GRANTLEE_RENDERCONTEXT_H
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 #include <QtCore/QVariantHash>
 
@@ -44,7 +44,7 @@ class RenderContextPrivate;
  * This class can not be instatiated by users of it. An instance of RenderContext is available
  * through Context::renderContext() for use with implementations of re-entrant template tags.
  */
-class GRANTLEE_CORE_EXPORT RenderContext
+class GRANTLEE_TEMPLATES_EXPORT RenderContext
 {
 public:
   /**

@@ -25,7 +25,7 @@
 
 #include "context.h"
 #include "filterexpression.h"
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 #include "outputstream.h"
 #include "safestring.h"
 
@@ -73,7 +73,7 @@ class NodePrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_CORE_EXPORT Node : public QObject
+class GRANTLEE_TEMPLATES_EXPORT Node : public QObject
 {
   Q_OBJECT
 public:
@@ -139,7 +139,7 @@ private:
 
   @see @ref tags_with_end_tags
 */
-class GRANTLEE_CORE_EXPORT NodeList : public QList<Grantlee::Node*>
+class GRANTLEE_TEMPLATES_EXPORT NodeList : public QList<Grantlee::Node*>
 {
 public:
   /**
@@ -279,7 +279,7 @@ class AbstractNodeFactoryPrivate;
 
   @see Parser::parse
 */
-class GRANTLEE_CORE_EXPORT AbstractNodeFactory : public QObject
+class GRANTLEE_TEMPLATES_EXPORT AbstractNodeFactory : public QObject
 {
   Q_OBJECT
 public:

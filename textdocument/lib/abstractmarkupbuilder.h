@@ -21,7 +21,7 @@
 #ifndef GRANTLEE_ABSTRACTMARKUPBUILDER_H
 #define GRANTLEE_ABSTRACTMARKUPBUILDER_H
 
-#include "grantlee_gui_export.h"
+#include "grantlee_textdocument_export.h"
 
 #include <QtCore/QString>
 #include <QtGui/QTextListFormat>
@@ -46,7 +46,7 @@ class AbstractMarkupBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT AbstractMarkupBuilder
+class GRANTLEE_TEXTDOCUMENT_EXPORT AbstractMarkupBuilder
 {
 public:
   /** Destructor */

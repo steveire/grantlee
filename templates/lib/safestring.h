@@ -21,7 +21,7 @@
 #ifndef GRANTLEE_SAFESTRING_H
 #define GRANTLEE_SAFESTRING_H
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 #include <QtCore/QString>
 #include <QtCore/QVariant>
@@ -70,7 +70,7 @@ namespace Grantlee
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_CORE_EXPORT SafeString
+class GRANTLEE_TEMPLATES_EXPORT SafeString
 {
 public:
   /**
@@ -135,7 +135,7 @@ public:
 
     This class is largely an implementation detail. See the SafeString documentation for details.
   */
-  class GRANTLEE_CORE_EXPORT NestedString : public QString
+  class GRANTLEE_TEMPLATES_EXPORT NestedString : public QString
   {
 #ifndef Q_QDOC
     friend class SafeString;

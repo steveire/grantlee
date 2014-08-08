@@ -23,7 +23,7 @@
 
 #include "templateloader.h"
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 namespace Grantlee
 {
@@ -61,7 +61,7 @@ class CachingLoaderDecoratorPrivate;
  * If the loading of Templates is a bottleneck in an application, it may make sense to use the caching decorator.
  *
  */
-class GRANTLEE_CORE_EXPORT CachingLoaderDecorator : public AbstractTemplateLoader
+class GRANTLEE_TEMPLATES_EXPORT CachingLoaderDecorator : public AbstractTemplateLoader
 {
 public:
 #ifndef Q_QDOC

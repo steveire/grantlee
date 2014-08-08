@@ -21,7 +21,11 @@ list(APPEND grantlee_textdocument_SRCS ${header_only_sources})
 add_library(grantlee_gui SHARED
   ${grantlee_textdocument_SRCS}
 )
-generate_export_header(grantlee_gui)
+generate_export_header(grantlee_gui
+  EXPORT_MACRO_NAME GRANTLEE_TEXTDOCUMENT_EXPORT
+  EXPORT_FILE_NAME grantlee_textdocument_export.h
+
+)
 
 target_link_libraries(grantlee_gui
   LINK_PUBLIC Qt5::Gui
@@ -48,7 +52,7 @@ install(FILES
   plaintextmarkupbuilder.h
   texthtmlbuilder.h
   mediawikimarkupbuilder.h
-  ${PROJECT_BINARY_DIR}/grantlee_gui_export.h
+  ${PROJECT_BINARY_DIR}/grantlee_textdocument_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT TextDocument
 )
 

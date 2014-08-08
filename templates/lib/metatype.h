@@ -22,7 +22,7 @@
 #ifndef GRANTLEE_METATYPE_H
 #define GRANTLEE_METATYPE_H
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 #include "typeaccessor.h"
 
@@ -47,7 +47,7 @@ namespace Grantlee
   @author Michael Jansen <kde@michael-jansen.biz>
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_CORE_EXPORT MetaType
+class GRANTLEE_TEMPLATES_EXPORT MetaType
 {
 public:
   /**

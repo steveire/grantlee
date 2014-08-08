@@ -23,7 +23,7 @@
 #define GRANTLEE_MARKUPDIRECTOR_H
 
 #include "abstractmarkupbuilder.h"
-#include "grantlee_gui_export.h"
+#include "grantlee_textdocument_export.h"
 
 #include <QtGui/QTextDocument>
 #include <QtGui/QTextFrame>
@@ -87,7 +87,7 @@ class MarkupDirectorPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT MarkupDirector
+class GRANTLEE_TEXTDOCUMENT_EXPORT MarkupDirector
 {
 public:
   /**

@@ -30,7 +30,7 @@
 #define DIGITSOFFSET 10
 
 #include "abstractmarkupbuilder.h"
-#include "grantlee_gui_export.h"
+#include "grantlee_textdocument_export.h"
 #include "markupdirector.h"
 
 class QBrush;
@@ -93,7 +93,7 @@ class PlainTextMarkupBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_GUI_EXPORT PlainTextMarkupBuilder : virtual public AbstractMarkupBuilder
+class GRANTLEE_TEXTDOCUMENT_EXPORT PlainTextMarkupBuilder : virtual public AbstractMarkupBuilder
 {
 public:
   /** Construct a new PlainTextHTMLMarkupBuilder. */

@@ -31,7 +31,7 @@ namespace Grantlee
 
   A Node for plain text. Plain text is everything between variables, comments and template tags.
 */
-class GRANTLEE_CORE_EXPORT TextNode : public Node
+class GRANTLEE_TEMPLATES_EXPORT TextNode : public Node
 {
   Q_OBJECT
 public:
@@ -51,7 +51,7 @@ private:
 
   A node for a variable or filter expression substitution.
 */
-class GRANTLEE_CORE_EXPORT VariableNode : public Node
+class GRANTLEE_TEMPLATES_EXPORT VariableNode : public Node
 {
   Q_OBJECT
 public:

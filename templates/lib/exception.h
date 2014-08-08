@@ -21,7 +21,7 @@
 #ifndef GRANTLEE_EXCEPTION_H
 #define GRANTLEE_EXCEPTION_H
 
-#include "grantlee_core_export.h"
+#include "grantlee_templates_export.h"
 
 #include <QtCore/QString>
 
@@ -78,7 +78,7 @@ enum Error {
   @endcode
 
 */
-class GRANTLEE_CORE_EXPORT Exception
+class GRANTLEE_TEMPLATES_EXPORT Exception
 {
 public:
   /**

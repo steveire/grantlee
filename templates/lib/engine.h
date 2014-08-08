@@ -107,7 +107,7 @@ class EnginePrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_CORE_EXPORT Engine : public QObject
+class GRANTLEE_TEMPLATES_EXPORT Engine : public QObject
 {
   Q_OBJECT
 public:
