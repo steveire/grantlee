@@ -8,8 +8,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-include(${Grantlee_USE_FILE})
-
 ## Grantlee plugin
 
 add_library(customtags MODULE

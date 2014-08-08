@@ -41,7 +41,6 @@ set(Grantlee_GUI_LIBRARY ${Grantlee_TEXTDOCUMENT_LIBRARY})
 set(Grantlee_GUI_LIBRARIES ${Grantlee_TEXTDOCUMENT_LIBRARIES})
 set(Grantlee_PLUGIN_PATH ${Grantlee_PLUGIN_DIR})
 
-# Now for the use file, which contains useful functions, sets up the project
-set(Grantlee_USE_FILE "${CMAKE_CURRENT_LIST_DIR}/GrantleeUse.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/GrantleeMacros.cmake")
 
 include(${CMAKE_CURRENT_LIST_DIR}/GrantleeTargets.cmake)

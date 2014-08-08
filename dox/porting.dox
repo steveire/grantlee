@@ -18,6 +18,17 @@ namespace Grantlee
   Templates library, and use the <tt>grantlee_adjust_plugin_name</tt> macro
   with the created target.
 
+  @subsection use_file_removed Grantlee_USE_FILE removed
+
+  The Grantlee_USE_FILE is obsolete and has been removed. Users should remove
+  code such as
+
+  @verbatim
+  include(${Grantlee_USE_FILE})
+  @endverbatim
+
+  from their buildsystems.
+
   @section cpp_porting C++ porting
 
   @subsection initialize_removed GRANTLEE_METATYPE_INITIALIZE macro removed

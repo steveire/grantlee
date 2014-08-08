@@ -1,8 +1,6 @@
 
 find_package(Qt5Script 5.2.0 REQUIRED)
 
-include(${Grantlee_USE_FILE})
-
 add_subdirectory(lib)
 
 if (BUILD_MAIN_PLUGINS)

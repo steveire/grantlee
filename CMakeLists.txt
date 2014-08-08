@@ -102,7 +102,7 @@ set( DATA_INSTALL_DIR share/apps )
 set( CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
 set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-set(Grantlee_USE_FILE "${Grantlee_MODULE_DIR}/GrantleeUse.cmake")
+include("${Grantlee_MODULE_DIR}/GrantleeMacros.cmake")
 
 if (BUILD_CORE AND BUILD_TEMPLATES)
   add_subdirectory(templates)
@@ -136,7 +136,7 @@ install(FILES
 )
 
 install(FILES
-  "${Grantlee_MODULE_DIR}/GrantleeUse.cmake"
+  "${Grantlee_MODULE_DIR}/GrantleeMacros.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Common
 )
