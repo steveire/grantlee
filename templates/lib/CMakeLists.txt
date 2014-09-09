@@ -70,10 +70,17 @@ file(READ "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h" _content)
 
 file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_core_export.h" "${_content}")
 
-target_link_libraries(grantlee_core
-  LINK_PUBLIC Qt4::QtCore
-  LINK_PRIVATE Qt4::QtScript
-)
+if (NOT Grantlee_Qt5_TRANSITIONAL)
+  target_link_libraries(grantlee_core
+    LINK_PUBLIC Qt4::QtCore
+    LINK_PRIVATE Qt4::QtScript
+  )
+else()
+  target_link_libraries(grantlee_core
+    LINK_PUBLIC Qt5::Core
+    LINK_PRIVATE Qt5::Script
+  )
+endif()
 
 if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
   set_target_properties(grantlee_core PROPERTIES

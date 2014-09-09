@@ -21,9 +21,20 @@ add_executable(contacts_linguist
 
 target_link_libraries(
   contacts_linguist
-  Qt4::QtWebKit
   ${Grantlee_TEMPLATES_LIBRARIES}
 )
+if (Grantlee_Qt5_TRANSITIONAL)
+  find_package(Qt5WebKitWidgets REQUIRED)
+  target_link_libraries(
+    contacts_linguist
+    Qt5::WebKitWidgets
+    )
+else()
+  target_link_libraries(
+    contacts_linguist
+    Qt4::QtWebKit
+  )
+endif()
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${PROJECT_SOURCE_DIR}/../../scripts" "${PROJECT_SOURCE_DIR}/scripts")
 

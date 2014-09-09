@@ -1,4 +1,6 @@
 
+#define QT_DISABLE_DEPRECATED_BEFORE 0
+
 #include "localrequestmanager.h"
 
 #include <QtCore/QDebug>

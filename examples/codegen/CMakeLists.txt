@@ -11,6 +11,12 @@ set(CMAKE_AUTORCC ON)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
+if (Grantlee_Qt5_TRANSITIONAL)
+  macro(qt4_add_resources)
+    qt5_add_resources(${ARGN})
+  endmacro()
+endif()
+
 qt4_add_resources(
   codegen_example_RCS_SRCS
   custom_tags.qrc
@@ -31,6 +37,18 @@ add_executable(codegen
 
 target_link_libraries(
   codegen
-  Qt4::QtGui
   ${Grantlee_TEMPLATES_LIBRARIES}
 )
+
+if (Grantlee_Qt5_TRANSITIONAL)
+  find_package(Qt5Widgets REQUIRED)
+  target_link_libraries(
+    codegen
+    Qt5::Widgets
+  )
+else()
+  target_link_libraries(
+    codegen
+    Qt4::QtGui
+  )
+endif()

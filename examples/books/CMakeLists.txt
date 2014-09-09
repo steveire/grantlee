@@ -21,7 +21,20 @@ add_executable(books
 
 target_link_libraries(
   books
-  Qt4::QtGui
-  Qt4::QtSql
   ${Grantlee_TEMPLATES_LIBRARIES}
 )
+
+if (Grantlee_Qt5_TRANSITIONAL)
+  find_package(Qt5 REQUIRED Sql Widgets)
+  target_link_libraries(
+    books
+    Qt5::Widgets
+    Qt5::Sql
+  )
+else()
+  target_link_libraries(
+    books
+    Qt4::QtGui
+    Qt4::QtSql
+  )
+endif()

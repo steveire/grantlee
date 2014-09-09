@@ -1,5 +1,9 @@
 
-find_package(Qt4 4.5.0 REQUIRED QtGui)
+if (Grantlee_Qt5_TRANSITIONAL)
+  find_package(Qt5Gui 5.3.0 REQUIRED)
+else()
+  find_package(Qt4 4.5.0 REQUIRED QtGui)
+endif()
 
 add_subdirectory(lib)
 

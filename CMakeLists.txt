@@ -20,6 +20,7 @@ option( BUILD_MAIN_PLUGINS "Build the Grantlee Templates plugins" TRUE )
 option( BUILD_I18N_PLUGIN "Build the Grantlee Templates i18n plugin" TRUE )
 option( BUILD_SCRIPT_PLUGIN "Build the Grantlee Templates scriptable tags plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
+option( Grantlee_Qt5_TRANSITIONAL "Build Grantlee with Qt5" FALSE)
 
 if (BUILD_TESTS)
   enable_testing()
@@ -225,12 +226,15 @@ if(LCOV_FOUND)
 
   # For an unknown reason lcov does not work with absolute paths such as ${CMAKE_BINARY_DIR}
   file(RELATIVE_PATH relBinaryDir / ${CMAKE_BINARY_DIR})
-  file(RELATIVE_PATH relQtDir / ${QT_HEADERS_DIR})
+  if (NOT Grantlee_Qt5_TRANSITIONAL)
+    file(RELATIVE_PATH relQtDir / ${QT_HEADERS_DIR})
+    set(Qt4_exclude -r test_all.info *${relQtDir}*)
+  endif()
 
   list(APPEND coverage_ARGS COMMAND ${LCOV_EXECUTABLE} -r test_all.info *${relBinaryDir}*
                                                                 -r test_all.info *pluginpointer*
                                                                 -r test_all.info *usr/include*
-                                                                -r test_all.info *${relQtDir}*
+                                                                ${Qt4_exclude}
                                                                 -o test_all.info
   )
 
