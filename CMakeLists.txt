@@ -1,7 +1,7 @@
 
-project(Grantlee)
-
 cmake_minimum_required(VERSION 2.8.11)
+
+project(Grantlee)
 
 # Workaround for http://public.kitware.com/Bug/view.php?id=12301
 if (MINGW)
