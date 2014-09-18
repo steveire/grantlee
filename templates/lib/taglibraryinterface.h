@@ -102,4 +102,3 @@ public:
 Q_DECLARE_INTERFACE( Grantlee::TagLibraryInterface, "org.kde.grantlee.TagLibraryInterface/1.0" )
 
 #endif
-

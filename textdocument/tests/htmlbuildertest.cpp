@@ -536,4 +536,3 @@ void TestHtmlOutput::testNewlinesThroughQTextCursor()
 
 QTEST_MAIN(TestHtmlOutput)
 #include "htmlbuildertest.moc"
-

@@ -331,4 +331,3 @@ private:
 Q_DECLARE_METATYPE( Grantlee::SafeString )
 
 #endif
-

@@ -78,4 +78,3 @@ QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument,
     return yes;
   return no;
 }
-

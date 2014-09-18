@@ -23,4 +23,3 @@
 #include "grantlee_export_plugin_p.h"
 
 GRANTLEE_EXPORT_PLUGIN( grantlee_i18ntags_library, I18nTagLibrary )
-

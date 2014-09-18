@@ -114,4 +114,3 @@ void IfChangedNode::render( OutputStream *stream, Context *c )
     m_falseList.render( stream, c );
   }
 }
-

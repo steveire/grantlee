@@ -54,4 +54,3 @@ void NowNode::render( OutputStream *stream, Context *c )
   Q_UNUSED( c )
   ( *stream ) << QDateTime::currentDateTime().toString( m_formatString );
 }
-

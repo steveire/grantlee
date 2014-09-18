@@ -8,4 +8,3 @@
     <file alias="test_fr_FR.qm">@PROJECT_BINARY_DIR@/test_fr_FR.qm</file>
 </qresource>
 </RCC>
-

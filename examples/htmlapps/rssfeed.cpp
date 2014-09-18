@@ -213,4 +213,3 @@ QVariant ResizeFilter::doFilter(const QVariant& input, const QVariant& argument,
   url.replace("_s", "_z");
   return url;
 }
-

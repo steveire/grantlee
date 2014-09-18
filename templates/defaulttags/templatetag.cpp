@@ -79,4 +79,3 @@ void TemplateTagNode::render( OutputStream *stream, Context *c )
   static QHash<QString, QString> map = getKeywordMap();
   ( *stream ) << map.value( m_name );
 }
-

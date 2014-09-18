@@ -126,4 +126,3 @@ void RangeNode::render( OutputStream *stream, Context* c )
       c->pop();
   }
 }
-

@@ -75,4 +75,3 @@ void FilterNode::render( OutputStream *stream, Context* c )
   m_fe.resolve( stream, c );
   c->pop();
 }
-

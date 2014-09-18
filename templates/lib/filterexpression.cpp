@@ -270,4 +270,3 @@ QStringList FilterExpression::filters() const
   Q_D( const FilterExpression );
   return d->m_filterNames;
 }
-

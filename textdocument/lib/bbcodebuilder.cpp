@@ -216,4 +216,3 @@ QString BBCodeBuilder::getResult()
   m_text.clear();
   return ret;
 }
-

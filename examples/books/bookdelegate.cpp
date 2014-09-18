@@ -125,4 +125,3 @@ QWidget *BookDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
 
     return sb;
 }
-

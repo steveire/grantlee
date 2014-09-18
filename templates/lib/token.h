@@ -56,4 +56,3 @@ struct Token {
 Q_DECLARE_TYPEINFO( Grantlee::Token, Q_MOVABLE_TYPE );
 
 #endif
-

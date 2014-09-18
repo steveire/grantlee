@@ -203,4 +203,3 @@ QTEST_MAIN( Benchmarking )
 #include "benchmarks.moc"
 
 #endif
-

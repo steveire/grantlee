@@ -23,5 +23,3 @@ target_link_libraries(
   Qt4::QtCore
   ${Grantlee_TEMPLATES_LIBRARIES}
 )
-
-

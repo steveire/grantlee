@@ -1686,4 +1686,3 @@ QTEST_MAIN( TestDefaultTags )
 #include "testdefaulttags.moc"
 
 #endif
-

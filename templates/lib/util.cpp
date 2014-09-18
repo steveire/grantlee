@@ -195,4 +195,3 @@ Grantlee::SafeString Grantlee::toString( const QVariantList &list )
 
   return output.append( QLatin1Char( ']' ) );
 }
-

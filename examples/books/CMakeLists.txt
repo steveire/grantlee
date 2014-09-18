@@ -31,6 +31,3 @@ target_link_libraries(
   Qt4::QtSql
   ${Grantlee_TEMPLATES_LIBRARIES}
 )
-
-
-

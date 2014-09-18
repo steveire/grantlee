@@ -116,4 +116,3 @@ QTEST_MAIN( TestSafeString )
 #include "testsafestring.moc"
 
 #endif
-

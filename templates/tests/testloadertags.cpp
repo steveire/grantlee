@@ -461,4 +461,3 @@ QTEST_MAIN( TestLoaderTags )
 #include "testloadertags.moc"
 
 #endif
-

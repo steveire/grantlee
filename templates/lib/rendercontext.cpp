@@ -80,4 +80,3 @@ void RenderContext::pop()
   Q_D( RenderContext );
   d->m_variantHashStack.removeFirst();
 }
-

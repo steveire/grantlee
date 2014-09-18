@@ -160,4 +160,3 @@ void ExtendsNode::appendNode( Node *node )
   m_list.append( node );
   node->setParent( parent() );
 }
-

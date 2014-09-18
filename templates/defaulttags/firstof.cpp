@@ -57,4 +57,3 @@ void FirstOfNode::render( OutputStream *stream, Context *c )
     }
   }
 }
-

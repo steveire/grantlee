@@ -583,4 +583,3 @@ void TestPlainMarkupOutput:: testBrInsideParagraph()
 
 QTEST_MAIN(TestPlainMarkupOutput)
 #include "plainmarkupbuildertest.moc"
-

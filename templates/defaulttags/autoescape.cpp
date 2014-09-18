@@ -78,4 +78,3 @@ void AutoescapeNode::render( OutputStream *stream, Context *c )
   m_list.render( stream, c );
   c->setAutoEscape( old_setting );
 }
-

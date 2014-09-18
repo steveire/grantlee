@@ -96,4 +96,3 @@ GRANTLEE_CORE_EXPORT Grantlee::SafeString toString( const QVariantList &list );
 }
 
 #endif
-

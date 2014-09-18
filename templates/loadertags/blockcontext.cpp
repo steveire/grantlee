@@ -58,4 +58,3 @@ bool BlockContext::isEmpty()
 {
   return m_blocks.isEmpty();
 }
-

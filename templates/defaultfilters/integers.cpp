@@ -96,4 +96,3 @@ QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argume
 
   return SafeString( value.get().at( value.get().size() - arg ) );
 }
-

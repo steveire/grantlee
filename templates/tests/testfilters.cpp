@@ -1051,4 +1051,3 @@ QTEST_MAIN( TestFilters )
 #include "testfilters.moc"
 
 #endif
-

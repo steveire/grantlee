@@ -60,4 +60,3 @@ QVariant PlainTextFilter::doFilter(const QVariant& input, const QVariant& argume
   delete builder;
   return markSafe(result);
 }
-

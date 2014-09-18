@@ -1663,4 +1663,3 @@ QTEST_MAIN( TestBuiltinSyntax )
 #include "testbuiltins.moc"
 
 #endif
-

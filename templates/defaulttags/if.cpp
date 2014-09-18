@@ -162,4 +162,3 @@ void IfNode::renderFalseList( OutputStream *stream, Context *c )
 {
   return m_falseList.render( stream, c );
 }
-

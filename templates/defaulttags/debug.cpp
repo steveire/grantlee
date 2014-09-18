@@ -64,4 +64,3 @@ void DebugNode::render( OutputStream *stream, Context *c )
 
   ( *stream ) << ret;
 }
-

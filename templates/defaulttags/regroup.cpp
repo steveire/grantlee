@@ -105,4 +105,3 @@ void RegroupNode::render( OutputStream *stream, Context *c )
   }
   c->insert( m_varName, contextList );
 }
-

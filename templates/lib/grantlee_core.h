@@ -24,4 +24,3 @@
 #include "grantlee_templates.h"
 
 #endif
-

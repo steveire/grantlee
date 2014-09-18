@@ -46,4 +46,3 @@
 #include "grantlee/variable.h"
 
 #endif
-

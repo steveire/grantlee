@@ -106,4 +106,3 @@ void IfEqualNode::render( OutputStream *stream, Context *c )
     m_falseList.render( stream, c );
 
 }
-

@@ -71,4 +71,3 @@ void WithLocaleNode::render( OutputStream *stream, Context *c )
   c->localizer()->popLocale();
   c->pop();
 }
-

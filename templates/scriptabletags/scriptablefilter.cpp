@@ -97,4 +97,3 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
   }
   return QVariant();
 }
-

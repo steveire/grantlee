@@ -36,4 +36,3 @@ static const char COMMENT_TAG_END[] = "#}";
 }
 
 #endif
-

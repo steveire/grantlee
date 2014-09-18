@@ -103,4 +103,3 @@ grantlee_templates_unit_tests(
 )
 
 add_subdirectory(pluginpointertest)
-

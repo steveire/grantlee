@@ -118,4 +118,3 @@ void CycleNode::render( OutputStream *stream, Context *c )
   }
   ( *stream ) << value;
 }
-

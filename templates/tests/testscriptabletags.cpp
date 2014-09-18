@@ -183,4 +183,3 @@ QTEST_MAIN( TestScriptableTagsSyntax )
 #include "testscriptabletags.moc"
 
 #endif
-

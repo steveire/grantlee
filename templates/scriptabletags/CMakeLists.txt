@@ -21,4 +21,3 @@ target_link_libraries(grantlee_scriptabletags
 install(TARGETS grantlee_scriptabletags
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
 )
-

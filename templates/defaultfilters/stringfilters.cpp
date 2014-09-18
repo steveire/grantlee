@@ -394,4 +394,3 @@ QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argumen
   inputString = inputString.remove( QRegExp( QLatin1String( "[^\\w\\s-]" ) ) ).trimmed().toLower();
   return markSafe( inputString.replace( QRegExp( QLatin1String( "[-\\s]+" ) ), QChar::fromLatin1( '-' ) ) );
 }
-

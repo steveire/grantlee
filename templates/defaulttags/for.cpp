@@ -246,4 +246,3 @@ void ForNode::render( OutputStream *stream, Context *c )
   }
   c->pop();
 }
-

@@ -95,4 +95,3 @@ void ConstantIncludeNode::render( OutputStream *stream, Context *c )
   if ( t->error() )
     throw Grantlee::Exception( t->error(), t->errorString() );
 }
-

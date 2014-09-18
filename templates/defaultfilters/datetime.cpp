@@ -137,4 +137,3 @@ QVariant TimeUntilFilter::doFilter( const QVariant& input, const QVariant &argum
 
   return timeSince( early, input.toDateTime() );
 }
-

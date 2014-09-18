@@ -58,4 +58,3 @@ void LoadNode::render( OutputStream *stream, Context *c )
   Q_UNUSED( stream )
   Q_UNUSED( c )
 }
-

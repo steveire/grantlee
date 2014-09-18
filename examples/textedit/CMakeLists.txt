@@ -45,6 +45,3 @@ target_link_libraries(
   Qt4::phonon
   ${Grantlee_TEMPLATES_LIBRARIES}
 )
-
-
-

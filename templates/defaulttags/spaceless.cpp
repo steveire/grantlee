@@ -67,4 +67,3 @@ void SpacelessNode::render( OutputStream *stream, Context *c )
   m_nodeList.render( temp.data(), c );
   ( *stream ) << markSafe( stripSpacesBetweenTags( output.trimmed() ) );
 }
-
