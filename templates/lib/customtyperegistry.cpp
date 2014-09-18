@@ -95,6 +95,16 @@ QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &prop
 
   {
     if ( !types.contains( id ) ) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+      if (object.userType() == qMetaTypeId<QVariantHash>()) {
+        // Workaround QTBUG-41403
+        return doAssociativeContainerLookup( object.value<QVariantHash>(), property );
+      } else if (object.canConvert<QVariantMap>()) {
+        return doAssociativeContainerLookup( object.value<QVariantMap>(), property );
+      } else if (object.canConvert<QVariantList>()) {
+        return SequentialContainerLookup<QVariantList >::doLookUp( object.value<QVariantList>(), property );
+      }
+#endif
       qWarning() << "Don't know how to handle metatype" << QMetaType::typeName( id );
       // :TODO: Print out error message
       return QVariant();
@@ -124,6 +134,11 @@ QVariantList CustomTypeRegistry::toVariantList( const QVariant &variant ) const
 
   {
     if ( !types.contains( id ) ) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+      if (variant.canConvert<QVariantList>()) {
+        return variant.value<QVariantList>();
+      }
+#endif
       qWarning() << "Don't know how to handle metatype for list" << QMetaType::typeName( id );
       // :TODO: Print out error message
       return QVariantList();
@@ -131,6 +146,11 @@ QVariantList CustomTypeRegistry::toVariantList( const QVariant &variant ) const
 
     const CustomTypeInfo &info = types[id];
     if ( !info.toVariantListFunction ) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+      if (variant.canConvert<QVariantList>()) {
+        return variant.value<QVariantList>();
+      }
+#endif
       qWarning() << "No toList function for metatype" << QMetaType::typeName( id );
       tvlf = 0;
       // :TODO: Print out error message

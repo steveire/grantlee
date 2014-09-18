@@ -282,6 +282,13 @@ struct RegisterTypeContainer
 };
 #endif
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+
+#define GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(Container, Type)
+#define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, Key, Type)
+
+#else
+
 /**
   Registers Container&lt;Type&gt; with %Grantlee if it has been declared as a metatype.
 
@@ -296,6 +303,8 @@ struct RegisterTypeContainer
 */
 #define GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_KEY_IF(Container, Key, Type)                                   \
   Grantlee::RegisterTypeContainer<Container<Key, Type>, QMetaTypeId2<Container<Key, Type> >::Defined>::reg();  \
+
+#endif
 
 #endif
 
