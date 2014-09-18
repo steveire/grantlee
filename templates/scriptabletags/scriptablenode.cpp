@@ -56,7 +56,7 @@ QScriptValue ScriptableNodeConstructor( QScriptContext *context,
 
   concreteNode.call( concreteNode, args );
 
-  QScriptValue renderMethod = concreteNode.property( QLatin1String( "render" ) );
+  QScriptValue renderMethod = concreteNode.property( QStringLiteral( "render" ) );
 
   ScriptableNode *object = new ScriptableNode( engine );
   object->setObjectName( scriptableNodeName );

@@ -78,9 +78,9 @@ static void replacePercentN( QString *result, int n )
       QString fmt;
       if ( result->at( percentPos + len ) == QLatin1Char( 'L' ) ) {
         ++len;
-        fmt = QLatin1String( "%L1" );
+        fmt = QStringLiteral( "%L1" );
       } else {
-        fmt = QLatin1String( "%1" );
+        fmt = QStringLiteral( "%1" );
       }
       if ( result->at( percentPos + len ) == QLatin1Char( 'n' ) ) {
         fmt = fmt.arg( n );
@@ -121,7 +121,7 @@ QString NullLocalizer::localizePluralContextString( const QString& _string, cons
   QVariantList arguments = _arguments;
   QString string = _string;
   QString pluralForm = _pluralForm;
-  if ( _string.contains( QLatin1String( "%n" ) ) ) {
+  if ( _string.contains( QStringLiteral( "%n" ) ) ) {
     arguments.removeFirst();
     replacePercentN( &string, count );
     replacePercentN( &pluralForm, count );
@@ -140,7 +140,7 @@ QString NullLocalizer::localizePluralString( const QString& _string, const QStri
   QVariantList arguments = _arguments;
   QString string = _string;
   QString pluralForm = _pluralForm;
-  if ( _string.contains( QLatin1String( "%n" ) ) ) {
+  if ( _string.contains( QStringLiteral( "%n" ) ) ) {
     arguments.removeFirst();
     replacePercentN( &string, count );
     replacePercentN( &pluralForm, count );

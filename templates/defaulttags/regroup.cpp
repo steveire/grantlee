@@ -34,18 +34,18 @@ Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = tagContent.split( QLatin1Char( ' ' ) );
 
   if ( expr.size() != 6 ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "widthratio takes five arguments" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "widthratio takes five arguments" ) );
   }
   FilterExpression target( expr.at( 1 ), p );
-  if ( expr.at( 2 ) != QLatin1String( "by" ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "second argument must be 'by'" ) );
+  if ( expr.at( 2 ) != QStringLiteral( "by" ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "second argument must be 'by'" ) );
   }
 
-  if ( expr.at( 4 ) != QLatin1String( "as" ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "fourth argument must be 'as'" ) );
+  if ( expr.at( 4 ) != QStringLiteral( "as" ) ) {
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "fourth argument must be 'as'" ) );
   }
 
-  FilterExpression expression( QLatin1String( "\"" ) + expr.at( 3 ) + QLatin1String( "\"" ), p );
+  FilterExpression expression( QStringLiteral( "\"" ) + expr.at( 3 ) + QStringLiteral( "\"" ), p );
 
   QString name = expr.at( 5 );
 
@@ -83,24 +83,24 @@ void RegroupNode::render( OutputStream *stream, Context *c ) const
   while ( i.hasNext() ) {
     const QVariant var = i.next();
     c->push();
-    c->insert( QLatin1String( "var" ), var );
-    const QString key = getSafeString( FilterExpression( QLatin1String( "var." ) + keyName, 0 ).resolve( c ) );
+    c->insert( QStringLiteral( "var" ), var );
+    const QString key = getSafeString( FilterExpression( QStringLiteral( "var." ) + keyName, 0 ).resolve( c ) );
     c->pop();
     QVariantHash hash;
     if ( contextList.size() > 0 ) {
       QVariant hashVar = contextList.last();
       hash = hashVar.toHash();
     }
-    if ( !hash.contains( QLatin1String( "grouper" ) ) || hash.value( QLatin1String( "grouper" ) ) != key ) {
+    if ( !hash.contains( QStringLiteral( "grouper" ) ) || hash.value( QStringLiteral( "grouper" ) ) != key ) {
       QVariantHash newHash;
-      hash.insert( QLatin1String( "grouper" ), key );
-      hash.insert( QLatin1String( "list" ), QVariantList() );
+      hash.insert( QStringLiteral( "grouper" ), key );
+      hash.insert( QStringLiteral( "list" ), QVariantList() );
       contextList.append( newHash );
     }
 
-    QVariantList list = hash.value( QLatin1String( "list" ) ).toList();
+    QVariantList list = hash.value( QStringLiteral( "list" ) ).toList();
     list.append( var );
-    hash.insert( QLatin1String( "list" ), list );
+    hash.insert( QStringLiteral( "list" ), list );
     contextList[contextList.size() - 1] = hash;
   }
   c->insert( m_varName, contextList );

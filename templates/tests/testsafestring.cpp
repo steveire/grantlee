@@ -42,8 +42,8 @@ private Q_SLOTS:
 
 void TestSafeString::testCombining()
 {
-  QString string1 = QLatin1String( "this & that" );
-  QString string2 = QLatin1String( " over & under" );
+  QString string1 = QStringLiteral( "this & that" );
+  QString string2 = QStringLiteral( " over & under" );
   SafeString safeString1unsafe( string1 );
   SafeString safeString2unsafe( string2 );
   SafeString safeString1safe( string1, SafeString::IsSafe );
@@ -66,7 +66,7 @@ void TestSafeString::testCombining()
 
 void TestSafeString::testAppending()
 {
-  QString string1 = QLatin1String( "this & that" );
+  QString string1 = QStringLiteral( "this & that" );
   SafeString safeString1unsafe( string1 );
   SafeString safeString1safe( string1, SafeString::IsSafe );
   SafeString safeString2safe( string1, SafeString::IsSafe );
@@ -88,24 +88,24 @@ void TestSafeString::testAppending()
 
 void TestSafeString::testChopping()
 {
-  QString string1 = QLatin1String( "this & that" );
+  QString string1 = QStringLiteral( "this & that" );
   SafeString safeString1unsafe( string1 );
   SafeString safeString1safe( string1, SafeString::IsSafe );
 
   safeString1safe.get().chop( 4 );
   QVERIFY( !safeString1safe.isSafe() );
-  QVERIFY( QLatin1String( "this & " ) == safeString1safe.get() );
+  QVERIFY( QStringLiteral( "this & " ) == safeString1safe.get() );
   safeString1unsafe.get().chop( 4 );
   QVERIFY( !safeString1unsafe.isSafe() );
-  QVERIFY( QLatin1String( "this & " ) == safeString1unsafe.get() );
+  QVERIFY( QStringLiteral( "this & " ) == safeString1unsafe.get() );
 }
 
 void TestSafeString::testReplacing()
 {
-  QString string1 = QLatin1String( "x&\ny" );
+  QString string1 = QStringLiteral( "x&\ny" );
   SafeString safeString1safe( string1, SafeString::IsSafe );
 
-  SafeString result = safeString1safe.get().replace( QLatin1Char( '\n' ), QLatin1String( "<br />" ) );
+  SafeString result = safeString1safe.get().replace( QLatin1Char( '\n' ), QStringLiteral( "<br />" ) );
   QVERIFY( !result.isSafe() );
   QVERIFY( !safeString1safe.isSafe() );
   QCOMPARE( result.get(), safeString1safe.get() );

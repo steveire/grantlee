@@ -165,49 +165,49 @@ struct ContainerPopulator<std::map<QString, T> >
 template<typename T>
 QString getTemplate()
 {
-  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item }},{% endfor %}" );
+  return QStringLiteral( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item }},{% endfor %}" );
 }
 
 template<>
 QString getTemplate<QDateTime>()
 {
-  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item|date }},{% endfor %}" );
+  return QStringLiteral( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item|date }},{% endfor %}" );
 }
 
 template<>
 QString getTemplate<QObject*>()
 {
-  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item.objectName }},{% endfor %}" );
+  return QStringLiteral( "{{ container.size }};{{ container.count }};{% for item in container %}{{ item.objectName }},{% endfor %}" );
 }
 
 template<typename T>
 QString getAssociativeTemplate()
 {
-  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item }},{% endfor %}" );
+  return QStringLiteral( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item }},{% endfor %}" );
 }
 
 template<>
 QString getAssociativeTemplate<QDateTime>()
 {
-  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item|date }},{% endfor %}" );
+  return QStringLiteral( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item|date }},{% endfor %}" );
 }
 
 template<>
 QString getAssociativeTemplate<QObject*>()
 {
-  return QLatin1String( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item.objectName }},{% endfor %}" );
+  return QStringLiteral( "{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item.objectName }},{% endfor %}" );
 }
 
 template <typename T>
 QStringList getResults()
 {
-  return QStringList() << QLatin1String( "3;3;" ) << QLatin1String( "9," ) << QLatin1String( "7," ) << QLatin1String( "5," );
+  return QStringList() << QStringLiteral( "3;3;" ) << QStringLiteral( "9," ) << QStringLiteral( "7," ) << QStringLiteral( "5," );
 }
 
 template<>
 QStringList getResults<QDateTime>()
 {
-  return QStringList() << QLatin1String( "3;3;" ) << QLatin1String( "Jan. 1, 1970," ) << QLatin1String( "Jan. 2, 1970," ) << QLatin1String( "Jan. 3, 1970," );
+  return QStringList() << QStringLiteral( "3;3;" ) << QStringLiteral( "Jan. 1, 1970," ) << QStringLiteral( "Jan. 2, 1970," ) << QStringLiteral( "Jan. 3, 1970," );
 }
 
 template<typename Container, typename T = typename Container::value_type>
@@ -273,12 +273,12 @@ void testContainer( const QString &stringTemplate, const QVariant &containerVari
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Context c;
-  c.insert( QLatin1String( "container" ), containerVariant );
+  c.insert( QStringLiteral( "container" ), containerVariant );
 
-  Grantlee::Template t1 = engine.newTemplate( stringTemplate, QLatin1String( "template1" ) );
+  Grantlee::Template t1 = engine.newTemplate( stringTemplate, QStringLiteral( "template1" ) );
 
   QString result = t1->render( &c );
   if (!unordered)
@@ -289,11 +289,11 @@ void testContainer( const QString &stringTemplate, const QVariant &containerVari
       QVERIFY(result.contains(expectedResult));
   }
 
-  Grantlee::Template t2 = engine.newTemplate( QLatin1String( "-{{ container.doesnotexist }}-" ), QLatin1String( "template2" ) );
+  Grantlee::Template t2 = engine.newTemplate( QStringLiteral( "-{{ container.doesnotexist }}-" ), QStringLiteral( "template2" ) );
 
   QString result2 = t2->render( &c );
 
-  QCOMPARE( result2, QLatin1String( "--" ) );
+  QCOMPARE( result2, QStringLiteral( "--" ) );
 }
 
 template<typename Container>

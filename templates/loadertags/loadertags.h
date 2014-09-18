@@ -48,9 +48,9 @@ public:
     Q_UNUSED( name );
 
     QHash<QString, AbstractNodeFactory*> nodeFactories;
-    nodeFactories.insert( QLatin1String( "block" ), new BlockNodeFactory() );
-    nodeFactories.insert( QLatin1String( "extends" ), new ExtendsNodeFactory() );
-    nodeFactories.insert( QLatin1String( "include" ), new IncludeNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "block" ), new BlockNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "extends" ), new ExtendsNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "include" ), new IncludeNodeFactory() );
     return nodeFactories;
   }
 };

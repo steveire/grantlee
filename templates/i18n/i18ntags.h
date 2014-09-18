@@ -50,17 +50,17 @@ public:
     Q_UNUSED( name );
 
     QHash<QString, AbstractNodeFactory*> nodeFactories;
-    nodeFactories.insert( QLatin1String( "i18n" ), new I18nNodeFactory() );
-    nodeFactories.insert( QLatin1String( "i18n_var" ), new I18nVarNodeFactory() );
-    nodeFactories.insert( QLatin1String( "i18nc" ), new I18ncNodeFactory() );
-    nodeFactories.insert( QLatin1String( "i18nc_var" ), new I18ncVarNodeFactory() );
-    nodeFactories.insert( QLatin1String( "i18np" ), new I18npNodeFactory() );
-    nodeFactories.insert( QLatin1String( "i18np_var" ), new I18npVarNodeFactory() );
-    nodeFactories.insert( QLatin1String( "i18ncp" ), new I18ncpNodeFactory() );
-    nodeFactories.insert( QLatin1String( "i18ncp_var" ), new I18ncpVarNodeFactory() );
-    nodeFactories.insert( QLatin1String( "l10n_money" ), new L10nMoneyNodeFactory() );
-    nodeFactories.insert( QLatin1String( "l10n_money_var" ), new L10nMoneyVarNodeFactory() );
-    nodeFactories.insert( QLatin1String( "with_locale" ), new WithLocaleNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18n" ), new I18nNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18n_var" ), new I18nVarNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18nc" ), new I18ncNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18nc_var" ), new I18ncVarNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18np" ), new I18npNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18np_var" ), new I18npVarNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18ncp" ), new I18ncpNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "i18ncp_var" ), new I18ncpVarNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "l10n_money" ), new L10nMoneyNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "l10n_money_var" ), new L10nMoneyVarNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "with_locale" ), new WithLocaleNodeFactory() );
     // TODO: Compat and block tags
     return nodeFactories;
   }

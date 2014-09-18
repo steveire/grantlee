@@ -68,7 +68,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   }
 
   int exprSize = expr.size();
-  if ( exprSize > 4 && expr.at( exprSize - 2 ) == QLatin1String( "as" ) ) {
+  if ( exprSize > 4 && expr.at( exprSize - 2 ) == QStringLiteral( "as" ) ) {
     // {% cycle "foo" "bar" "bat" as var %}
     QString name = expr.at( exprSize - 1 );
     QStringList list = expr.mid( 1, exprSize - 3 );

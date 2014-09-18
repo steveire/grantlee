@@ -33,7 +33,7 @@ Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   QStringList expr = smartSplit( tagContent );
 
-  if ( expr.size() != 4 || expr.at( 2 ) != QLatin1String( "as" ) ) {
+  if ( expr.size() != 4 || expr.at( 2 ) != QStringLiteral( "as" ) ) {
     throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expected format is 'value as name'" ).arg( expr.first() ) );
   }
 
@@ -41,7 +41,7 @@ Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QString name( expr.at( 3 ) );
 
   WithNode *n = new WithNode( fe, name, p );
-  NodeList nodeList = p->parse( n, QLatin1String( "endwith" ) );
+  NodeList nodeList = p->parse( n, QStringLiteral( "endwith" ) );
   n->setNodeList( nodeList );
   p->removeNextToken();
 

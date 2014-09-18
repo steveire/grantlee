@@ -42,12 +42,12 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList vars;
 
   int reversed = ForNode::IsNotReversed;
-  if ( expr.last() == QLatin1String( "reversed" ) ) {
+  if ( expr.last() == QStringLiteral( "reversed" ) ) {
     reversed = ForNode::IsReversed;
     expr.removeLast();
   }
 
-  if ( expr.mid( expr.size() - 2 ).first() != QLatin1String( "in" ) ) {
+  if ( expr.mid( expr.size() - 2 ).first() != QStringLiteral( "in" ) ) {
     throw Grantlee::Exception( TagSyntaxError,
       QString::fromLatin1( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
   }
@@ -58,19 +58,19 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   Q_FOREACH( const QString &var, vars ) {
     if ( var.isNull() )
-      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'for' tag received invalid argument" ) );
+      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'for' tag received invalid argument" ) );
   }
 
   FilterExpression fe( expr.last(), p );
 
   ForNode *n = new ForNode( vars, fe, reversed, p );
 
-  NodeList loopNodes = p->parse( n, QStringList() << QLatin1String( "empty" ) << QLatin1String( "endfor" ) );
+  NodeList loopNodes = p->parse( n, QStringList() << QStringLiteral( "empty" ) << QStringLiteral( "endfor" ) );
   n->setLoopList( loopNodes );
 
   NodeList emptyNodes;
-  if ( p->takeNextToken().content.trimmed() == QLatin1String( "empty" ) ) {
-    emptyNodes = p->parse( n, QLatin1String( "endfor" ) );
+  if ( p->takeNextToken().content.trimmed() == QStringLiteral( "empty" ) ) {
+    emptyNodes = p->parse( n, QStringLiteral( "endfor" ) );
     n->setEmptyList( emptyNodes );
     // skip past the endfor tag
     p->removeNextToken();
@@ -109,14 +109,14 @@ static const char parentloop[] = "parentloop";
 void ForNode::insertLoopVariables( Context *c, int listSize, int i )
 {
   // some magic variables injected into the context while rendering.
-  static const QString counter0 = QLatin1String( "counter0" );
-  static const QString counter = QLatin1String( "counter" );
-  static const QString revcounter0 = QLatin1String( "revcounter0" );
-  static const QString revcounter = QLatin1String( "revcounter" );
-  static const QString first = QLatin1String( "first" );
-  static const QString last = QLatin1String( "last" );
+  static const QString counter0 = QStringLiteral( "counter0" );
+  static const QString counter = QStringLiteral( "counter" );
+  static const QString revcounter0 = QStringLiteral( "revcounter0" );
+  static const QString revcounter = QStringLiteral( "revcounter" );
+  static const QString first = QStringLiteral( "first" );
+  static const QString last = QStringLiteral( "last" );
 
-  QVariantHash forloopHash = c->lookup( QLatin1String( "forloop" ) ).toHash();
+  QVariantHash forloopHash = c->lookup( QStringLiteral( "forloop" ) ).toHash();
   forloopHash.insert( counter0, i );
   forloopHash.insert( counter, i + 1 );
   forloopHash.insert( revcounter, listSize - i );
@@ -255,8 +255,8 @@ void ForNode::render( OutputStream *stream, Context *c ) const
         // Probably have a list of objects that we're taking properties from.
         Q_FOREACH( const QString &loopVar, m_loopVars ) {
           c->push();
-          c->insert( QLatin1String( "var" ), v );
-          QVariant v = FilterExpression( QLatin1String( "var." ) + loopVar, 0 ).resolve( c );
+          c->insert( QStringLiteral( "var" ), v );
+          QVariant v = FilterExpression( QStringLiteral( "var." ) + loopVar, 0 ).resolve( c );
           c->pop();
           c->insert( loopVar, v );
         }

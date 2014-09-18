@@ -31,13 +31,13 @@ namespace Grantlee
 {
 
 static QRegExp getIsTitleRegexp() {
-  QRegExp titleRe( QLatin1String( "\\b[a-z]" ) );
+  QRegExp titleRe( QStringLiteral( "\\b[a-z]" ) );
   titleRe.setMinimal( true );
   return titleRe;
 }
 
 static QRegExp getTitleRegexp() {
-  QRegExp titleRe( QLatin1String( "\\b(.)" ) );
+  QRegExp titleRe( QStringLiteral( "\\b(.)" ) );
   titleRe.setMinimal( true );
   return titleRe;
 }
@@ -45,7 +45,7 @@ static QRegExp getTitleRegexp() {
 template <>
 QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString &object, const QString &property )
 {
-  if ( property == QLatin1String( "capitalize" ) ) {
+  if ( property == QStringLiteral( "capitalize" ) ) {
     const QString s = object.get();
     return QVariant(s.at( 0 ).toUpper() + s.right( s.length() - 1 ));
   }
@@ -53,7 +53,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
   static const QLatin1String falseString( "False" );
   static const QLatin1String trueString( "True" );
 
-  if ( property == QLatin1String( "isalnum" ) ) {
+  if ( property == QStringLiteral( "isalnum" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
@@ -63,7 +63,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     }
     return trueString;
   }
-  if ( property == QLatin1String( "isalpha" ) ) {
+  if ( property == QStringLiteral( "isalpha" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     if ( it == s.constEnd() )
@@ -75,7 +75,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     }
     return trueString;
   }
-  if ( property == QLatin1String( "isdigit" ) ) {
+  if ( property == QStringLiteral( "isdigit" ) ) {
     const QString s = object.get();
     QString::const_iterator it = s.constBegin();
     while ( it != s.constEnd() ) {
@@ -85,28 +85,28 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     }
     return trueString;
   }
-  if ( property == QLatin1String( "islower" ) ) {
+  if ( property == QStringLiteral( "islower" ) ) {
     const QString s = object.get().toLower();
     return ( s == object.get() ) ? trueString : falseString;
   }
-  if ( property == QLatin1String( "isspace" ) ) {
+  if ( property == QStringLiteral( "isspace" ) ) {
     const QString s = object.get().trimmed();
     return ( s.isEmpty() ) ? trueString : falseString;
   }
-  if ( property == QLatin1String( "istitle" ) ) {
+  if ( property == QStringLiteral( "istitle" ) ) {
     const QString s = object.get();
 
     static const QRegExp titleRe = getIsTitleRegexp();
     return ( titleRe.indexIn( s ) < 0 ) ? trueString : falseString;
   }
-  if ( property == QLatin1String( "isupper" ) ) {
+  if ( property == QStringLiteral( "isupper" ) ) {
     const QString s = object.get().toUpper();
     return ( s == object ) ? trueString : falseString;
   }
-  if ( property == QLatin1String( "lower" ) ) {
+  if ( property == QStringLiteral( "lower" ) ) {
     return object.get().toLower();
   }
-  if ( property == QLatin1String( "splitlines" ) ) {
+  if ( property == QStringLiteral( "splitlines" ) ) {
     const QStringList strings = object.get().split( QLatin1Char( '\n' ) );
     QVariantList list;
     QStringList::const_iterator it = strings.constBegin();
@@ -115,10 +115,10 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
       list << *it;
     return list;
   }
-  if ( property == QLatin1String( "strip" ) ) {
+  if ( property == QStringLiteral( "strip" ) ) {
     return object.get().trimmed();
   }
-  if ( property == QLatin1String( "swapcase" ) ) {
+  if ( property == QStringLiteral( "swapcase" ) ) {
     const QString inputString = object.get();
     QString s;
     s.reserve( inputString.size() );
@@ -134,7 +134,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     }
     return s;
   }
-  if ( property == QLatin1String( "title" ) ) {
+  if ( property == QStringLiteral( "title" ) ) {
     static const QRegExp titleRe = getTitleRegexp();
 
     const QString s = object.get();
@@ -155,7 +155,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     }
     return output;
   }
-  if ( property == QLatin1String( "upper" ) ) {
+  if ( property == QStringLiteral( "upper" ) ) {
     return object.get().toUpper();
   }
   return QVariant();
@@ -164,15 +164,15 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
 template <>
 QVariant TypeAccessor<MetaEnumVariable&>::lookUp( const MetaEnumVariable &object, const QString &property )
 {
-  if ( property == QLatin1String( "name" ) )
+  if ( property == QStringLiteral( "name" ) )
     return QLatin1String( object.enumerator.name() );
-  if ( property == QLatin1String( "value" ) )
+  if ( property == QStringLiteral( "value" ) )
     return object.value;
-  if ( property == QLatin1String( "key" ) )
+  if ( property == QStringLiteral( "key" ) )
     return QLatin1String( object.enumerator.valueToKey( object.value ) );
-  if ( property == QLatin1String( "scope" ) )
+  if ( property == QStringLiteral( "scope" ) )
     return QLatin1String( object.enumerator.scope() );
-  if ( property == QLatin1String( "keyCount" ) )
+  if ( property == QStringLiteral( "keyCount" ) )
     return object.enumerator.keyCount();
 
   bool ok = false;

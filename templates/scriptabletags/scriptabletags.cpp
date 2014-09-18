@@ -44,15 +44,15 @@ using namespace Grantlee;
 QScriptValue tokenToScriptValue( QScriptEngine *engine, const Token &t )
 {
   QScriptValue obj = engine->newObject();
-  obj.setProperty( QLatin1String( "tokenType" ), t.tokenType );
-  obj.setProperty( QLatin1String( "content" ), t.content );
+  obj.setProperty( QStringLiteral( "tokenType" ), t.tokenType );
+  obj.setProperty( QStringLiteral( "content" ), t.content );
   return obj;
 }
 
 void tokenFromScriptValue( const QScriptValue &obj, Token &t )
 {
-  t.tokenType = obj.property( QLatin1String( "tokenType" ) ).toInt32();
-  t.content = obj.property( QLatin1String( "content" ) ).toString();
+  t.tokenType = obj.property( QStringLiteral( "tokenType" ) ).toInt32();
+  t.content = obj.property( QStringLiteral( "content" ) ).toString();
 }
 
 ScriptableTagLibrary::ScriptableTagLibrary( QObject *parent )
@@ -68,35 +68,35 @@ ScriptableTagLibrary::ScriptableTagLibrary( QObject *parent )
   // Make Node new-able
   QScriptValue nodeCtor = m_scriptEngine->newFunction( ScriptableNodeConstructor );
   QScriptValue nodeMetaObject = m_scriptEngine->newQMetaObject( &ScriptableNode::staticMetaObject, nodeCtor );
-  m_scriptEngine->globalObject().setProperty( QLatin1String( "Node" ), nodeMetaObject );
+  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Node" ), nodeMetaObject );
 
   // Make Variable new-able
   QScriptValue variableCtor = m_scriptEngine->newFunction( ScriptableVariableConstructor );
   QScriptValue variableMetaObject = m_scriptEngine->newQMetaObject( &VariableNode::staticMetaObject, variableCtor );
-  m_scriptEngine->globalObject().setProperty( QLatin1String( "Variable" ), variableMetaObject );
+  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Variable" ), variableMetaObject );
 
   // Make FilterExpression new-able
   QScriptValue filterExpressionCtor = m_scriptEngine->newFunction( ScriptableFilterExpressionConstructor );
   QScriptValue filterExpressionMetaObject = m_scriptEngine->newQMetaObject( &ScriptableFilterExpression::staticMetaObject, filterExpressionCtor );
-  m_scriptEngine->globalObject().setProperty( QLatin1String( "FilterExpression" ), filterExpressionMetaObject );
+  m_scriptEngine->globalObject().setProperty( QStringLiteral( "FilterExpression" ), filterExpressionMetaObject );
 
   // Make Template new-able
   QScriptValue templateCtor = m_scriptEngine->newFunction( ScriptableTemplateConstructor );
   QScriptValue templateMetaObject = m_scriptEngine->newQMetaObject( &ScriptableTemplate::staticMetaObject, templateCtor );
-  m_scriptEngine->globalObject().setProperty( QLatin1String( "Template" ), templateMetaObject );
+  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Template" ), templateMetaObject );
 
   // Create a global Library object
   QScriptValue libraryObject = m_scriptEngine->newQObject( this );
-  m_scriptEngine->globalObject().setProperty( QLatin1String( "Library" ), libraryObject );
+  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Library" ), libraryObject );
 
   // Create a global AbstractNodeFactory object to make smartSplit available.
   ScriptableNodeFactory *nodeFactory = new ScriptableNodeFactory( this );
   QScriptValue nodeFactoryObject = m_scriptEngine->newQObject( nodeFactory );
-  m_scriptEngine->globalObject().setProperty( QLatin1String( "AbstractNodeFactory" ), nodeFactoryObject );
+  m_scriptEngine->globalObject().setProperty( QStringLiteral( "AbstractNodeFactory" ), nodeFactoryObject );
 
   // Make mark_safe a globally available object.
   QScriptValue markSafeFunctionObject = m_scriptEngine->newFunction( markSafeFunction );
-  m_scriptEngine->globalObject().setProperty( QLatin1String( "mark_safe" ), markSafeFunctionObject );
+  m_scriptEngine->globalObject().setProperty( QStringLiteral( "mark_safe" ), markSafeFunctionObject );
 
 }
 
@@ -176,7 +176,7 @@ QHash<QString, Filter*> ScriptableTagLibrary::getFilters()
   QListIterator<QString> it( m_filterNames );
   while ( it.hasNext() ) {
     QScriptValue filterObject = m_scriptEngine->globalObject().property( it.next() );
-    QString filterName = filterObject.property( QLatin1String( "filterName" ) ).toString();
+    QString filterName = filterObject.property( QStringLiteral( "filterName" ) ).toString();
     ScriptableFilter *filter = new ScriptableFilter( filterObject, m_scriptEngine );
     filters.insert( filterName, filter );
   }

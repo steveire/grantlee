@@ -37,22 +37,22 @@ Node* AutoescapeNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   if ( expr.size() != 2 ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "autoescape takes two arguments." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "autoescape takes two arguments." ) );
   }
 
   QString strState = expr.at( 1 );
   int state;
-  if ( strState == QLatin1String( "on" ) )
+  if ( strState == QStringLiteral( "on" ) )
     state = AutoescapeNode::On;
-  else if ( strState == QLatin1String( "off" ) )
+  else if ( strState == QStringLiteral( "off" ) )
     state = AutoescapeNode::Off;
   else {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "argument must be 'on' or 'off'" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "argument must be 'on' or 'off'" ) );
   }
 
   AutoescapeNode *n = new AutoescapeNode( state, p );
 
-  NodeList list = p->parse( n, QLatin1String( "endautoescape" ) );
+  NodeList list = p->parse( n, QStringLiteral( "endautoescape" ) );
   p->removeNextToken();
 
   n->setList( list );

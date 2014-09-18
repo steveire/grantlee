@@ -34,18 +34,18 @@ int main( int argc, char **argv )
   QCoreApplication app( argc, argv );
 
 #ifndef DONT_LEAK
-  QPluginLoader loader( app.applicationDirPath() + QLatin1String( "/myplugin.so" ) );
+  QPluginLoader loader( app.applicationDirPath() + QStringLiteral( "/myplugin.so" ) );
   QObject *raw_plugin = loader.instance();
   MyInterface *if1 = qobject_cast<MyInterface*>( raw_plugin );
 
   qDebug() << if1->double_it( 5 );
 #endif
 
-  PluginPointer<MyInterface> p1( app.applicationDirPath() + QLatin1String( "/myplugin.so" ) );
+  PluginPointer<MyInterface> p1( app.applicationDirPath() + QStringLiteral( "/myplugin.so" ) );
   PluginPointer<MyInterface> p2;
 
   if ( true ) {
-    PluginPointer<MyInterface> p3( app.applicationDirPath() + QLatin1String( "/myplugin.so" ) );
+    PluginPointer<MyInterface> p3( app.applicationDirPath() + QStringLiteral( "/myplugin.so" ) );
     p2 = p3;
     PluginPointer<MyInterface> p4( p3 );
     PluginPointer<MyInterface> p5 = p3;

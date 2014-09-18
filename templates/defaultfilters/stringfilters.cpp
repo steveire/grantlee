@@ -29,7 +29,7 @@ QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argu
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   SafeString safeString = getSafeString( input );
-  safeString.get().replace( QLatin1Char( '\\' ), QLatin1String( "\\\\" ) ).get().replace( QLatin1Char( '\"' ), QLatin1String( "\\\"" ) ).get().replace( QLatin1Char( '\'' ), QLatin1String( "\\\'" ) );
+  safeString.get().replace( QLatin1Char( '\\' ), QStringLiteral( "\\\\" ) ).get().replace( QLatin1Char( '\"' ), QStringLiteral( "\\\"" ) ).get().replace( QLatin1Char( '\'' ), QStringLiteral( "\\\'" ) );
   return safeString;
 }
 
@@ -52,21 +52,21 @@ EscapeJsFilter::EscapeJsFilter()
 static QList<QPair<QString, QString> > getJsEscapes()
 {
   QList<QPair<QString, QString> > jsEscapes;
-  jsEscapes << QPair<QString, QString>( QChar::fromLatin1( '\\' ), QLatin1String( "\\u005C" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '\'' ),  QLatin1String( "\\u0027" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '\"' ),  QLatin1String( "\\u0022" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '>' ), QLatin1String( "\\u003E" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '<' ), QLatin1String( "\\u003C" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '&' ), QLatin1String( "\\u0026" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '=' ), QLatin1String( "\\u003D" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( '-' ), QLatin1String( "\\u002D" ) )
-            << QPair<QString, QString>( QChar::fromLatin1( ';' ), QLatin1String( "\\u003B" ) )
-            << QPair<QString, QString>( QChar( 0x2028 ), QLatin1String( "\\u2028" ) )
-            << QPair<QString, QString>( QChar( 0x2029 ), QLatin1String( "\\u2029" ) );
+  jsEscapes << QPair<QString, QString>( QChar::fromLatin1( '\\' ), QStringLiteral( "\\u005C" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '\'' ),  QStringLiteral( "\\u0027" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '\"' ),  QStringLiteral( "\\u0022" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '>' ), QStringLiteral( "\\u003E" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '<' ), QStringLiteral( "\\u003C" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '&' ), QStringLiteral( "\\u0026" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '=' ), QStringLiteral( "\\u003D" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( '-' ), QStringLiteral( "\\u002D" ) )
+            << QPair<QString, QString>( QChar::fromLatin1( ';' ), QStringLiteral( "\\u003B" ) )
+            << QPair<QString, QString>( QChar( 0x2028 ), QStringLiteral( "\\u2028" ) )
+            << QPair<QString, QString>( QChar( 0x2029 ), QStringLiteral( "\\u2029" ) );
 
   for( int i = 0; i < 32; ++i )
   {
-    jsEscapes << QPair<QString, QString>( QChar( i ), QLatin1String( "\\u00" ) + QString::fromLatin1( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
+    jsEscapes << QPair<QString, QString>( QChar( i ), QStringLiteral( "\\u00" ) + QString::fromLatin1( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
   }
   return jsEscapes;
 }
@@ -94,9 +94,9 @@ QVariant FixAmpersandsFilter::doFilter( const QVariant& input, const QVariant &a
   Q_UNUSED( autoescape )
   SafeString safeString = getSafeString( input );
 
-  const QRegExp fixAmpersandsRegexp( QLatin1String( "&(?!(\\w+|#\\d+);)" ) );
+  const QRegExp fixAmpersandsRegexp( QStringLiteral( "&(?!(\\w+|#\\d+);)" ) );
 
-  safeString.get().replace( fixAmpersandsRegexp, QLatin1String( "&amp;" ) );
+  safeString.get().replace( fixAmpersandsRegexp, QStringLiteral( "&amp;" ) );
 
   return safeString;
 }
@@ -200,8 +200,8 @@ QVariant TruncateWordsFilter::doFilter( const QVariant& input, const QVariant &a
 
   if ( words.size() > numWords ) {
     words = words.mid( 0, numWords );
-    if ( !words.at( words.size() - 1 ).endsWith( QLatin1String( "..." ) ) ) {
-      words << QLatin1String( "..." );
+    if ( !words.at( words.size() - 1 ).endsWith( QStringLiteral( "..." ) ) ) {
+      words << QStringLiteral( "..." );
     }
   }
   return words.join( QChar::fromLatin1( ' ' ) );
@@ -281,7 +281,7 @@ QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argum
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
-  static QRegExp tagRe( QLatin1String( "<[^>]*>" ) );
+  static QRegExp tagRe( QStringLiteral( "<[^>]*>" ) );
   tagRe.setMinimal( true );
 
   QString value = getSafeString( input );
@@ -346,17 +346,17 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
 {
   Q_UNUSED( argument )
   SafeString inputString = getSafeString( input );
-  static const QRegExp re( QLatin1String( "\n{2,}" ) );
+  static const QRegExp re( QStringLiteral( "\n{2,}" ) );
   QStringList output;
 
   Q_FOREACH( const QString &bit, inputString.get().split( re ) ) {
     SafeString _bit = SafeString( bit, inputString.isSafe() );
     if ( autoescape )
       _bit = conditionalEscape( _bit );
-    _bit.get().replace( QLatin1Char( '\n' ), QLatin1String( "<br />" ) );
+    _bit.get().replace( QLatin1Char( '\n' ), QStringLiteral( "<br />" ) );
     output.append( QString::fromLatin1( "<p>%1</p>" ).arg( _bit ) );
   }
-  return markSafe( output.join( QLatin1String( "\n\n" ) ) );
+  return markSafe( output.join( QStringLiteral( "\n\n" ) ) );
 }
 
 QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
@@ -366,7 +366,7 @@ QVariant LineBreaksBrFilter::doFilter( const QVariant& input, const QVariant& ar
   if ( autoescape && isSafeString( input ) ) {
     inputString = conditionalEscape( inputString );
   }
-  return markSafe( inputString.get().replace( QLatin1Char( '\n' ), QLatin1String( "<br />" ) ) );
+  return markSafe( inputString.get().replace( QLatin1Char( '\n' ), QStringLiteral( "<br />" ) ) );
 }
 
 static QString nofailStringToAscii( const QString &input )
@@ -391,6 +391,6 @@ QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argumen
   QString inputString = getSafeString( input );
   inputString = inputString.normalized( QString::NormalizationForm_KD );
   inputString = nofailStringToAscii( inputString );
-  inputString = inputString.remove( QRegExp( QLatin1String( "[^\\w\\s-]" ) ) ).trimmed().toLower();
-  return markSafe( inputString.replace( QRegExp( QLatin1String( "[-\\s]+" ) ), QChar::fromLatin1( '-' ) ) );
+  inputString = inputString.remove( QRegExp( QStringLiteral( "[^\\w\\s-]" ) ) ).trimmed().toLower();
+  return markSafe( inputString.replace( QRegExp( QStringLiteral( "[-\\s]+" ) ), QChar::fromLatin1( '-' ) ) );
 }

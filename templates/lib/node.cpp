@@ -188,7 +188,7 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
 
 QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
 {
-  const QRegExp r( QLatin1String( "("                   // match
+  const QRegExp r( QStringLiteral( "("                   // match
                     "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
                       "(?:"                             // followed by
                         "(?:\""                         // Either a quote starting with "

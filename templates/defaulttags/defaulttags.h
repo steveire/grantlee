@@ -66,26 +66,26 @@ public:
 
     QHash<QString, AbstractNodeFactory*> nodeFactories;
 
-    nodeFactories.insert( QLatin1String( "autoescape" ), new AutoescapeNodeFactory() );
-    nodeFactories.insert( QLatin1String( "comment" ), new CommentNodeFactory() );
-    nodeFactories.insert( QLatin1String( "cycle" ), new CycleNodeFactory() );
-    nodeFactories.insert( QLatin1String( "debug" ), new DebugNodeFactory() );
-    nodeFactories.insert( QLatin1String( "filter" ), new FilterNodeFactory() );
-    nodeFactories.insert( QLatin1String( "firstof" ), new FirstOfNodeFactory() );
-    nodeFactories.insert( QLatin1String( "for" ), new ForNodeFactory() );
-    nodeFactories.insert( QLatin1String( "if" ), new IfNodeFactory() );
-    nodeFactories.insert( QLatin1String( "ifchanged" ), new IfChangedNodeFactory() );
-    nodeFactories.insert( QLatin1String( "ifequal" ), new IfEqualNodeFactory() );
-    nodeFactories.insert( QLatin1String( "ifnotequal" ), new IfNotEqualNodeFactory() );
-    nodeFactories.insert( QLatin1String( "load" ), new LoadNodeFactory() );
-    nodeFactories.insert( QLatin1String( "media_finder" ), new MediaFinderNodeFactory() );
-    nodeFactories.insert( QLatin1String( "now" ), new NowNodeFactory() );
-    nodeFactories.insert( QLatin1String( "range" ), new RangeNodeFactory() );
-    nodeFactories.insert( QLatin1String( "regroup" ), new RegroupNodeFactory() );
-    nodeFactories.insert( QLatin1String( "spaceless" ), new SpacelessNodeFactory() );
-    nodeFactories.insert( QLatin1String( "templatetag" ), new TemplateTagNodeFactory() );
-    nodeFactories.insert( QLatin1String( "widthratio" ), new WidthRatioNodeFactory() );
-    nodeFactories.insert( QLatin1String( "with" ), new WithNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "autoescape" ), new AutoescapeNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "comment" ), new CommentNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "cycle" ), new CycleNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "debug" ), new DebugNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "filter" ), new FilterNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "firstof" ), new FirstOfNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "for" ), new ForNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "if" ), new IfNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "ifchanged" ), new IfChangedNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "ifequal" ), new IfEqualNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "ifnotequal" ), new IfNotEqualNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "load" ), new LoadNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "media_finder" ), new MediaFinderNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "now" ), new NowNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "range" ), new RangeNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "regroup" ), new RegroupNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "spaceless" ), new SpacelessNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "templatetag" ), new TemplateTagNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "widthratio" ), new WidthRatioNodeFactory() );
+    nodeFactories.insert( QStringLiteral( "with" ), new WithNodeFactory() );
 
     return nodeFactories;
   }

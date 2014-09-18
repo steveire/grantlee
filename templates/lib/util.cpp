@@ -29,9 +29,9 @@
 QString Grantlee::unescapeStringLiteral( const QString &input )
 {
   return input.mid( 1, input.size() - 2 )
-         .replace( QLatin1String( "\\\'" ), QChar::fromLatin1( '\'' ) )
-         .replace( QLatin1String( "\\\"" ), QChar::fromLatin1( '"' ) )
-         .replace( QLatin1String( "\\\\" ), QChar::fromLatin1( '\\' ) );
+         .replace( QStringLiteral( "\\\'" ), QChar::fromLatin1( '\'' ) )
+         .replace( QStringLiteral( "\\\"" ), QChar::fromLatin1( '"' ) )
+         .replace( QStringLiteral( "\\\\" ), QChar::fromLatin1( '\\' ) );
 }
 
 bool Grantlee::variantIsTrue( const QVariant &variant )
@@ -167,7 +167,7 @@ Grantlee::SafeString Grantlee::toString( const QVariantList &list )
   while ( it != end ) {
     const QVariant item = *it;
     if ( isSafeString( item ) ) {
-      output += QLatin1Literal( "u\'" )
+      output += QStringLiteral( "u\'" )
               + static_cast<QString>( getSafeString( item ).get() )
               + QLatin1Char( '\'' );
     }
@@ -184,7 +184,7 @@ Grantlee::SafeString Grantlee::toString( const QVariantList &list )
       output += static_cast<QString>( toString( item.toList() ).get() );
     }
     if ( ( it + 1 ) != end )
-      output += QLatin1String( ", " );
+      output += QStringLiteral( ", " );
     ++it;
   }
 

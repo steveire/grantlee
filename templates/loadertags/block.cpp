@@ -42,7 +42,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   const QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "block tag takes one argument" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "block tag takes one argument" ) );
   }
 
   const QString blockName = expr.at( 1 );
@@ -68,7 +68,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
   BlockNode *n = new BlockNode( blockName, p );
-  const NodeList list = p->parse( n, QStringList() << QLatin1String( "endblock" ) << QLatin1String( "endblock " ) + blockName );
+  const NodeList list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) << QStringLiteral( "endblock " ) + blockName );
 
   n->setNodeList( list );
   p->removeNextToken();
@@ -101,7 +101,7 @@ void BlockNode::render( OutputStream *stream, Context *c ) const
   if ( blockContext.isEmpty() ) {
     m_context = c;
     m_stream = stream;
-    c->insert( QLatin1String( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( this ) ) ) );
+    c->insert( QStringLiteral( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( this ) ) ) );
     m_list.render( stream, c );
     m_stream = 0;
   } else {
@@ -118,7 +118,7 @@ void BlockNode::render( OutputStream *stream, Context *c ) const
     block->setNodeList( list );
     block->m_context = c;
     block->m_stream = stream;
-    c->insert( QLatin1String( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( block ) ) ) );
+    c->insert( QStringLiteral( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( block ) ) ) );
     list.render( stream, c );
 
     delete block;

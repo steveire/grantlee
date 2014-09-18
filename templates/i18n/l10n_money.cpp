@@ -37,7 +37,7 @@ Node* L10nMoneyNodeFactory::getNode( const QString& tagContent, Parser* p ) cons
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() < 2 )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: l10n_money tag takes at least one argument" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: l10n_money tag takes at least one argument" ) );
 
   FilterExpression value( expr.at( 1 ), p );
 
@@ -61,7 +61,7 @@ Grantlee::Node* L10nMoneyVarNodeFactory::getNode( const QString& tagContent, Par
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() < 4 )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: l10n_money tag takes at least three arguments" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: l10n_money tag takes at least three arguments" ) );
 
   FilterExpression value( expr.at( 1 ), p );
 

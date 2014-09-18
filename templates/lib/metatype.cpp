@@ -53,7 +53,7 @@ static QVariant doQobjectLookUp( const QObject * const object, const QString &pr
 {
   if (!object)
     return QVariant();
-  if ( property == QLatin1String( "children" ) ) {
+  if ( property == QStringLiteral( "children" ) ) {
     const QObjectList childList = object->children();
     if ( childList.isEmpty() )
       return QVariant();
@@ -66,7 +66,7 @@ static QVariant doQobjectLookUp( const QObject * const object, const QString &pr
     return children;
   }
 
-  if ( property == QLatin1String( "objectName" ) ) {
+  if ( property == QStringLiteral( "objectName" ) ) {
     return object->objectName();
   }
   // Can't be const because of invokeMethod.
@@ -116,7 +116,7 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
   }
   if (object.canConvert<QVariantList>()) {
     QSequentialIterable iter = object.value<QSequentialIterable>();
-    if (property == QLatin1String("size") || property == QLatin1String( "count" ) ) {
+    if (property == QStringLiteral("size") || property == QStringLiteral( "count" ) ) {
       return iter.size();
     }
 
@@ -137,12 +137,12 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
     if(mappedValue.isValid())
       return mappedValue;
 
-    if (property == QLatin1String("size") || property == QLatin1String( "count" ) )
+    if (property == QStringLiteral("size") || property == QStringLiteral( "count" ) )
     {
       return iter.size();
     }
 
-    if ( property == QLatin1String( "items" ) ) {
+    if ( property == QStringLiteral( "items" ) ) {
       QAssociativeIterable::const_iterator it = iter.begin();
       const QAssociativeIterable::const_iterator end = iter.end();
       QVariantList list;
@@ -155,7 +155,7 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
       return list;
     }
 
-    if ( property == QLatin1String( "keys" ) ) {
+    if ( property == QStringLiteral( "keys" ) ) {
       QAssociativeIterable::const_iterator it = iter.begin();
       const QAssociativeIterable::const_iterator end = iter.end();
       QVariantList list;
@@ -165,7 +165,7 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
       return list;
     }
 
-    if ( property == QLatin1String( "values" ) ) {
+    if ( property == QStringLiteral( "values" ) ) {
       QAssociativeIterable::const_iterator it = iter.begin();
       const QAssociativeIterable::const_iterator end = iter.end();
       QVariantList list;

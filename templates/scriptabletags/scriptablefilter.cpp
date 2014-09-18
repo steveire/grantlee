@@ -37,7 +37,7 @@ ScriptableFilter::~ScriptableFilter()
 
 bool ScriptableFilter::isSafe() const
 {
-  QScriptValue safety = m_filterObject.property( QLatin1String( "isSafe" ) );
+  QScriptValue safety = m_filterObject.property( QStringLiteral( "isSafe" ) );
   if ( safety.isBool() ) {
     return safety.toBool();
   }

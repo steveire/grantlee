@@ -72,10 +72,10 @@ void TestScriptableTagsSyntax::initTestCase()
 
   m_engine = new Engine( this );
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
-  m_engine->setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH )
+  m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH )
                                           << QString::fromLatin1( ":/plugins/" ) // For scripteddefaults.qs
                          );
-  m_engine->addDefaultLibrary( QLatin1String( "grantlee_scriptabletags" ) );
+  m_engine->addDefaultLibrary( QStringLiteral( "grantlee_scriptabletags" ) );
 }
 
 void TestScriptableTagsSyntax::cleanupTestCase()
@@ -124,8 +124,8 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
 
   Dict dict;
 
-  dict.insert( QLatin1String( "boo" ), QLatin1String( "Far" ) );
-  dict.insert( QLatin1String( "booList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
+  dict.insert( QStringLiteral( "boo" ), QStringLiteral( "Far" ) );
+  dict.insert( QStringLiteral( "booList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
 
   QTest::newRow( "scriptable-tags01" ) << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{{ boo }}{% endif2 %}" << dict << QString::fromLatin1( "Far" ) << NoError;
 
@@ -139,7 +139,7 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
   QTest::newRow( "scriptable-tags05" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ boo|upper }}" ) << dict << QString::fromLatin1( "FAR" ) << NoError;
 
 
-  dict.insert( QLatin1String( "boo" ), QLatin1String( "Far & away" ) );
+  dict.insert( QStringLiteral( "boo" ), QStringLiteral( "Far & away" ) );
   // Variables are escaped ...
   QTest::newRow( "scriptable-tags06" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ boo }}" ) << dict << QString::fromLatin1( "Far &amp; away" ) << NoError;
   // and scripted filters can mark output as 'safe'.
@@ -155,7 +155,7 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
   QTest::newRow( "scriptable-tags10" ) << "{% load scripteddefaults %}{{ booList|join2:\" & \" }}" << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
   // Nor are variables.
-  dict.insert( QLatin1String( "amp" ), QLatin1String( " & " ) );
+  dict.insert( QStringLiteral( "amp" ), QStringLiteral( " & " ) );
   QTest::newRow( "scriptable-tags11" ) << QString::fromLatin1( "{% load scripteddefaults %}{{ booList|join2:amp }}" ) << dict << QString::fromLatin1( "Tom & Dick & Harry" ) << NoError;
 
   QTest::newRow( "scriptable-load-error01" ) << QString::fromLatin1( "{% load %}{{ booList|join2:amp }}" ) << dict << QString() << TagSyntaxError;
@@ -171,8 +171,8 @@ void TestScriptableTagsSyntax::testResolve_data()
   QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
-  dict.insert( QLatin1String( "boo" ), QLatin1String( "Far" ) );
-  dict.insert( QLatin1String( "zing" ), QLatin1String( "Bang" ) );
+  dict.insert( QStringLiteral( "boo" ), QStringLiteral( "Far" ) );
+  dict.insert( QStringLiteral( "zing" ), QStringLiteral( "Bang" ) );
 
   QTest::newRow( "resolve-01" ) << "{% load scripteddefaults %}{% resolver boo zing %}" << dict << QString::fromLatin1( "Far - Bang" ) << NoError;
 }

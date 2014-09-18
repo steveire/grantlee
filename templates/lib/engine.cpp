@@ -42,9 +42,9 @@ static const char __scriptableLibName[] = "grantlee_scriptabletags";
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
 {
-  d_ptr->m_defaultLibraries << QLatin1String( "grantlee_defaulttags" )
-                            << QLatin1String( "grantlee_loadertags" )
-                            << QLatin1String( "grantlee_defaultfilters" );
+  d_ptr->m_defaultLibraries << QStringLiteral( "grantlee_defaulttags" )
+                            << QStringLiteral( "grantlee_loadertags" )
+                            << QStringLiteral( "grantlee_defaultfilters" );
 
   d_ptr->m_pluginDirs = QCoreApplication::instance()->libraryPaths();
   d_ptr->m_pluginDirs << QString::fromLocal8Bit( GRANTLEE_PLUGIN_PATH );
@@ -155,7 +155,7 @@ void Engine::loadDefaultLibraries()
     d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
     PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( __scriptableLibName, GRANTLEE_VERSION_MINOR );
     if ( !library )
-      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Could not load scriptable tags library" ) );
+      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Could not load scriptable tags library" ) );
 #endif
   }
 
@@ -242,7 +242,7 @@ EnginePrivate::EnginePrivate( Engine *engine )
 QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVersion ) const
 {
   int pluginIndex = 0;
-  const QString prefix = QLatin1Literal( "/grantlee/" )
+  const QString prefix = QStringLiteral( "/grantlee/" )
                        + QString::number( GRANTLEE_VERSION_MAJOR )
                        + QLatin1Char( '.' )
                        + QString::number( minorVersion )
@@ -252,7 +252,7 @@ QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVers
     const QString libFileName = nextDir
                               + prefix
                               + name
-                              + QLatin1Literal( ".qs" );
+                              + QStringLiteral( ".qs" );
 
     const QFile file( libFileName );
     if ( !file.exists() )
@@ -264,7 +264,7 @@ QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVers
   for ( ; it != end; ++it ) {
     const QPair<QString, QString> pair = ( *it )->getMediaUri( prefix
                                                             + name
-                                                            + QLatin1Literal( ".qs" ) );
+                                                            + QStringLiteral( ".qs" ) );
 
     if ( !pair.first.isEmpty() && !pair.second.isEmpty() ) {
       return pair.first + pair.second;
@@ -313,7 +313,7 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
   while ( m_pluginDirs.size() > pluginIndex ) {
     const QString nextDir = m_pluginDirs.at( pluginIndex++ );
     const QString pluginDirString = nextDir
-                                  + QLatin1Literal( "/grantlee/" )
+                                  + QStringLiteral( "/grantlee/" )
                                   + QString::number( GRANTLEE_VERSION_MAJOR )
                                   + QLatin1Char( '.' )
                                   + QString::number( minorVersion )

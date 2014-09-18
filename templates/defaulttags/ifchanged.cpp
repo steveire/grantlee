@@ -37,12 +37,12 @@ Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
   expr.takeAt( 0 );
   IfChangedNode *n =  new IfChangedNode( getFilterExpressionList( expr, p ), p );
 
-  NodeList trueList = p->parse( n, QStringList() << QLatin1String( "else" ) << QLatin1String( "endifchanged" ) );
+  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << QStringLiteral( "endifchanged" ) );
   n->setTrueList( trueList );
   NodeList falseList;
 
-  if ( p->takeNextToken().content.trimmed() == QLatin1String( "else" ) ) {
-    falseList = p->parse( n, QLatin1String( "endifchanged" ) );
+  if ( p->takeNextToken().content.trimmed() == QStringLiteral( "else" ) ) {
+    falseList = p->parse( n, QStringLiteral( "endifchanged" ) );
     n->setFalseList( falseList );
     p->removeNextToken();
   }
@@ -69,11 +69,11 @@ void IfChangedNode::setFalseList( NodeList falseList )
 
 void IfChangedNode::render( OutputStream *stream, Context *c ) const
 {
-  if ( c->lookup( QLatin1String( "forloop" ) ).isValid() && ( !c->lookup( QLatin1String( "forloop" ) ).toHash().contains( m_id ) ) ) {
+  if ( c->lookup( QStringLiteral( "forloop" ) ).isValid() && ( !c->lookup( QStringLiteral( "forloop" ) ).toHash().contains( m_id ) ) ) {
     m_lastSeen = QVariant();
-    QVariantHash hash = c->lookup( QLatin1String( "forloop" ) ).toHash();
+    QVariantHash hash = c->lookup( QStringLiteral( "forloop" ) ).toHash();
     hash.insert( m_id, 1 );
-    c->insert( QLatin1String( "forloop" ), hash );
+    c->insert( QStringLiteral( "forloop" ), hash );
   }
 
   QString watchedString;
@@ -106,8 +106,8 @@ void IfChangedNode::render( OutputStream *stream, Context *c ) const
     c->push();
     QVariantHash hash;
     // TODO: Document this.
-    hash.insert( QLatin1String( "firstloop" ), firstLoop );
-    c->insert( QLatin1String( "ifchanged" ), hash );
+    hash.insert( QStringLiteral( "firstloop" ), firstLoop );
+    c->insert( QStringLiteral( "ifchanged" ), hash );
     m_trueList.render( stream, c );
     c->pop();
   } else if ( !m_falseList.isEmpty() ) {

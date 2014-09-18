@@ -469,7 +469,7 @@ bool TextEdit::maybeSave()
 {
     if (!textEdit->document()->isModified())
         return true;
-    if (fileName.startsWith(QLatin1String(":/")))
+    if (fileName.startsWith(QStringLiteral(":/")))
         return true;
     QMessageBox::StandardButton ret;
     ret = QMessageBox::warning(this, tr("Application"),

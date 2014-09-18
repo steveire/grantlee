@@ -44,10 +44,10 @@ OutputStream::~OutputStream()
 QString OutputStream::escape( const QString &input ) const
 {
   QString temp = input;
-  temp.replace( QLatin1Char( '&' ), QLatin1String( "&amp;" ) );
-  temp.replace( QLatin1Char( '<' ), QLatin1String( "&lt;" ) );
-  temp.replace( QLatin1Char( '>' ), QLatin1String( "&gt;" ) );
-  temp.replace( QLatin1Char( '\'' ), QLatin1String( "&#39;" ) );
+  temp.replace( QLatin1Char( '&' ), QStringLiteral( "&amp;" ) );
+  temp.replace( QLatin1Char( '<' ), QStringLiteral( "&lt;" ) );
+  temp.replace( QLatin1Char( '>' ), QStringLiteral( "&gt;" ) );
+  temp.replace( QLatin1Char( '\'' ), QStringLiteral( "&#39;" ) );
   return temp;
 }
 

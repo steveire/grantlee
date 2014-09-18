@@ -104,9 +104,9 @@ static void replacePercentN( QString *result, int n )
       QString fmt;
       if ( result->at( percentPos + len ) == QLatin1Char( 'L' ) ) {
         ++len;
-        fmt = QLatin1String( "%L1" );
+        fmt = QStringLiteral( "%L1" );
       } else {
-        fmt = QLatin1String( "%1" );
+        fmt = QStringLiteral( "%1" );
       }
       if ( result->at( percentPos + len ) == QLatin1Char( 'n' ) ) {
         fmt = fmt.arg( n );
@@ -217,11 +217,11 @@ QString QtLocalizer::localizeNumber( qreal number ) const
 QString QtLocalizer::localizeMonetaryValue( qreal value, const QString& currencyCode ) const
 {
   Q_D( const QtLocalizer );
-  QString currencySymbol = QLatin1String( "$" );
-  if ( currencyCode == QLatin1String( "EUR" ) ) {
+  QString currencySymbol = QStringLiteral( "$" );
+  if ( currencyCode == QStringLiteral( "EUR" ) ) {
     currencySymbol = QChar( 0x20AC );
-  } else if ( currencyCode == QLatin1String( "GBP" ) ) {
-    currencySymbol = QLatin1String( "£" );
+  } else if ( currencyCode == QStringLiteral( "GBP" ) ) {
+    currencySymbol = QStringLiteral( "£" );
   } else {
     currencySymbol = currencyCode;
   }
@@ -291,7 +291,7 @@ void QtLocalizer::pushLocale( const QString& localeName )
   if ( !d->m_availableLocales.contains( localeName ) ) {
     localeStruct = new Locale( QLocale( localeName ) );
     QTranslator *qtTranslator = new QTranslator;
-    qtTranslator->load( QLatin1Literal( "qt_" ) + localeName,
+    qtTranslator->load( QStringLiteral( "qt_" ) + localeName,
                         QLibraryInfo::location( QLibraryInfo::TranslationsPath ) );
     localeStruct->systemTranslators.append( qtTranslator );
     QTranslator *appTranslator = new QTranslator;

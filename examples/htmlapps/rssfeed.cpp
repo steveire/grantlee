@@ -101,9 +101,9 @@ void RssFeedNode::render(Grantlee::OutputStream* stream, Grantlee::Context* c) c
   const QHash<QString, QVariant>::const_iterator end = h.constEnd();
   for ( ; it != end; ++it ) {
     if (it.key().isEmpty()) {
-      ns += QLatin1Literal( "declare default element namespace " ) + QLatin1Literal( " \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral( "declare default element namespace " ) + QLatin1Literal( " \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
     } else {
-      ns += QLatin1Literal( "declare namespace " ) + it.key() + QLatin1Literal( " = \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral( "declare namespace " ) + it.key() + QLatin1Literal( " = \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
     }
   }
   query.setQuery(ns + "doc($inputDocument)" + Grantlee::getSafeString(m_query.resolve(c)).get());
@@ -167,9 +167,9 @@ void XmlRoleNode::render(Grantlee::OutputStream *stream, Grantlee::Context *c) c
   const QHash<QString, QVariant>::const_iterator end = h.constEnd();
   for ( ; it != end; ++it ) {
     if (it.key().isEmpty()) {
-      ns += QLatin1Literal( "declare default element namespace " ) + QLatin1Literal( " \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral( "declare default element namespace " ) + QLatin1Literal( " \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
     } else {
-      ns += QLatin1Literal( "declare namespace " ) + it.key() + QLatin1Literal( " = \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral( "declare namespace " ) + it.key() + QLatin1Literal( " = \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
     }
   }
   q.setQuery(ns + Grantlee::getSafeString(m_query.resolve(c)));

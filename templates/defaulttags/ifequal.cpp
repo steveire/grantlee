@@ -45,11 +45,11 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
 
   IfEqualNode *n = new IfEqualNode( val1 , val2, negate, p );
 
-  const QString endTag( QLatin1String( "end" ) + expr.first() );
-  NodeList trueList = p->parse( n, QStringList() << QLatin1String( "else" ) << endTag );
+  const QString endTag( QStringLiteral( "end" ) + expr.first() );
+  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << endTag );
   n->setTrueList( trueList );
   NodeList falseList;
-  if ( p->takeNextToken().content.trimmed() == QLatin1String( "else" ) ) {
+  if ( p->takeNextToken().content.trimmed() == QStringLiteral( "else" ) ) {
     falseList = p->parse( n, QStringList() << endTag );
     n->setFalseList( falseList );
     p->removeNextToken();

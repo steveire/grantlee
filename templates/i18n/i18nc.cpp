@@ -42,13 +42,13 @@ Node* I18ncNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() < 3 )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18nc tag takes at least two arguments" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc tag takes at least two arguments" ) );
 
   QString contextText = expr.at( 1 );
 
   if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
        && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18nc tag first argument must be a static string." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc tag first argument must be a static string." ) );
   }
   contextText = contextText.mid( 1, contextText.size() - 2 );
 
@@ -56,7 +56,7 @@ Node* I18ncNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18nc tag second argument must be a static string." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc tag second argument must be a static string." ) );
   }
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 
@@ -79,13 +79,13 @@ Grantlee::Node* I18ncVarNodeFactory::getNode( const QString& tagContent, Parser*
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() < 5 )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18nc_var tag takes at least four arguments" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc_var tag takes at least four arguments" ) );
 
   QString contextText = expr.at( 1 );
 
   if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
        && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18nc_var tag first argument must be a static string." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc_var tag first argument must be a static string." ) );
   }
   contextText = contextText.mid( 1, contextText.size() - 2 );
 
@@ -93,7 +93,7 @@ Grantlee::Node* I18ncVarNodeFactory::getNode( const QString& tagContent, Parser*
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: i18nc_var tag second argument must be a static string." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc_var tag second argument must be a static string." ) );
   }
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 

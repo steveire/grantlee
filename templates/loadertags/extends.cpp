@@ -45,7 +45,7 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   const QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: Include tag takes only one argument" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: Include tag takes only one argument" ) );
 
   FilterExpression fe( expr.at( 1 ), p );
 
@@ -54,13 +54,13 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   TemplateImpl *t = qobject_cast<TemplateImpl *>( p->parent() );
 
   if ( !t )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Extends tag is not in a template." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Extends tag is not in a template." ) );
 
   const NodeList nodeList = p->parse( t );
   n->setNodeList( nodeList );
 
   if ( t->findChildren<ExtendsNode *>().size() > 1 ) {
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Extends tag may only appear once in a template." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Extends tag may only appear once in a template." ) );
   }
 
   return n;

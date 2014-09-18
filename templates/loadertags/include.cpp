@@ -36,7 +36,7 @@ Node* IncludeNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 )
-    throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Error: Include tag takes only one argument" ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: Include tag takes only one argument" ) );
 
   QString includeName = expr.at( 1 );
   int size = includeName.size();

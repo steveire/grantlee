@@ -106,9 +106,9 @@ int qHash( const Person &p )
 Q_DECLARE_METATYPE(Person)
 
 GRANTLEE_BEGIN_LOOKUP(Person)
-  if ( property == QLatin1String( "name" ) )
+  if ( property == QStringLiteral( "name" ) )
     return QString::fromStdString( object.name );
-  else if ( property == QLatin1String( "age" ) )
+  else if ( property == QStringLiteral( "age" ) )
     return object.age;
 GRANTLEE_END_LOOKUP
 
@@ -142,20 +142,20 @@ void TestGenericTypes::testGenericClassType()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Template t1 = engine.newTemplate(
-      QLatin1String( "Person: \nName: {{p.name}}\nAge: {{p.age}}\nUnknown: {{p.unknown}}" ),
-      QLatin1String( "template1" ) );
+      QStringLiteral( "Person: \nName: {{p.name}}\nAge: {{p.age}}\nUnknown: {{p.unknown}}" ),
+      QStringLiteral( "template1" ) );
 
   // Check it
   QVariantHash h;
   Person p( "Grant Lee", 2 );
-  h.insert( QLatin1String( "p" ), QVariant::fromValue( p ) );
+  h.insert( QStringLiteral( "p" ), QVariant::fromValue( p ) );
   Grantlee::Context c( h );
   QCOMPARE(
       t1->render( &c ),
-      QLatin1String( "Person: \nName: Grant Lee\nAge: 2\nUnknown: " ));
+      QStringLiteral( "Person: \nName: Grant Lee\nAge: 2\nUnknown: " ));
 
 }
 
@@ -177,7 +177,7 @@ void insertPeopleVariants( Grantlee::Context &c )
   SequentialContainer container;
   for ( ; it != end; ++it )
     container.push_back( QVariant::fromValue( it.value() ) );
-  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+  c.insert( QStringLiteral( "people" ), QVariant::fromValue( container ) );
 }
 
 template<typename AssociativeContainer>
@@ -189,7 +189,7 @@ void insertAssociatedPeopleVariants( Grantlee::Context &c )
   AssociativeContainer container;
   for ( ; it != end; ++it )
     container.insert( QString::number( it.key() ), QVariant::fromValue( it.value() ) );
-  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+  c.insert( QStringLiteral( "people" ), QVariant::fromValue( container ) );
 }
 
 template<>
@@ -209,15 +209,15 @@ void testSequentialIteration( Grantlee::Context c )
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-        QLatin1String( "{% for person in people %}{{ person.name }},{% endfor %}" ),
-        QLatin1String( "people_template" ) );
+        QStringLiteral( "{% for person in people %}{{ person.name }},{% endfor %}" ),
+        QStringLiteral( "people_template" ) );
     QCOMPARE(
       t1->render( &c ),
-      QLatin1String( "Claire,Grant,Alan," ) );
+      QStringLiteral( "Claire,Grant,Alan," ) );
   }
 }
 
@@ -226,15 +226,15 @@ void testSequentialIndexing( Grantlee::Context c )
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-        QLatin1String( "{{ people.0.name }},{{ people.1.name }},{{ people.2.name }}," ),
-        QLatin1String( "people_template" ) );
+        QStringLiteral( "{{ people.0.name }},{{ people.1.name }},{{ people.2.name }}," ),
+        QStringLiteral( "people_template" ) );
     QCOMPARE(
       t1->render( &c ),
-      QLatin1String( "Claire,Grant,Alan," ) );
+      QStringLiteral( "Claire,Grant,Alan," ) );
   }
 }
 
@@ -259,11 +259,11 @@ struct SequentialContainerTester<QSet<T> >
   {
     Grantlee::Engine engine;
 
-    engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+    engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
     Grantlee::Template t1 = engine.newTemplate(
-        QLatin1String( "{% for person in people %}{{ person.name }},{% endfor %}" ),
-        QLatin1String( "people_template" ) );
+        QStringLiteral( "{% for person in people %}{{ person.name }},{% endfor %}" ),
+        QStringLiteral( "people_template" ) );
     QString result = t1->render( &c );
     QStringList output;
     output << QString::fromLatin1("Claire,") << QString::fromLatin1("Grant,") << QString::fromLatin1("Alan,");
@@ -321,21 +321,21 @@ void testAssociativeValues( Grantlee::Context c, bool unordered = false )
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-        QLatin1String( "{% for person in people.values %}({{ person.name }}:{{ person.age }}),{% endfor %}" ),
-        QLatin1String( "people_template" ) );
+        QStringLiteral( "{% for person in people.values %}({{ person.name }}:{{ person.age }}),{% endfor %}" ),
+        QStringLiteral( "people_template" ) );
 
     QString result = t1->render( &c );
     if ( !unordered )
-      QCOMPARE( result, QLatin1String( "(Claire:23),(Grant:32),(Alan:50)," ) );
+      QCOMPARE( result, QStringLiteral( "(Claire:23),(Grant:32),(Alan:50)," ) );
     else {
       QVERIFY( result.size() == 33 );
-      QVERIFY( result.contains( QLatin1String( "(Claire:23)," ) ) );
-      QVERIFY( result.contains( QLatin1String( "(Grant:32)," ) ) );
-      QVERIFY( result.contains( QLatin1String( "(Alan:50)," ) ) );
+      QVERIFY( result.contains( QStringLiteral( "(Claire:23)," ) ) );
+      QVERIFY( result.contains( QStringLiteral( "(Grant:32)," ) ) );
+      QVERIFY( result.contains( QStringLiteral( "(Alan:50)," ) ) );
     }
   }
 }
@@ -345,20 +345,20 @@ void testAssociativeItems( Grantlee::Context c, bool unordered )
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-        QLatin1String( "{% for item in people.items %}({{ item.1.name }}:{{ item.1.age }}),{% endfor %}" ),
-        QLatin1String( "people_template" ) );
+        QStringLiteral( "{% for item in people.items %}({{ item.1.name }}:{{ item.1.age }}),{% endfor %}" ),
+        QStringLiteral( "people_template" ) );
     QString result = t1->render( &c );
     if ( !unordered )
-      QCOMPARE( result, QLatin1String( "(Claire:23),(Grant:32),(Alan:50)," ) );
+      QCOMPARE( result, QStringLiteral( "(Claire:23),(Grant:32),(Alan:50)," ) );
     else {
       QVERIFY( result.size() == 33 );
-      QVERIFY( result.contains( QLatin1String( "(Claire:23)," ) ) );
-      QVERIFY( result.contains( QLatin1String( "(Grant:32)," ) ) );
-      QVERIFY( result.contains( QLatin1String( "(Alan:50)," ) ) );
+      QVERIFY( result.contains( QStringLiteral( "(Claire:23)," ) ) );
+      QVERIFY( result.contains( QStringLiteral( "(Grant:32)," ) ) );
+      QVERIFY( result.contains( QStringLiteral( "(Alan:50)," ) ) );
     }
   }
 }
@@ -368,7 +368,7 @@ void doTestAssociativeContainer_Variant( bool unordered = false )
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Context c;
 
@@ -401,7 +401,7 @@ void insertPeople( Grantlee::Context &c )
   SequentialContainer container;
   for ( ; it != end; ++it )
     container.insert( container.end(), it.value() );
-  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+  c.insert( QStringLiteral( "people" ), QVariant::fromValue( container ) );
 }
 
 template<>
@@ -413,7 +413,7 @@ void insertPeople<QSet<Person> >( Grantlee::Context &c )
   QSet<Person> container;
   for ( ; it != end; ++it )
     container.insert( it.value() );
-  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+  c.insert( QStringLiteral( "people" ), QVariant::fromValue( container ) );
 }
 
 #ifndef GRANTLEE_NO_TR1
@@ -427,7 +427,7 @@ void insertPeople<ThreeArray<Person> >( Grantlee::Context &c )
     Q_ASSERT( it != people.constEnd() );
     container[i] = it.value();
   }
-  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+  c.insert( QStringLiteral( "people" ), QVariant::fromValue( container ) );
 }
 #endif
 
@@ -440,7 +440,7 @@ void insertAssociatedPeople( Grantlee::Context &c )
   AssociativeContainer container;
   for ( ; it != end; ++it )
     container[QString::number( it.key() )] = it.value();
-  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+  c.insert( QStringLiteral( "people" ), QVariant::fromValue( container ) );
 }
 
 template<typename AssociativeContainer>
@@ -452,7 +452,7 @@ void insertAssociatedPeople_Number( Grantlee::Context &c )
   AssociativeContainer container;
   for ( ; it != end; ++it )
     container[it.key()] = it.value();
-  c.insert( QLatin1String( "people" ), QVariant::fromValue( container ) );
+  c.insert( QStringLiteral( "people" ), QVariant::fromValue( container ) );
 }
 
 template<typename Container>
@@ -471,7 +471,7 @@ void doTestAssociativeContainer_Type( bool unordered = false )
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Context c;
 
@@ -485,7 +485,7 @@ void doTestAssociativeContainer_Type_Number( bool unordered = false )
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Context c;
 
@@ -495,10 +495,10 @@ void doTestAssociativeContainer_Type_Number( bool unordered = false )
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-        QLatin1String( "{{ people.23.name }}" ),
-        QLatin1String( "claire_template" ) );
+        QStringLiteral( "{{ people.23.name }}" ),
+        QStringLiteral( "claire_template" ) );
     QString result = t1->render( &c );
-    QCOMPARE( result, QLatin1String( "Claire" ) );
+    QCOMPARE( result, QStringLiteral( "Claire" ) );
   }
 
 }
@@ -559,20 +559,20 @@ void TestGenericTypes::testSharedPointer()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Template t1 = engine.newTemplate(
-      QLatin1String( "{{ p.name }} {{ p.age }}" ),
-      QLatin1String( "template1" ) );
+      QStringLiteral( "{{ p.name }} {{ p.age }}" ),
+      QStringLiteral( "template1" ) );
 
   // Check it
   QVariantHash h;
-  QSharedPointer<PersonObject> p( new PersonObject( QLatin1String( "Grant Lee" ), 2 ) );
-  h.insert( QLatin1String( "p" ), QVariant::fromValue( p ) );
+  QSharedPointer<PersonObject> p( new PersonObject( QStringLiteral( "Grant Lee" ), 2 ) );
+  h.insert( QStringLiteral( "p" ), QVariant::fromValue( p ) );
   Grantlee::Context c( h );
   QCOMPARE(
       t1->render( &c ),
-      QLatin1String( "Grant Lee 2" ));
+      QStringLiteral( "Grant Lee 2" ));
 
 }
 
@@ -581,20 +581,20 @@ void TestGenericTypes::testThirdPartySharedPointer()
 #ifndef GRANTLEE_NO_TR1
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Template t1 = engine.newTemplate(
-      QLatin1String( "{{ p.name }} {{ p.age }}" ),
-      QLatin1String( "template1" ) );
+      QStringLiteral( "{{ p.name }} {{ p.age }}" ),
+      QStringLiteral( "template1" ) );
 
   // Check it
   QVariantHash h;
-  std::tr1::shared_ptr<PersonObject> p( new PersonObject( QLatin1String( "Grant Lee" ), 2 ) );
-  h.insert( QLatin1String( "p" ), QVariant::fromValue( p ) );
+  std::tr1::shared_ptr<PersonObject> p( new PersonObject( QStringLiteral( "Grant Lee" ), 2 ) );
+  h.insert( QStringLiteral( "p" ), QVariant::fromValue( p ) );
   Grantlee::Context c( h );
   QCOMPARE(
       t1->render( &c ),
-      QLatin1String( "Grant Lee 2" ));
+      QStringLiteral( "Grant Lee 2" ));
 #endif
 }
 
@@ -642,13 +642,13 @@ void TestGenericTypes::testNestedContainers()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   Grantlee::Context c;
-  c.insert( QLatin1String( "stack" ), QVariant::fromValue( getMapStack() ) );
+  c.insert( QStringLiteral( "stack" ), QVariant::fromValue( getMapStack() ) );
 
   Grantlee::Template t1 = engine.newTemplate(
-    QLatin1String(  "{% for map in stack %}"
+    QStringLiteral(  "{% for map in stack %}"
                       "(M {% for key, list in map.items %}"
                         "({{ key }} : (L {% for vector in list %}"
                           "(V {% for number in vector %}"
@@ -657,11 +657,11 @@ void TestGenericTypes::testNestedContainers()
                         "{% endfor %}),"
                       "{% endfor %}),"
                     "{% endfor %}" )
-    , QLatin1String( "template1" ) );
+    , QStringLiteral( "template1" ) );
 
   QString result = t1->render( &c );
 
-  QString expectedResult = QLatin1String(
+  QString expectedResult = QStringLiteral(
     "(M (0 : (L (V 1,2,),(V 3,4,),),(1 : (L (V 5,6,),(V 7,8,),),),(M (0 : (L (V 9,10,),(V 11,12,),),(1 : (L (V 13,14,),(V 15,16,),),),"
   );
 
@@ -687,7 +687,7 @@ public:
   explicit OtherObject(QObject* parent = 0)
     : QObject(parent), m_custom(new CustomObject(this))
   {
-    m_custom->setProperty("nestedProp", QLatin1String("nestedValue"));
+    m_custom->setProperty("nestedProp", QStringLiteral("nestedValue"));
   }
 
   CustomObject* custom()
@@ -703,35 +703,35 @@ void TestGenericTypes::testCustomQObjectDerived()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   CustomObject *customObject = new CustomObject(this);
-  customObject->setProperty("someProp", QLatin1String("propValue"));
+  customObject->setProperty("someProp", QStringLiteral("propValue"));
 
 
   Grantlee::Context c;
-  c.insert( QLatin1String( "custom" ), QVariant::fromValue( customObject ) );
+  c.insert( QStringLiteral( "custom" ), QVariant::fromValue( customObject ) );
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-      QLatin1String( "{{ custom.someProp }}"), QLatin1String( "template1" ) );
+      QStringLiteral( "{{ custom.someProp }}"), QStringLiteral( "template1" ) );
 
     QString result = t1->render( &c );
-    QString expectedResult = QLatin1String("propValue");
+    QString expectedResult = QStringLiteral("propValue");
 
     QCOMPARE(result, expectedResult);
   }
 
   QObject *other = new OtherObject(this);
 
-  c.insert(QLatin1String("other"), other);
+  c.insert(QStringLiteral("other"), other);
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-      QLatin1String( "{{ other.custom.nestedProp }}"), QLatin1String( "template1" ) );
+      QStringLiteral( "{{ other.custom.nestedProp }}"), QStringLiteral( "template1" ) );
 
     QString result = t1->render( &c );
-    QString expectedResult = QLatin1String("nestedValue");
+    QString expectedResult = QStringLiteral("nestedValue");
 
     QCOMPARE(result, expectedResult);
   }
@@ -753,7 +753,7 @@ Q_DECLARE_METATYPE(RegisteredNotListType)
 
 GRANTLEE_BEGIN_LOOKUP(RegisteredNotListType)
   Q_UNUSED( object )
-  if ( property == QLatin1String( "property" ) )
+  if ( property == QStringLiteral( "property" ) )
     return 42;
 GRANTLEE_END_LOOKUP
 
@@ -774,7 +774,7 @@ void TestGenericTypes::testUnregistered()
     UnregisteredType unregType;
     QVariant v = QVariant::fromValue( unregType );
 
-    QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
+    QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
     QVERIFY( !result.isValid() );
 
     QVERIFY( !v.canConvert<QVariantList>() );
@@ -785,7 +785,7 @@ void TestGenericTypes::testUnregistered()
   {
     RegisteredNotListType nonListType;
     QVariant v = QVariant::fromValue( nonListType );
-    QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
+    QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
     QVERIFY( result.isValid() );
     QVERIFY( !v.canConvert<QVariantList>() );
   }
@@ -794,7 +794,7 @@ void TestGenericTypes::testUnregistered()
     QMetaType::registerConverter<UnregisteredType, QVariantList>(&dummy);
     UnregisteredType unregType;
     QVariant v = QVariant::fromValue( unregType );
-    QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "property" ) );
+    QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
     QVERIFY( !result.isValid() );
   }
 
@@ -807,9 +807,9 @@ void TestGenericTypes::testUnregistered()
 Q_DECLARE_METATYPE( Person* )
 
 GRANTLEE_BEGIN_LOOKUP_PTR(Person)
-  if ( property == QLatin1String( "name" ) )
+  if ( property == QStringLiteral( "name" ) )
     return QString::fromStdString( object->name );
-  else if ( property == QLatin1String( "age" ) )
+  else if ( property == QStringLiteral( "age" ) )
     return object->age;
 GRANTLEE_END_LOOKUP
 
@@ -820,9 +820,9 @@ void TestGenericTypes::testPointerNonQObject()
 
   Grantlee::registerMetaType<Person*>();
 
-  QVariant result = Grantlee::MetaType::lookup( v, QLatin1String( "name" ) );
+  QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "name" ) );
 
-  QCOMPARE( result.toString(), QLatin1String( "Adele" ) );
+  QCOMPARE( result.toString(), QStringLiteral( "Adele" ) );
 
   delete p;
 }

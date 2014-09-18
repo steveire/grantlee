@@ -60,20 +60,20 @@ static QRegExp getFilterRegexp()
   const QString filterSep( QRegExp::escape( QChar::fromLatin1( FILTER_SEPARATOR ) ) );
   const QString argSep( QRegExp::escape( QChar::fromLatin1( FILTER_ARGUMENT_SEPARATOR ) ) );
 
-  const QLatin1Literal varChars( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_." );
-  const QLatin1Literal numChars( "[-+\\.]?\\d[\\d\\.e]*" );
-  const QString i18nOpen( QRegExp::escape( QLatin1String( "_(" ) ) );
-  const QLatin1Literal doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" );
-  const QLatin1Literal singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
-  const QString i18nClose( QRegExp::escape( QLatin1String( ")" ) ) );
-  const QString variable = QLatin1Char( '[' ) + varChars + QLatin1Literal( "]+");
+  const QLatin1String varChars( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_." );
+  const QLatin1String numChars( "[-+\\.]?\\d[\\d\\.e]*" );
+  const QString i18nOpen( QRegExp::escape( QStringLiteral( "_(" ) ) );
+  const QLatin1String doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" );
+  const QLatin1String singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
+  const QString i18nClose( QRegExp::escape( QStringLiteral( ")" ) ) );
+  const QString variable = QLatin1Char( '[' ) + varChars + QStringLiteral( "]+");
 
-  const QString localizedExpression = QLatin1Literal( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
+  const QString localizedExpression = QStringLiteral( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
                                                               + i18nOpen + singleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
                                                               + i18nOpen + numChars                 + i18nClose + QLatin1Char( '|' )
                                                               + i18nOpen + variable                 + i18nClose + QLatin1Char( ')' );
 
-  const QString constantString = QLatin1Literal( "(?:" ) + doubleQuoteStringLiteral + QLatin1Char( '|' )
+  const QString constantString = QStringLiteral( "(?:" ) + doubleQuoteStringLiteral + QLatin1Char( '|' )
                                                          + singleQuoteStringLiteral
                                    + QLatin1Char( ')' );
 
@@ -81,9 +81,9 @@ static QRegExp getFilterRegexp()
                                + QLatin1Char( '^' ) + localizedExpression + QLatin1Char( '|' )
                                + QLatin1Char( '^' ) + variable + QLatin1Char( '|' )
                                + numChars + QLatin1Char( '|' )
-                               + filterSep + QLatin1Literal( "\\w+|" )
+                               + filterSep + QStringLiteral( "\\w+|" )
                                + argSep
-                               + QLatin1Literal( "(?:" )
+                               + QStringLiteral( "(?:" )
                                  + constantString + QLatin1Char( '|' ) + localizedExpression
                                  + QLatin1Char( '|' )
                                  + variable
@@ -91,7 +91,7 @@ static QRegExp getFilterRegexp()
                                  + numChars
                                  + QLatin1Char( '|' )
                                  + filterSep
-                               + QLatin1Literal( "\\w+)" );
+                               + QStringLiteral( "\\w+)" );
 
   return QRegExp( filterRawString );
 }

@@ -32,8 +32,8 @@
 using namespace Grantlee;
 
 #define INIT_LOCALIZER(localizer)                                \
-localizer->setAppTranslatorPrefix(QLatin1String( "test_" ) );    \
-localizer->setAppTranslatorPath(QLatin1String( ":/" ) );         \
+localizer->setAppTranslatorPrefix(QStringLiteral( "test_" ) );    \
+localizer->setAppTranslatorPath(QStringLiteral( ":/" ) );         \
 
 class TestInternationalization : public CoverageObject
 {
@@ -49,7 +49,7 @@ public:
       en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates))),
       m_engine(new Engine(this))
   {
-    m_engine->setPluginPaths( QStringList() << QLatin1String( GRANTLEE_PLUGIN_PATH ) );
+    m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
     INIT_LOCALIZER(cLocalizer)
     INIT_LOCALIZER(deLocalizer)
     INIT_LOCALIZER(frLocalizer)
@@ -57,20 +57,20 @@ public:
     INIT_LOCALIZER(en_USLocalizer)
     {
       QTranslator *deTranslator = new QTranslator(this);
-      const bool result = deTranslator->load( QLatin1String( ":/test_de_DE" ) );
+      const bool result = deTranslator->load( QStringLiteral( ":/test_de_DE" ) );
       Q_UNUSED(result);
       Q_ASSERT(result);
-      deLocalizer->installTranslator(deTranslator, QLatin1String( "de_DE" ) );
+      deLocalizer->installTranslator(deTranslator, QStringLiteral( "de_DE" ) );
     }
 
     {
       QTranslator *frTranslator = new QTranslator(this);
-      const bool result = frTranslator->load( QLatin1String( ":/test_fr_FR.qm" ) );
+      const bool result = frTranslator->load( QStringLiteral( ":/test_fr_FR.qm" ) );
       Q_UNUSED(result);
       Q_ASSERT(result);
-      frLocalizer->installTranslator(frTranslator, QLatin1String( "fr_FR" ) );
+      frLocalizer->installTranslator(frTranslator, QStringLiteral( "fr_FR" ) );
     }
-    m_engine->addDefaultLibrary(QLatin1String("grantlee_i18ntags"));
+    m_engine->addDefaultLibrary(QStringLiteral("grantlee_i18ntags"));
   }
 
 private Q_SLOTS:
@@ -327,7 +327,7 @@ void TestInternationalization::testLocalizedTemplate_data()
   QTest::addColumn<Dict>("dict");
 
   Dict dict;
-  dict.insert(QLatin1String("date"), QDate(2005, 5, 7) );
+  dict.insert(QStringLiteral("date"), QDate(2005, 5, 7) );
   QTest::newRow("fragment-01")
     << QString::fromLatin1("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(1000) _(date) _(0.6) _(4.8) %}")
     << QString::fromLatin1("1,000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
@@ -337,9 +337,9 @@ void TestInternationalization::testLocalizedTemplate_data()
     << QString::fromUtf8("1 000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
     << dict;
 
-  dict.insert(QLatin1String("integer"), 1000);
-  dict.insert(QLatin1String("smallFloat"), 0.6);
-  dict.insert(QLatin1String("largeFloat"), 4.8);
+  dict.insert(QStringLiteral("integer"), 1000);
+  dict.insert(QStringLiteral("smallFloat"), 0.6);
+  dict.insert(QStringLiteral("largeFloat"), 4.8);
 
   QTest::newRow("fragment-02")
     << QString::fromLatin1("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(integer) _(date) _(smallFloat) _(largeFloat) %}")
@@ -350,8 +350,8 @@ void TestInternationalization::testLocalizedTemplate_data()
     << QString::fromUtf8("1 000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
     << dict;
 
-  dict.insert(QLatin1String("time"), QTime(4, 5, 6));
-  dict.insert(QLatin1String("dateTime"), QDateTime(QDate(2005, 5, 7), QTime(4, 5, 6)));
+  dict.insert(QStringLiteral("time"), QTime(4, 5, 6));
+  dict.insert(QStringLiteral("dateTime"), QDateTime(QDate(2005, 5, 7), QTime(4, 5, 6)));
 
   QTest::newRow("fragment-03")
     << QString::fromLatin1("{{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}")
@@ -420,7 +420,7 @@ void TestInternationalization::testLocalizedTemplate_data()
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << dict;
 
-  dict.insert( QLatin1String( "list" ), QVariantList() << 1000);
+  dict.insert( QStringLiteral( "list" ), QVariantList() << 1000);
   QTest::newRow("fragment-06")
     << QString::fromLatin1("{{ _(list.0) }}")
       << QString::fromUtf8( "1,000" )
@@ -430,10 +430,10 @@ void TestInternationalization::testLocalizedTemplate_data()
       << QString::fromUtf8( "1 000" ) << dict;
 
   dict.clear();
-  dict.insert(QLatin1String("longlong"), (qlonglong)1000);
-  dict.insert(QLatin1String("float"), (float)0.6);
-  dict.insert(QLatin1String("double"), (float)4.8);
-  dict.insert(QLatin1String("hash"), QVariantHash());
+  dict.insert(QStringLiteral("longlong"), (qlonglong)1000);
+  dict.insert(QStringLiteral("float"), (float)0.6);
+  dict.insert(QStringLiteral("double"), (float)4.8);
+  dict.insert(QStringLiteral("hash"), QVariantHash());
 
   QTest::newRow("fragment-07")
     << QString::fromLatin1("{{ _(longlong) }} {{ _(float) }} {{ _(double) }}{{ _(hash) }}")
@@ -478,7 +478,7 @@ void TestInternationalization::testSafeContent_data()
   QTest::addColumn<Dict>("dict");
 
   Dict dict;
-  dict.insert(QLatin1String("date"), QDate(2005, 5, 7) );
+  dict.insert(QStringLiteral("date"), QDate(2005, 5, 7) );
 
   QTest::newRow("safe-01")
     << QString::fromLatin1("{% i18n 'Today is %1' _(date) %}")
@@ -516,7 +516,7 @@ void TestInternationalization::testSafeContent_data()
     << QString::fromUtf8("-Aujourd'hui-")
     << dict;
 
-  dict.insert( QLatin1String( "today_text" ), QLatin1String( "Today" ) );
+  dict.insert( QStringLiteral( "today_text" ), QStringLiteral( "Today" ) );
 
   QTest::newRow("safe-07")
     << QString::fromLatin1("-{{ _(today_text) }}-")
@@ -530,7 +530,7 @@ void TestInternationalization::testSafeContent_data()
     << QString::fromUtf8("-Aujourd'hui-")
     << dict;
 
-  dict.insert( QLatin1String( "today_and_tomorrow_text" ), markSafe( QString::fromLatin1( "Today &amp; tomorrow" ) ) );
+  dict.insert( QStringLiteral( "today_and_tomorrow_text" ), markSafe( QString::fromLatin1( "Today &amp; tomorrow" ) ) );
 
   QTest::newRow("safe-09")
     << QString::fromLatin1("-{{ _(today_and_tomorrow_text) }}-")

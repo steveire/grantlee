@@ -74,7 +74,7 @@ QString PlainTextMarkupBuilderPrivate::getRomanString(int item)
       QString romanNumeral;
 
       // works for up to 4999 items
-      QString romanSymbols = QLatin1String("iiivixxxlxcccdcmmmm");
+      QString romanSymbols = QStringLiteral("iiivixxxlxcccdcmmmm");
       int c[] = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
       int n = item;
       for (int i = 12; i >= 0; n %= c[i], i--) {
@@ -103,7 +103,7 @@ QString PlainTextMarkupBuilderPrivate::getRomanString(int item)
       }
       result = romanNumeral;
   } else {
-      result = QLatin1String("?");
+      result = QStringLiteral("?");
   }
   return result;
 }
@@ -132,7 +132,7 @@ QString PlainTextMarkupBuilderPrivate::getReferences()
 {
   QString refs;
   if ( !m_urls.isEmpty() ) {
-    refs.append( QLatin1String( "\n--------\n" ) );
+    refs.append( QStringLiteral( "\n--------\n" ) );
 
     int index = 1;
     while ( !m_urls.isEmpty() ) {
@@ -234,7 +234,7 @@ void PlainTextMarkupBuilder::insertHorizontalRule( int width )
   Q_UNUSED( width )
   Q_D( PlainTextMarkupBuilder );
 
-  d->m_text.append( QLatin1String( "--------------------\n" ) );
+  d->m_text.append( QStringLiteral( "--------------------\n" ) );
 }
 
 int PlainTextMarkupBuilder::addReference( const QString& reference )
@@ -277,20 +277,20 @@ void PlainTextMarkupBuilder::beginListItem()
 {
   Q_D( PlainTextMarkupBuilder );
   for ( int i = 0; i < d->currentListItemNumbers.size(); i++ ) {
-    d->m_text.append( QLatin1String( "    " ) );
+    d->m_text.append( QStringLiteral( "    " ) );
   }
 
   int itemNumber = d->currentListItemNumbers.last();
 
   switch ( d->currentListItemStyles.last() ) {
   case QTextListFormat::ListDisc:
-    d->m_text.append( QLatin1String( " *  " ) );
+    d->m_text.append( QStringLiteral( " *  " ) );
     break;
   case QTextListFormat::ListCircle:
-    d->m_text.append( QLatin1String( " o  " ) );
+    d->m_text.append( QStringLiteral( " o  " ) );
     break;
   case QTextListFormat::ListSquare:
-    d->m_text.append( QLatin1String( " -  " ) );
+    d->m_text.append( QStringLiteral( " -  " ) );
     break;
   case QTextListFormat::ListDecimal:
     d->m_text.append( QString::fromLatin1( " %1. " ).arg( itemNumber + 1 ) );
@@ -322,7 +322,7 @@ void PlainTextMarkupBuilder::endListItem()
 void PlainTextMarkupBuilder::beginSuperscript()
 {
   Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1String( "^{" ) );
+  d->m_text.append( QStringLiteral( "^{" ) );
 }
 
 void PlainTextMarkupBuilder::endSuperscript()
@@ -334,7 +334,7 @@ void PlainTextMarkupBuilder::endSuperscript()
 void PlainTextMarkupBuilder::beginSubscript()
 {
   Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1String( "_{" ) );
+  d->m_text.append( QStringLiteral( "_{" ) );
 }
 
 void PlainTextMarkupBuilder::endSubscript()

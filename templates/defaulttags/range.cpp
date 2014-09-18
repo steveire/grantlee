@@ -39,11 +39,11 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
   int numArgs = expr.size();
   if ( numArgs != 1 ) {
     if ( numArgs <= 2 ) {
-      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "'range' tag requires at least three arguments" ) );
+      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'range' tag requires at least three arguments" ) );
     }
 
-    if ( expr.at( numArgs - 2 ) != QLatin1String( "as" ) ) {
-      throw Grantlee::Exception( TagSyntaxError, QLatin1String( "Invalid arguments to 'range' tag" ) );
+    if ( expr.at( numArgs - 2 ) != QStringLiteral( "as" ) ) {
+      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Invalid arguments to 'range' tag" ) );
     }
   }
 
@@ -67,7 +67,7 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
     return 0;
   }
 
-  NodeList list = p->parse( n, QLatin1String( "endrange" ) );
+  NodeList list = p->parse( n, QStringLiteral( "endrange" ) );
   p->removeNextToken();
 
   n->setNodeList( list );

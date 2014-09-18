@@ -90,7 +90,7 @@ Variable::Variable( const QString &var )
   d->m_varString = var;
 
   QString localVar = var;
-  if ( var.startsWith( QLatin1String( "_(" ) ) ) {
+  if ( var.startsWith( QStringLiteral( "_(" ) ) ) {
     // The FilterExpression parser ensures this:
     Q_ASSERT( var.endsWith( QLatin1Char( ')' ) ) );
     d->m_localize = true;
@@ -121,7 +121,7 @@ Variable::Variable( const QString &var )
       const Grantlee::SafeString ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
-      if ( localVar.contains( QLatin1String( "._" ) ) || ( localVar.startsWith( QLatin1Char( '_' ) ) ) ) {
+      if ( localVar.contains( QStringLiteral( "._" ) ) || ( localVar.startsWith( QLatin1Char( '_' ) ) ) ) {
         delete d_ptr;
         throw Grantlee::Exception( TagSyntaxError,
             QString::fromLatin1( "Variables and attributes may not begin with underscores: %1" ).arg( localVar ) );
@@ -178,7 +178,7 @@ QVariant Variable::resolve( Context *c ) const
   QVariant var;
   if ( !d->m_lookups.isEmpty() ) {
     int i = 0;
-    if ( d->m_lookups.at( i ) == QLatin1String( "Qt" ) ) {
+    if ( d->m_lookups.at( i ) == QStringLiteral( "Qt" ) ) {
       ++i;
       const QString nextPart = d->m_lookups.at( i );
       ++i;
