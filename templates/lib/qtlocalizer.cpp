@@ -44,6 +44,7 @@ struct Locale
   }
 
   const QLocale locale;
+  QVector<QTranslator*> externalSystemTranslators; // Not owned by us!
   QVector<QTranslator*> systemTranslators;
   QVector<QTranslator*> themeTranslators;
 };
@@ -132,9 +133,10 @@ QString QtLocalizerPrivate::translate( const QString& input, const QString& cont
     result = translator->translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), count );
   }
   if ( result.isEmpty() ) {
-    if ( locale->systemTranslators.isEmpty() )
+    QVector<QTranslator*> translators = locale->externalSystemTranslators + locale->systemTranslators;
+    if ( translators.isEmpty() )
       return QCoreApplication::translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), QCoreApplication::CodecForTr, count );
-    Q_FOREACH( QTranslator *translator, locale->systemTranslators ) {
+    Q_FOREACH( QTranslator *translator, translators ) {
       result = translator->translate( "GR_FILENAME", input.toLatin1().constData(), context.toLatin1().constData(), count );
       if ( !result.isEmpty() )
         break;
@@ -179,7 +181,7 @@ void QtLocalizer::installTranslator( QTranslator* translator, const QString &loc
     const QLocale namedLocale( localeName );
     d->m_availableLocales.insert( localeName, new Locale( namedLocale ) );
   }
-  d->m_availableLocales[localeName]->systemTranslators.prepend( translator );
+  d->m_availableLocales[localeName]->externalSystemTranslators.prepend( translator );
 }
 
 QString QtLocalizer::localizeDate( const QDate& date, QLocale::FormatType formatType ) const
