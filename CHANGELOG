@@ -5,6 +5,13 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 0.5.0 --
+-------------------
+* Bump Grantlee CMake requirement to 2.8.11.
+* Fix parsing of filter expressions in the extends tag.
+* Export CMake targets for grantlee plugins.
+* Add a way to build Grantlee with Qt 5.
+
 -- Version 0.4.0 --
 -------------------
 * Bump Grantlee CMake requirement to 2.8.9.
