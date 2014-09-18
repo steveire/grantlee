@@ -335,7 +335,11 @@ void TestInternationalization::testLocalizedTemplate_data()
     << QString::fromLatin1("1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("1 000 messages au 07/05/05, la fraction du total: 0,60. Note: 4,80")
+#else
+    << QString::fromUtf8("1 000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
+#endif
     << dict;
 
   dict.insert(QLatin1String("integer"), 1000);
@@ -348,7 +352,11 @@ void TestInternationalization::testLocalizedTemplate_data()
     << QString::fromLatin1("1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("1 000 messages au 07/05/05, la fraction du total: 0,60. Note: 4,80")
+#else
+    << QString::fromUtf8("1 000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
+#endif
     << dict;
 
   dict.insert(QLatin1String("time"), QTime(4, 5, 6));
@@ -360,7 +368,11 @@ void TestInternationalization::testLocalizedTemplate_data()
     << QString::fromLatin1("1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM")
     << QString::fromLatin1("1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05")
     << QString::fromLatin1("1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+#else
+    << QString::fromUtf8("1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+#endif
     << dict;
 
   QTest::newRow("fragment-04")
@@ -374,19 +386,41 @@ void TestInternationalization::testLocalizedTemplate_data()
       "{% endwith_locale %}")
     << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+#endif
     << QString::fromUtf8("Today"           " -- 1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+#endif
     << QString::fromUtf8("Today"           " -- 1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+#endif
     << QString::fromUtf8("Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+#endif
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05")
+#else
+    << QString::fromUtf8("Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+#endif
     << dict;
 
   QTest::newRow("fragment-05")
@@ -401,24 +435,47 @@ void TestInternationalization::testLocalizedTemplate_data()
       "{% endwith_locale %}")
     << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
+#endif
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << QString::fromUtf8("Today"           " -- 1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
+#endif
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << QString::fromUtf8("Today"           " -- 1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
+#endif
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
     << QString::fromUtf8("Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
+#else
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
+#endif
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/05 -- 0,60 -- 4,80 -- 04:05 -- 07/05/05 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+#else
+    << QString::fromUtf8("Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
+                         "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
+                         "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
+#endif
     << dict;
 
   dict.insert( QLatin1String( "list" ), QVariantList() << 1000);
@@ -428,7 +485,12 @@ void TestInternationalization::testLocalizedTemplate_data()
       << QString::fromUtf8( "1,000" )
       << QString::fromUtf8( "1,000" )
       << QString::fromUtf8( "1.000" )
-      << QString::fromUtf8( "1 000" ) << dict;
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+      << QString::fromUtf8( "1 000" )
+#else
+      << QString::fromUtf8( "1 000" )
+#endif
+      << dict;
 
   dict.clear();
   dict.insert(QLatin1String("longlong"), (qlonglong)1000);
@@ -484,25 +546,41 @@ void TestInternationalization::testSafeContent_data()
   QTest::newRow("safe-01")
     << QString::fromLatin1("{% i18n 'Today is %1' _(date) %}")
     << QString::fromLatin1("Today is 7 May 2005")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("Aujourd&#39;hui est 07/05/05")
+#else
+    << QString::fromUtf8("Aujourd&#39;hui est 07/05/2005")
+#endif
     << dict;
 
   QTest::newRow("safe-02")
     << QString::fromLatin1("{% autoescape off %}{% i18n 'Today is %1' _(date) %}{% endautoescape %}")
     << QString::fromLatin1("Today is 7 May 2005")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("Aujourd'hui est 07/05/05")
+#else
+    << QString::fromUtf8("Aujourd'hui est 07/05/2005")
+#endif
     << dict;
 
   QTest::newRow("safe-03")
     << QString::fromLatin1("{% i18n_var 'Today is %1' _(date) as today_greeting %}-{{ today_greeting }}-")
     << QString::fromLatin1("-Today is 7 May 2005-")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("-Aujourd&#39;hui est 07/05/05-")
+#else
+    << QString::fromUtf8("-Aujourd&#39;hui est 07/05/2005-")
+#endif
     << dict;
 
   QTest::newRow("safe-04")
     << QString::fromLatin1("{% autoescape off %}{% i18n_var 'Today is %1' _(date) as today_greeting %}-{{ today_greeting }}-{% endautoescape %}")
     << QString::fromLatin1("-Today is 7 May 2005-")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromUtf8("-Aujourd'hui est 07/05/05-")
+#else
+    << QString::fromUtf8("-Aujourd'hui est 07/05/2005-")
+#endif
     << dict;
 
   QTest::newRow("safe-05")
@@ -720,7 +798,11 @@ void TestInternationalization::testDates_data()
     << QString::fromLatin1("5/9/10")
     << QString::fromLatin1("09/05/2010")
     << QString::fromLatin1("09.05.10")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("09/05/10");
+#else
+    << QString::fromLatin1("09/05/2010");
+#endif
 
   QTest::newRow("date-02")
     << QDate(2010, 10, 11)
@@ -728,7 +810,11 @@ void TestInternationalization::testDates_data()
     << QString::fromLatin1("10/11/10")
     << QString::fromLatin1("11/10/2010")
     << QString::fromLatin1("11.10.10")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("11/10/10");
+#else
+    << QString::fromLatin1("11/10/2010");
+#endif
 }
 
 void TestInternationalization::testIntegers()
@@ -905,7 +991,11 @@ void TestInternationalization::testDateTimes_data()
     << QString::fromLatin1("6/7/05 5:06 AM")
     << QString::fromLatin1("07/06/2005 05:06")
     << QString::fromLatin1("07.06.05 05:06")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("07/06/05 05:06");
+#else
+    << QString::fromLatin1("07/06/2005 05:06");
+#endif
 
   QTest::newRow("datetime-02")
     << QDateTime(QDate(2005, 6, 7), QTime(11, 12, 13))
@@ -913,7 +1003,11 @@ void TestInternationalization::testDateTimes_data()
     << QString::fromLatin1("6/7/05 11:12 AM")
     << QString::fromLatin1("07/06/2005 11:12")
     << QString::fromLatin1("07.06.05 11:12")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("07/06/05 11:12");
+#else
+    << QString::fromLatin1("07/06/2005 11:12");
+#endif
 
   QTest::newRow("datetime-03")
     << QDateTime(QDate(2005, 6, 7), QTime(15, 12, 13))
@@ -921,7 +1015,11 @@ void TestInternationalization::testDateTimes_data()
     << QString::fromLatin1("6/7/05 3:12 PM")
     << QString::fromLatin1("07/06/2005 15:12")
     << QString::fromLatin1("07.06.05 15:12")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("07/06/05 15:12");
+#else
+    << QString::fromLatin1("07/06/2005 15:12");
+#endif
 
   QTest::newRow("datetime-04")
     << QDateTime(QDate(2005, 10, 11), QTime(5, 6, 7))
@@ -929,7 +1027,11 @@ void TestInternationalization::testDateTimes_data()
     << QString::fromLatin1("10/11/05 5:06 AM")
     << QString::fromLatin1("11/10/2005 05:06")
     << QString::fromLatin1("11.10.05 05:06")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("11/10/05 05:06");
+#else
+    << QString::fromLatin1("11/10/2005 05:06");
+#endif
 
   QTest::newRow("datetime-05")
     << QDateTime(QDate(2005, 10, 11), QTime(11, 12, 13))
@@ -937,7 +1039,11 @@ void TestInternationalization::testDateTimes_data()
     << QString::fromLatin1("10/11/05 11:12 AM")
     << QString::fromLatin1("11/10/2005 11:12")
     << QString::fromLatin1("11.10.05 11:12")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("11/10/05 11:12");
+#else
+    << QString::fromLatin1("11/10/2005 11:12");
+#endif
 
   QTest::newRow("datetime-06")
     << QDateTime(QDate(2005, 10, 11), QTime(15, 12, 13))
@@ -945,7 +1051,11 @@ void TestInternationalization::testDateTimes_data()
     << QString::fromLatin1("10/11/05 3:12 PM")
     << QString::fromLatin1("11/10/2005 15:12")
     << QString::fromLatin1("11.10.05 15:12")
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     << QString::fromLatin1("11/10/05 15:12");
+#else
+    << QString::fromLatin1("11/10/2005 15:12");
+#endif
 
 }
 
