@@ -97,6 +97,7 @@ Variable::Variable( const QString &var )
     localVar = var.mid( 2, var.size() - 3 );
   }
   if ( localVar.endsWith( QLatin1Char( '.' ) ) ) {
+    delete d_ptr;
     throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Variable may not end with a dot: %1" ).arg( localVar ) );
   }
 
@@ -121,6 +122,7 @@ Variable::Variable( const QString &var )
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
       if ( localVar.contains( QLatin1String( "._" ) ) || ( localVar.startsWith( QLatin1Char( '_' ) ) ) ) {
+        delete d_ptr;
         throw Grantlee::Exception( TagSyntaxError,
             QString::fromLatin1( "Variables and attributes may not begin with underscores: %1" ).arg( localVar ) );
       }
