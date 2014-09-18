@@ -282,7 +282,7 @@ void TestFilters::testDateBasedFilters_data()
   QTest::newRow( "filter-timeuntil07" ) << QString::fromLatin1( "{{ earlier|timeuntil:now }}" ) << dict << QString::fromLatin1( "0 minutes" ) << NoError;
 
   dict.clear();
-  dict.insert( QLatin1String( "later" ), QDateTime::currentDateTime().addDays( 7 ) );
+  dict.insert( QLatin1String( "later" ), QDateTime::currentDateTime().addDays( 7 ).addSecs( 5 ) );
 
   QTest::newRow( "filter-timeuntil08" ) << QString::fromLatin1( "{{ later|timeuntil }}" ) << dict << QString::fromLatin1( "1 week" ) << NoError;
 
