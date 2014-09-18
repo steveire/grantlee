@@ -2,7 +2,7 @@
 {% extends "shared/base.html" %}
 
 {% block content %}
-  {% rssfeed "http://rss.weather.com/weather/rss/local/GMXX0007?cm_ven=LWO&cm_cat=rss&par=LWO_rss" "/rss/channel/item" %}
+  {% rssfeed "http://wxdata.weather.com/wxdata/weather/rss/local/GMXX0007?cm_ven=LWO&amp;cm_cat=rss" "/rss/channel/item" %}
   <h2><a href="{% xmlrole "link/string()" %}">{% xmlrole "title/string()" %}</a></h2>
   {% xmlrole "description/string()" %}
   {% endrssfeed %}
