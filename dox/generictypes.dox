@@ -306,30 +306,20 @@ namespace Grantlee
 
   To support another, non-built in container it is necessary to use some macros to register it with %Grantlee.
 
-  For a sequential container, GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER,
-  GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR and GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF are needed.
+  For a sequential container, Q_DECLARE_SEQUENTIAL_CONTAINER_METATYPE,
+  and Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE are needed.
 
   @code
     #include <boost/circular_buffer>
 
     // Enable looping over the contents of the container
-    GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER       (boost::circular_buffer)
-    // Enable operator[] index lookup in the container.
-    GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR  (boost::circular_buffer)
+    Q_DECLARE_SEQUENTIAL_CONTAINER_METATYPE(boost::circular_buffer)
 
     Q_DECLARE_METATYPE(boost::circular_buffer<Person>)
-    Q_DECLARE_METATYPE(boost::circular_buffer<SportsClub>)
 
     void someInitializer()
     {
       Grantlee::registerMetaType<Person>();
-      // Make it possible to use circular_buffer<Person> and Container<circular_buffer<Person> >
-      // for any built in Container.
-      GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(boost::circular_buffer, Person)
-
-      // Make it possible to use circular_buffer<SportsClub> and Container<circular_buffer<SportsClub> >
-      // for any built in container.
-      GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER_IF(boost::circular_buffer, SportsClub)
     }
 
     Grantlee::Context getContext()
@@ -346,25 +336,9 @@ namespace Grantlee
     }
   @endcode
 
-  Note that if the container does not allow operator[] lookup it is necessary to use the GRANTLEE_DISABLE_RANDOM_ACCESS macro instead of
-  GRANTLEE_SEQUENTIAL_TYPE_CONTAINER_ACCESSOR
-
-  @code
-    #include <ext/slist>
-
-    // Enable looping over the contents of the container
-    GRANTLEE_REGISTER_SEQUENTIAL_CONTAINER       (std::slist)
-    // Disable operator[] index lookup in the container.
-    GRANTLEE_DISABLE_RANDOM_ACCESS               (std::slist)
-  @endcode
-
-  This means that template constructs such as <tt>{{ someList.4 }}</tt> will work for containers with operator[], such as QList and
-  QVector, but will not work with containers like QLinkedList, QSet, std::list.
-
   @see @ref lookups
 
-  For associative containers GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER,
-  GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR and GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER_IF are needed.
+  For associative containers Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE is needed.
 
   It might also be necessary, depending on the API of the container to define additional accessors for keys and
   values from a %const_iterator. By default, %Grantlee uses iter.key() and iter.value() (The Qt default) to
@@ -391,8 +365,7 @@ namespace Grantlee
     }
 
     // Register the container with Grantlee
-    GRANTLEE_REGISTER_ASSOCIATIVE_CONTAINER       (QtHashMap)
-    GRANTLEE_ASSOCIATIVE_TYPE_CONTAINER_ACCESSOR  (QtHashMap)
+    Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE(QtHashMap)
 
     namespace Grantlee {
 
