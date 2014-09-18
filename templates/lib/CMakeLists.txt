@@ -6,10 +6,6 @@ set(Grantlee_PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} )
 
 configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_p.h)
 
-# BIC: remove
-remove_definitions(-DQT_NO_CAST_TO_ASCII)
-remove_definitions(-DQT_NO_CAST_FROM_ASCII)
-
 set (grantlee_templates_SRCS
   abstractlocalizer.cpp
   cachingloaderdecorator.cpp

@@ -148,10 +148,20 @@ public:
     SafeString& append( const QString &str );
     SafeString& append( const QStringRef &reference );
     SafeString& append( const QLatin1String &str );
-    // BIC: Use QT_NO_CAST_FROM_ASCII instead.
-#ifndef GRANTLEE_NO_CAST_FROM_ASCII
-    SafeString& append( const QByteArray &ba );
-    SafeString& append( const char *str );
+#ifndef QT_NO_CAST_FROM_ASCII
+    SafeString& append( const QByteArray &ba )
+    {
+      QString::append( ba );
+      m_safeString->m_safety = IsNotSafe;
+      return *m_safeString;
+    }
+
+    SafeString& append( const char *str )
+    {
+      QString::append( str );
+      m_safeString->m_safety = IsNotSafe;
+      return *m_safeString;
+    }
 #endif
     SafeString& append( const QChar ch );
 
@@ -173,9 +183,20 @@ public:
     SafeString& prepend( const SafeString &str );
     SafeString& prepend( const QString &str );
     SafeString& prepend( const QLatin1String &str );
-#ifndef GRANTLEE_NO_CAST_FROM_ASCII
-    SafeString& prepend( const QByteArray &ba );
-    SafeString& prepend( const char *str );
+#ifndef QT_NO_CAST_FROM_ASCII
+    SafeString& prepend( const QByteArray &ba )
+    {
+      QString::prepend( ba );
+      m_safeString->m_safety = IsNotSafe;
+      return *m_safeString;
+    }
+
+    SafeString& prepend( const char *str )
+    {
+      QString::prepend( str );
+      m_safeString->m_safety = IsNotSafe;
+      return *m_safeString;
+    }
 #endif
     SafeString& prepend( QChar ch );
 

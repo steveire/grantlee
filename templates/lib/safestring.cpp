@@ -175,22 +175,6 @@ SafeString& SafeString::NestedString::append( const QLatin1String &str )
   return *m_safeString;
 }
 
-#ifndef GRANTLEE_NO_CAST_FROM_ASCII
-SafeString& SafeString::NestedString::append( const QByteArray &ba )
-{
-  QString::append( ba );
-  m_safeString->m_safety = IsNotSafe;
-  return *m_safeString;
-}
-
-SafeString& SafeString::NestedString::append( const char *str )
-{
-  QString::append( str );
-  m_safeString->m_safety = IsNotSafe;
-  return *m_safeString;
-}
-#endif
-
 SafeString& SafeString::NestedString::append( const QChar ch )
 {
   QString::append( ch );
@@ -291,22 +275,6 @@ SafeString& SafeString::NestedString::prepend( const QLatin1String &str )
   m_safeString->m_safety = IsNotSafe;
   return *m_safeString;
 }
-
-#ifndef GRANTLEE_NO_CAST_FROM_ASCII
-SafeString& SafeString::NestedString::prepend( const QByteArray &ba )
-{
-  QString::prepend( ba );
-  m_safeString->m_safety = IsNotSafe;
-  return *m_safeString;
-}
-
-SafeString& SafeString::NestedString::prepend( const char *str )
-{
-  QString::prepend( str );
-  m_safeString->m_safety = IsNotSafe;
-  return *m_safeString;
-}
-#endif
 
 SafeString& SafeString::NestedString::prepend( QChar ch )
 {
