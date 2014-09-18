@@ -110,7 +110,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
   static const QRegExp sFilterRe = getFilterRegexp();
 
-  // This is one fo the few contstructors that can throw so we make sure to delete its d->pointer.
+  // This is one fo the few constructors that can throw so we make sure to delete its d->pointer.
   try {
     while ( ( pos = sFilterRe.indexIn( vs, pos ) ) != -1 ) {
       len = sFilterRe.matchedLength();
