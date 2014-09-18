@@ -20,7 +20,6 @@
 
 #include "util.h"
 
-#include "grantlee_latin1literal_p.h"
 #include "metaenumvariable_p.h"
 #include "metatype.h"
 

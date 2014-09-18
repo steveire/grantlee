@@ -22,7 +22,6 @@
 
 #include "engine.h"
 #include "exception.h"
-#include "grantlee_latin1literal_p.h"
 #include "nulllocalizer_p.h"
 
 #include <QtCore/QDir>

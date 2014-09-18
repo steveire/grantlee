@@ -23,7 +23,6 @@
 
 #include "exception.h"
 #include "grantlee_config_p.h"
-#include "grantlee_latin1literal_p.h"
 #include "grantlee_version.h"
 #include "scriptabletags.h"
 #include "template_p.h"

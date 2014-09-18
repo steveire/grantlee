@@ -22,7 +22,6 @@
 
 #include <grantlee_templates.h>
 
-#include "../../templates/lib/grantlee_latin1literal_p.h"
 
 #include <QtCore/QBuffer>
 #include <QtCore/QFile>

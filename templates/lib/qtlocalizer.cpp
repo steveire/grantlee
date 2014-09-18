@@ -20,7 +20,6 @@
 
 #include "qtlocalizer.h"
 
-#include "grantlee_latin1literal_p.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>

@@ -22,7 +22,6 @@
 
 #include "exception.h"
 #include "filter.h"
-#include "grantlee_latin1literal_p.h"
 #include "metatype.h"
 #include "parser.h"
 #include "util.h"
