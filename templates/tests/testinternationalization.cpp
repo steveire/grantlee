@@ -58,6 +58,7 @@ public:
     {
       QTranslator *deTranslator = new QTranslator(this);
       const bool result = deTranslator->load( QLatin1String( ":/test_de_DE" ) );
+      Q_UNUSED(result);
       Q_ASSERT(result);
       deLocalizer->installTranslator(deTranslator, QLatin1String( "de_DE" ) );
     }
@@ -65,6 +66,7 @@ public:
     {
       QTranslator *frTranslator = new QTranslator(this);
       const bool result = frTranslator->load( QLatin1String( ":/test_fr_FR.qm" ) );
+      Q_UNUSED(result);
       Q_ASSERT(result);
       frLocalizer->installTranslator(frTranslator, QLatin1String( "fr_FR" ) );
     }
