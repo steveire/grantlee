@@ -2,11 +2,6 @@
 # Set up the include directories and link directories
 include_directories(${Grantlee_INCLUDE_DIRS})
 
-if (NOT Grantlee_Qt5_TRANSITIONAL)
-  # Set up the deps needed to use Grantlee
-  include(${QT_USE_FILE})
-endif()
-
 # Add the Grantlee modules directory to the CMake module path
 set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR} ${CMAKE_MODULE_PATH})
 
@@ -33,10 +28,6 @@ macro(GRANTLEE_ADD_PLUGIN pluginname)
   foreach(_filename ${_PLUGIN_FILTERS})
     list(APPEND _sources ${_filename}.cpp)
   endforeach()
-
-  if (NOT CMAKE_AUTOMOC AND NOT Grantlee_Qt5_TRANSITIONAL)
-    qt4_wrap_cpp(_plugin_moc_srcs ${_headers})
-  endif()
 
   add_library(${pluginname} MODULE ${_sources} ${_plugin_moc_srcs})
 

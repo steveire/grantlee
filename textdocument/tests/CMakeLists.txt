@@ -1,21 +1,13 @@
 project(grantlee_textdocument_tests)
 
-if (Grantlee_Qt5_TRANSITIONAL)
-  find_package(Qt5Test 5.2.0 REQUIRED)
-else()
-  find_package(Qt4 4.5.0 REQUIRED QtTest)
-endif()
+find_package(Qt5Test 5.2.0 REQUIRED)
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 add_library(textdocument_test_builtins STATIC
   coverageobject.cpp
 )
-if (Grantlee_Qt5_TRANSITIONAL)
-  target_link_libraries(textdocument_test_builtins Qt5::Test)
-else()
-  target_link_libraries(textdocument_test_builtins Qt4::QtTest)
-endif()
+target_link_libraries(textdocument_test_builtins Qt5::Test)
 
 macro(GRANTLEE_TEXTDOCUMENT_UNIT_TESTS)
   foreach(_testname ${ARGN})

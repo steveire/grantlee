@@ -18,21 +18,13 @@ grantlee_add_plugin(customplugin
     rssfeed
 )
 
+find_package(Qt5 REQUIRED XmlPatterns Network)
+
 target_link_libraries(customplugin
   ${Grantlee_TEMPLATES_LIBRARIES}
+  Qt5::XmlPatterns
+  Qt5::Network
 )
-if (Grantlee_Qt5_TRANSITIONAL)
-  find_package(Qt5 REQUIRED XmlPatterns Network)
-  target_link_libraries(customplugin
-    Qt5::XmlPatterns
-    Qt5::Network
-  )
-else()
-  target_link_libraries(customplugin
-    Qt4::QtXmlPatterns
-    Qt4::QtNetwork
-  )
-endif()
 
 add_executable(htmlapps
   main.cpp
@@ -40,16 +32,10 @@ add_executable(htmlapps
   localrequestmanager.cpp
   templatereply.cpp
 )
+
+find_package(Qt5WebKitWidgets REQUIRED)
+
 target_link_libraries(htmlapps
   ${Grantlee_TEMPLATES_LIBRARIES}
+  Qt5::WebKitWidgets
 )
-if (Grantlee_Qt5_TRANSITIONAL)
-  find_package(Qt5WebKitWidgets REQUIRED)
-  target_link_libraries(htmlapps
-    Qt5::WebKitWidgets
-  )
-else()
-  target_link_libraries(htmlapps
-    Qt4::QtWebKit
-  )
-endif()

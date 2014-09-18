@@ -1,9 +1,5 @@
 
-if (Grantlee_Qt5_TRANSITIONAL)
-  find_package(Qt5Script 5.2.0 REQUIRED)
-else()
-  find_package(Qt4 4.5.0 REQUIRED QtScript)
-endif()
+find_package(Qt5Script 5.2.0 REQUIRED)
 
 include(${Grantlee_USE_FILE})
 

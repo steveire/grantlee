@@ -46,7 +46,7 @@ MethodTableView::MethodTableView(QWidget* parent)
   setItemDelegateForColumn(2, new ComboBoxDelegate(types, ComboBoxDelegate::Editable));
 
   setEditTriggers(QAbstractItemView::AllEditTriggers);
-  horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+  horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 ArgsTableView::ArgsTableView(QWidget* parent)
@@ -59,6 +59,6 @@ ArgsTableView::ArgsTableView(QWidget* parent)
   setItemDelegateForColumn(0, new ComboBoxDelegate(types, ComboBoxDelegate::Editable));
 
   setEditTriggers(QAbstractItemView::AllEditTriggers);
-  horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+  horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 }

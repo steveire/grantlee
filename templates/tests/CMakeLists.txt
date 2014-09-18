@@ -1,10 +1,6 @@
 project(grantlee_templates_tests)
 
-if (Grantlee_Qt5_TRANSITIONAL)
-  find_package(Qt5Test 5.2.0 REQUIRED)
-else()
-  find_package(Qt4 4.5.0 REQUIRED QtTest)
-endif()
+find_package(Qt5Test 5.2.0 REQUIRED)
 
 #building on Solaris with Sun Studio uses stdcxx which does not have TR1 fully implemented
 #take it from boost
@@ -48,11 +44,9 @@ configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 set(TESTS_LOCALES "fr_FR" "de_DE")
 
-if (Grantlee_Qt5_TRANSITIONAL)
-  find_package(Qt5LinguistTools REQUIRED)
-  set(QT_LUPDATE_EXECUTABLE Qt5::lupdate)
-  set(QT_LRELEASE_EXECUTABLE Qt5::lrelease)
-endif()
+find_package(Qt5LinguistTools REQUIRED)
+set(QT_LUPDATE_EXECUTABLE Qt5::lupdate)
+set(QT_LRELEASE_EXECUTABLE Qt5::lrelease)
 
 set(LINGUIST_TS_ARGS COMMAND "${QT_LUPDATE_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/test_input.cpp" "-ts")
 
@@ -79,21 +73,14 @@ add_custom_command(
 configure_file(testresource.qrc.cmake "${PROJECT_BINARY_DIR}/testresource.qrc")
 
 set (_rcc_file "${PROJECT_BINARY_DIR}/testresource.qrc")
-if(NOT Grantlee_Qt5_TRANSITIONAL)
-  qt4_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
-else()
-  qt5_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
-endif()
+
+qt5_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
 
 add_library(template_test_builtins STATIC coverageobject.cpp
   coverageobject.cpp
   ${_testresource_rcc_src}
 )
-if(NOT Grantlee_Qt5_TRANSITIONAL)
-  target_link_libraries(template_test_builtins Qt4::QtTest)
-else()
-  target_link_libraries(template_test_builtins Qt5::Test)
-endif()
+target_link_libraries(template_test_builtins Qt5::Test)
 
 macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
   foreach(_testname ${ARGN})
