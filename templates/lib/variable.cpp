@@ -97,7 +97,7 @@ Variable::Variable( const QString &var )
     localVar = var.mid( 2, var.size() - 3 );
   }
   if ( localVar.endsWith( QLatin1Char( '.' ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QString( "Variable may not end with a dot: %1" ).arg( localVar ) );
+    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Variable may not end with a dot: %1" ).arg( localVar ) );
   }
 
   bool processedNumber = false;
