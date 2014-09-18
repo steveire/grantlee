@@ -25,6 +25,6 @@ grantlee_add_plugin ( grantlee_defaulttags
     with
 )
 
-install(TARGETS grantlee_defaulttags
+install(TARGETS grantlee_defaulttags EXPORT grantlee_targets
         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )

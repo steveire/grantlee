@@ -12,6 +12,6 @@ grantlee_add_plugin(grantlee_defaultfilters
     stringfilters
 )
 
-install(TARGETS grantlee_defaultfilters
+install(TARGETS grantlee_defaultfilters EXPORT grantlee_targets
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )

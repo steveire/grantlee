@@ -12,6 +12,6 @@ grantlee_add_plugin(grantlee_i18ntags
    with_locale
 )
 
-install(TARGETS grantlee_i18ntags
+install(TARGETS grantlee_i18ntags EXPORT grantlee_targets
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )

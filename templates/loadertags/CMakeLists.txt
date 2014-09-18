@@ -12,6 +12,6 @@ grantlee_add_plugin(grantlee_loadertags
     include
 )
 
-install(TARGETS grantlee_loadertags
+install(TARGETS grantlee_loadertags EXPORT grantlee_targets
          LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
 )
