@@ -417,6 +417,8 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   QTest::newRow( "basic-syntax15" ) << QString::fromLatin1( "{{ sp%am }}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "basic-syntax16" ) << QString::fromLatin1( "{{ eggs! }}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "basic-syntax17" ) << QString::fromLatin1( "{{ moo? }}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "basic-syntax-error01" ) << QString::fromLatin1( "{{ moo:arg }}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "basic-syntax-error02" ) << QString::fromLatin1( "{{ moo|cut:'foo':'bar' }}" ) << dict << QString() << TagSyntaxError;
 
   // Attribute syntax allows a template to call a dictionary key's value
 

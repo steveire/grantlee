@@ -132,6 +132,11 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
         d->m_filters << qMakePair<Filter::Ptr, Variable>( f, Variable() );
 
       } else if ( subString.startsWith( QLatin1Char( FILTER_ARGUMENT_SEPARATOR ) ) ) {
+        if (d->m_filters.isEmpty() || d->m_filters.last().second.isValid()) {
+            const QString remainder = vs.right( vs.size() - lastPos );
+            throw Grantlee::Exception( TagSyntaxError,
+                QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
+        }
         subString = subString.right( ssSize - 1 );
         const int lastFilter = d->m_filters.size();
         if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) )
