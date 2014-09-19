@@ -41,9 +41,7 @@ endif()
 
 set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
-set(CMAKE_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
-set(CMAKE_STATIC_LINKER_FLAGS_COVERAGE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
 
 set(TESTCOCOON_ARGS "--cs-on --cs-count --cs-include-file-abs-regex=${CMAKE_SOURCE_DIR}/.* --cs-include-file-regex=qrc_* --cs-qt4 --cs-exclude-file-abs-regex=${CMAKE_BINARY_DIR}/.*")
 set(CMAKE_CXX_FLAGS_TESTCOCOON "${CMAKE_CXX_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
