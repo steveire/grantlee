@@ -53,6 +53,32 @@ endforeach()
 
 set(Grantlee_TEMPLATES_LIB_SOVERSION ${Grantlee_VERSION_MAJOR})
 
+# Help IDEs find some non-compiled files.
+set(header_only_sources
+  containeraccessor.h
+  customtyperegistry_p.h
+  engine_p.h
+  exception.h
+  filter.h
+  grantlee_core.h
+  grantlee_export_plugin_p.h
+  grantlee_latin1literal_p.h
+  grantlee_tags_p.h
+  grantlee_templates.h
+  lexer_p.h
+  metaenumvariable_p.h
+  nodebuiltins_p.h
+  nulllocalizer_p.h
+  pluginpointer_p.h
+  statemachine_p.h
+  taglibraryinterface.h
+  template_p.h
+  textprocessingmachine_p.h
+  token.h
+  typeaccessor.h
+)
+list(APPEND grantlee_templates_SRCS ${header_only_sources})
+
 add_library(grantlee_core SHARED
   ${grantlee_templates_SRCS}
   ${scriptabletags_SRCS}

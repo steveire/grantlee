@@ -10,6 +10,14 @@ set (grantlee_textdocument_SRCS
 
 set(Grantlee_TEXTDOCUMENT_LIB_SOVERSION ${Grantlee_VERSION_MAJOR})
 
+# Help IDEs find some non-compiled files.
+set(header_only_sources
+  abstractmarkupbuilder.h
+  grantlee_textdocument.h
+  markupdirector_p.h
+)
+list(APPEND grantlee_textdocument_SRCS ${header_only_sources})
+
 add_library(grantlee_gui SHARED
   ${grantlee_textdocument_SRCS}
 )
