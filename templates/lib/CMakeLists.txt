@@ -59,7 +59,6 @@ set(header_only_sources
   engine_p.h
   exception.h
   filter.h
-  grantlee_core.h
   grantlee_latin1literal_p.h
   grantlee_tags_p.h
   grantlee_templates.h
@@ -144,7 +143,6 @@ install(FILES
 )
 
 install(FILES
-  grantlee_core.h
   grantlee_templates.h
   DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Templates
 )
