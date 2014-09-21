@@ -59,41 +59,29 @@ public:
   /**
     Destructor.
   */
-  virtual ~Filter() {}
+  virtual ~Filter();
 
 #ifndef Q_QDOC
   /**
     FilterExpression makes it possible to access stream methods like escape while resolving.
   */
-  void setStream( OutputStream *stream ) {
-    m_stream = stream;
-  }
+  void setStream( OutputStream *stream );
 #endif
 
   /**
     Escapes and returns @p input. The OutputStream::escape method is used to escape @p input.
   */
-  SafeString escape( const QString &input ) const {
-    return m_stream->escape( input );
-  }
+  SafeString escape( const QString &input ) const;
 
   /**
     Escapes and returns @p input. The OutputStream::escape method is used to escape @p input.
   */
-  SafeString escape( const SafeString &input ) const {
-    if ( input.isSafe() )
-      return SafeString( m_stream->escape( input ), SafeString::IsSafe );
-    return m_stream->escape( input );
-  }
+  SafeString escape( const SafeString &input ) const;
 
   /**
     Escapes @p input if not already safe from further escaping and returns it. The OutputStream::escape method is used to escape @p input.
   */
-  SafeString conditionalEscape( const SafeString &input ) const {
-    if ( !input.isSafe() )
-      return m_stream->escape( input );
-    return input;
-  }
+  SafeString conditionalEscape( const SafeString &input ) const;
 
   /**
     Reimplement to filter @p input given @p argument.
@@ -109,9 +97,7 @@ public:
   /**
     Reimplement to return whether this filter is safe.
   */
-  virtual bool isSafe() const { // krazy:exclude:inline
-    return false;
-  }
+  virtual bool isSafe() const;
 
 private:
 #ifndef Q_QDOC

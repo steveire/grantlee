@@ -12,6 +12,7 @@ set (grantlee_templates_SRCS
   customtyperegistry.cpp
   context.cpp
   engine.cpp
+  filter.cpp
   filterexpression.cpp
   lexer.cpp
   metatype.cpp
@@ -54,7 +55,6 @@ set(header_only_sources
   customtyperegistry_p.h
   engine_p.h
   exception.h
-  filter.h
   grantlee_tags_p.h
   grantlee_templates.h
   lexer_p.h
