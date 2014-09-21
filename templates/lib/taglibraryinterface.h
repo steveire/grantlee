@@ -99,6 +99,6 @@ public:
 
 }
 
-Q_DECLARE_INTERFACE( Grantlee::TagLibraryInterface, "org.kde.grantlee.TagLibraryInterface/1.0" )
+Q_DECLARE_INTERFACE( Grantlee::TagLibraryInterface, "org.grantlee.TagLibraryInterface/1.0" )
 
 #endif
