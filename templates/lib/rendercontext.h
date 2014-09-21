@@ -36,8 +36,6 @@ class Node;
 
 class RenderContextPrivate;
 
-// ### BIC Rewrite this and Context in terms of a common base class.
-
 /**
  * @brief Provides storage facility for state while rendering a template.
  *
