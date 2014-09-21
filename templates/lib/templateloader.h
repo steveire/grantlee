@@ -132,7 +132,7 @@ public:
   /**
     Constructor
   */
-  FileSystemTemplateLoader();
+  FileSystemTemplateLoader(const AbstractLocalizer::Ptr localizer = AbstractLocalizer::Ptr());
 
   /**
     Destructor
@@ -168,47 +168,6 @@ public:
 private:
   Q_DECLARE_PRIVATE( FileSystemTemplateLoader )
   FileSystemTemplateLoaderPrivate * const d_ptr;
-};
-
-class LocalizedFileSystemTemplateLoaderPrivate;
-
-// ### BIC: Make l10n part of the AbstractTemplateLoader, making this class unneeded.
-/**
-  @brief The LocalizedFileSystemTemplateLoader loads templates and l10n catalogs from the filesystem.
-
-  This template loader not only loads templates from the file system, but also loads translation
-  catalogs for themes.
-*/
-class GRANTLEE_TEMPLATES_EXPORT LocalizedFileSystemTemplateLoader : public FileSystemTemplateLoader
-{
-public:
-#ifndef Q_QDOC
-  typedef QSharedPointer<LocalizedFileSystemTemplateLoader> Ptr;
-#endif
-
-  /**
-    Constructor
-  */
-  LocalizedFileSystemTemplateLoader( const AbstractLocalizer::Ptr localizer );
-
-  /**
-    Destructor
-  */
-  virtual ~LocalizedFileSystemTemplateLoader();
-
-  /**
-    Sets the theme of this loader to @p themeName and loads the theme catalogs
-  */
-  void setTheme( const QString &themeName );
-
-  /**
-    Sets the directories to look for template files to @p dirs and loads catalogs from them.
-  */
-  void setTemplateDirs( const QStringList &dirs );
-
-private:
-  Q_DECLARE_PRIVATE( LocalizedFileSystemTemplateLoader )
-  LocalizedFileSystemTemplateLoaderPrivate * const d_ptr;
 };
 
 /// @headerfile templateloader.h grantlee/templateloader.h

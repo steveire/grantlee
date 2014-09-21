@@ -56,7 +56,7 @@ private:
   QString m_templateDir;
 
   Grantlee::Engine *m_engine;
-  Grantlee::LocalizedFileSystemTemplateLoader::Ptr  m_templateLoader;
+  Grantlee::FileSystemTemplateLoader::Ptr  m_templateLoader;
 };
 
 template<typename T>

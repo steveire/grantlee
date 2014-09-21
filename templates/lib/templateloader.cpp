@@ -38,8 +38,8 @@ AbstractTemplateLoader::~AbstractTemplateLoader()
 namespace Grantlee {
 class FileSystemTemplateLoaderPrivate
 {
-    FileSystemTemplateLoaderPrivate( FileSystemTemplateLoader *loader )
-        : q_ptr( loader ) {
+    FileSystemTemplateLoaderPrivate( FileSystemTemplateLoader *loader, AbstractLocalizer::Ptr localizer )
+        : q_ptr( loader ), m_localizer( localizer ? localizer : AbstractLocalizer::Ptr( new NullLocalizer ) ) {
 
     }
     Q_DECLARE_PUBLIC( FileSystemTemplateLoader )
@@ -47,18 +47,21 @@ class FileSystemTemplateLoaderPrivate
 
     QString m_themeName;
     QStringList m_templateDirs;
+    const AbstractLocalizer::Ptr m_localizer;
 };
 }
 
-FileSystemTemplateLoader::FileSystemTemplateLoader()
+FileSystemTemplateLoader::FileSystemTemplateLoader(const AbstractLocalizer::Ptr localizer)
   : AbstractTemplateLoader(),
-  d_ptr( new FileSystemTemplateLoaderPrivate( this ) )
+  d_ptr( new FileSystemTemplateLoaderPrivate( this, localizer  ) )
 {
 
 }
 
 FileSystemTemplateLoader::~FileSystemTemplateLoader()
 {
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d_ptr->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
   delete d_ptr;
 }
 
@@ -76,7 +79,11 @@ InMemoryTemplateLoader::~InMemoryTemplateLoader()
 void FileSystemTemplateLoader::setTheme( const QString &themeName )
 {
   Q_D(FileSystemTemplateLoader);
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + d->m_themeName );
   d->m_themeName = themeName;
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->loadCatalog( dir + QLatin1Char( '/' ) + themeName, themeName );
 }
 
 QString FileSystemTemplateLoader::themeName() const
@@ -88,7 +95,12 @@ QString FileSystemTemplateLoader::themeName() const
 void FileSystemTemplateLoader::setTemplateDirs( const QStringList &dirs )
 {
   Q_D(FileSystemTemplateLoader);
+
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + d->m_themeName );
   d->m_templateDirs = dirs;
+  Q_FOREACH( const QString &dir, templateDirs() )
+    d->m_localizer->loadCatalog( dir + QLatin1Char( '/' ) + d->m_themeName, d->m_themeName );
 }
 
 QStringList FileSystemTemplateLoader::templateDirs() const
@@ -199,55 +211,4 @@ QPair<QString, QString> InMemoryTemplateLoader::getMediaUri( const QString& file
   Q_UNUSED( fileName )
   // This loader doesn't make any media available yet.
   return QPair<QString, QString>();
-}
-
-namespace Grantlee
-{
-
-class LocalizedFileSystemTemplateLoaderPrivate
-{
-  LocalizedFileSystemTemplateLoaderPrivate( LocalizedFileSystemTemplateLoader *qq, AbstractLocalizer::Ptr localizer )
-    : q_ptr( qq ), m_localizer( localizer ? localizer : AbstractLocalizer::Ptr( new NullLocalizer ) )
-  {
-
-  }
-  Q_DECLARE_PUBLIC( LocalizedFileSystemTemplateLoader )
-  LocalizedFileSystemTemplateLoader * const q_ptr;
-  const AbstractLocalizer::Ptr m_localizer;
-};
-
-}
-
-LocalizedFileSystemTemplateLoader::LocalizedFileSystemTemplateLoader( const AbstractLocalizer::Ptr localizer )
-  : FileSystemTemplateLoader(),
-    d_ptr( new LocalizedFileSystemTemplateLoaderPrivate( this, localizer ) )
-{
-
-}
-
-LocalizedFileSystemTemplateLoader::~LocalizedFileSystemTemplateLoader()
-{
-  Q_FOREACH( const QString &dir, templateDirs() )
-    d_ptr->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
-  delete d_ptr;
-}
-
-void LocalizedFileSystemTemplateLoader::setTemplateDirs( const QStringList& dirs )
-{
-  Q_D( LocalizedFileSystemTemplateLoader );
-  Q_FOREACH( const QString &dir, templateDirs() )
-    d->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
-  FileSystemTemplateLoader::setTemplateDirs( dirs );
-  Q_FOREACH( const QString &dir, templateDirs() )
-    d->m_localizer->loadCatalog( dir + QLatin1Char( '/' ) + themeName(), themeName() );
-}
-
-void LocalizedFileSystemTemplateLoader::setTheme( const QString& _themeName )
-{
-  Q_D( LocalizedFileSystemTemplateLoader );
-  Q_FOREACH( const QString &dir, templateDirs() )
-    d->m_localizer->unloadCatalog( dir + QLatin1Char( '/' ) + themeName() );
-  FileSystemTemplateLoader::setTheme( _themeName );
-  Q_FOREACH( const QString &dir, templateDirs() )
-    d->m_localizer->loadCatalog( dir + QLatin1Char( '/' ) + _themeName, _themeName );
 }
