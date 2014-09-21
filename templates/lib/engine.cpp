@@ -56,13 +56,13 @@ Engine::~Engine()
   delete d_ptr;
 }
 
-QList<AbstractTemplateLoader::Ptr> Engine::templateLoaders()
+QList<QSharedPointer<AbstractTemplateLoader> > Engine::templateLoaders()
 {
   Q_D( Engine );
   return d->m_loaders;
 }
 
-void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader )
+void Engine::addTemplateLoader( QSharedPointer<AbstractTemplateLoader> loader )
 {
   Q_D( Engine );
   d->m_loaders << loader;
@@ -71,11 +71,11 @@ void Engine::addTemplateLoader( AbstractTemplateLoader::Ptr loader )
 QPair<QString, QString> Engine::mediaUri( const QString &fileName ) const
 {
   Q_D( const Engine );
-  QListIterator<AbstractTemplateLoader::Ptr> it( d->m_loaders );
+  QListIterator<QSharedPointer<AbstractTemplateLoader> > it( d->m_loaders );
 
   QPair<QString, QString> uri;
   while ( it.hasNext() ) {
-    const AbstractTemplateLoader::Ptr loader = it.next();
+    const QSharedPointer<AbstractTemplateLoader> loader = it.next();
     uri = loader->getMediaUri( fileName );
     if ( !uri.second.isEmpty() )
       break;
@@ -258,8 +258,8 @@ QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVers
       continue;
     return libFileName;
   }
-  QList<AbstractTemplateLoader::Ptr>::const_iterator it = m_loaders.constBegin();
-  const QList<AbstractTemplateLoader::Ptr>::const_iterator end = m_loaders.constEnd();
+  QList<QSharedPointer<AbstractTemplateLoader> >::const_iterator it = m_loaders.constBegin();
+  const QList<QSharedPointer<AbstractTemplateLoader> >::const_iterator end = m_loaders.constEnd();
   for ( ; it != end; ++it ) {
     const QPair<QString, QString> pair = ( *it )->getMediaUri( prefix
                                                             + name
@@ -346,9 +346,9 @@ Template Engine::loadByName( const QString &name ) const
 {
   Q_D( const Engine );
 
-  QListIterator<AbstractTemplateLoader::Ptr> it( d->m_loaders );
+  QListIterator<QSharedPointer<AbstractTemplateLoader> > it( d->m_loaders );
   while ( it.hasNext() ) {
-    const AbstractTemplateLoader::Ptr loader = it.next();
+    const QSharedPointer<AbstractTemplateLoader> loader = it.next();
 
     if ( !loader->canLoadTemplate( name ) )
       continue;

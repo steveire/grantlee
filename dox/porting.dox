@@ -64,6 +64,10 @@ namespace Grantlee
 
   Users of LocalizedFileSystemTemplateLoader can now use FileSystemTemplateLoader instead.
 
+  @subsection ptr_typedefs QSharedPointer typedefs named "Ptr" have been removed.
+
+  Replace uses of FileSystemTemplateLoader::Ptr with QSharedPointer<FileSystemTemplateLoader> for example.
+
 */
 
 }

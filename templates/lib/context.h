@@ -211,12 +211,12 @@ public:
 
     The Context takes ownerwhip of the localizer.
   */
-  void setLocalizer( AbstractLocalizer::Ptr localizer );
+  void setLocalizer( QSharedPointer<AbstractLocalizer> localizer );
 
   /**
     Returns the localizer currently in use.
   */
-  AbstractLocalizer::Ptr localizer() const;
+  QSharedPointer<AbstractLocalizer> localizer() const;
 
   /**
     Returns the external media encountered in the Template while rendering.

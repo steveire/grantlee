@@ -64,14 +64,10 @@ class CachingLoaderDecoratorPrivate;
 class GRANTLEE_TEMPLATES_EXPORT CachingLoaderDecorator : public AbstractTemplateLoader
 {
 public:
-#ifndef Q_QDOC
-  typedef QSharedPointer<CachingLoaderDecorator> Ptr;
-#endif
-
   /**
     Constructor
   */
-  CachingLoaderDecorator( Grantlee::AbstractTemplateLoader::Ptr loader );
+  CachingLoaderDecorator( QSharedPointer<AbstractTemplateLoader> loader );
 
   /**
     Destructor

@@ -26,7 +26,7 @@
 #include "parser.h"
 #include "util.h"
 
-typedef QPair<Grantlee::Filter::Ptr, Grantlee::Variable> ArgFilter;
+typedef QPair<QSharedPointer<Grantlee::Filter>, Grantlee::Variable> ArgFilter;
 
 namespace Grantlee
 {
@@ -123,12 +123,12 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
       if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) ) {
         subString = subString.right( ssSize - 1 );
-        Filter::Ptr f = parser->getFilter( subString );
+        QSharedPointer<Filter> f = parser->getFilter( subString );
 
         Q_ASSERT( f );
 
         d->m_filterNames << subString;
-        d->m_filters << qMakePair<Filter::Ptr, Variable>( f, Variable() );
+        d->m_filters << qMakePair<QSharedPointer<Filter>, Variable>( f, Variable() );
 
       } else if ( subString.startsWith( QLatin1Char( FILTER_ARGUMENT_SEPARATOR ) ) ) {
         if (d->m_filters.isEmpty() || d->m_filters.last().second.isValid()) {
@@ -209,7 +209,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
   QVector<ArgFilter>::const_iterator it = d->m_filters.constBegin();
   const QVector<ArgFilter>::const_iterator end = d->m_filters.constEnd();
   for ( ; it != end; ++it ) {
-    Filter::Ptr filter = it->first;
+    QSharedPointer<Filter> filter = it->first;
     filter->setStream( stream );
     const Variable argVar = it->second;
     QVariant arg = argVar.resolve( c );

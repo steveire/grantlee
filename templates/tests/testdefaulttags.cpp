@@ -42,8 +42,6 @@ class FakeTemplateLoader : public Grantlee::InMemoryTemplateLoader
 {
 public:
 
-  typedef QSharedPointer<FakeTemplateLoader> Ptr;
-
   FakeTemplateLoader()
     : Grantlee::InMemoryTemplateLoader()
   {
@@ -191,7 +189,7 @@ void TestDefaultTags::initTestCase()
   m_engine = new Engine( this );
   m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
-  FakeTemplateLoader::Ptr loader1 = FakeTemplateLoader::Ptr( new FakeTemplateLoader() );
+  QSharedPointer<FakeTemplateLoader> loader1 = QSharedPointer<FakeTemplateLoader>( new FakeTemplateLoader() );
 
   m_engine->addTemplateLoader( loader1 );
 }

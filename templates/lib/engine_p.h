@@ -90,7 +90,7 @@ class EnginePrivate
   QHash<QString, PluginPointer<TagLibraryInterface> > m_libraries;
   QHash<QString, ScriptableLibraryContainer*> m_scriptableLibraries;
 
-  QList<AbstractTemplateLoader::Ptr> m_loaders;
+  QList<QSharedPointer<AbstractTemplateLoader> > m_loaders;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
   ScriptableTagLibrary *m_scriptableTagLibrary;

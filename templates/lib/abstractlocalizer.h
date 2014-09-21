@@ -42,11 +42,6 @@ class GRANTLEE_TEMPLATES_EXPORT AbstractLocalizer
 {
 public:
   /**
-    A QSharedPointer to an AbstractLocalizer
-  */
-  typedef QSharedPointer<AbstractLocalizer> Ptr;
-
-  /**
    Constructor
   */
   AbstractLocalizer();

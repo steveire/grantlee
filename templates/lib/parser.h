@@ -96,7 +96,7 @@ public:
   /**
     Returns the filter object called @p name or an invalid object if no filter with that name is loaded.
   */
-  Filter::Ptr getFilter( const QString &name ) const;
+  QSharedPointer<Filter> getFilter( const QString &name ) const;
 
   /**
     Advances the parser to the tag @p tag. This method is similar to parse, but it does not create

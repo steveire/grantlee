@@ -50,7 +50,7 @@ private:
 private:
   DesignWidget *m_designWidget;
   Grantlee::Engine *m_engine;
-  Grantlee::FileSystemTemplateLoader::Ptr m_loader;
+  QSharedPointer<Grantlee::FileSystemTemplateLoader> m_loader;
   QTabWidget *m_tabWidget;
 };
 

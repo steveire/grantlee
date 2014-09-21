@@ -30,9 +30,9 @@
 
 #define TEMPLATE_DIR GRANTLEE_TEMPLATE_PATH "/linguist/"
 
-static Grantlee::AbstractLocalizer::Ptr getLocalizer()
+static QSharedPointer<Grantlee::AbstractLocalizer> getLocalizer()
 {
-  Grantlee::QtLocalizer::Ptr localizer = Grantlee::QtLocalizer::Ptr( new Grantlee::QtLocalizer );
+  QSharedPointer<Grantlee::QtLocalizer> localizer = QSharedPointer<Grantlee::QtLocalizer>( new Grantlee::QtLocalizer );
   localizer->setAppTranslatorPrefix("contacts_");
   localizer->setAppTranslatorPath(qApp->applicationDirPath());
 

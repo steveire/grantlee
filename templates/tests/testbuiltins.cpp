@@ -260,7 +260,7 @@ private Q_SLOTS:
 private:
   Engine *m_engine;
 
-  InMemoryTemplateLoader::Ptr m_loader;
+  QSharedPointer<InMemoryTemplateLoader> m_loader;
 
   Engine* getEngine();
 
@@ -305,7 +305,7 @@ void TestBuiltinSyntax::testObjects()
 void TestBuiltinSyntax::initTestCase()
 {
   m_engine = getEngine();
-  m_loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
+  m_loader = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
   m_engine->addTemplateLoader( m_loader );
   QVERIFY( m_engine->templateLoaders().contains( m_loader ) );
 }
@@ -879,7 +879,7 @@ void TestBuiltinSyntax::testMultipleStates()
 {
   Engine *engine1 = getEngine();
 
-  InMemoryTemplateLoader::Ptr loader1 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
+  QSharedPointer<InMemoryTemplateLoader> loader1 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
 
   loader1->setTemplate( QStringLiteral( "template1" ), QStringLiteral( "Template 1" ) );
   engine1->addTemplateLoader( loader1 );
@@ -888,7 +888,7 @@ void TestBuiltinSyntax::testMultipleStates()
 
   Engine *engine2 = getEngine();
 
-  InMemoryTemplateLoader::Ptr loader2 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
+  QSharedPointer<InMemoryTemplateLoader> loader2 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
 
   loader2->setTemplate( QStringLiteral( "template2" ), QStringLiteral( "Template 2" ) );
 
@@ -898,7 +898,7 @@ void TestBuiltinSyntax::testMultipleStates()
 
   Engine *engine3 = getEngine();
 
-  InMemoryTemplateLoader::Ptr loader3 = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
+  QSharedPointer<InMemoryTemplateLoader> loader3 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
 
   loader3->setTemplate( QStringLiteral( "template3" ), QStringLiteral( "Template 3" ) );
 

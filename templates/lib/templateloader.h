@@ -47,11 +47,6 @@ class GRANTLEE_TEMPLATES_EXPORT AbstractTemplateLoader
 {
 public:
   /**
-    A QSharedPointer to an AbstractTemplateLoader
-  */
-  typedef QSharedPointer<AbstractTemplateLoader> Ptr;
-
-  /**
     Destructor
   */
   virtual ~AbstractTemplateLoader();
@@ -125,14 +120,10 @@ class FileSystemTemplateLoaderPrivate;
 class GRANTLEE_TEMPLATES_EXPORT FileSystemTemplateLoader : public AbstractTemplateLoader
 {
 public:
-#ifndef Q_QDOC
-  typedef QSharedPointer<FileSystemTemplateLoader> Ptr;
-#endif
-
   /**
     Constructor
   */
-  FileSystemTemplateLoader(const AbstractLocalizer::Ptr localizer = AbstractLocalizer::Ptr());
+  FileSystemTemplateLoader(const QSharedPointer<AbstractLocalizer> localizer = QSharedPointer<AbstractLocalizer>());
 
   /**
     Destructor
@@ -182,10 +173,6 @@ private:
 class GRANTLEE_TEMPLATES_EXPORT InMemoryTemplateLoader : public AbstractTemplateLoader
 {
 public:
-#ifndef Q_QDOC
-  typedef QSharedPointer<InMemoryTemplateLoader> Ptr;
-#endif
-
   InMemoryTemplateLoader();
   virtual ~InMemoryTemplateLoader();
 
@@ -201,7 +188,7 @@ public:
     Example:
 
     @code
-      InMemoryTemplateLoader::Ptr loader = InMemoryTemplateLoader( new InMemoryTemplateLoader() );
+      auto loader = QSharedPointer<InMemoryTemplateLoader::create();
       loader->setTemplate( "name_template", "My name is {{ name }}" );
       loader->setTemplate( "age_template", "My age is {{ age }}" );
       engine->addTemplateLoader( loader );

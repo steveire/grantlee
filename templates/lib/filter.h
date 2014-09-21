@@ -52,10 +52,6 @@ namespace Grantlee
 class GRANTLEE_TEMPLATES_EXPORT Filter
 {
 public:
-#ifndef Q_QDOC
-  typedef QSharedPointer<Filter> Ptr;
-#endif
-
   /**
     Destructor.
   */

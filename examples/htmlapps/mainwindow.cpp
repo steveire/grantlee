@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget* parent)
   Grantlee::Engine *engine = new Grantlee::Engine(this);
   engine->addDefaultLibrary( "customplugin" );
 
-  Grantlee::FileSystemTemplateLoader::Ptr loader(new Grantlee::FileSystemTemplateLoader);
+  QSharedPointer<Grantlee::FileSystemTemplateLoader> loader(new Grantlee::FileSystemTemplateLoader);
   loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH);
   engine->addTemplateLoader(loader);
 

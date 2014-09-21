@@ -125,7 +125,7 @@ BookWindow::BookWindow()
     connect(ui.exportButton, SIGNAL(pressed()), SLOT(renderBooks()));
 
     m_engine = new Grantlee::Engine();
-    Grantlee::FileSystemTemplateLoader::Ptr loader = Grantlee::FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader() );
+    QSharedPointer<Grantlee::FileSystemTemplateLoader> loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>( new Grantlee::FileSystemTemplateLoader() );
     loader->setTemplateDirs( QStringList() << GRANTLEE_TEMPLATE_PATH );
     m_engine->addTemplateLoader(loader);
 

@@ -61,7 +61,7 @@ private:
 
   void doTest();
 
-  InMemoryTemplateLoader::Ptr loader;
+  QSharedPointer<InMemoryTemplateLoader> loader;
   Engine *m_engine;
 
 };
@@ -72,7 +72,7 @@ void TestLoaderTags::initTestCase()
 
   m_engine = new Engine( this );
 
-  loader = InMemoryTemplateLoader::Ptr( new InMemoryTemplateLoader() );
+  loader = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
   m_engine->addTemplateLoader( loader );
 
   QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();

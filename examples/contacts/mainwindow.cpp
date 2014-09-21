@@ -130,7 +130,7 @@ void MainWindow::delayedInit()
 
   initLocalizer();
 
-  m_templateLoader = Grantlee::FileSystemTemplateLoader::Ptr(new Grantlee::FileSystemTemplateLoader(m_localizer));
+  m_templateLoader = QSharedPointer<Grantlee::FileSystemTemplateLoader>(new Grantlee::FileSystemTemplateLoader(m_localizer));
   m_templateLoader->setTemplateDirs(QStringList() << m_templateDir);
 
   m_engine->addTemplateLoader(m_templateLoader);

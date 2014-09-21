@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags flags)
   m_engine->addDefaultLibrary( "grantlee_scriptabletags" );
   m_engine->setSmartTrimEnabled(true);
 
-  m_loader = Grantlee::FileSystemTemplateLoader::Ptr( new Grantlee::FileSystemTemplateLoader );
+  m_loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>( new Grantlee::FileSystemTemplateLoader );
   m_loader->setTemplateDirs( QStringList() << ":/templates" );
   m_engine->addTemplateLoader(m_loader);
   m_engine->addDefaultLibrary("custom_tags");

@@ -47,7 +47,7 @@ private Q_SLOTS:
   void delayedInit();
 
 protected:
-  Grantlee::AbstractLocalizer::Ptr m_localizer;
+  QSharedPointer<Grantlee::AbstractLocalizer> m_localizer;
 
 private:
   QListWidget *m_list;
@@ -56,7 +56,7 @@ private:
   QString m_templateDir;
 
   Grantlee::Engine *m_engine;
-  Grantlee::FileSystemTemplateLoader::Ptr  m_templateLoader;
+  QSharedPointer<Grantlee::FileSystemTemplateLoader>  m_templateLoader;
 };
 
 template<typename T>
@@ -71,7 +71,7 @@ public:
 protected:
   virtual void initLocalizer()
   {
-    m_localizer = Grantlee::AbstractLocalizer::Ptr( new T );
+    m_localizer = QSharedPointer<Grantlee::AbstractLocalizer>( new T );
   }
 };
 

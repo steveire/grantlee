@@ -42,7 +42,7 @@ class EnginePrivate;
   @code
     Engine *engine = new Engine();
 
-    FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new FileSystemTemplateLoader() );
+    auto loader = QSharedPointer<FileSystemTemplateLoader>::create();
     loader->setTemplateDirs( QStringList() << "/usr/share/myapp/templates" );
     engine->addTemplateLoader( loader );
 
@@ -124,12 +124,12 @@ public:
   /**
     Returns the TemplateLoaders currently configured on the Engine.
   */
-  QList<AbstractTemplateLoader::Ptr> templateLoaders();
+  QList<QSharedPointer<AbstractTemplateLoader> > templateLoaders();
 
   /**
     Adds @p loader to the TemplateLoaders currently configured on the Engine.
   */
-  void addTemplateLoader( AbstractTemplateLoader::Ptr loader );
+  void addTemplateLoader( QSharedPointer<AbstractTemplateLoader> loader );
 
   /**
     Sets the plugin dirs currently configured on the Engine to @p dirs.

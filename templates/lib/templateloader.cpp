@@ -38,8 +38,8 @@ AbstractTemplateLoader::~AbstractTemplateLoader()
 namespace Grantlee {
 class FileSystemTemplateLoaderPrivate
 {
-    FileSystemTemplateLoaderPrivate( FileSystemTemplateLoader *loader, AbstractLocalizer::Ptr localizer )
-        : q_ptr( loader ), m_localizer( localizer ? localizer : AbstractLocalizer::Ptr( new NullLocalizer ) ) {
+    FileSystemTemplateLoaderPrivate( FileSystemTemplateLoader *loader, QSharedPointer<AbstractLocalizer> localizer )
+        : q_ptr( loader ), m_localizer( localizer ? localizer : QSharedPointer<AbstractLocalizer>( new NullLocalizer ) ) {
 
     }
     Q_DECLARE_PUBLIC( FileSystemTemplateLoader )
@@ -47,11 +47,11 @@ class FileSystemTemplateLoaderPrivate
 
     QString m_themeName;
     QStringList m_templateDirs;
-    const AbstractLocalizer::Ptr m_localizer;
+    const QSharedPointer<AbstractLocalizer> m_localizer;
 };
 }
 
-FileSystemTemplateLoader::FileSystemTemplateLoader(const AbstractLocalizer::Ptr localizer)
+FileSystemTemplateLoader::FileSystemTemplateLoader(const QSharedPointer<AbstractLocalizer> localizer)
   : AbstractTemplateLoader(),
   d_ptr( new FileSystemTemplateLoaderPrivate( this, localizer  ) )
 {

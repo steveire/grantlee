@@ -26,7 +26,7 @@ namespace Grantlee
 class CachingLoaderDecoratorPrivate
 {
 public:
-  CachingLoaderDecoratorPrivate( Grantlee::AbstractTemplateLoader::Ptr loader, CachingLoaderDecorator *qq )
+  CachingLoaderDecoratorPrivate( QSharedPointer<AbstractTemplateLoader> loader, CachingLoaderDecorator *qq )
     : q_ptr( qq ), m_wrappedLoader( loader )
   {
 
@@ -35,7 +35,7 @@ public:
   Q_DECLARE_PUBLIC( CachingLoaderDecorator )
   CachingLoaderDecorator * const q_ptr;
 
-  const Grantlee::AbstractTemplateLoader::Ptr m_wrappedLoader;
+  const QSharedPointer<AbstractTemplateLoader> m_wrappedLoader;
 
   mutable QHash<QString, Template> m_cache;
 };
@@ -44,7 +44,7 @@ public:
 
 using namespace Grantlee;
 
-CachingLoaderDecorator::CachingLoaderDecorator( Grantlee::AbstractTemplateLoader::Ptr loader )
+CachingLoaderDecorator::CachingLoaderDecorator( QSharedPointer<AbstractTemplateLoader> loader )
   : d_ptr( new CachingLoaderDecoratorPrivate( loader, this ) )
 {
 

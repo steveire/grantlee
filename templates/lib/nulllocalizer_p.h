@@ -29,7 +29,6 @@ namespace Grantlee
 class GRANTLEE_TESTS_EXPORT NullLocalizer : public AbstractLocalizer
 {
 public:
-  typedef QSharedPointer<NullLocalizer> Ptr;
   NullLocalizer();
   virtual ~NullLocalizer();
 

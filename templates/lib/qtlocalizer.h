@@ -55,9 +55,6 @@ class QtLocalizerPrivate;
 class GRANTLEE_TEMPLATES_EXPORT QtLocalizer : public AbstractLocalizer
 {
 public:
-#ifndef Q_QDOC
-  typedef QSharedPointer<QtLocalizer> Ptr;
-#endif
   /**
     Constructs a new QtLocalizer using the @p locale
   */

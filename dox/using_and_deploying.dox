@@ -50,7 +50,7 @@ namespace Grantlee
     {
       Engine *engine = new Engine( this );
 
-      FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new FileSystemTemplateLoader() );
+      auto loader = QSharedPointer<FileSystemTemplateLoader>::create();
       loader->setTemplateDirs( QStringList() << path_to_installed_templates );
 
       engine->addTemplateLoader( loader );
@@ -77,7 +77,7 @@ namespace Grantlee
     add_executable(my_app, ${my_app_srcs} ${_template_rcc_src})
 
     # Application code:
-    FileSystemTemplateLoader::Ptr loader = FileSystemTemplateLoader::Ptr( new FileSystemTemplateLoader() );
+    auto loader = QSharedPointer<FileSystemTemplateLoader>::create();
     loader->setTemplateDirs( QStringList() << ":/templates/" );
 
     engine->addTemplateLoader( loader );
@@ -90,12 +90,12 @@ namespace Grantlee
   If users are able to define their own templates in an application that uses %Grantlee for theming for example, the path to the location of such potential templates must also be set through the TemplateLoader. Paths to user defined templates should be defined before default/installed templates so that the user templates are found first. If there is a reason to disallow user overriding of certain templates, they can be specified in a separate TemplateLoader.
 
   @code
-    FileSystemTemplateLoader::Ptr no_override_loader = FileSystemTemplateLoader::Ptr( new FileSystemTemplateLoader() );
+    auto no_override_loader = QSharedPointer<FileSystemTemplateLoader>::create();
     no_override_loader->setTemplateDirs( QStringList() << path_to_non_overridable_templates );
 
     engine->addTemplateLoader( no_override_loader );
 
-    FileSystemTemplateLoader::Ptr override_loader = FileSystemTemplateLoader::Ptr( new FileSystemTemplateLoader() );
+    auto override_loader = QSharedPointer<FileSystemTemplateLoader>::create();
     override_loader->setTemplateDirs( QStringList() << path_to_user_templates << path_to_default_templates );
 
     engine->addTemplateLoader( override_loader );

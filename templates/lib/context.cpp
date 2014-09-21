@@ -58,7 +58,7 @@ class ContextPrivate
   Context::UrlType m_urlType;
   QString m_relativeMediaPath;
   RenderContext * const m_renderContext;
-  AbstractLocalizer::Ptr  m_localizer;
+  QSharedPointer<AbstractLocalizer>  m_localizer;
 };
 
 }
@@ -227,17 +227,17 @@ RenderContext* Context::renderContext() const
   return d->m_renderContext;
 }
 
-void Context::setLocalizer( AbstractLocalizer::Ptr localizer )
+void Context::setLocalizer( QSharedPointer<AbstractLocalizer> localizer )
 {
   Q_D( Context );
   if ( !localizer ) {
-    d->m_localizer = AbstractLocalizer::Ptr( new NullLocalizer );
+    d->m_localizer = QSharedPointer<AbstractLocalizer>( new NullLocalizer );
     return;
   }
   d->m_localizer = localizer;
 }
 
-AbstractLocalizer::Ptr Context::localizer() const
+QSharedPointer<AbstractLocalizer> Context::localizer() const
 {
   Q_D( const Context );
   return d->m_localizer;

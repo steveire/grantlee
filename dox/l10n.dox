@@ -106,13 +106,13 @@ namespace Grantlee
     Context c = getContext();
 
     QLocale deLocale(QLocale::German, QLocale::Germany);
-    QtLocalizer::Ptr deLocalizer(new QtLocalizer(deLocale));
+    auto deLocalizer = QSharedPointer<QtLocalizer>::create(deLocale);
 
     c.setLocalizer(deLocalizer);
     t->render(&c); // Render the template with the de locale.
 
     QLocale frLocale(QLocale::French, QLocale::France);
-    QtLocalizer::Ptr frLocalizer(new QtLocalizer(frLocale));
+    auto frLocalizer = QSharedPointer<QtLocalizer>::create(frLocale);
 
     c.setLocalizer(frLocalizer);
     t->render(&c); // Render the same template with the fr locale.
