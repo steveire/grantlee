@@ -27,12 +27,6 @@
 namespace Grantlee
 {
 
-void _deleter( QPluginLoader *loader )
-{
-  loader->unload();
-  delete loader;
-}
-
 /**
   @brief A smart pointer for handling plugins.
 
@@ -53,8 +47,12 @@ public:
   PluginPointer( const QString &fileName )
     : m_object( 0 ), m_plugin( 0 )
   {
-    m_pluginLoader = QSharedPointer<QPluginLoader>( new QPluginLoader( fileName ), _deleter );
+    m_pluginLoader = QSharedPointer<QPluginLoader>( new QPluginLoader( fileName ) );
 
+    // This causes a load of the plugin, and we never call unload() to unload
+    // it. Unloading it would cause the destructors of all types defined in plugins
+    // to be unreachable. If a Template object outlives the last engine, that
+    // causes segfaults if the plugin has been unloaded.
     m_object = m_pluginLoader->instance();
 
     m_plugin = qobject_cast<PluginType*>( m_object );
