@@ -35,15 +35,31 @@ AbstractTemplateLoader::~AbstractTemplateLoader()
 
 }
 
+namespace Grantlee {
+class FileSystemTemplateLoaderPrivate
+{
+    FileSystemTemplateLoaderPrivate( FileSystemTemplateLoader *loader )
+        : q_ptr( loader ) {
+
+    }
+    Q_DECLARE_PUBLIC( FileSystemTemplateLoader )
+    FileSystemTemplateLoader * const q_ptr;
+
+    QString m_themeName;
+    QStringList m_templateDirs;
+};
+}
+
 FileSystemTemplateLoader::FileSystemTemplateLoader()
-  : AbstractTemplateLoader()
+  : AbstractTemplateLoader(),
+  d_ptr( new FileSystemTemplateLoaderPrivate( this ) )
 {
 
 }
 
 FileSystemTemplateLoader::~FileSystemTemplateLoader()
 {
-
+  delete d_ptr;
 }
 
 InMemoryTemplateLoader::InMemoryTemplateLoader()
@@ -59,34 +75,39 @@ InMemoryTemplateLoader::~InMemoryTemplateLoader()
 
 void FileSystemTemplateLoader::setTheme( const QString &themeName )
 {
-  m_themeName = themeName;
+  Q_D(FileSystemTemplateLoader);
+  d->m_themeName = themeName;
 }
 
 QString FileSystemTemplateLoader::themeName() const
 {
-  return m_themeName;
+  Q_D(const FileSystemTemplateLoader);
+  return d->m_themeName;
 }
 
 void FileSystemTemplateLoader::setTemplateDirs( const QStringList &dirs )
 {
-  m_templateDirs = dirs;
+  Q_D(FileSystemTemplateLoader);
+  d->m_templateDirs = dirs;
 }
 
 QStringList FileSystemTemplateLoader::templateDirs() const
 {
-  return m_templateDirs;
+  Q_D(const FileSystemTemplateLoader);
+  return d->m_templateDirs;
 }
 
 bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
 {
+  Q_D(const FileSystemTemplateLoader);
   int i = 0;
   QFile file;
 
   while ( !file.exists() ) {
-    if ( i >= m_templateDirs.size() )
+    if ( i >= d->m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + QLatin1Char( '/' ) + m_themeName + QLatin1Char( '/' ) + name );
+    file.setFileName( d->m_templateDirs.at( i ) + QLatin1Char( '/' ) + d->m_themeName + QLatin1Char( '/' ) + name );
     ++i;
   }
 
@@ -99,18 +120,19 @@ bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
 
 Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine const *engine ) const
 {
+  Q_D(const FileSystemTemplateLoader);
   int i = 0;
   QFile file;
 
   while ( !file.exists() ) {
-    if ( i >= m_templateDirs.size() )
+    if ( i >= d->m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + QLatin1Char( '/' ) + m_themeName + QLatin1Char( '/' ) + fileName );
+    file.setFileName( d->m_templateDirs.at( i ) + QLatin1Char( '/' ) + d->m_themeName + QLatin1Char( '/' ) + fileName );
     const QFileInfo fi( file );
 
     if ( file.exists() &&
-          !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) )
+          !fi.canonicalFilePath().contains( QDir( d->m_templateDirs.at( i ) ).canonicalPath() ) )
       return Template();
     ++i;
   }
@@ -128,16 +150,17 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
 
 QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
 {
+  Q_D(const FileSystemTemplateLoader);
   int i = 0;
   QFile file;
   while ( !file.exists() ) {
-    if ( i >= m_templateDirs.size() )
+    if ( i >= d->m_templateDirs.size() )
       break;
 
-    file.setFileName( m_templateDirs.at( i ) + QLatin1Char( '/' ) + m_themeName + QLatin1Char( '/' ) + fileName );
+    file.setFileName( d->m_templateDirs.at( i ) + QLatin1Char( '/' ) + d->m_themeName + QLatin1Char( '/' ) + fileName );
 
     const QFileInfo fi( file );
-    if ( !fi.canonicalFilePath().contains( QDir( m_templateDirs.at( i ) ).canonicalPath() ) ) {
+    if ( !fi.canonicalFilePath().contains( QDir( d->m_templateDirs.at( i ) ).canonicalPath() ) ) {
       ++i;
       continue;
     }

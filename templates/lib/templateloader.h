@@ -75,6 +75,8 @@ public:
 
 /// @headerfile templateloader.h grantlee/templateloader.h
 
+class FileSystemTemplateLoaderPrivate;
+
 /**
   @brief The FileSystemTemplateLoader loads Templates from the file system.
 
@@ -164,8 +166,8 @@ public:
   QStringList templateDirs() const;
 
 private:
-  QString m_themeName;
-  QStringList m_templateDirs;
+  Q_DECLARE_PRIVATE( FileSystemTemplateLoader )
+  FileSystemTemplateLoaderPrivate * const d_ptr;
 };
 
 class LocalizedFileSystemTemplateLoaderPrivate;
