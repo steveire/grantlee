@@ -111,8 +111,7 @@ void BlockNode::render( OutputStream *stream, Context *c ) const
     if ( !block )
       block = this;
 
-    // BIC Make const when render() is const.
-    NodeList list = block->m_list;
+    const NodeList list = block->m_list;
 
     block = new BlockNode( block->m_name, 0 );
     block->setNodeList( list );
