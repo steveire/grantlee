@@ -9,6 +9,7 @@ add_library(grantlee_defaultfilters MODULE
   misc.cpp
   stringfilters.cpp
 )
+set_property(TARGET grantlee_defaultfilters PROPERTY EXPORT_NAME defaultfilters)
 target_link_libraries(grantlee_defaultfilters Grantlee::Templates)
 grantlee_adjust_plugin_name(grantlee_defaultfilters)
 

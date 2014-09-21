@@ -9,6 +9,7 @@ add_library(grantlee_i18ntags MODULE
   l10n_money.cpp
   with_locale.cpp
 )
+set_property(TARGET grantlee_i18ntags PROPERTY EXPORT_NAME i18ntags)
 target_link_libraries(grantlee_i18ntags Grantlee::Templates)
 grantlee_adjust_plugin_name(grantlee_i18ntags)
 

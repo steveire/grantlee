@@ -22,6 +22,7 @@ add_library(grantlee_defaulttags MODULE
   widthratio.cpp
   with.cpp
 )
+set_property(TARGET grantlee_defaulttags PROPERTY EXPORT_NAME defaulttags)
 target_link_libraries(grantlee_defaulttags Grantlee::Templates)
 grantlee_adjust_plugin_name(grantlee_defaulttags)
 
