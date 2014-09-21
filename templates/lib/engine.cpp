@@ -309,7 +309,6 @@ ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString 
 PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion )
 {
   int pluginIndex = 0;
-  QString libFileName;
 
   while ( m_pluginDirs.size() > pluginIndex ) {
     const QString nextDir = m_pluginDirs.at( pluginIndex++ );
