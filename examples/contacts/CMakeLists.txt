@@ -56,6 +56,7 @@ endforeach()
 
 add_custom_target(linguist_ts
   ${LINGUIST_TS_ARGS}
+    VERBATIM
 )
 
 set( LINGUIST_QM_ARGS COMMAND "${QT_LRELEASE_EXECUTABLE}" )
