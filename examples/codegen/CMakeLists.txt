@@ -34,6 +34,7 @@ add_executable(codegen
   mainwindow.cpp
   ${codegen_example_RCS_SRCS}
 )
+target_compile_definitions(codegen PRIVATE QT_DISABLE_DEPRECATED_BEFORE=0)
 
 target_link_libraries(
   codegen
