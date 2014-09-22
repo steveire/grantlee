@@ -18,9 +18,9 @@
 
 */
 
-#include <QtTest>
+#include <QtTest/QtTest>
 #include <QtCore>
-#include <qtestevent.h>
+#include <QtTest/qtestevent.h>
 #include <QtCore/QRegExp>
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextDocument>
