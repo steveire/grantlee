@@ -5,6 +5,18 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 5.0.0 --
+-------------------
+* Drop Qt 4 build. Make Qt 5 a hard requirement.
+* Add a porting guide for users of old versions of Grantlee.
+* Drop custom handling of QObjects and containers in QVariant.
+* Drop old names 'grantlee_core' and 'grantlee_gui' in favor of 'Templates' and 'Textdocument' respectively.
+* Rely on modern CMake features such as IMPORTED targets and usage requirements.
+* Bump Grantlee CMake requirement to 2.8.12.
+* Make the virtual Grantlee::Node::render method const.
+* Merge LocalizedFilesystemTemplateLoader into FilesystemTemplateLoader.
+* Remove typedefs for QSharedPointers from APIs.
+
 -- Version 0.5.1 --
 -------------------
 * Make the coverage target work with Qt 5.
