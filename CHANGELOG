@@ -5,6 +5,13 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 0.5.1 --
+-------------------
+* Make the coverage target work with Qt 5.
+* Make the examples build with Qt 5.
+* Drop the Qt 5 requirement to 5.2.0 from 5.3.0.
+* Don't unload plugins when no longer used.
+
 -- Version 0.5.0 --
 -------------------
 * Bump Grantlee CMake requirement to 2.8.11.
