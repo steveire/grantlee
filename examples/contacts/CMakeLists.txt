@@ -25,10 +25,13 @@ target_link_libraries(
 )
 if (Grantlee_Qt5_TRANSITIONAL)
   find_package(Qt5WebKitWidgets REQUIRED)
+  find_package(Qt5LinguistTools REQUIRED)
   target_link_libraries(
     contacts_linguist
     Qt5::WebKitWidgets
     )
+  set(QT_LRELEASE_EXECUTABLE Qt5::lrelease)
+  set(QT_LUPDATE_EXECUTABLE Qt5::lupdate)
 else()
   target_link_libraries(
     contacts_linguist
