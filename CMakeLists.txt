@@ -229,6 +229,19 @@ if(LCOV_FOUND)
   if (NOT Grantlee_Qt5_TRANSITIONAL)
     file(RELATIVE_PATH relQtDir / ${QT_HEADERS_DIR})
     set(Qt4_exclude -r test_all.info *${relQtDir}*)
+  else()
+    find_package(Qt5Core REQUIRED)
+    get_property(qmake_loc TARGET Qt5::qmake PROPERTY LOCATION)
+    execute_process(COMMAND "${qmake_loc}" -query QT_INSTALL_HEADERS
+      RESULT_VARIABLE return_code
+      OUTPUT_VARIABLE output
+      OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
+    if(return_code)
+      message(FATAL_ERROR "Problem")
+    endif()
+    file(TO_CMAKE_PATH "${output}" output)
+    file(RELATIVE_PATH relQtDir / ${output})
+    set(Qt4_exclude -r test_all.info *${relQtDir}*)
   endif()
 
   list(APPEND coverage_ARGS COMMAND ${LCOV_EXECUTABLE} -r test_all.info *${relBinaryDir}*
