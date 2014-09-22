@@ -1,7 +1,7 @@
 project(grantlee_textdocument_tests)
 
 if (Grantlee_Qt5_TRANSITIONAL)
-  find_package(Qt5Test 5.3.0 REQUIRED)
+  find_package(Qt5Test 5.2.0 REQUIRED)
 else()
   find_package(Qt4 4.5.0 REQUIRED QtTest)
 endif()
