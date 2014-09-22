@@ -61,15 +61,6 @@ public:
   */
   ~Parser();
 
-#ifndef Q_QDOC
-  /**
-    @internal
-
-    Sets the tokens for this object to parse.
-  */
-  void setTokens( const QList<Token> &tokenList );
-#endif
-
   /**
     Advance the parser, using @p parent as the parent of new Nodes. The parser will stop
     if it encounters a tag which is contained in the list @p stopAt.

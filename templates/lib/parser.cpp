@@ -119,14 +119,6 @@ Parser::~Parser()
   delete d_ptr;
 }
 
-
-void Parser::setTokens( const QList< Token >& tokenList )
-{
-  Q_D( Parser );
-  d->m_tokenList = tokenList;
-}
-
-
 void Parser::loadLib( const QString &name )
 {
   Q_D( Parser );
