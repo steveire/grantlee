@@ -188,7 +188,14 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
 
 QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
 {
-  const QRegExp r( QStringLiteral( "("                   // match
+#if defined(Q_CC_MSVC)
+// MSVC doesn't like static string concatenations like L"foo" "bar", as
+// results from QStringLiteral, so use QLatinString here instead.
+#define STRING_LITERAL QLatinString
+#else
+#define STRING_LITERAL QStringLiteral
+#endif
+  const QRegExp r( STRING_LITERAL( "("                   // match
                     "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
                       "(?:"                             // followed by
                         "(?:\""                         // Either a quote starting with "
@@ -202,6 +209,8 @@ QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
                     "|\\S+"                             // Apart from quoted strings, match non-whitespace fragments also
                   ")"                                   // End match
                 ) );
+
+#undef STRING_LITERAL
 
   QStringList l;
   int count = 0;

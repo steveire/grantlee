@@ -647,8 +647,15 @@ void TestGenericTypes::testNestedContainers()
   Grantlee::Context c;
   c.insert( QStringLiteral( "stack" ), QVariant::fromValue( getMapStack() ) );
 
+#if defined(Q_CC_MSVC)
+// MSVC doesn't like static string concatenations like L"foo" "bar", as
+// results from QStringLiteral, so use QLatinString here instead.
+#define STRING_LITERAL QLatinString
+#else
+#define STRING_LITERAL QStringLiteral
+#endif
   Grantlee::Template t1 = engine.newTemplate(
-    QStringLiteral(  "{% for map in stack %}"
+    STRING_LITERAL( "{% for map in stack %}"
                       "(M {% for key, list in map.items %}"
                         "({{ key }} : (L {% for vector in list %}"
                           "(V {% for number in vector %}"
@@ -658,6 +665,8 @@ void TestGenericTypes::testNestedContainers()
                       "{% endfor %}),"
                     "{% endfor %}" )
     , QStringLiteral( "template1" ) );
+
+#undef STRING_LITERAL
 
   QString result = t1->render( &c );
 
