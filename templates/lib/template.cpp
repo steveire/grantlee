@@ -28,7 +28,9 @@
 #include "parser.h"
 #include "rendercontext.h"
 
-#include <QtCore/QDebug>
+#include <QtCore/QLoggingCategory>
+
+Q_LOGGING_CATEGORY(GRANTLEE_TEMPLATE, "grantlee.template")
 
 using namespace Grantlee;
 
@@ -65,7 +67,7 @@ void TemplateImpl::setContent( const QString &templateString )
   try {
     d->m_nodeList = d->compileString( templateString );
   } catch ( Grantlee::Exception &e ) {
-    qWarning() << e.what();
+    qCWarning(GRANTLEE_TEMPLATE) << e.what();
     d->setError( e.errorCode(), e.what() );
   }
 }
@@ -90,7 +92,7 @@ OutputStream* TemplateImpl::render( OutputStream *stream, Context *c ) const
   try {
     d->m_nodeList.render( stream, c );
   } catch ( Grantlee::Exception &e ) {
-    qWarning() << e.what();
+    qCWarning(GRANTLEE_TEMPLATE) << e.what();
     d->setError( e.errorCode(), e.what() );
   }
 

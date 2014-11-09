@@ -23,10 +23,13 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>
-#include <QtCore/QDebug>
 #include <QtCore/QLibraryInfo>
 #include <QtCore/QTranslator>
 #include <QtCore/QVector>
+
+#include <QtCore/QLoggingCategory>
+
+Q_LOGGING_CATEGORY(GRANTLEE_LOCALIZER, "grantlee.localizer")
 
 struct Locale
 {
@@ -71,7 +74,7 @@ class QtLocalizerPrivate
   {
     Q_ASSERT( !m_locales.isEmpty() );
     if ( m_locales.isEmpty() ) {
-      qWarning() << "Invalid Locale";
+      qCWarning(GRANTLEE_LOCALIZER) << "Invalid Locale";
       return QLocale();
     }
     return m_locales.last()->locale;

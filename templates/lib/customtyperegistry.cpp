@@ -24,10 +24,12 @@
 #include "metaenumvariable_p.h"
 #include "safestring.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QStack>
 #include <QtCore/QStringList>
 #include <QtCore/QQueue>
+#include <QtCore/QLoggingCategory>
+
+Q_LOGGING_CATEGORY(GRANTLEE_CUSTOMTYPE, "grantlee.customtype")
 
 using namespace Grantlee;
 
@@ -53,14 +55,14 @@ QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &prop
 
   {
     if ( !types.contains( id ) ) {
-      qWarning() << "Don't know how to handle metatype" << QMetaType::typeName( id );
+      qCWarning(GRANTLEE_CUSTOMTYPE) << "Don't know how to handle metatype" << QMetaType::typeName( id );
       // :TODO: Print out error message
       return QVariant();
     }
 
     const CustomTypeInfo &info = types[id];
     if ( !info.lookupFunction ) {
-      qWarning() << "No lookup function for metatype" << QMetaType::typeName( id );
+      qCWarning(GRANTLEE_CUSTOMTYPE) << "No lookup function for metatype" << QMetaType::typeName( id );
       lf = 0;
       // :TODO: Print out error message
       return QVariant();
