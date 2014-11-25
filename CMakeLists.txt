@@ -92,7 +92,7 @@ set(Grantlee5_VERSION_STRING "${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MIN
 set (LIB_SUFFIX "" CACHE STRING "Define suffix of library directory name (eg. '64')")
 
 set( LIB_INSTALL_DIR lib${LIB_SUFFIX} )
-set( PLUGIN_INSTALL_DIR lib${LIB_SUFFIX}/grantlee/${Grantlee5_MAJOR_MINOR_VERSION_STRING} )
+set( PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/grantlee/${Grantlee5_MAJOR_MINOR_VERSION_STRING} )
 set( BIN_INSTALL_DIR bin )
 set( INCLUDE_INSTALL_DIR include )
 set( DATA_INSTALL_DIR share/apps )
