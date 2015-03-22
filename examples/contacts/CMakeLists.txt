@@ -34,7 +34,7 @@ set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_lingu
   "${CMAKE_SOURCE_DIR}/themes/linguist/bashful/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sneezy/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sleepy/*.html"
-  "> ${CMAKE_BINARY_DIR}/output.cpp"
+  ">" "${CMAKE_BINARY_DIR}/output.cpp"
   COMMAND Qt5::lupdate "${CMAKE_BINARY_DIR}/output.cpp" "-ts" )
 
 set (CONTACTS_LOCALES "fr_FR" "de_DE" )
