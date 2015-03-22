@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="en_US">
 <context>
     <name>GR_FILENAME</name>
     <message>
@@ -20,7 +20,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="71"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="72"/>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Spitzname</translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="2"/>
@@ -29,8 +29,9 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="73"/>
         <source>%n person</source>
         <comment>The total number of people displayed</comment>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Person</numerusform>
+            <numerusform>%n Personen</numerusform>
         </translation>
     </message>
     <message>
@@ -43,7 +44,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="82"/>
         <source>Name</source>
         <comment>The name of a person</comment>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="4"/>
@@ -62,7 +63,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="85"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="97"/>
         <source>Email</source>
-        <translation type="unfinished"></translation>
+        <translation>mail</translation>
     </message>
     <message>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="5"/>
@@ -81,7 +82,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="88"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="98"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Handy</translation>
     </message>
     <message>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="6"/>
@@ -100,7 +101,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="91"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="99"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Addresse</translation>
     </message>
     <message>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="7"/>
@@ -117,7 +118,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="93"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="94"/>
         <source>Birthday</source>
-        <translation type="unfinished"></translation>
+        <translation>Geburtstag</translation>
     </message>
     <message>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="8"/>
@@ -125,7 +126,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="47"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="79"/>
         <source>Salary</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehalt</translation>
     </message>
     <message>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="9"/>
@@ -133,7 +134,7 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="48"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="80"/>
         <source>Rating</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="22"/>
@@ -142,15 +143,16 @@
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="81"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="95"/>
         <source>%n person</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n Person</numerusform>
+            <numerusform>%n Personen</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="64"/>
         <location filename="../../../../../../build/qt47/playground/pim/grantlee/examples/contacts/output.cpp" line="96"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
 </context>
 </TS>
