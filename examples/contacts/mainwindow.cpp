@@ -67,8 +67,6 @@ MainWindow::MainWindow(const QString &templateDir, QWidget *parent, Qt::WindowFl
 
   const int numContacts = sizeof(contacts) / sizeof(*contacts);
 
-  Grantlee::registerSequentialContainer<QList<QObject*> >();
-
   QList<Contact *> contactList;
   for (int i = 0; i < numContacts; ++i)
   {
