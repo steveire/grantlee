@@ -22,6 +22,7 @@
 #include "comboboxdelegate_p.h"
 
 #include <QDebug>
+#include <QApplication>
 
 ComboBoxEditorCreator::ComboBoxEditorCreator(const QStringList &data, ComboBoxDelegate::Type type)
     : QItemEditorCreatorBase(), m_data(data), m_type(type)
@@ -88,15 +89,37 @@ QWidget* ComboBoxDelegate::createEditor(QWidget* parent, const QStyleOptionViewI
   return viewComboBox;
 }
 
+static QSize textSize(const QFont &font, const QString &text)
+{
+  QFontMetrics fm(font);
+  QSize size = fm.size(Qt::TextSingleLine, text);
+  const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+  return QSize(size.width() + 2 * textMargin, size.height());
+}
+
 QSize ComboBoxDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-  QWidget *w = QItemDelegate::createEditor(0, option, index);
-  ViewComboBox *viewComboBox = qobject_cast<ViewComboBox *>(w);
-  if (!viewComboBox)
-    return QItemDelegate::sizeHint(option, index);
-  QSize s = viewComboBox->sizeHint();
-  delete w;
-  return s;
+  if (m_sizes.contains(index.row())) {
+    return m_sizes.value(index.row());
+  }
+  QSize sz;
+  QVariant fontData = index.data(Qt::FontRole);
+  QFont fnt = qvariant_cast<QFont>(fontData).resolve(option.font);
+  for ( int i = 0; i < sizeof sTypes / sizeof *sTypes; ++i) {
+    QString text = *(sTypes + i);
+    QSize s = textSize(fnt, text);
+    sz = sz.expandedTo(s);
+  }
+
+  QStyleOptionComboBox opt;
+  opt.editable = true;
+  opt.frame = true;
+  opt.currentText = index.data().toString();
+
+  sz = qApp->style()->sizeFromContents(QStyle::CT_ComboBox, &opt, sz);
+  m_sizes.insert(index.row(), sz);
+
+  return sz;
 }
 
 

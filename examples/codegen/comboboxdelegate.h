@@ -57,6 +57,9 @@ public:
 
   virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
   virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+private:
+  mutable QHash<int, QSize> m_sizes;
 };
 
 #endif
