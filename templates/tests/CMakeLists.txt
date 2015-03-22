@@ -42,33 +42,41 @@ set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/" )
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-set(TESTS_LOCALES "fr_FR" "de_DE")
+find_package(Qt5LinguistTools QUIET)
+if (Qt5LinguistTools_FOUND)
+  set(TESTS_LOCALES "fr_FR" "de_DE")
 
-find_package(Qt5LinguistTools REQUIRED)
-set(QT_LUPDATE_EXECUTABLE Qt5::lupdate)
-set(QT_LRELEASE_EXECUTABLE Qt5::lrelease)
+  set(QT_LUPDATE_EXECUTABLE Qt5::lupdate)
+  set(QT_LRELEASE_EXECUTABLE Qt5::lrelease)
 
-set(LINGUIST_TS_ARGS COMMAND "${QT_LUPDATE_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/test_input.cpp" "-ts")
+  set(LINGUIST_TS_ARGS COMMAND "${QT_LUPDATE_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/test_input.cpp" "-ts")
 
-foreach(TESTS_LOCALE ${TESTS_LOCALES})
-    set( LINGUIST_TS_ARGS ${LINGUIST_TS_ARGS} "${CMAKE_CURRENT_SOURCE_DIR}/test_${TESTS_LOCALE}.ts" )
-endforeach()
+  foreach(TESTS_LOCALE ${TESTS_LOCALES})
+      set( LINGUIST_TS_ARGS ${LINGUIST_TS_ARGS} "${CMAKE_CURRENT_SOURCE_DIR}/test_${TESTS_LOCALE}.ts" )
+  endforeach()
 
-add_custom_target(test_l10n
-  ${LINGUIST_TS_ARGS}
-)
+  add_custom_target(test_l10n
+    ${LINGUIST_TS_ARGS}
+  )
 
-set( LINGUIST_QM_ARGS COMMAND "${QT_LRELEASE_EXECUTABLE}" )
+  set( LINGUIST_QM_ARGS COMMAND "${QT_LRELEASE_EXECUTABLE}" )
 
-foreach(TESTS_LOCALE ${TESTS_LOCALES})
-    set( generate_QMs ${generate_QMs} ${LINGUIST_QM_ARGS} "${CMAKE_CURRENT_SOURCE_DIR}/test_${TESTS_LOCALE}.ts" "-qm" "${CMAKE_CURRENT_BINARY_DIR}/test_${TESTS_LOCALE}.qm" )
-endforeach()
+  foreach(TESTS_LOCALE ${TESTS_LOCALES})
+      set( generate_QMs ${generate_QMs} ${LINGUIST_QM_ARGS} "${CMAKE_CURRENT_SOURCE_DIR}/test_${TESTS_LOCALE}.ts" "-qm" "${CMAKE_CURRENT_BINARY_DIR}/test_${TESTS_LOCALE}.qm" )
+  endforeach()
 
-add_custom_command(
-  OUTPUT test_de_DE.qm test_fr_FR.qm
-  ${generate_QMs}
-  DEPENDS test_de_DE.ts test_fr_FR.ts
-)
+  add_custom_command(
+    OUTPUT test_de_DE.qm test_fr_FR.qm
+    ${generate_QMs}
+    DEPENDS test_de_DE.ts test_fr_FR.ts
+  )
+
+  set(QM_FILES "
+<qresource>
+    <file alias=\"test_de_DE.qm\">${PROJECT_BINARY_DIR}/test_de_DE.qm</file>
+    <file alias=\"test_fr_FR.qm\">${PROJECT_BINARY_DIR}/test_fr_FR.qm</file>
+</qresource>")
+endif()
 
 configure_file(testresource.qrc.cmake "${PROJECT_BINARY_DIR}/testresource.qrc")
 
@@ -103,8 +111,13 @@ grantlee_templates_unit_tests(
   testfilters
   testgenerictypes
   testgenericcontainers
-  testinternationalization
 #   benchmarks
 )
+
+if (Qt5LinguistTools_FOUND)
+  grantlee_templates_unit_tests(
+    testinternationalization
+  )
+endif()
 
 add_subdirectory(pluginpointertest)
