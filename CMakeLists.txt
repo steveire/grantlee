@@ -81,18 +81,18 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 set(CMAKE_AUTOMOC ON)
 
-set(Grantlee_VERSION_MAJOR 5)
-set(Grantlee_VERSION_MINOR 0)
-set(Grantlee_VERSION_PATCH 0)
-set(Grantlee_MIN_PLUGIN_VERSION 0)
+set(Grantlee5_VERSION_MAJOR 5)
+set(Grantlee5_VERSION_MINOR 0)
+set(Grantlee5_VERSION_PATCH 0)
+set(Grantlee5_MIN_PLUGIN_VERSION 0)
 
-set(Grantlee_MAJOR_MINOR_VERSION_STRING "${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}" )
-set(Grantlee_VERSION_STRING "${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}" )
+set(Grantlee5_MAJOR_MINOR_VERSION_STRING "${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}" )
+set(Grantlee5_VERSION_STRING "${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}" )
 
 set (LIB_SUFFIX "" CACHE STRING "Define suffix of library directory name (eg. '64')")
 
 set( LIB_INSTALL_DIR lib${LIB_SUFFIX} )
-set( PLUGIN_INSTALL_DIR lib${LIB_SUFFIX}/grantlee/${Grantlee_MAJOR_MINOR_VERSION_STRING} )
+set( PLUGIN_INSTALL_DIR lib${LIB_SUFFIX}/grantlee/${Grantlee5_MAJOR_MINOR_VERSION_STRING} )
 set( BIN_INSTALL_DIR bin )
 set( INCLUDE_INSTALL_DIR include )
 set( DATA_INSTALL_DIR share/apps )
@@ -111,23 +111,23 @@ if (BUILD_TEXTDOCUMENT)
   add_subdirectory(textdocument)
 endif()
 
-set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/Grantlee${Grantlee_VERSION_MAJOR}" )
+set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/Grantlee${Grantlee5_VERSION_MAJOR}" )
 
 configure_file(
-  "${Grantlee_MODULE_DIR}/Grantlee${Grantlee_VERSION_MAJOR}Config.cmake.in"
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee_VERSION_MAJOR}Config.cmake"
+  "${Grantlee_MODULE_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake.in"
+  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
   @ONLY
 )
 
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file("${Grantlee_BINARY_DIR}/Grantlee${Grantlee_VERSION_MAJOR}ConfigVersion.cmake"
-  VERSION ${Grantlee_VERSION_STRING}
+write_basic_package_version_file("${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
+  VERSION ${Grantlee5_VERSION_STRING}
   COMPATIBILITY AnyNewerVersion
 )
 
 install(FILES
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee_VERSION_MAJOR}Config.cmake"
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee_VERSION_MAJOR}ConfigVersion.cmake"
+  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
+  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Common
 )
@@ -140,7 +140,7 @@ install(FILES
 
 install(EXPORT grantlee_targets
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-  NAMESPACE Grantlee${Grantlee_VERSION_MAJOR}::
+  NAMESPACE Grantlee${Grantlee5_VERSION_MAJOR}::
   FILE GrantleeTargets.cmake
   COMPONENT Common
 )
@@ -343,9 +343,9 @@ endif()
 
 # http://www.vtk.org/Wiki/CMake:Component_Install_With_CPack
 set(CPACK_PACKAGE_NAME "grantlee")
-set(CPACK_PACKAGE_VERSION_MAJOR ${Grantlee_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${Grantlee_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${Grantlee_VERSION_PATCH})
+set(CPACK_PACKAGE_VERSION_MAJOR ${Grantlee5_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${Grantlee5_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${Grantlee5_VERSION_PATCH})
 set(CPACK_PACKAGE_CONTACT "Stephen Kelly <steveire@gmail.com>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A set of frameworks for use with Qt")
 set(CPACK_GENERATOR "TGZ" )

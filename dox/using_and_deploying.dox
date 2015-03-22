@@ -176,7 +176,7 @@ namespace Grantlee
   @code
     # CMake code:
     set (_rcc_file "my_qtscript_library.qrc")
-    qt5_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/plugins/grantlee/${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}" )
+    qt5_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/plugins/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}" )
 
     add_executable(my_app, ${my_app_srcs} ${_scripted_rcc_src})
 

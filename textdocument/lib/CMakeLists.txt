@@ -8,7 +8,7 @@ set (grantlee_textdocument_SRCS
   mediawikimarkupbuilder.cpp
 )
 
-set(Grantlee_TEXTDOCUMENT_LIB_SOVERSION ${Grantlee_VERSION_MAJOR})
+set(Grantlee5_TEXTDOCUMENT_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
 
 # Help IDEs find some non-compiled files.
 set(header_only_sources
@@ -32,8 +32,8 @@ target_link_libraries(Grantlee_TextDocument
 
 if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
   set_target_properties(Grantlee_TextDocument PROPERTIES
-    VERSION    ${Grantlee_VERSION_MAJOR}.${Grantlee_VERSION_MINOR}.${Grantlee_VERSION_PATCH}
-    SOVERSION  ${Grantlee_TEXTDOCUMENT_LIB_SOVERSION}
+    VERSION    ${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}
+    SOVERSION  ${Grantlee5_TEXTDOCUMENT_LIB_SOVERSION}
   )
 endif()
 

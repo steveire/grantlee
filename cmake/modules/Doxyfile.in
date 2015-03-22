@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = Grantlee
-PROJECT_NUMBER         = @Grantlee_VERSION_MAJOR@.@Grantlee_VERSION_MINOR@.@Grantlee_VERSION_PATCH@
+PROJECT_NUMBER         = @Grantlee5_VERSION_MAJOR@.@Grantlee5_VERSION_MINOR@.@Grantlee5_VERSION_PATCH@
 OUTPUT_DIRECTORY       = @DOCS_OUTPUT_DIRECTORY@
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -160,9 +160,9 @@ FORMULA_FONTSIZE       = 10
 # configuration options related to the Qt Docs output
 #---------------------------------------------------------------------------
 GENERATE_QHP       = @GENERATE_QHP@
-QHP_NAMESPACE      = "org.grantlee.@Grantlee_VERSION_MAJOR@@Grantlee_VERSION_MINOR@@Grantlee_VERSION_PATCH@"
-QHP_VIRTUAL_FOLDER = "grantlee-@Grantlee_VERSION_MAJOR@.@Grantlee_VERSION_MINOR@"
-QCH_FILE           = @CMAKE_BINARY_DIR@/"grantlee-@Grantlee_VERSION_MAJOR@@Grantlee_VERSION_MINOR@@Grantlee_VERSION_PATCH@.qch"
+QHP_NAMESPACE      = "org.grantlee.@Grantlee5_VERSION_MAJOR@@Grantlee5_VERSION_MINOR@@Grantlee5_VERSION_PATCH@"
+QHP_VIRTUAL_FOLDER = "grantlee-@Grantlee5_VERSION_MAJOR@.@Grantlee5_VERSION_MINOR@"
+QCH_FILE           = @CMAKE_BINARY_DIR@/"grantlee-@Grantlee5_VERSION_MAJOR@@Grantlee5_VERSION_MINOR@@Grantlee5_VERSION_PATCH@.qch"
 QHG_LOCATION       = "qhelpgenerator"
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
