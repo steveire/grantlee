@@ -149,7 +149,7 @@ void BookWindow::renderBooks() const
       QString author = model->index(row, 2).data().toString();
       QString genre = model->index(row, 3).data().toString();
       int rating = model->index(row, 5).data().toInt();
-      QObject *book = new BookWrapper(author, title, genre, rating, this);
+      QObject *book = new BookWrapper(author, title, genre, rating, const_cast<BookWindow*>(this));
       QVariant var = QVariant::fromValue(book);
       bookList.append(var);
     }
@@ -162,20 +162,20 @@ void BookWindow::renderBooks() const
     Grantlee::Template t = m_engine->loadByName( themeName + ".html" );
     if (!t)
     {
-      QMessageBox::critical(this, "Unable to load template",
+      QMessageBox::critical(const_cast<BookWindow*>(this), "Unable to load template",
                 QString( "Error loading template: %1" ).arg( themeName + ".html" ) );
       return;
     }
 
     if ( t->error() )
     {
-      QMessageBox::critical(this, "Unable to load template",
+      QMessageBox::critical(const_cast<BookWindow*>(this), "Unable to load template",
                 QString( "Error loading template: %1" ).arg( t->errorString() ) );
       return;
     }
 
     bool ok;
-    QString text = QInputDialog::getText(this, tr("Export Location"),
+    QString text = QInputDialog::getText(const_cast<BookWindow*>(this), tr("Export Location"),
                                          tr("file name:"), QLineEdit::Normal,
                                          QDir::home().absolutePath() + "/book_export.html", &ok);
     if (!ok || text.isEmpty())
@@ -189,7 +189,7 @@ void BookWindow::renderBooks() const
 
     if ( t->error() )
     {
-      QMessageBox::critical(this, "Unable render template",
+      QMessageBox::critical(const_cast<BookWindow*>(this), "Unable render template",
                 QString( "Error rendering template: %1" ).arg( t->errorString() ) );
       return;
     }
