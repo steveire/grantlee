@@ -39,6 +39,6 @@ add_executable(htmlapps
 find_package(Qt5WebKitWidgets REQUIRED)
 
 target_link_libraries(htmlapps
-  Grantlee::Templates
+  Grantlee5::Templates
   Qt5::WebKitWidgets
 )

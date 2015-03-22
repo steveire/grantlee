@@ -72,7 +72,7 @@ void RssFeedNode::setChildNodes(QList< Grantlee::Node* > childNodes)
 
 void RssFeedNode::render(Grantlee::OutputStream* stream, Grantlee::Context* c) const
 {
-  QNetworkAccessManager *mgr = new QNetworkAccessManager(this);
+  QNetworkAccessManager *mgr = new QNetworkAccessManager(const_cast<RssFeedNode*>(this));
   QUrl url(Grantlee::getSafeString(m_url.resolve(c)));
   QNetworkReply *reply = mgr->get(QNetworkRequest(url));
   QEventLoop eLoop;
