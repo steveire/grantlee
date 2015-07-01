@@ -20,6 +20,8 @@
 
 #include "spaceless.h"
 
+#include <QtCore/QRegularExpression>
+
 #include "parser.h"
 #include "util.h"
 
@@ -53,7 +55,7 @@ QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 {
   QString stripped = input;
 
-  static const QRegExp re( QStringLiteral( ">\\s+<" ) );
+  static const QRegularExpression re( QStringLiteral( ">\\s+<" ) );
   stripped.replace( re, QStringLiteral( "><" ) );
   return stripped;
 }
