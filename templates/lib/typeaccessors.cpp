@@ -23,22 +23,20 @@
 #include "metaenumvariable_p.h"
 #include "safestring.h"
 
-#include <QtCore/QRegExp>
+#include <QtCore/QRegularExpression>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 
 namespace Grantlee
 {
 
-static QRegExp getIsTitleRegexp() {
-  QRegExp titleRe( QStringLiteral( "\\b[a-z]" ) );
-  titleRe.setMinimal( true );
+static QRegularExpression getIsTitleRegexp() {
+  QRegularExpression titleRe( QStringLiteral( "\\b[a-z]" ), QRegularExpression::InvertedGreedinessOption );
   return titleRe;
 }
 
-static QRegExp getTitleRegexp() {
-  QRegExp titleRe( QStringLiteral( "\\b(.)" ) );
-  titleRe.setMinimal( true );
+static QRegularExpression getTitleRegexp() {
+  QRegularExpression titleRe( QStringLiteral( "\\b(.)" ), QRegularExpression::InvertedGreedinessOption );
   return titleRe;
 }
 
@@ -96,8 +94,8 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
   if ( property == QStringLiteral( "istitle" ) ) {
     const QString s = object.get();
 
-    static const QRegExp titleRe = getIsTitleRegexp();
-    return ( titleRe.indexIn( s ) < 0 ) ? trueString : falseString;
+    static const QRegularExpression titleRe = getIsTitleRegexp();
+    return ( titleRe.match( s ).hasMatch() ) ? trueString : falseString;
   }
   if ( property == QStringLiteral( "isupper" ) ) {
     const QString s = object.get().toUpper();
@@ -135,7 +133,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     return s;
   }
   if ( property == QStringLiteral( "title" ) ) {
-    static const QRegExp titleRe = getTitleRegexp();
+    static const QRegularExpression titleRe = getTitleRegexp();
 
     const QString s = object.get();
     QString output;
@@ -144,15 +142,15 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     int nextPos = 0;
     int matchedLength;
 
-    while ( ( pos = titleRe.indexIn( s, pos ) ) != -1 ) {
-      output += titleRe.cap( 1 ).toUpper();
-      matchedLength = titleRe.matchedLength();
-      if ( ( nextPos = titleRe.indexIn( s, pos + matchedLength ) ) != -1 )
-        output += s.mid( pos + matchedLength, nextPos - pos - 1 );
-      else
-        output += s.right( s.length() - ( pos + matchedLength ) );
-      pos += matchedLength;
-    }
+//    while ( ( pos = titleRe.indexIn( s, pos ) ) != -1 ) {
+//      output += titleRe.cap( 1 ).toUpper();
+//      matchedLength = titleRe.matchedLength();
+//      if ( ( nextPos = titleRe.indexIn( s, pos + matchedLength ) ) != -1 )
+//        output += s.mid( pos + matchedLength, nextPos - pos - 1 );
+//      else
+//        output += s.right( s.length() - ( pos + matchedLength ) );
+//      pos += matchedLength;
+//    }
     return output;
   }
   if ( property == QStringLiteral( "upper" ) ) {
