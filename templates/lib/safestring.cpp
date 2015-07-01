@@ -323,7 +323,7 @@ SafeString& SafeString::NestedString::remove( const QString &str, Qt::CaseSensit
   return *m_safeString;
 }
 
-SafeString& SafeString::NestedString::remove( const QRegExp &rx )
+SafeString& SafeString::NestedString::remove( const QRegularExpression &rx )
 {
   QString::remove( rx );
   m_safeString->m_safety = IsNotSafe;
@@ -461,14 +461,14 @@ SafeString& SafeString::NestedString::replace( QChar c, const QLatin1String &aft
   return *m_safeString;
 }
 
-SafeString& SafeString::NestedString::replace( const QRegExp &rx, const Grantlee::SafeString &after )
+SafeString& SafeString::NestedString::replace( const QRegularExpression &rx, const Grantlee::SafeString &after )
 {
   QString::replace( rx, after.get() );
   m_safeString->m_safety = after.m_safety;
   return *m_safeString;
 }
 
-SafeString& SafeString::NestedString::replace( const QRegExp &rx, const QString &after )
+SafeString& SafeString::NestedString::replace( const QRegularExpression &rx, const QString &after )
 {
   QString::replace( rx, after );
   m_safeString->m_safety = IsNotSafe;
@@ -485,7 +485,7 @@ SafeString SafeString::NestedString::rightJustified( int width, QChar fill, bool
   return SafeString( QString::rightJustified( width, fill, truncate ), m_safeString->m_safety );
 }
 
-SafeString SafeString::NestedString::section( const QRegExp &reg, int start, int end, QString::SectionFlags flags ) const
+SafeString SafeString::NestedString::section( const QRegularExpression &reg, int start, int end, QString::SectionFlags flags ) const
 {
   return SafeString( QString::section( reg, start, end, flags ), m_safeString->m_safety );
 }
@@ -609,7 +609,7 @@ QStringList SafeString::NestedString::split( const QChar &sep, QString::SplitBeh
   return QString::split( sep, behavior, cs );
 }
 
-QStringList SafeString::NestedString::split( const QRegExp &rx, QString::SplitBehavior behavior ) const
+QStringList SafeString::NestedString::split( const QRegularExpression &rx, QString::SplitBehavior behavior ) const
 {
   return QString::split( rx, behavior );
 }

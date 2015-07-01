@@ -207,7 +207,7 @@ public:
     SafeString& remove( QChar ch, Qt::CaseSensitivity cs = Qt::CaseSensitive );
     SafeString& remove( const SafeString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive );
     SafeString& remove( const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive );
-    SafeString& remove( const QRegExp &rx );
+    SafeString& remove(const QRegularExpression &rx );
     SafeString repeated( int times ) const;
     SafeString& replace( int position, int n, const SafeString &after );
     SafeString& replace( int position, int n, const QString &after );
@@ -227,8 +227,8 @@ public:
     SafeString& replace( const SafeString &before, const QLatin1String &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
     SafeString& replace( const QString &before, const QLatin1String &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
     SafeString& replace( QChar c, const QLatin1String &after, Qt::CaseSensitivity cs = Qt::CaseSensitive );
-    SafeString& replace( const QRegExp &rx, const SafeString &after );
-    SafeString& replace( const QRegExp &rx, const QString &after );
+    SafeString& replace(const QRegularExpression &rx, const SafeString &after );
+    SafeString& replace(const QRegularExpression &rx, const QString &after );
 
     SafeString right( int n ) const;
     SafeString rightJustified( int width, QChar fill = QLatin1Char( ' ' ), bool truncate = false ) const;
@@ -236,7 +236,7 @@ public:
     SafeString section( QChar sep, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
     SafeString section( const SafeString& sep, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
     SafeString section( const QString& sep, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
-    SafeString section( const QRegExp& reg, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
+    SafeString section(const QRegularExpression &reg, int start, int end = -1, SectionFlags flags = SectionDefault ) const;
     SafeString& setNum( int n, int base = 10 );
     SafeString& setNum( uint n, int base = 10 );
     SafeString& setNum( long n, int base = 10 );
@@ -254,7 +254,7 @@ public:
     QStringList split( const SafeString& sep, SplitBehavior behavior = KeepEmptyParts, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const;
     QStringList split( const QString& sep, SplitBehavior behavior = KeepEmptyParts, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const;
     QStringList split( const QChar & sep, SplitBehavior behavior = KeepEmptyParts, Qt::CaseSensitivity cs = Qt::CaseSensitive ) const;
-    QStringList split( const QRegExp & rx, SplitBehavior behavior = KeepEmptyParts ) const;
+    QStringList split(const QRegularExpression &rx, SplitBehavior behavior = KeepEmptyParts ) const;
 
     SafeString toLower() const;
     SafeString toUpper() const;
