@@ -23,6 +23,7 @@
 #include "util.h"
 
 #include <QtCore/QVariant>
+#include <QtCore/QRegularExpression>
 
 QVariant AddSlashesFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
@@ -94,7 +95,7 @@ QVariant FixAmpersandsFilter::doFilter( const QVariant& input, const QVariant &a
   Q_UNUSED( autoescape )
   SafeString safeString = getSafeString( input );
 
-  const QRegExp fixAmpersandsRegexp( QStringLiteral( "&(?!(\\w+|#\\d+);)" ) );
+  const QRegularExpression fixAmpersandsRegexp( QStringLiteral( "&(?!(\\w+|#\\d+);)" ) );
 
   safeString.get().replace( fixAmpersandsRegexp, QStringLiteral( "&amp;" ) );
 
@@ -265,8 +266,8 @@ QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argu
   Q_UNUSED( autoescape )
   const QStringList tags = getSafeString( argument ).get().split( QLatin1Char( ' ' ) );
   const QString tagRe = QString::fromLatin1( "(%1)" ).arg( tags.join( QChar::fromLatin1( '|' ) ) );
-  const QRegExp startTag( QString::fromLatin1( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
-  const QRegExp endTag( QString::fromLatin1( "</%1>" ).arg( tagRe ) );
+  const QRegularExpression startTag( QString::fromLatin1( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
+  const QRegularExpression endTag( QString::fromLatin1( "</%1>" ).arg( tagRe ) );
 
   SafeString value = getSafeString( input );
   const bool safeInput = value.isSafe();
@@ -281,8 +282,7 @@ QVariant StripTagsFilter::doFilter( const QVariant& input, const QVariant &argum
 {
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
-  static QRegExp tagRe( QStringLiteral( "<[^>]*>" ) );
-  tagRe.setMinimal( true );
+  static QRegularExpression tagRe( QStringLiteral( "<[^>]*>" ), QRegularExpression::InvertedGreedinessOption );
 
   QString value = getSafeString( input );
   value.remove( tagRe );
@@ -346,7 +346,7 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
 {
   Q_UNUSED( argument )
   SafeString inputString = getSafeString( input );
-  static const QRegExp re( QStringLiteral( "\n{2,}" ) );
+  static const QRegularExpression re( QStringLiteral( "\n{2,}" ) );
   QStringList output;
 
   Q_FOREACH( const QString &bit, inputString.get().split( re ) ) {
@@ -391,6 +391,6 @@ QVariant SlugifyFilter::doFilter( const QVariant& input, const QVariant& argumen
   QString inputString = getSafeString( input );
   inputString = inputString.normalized( QString::NormalizationForm_KD );
   inputString = nofailStringToAscii( inputString );
-  inputString = inputString.remove( QRegExp( QStringLiteral( "[^\\w\\s-]" ) ) ).trimmed().toLower();
-  return markSafe( inputString.replace( QRegExp( QStringLiteral( "[-\\s]+" ) ), QChar::fromLatin1( '-' ) ) );
+  inputString = inputString.remove( QRegularExpression( QStringLiteral( "[^\\w\\s-]" ) ) ).trimmed().toLower();
+  return markSafe( inputString.replace( QRegularExpression( QStringLiteral( "[-\\s]+" ) ), QChar::fromLatin1( '-' ) ) );
 }

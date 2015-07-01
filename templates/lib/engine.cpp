@@ -31,7 +31,6 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 #include <QtCore/QPluginLoader>
-#include <QtCore/QRegExp>
 #include <QtCore/QTextStream>
 
 using namespace Grantlee;
