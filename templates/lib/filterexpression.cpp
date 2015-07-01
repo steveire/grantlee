@@ -20,6 +20,8 @@
 
 #include "filterexpression.h"
 
+#include <QtCore/QRegularExpression>
+
 #include "exception.h"
 #include "filter.h"
 #include "metatype.h"
@@ -54,17 +56,17 @@ using namespace Grantlee;
 static const char FILTER_SEPARATOR = '|';
 static const char FILTER_ARGUMENT_SEPARATOR = ':';
 
-static QRegExp getFilterRegexp()
+static QRegularExpression getFilterRegexp()
 {
-  const QString filterSep( QRegExp::escape( QChar::fromLatin1( FILTER_SEPARATOR ) ) );
-  const QString argSep( QRegExp::escape( QChar::fromLatin1( FILTER_ARGUMENT_SEPARATOR ) ) );
+  const QString filterSep( QRegularExpression::escape( QChar::fromLatin1( FILTER_SEPARATOR ) ) );
+  const QString argSep( QRegularExpression::escape( QChar::fromLatin1( FILTER_ARGUMENT_SEPARATOR ) ) );
 
   const QLatin1String varChars( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_." );
   const QLatin1String numChars( "[-+\\.]?\\d[\\d\\.e]*" );
-  const QString i18nOpen( QRegExp::escape( QStringLiteral( "_(" ) ) );
+  const QString i18nOpen( QRegularExpression::escape( QStringLiteral( "_(" ) ) );
   const QLatin1String doubleQuoteStringLiteral( "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" );
   const QLatin1String singleQuoteStringLiteral( "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'" );
-  const QString i18nClose( QRegExp::escape( QStringLiteral( ")" ) ) );
+  const QString i18nClose( QRegularExpression::escape( QStringLiteral( ")" ) ) );
   const QString variable = QLatin1Char( '[' ) + varChars + QStringLiteral( "]+");
 
   const QString localizedExpression = QStringLiteral( "(?:" ) + i18nOpen + doubleQuoteStringLiteral + i18nClose + QLatin1Char( '|' )
@@ -92,7 +94,7 @@ static QRegExp getFilterRegexp()
                                  + filterSep
                                + QStringLiteral( "\\w+)" );
 
-  return QRegExp( filterRawString );
+  return QRegularExpression( filterRawString );
 }
 
 FilterExpression::FilterExpression( const QString &varString, Parser *parser )
@@ -107,13 +109,16 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
   QString vs = varString;
 
-  static const QRegExp sFilterRe = getFilterRegexp();
+  static const QRegularExpression sFilterRe = getFilterRegexp();
 
   // This is one fo the few constructors that can throw so we make sure to delete its d->pointer.
   try {
-    while ( ( pos = sFilterRe.indexIn( vs, pos ) ) != -1 ) {
-      len = sFilterRe.matchedLength();
-      subString = vs.mid( pos, len );
+    QRegularExpressionMatchIterator i = sFilterRe.globalMatch(vs);
+    while (i.hasNext()) {
+      QRegularExpressionMatch match = i.next();
+      len = match.capturedLength();
+      pos = match.capturedStart();
+      subString = match.captured();
       const int ssSize = subString.size();
 
       if ( pos != lastPos ) {

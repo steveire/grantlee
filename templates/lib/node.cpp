@@ -25,6 +25,8 @@
 #include "template.h"
 #include "util.h"
 
+#include <QtCore/QRegularExpressionMatchIterator>
+
 using namespace Grantlee;
 
 namespace Grantlee
@@ -51,7 +53,7 @@ class AbstractNodeFactoryPrivate
 #else
 #define STRING_LITERAL QStringLiteral
 #endif
-  smartSplitRe = QRegExp(
+  smartSplitRe = QRegularExpression(
                   STRING_LITERAL( "("                   // match
                     "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
                       "(?:"                             // followed by
@@ -74,7 +76,7 @@ class AbstractNodeFactoryPrivate
   AbstractNodeFactory * const q_ptr;
 
 public:
-  QRegExp smartSplitRe;
+  QRegularExpression smartSplitRe;
 };
 
 }
@@ -216,12 +218,11 @@ QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
 {
   Q_D(const AbstractNodeFactory);
   QStringList l;
-  int count = 0;
-  int pos = 0;
-  while (( pos = d->smartSplitRe.indexIn( str, pos ) ) != -1 ) {
-    ++count;
-    pos += d->smartSplitRe.matchedLength();
-    l << d->smartSplitRe.capturedTexts().first();
+
+  QRegularExpressionMatchIterator i = d->smartSplitRe.globalMatch(str);
+  while (i.hasNext()) {
+    QRegularExpressionMatch match = i.next();
+    l.append(match.captured());
   }
 
   return l;
