@@ -228,6 +228,11 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
 
       // unknown tag.
       if ( !nodeFactory ) {
+        // handle for elif case
+        if ( stopAt.contains( command ) ) {
+          q->prependToken( token );
+          return nodeList;
+        }
         throw Grantlee::Exception( InvalidBlockTagError, QString::fromLatin1( "Unknown tag: \"%1\", line %2, %3" ).arg( command ).arg( token.linenumber ).arg( q->parent()->objectName() ) );
       }
 
