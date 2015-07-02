@@ -26,6 +26,7 @@
 #include "token.h"
 
 #include <QtCore/QStringList>
+#include <QtCore/QRegularExpression>
 
 namespace Grantlee
 {
@@ -70,7 +71,7 @@ public:
     @see AbstractNodeFactory::getNode
 
   */
-  NodeList parse( Node *parent, const QStringList &stopAt = QStringList() );
+  NodeList parse( Node *parent, const QStringList &stopAt = QStringList(), const QRegularExpression &stopAtRE = QRegularExpression() );
 
   /**
     This is an overloaded method.

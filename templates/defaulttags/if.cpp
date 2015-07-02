@@ -23,6 +23,8 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
+#include <QtCore/QRegularExpression>
+
 IfNodeFactory::IfNodeFactory()
 {
 
@@ -75,7 +77,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   IfNode *n = new IfNode( boolVars, linkType, p );
   n->setObjectName(tagContent);
 
-  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "elif" ) << QStringLiteral( "else" ) << QStringLiteral( "endif" ) );
+  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << QStringLiteral( "endif" ), QRegularExpression( QStringLiteral( "^elif" ) ) );
   n->setTrueList( trueList );
 
   NodeList falseList;

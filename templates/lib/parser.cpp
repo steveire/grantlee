@@ -30,6 +30,7 @@
 #include "template_p.h"
 
 #include <QtCore/QFile>
+#include <QtCore/QRegularExpression>
 
 using namespace Grantlee;
 
@@ -51,7 +52,7 @@ public:
     Parses the template to create a Nodelist.
     The given @p parent is the parent of each node in the returned list.
   */
-  NodeList parse( QObject *parent, const QStringList &stopAt = QStringList() );
+  NodeList parse( QObject *parent, const QStringList &stopAt = QStringList(), const QRegularExpression &stopAtRE = QRegularExpression() );
 
   void openLibrary( TagLibraryInterface * library );
   Q_DECLARE_PUBLIC( Parser )
@@ -173,13 +174,13 @@ NodeList Parser::parse( TemplateImpl *parent, const QStringList &stopAt )
   return d->parse( parent, stopAt );
 }
 
-NodeList Parser::parse( Node *parent, const QStringList &stopAt )
+NodeList Parser::parse(Node *parent, const QStringList &stopAt , const QRegularExpression &stopAtRE)
 {
   Q_D( Parser );
-  return d->parse( parent, stopAt );
+  return d->parse( parent, stopAt, stopAtRE );
 }
 
-NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
+NodeList ParserPrivate::parse(QObject *parent, const QStringList &stopAt , const QRegularExpression &stopAtRE)
 {
   Q_Q( Parser );
   NodeList nodeList;
@@ -209,7 +210,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
     } else {
       Q_ASSERT( token.tokenType == BlockToken );
-      if ( stopAt.contains( token.content ) ) {
+      if ( stopAt.contains( token.content ) || (!stopAtRE.pattern().isNull() && stopAtRE.match(token.content).hasMatch() ) ) {
         // put the token back.
         q->prependToken( token );
         return nodeList;
@@ -228,11 +229,6 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
 
       // unknown tag.
       if ( !nodeFactory ) {
-        // handle for elif case
-        if ( stopAt.contains( command ) ) {
-          q->prependToken( token );
-          return nodeList;
-        }
         throw Grantlee::Exception( InvalidBlockTagError, QString::fromLatin1( "Unknown tag: \"%1\", line %2, %3" ).arg( command ).arg( token.linenumber ).arg( q->parent()->objectName() ) );
       }
 
