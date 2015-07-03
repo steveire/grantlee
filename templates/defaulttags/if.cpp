@@ -187,24 +187,52 @@ class IfNodeOperatorLessThanToken : public IfNodeToken
 {
 public:
     IfNodeOperatorLessThanToken() : IfNodeToken(5, IfNodeToken::Operators) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        qDebug() << left << "<" << right;
+        return Grantlee::lessThan( left, right );
+    }
 };
 
 class IfNodeOperatorGreaterThanToken : public IfNodeToken
 {
 public:
     IfNodeOperatorGreaterThanToken() : IfNodeToken(5, IfNodeToken::Operators) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        qDebug() << left << ">" << right;
+        return ! Grantlee::lessThan( left, right );
+    }
 };
 
 class IfNodeOperatorLessEqualToken : public IfNodeToken
 {
 public:
     IfNodeOperatorLessEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        qDebug() << left << "<=" << right;
+        return Grantlee::lessThan( left, right ) || Grantlee::equals( left, right );
+    }
 };
 
 class IfNodeOperatorGreaterEqualToken : public IfNodeToken
 {
 public:
     IfNodeOperatorGreaterEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        qDebug() << left << ">=" << right;
+        return ! Grantlee::lessThan( left, right ) || Grantlee::equals( left, right );
+    }
 };
 
 class IfNodeEndToken : public IfNodeToken
