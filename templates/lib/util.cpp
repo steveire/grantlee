@@ -184,6 +184,53 @@ bool Grantlee::lessThan( const QVariant &lhs, const QVariant &rhs )
     return lhs < rhs;
 }
 
+bool Grantlee::contains( const QVariant &lhs, const QVariant &rhs )
+{
+    // TODO: Redesign...
+
+    int rUserType = rhs.userType();
+    int lUserType = lhs.userType();
+    if ( rUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+        QString right = rhs.value<Grantlee::SafeString>();
+        if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+            return right.contains(lhs.toString());
+        } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+            QString left = lhs.value<Grantlee::SafeString>();
+            return right.contains(left);
+        }
+    } else if ( rUserType == QVariant::List ) {
+        QVariantList list = rhs.toList();
+        Q_FOREACH (const QVariant &item, list) {
+            if ( equals( item, lhs ) ) {
+                return true;
+            }
+        }
+        return false;
+    } else if ( rUserType == QVariant::StringList ) {
+        QStringList list = rhs.toStringList();
+        if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+            return list.contains(lhs.toString());
+        } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+            QString left = lhs.value<Grantlee::SafeString>();
+            return list.contains(left);
+        }
+        return false;
+    }
+
+    if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+      if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+        return rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>();
+      } else if ( lhs.type() == QVariant::Int ) {
+        return rhs.value<MetaEnumVariable>() == lhs.toInt();
+      }
+    } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+      if ( rhs.type() == QVariant::Int ) {
+        return lhs.value<MetaEnumVariable>() == rhs.toInt();
+      }
+    }
+
+    return lhs == rhs;
+}
 
 Grantlee::SafeString Grantlee::toString( const QVariantList &list )
 {
