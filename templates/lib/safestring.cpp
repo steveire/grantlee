@@ -21,6 +21,7 @@
 #include "safestring.h"
 
 #include <QtCore/QStringList>
+#include <QtCore/QDebug>
 
 using namespace Grantlee;
 
@@ -142,7 +143,28 @@ bool SafeString::operator==( const Grantlee::SafeString &other ) const
 
 bool SafeString::operator==( const QString &other ) const
 {
-  return m_nestedString == other;
+    return m_nestedString == other;
+}
+
+bool SafeString::operator==(const QByteArray &other) const
+{
+    qDebug() << m_nestedString << other;
+    return m_nestedString == QString::fromUtf8(other);
+}
+
+bool SafeString::operator<(const SafeString &other) const
+{
+  return m_nestedString < other.get();
+}
+
+bool SafeString::operator<(const QString &other) const
+{
+    return m_nestedString < other;
+}
+
+bool SafeString::operator<(const QByteArray &other) const
+{
+    return m_nestedString < QString::fromUtf8(other);
 }
 
 SafeString& SafeString::NestedString::append( const SafeString &str )
