@@ -34,6 +34,7 @@ public:
   Node* getNode( const QString &tagContent, Parser *p ) const;
 };
 
+class IfNodeToken;
 class IfNode : public Node
 {
   Q_OBJECT
@@ -50,6 +51,8 @@ public:
   */
   IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent = 0 );
 
+  IfNode( const QList<IfNodeToken *> &tokens, QObject *parent = 0 );
+
   void setTrueList( NodeList trueList );
   void setFalseList( NodeList falseList );
 
@@ -61,6 +64,7 @@ protected:
 
 private:
   QList<QPair<bool, FilterExpression > > m_boolVars;
+  QList<IfNodeToken *> m_tokens;
   NodeList m_trueList;
   NodeList m_falseList;
   int m_linkType;
