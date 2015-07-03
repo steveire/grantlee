@@ -81,6 +81,8 @@ GRANTLEE_TEMPLATES_EXPORT bool equals( const QVariant &lhs, const QVariant &rhs 
 
 GRANTLEE_TEMPLATES_EXPORT bool lessThan( const QVariant &lhs, const QVariant &rhs );
 
+GRANTLEE_TEMPLATES_EXPORT bool contains( const QVariant &lhs, const QVariant &rhs );
+
 
 #ifndef Q_QDOC
 /**
