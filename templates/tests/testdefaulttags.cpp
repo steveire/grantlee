@@ -595,8 +595,49 @@ void TestDefaultTags::testIfTag_data()
   // If not raises a TemplateSyntaxError in Django
   dict.clear();
   QTest::newRow( "if-tag-error08" ) << QString::fromLatin1( "{% if not %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
-
+  dict.insert( QStringLiteral( "true" ), true );
   QTest::newRow( "if-tag-error-not01" ) << QString::fromLatin1( "{% if not not %}no{% else %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+
+  // operators
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-01" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-02" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "one" ) );
+  QTest::newRow( "if-tag-operators-03" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operators-04" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-05" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-06" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "one" ) );
+  QTest::newRow( "if-tag-operators-05" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operators-06" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
 
   // Truthiness
   dict.clear();
