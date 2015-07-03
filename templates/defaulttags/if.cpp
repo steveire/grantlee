@@ -100,7 +100,6 @@ public:
 
     virtual QVariant nud( IfNodeParser *p ) const
     {
-//        bool ret = filterExpression.isTrue( p->c );
         return filterExpression.resolve( p->c );
     }
 };
@@ -253,17 +252,20 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
         IfNodeToken *ifNodeToken;
         if (token == QLatin1String("or")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'or' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeOrToken;
         } else if (token == QLatin1String("and")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'and' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeAndToken;
         } else if (token == QLatin1String("not")) {
             if (++it != tokens.constEnd() && *it == QLatin1String("in") ) {
                 if (lastType != IfNodeToken::Literal) {
+                    qDeleteAll(ret);
                     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'not in' requires a previous argument" ) );
                 }
                 ifNodeToken = new IfNodeNotInToken;
@@ -273,41 +275,49 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
             }
         } else if (token == QLatin1String("in")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'in' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeInToken;
         } else if (token == QLatin1String("==")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'==' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeOperatorEqualToken;
         } else if (token == QLatin1String("!=")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'!=' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeOperatorNotEqualToken;
         } else if (token == QLatin1String("<")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'<' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeOperatorLessThanToken;
         } else if (token == QLatin1String(">")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'>' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeOperatorGreaterThanToken;
         } else if (token == QLatin1String("<=")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'<=' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeOperatorLessEqualToken;
         } else if (token == QLatin1String(">=")) {
             if (lastType != IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'>=' requires a previous argument" ) );
             }
             ifNodeToken = new IfNodeOperatorGreaterEqualToken;
         } else {
             if (lastType == IfNodeToken::Literal) {
+                qDeleteAll(ret);
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'%1' can not be followed by another literal" ).arg(lastToken.trimmed()) );
             }
             ifNodeToken = new IfNodeLiteralToken(FilterExpression(token.trimmed(), parser));
@@ -323,6 +333,7 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
     }
 
     if (lastType != IfNodeToken::Literal) {
+        qDeleteAll(ret);
         throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'%1' must be followed by a literal" ).arg(lastToken.trimmed()) );
     }
 
@@ -358,19 +369,15 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   return n;
 }
 
-
-IfNode::IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent )
-    : Node( parent ),
-    m_boolVars( boolVars ),
-    m_linkType( linkType )
-{
-
-}
-
 IfNode::IfNode(const QList<IfNodeToken *> &tokens, QObject *parent) : Node( parent )
   , m_tokens( tokens )
 {
 
+}
+
+IfNode::~IfNode()
+{
+    qDeleteAll(m_tokens);
 }
 
 void IfNode::setTrueList( NodeList trueList )
@@ -383,63 +390,18 @@ void IfNode::setFalseList( NodeList falseList )
   m_falseList = falseList;
 }
 
-
-
 void IfNode::render( OutputStream *stream, Context *c ) const
 {
   // Evaluate the expression. rendering variables with the context as needed. and processing nodes recursively
   // in either trueList or falseList as determined by booleanExpression.
 
-    IfNodeParser nodeParser( c, m_tokens );
-    QVariant result = nodeParser.expression();
-    if ( Grantlee::variantIsTrue( result ) ) {
-        renderTrueList( stream, c );
-    } else {
-        renderFalseList( stream, c );
-    }
-    return;
-
-
-  if ( m_linkType == OrLink ) {
-    for ( int i = 0; i < m_boolVars.size(); i++ ) {
-      QPair<bool, FilterExpression> pair = m_boolVars.at( i );
-      bool negate = pair.first;
-
-      bool isTrue = pair.second.isTrue( c );
-
-      if ( isTrue != negate ) {
-        renderTrueList( stream, c );
-        return;
-      }
-    }
-//     return renderFalseList(c);
+  IfNodeParser nodeParser( c, m_tokens );
+  QVariant result = nodeParser.expression();
+  if ( Grantlee::variantIsTrue( result ) ) {
+    renderTrueList( stream, c );
   } else {
-    bool renderTrue = true;
-    for ( int i = 0; i < m_boolVars.size(); i++ ) {
-      QPair<bool, FilterExpression> pair = m_boolVars.at( i );
-      bool negate = pair.first;
-
-      bool isTrue = pair.second.isTrue( c );
-
-      // Karnaugh map:
-      //          VariantIsTrue
-      //          \ 0   1
-      //         0| 0 | 1 |
-      // negate  1| 1 | 0 |
-
-      if (( !isTrue && !negate )
-          || ( isTrue && negate ) ) {
-        renderTrue = false;
-        break;
-      }
-    }
-    if ( renderTrue ) {
-      renderTrueList( stream, c );
-      return;
-    }
+    renderFalseList( stream, c );
   }
-
-  renderFalseList( stream, c );
 }
 
 void IfNode::renderTrueList( OutputStream *stream, Context *c ) const
@@ -451,7 +413,6 @@ void IfNode::renderFalseList( OutputStream *stream, Context *c ) const
 {
   return m_falseList.render( stream, c );
 }
-
 
 QVariant IfNodeParser::expression(uint rbp)
 {

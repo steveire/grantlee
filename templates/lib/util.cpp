@@ -158,78 +158,78 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
 
 bool Grantlee::lessThan( const QVariant &lhs, const QVariant &rhs )
 {
-    // TODO: Redesign...
+  // TODO: Redesign...
 
-    // QVariant doesn't use operator== to compare SafeString to QString or QByteArray
-    if ( lhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
-      if ( rhs.userType() == QVariant::String || rhs.userType() == QVariant::ByteArray ) {
-        return lhs.value<Grantlee::SafeString>() < rhs.toString();
-      }
-    } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && ( lhs.userType() == QVariant::String || lhs.userType() == QVariant::ByteArray ) ) {
-      if ( lhs.userType() == QVariant::String ) {
-        return rhs.value<Grantlee::SafeString>() < lhs.toString();
-      }
-    } else if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-      if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-        return rhs.value<MetaEnumVariable>().value < lhs.value<MetaEnumVariable>().value;
-      } else if ( lhs.type() == QVariant::Int ) {
-        return rhs.value<MetaEnumVariable>().value < lhs.toInt();
-      }
-    } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-      if ( rhs.type() == QVariant::Int ) {
-        return lhs.value<MetaEnumVariable>().value < rhs.toInt();
-      }
+  // QVariant doesn't use operator== to compare SafeString to QString or QByteArray
+  if ( lhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
+    if ( rhs.userType() == QVariant::String || rhs.userType() == QVariant::ByteArray ) {
+      return lhs.value<Grantlee::SafeString>() < rhs.toString();
     }
+  } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && ( lhs.userType() == QVariant::String || lhs.userType() == QVariant::ByteArray ) ) {
+    if ( lhs.userType() == QVariant::String ) {
+      return rhs.value<Grantlee::SafeString>() < lhs.toString();
+    }
+  } else if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+      return rhs.value<MetaEnumVariable>().value < lhs.value<MetaEnumVariable>().value;
+    } else if ( lhs.type() == QVariant::Int ) {
+      return rhs.value<MetaEnumVariable>().value < lhs.toInt();
+    }
+  } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    if ( rhs.type() == QVariant::Int ) {
+      return lhs.value<MetaEnumVariable>().value < rhs.toInt();
+    }
+  }
 
-    return lhs < rhs;
+  return lhs < rhs;
 }
 
 bool Grantlee::contains( const QVariant &lhs, const QVariant &rhs )
 {
-    // TODO: Redesign...
+  // TODO: Redesign...
 
-    int rUserType = rhs.userType();
-    int lUserType = lhs.userType();
-    if ( rUserType == qMetaTypeId<Grantlee::SafeString>() ) {
-        QString right = rhs.value<Grantlee::SafeString>();
-        if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
-            return right.contains(lhs.toString());
-        } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
-            QString left = lhs.value<Grantlee::SafeString>();
-            return right.contains(left);
-        }
-    } else if ( rUserType == QVariant::List ) {
-        QVariantList list = rhs.toList();
-        Q_FOREACH (const QVariant &item, list) {
-            if ( equals( item, lhs ) ) {
-                return true;
-            }
-        }
-        return false;
-    } else if ( rUserType == QVariant::StringList ) {
-        QStringList list = rhs.toStringList();
-        if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
-            return list.contains(lhs.toString());
-        } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
-            QString left = lhs.value<Grantlee::SafeString>();
-            return list.contains(left);
-        }
-        return false;
+  int rUserType = rhs.userType();
+  int lUserType = lhs.userType();
+  if ( rUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+    QString right = rhs.value<Grantlee::SafeString>();
+    if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+      return right.contains(lhs.toString());
+    } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+      QString left = lhs.value<Grantlee::SafeString>();
+      return right.contains(left);
     }
-
-    if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-      if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-        return rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>();
-      } else if ( lhs.type() == QVariant::Int ) {
-        return rhs.value<MetaEnumVariable>() == lhs.toInt();
-      }
-    } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-      if ( rhs.type() == QVariant::Int ) {
-        return lhs.value<MetaEnumVariable>() == rhs.toInt();
+  } else if ( rUserType == QVariant::List ) {
+    QVariantList list = rhs.toList();
+    Q_FOREACH (const QVariant &item, list) {
+      if ( equals( item, lhs ) ) {
+        return true;
       }
     }
+    return false;
+  } else if ( rUserType == QVariant::StringList ) {
+    QStringList list = rhs.toStringList();
+    if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+      return list.contains(lhs.toString());
+    } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+      QString left = lhs.value<Grantlee::SafeString>();
+      return list.contains(left);
+    }
+    return false;
+  }
 
-    return lhs == rhs;
+  if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+      return rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>();
+    } else if ( lhs.type() == QVariant::Int ) {
+      return rhs.value<MetaEnumVariable>() == lhs.toInt();
+    }
+  } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+    if ( rhs.type() == QVariant::Int ) {
+      return lhs.value<MetaEnumVariable>() == rhs.toInt();
+    }
+  }
+
+  return lhs == rhs;
 }
 
 Grantlee::SafeString Grantlee::toString( const QVariantList &list )
