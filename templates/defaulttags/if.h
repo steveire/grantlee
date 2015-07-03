@@ -2,6 +2,7 @@
   This file is part of the Grantlee template system.
 
   Copyright (c) 2009,2010 Stephen Kelly <steveire@gmail.com>
+  Copyright (c) 2015 Daniel Nicoletti <dantti12@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -39,19 +40,11 @@ class IfNode : public Node
 {
   Q_OBJECT
 public:
-  enum LinkType {
-    OrLink,
-    AndLink
-  };
-
   /**
-  The expression.
-  Nodes to render if the expression is true
-  Nodes to render if the expression is false
+    The expression.
   */
-  IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent = 0 );
-
   IfNode( const QList<IfNodeToken *> &tokens, QObject *parent = 0 );
+  virtual ~IfNode();
 
   void setTrueList( NodeList trueList );
   void setFalseList( NodeList falseList );
@@ -63,12 +56,9 @@ protected:
   void renderFalseList( OutputStream *stream, Context *c ) const;
 
 private:
-  QList<QPair<bool, FilterExpression > > m_boolVars;
   QList<IfNodeToken *> m_tokens;
   NodeList m_trueList;
   NodeList m_falseList;
-  int m_linkType;
-
 };
 
 #endif
