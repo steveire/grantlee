@@ -33,7 +33,6 @@
 #include <QtCore/QPluginLoader>
 #include <QtCore/QRegExp>
 #include <QtCore/QTextStream>
-#include <QtCore/QDebug>
 
 using namespace Grantlee;
 
@@ -42,7 +41,7 @@ static const char __scriptableLibName[] = "grantlee_scriptabletags";
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
 {
-  qDebug() << "comparators" << QMetaType::registerComparators<SafeString>();
+  QMetaType::registerComparators<SafeString>();
 
   d_ptr->m_defaultLibraries << QStringLiteral( "grantlee_defaulttags" )
                             << QStringLiteral( "grantlee_loadertags" )
