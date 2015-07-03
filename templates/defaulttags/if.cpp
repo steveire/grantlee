@@ -143,17 +143,32 @@ public:
         QVariant right = p->expression( 3 );
         return ! Grantlee::variantIsTrue( right );
     }
-
-//    virtual bool led( IfNodeParser *p, bool left, IfNodeToken *right ) const
-//    {
-//        return ! right->nud( p );
-//    }
 };
 
 class IfNodeInToken : public IfNodeToken
 {
 public:
     IfNodeInToken() : IfNodeToken(4, IfNodeToken::In) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        qDebug() << left << "in" << right;
+        return Grantlee::contains( left, right );
+    }
+};
+
+class IfNodeNotInToken : public IfNodeToken
+{
+public:
+    IfNodeNotInToken() : IfNodeToken(4, IfNodeToken::In) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        qDebug() << left << "not in" << right;
+        return ! Grantlee::contains( left, right );
+    }
 };
 
 class IfNodeOperatorEqualToken : public IfNodeToken
@@ -245,7 +260,9 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
 
     QString lastToken;
     IfNodeToken::Type lastType = IfNodeToken::None;
-    Q_FOREACH (const QString &token, tokens) {
+    QStringList::ConstIterator it = tokens.constBegin();
+    while ( it != tokens.constEnd() ) {
+        const QString &token = *it;
         IfNodeToken *ifNodeToken;
         if (token == QLatin1String("or")) {
             if (lastType != IfNodeToken::Literal) {
@@ -258,7 +275,15 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
             }
             ifNodeToken = new IfNodeAndToken;
         } else if (token == QLatin1String("not")) {
-            ifNodeToken = new IfNodeNotToken;
+            if (++it != tokens.constEnd() && *it == QLatin1String("in") ) {
+                if (lastType != IfNodeToken::Literal) {
+                    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'not in' requires a previous argument" ) );
+                }
+                ifNodeToken = new IfNodeNotInToken;
+            } else {
+                --it;
+                ifNodeToken = new IfNodeNotToken;
+            }
         } else if (token == QLatin1String("in")) {
             if (lastType != IfNodeToken::Literal) {
                 throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'in' requires a previous argument" ) );
@@ -306,6 +331,8 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
         lastType = ifNodeToken->type;
 
         ret.append(ifNodeToken);
+
+        ++it;
 
         qDebug() << "create token" << token << ifNodeToken;
     }

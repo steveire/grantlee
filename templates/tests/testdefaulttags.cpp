@@ -600,6 +600,49 @@ void TestDefaultTags::testIfTag_data()
 
   // operators
 
+  // In Operator
+  dict.clear();
+  QTest::newRow( "if-tag-operator-in-01" ) << QString::fromLatin1( "{% if \"bc\" in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  QTest::newRow( "if-tag-operator-in-02" ) << QString::fromLatin1( "{% if \"xy\" in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "bc" ) );
+  QTest::newRow( "if-tag-operator-in-03" ) << QString::fromLatin1( "{% if foo in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "xy" ) );
+  QTest::newRow( "if-tag-operator-in-04" ) << QString::fromLatin1( "{% if foo in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-05" ) << QString::fromLatin1( "{% if \"one\" in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-06" ) << QString::fromLatin1( "{% if \"xz\" in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-07" ) << QString::fromLatin1( "{% if foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "xy" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-08" ) << QString::fromLatin1( "{% if foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-09" ) << QString::fromLatin1( "{% if foo not in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-06" ) << QString::fromLatin1( "{% if not foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
   // Operator ==
   dict.clear();
   dict.insert( QStringLiteral( "foo" ), 1 );
