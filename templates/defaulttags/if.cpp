@@ -23,6 +23,7 @@
 
 #include "../lib/exception.h"
 #include "parser.h"
+#include "util.h"
 
 IfNodeFactory::IfNodeFactory()
 {
@@ -50,9 +51,8 @@ public:
     QList<IfNodeToken *> tokens;
     QList<IfNodeToken *>::ConstIterator iterator;
 
-    bool expression( uint rbp );
+    QVariant expression( uint rbp = 0 );
 };
-
 
 class IfNodeToken
 {
@@ -71,17 +71,17 @@ public:
     {}
     virtual ~IfNodeToken() {}
 
-    virtual bool led( IfNodeParser *p, bool left ) const
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
         Q_UNUSED( p )
         Q_UNUSED( left )
-        return false;
+        return QVariant();
     }
 
-    virtual bool nud( IfNodeParser *p ) const
+    virtual QVariant nud( IfNodeParser *p ) const
     {
         Q_UNUSED( p )
-        return false;
+        return QVariant();
     }
 
     QString token;
@@ -98,10 +98,10 @@ public:
         filterExpression = expr;
     }
 
-    virtual bool nud( IfNodeParser *p ) const
+    virtual QVariant nud( IfNodeParser *p ) const
     {
-        bool ret = filterExpression.isTrue( p->c );
-        return ret;
+//        bool ret = filterExpression.isTrue( p->c );
+        return filterExpression.resolve( p->c );
     }
 };
 
@@ -109,10 +109,10 @@ class IfNodeOrToken : public IfNodeToken
 {
 public:
     IfNodeOrToken() : IfNodeToken(1, IfNodeToken::Or) {}
-    virtual bool led( IfNodeParser *p, bool left ) const
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        bool right = p->expression( 1 );
-        return left || right;
+        QVariant right = p->expression( 1 );
+        return Grantlee::variantIsTrue( left ) || Grantlee::variantIsTrue( right );
     }
 };
 
@@ -121,10 +121,10 @@ class IfNodeAndToken : public IfNodeToken
 public:
     IfNodeAndToken() : IfNodeToken(2, IfNodeToken::And) {}
 
-    virtual bool led( IfNodeParser *p, bool left ) const
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        bool right = p->expression( 2 );
-        return left && right;
+        QVariant right = p->expression( 2 );
+        return Grantlee::variantIsTrue( left ) && Grantlee::variantIsTrue( right );
     }
 };
 
@@ -133,9 +133,10 @@ class IfNodeNotToken : public IfNodeToken
 public:
     IfNodeNotToken() : IfNodeToken(3, IfNodeToken::Not) {}
 
-    virtual bool nud( IfNodeParser *p ) const
+    virtual QVariant nud( IfNodeParser *p ) const
     {
-        return ! p->expression( 3 );
+        QVariant right = p->expression( 3 );
+        return ! Grantlee::variantIsTrue( right );
     }
 
 //    virtual bool led( IfNodeParser *p, bool left, IfNodeToken *right ) const
@@ -154,6 +155,12 @@ class IfNodeOperatorEqualToken : public IfNodeToken
 {
 public:
     IfNodeOperatorEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        return Grantlee::equals( left, right );
+    }
 };
 
 
@@ -161,6 +168,12 @@ class IfNodeOperatorNotEqualToken : public IfNodeToken
 {
 public:
     IfNodeOperatorNotEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
+
+    virtual QVariant led( IfNodeParser *p, QVariant left ) const
+    {
+        QVariant right = p->expression( 2 );
+        return ! Grantlee::equals( left, right );
+    }
 };
 
 class IfNodeOperatorLessThanToken : public IfNodeToken
@@ -329,7 +342,8 @@ void IfNode::render( OutputStream *stream, Context *c ) const
   // in either trueList or falseList as determined by booleanExpression.
 
     IfNodeParser nodeParser( c, m_tokens );
-    if ( nodeParser.expression( 0) ) {
+    QVariant result = nodeParser.expression();
+    if ( Grantlee::variantIsTrue( result ) ) {
         renderTrueList( stream, c );
     } else {
         renderFalseList( stream, c );
@@ -390,7 +404,7 @@ void IfNode::renderFalseList( OutputStream *stream, Context *c ) const
 }
 
 
-bool IfNodeParser::expression(uint rbp)
+QVariant IfNodeParser::expression(uint rbp)
 {
     if (iterator == tokens.constEnd()) {
         return false;
@@ -398,8 +412,8 @@ bool IfNodeParser::expression(uint rbp)
 
     IfNodeToken *t = token;
     token = next();
-    bool left = t->nud( this );
-    while ( rbp < token->lbp) {
+    QVariant left = t->nud( this );
+    while ( rbp < token->lbp ) {
         t = token;
         token = next();
         left = t->led( this, left );
