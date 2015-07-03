@@ -37,9 +37,16 @@ public:
         this->c = c;
         this->tokens = tokens;
         iterator = tokens.constBegin();
+        token = *iterator;
+    }
+
+    IfNodeToken *next()
+    {
+        return *++iterator;
     }
 
     Context *c;
+    IfNodeToken *token;
     QList<IfNodeToken *> tokens;
     QList<IfNodeToken *>::ConstIterator iterator;
 
@@ -50,15 +57,24 @@ public:
 class IfNodeToken
 {
 public:
-    IfNodeToken(uint _lbp = 0) : lbp(_lbp)
+    enum Type {
+        None,
+        Literal,
+        Or,
+        And,
+        Not,
+        In,
+        Operators,
+        End
+    };
+    IfNodeToken(uint _lbp = 0, Type _type = End) : type(_type), lbp(_lbp)
     {}
     virtual ~IfNodeToken() {}
 
-    virtual bool led( IfNodeParser *p, bool left, IfNodeToken *right ) const
+    virtual bool led( IfNodeParser *p, bool left ) const
     {
         Q_UNUSED( p )
         Q_UNUSED( left )
-        Q_UNUSED( right )
         return false;
     }
 
@@ -68,110 +84,111 @@ public:
         return false;
     }
 
-    uint lbp;
+    QString token;
     FilterExpression filterExpression;
+    Type type;
+    uint lbp;
 };
 
 class IfNodeLiteralToken : public IfNodeToken
 {
 public:
-    IfNodeLiteralToken(const FilterExpression &expr) : IfNodeToken(1)
+    IfNodeLiteralToken(const FilterExpression &expr) : IfNodeToken(1, IfNodeToken::Literal)
     {
         filterExpression = expr;
     }
 
     virtual bool nud( IfNodeParser *p ) const
-    { return filterExpression.isTrue( p->c ); }
+    {
+        bool ret = filterExpression.isTrue( p->c );
+        return ret;
+    }
 };
 
 class IfNodeOrToken : public IfNodeToken
 {
 public:
-    IfNodeOrToken() : IfNodeToken(1) {}
-    virtual bool led( IfNodeParser *p, bool left, IfNodeToken *right ) const
+    IfNodeOrToken() : IfNodeToken(1, IfNodeToken::Or) {}
+    virtual bool led( IfNodeParser *p, bool left ) const
     {
-        return left || right->nud( p );
+        bool right = p->expression( 1 );
+        return left || right;
     }
 };
 
 class IfNodeAndToken : public IfNodeToken
 {
 public:
-    IfNodeAndToken() : IfNodeToken(2) {}
+    IfNodeAndToken() : IfNodeToken(2, IfNodeToken::And) {}
 
-    virtual bool led( IfNodeParser *p, bool left, IfNodeToken *right ) const
+    virtual bool led( IfNodeParser *p, bool left ) const
     {
-        return left && right->nud( p );
+        bool right = p->expression( 2 );
+        return left && right;
     }
 };
 
 class IfNodeNotToken : public IfNodeToken
 {
 public:
-    IfNodeNotToken() : IfNodeToken(3) {}
+    IfNodeNotToken() : IfNodeToken(3, IfNodeToken::Not) {}
 
     virtual bool nud( IfNodeParser *p ) const
     {
-        if (++p->iterator != p->tokens.constEnd() ) {
-            IfNodeToken *token = *p->iterator;
-            return ! token->nud( p );
-        }
-        return false;
+        return ! p->expression( 3 );
     }
 
-    virtual bool led( IfNodeParser *p, bool left, IfNodeToken *right ) const
-    {
-        return ! right->nud( p );
-    }
+//    virtual bool led( IfNodeParser *p, bool left, IfNodeToken *right ) const
+//    {
+//        return ! right->nud( p );
+//    }
 };
 
 class IfNodeInToken : public IfNodeToken
 {
 public:
-    IfNodeInToken() : IfNodeToken(4) {}
+    IfNodeInToken() : IfNodeToken(4, IfNodeToken::In) {}
 };
 
 class IfNodeOperatorEqualToken : public IfNodeToken
 {
 public:
-    IfNodeOperatorEqualToken() : IfNodeToken(5) {}
+    IfNodeOperatorEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
 };
 
 
 class IfNodeOperatorNotEqualToken : public IfNodeToken
 {
 public:
-    IfNodeOperatorNotEqualToken() : IfNodeToken(5) {}
+    IfNodeOperatorNotEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
 };
 
 class IfNodeOperatorLessThanToken : public IfNodeToken
 {
 public:
-    IfNodeOperatorLessThanToken() : IfNodeToken(5) {}
+    IfNodeOperatorLessThanToken() : IfNodeToken(5, IfNodeToken::Operators) {}
 };
 
 class IfNodeOperatorGreaterThanToken : public IfNodeToken
 {
 public:
-    IfNodeOperatorGreaterThanToken() : IfNodeToken(5) {}
+    IfNodeOperatorGreaterThanToken() : IfNodeToken(5, IfNodeToken::Operators) {}
 };
 
 class IfNodeOperatorLessEqualToken : public IfNodeToken
 {
 public:
-    IfNodeOperatorLessEqualToken() : IfNodeToken(5) {}
+    IfNodeOperatorLessEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
 };
 
 class IfNodeOperatorGreaterEqualToken : public IfNodeToken
 {
 public:
-    IfNodeOperatorGreaterEqualToken() : IfNodeToken(5) {}
+    IfNodeOperatorGreaterEqualToken() : IfNodeToken(5, IfNodeToken::Operators) {}
 };
 
 class IfNodeEndToken : public IfNodeToken
 {
-public:
-    IfNodeEndToken() : IfNodeToken(0) {}
 };
 
 QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parser)
@@ -179,33 +196,77 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
     QList<IfNodeToken *> ret;
 
     QString lastToken;
+    IfNodeToken::Type lastType = IfNodeToken::None;
     Q_FOREACH (const QString &token, tokens) {
+        IfNodeToken *ifNodeToken;
         if (token == QLatin1String("or")) {
-            ret.append(new IfNodeOrToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'or' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeOrToken;
         } else if (token == QLatin1String("and")) {
-            ret.append(new IfNodeAndToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'and' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeAndToken;
         } else if (token == QLatin1String("not")) {
-            ret.append(new IfNodeNotToken);
+            ifNodeToken = new IfNodeNotToken;
         } else if (token == QLatin1String("in")) {
-            ret.append(new IfNodeInToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'in' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeInToken;
         } else if (token == QLatin1String("==")) {
-            ret.append(new IfNodeOperatorEqualToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'==' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeOperatorEqualToken;
         } else if (token == QLatin1String("!=")) {
-            ret.append(new IfNodeOperatorNotEqualToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'!=' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeOperatorNotEqualToken;
         } else if (token == QLatin1String("<")) {
-            ret.append(new IfNodeOperatorLessThanToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'<' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeOperatorLessThanToken;
         } else if (token == QLatin1String(">")) {
-            ret.append(new IfNodeOperatorGreaterThanToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'>' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeOperatorGreaterThanToken;
         } else if (token == QLatin1String("<=")) {
-            ret.append(new IfNodeOperatorLessEqualToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'<=' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeOperatorLessEqualToken;
         } else if (token == QLatin1String(">=")) {
-            ret.append(new IfNodeOperatorGreaterEqualToken);
+            if (lastType != IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'>=' requires a previous argument" ) );
+            }
+            ifNodeToken = new IfNodeOperatorGreaterEqualToken;
         } else {
-            ret.append(new IfNodeLiteralToken(FilterExpression(token.trimmed(), parser)));
+            if (lastType == IfNodeToken::Literal) {
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'%1' can not be followed by another literal" ).arg(lastToken.trimmed()) );
+            }
+            ifNodeToken = new IfNodeLiteralToken(FilterExpression(token.trimmed(), parser));
         }
+
+        ifNodeToken->token = token;
+        lastToken = token;
+        lastType = ifNodeToken->type;
+
+        ret.append(ifNodeToken);
     }
 
-    ret.append(new IfNodeEndToken);
+    if (lastType != IfNodeToken::Literal) {
+        throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'%1' must be followed by a literal" ).arg(lastToken.trimmed()) );
+    }
+
+    IfNodeToken *end = new IfNodeEndToken;
+    end->token = QStringLiteral("IfNodeEndToken");
+    ret.append(end);
 
     return ret;
 }
@@ -335,14 +396,14 @@ bool IfNodeParser::expression(uint rbp)
         return false;
     }
 
-    IfNodeToken *t = *iterator;
-    IfNodeToken *token = *++iterator;
+    IfNodeToken *t = token;
+    token = next();
     bool left = t->nud( this );
     while ( rbp < token->lbp) {
-
         t = token;
-        token = *++iterator;
-        left = t->led( this, left, token );
+        token = next();
+        left = t->led( this, left );
     }
+
     return left;
 }
