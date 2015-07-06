@@ -133,9 +133,26 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
 
     QAssociativeIterable iter = object.value<QAssociativeIterable>();
 
-    QVariant mappedValue = iter.value(property);
-    if(mappedValue.isValid())
-      return mappedValue;
+    // On Qt 5.5 use iter.find()
+    QAssociativeIterable::const_iterator it = iter.begin();
+    const QAssociativeIterable::const_iterator end = iter.end();
+    QVariantList ret;
+    while ( it != end ) {
+      if ( it.key() == property ) {
+        ret.append( it.value() );
+      }
+      ++it;
+    }
+
+    // if it's a QMap or QHash with multiple values
+    // return the variant list
+    if ( ! ret.isEmpty() ) {
+      if ( ret.size() > 1 ) {
+        return ret;
+      }
+      return ret.first();
+    }
+
 
     if (property == QStringLiteral("size") || property == QStringLiteral( "count" ) )
     {

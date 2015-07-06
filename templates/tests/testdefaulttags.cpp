@@ -643,6 +643,24 @@ void TestDefaultTags::testIfTag_data()
   dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
   QTest::newRow( "if-tag-operator-in-06" ) << QString::fromLatin1( "{% if not foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
+  // operator in with multi map
+  QVariantHash colors;
+  colors.insertMulti( QStringLiteral( "colors" ), QStringLiteral( "blue" ) );
+  colors.insertMulti( QStringLiteral( "colors" ), QStringLiteral( "red" ) );
+
+  dict.clear();
+  dict.insert( QStringLiteral( "color" ), QStringLiteral( "red" ) );
+  dict.insert( QStringLiteral( "form" ), colors );
+  QTest::newRow( "if-tag-operator-in-07" ) << QString::fromLatin1( "{% if color in form.colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "form" ), colors );
+  QTest::newRow( "if-tag-operator-in-08" ) << QString::fromLatin1( "{% if \"blue\" in form.colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "form" ), colors );
+  QTest::newRow( "if-tag-operator-in-08" ) << QString::fromLatin1( "{% if \"green\" in form.colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
   // Operator ==
   dict.clear();
   dict.insert( QStringLiteral( "foo" ), 1 );
