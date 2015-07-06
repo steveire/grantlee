@@ -110,8 +110,13 @@ public:
     IfNodeOrToken() : IfNodeToken(1, IfNodeToken::Or) {}
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 1 );
-        return Grantlee::variantIsTrue( left ) || Grantlee::variantIsTrue( right );
+        if ( Grantlee::variantIsTrue( left ) ) {
+            p->token = p->tokens.last(); // Skip processing right part
+            return true;
+        } else {
+            const QVariant &right = p->expression( 1 );
+            return Grantlee::variantIsTrue( right );
+        }
     }
 };
 
@@ -122,7 +127,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return Grantlee::variantIsTrue( left ) && Grantlee::variantIsTrue( right );
     }
 };
@@ -134,7 +139,7 @@ public:
 
     virtual QVariant nud( IfNodeParser *p ) const
     {
-        QVariant right = p->expression( 3 );
+        const QVariant &right = p->expression( 3 );
         return ! Grantlee::variantIsTrue( right );
     }
 };
@@ -146,7 +151,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return Grantlee::contains( left, right );
     }
 };
@@ -158,7 +163,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return ! Grantlee::contains( left, right );
     }
 };
@@ -170,7 +175,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return Grantlee::equals( left, right );
     }
 };
@@ -183,7 +188,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return ! Grantlee::equals( left, right );
     }
 };
@@ -195,7 +200,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return Grantlee::lessThan( left, right );
     }
 };
@@ -207,7 +212,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return ! Grantlee::lessThan( left, right ) && ! Grantlee::equals( left, right );
     }
 };
@@ -219,7 +224,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return Grantlee::lessThan( left, right ) || Grantlee::equals( left, right );
     }
 };
@@ -231,7 +236,7 @@ public:
 
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
-        QVariant right = p->expression( 2 );
+        const QVariant &right = p->expression( 2 );
         return ! Grantlee::lessThan( left, right ) || Grantlee::equals( left, right );
     }
 };
