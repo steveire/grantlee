@@ -191,13 +191,33 @@ bool Grantlee::contains( const QVariant &lhs, const QVariant &rhs )
   int rUserType = rhs.userType();
   int lUserType = lhs.userType();
   if ( rUserType == qMetaTypeId<Grantlee::SafeString>() ) {
-    QString right = rhs.value<Grantlee::SafeString>();
+    const QString right = rhs.value<Grantlee::SafeString>();
     if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
       return right.contains(lhs.toString());
     } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
-      QString left = lhs.value<Grantlee::SafeString>();
+      const QString left = lhs.value<Grantlee::SafeString>();
       return right.contains(left);
     }
+  } else if ( rUserType == QVariant::String ) {
+      const QString right = rhs.toString();
+      if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+        return right.contains(lhs.toString());
+      } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+        const QString left = lhs.value<Grantlee::SafeString>();
+        return right.contains(left);
+      }
+  } else if ( rUserType == QVariant::ByteArray ) {
+      if (lUserType == QVariant::String ) {
+        const QString right = QString::fromUtf8( rhs.toByteArray() );
+        return right.contains( lhs.toString() );
+      } else if ( lUserType == QVariant::ByteArray ) {
+          const QByteArray right = rhs.toByteArray();
+        return rhs.toByteArray().contains( lhs.toByteArray() );
+      } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+        const QString right = QString::fromUtf8( rhs.toByteArray() );
+        const QString left = lhs.value<Grantlee::SafeString>();
+        return right.contains(left);
+      }
   } else if ( rUserType == QVariant::List ) {
     QVariantList list = rhs.toList();
     Q_FOREACH (const QVariant &item, list) {
