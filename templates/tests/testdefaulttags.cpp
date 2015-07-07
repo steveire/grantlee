@@ -643,6 +643,33 @@ void TestDefaultTags::testIfTag_data()
   dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
   QTest::newRow( "if-tag-operator-in-06" ) << QString::fromLatin1( "{% if not foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
+  // operator in with bytearray
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QStringLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-ba-1" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QStringLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-ba-2" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-ba-2" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-ba-3" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "color" ), QByteArrayLiteral( "green" ) );
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-ba-2" ) << QString::fromLatin1( "{% if color in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "color" ), QByteArrayLiteral( "green" ) );
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-ba-3" ) << QString::fromLatin1( "{% if color in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
   // Operator ==
   dict.clear();
   dict.insert( QStringLiteral( "foo" ), 1 );
