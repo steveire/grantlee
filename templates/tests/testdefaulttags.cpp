@@ -659,7 +659,33 @@ void TestDefaultTags::testIfTag_data()
 
   dict.clear();
   dict.insert( QStringLiteral( "form" ), colors );
-  QTest::newRow( "if-tag-operator-in-08" ) << QString::fromLatin1( "{% if \"green\" in form.colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+  QTest::newRow( "if-tag-operator-in-09" ) << QString::fromLatin1( "{% if \"green\" in form.colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QStringLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-10" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QStringLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-11" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-12" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-13" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "color" ), QByteArrayLiteral( "green" ) );
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-12" ) << QString::fromLatin1( "{% if color in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "color" ), QByteArrayLiteral( "green" ) );
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-13" ) << QString::fromLatin1( "{% if color in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
   // Operator ==
   dict.clear();
