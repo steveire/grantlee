@@ -43,12 +43,28 @@ OutputStream::~OutputStream()
 
 QString OutputStream::escape( const QString &input ) const
 {
-  QString temp = input;
-  temp.replace( QLatin1Char( '&' ), QStringLiteral( "&amp;" ) );
-  temp.replace( QLatin1Char( '<' ), QStringLiteral( "&lt;" ) );
-  temp.replace( QLatin1Char( '>' ), QStringLiteral( "&gt;" ) );
-  temp.replace( QLatin1Char( '\'' ), QStringLiteral( "&#39;" ) );
-  return temp;
+  // This could be replaced by QString::toHtmlEscaped()
+  // but atm it does not escape single quotes
+  QString rich;
+  const int len = input.length();
+  rich.reserve(int(len * 1.1));
+  for (int i = 0; i < len; ++i) {
+    const QChar ch = input.at(i);
+    if (ch == QLatin1Char('<'))
+      rich += QLatin1String("&lt;");
+    else if (ch == QLatin1Char('>'))
+      rich += QLatin1String("&gt;");
+    else if (ch == QLatin1Char('&'))
+      rich += QLatin1String("&amp;");
+    else if (ch == QLatin1Char('"'))
+      rich += QLatin1String("&quot;");
+    else if (ch == QLatin1Char('\''))
+      rich += QLatin1String("&#39;");
+    else
+      rich += ch;
+  }
+  rich.squeeze();
+  return rich;
 }
 
 QString OutputStream::escape( const Grantlee::SafeString& input ) const

@@ -452,7 +452,7 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   // purposes.
   QTest::newRow( "basic-syntax25" ) << "{{ \"fred\" }}" << dict << QString::fromLatin1( "fred" ) << NoError;
   QTest::newRow( "basic-syntax26" ) << "{{ \"\\\"fred\\\"\" }}" << dict << "\"fred\"" << NoError;
-  QTest::newRow( "basic-syntax27" ) << "{{ _(\"\\\"fred\\\"\") }}" << dict << "\"fred\"" << NoError;
+  QTest::newRow( "basic-syntax27" ) << "{{ _(\"\\\"fred\\\"\") }}" << dict << "&quot;fred&quot;" << NoError;
 
 
   dict.clear();
@@ -835,7 +835,7 @@ void TestBuiltinSyntax::testEscaping_data()
 
   // html escaping is not to be confused with for example url escaping.
   dict.insert( QStringLiteral( "var" ), QStringLiteral( "< > & \" \' # = % $" ) );
-  QTest::newRow( "escape01" ) << QString::fromLatin1( "{{ var }}" ) << dict << "&lt; &gt; &amp; \" &#39; # = % $" << NoError;
+  QTest::newRow( "escape01" ) << QString::fromLatin1( "{{ var }}" ) << dict << "&lt; &gt; &amp; &quot; &#39; # = % $" << NoError;
 
   dict.clear();
   dict.insert( QStringLiteral( "var" ), QStringLiteral( "this & that" ) );
