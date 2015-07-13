@@ -85,8 +85,8 @@ public:
         return QVariant();
     }
 
-    Type type;
     uint lbp;
+    Type type;
     QString token;
     FilterExpression filterExpression;
 };
