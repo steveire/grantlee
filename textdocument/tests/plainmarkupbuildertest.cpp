@@ -24,6 +24,7 @@
 #include <QtCore/QRegExp>
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextDocument>
+#include <QtGui/QTextLine>
 
 #include "markupdirector.h"
 #include "plaintextmarkupbuilder.h"
@@ -62,6 +63,7 @@ private Q_SLOTS:
     void testEmptyParagraphs();
     void testNewlinesThroughQTextCursor();
     void testBrInsideParagraph();
+    void testLongDocument();
 
 };
 
@@ -580,6 +582,22 @@ void TestPlainMarkupOutput:: testBrInsideParagraph()
     QVERIFY(regex.exactMatch(result));
 }
 
+void TestPlainMarkupOutput::testLongDocument()
+{
+    QTextDocument doc;
+
+    QFile sourceHtml(QFINDTESTDATA("sourcehtml"));
+    QVERIFY(sourceHtml.open(QIODevice::ReadOnly));
+    doc.setHtml(QString::fromLatin1(sourceHtml.readAll().constData()));
+
+    PlainTextMarkupBuilder *hb = new PlainTextMarkupBuilder();
+    MarkupDirector *md = new MarkupDirector(hb);
+    md->processDocument(&doc);
+    QString result = hb->getResult();
+    QVERIFY2(result.startsWith(QLatin1String("Hello,\nThis is some text\nIt shows how grantlee is used from kmail\n")), qPrintable(result));
+    QVERIFY2(result.endsWith(QLatin1String("This is the end of the signature\n")), qPrintable(result));
+    //qDebug() << result;
+}
 
 QTEST_MAIN(TestPlainMarkupOutput)
 #include "plainmarkupbuildertest.moc"
