@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 2.8.11)
+
+if (POLICY CMP0063)
+  cmake_policy(SET CMP0063 NEW)
+endif()
+
 project(pluginpointertest)
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )

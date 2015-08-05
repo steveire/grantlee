@@ -1,6 +1,10 @@
 
 cmake_minimum_required(VERSION 2.8.12)
 
+if (POLICY CMP0063)
+  cmake_policy(SET CMP0063 NEW)
+endif()
+
 project(Grantlee)
 
 # Workaround for http://public.kitware.com/Bug/view.php?id=12301
