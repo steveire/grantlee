@@ -214,7 +214,7 @@ public:
     virtual QVariant led( IfNodeParser *p, QVariant left ) const
     {
         const QVariant &right = p->expression( 2 );
-        return ! Grantlee::lessThan( left, right );
+        return ! Grantlee::lessThan( left, right ) && ! Grantlee::equals( left, right );
     }
 };
 

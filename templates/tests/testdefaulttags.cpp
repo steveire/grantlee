@@ -766,7 +766,7 @@ void TestDefaultTags::testIfTag_data()
   dict.clear();
   dict.insert( QStringLiteral( "foo" ), 1 );
   dict.insert( QStringLiteral( "bar" ), 1 );
-  QTest::newRow( "if-tag-operators-greater-than-01" ) << QString::fromLatin1( "{% if foo > bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+  QTest::newRow( "if-tag-operators-greater-than-01" ) << QString::fromLatin1( "{% if foo > bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
   dict.clear();
   dict.insert( QStringLiteral( "foo" ), 1 );
