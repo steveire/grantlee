@@ -44,11 +44,37 @@ class AbstractNodeFactoryPrivate
 {
   AbstractNodeFactoryPrivate( AbstractNodeFactory *factory )
       : q_ptr( factory ) {
+#if defined(Q_CC_MSVC)
+// MSVC doesn't like static string concatenations like L"foo" "bar", as
+// results from QStringLiteral, so use QLatin1String here instead.
+#define STRING_LITERAL QLatin1String
+#else
+#define STRING_LITERAL QStringLiteral
+#endif
+  smartSplitRe = QRegExp(
+                  STRING_LITERAL( "("                   // match
+                    "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
+                      "(?:"                             // followed by
+                        "(?:\""                         // Either a quote starting with "
+                          "(?:[^\"\\\\]|\\\\.)*\""      // followed by anything that is not the end of the quote
+                        "|\'"                           // Or a quote starting with '
+                          "(?:[^\'\\\\]|\\\\.)*\'"      // followed by anything that is not the end of the quote
+                        ")"                             // (End either)
+                        "[^\\s\'\"]*"                   // To the start of the next such fragment
+                      ")+"                              // Perform multiple matches of the above.
+                    ")"                                 // End of quoted string handling.
+                    "|\\S+"                             // Apart from quoted strings, match non-whitespace fragments also
+                  ")"                                   // End match
+                ) );
 
+#undef STRING_LITERAL
   }
 
   Q_DECLARE_PUBLIC( AbstractNodeFactory )
   AbstractNodeFactory * const q_ptr;
+
+public:
+  QRegExp smartSplitRe;
 };
 
 }
@@ -188,37 +214,14 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
 
 QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
 {
-#if defined(Q_CC_MSVC)
-// MSVC doesn't like static string concatenations like L"foo" "bar", as
-// results from QStringLiteral, so use QLatin1String here instead.
-#define STRING_LITERAL QLatin1String
-#else
-#define STRING_LITERAL QStringLiteral
-#endif
-  const QRegExp r( STRING_LITERAL( "("                   // match
-                    "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
-                      "(?:"                             // followed by
-                        "(?:\""                         // Either a quote starting with "
-                          "(?:[^\"\\\\]|\\\\.)*\""      // followed by anything that is not the end of the quote
-                        "|\'"                           // Or a quote starting with '
-                          "(?:[^\'\\\\]|\\\\.)*\'"      // followed by anything that is not the end of the quote
-                        ")"                             // (End either)
-                        "[^\\s\'\"]*"                   // To the start of the next such fragment
-                      ")+"                              // Perform multiple matches of the above.
-                    ")"                                 // End of quoted string handling.
-                    "|\\S+"                             // Apart from quoted strings, match non-whitespace fragments also
-                  ")"                                   // End match
-                ) );
-
-#undef STRING_LITERAL
-
+  Q_D(const AbstractNodeFactory);
   QStringList l;
   int count = 0;
   int pos = 0;
-  while (( pos = r.indexIn( str, pos ) ) != -1 ) {
+  while (( pos = d->smartSplitRe.indexIn( str, pos ) ) != -1 ) {
     ++count;
-    pos += r.matchedLength();
-    l << r.capturedTexts().first();
+    pos += d->smartSplitRe.matchedLength();
+    l << d->smartSplitRe.capturedTexts().first();
   }
 
   return l;
