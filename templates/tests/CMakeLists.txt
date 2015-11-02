@@ -108,6 +108,7 @@ grantlee_templates_unit_tests(
   testloadertags
   testdefaulttags
   testscriptabletags
+  testcachingloader
   testfilters
   testgenerictypes
   testgenericcontainers
