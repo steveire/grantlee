@@ -275,9 +275,13 @@ QList<IfNodeToken *> tokenize(const QStringList &tokens, Grantlee::Parser *parse
                     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'not in' requires a previous argument" ) );
                 }
                 ifNodeToken = new IfNodeNotInToken;
-            } else {
+            } else if (lastType == IfNodeToken::None || lastType == IfNodeToken::And || lastType == IfNodeToken::Not ||
+                       lastType == IfNodeToken::Or || lastType == IfNodeToken::Operators) {
                 --it;
                 ifNodeToken = new IfNodeNotToken;
+            } else {
+                qDeleteAll(ret);
+                throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'not' is incomptible with previous argument" ) );
             }
         } else if (token == QLatin1String("in")) {
             if (lastType != IfNodeToken::Literal) {
