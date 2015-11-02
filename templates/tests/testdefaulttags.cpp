@@ -409,15 +409,13 @@ void TestDefaultTags::testIfTag_data()
   dict.clear();
   dict.insert( QStringLiteral( "foo" ), true );
   QTest::newRow( "if-tag-not01" ) << QString::fromLatin1( "{% if not foo %}no{% else %}yes{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
-  QTest::newRow( "if-tag-not02" ) << QString::fromLatin1( "{% if not %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "not" ), true );
-  QTest::newRow( "if-tag-not03" ) << QString::fromLatin1( "{% if not %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
-  QTest::newRow( "if-tag-not04" ) << QString::fromLatin1( "{% if not not %}no{% else %}yes{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+  dict.insert( QStringLiteral( "foo" ), true );
+  QTest::newRow( "if-tag-not02" ) << QString::fromLatin1( "{% if not not foo %}no{% else %}yes{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+  // not03 to not05 removed, now TagSyntaxError
 
   dict.clear();
-  QTest::newRow( "if-tag-not05" ) << QString::fromLatin1( "{% if not not %}no{% else %}yes{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
   QTest::newRow( "if-tag-not06" ) << QString::fromLatin1( "{% if foo and not bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
   dict.clear();
@@ -555,17 +553,307 @@ void TestDefaultTags::testIfTag_data()
   dict.insert( QStringLiteral( "bar" ), false );
   QTest::newRow( "if-tag-not35" ) << QString::fromLatin1( "{% if not foo or not bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
 
-  // AND and OR raises a TemplateSyntaxError
-  QTest::newRow( "if-tag-error01" ) << QString::fromLatin1( "{% if foo or bar and baz %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
+  dict.clear();
+  QTest::newRow( "if-tag-or-and-01" ) << QString::fromLatin1( "{% if foo or bar and baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
+  //TODO
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), true );
+  dict.insert( QStringLiteral( "bar" ), false );
+  dict.insert( QStringLiteral( "baz" ), false );
+  QTest::newRow( "if-tag-or-and-02" ) << QString::fromLatin1( "{% if foo or bar and baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), false );
+  dict.insert( QStringLiteral( "bar" ), true );
+  dict.insert( QStringLiteral( "baz" ), true );
+  QTest::newRow( "if-tag-or-and-03" ) << QString::fromLatin1( "{% if foo or bar and baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), false );
+  dict.insert( QStringLiteral( "bar" ), false );
+  dict.insert( QStringLiteral( "baz" ), false );
+  QTest::newRow( "if-tag-or-and-04" ) << QString::fromLatin1( "{% if foo and bar or baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), false );
+  dict.insert( QStringLiteral( "bar" ), false );
+  dict.insert( QStringLiteral( "baz" ), true );
+  QTest::newRow( "if-tag-or-and-05" ) << QString::fromLatin1( "{% if foo and bar or baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), true );
+  dict.insert( QStringLiteral( "bar" ), true );
+  dict.insert( QStringLiteral( "baz" ), false );
+  QTest::newRow( "if-tag-or-and-06" ) << QString::fromLatin1( "{% if foo and bar or baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  // Various syntax errors
+  dict.clear();
+  QTest::newRow( "if-tag-error01" ) << QString::fromLatin1( "{% if %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
   dict.clear();
   dict.insert( QStringLiteral( "foo" ), true );
   QTest::newRow( "if-tag-error02" ) << QString::fromLatin1( "{% if foo and %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "if-tag-error03" ) << QString::fromLatin1( "{% if foo or %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "if-tag-error04" ) << QString::fromLatin1( "{% if not foo and %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
   QTest::newRow( "if-tag-error05" ) << QString::fromLatin1( "{% if not foo or %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
-  QTest::newRow( "if-tag-error06" ) << QString::fromLatin1( "{% if %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
-  QTest::newRow( "if-tag-error07" ) << QString::fromLatin1( "{% if foo %}yes" ) << dict << QString() << UnclosedBlockTagError;
+  dict.clear();
+  QTest::newRow( "if-tag-error06" ) << QString::fromLatin1( "{% if abc def %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error07" ) << QString::fromLatin1( "{% if not %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error08" ) << QString::fromLatin1( "{% if and %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error09" ) << QString::fromLatin1( "{% if or %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error10" ) << QString::fromLatin1( "{% if == %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error11" ) << QString::fromLatin1( "{% if 1 == %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error12" ) << QString::fromLatin1( "{% if a not b %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+
+  // operators
+
+  // In Operator
+  dict.clear();
+  QTest::newRow( "if-tag-operator-in-01" ) << QString::fromLatin1( "{% if \"bc\" in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  QTest::newRow( "if-tag-operator-in-02" ) << QString::fromLatin1( "{% if \"xy\" in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "bc" ) );
+  QTest::newRow( "if-tag-operator-in-03" ) << QString::fromLatin1( "{% if foo in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "xy" ) );
+  QTest::newRow( "if-tag-operator-in-04" ) << QString::fromLatin1( "{% if foo in \"abcdef\" %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-05" ) << QString::fromLatin1( "{% if \"one\" in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-06" ) << QString::fromLatin1( "{% if \"xz\" in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-07" ) << QString::fromLatin1( "{% if foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "xy" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-08" ) << QString::fromLatin1( "{% if foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-09" ) << QString::fromLatin1( "{% if foo not in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "list" ), QStringList() << QStringLiteral( "one" ) << QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operator-in-06" ) << QString::fromLatin1( "{% if not foo in list %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  // operator in with bytearray
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QStringLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-ba-1" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QStringLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-ba-2" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-ba-2" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-ba-3" ) << QString::fromLatin1( "{% if \"green\" in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "color" ), QByteArrayLiteral( "green" ) );
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "green" ) );
+  QTest::newRow( "if-tag-operator-in-ba-2" ) << QString::fromLatin1( "{% if color in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "color" ), QByteArrayLiteral( "green" ) );
+  dict.insert( QStringLiteral( "colors" ), QByteArrayLiteral( "red" ) );
+  QTest::newRow( "if-tag-operator-in-ba-3" ) << QString::fromLatin1( "{% if color in colors %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  // Operator ==
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operator-equal-01" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-equal-02" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "one" ) );
+  QTest::newRow( "if-tag-operators-equal-03" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operators-equal-04" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "baz" ), true );
+  QTest::newRow( "if-tag-operators-equal-05" ) << QString::fromLatin1( "{% if foo == bar and baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "baz" ), false );
+  QTest::newRow( "if-tag-operators-equal-06" ) << QString::fromLatin1( "{% if foo == bar and baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "baz" ), false );
+  QTest::newRow( "if-tag-operators-equal-07" ) << QString::fromLatin1( "{% if foo == bar or baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "two" ) );
+  dict.insert( QStringLiteral( "baz" ), true );
+  QTest::newRow( "if-tag-operators-equal-08" ) << QString::fromLatin1( "{% if foo == bar or baz %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QByteArray( "one" ) );
+  QTest::newRow( "if-tag-operators-equal-09" ) << QString::fromLatin1( "{% if foo == bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  // Operator !=
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-not-equal-01" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-not-equal-02" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "one" ) );
+  QTest::newRow( "if-tag-operators-not-equal-03" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "one" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "two" ) );
+  QTest::newRow( "if-tag-operators-not-equal-04" ) << QString::fromLatin1( "{% if foo != bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  // Operator <
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-less-than-01" ) << QString::fromLatin1( "{% if foo < bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-less-than-02" ) << QString::fromLatin1( "{% if foo < bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "bbb" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "aaa" ) );
+  QTest::newRow( "if-tag-operators-less-than-03" ) << QString::fromLatin1( "{% if foo < bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "aaa" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "bbb" ) );
+  QTest::newRow( "if-tag-operators-less-than-04" ) << QString::fromLatin1( "{% if foo < bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  // Operator >
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-greater-than-01" ) << QString::fromLatin1( "{% if foo > bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-greater-than-02" ) << QString::fromLatin1( "{% if foo > bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "bbb" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "aaa" ) );
+  QTest::newRow( "if-tag-operators-greater-than-03" ) << QString::fromLatin1( "{% if foo > bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "aaa" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "bbb" ) );
+  QTest::newRow( "if-tag-operators-greater-than-04" ) << QString::fromLatin1( "{% if foo > bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  // Operator <=
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-less-equal-01" ) << QString::fromLatin1( "{% if foo <= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-less-equal-02" ) << QString::fromLatin1( "{% if foo <= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 2 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-less-equal-03" ) << QString::fromLatin1( "{% if foo <= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "aaa" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "aaa" ) );
+  QTest::newRow( "if-tag-operators-less-equal-04" ) << QString::fromLatin1( "{% if foo <= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "aaa" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "bbb" ) );
+  QTest::newRow( "if-tag-operators-less-equal-05" ) << QString::fromLatin1( "{% if foo <= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "bbb" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "aaa" ) );
+  QTest::newRow( "if-tag-operators-less-equal-06" ) << QString::fromLatin1( "{% if foo <= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  // Operator >=
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-greater-equal-01" ) << QString::fromLatin1( "{% if foo >= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 2 );
+  dict.insert( QStringLiteral( "bar" ), 1 );
+  QTest::newRow( "if-tag-operators-greater-equal-02" ) << QString::fromLatin1( "{% if foo >= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), 1 );
+  dict.insert( QStringLiteral( "bar" ), 2 );
+  QTest::newRow( "if-tag-operators-greater-equal-03" ) << QString::fromLatin1( "{% if foo >= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "aaa" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "aaa" ) );
+  QTest::newRow( "if-tag-operators-greater-equal-04" ) << QString::fromLatin1( "{% if foo >= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "bbb" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "aaa" ) );
+  QTest::newRow( "if-tag-operators-greater-equal-05" ) << QString::fromLatin1( "{% if foo >= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "yes" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), QStringLiteral( "aaa" ) );
+  dict.insert( QStringLiteral( "bar" ), QStringLiteral( "bbb" ) );
+  QTest::newRow( "if-tag-operators-greater-equal-06" ) << QString::fromLatin1( "{% if foo >= bar %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
   // Truthiness
   dict.clear();

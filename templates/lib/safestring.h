@@ -333,6 +333,34 @@ public:
   bool operator==( const QString &other ) const;
 
   /**
+    Returns true if the content of @p other matches the content of this.
+
+    Safeness and needing escaping are not accounted for in the comparison.
+  */
+  bool operator==( const QByteArray &other ) const;
+
+  /**
+    Returns true if the content of @p other is less than the content of this.
+
+    Safeness and needing escaping are not accounted for in the comparison.
+  */
+  bool operator<( const SafeString &other ) const;
+
+  /**
+    Returns true if the content of @p other is less than the content of this.
+
+    Safeness and needing escaping are not accounted for in the comparison.
+  */
+  bool operator<( const QString &other ) const;
+
+  /**
+    Returns true if the content of @p other is less than the content of this.
+
+    Safeness and needing escaping are not accounted for in the comparison.
+  */
+  bool operator<( const QByteArray &other ) const;
+
+  /**
     Convenience operator for storing a SafeString in a QVariant.
   */
   operator QVariant() const {
