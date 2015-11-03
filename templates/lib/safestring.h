@@ -332,6 +332,14 @@ public:
   */
   bool operator==( const QString &other ) const;
 
+  bool operator==( const QByteArray &other ) const;
+
+  bool operator<( const SafeString &other ) const;
+
+  bool operator<( const QString &other ) const;
+
+  bool operator<( const QByteArray &other ) const;
+
   /**
     Convenience operator for storing a SafeString in a QVariant.
   */

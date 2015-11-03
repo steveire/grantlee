@@ -132,31 +132,58 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
 
   // TODO: Redesign...
 
-  // QVariant doesn't use operator== to compare its held data, so we do it manually instead for SafeString.
-  bool equal = false;
+  // QVariant doesn't use operator== to compare SafeString to QString or QByteArray
   if ( lhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
-    if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
-      equal = ( lhs.value<Grantlee::SafeString>() == rhs.value<Grantlee::SafeString>() );
-    } else if ( rhs.userType() == QVariant::String ) {
-      equal = ( lhs.value<Grantlee::SafeString>() == rhs.toString() );
+    if ( rhs.userType() == QVariant::String || rhs.userType() == QVariant::ByteArray ) {
+      return lhs.value<Grantlee::SafeString>() == rhs.toString();
     }
-  } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && lhs.userType() == QVariant::String ) {
-    equal = ( rhs.value<Grantlee::SafeString>() == lhs.toString() );
+  } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && ( lhs.userType() == QVariant::String || lhs.userType() == QVariant::ByteArray ) ) {
+    if ( lhs.userType() == QVariant::String ) {
+      return rhs.value<Grantlee::SafeString>() == lhs.toString();
+    }
   } else if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
     if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-      equal = ( rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>() );
+      return rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>();
     } else if ( lhs.type() == QVariant::Int ) {
-      equal = ( rhs.value<MetaEnumVariable>() == lhs.toInt() );
+      return rhs.value<MetaEnumVariable>() == lhs.toInt();
     }
   } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
     if ( rhs.type() == QVariant::Int ) {
-      equal = ( lhs.value<MetaEnumVariable>() == rhs.toInt() );
+      return lhs.value<MetaEnumVariable>() == rhs.toInt();
     }
-  } else {
-    equal = (( lhs == rhs ) && ( lhs.userType() == rhs.userType() ) );
   }
-  return equal;
+
+  return lhs == rhs;
 }
+
+bool Grantlee::lessThan( const QVariant &lhs, const QVariant &rhs )
+{
+    // TODO: Redesign...
+
+    // QVariant doesn't use operator== to compare SafeString to QString or QByteArray
+    if ( lhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
+      if ( rhs.userType() == QVariant::String || rhs.userType() == QVariant::ByteArray ) {
+        return lhs.value<Grantlee::SafeString>() < rhs.toString();
+      }
+    } else if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && ( lhs.userType() == QVariant::String || lhs.userType() == QVariant::ByteArray ) ) {
+      if ( lhs.userType() == QVariant::String ) {
+        return rhs.value<Grantlee::SafeString>() < lhs.toString();
+      }
+    } else if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+      if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+        return rhs.value<MetaEnumVariable>().value < lhs.value<MetaEnumVariable>().value;
+      } else if ( lhs.type() == QVariant::Int ) {
+        return rhs.value<MetaEnumVariable>().value < lhs.toInt();
+      }
+    } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+      if ( rhs.type() == QVariant::Int ) {
+        return lhs.value<MetaEnumVariable>().value < rhs.toInt();
+      }
+    }
+
+    return lhs < rhs;
+}
+
 
 Grantlee::SafeString Grantlee::toString( const QVariantList &list )
 {
