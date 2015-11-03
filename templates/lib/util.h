@@ -79,6 +79,21 @@ GRANTLEE_TEMPLATES_EXPORT bool supportedOutputType( const QVariant &input );
 */
 GRANTLEE_TEMPLATES_EXPORT bool equals( const QVariant &lhs, const QVariant &rhs );
 
+/**
+  Compares @p lhs and @p rhs for less than. SafeStrings are compared as raw QStrings. Their safeness is not part of the comparison.
+
+  @see QVariant::operator<
+*/
+GRANTLEE_TEMPLATES_EXPORT bool lessThan( const QVariant &lhs, const QVariant &rhs );
+
+/**
+  Verify if rhs contains lhs, if both are strings they are contains is called, if rhs is a QStringList contains is called,
+  if rhs is QVariantList we iterate and use Grantlee::equals to see if each value matches lhs.
+  SafeStrings are compared as raw QStrings. Their safeness is not part of the comparison.
+*/
+GRANTLEE_TEMPLATES_EXPORT bool contains( const QVariant &lhs, const QVariant &rhs );
+
+
 #ifndef Q_QDOC
 /**
   @internal
