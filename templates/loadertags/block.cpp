@@ -39,7 +39,8 @@ BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( par
 
 Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  const QStringList expr = smartSplit( tagContent );
+  // smartSplit() isn't useful here because this tag doesn't accept variable as arguments
+  const QStringList expr = tagContent.split(QLatin1Char(' '), QString::SkipEmptyParts);
 
   if ( expr.size() != 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "block tag takes one argument" ) );
@@ -57,21 +58,27 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       const QString blockNodeName = it.next().toString();
 
       if ( blockNodeName == blockName ) {
-        throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 appears more than once." ).arg( blockName ) );
+        throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "'%1' tag with name '%2' appears more than once." ).arg( expr.at( 0 ), blockName ) );
       }
     }
   }
   // Block not already in list.
   blockVariantList.append( blockName );
-  loadedBlocksVariant = QVariant( blockVariantList );
+  loadedBlocksVariant = blockVariantList;
 
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
   BlockNode *n = new BlockNode( blockName, p );
-  const NodeList list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) << QStringLiteral( "endblock " ) + blockName );
+  const NodeList list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) );
+
+  // This check is kept for backwards-compatibility. See #3100 of Django.
+  Token endBlock = p->takeNextToken();
+  const QStringList acceptableBlocks = QStringList() << QStringLiteral( "endblock" ) << QLatin1String( "endblock " ) % blockName;
+  if ( ! acceptableBlocks.contains( endBlock.content ) ) {
+      p->invalidBlockTag( endBlock, QStringLiteral("endblock"), acceptableBlocks );
+  }
 
   n->setNodeList( list );
-  p->removeNextToken();
 
   return n;
 }

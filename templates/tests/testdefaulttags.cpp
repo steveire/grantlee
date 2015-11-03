@@ -325,6 +325,43 @@ void TestDefaultTags::testIfTag_data()
   dict.clear();
   QTest::newRow( "if-tag03" ) << QString::fromLatin1( "{% if foo %}yes{% else %}no{% endif %}" ) << dict << QString::fromLatin1( "no" ) << NoError;
 
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), true );
+  QTest::newRow( "if-tag04" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% endif %}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "bar" ), true );
+  QTest::newRow( "if-tag05" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% endif %}" ) << dict << QString::fromLatin1( "bar" ) << NoError;
+
+  dict.clear();
+  QTest::newRow( "if-tag06" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% endif %}" ) << dict << QString::fromLatin1( "" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), true );
+  QTest::newRow( "if-tag07" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "bar" ), true );
+  QTest::newRow( "if-tag08" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}" ) << dict << QString::fromLatin1( "bar" ) << NoError;
+
+  dict.clear();
+  QTest::newRow( "if-tag09" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}" ) << dict << QString::fromLatin1( "nothing" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "foo" ), true );
+  QTest::newRow( "if-tag10" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}" ) << dict << QString::fromLatin1( "foo" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "bar" ), true );
+  QTest::newRow( "if-tag11" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}" ) << dict << QString::fromLatin1( "bar" ) << NoError;
+
+  dict.clear();
+  dict.insert( QStringLiteral( "baz" ), true );
+  QTest::newRow( "if-tag12" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}" ) << dict << QString::fromLatin1( "baz" ) << NoError;
+
+  dict.clear();
+  QTest::newRow( "if-tag13" ) << QString::fromLatin1( "{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}" ) << dict << QString::fromLatin1( "nothing" ) << NoError;
+
   // AND
 
   dict.clear();

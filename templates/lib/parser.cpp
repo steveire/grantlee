@@ -29,8 +29,6 @@
 #include "template.h"
 #include "template_p.h"
 
-#include <QtCore/QFile>
-
 using namespace Grantlee;
 
 namespace Grantlee
@@ -51,7 +49,7 @@ public:
     Parses the template to create a Nodelist.
     The given @p parent is the parent of each node in the returned list.
   */
-  NodeList parse( QObject *parent, const QStringList &stopAt = QStringList() );
+  NodeList parse(QObject *parent, const QStringList &stopAt = QStringList());
 
   void openLibrary( TagLibraryInterface * library );
   Q_DECLARE_PUBLIC( Parser )
@@ -173,13 +171,13 @@ NodeList Parser::parse( TemplateImpl *parent, const QStringList &stopAt )
   return d->parse( parent, stopAt );
 }
 
-NodeList Parser::parse( Node *parent, const QStringList &stopAt )
+NodeList Parser::parse(Node *parent, const QStringList &stopAt)
 {
   Q_D( Parser );
   return d->parse( parent, stopAt );
 }
 
-NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
+NodeList ParserPrivate::parse(QObject *parent, const QStringList &stopAt)
 {
   Q_Q( Parser );
   NodeList nodeList;
@@ -209,26 +207,27 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
     } else {
       Q_ASSERT( token.tokenType == BlockToken );
-      if ( stopAt.contains( token.content ) ) {
-        // put the token back.
+      const QString command = token.content.section(QLatin1Char(' '), 0, 0);
+      if ( stopAt.contains( command ) ) {
+        // A matching token has been reached. Return control to
+        // the caller. Put the token back on the token list so the
+        // caller knows where it terminated.
         q->prependToken( token );
         return nodeList;
       }
 
-      if ( token.content.isEmpty() ) {
+      if ( command.isEmpty() ) {
         QString message;
         Q_ASSERT( q->hasNextToken() );
         message = QString::fromLatin1( "Empty block tag before \"%1\", line %2, %3" ).arg( token.content.left( 20 ) ).arg( token.linenumber ).arg( q->parent()->objectName() );
         throw Grantlee::Exception( EmptyBlockTagError, message );
       }
 
-      const QStringList tagContents = token.content.split( QLatin1Char( ' ' ) );
-      const QString command = tagContents.first();
       AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
 
       // unknown tag.
       if ( !nodeFactory ) {
-        throw Grantlee::Exception( InvalidBlockTagError, QString::fromLatin1( "Unknown tag: \"%1\", line %2, %3" ).arg( command ).arg( token.linenumber ).arg( q->parent()->objectName() ) );
+        q->invalidBlockTag( token, command, stopAt );
       }
 
       // TODO: Make getNode take a Token instead?
@@ -275,6 +274,18 @@ void Parser::removeNextToken()
 {
   Q_D( Parser );
   d->m_tokenList.removeFirst();
+}
+
+void Parser::invalidBlockTag(const Token &token, const QString &command, const QStringList &stopAt)
+{
+  if ( stopAt.size() ) {
+    throw Grantlee::Exception( InvalidBlockTagError, QString::fromLatin1( "Invalid block tag on line %1: '%2\'', expected '%3'" )
+                               .arg( token.linenumber ).arg( command ).arg( stopAt.join(QLatin1String("', '")) ) );
+  } else {
+    throw Grantlee::Exception( InvalidBlockTagError,
+                               QString::fromLatin1( "Invalid block tag on line %1: '%2\''. Did you forget to register or load this tag?" )
+                               .arg( token.linenumber ).arg( command ) );
+  }
 }
 
 void Parser::prependToken( const Token &token )
