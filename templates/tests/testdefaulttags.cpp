@@ -601,12 +601,12 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow( "if-tag-error05" ) << QString::fromLatin1( "{% if not foo or %}yes{% else %}no{% endif %}" ) << dict << QString() << TagSyntaxError;
   dict.clear();
   QTest::newRow( "if-tag-error06" ) << QString::fromLatin1( "{% if abc def %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
-  QTest::newRow( "if-tag-error07" ) << QString::fromLatin1( "{% if not %}yes{% endif %}" ) << dict << QString() << UnclosedBlockTagError;
-  QTest::newRow( "if-tag-error08" ) << QString::fromLatin1( "{% if and %}yes{% endif %}" ) << dict << QString() << UnclosedBlockTagError;
-  QTest::newRow( "if-tag-error09" ) << QString::fromLatin1( "{% if or %}yes{% endif %}" ) << dict << QString() << UnclosedBlockTagError;
-  QTest::newRow( "if-tag-error10" ) << QString::fromLatin1( "{% if == %}yes{% endif %}" ) << dict << QString() << UnclosedBlockTagError;
-  QTest::newRow( "if-tag-error11" ) << QString::fromLatin1( "{% if 1 == %}yes{% endif %}" ) << dict << QString() << UnclosedBlockTagError;
-  QTest::newRow( "if-tag-error12" ) << QString::fromLatin1( "{% if a not b %}yes{% endif %}" ) << dict << QString() << UnclosedBlockTagError;
+  QTest::newRow( "if-tag-error07" ) << QString::fromLatin1( "{% if not %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error08" ) << QString::fromLatin1( "{% if and %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error09" ) << QString::fromLatin1( "{% if or %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error10" ) << QString::fromLatin1( "{% if == %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error11" ) << QString::fromLatin1( "{% if 1 == %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "if-tag-error12" ) << QString::fromLatin1( "{% if a not b %}yes{% endif %}" ) << dict << QString() << TagSyntaxError;
 
   // operators
 
