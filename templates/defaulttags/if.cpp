@@ -23,8 +23,6 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
-#include <QtCore/QRegularExpression>
-
 IfNodeFactory::IfNodeFactory()
 {
 
@@ -77,13 +75,13 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   IfNode *n = new IfNode( boolVars, linkType, p );
   n->setObjectName(tagContent);
 
-  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << QStringLiteral( "endif" ), QRegularExpression( QStringLiteral( "^elif" ) ) );
+  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "elif" ) << QStringLiteral( "else" ) << QStringLiteral( "endif" ) );
   n->setTrueList( trueList );
 
   NodeList falseList;
   Token nextToken = p->takeNextToken();
   QString nextTokenContent = nextToken.content.trimmed();
-  if ( nextTokenContent.startsWith( QStringLiteral( "elif" ) ) ) {
+  if ( nextTokenContent.startsWith( QLatin1String( "elif" ) ) ) {
     Node *elif;
     try {
       elif = getNode( nextTokenContent, p );

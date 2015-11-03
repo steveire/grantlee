@@ -26,7 +26,6 @@
 #include "token.h"
 
 #include <QtCore/QStringList>
-#include <QtCore/QRegularExpression>
 
 namespace Grantlee
 {
@@ -71,7 +70,7 @@ public:
     @see AbstractNodeFactory::getNode
 
   */
-  NodeList parse( Node *parent, const QStringList &stopAt = QStringList(), const QRegularExpression &stopAtRE = QRegularExpression() );
+  NodeList parse(Node *parent, const QStringList &stopAt = QStringList());
 
   /**
     This is an overloaded method.
@@ -114,6 +113,8 @@ public:
     Deletes the next token available to the parser.
   */
   void removeNextToken();
+
+  void invalidBlockTag( const Token &token, const QString &command, const QStringList &stopAt = QStringList() );
 
 #ifndef Q_QDOC
   /**
