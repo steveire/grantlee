@@ -29,8 +29,6 @@
 #include "template.h"
 #include "template_p.h"
 
-#include <QtCore/QFile>
-
 using namespace Grantlee;
 
 namespace Grantlee
