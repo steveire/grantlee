@@ -114,6 +114,8 @@ public:
   */
   void removeNextToken();
 
+  void invalidBlockTag( const Token &token, const QString &command, const QStringList &stopAt = QStringList() );
+
 #ifndef Q_QDOC
   /**
     @internal

@@ -225,7 +225,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
 
       // unknown tag.
       if ( !nodeFactory ) {
-        throw Grantlee::Exception( InvalidBlockTagError, QString::fromLatin1( "Unknown tag: \"%1\", line %2, %3" ).arg( command ).arg( token.linenumber ).arg( q->parent()->objectName() ) );
+        q->invalidBlockTag( token, command, stopAt );
       }
 
       // TODO: Make getNode take a Token instead?
@@ -272,6 +272,18 @@ void Parser::removeNextToken()
 {
   Q_D( Parser );
   d->m_tokenList.removeFirst();
+}
+
+void Parser::invalidBlockTag(const Token &token, const QString &command, const QStringList &stopAt)
+{
+  if ( !stopAt.empty() ) {
+    throw Grantlee::Exception( InvalidBlockTagError, QString::fromLatin1( "Invalid block tag on line %1: '%2', expected '%3'" )
+                               .arg( token.linenumber ).arg( command ).arg( stopAt.join(QLatin1String("', '")) ) );
+  } else {
+    throw Grantlee::Exception( InvalidBlockTagError,
+                               QString::fromLatin1( "Invalid block tag on line %1: '%2\''. Did you forget to register or load this tag?" )
+                               .arg( token.linenumber ).arg( command ) );
+  }
 }
 
 void Parser::prependToken( const Token &token )
