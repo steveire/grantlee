@@ -48,7 +48,7 @@ QString AbstractLocalizer::localize( const QVariant& variant ) const
     return localizeString( getSafeString( variant ).get() );
   else if ( variant.type() == QVariant::Double || variant.userType() == QMetaType::Float )
     return localizeNumber( variant.toReal() );
-  else if ( variant.canConvert( QVariant::Int ) )
+  else if ( variant.canConvert<int>() )
     return localizeNumber( variant.toInt() );
   return QString();
 }
