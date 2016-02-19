@@ -96,7 +96,7 @@ void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Co
 {
   Grantlee::SafeString inputString;
   if ( input.userType() == qMetaTypeId<QVariantList>() ) {
-    inputString = toString( input.toList() );
+    inputString = toString( input.value<QVariantList>() );
   } else if ( input.userType() == qMetaTypeId<MetaEnumVariable>() ) {
     const MetaEnumVariable mev = input.value<MetaEnumVariable>();
     if ( mev.value >= 0 )

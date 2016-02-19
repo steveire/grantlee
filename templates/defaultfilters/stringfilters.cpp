@@ -156,7 +156,7 @@ QVariant StringFormatFilter::doFilter( const QVariant& input, const QVariant &ar
   if ( isSafeString( input ) )
     a = getSafeString( input );
   else if ( input.userType() == qMetaTypeId<QVariantList>() ) {
-    a = toString( input.toList() );
+    a = toString( input.value<QVariantList>() );
   }
 
   return SafeString( getSafeString( argument ).get().arg( a ), getSafeString( input ).isSafe() );
@@ -193,7 +193,7 @@ QVariant TruncateWordsFilter::doFilter( const QVariant& input, const QVariant &a
   int numWords = s.get().toInt( &ok );
 
   if ( !ok ) {
-    return input.toString();
+    return input.value<QString>();
   }
 
   QString inputString = getSafeString( input );
@@ -293,7 +293,7 @@ QVariant WordWrapFilter::doFilter( const QVariant& input, const QVariant& argume
 {
   Q_UNUSED( autoescape )
   QString _input = getSafeString( input );
-  int width = argument.toInt();
+  int width = argument.value<int>();
   QStringList partList = _input.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
   QString output = partList.takeFirst();
   int pos = output.size() - output.lastIndexOf( QLatin1Char( '\n' ) ) - 1;
@@ -337,7 +337,7 @@ QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& ar
   Q_UNUSED( autoescape )
   QVariantList list;
   if ( input.userType() == qMetaTypeId<QVariantList>() )
-    Q_FOREACH( const QVariant &item, input.toList() )
+    Q_FOREACH( const QVariant &item, input.value<QVariantList>() )
       list << markSafe( getSafeString( item ) );
   return list;
 }

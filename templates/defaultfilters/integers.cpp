@@ -34,43 +34,43 @@ QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, b
 
   if ( input.userType() == qMetaTypeId<QVariantList>() ) {
     if ( argument.userType() == qMetaTypeId<QVariantList>() )
-      return input.toList() + argument.toList();
+      return input.value<QVariantList>() + argument.value<QVariantList>();
     return input;
   }
 
   if ( input.userType() == qMetaTypeId<QStringList>() ) {
     if ( argument == QVariant::StringList )
-      return input.toStringList() + argument.toStringList();
+      return input.value<QStringList>() + argument.value<QStringList>();
     return input;
   }
 
   if ( input.userType() == qMetaTypeId<int>() ) {
     if ( argument.userType() == qMetaTypeId<int>() )
-      return input.toInt() + argument.toInt();
+      return input.value<int>() + argument.value<int>();
     return input;
   }
 
   if ( input.userType() == qMetaTypeId<uint>() ) {
     if ( argument.userType() == qMetaTypeId<uint>() )
-      return input.toUInt() + argument.toUInt();
+      return input.value<uint>() + argument.value<uint>();
     return input;
   }
 
   if ( input.canConvert<double>() ) {
     if ( argument.canConvert<double>() )
-      return input.toDouble() + argument.toDouble();
+      return input.value<double>() + argument.value<double>();
     return input;
   }
 
   if ( input.userType() == qMetaTypeId<long long>() ) {
     if ( argument.userType() == qMetaTypeId<long long>() )
-      return input.toLongLong() + argument.toLongLong();
+      return input.value<long long>() + argument.value<long long>();
     return input;
   }
 
   if ( input.userType() == qMetaTypeId<unsigned long long>() ) {
     if ( input.userType() == qMetaTypeId<unsigned long long>() )
-      return input.toULongLong() + argument.toULongLong();
+      return input.value<unsigned long long>() + argument.value<unsigned long long>();
     return input;
   }
   return input;

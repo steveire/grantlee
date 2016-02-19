@@ -122,7 +122,7 @@ QVariant Context::lookup( const QString &str ) const
       QVariant var = h.value( str );
       // If the user passed a string into the context, turn it into a Grantlee::SafeString.
       if ( var.userType() == qMetaTypeId<QString>() ) {
-        var = QVariant::fromValue<Grantlee::SafeString>( getSafeString( var.toString() ) );
+        var = QVariant::fromValue<Grantlee::SafeString>( getSafeString( var.value<QString>() ) );
       }
       return var;
     }

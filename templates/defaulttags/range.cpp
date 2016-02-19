@@ -102,11 +102,11 @@ void RangeNode::render( OutputStream *stream, Context* c ) const
   int stop;
   int step;
 
-  start = m_startExpression.resolve( c ).toInt();
-  stop = m_stopExpression.resolve( c ).toInt();
+  start = m_startExpression.resolve( c ).value<int>();
+  stop = m_stopExpression.resolve( c ).value<int>();
 
   if ( m_stepExpression.isValid() ) {
-    step = m_stepExpression.resolve( c ).toInt();
+    step = m_stepExpression.resolve( c ).value<int>();
   } else {
     step = 1;
   }

@@ -224,7 +224,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
       if ( arg.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
         argString = arg.value<Grantlee::SafeString>();
       } else if ( arg.userType() == qMetaTypeId<QString>() ) {
-        argString = Grantlee::SafeString( arg.toString() );
+        argString = Grantlee::SafeString( arg.value<QString>() );
       }
       if ( argVar.isConstant() ) {
         argString = markSafe( argString );

@@ -145,7 +145,7 @@ QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument,
     }
     return inputString.mid( left, right );
   } else {
-    return QString( inputString.at( argument.toInt() ) );
+    return QString( inputString.at( argument.value<int>() ) );
   }
 }
 
@@ -208,7 +208,7 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
       ++i;
     }
     if ( sublistItem.isValid() ) {
-      sublist = processList( sublistItem.toList(), tabs + 1, autoescape );
+      sublist = processList( sublistItem.value<QVariantList>(), tabs + 1, autoescape );
       sublist = QStringLiteral( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent, sublist, indent, indent );
     }
     output.append( QStringLiteral( "%1<li>%2%3</li>" ).arg( indent,
@@ -231,25 +231,25 @@ struct DictSortLessThan
     case QVariant::Invalid:
         return (r.isValid());
     case QVariant::Int:
-        return l.toInt() < r.toInt();
+        return l.value<int>() < r.value<int>();
     case QVariant::UInt:
-        return l.toUInt() < r.toUInt();
+        return l.value<uint>() < r.value<uint>();
     case QVariant::LongLong:
-        return l.toLongLong() < r.toLongLong();
+        return l.value<long long>() < r.value<long long>();
     case QVariant::ULongLong:
-        return l.toULongLong() < r.toULongLong();
+        return l.value<unsigned long long>() < r.value<unsigned long long>();
     case QMetaType::Float:
-        return l.toFloat() < r.toFloat();
+        return l.value<float>() < r.value<float>();
     case QVariant::Double:
-        return l.toDouble() < r.toDouble();
+        return l.value<double>() < r.value<double>();
     case QVariant::Char:
-        return l.toChar() < r.toChar();
+        return l.value<QChar>() < r.value<QChar>();
     case QVariant::Date:
-        return l.toDate() < r.toDate();
+        return l.value<QDate>() < r.value<QDate>();
     case QVariant::Time:
-        return l.toTime() < r.toTime();
+        return l.value<QTime>() < r.value<QTime>();
     case QVariant::DateTime:
-        return l.toDateTime() < r.toDateTime();
+        return l.value<QDateTime>() < r.value<QDateTime>();
     case QMetaType::QObjectStar:
         return l.value<QObject*>() < r.value<QObject*>();
     }
@@ -257,15 +257,15 @@ struct DictSortLessThan
       if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
         return l.value<Grantlee::SafeString>().get() < r.value<Grantlee::SafeString>().get();
       } else if ( r.userType() == qMetaTypeId<QString>() ) {
-        return l.value<Grantlee::SafeString>().get() < r.toString();
+        return l.value<Grantlee::SafeString>().get() < r.value<QString>();
       }
     } else if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
       if ( l.userType() == qMetaTypeId<QString>() ) {
-        return l.toString() < r.value<Grantlee::SafeString>().get();
+        return l.value<QString>() < r.value<Grantlee::SafeString>().get();
       }
     } else if ( l.userType() == qMetaTypeId<QString>() ) {
       if ( r.userType() == qMetaTypeId<QString>() ) {
-        return l.toString() < r.toString();
+        return l.value<QString>() < r.value<QString>();
       }
     }
     return false;
@@ -287,7 +287,7 @@ QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argume
     const Variable v( getSafeString( argument ) );
 
     if ( v.literal().isValid() ) {
-      var = MetaType::lookup( var, v.literal().toString() );
+      var = MetaType::lookup( var, v.literal().value<QString>() );
     } else {
       const QStringList lookups = v.lookups();
       Q_FOREACH( const QString &lookup, lookups ) {

@@ -116,7 +116,7 @@ void ForNode::insertLoopVariables( Context *c, int listSize, int i )
   static const QString first = QStringLiteral( "first" );
   static const QString last = QStringLiteral( "last" );
 
-  QVariantHash forloopHash = c->lookup( QStringLiteral( "forloop" ) ).toHash();
+  QVariantHash forloopHash = c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>();
   forloopHash.insert( counter0, i );
   forloopHash.insert( counter, i + 1 );
   forloopHash.insert( revcounter, listSize - i );
@@ -180,8 +180,8 @@ void ForNode::render( OutputStream *stream, Context *c ) const
   QVariant parentLoopVariant = c->lookup( QLatin1String( forloop ) );
   if ( parentLoopVariant.isValid() ) {
     // This is a nested loop.
-    forloopHash = parentLoopVariant.toHash();
-    forloopHash.insert( QLatin1String( parentloop ), parentLoopVariant.toHash() );
+    forloopHash = parentLoopVariant.value<QVariantHash>();
+    forloopHash.insert( QLatin1String( parentloop ), parentLoopVariant.value<QVariantHash>() );
     c->insert( QLatin1String( forloop ), forloopHash );
   }
 
@@ -237,7 +237,7 @@ void ForNode::render( OutputStream *stream, Context *c ) const
 
     if ( unpack ) {
       if ( v.userType() == qMetaTypeId<QVariantList>() ) {
-        QVariantList vList = v.toList();
+        QVariantList vList = v.value<QVariantList>();
         int varsSize = qMin( m_loopVars.size(), vList.size() );
         int j = 0;
         for ( ; j < varsSize; ++j ) {

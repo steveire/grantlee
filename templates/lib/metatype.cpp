@@ -82,7 +82,7 @@ static QVariant doQobjectLookUp( const QObject * const object, const QString &pr
       continue;
 
     if ( mp.isEnumType() ) {
-      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).toInt() );
+      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).value<int>() );
       return QVariant::fromValue( mev );
     }
 

@@ -69,9 +69,9 @@ void IfChangedNode::setFalseList(const NodeList& falseList )
 
 void IfChangedNode::render( OutputStream *stream, Context *c ) const
 {
-  if ( c->lookup( QStringLiteral( "forloop" ) ).isValid() && ( !c->lookup( QStringLiteral( "forloop" ) ).toHash().contains( m_id ) ) ) {
+  if ( c->lookup( QStringLiteral( "forloop" ) ).isValid() && ( !c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>().contains( m_id ) ) ) {
     m_lastSeen = QVariant();
-    QVariantHash hash = c->lookup( QStringLiteral( "forloop" ) ).toHash();
+    QVariantHash hash = c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>();
     hash.insert( m_id, 1 );
     c->insert( QStringLiteral( "forloop" ), hash );
   }
@@ -96,8 +96,8 @@ void IfChangedNode::render( OutputStream *stream, Context *c ) const
   // At first glance it looks like m_last_seen will always be invalid,
   // But it will change because render is called multiple times by the parent
   // {% for %} loop in the template.
-  if (( watchedVars != m_lastSeen.toList() )
-      || ( !watchedString.isEmpty() && ( watchedString != m_lastSeen.toString() ) ) ) {
+  if (( watchedVars != m_lastSeen.value<QVariantList>() )
+      || ( !watchedString.isEmpty() && ( watchedString != m_lastSeen.value<QString>() ) ) ) {
     bool firstLoop = !m_lastSeen.isValid();
     if ( !watchedString.isNull() )
       m_lastSeen = watchedString;

@@ -97,13 +97,13 @@ static QString substituteArguments( const QString &input, const QVariantList &ar
   QString string = input;
   Q_FOREACH( const QVariant &arg, arguments ) {
     if ( arg.userType() == qMetaTypeId<int>() )
-      string = string.arg( arg.toInt() );
+      string = string.arg( arg.value<int>() );
     else if ( arg.userType() == qMetaTypeId<double>() )
-      string = string.arg( arg.toDouble() );
+      string = string.arg( arg.value<double>() );
     else if ( arg.userType() == qMetaTypeId<QDateTime>() )
-      string = string.arg( arg.toDateTime().toString() );
+      string = string.arg( arg.value<QDateTime>().toString() );
     else
-      string = string.arg( arg.toString() );
+      string = string.arg( arg.value<QString>() );
   }
   return string;
 }
@@ -117,7 +117,7 @@ QString NullLocalizer::localizeContextString( const QString& string, const QStri
 QString NullLocalizer::localizePluralContextString( const QString& _string, const QString& _pluralForm, const QString& context, const QVariantList &_arguments ) const
 {
   Q_UNUSED( context )
-  const int count = _arguments.first().toInt();
+  const int count = _arguments.first().value<int>();
   QVariantList arguments = _arguments;
   QString string = _string;
   QString pluralForm = _pluralForm;
@@ -136,7 +136,7 @@ QString NullLocalizer::localizeString( const QString& string, const QVariantList
 
 QString NullLocalizer::localizePluralString( const QString& _string, const QString& _pluralForm, const QVariantList &_arguments ) const
 {
-  const int count = _arguments.first().toInt();
+  const int count = _arguments.first().value<int>();
   QVariantList arguments = _arguments;
   QString string = _string;
   QString pluralForm = _pluralForm;

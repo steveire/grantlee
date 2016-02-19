@@ -51,10 +51,10 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QVariantList blockVariantList;
 
   if ( loadedBlocksVariant.isValid() && loadedBlocksVariant.userType() == qMetaTypeId<QVariantList>() ) {
-    blockVariantList = loadedBlocksVariant.toList();
+    blockVariantList = loadedBlocksVariant.value<QVariantList>();
     QListIterator<QVariant> it( blockVariantList );
     while ( it.hasNext() ) {
-      const QString blockNodeName = it.next().toString();
+      const QString blockNodeName = it.next().value<QString>();
 
       if ( blockNodeName == blockName ) {
         throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'block' tag with name '%1' appears more than once." ).arg( blockName ) );

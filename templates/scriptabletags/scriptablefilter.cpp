@@ -49,7 +49,7 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
   Q_UNUSED( autoescape )
   QScriptValueList args;
   if ( input.userType() == qMetaTypeId<QVariantList>() ) {
-    QVariantList inputList = input.toList();
+    QVariantList inputList = input.value<QVariantList>();
     QScriptValue array = m_scriptEngine->newArray( inputList.size() );
     for ( int i = 0; i < inputList.size(); ++i ) {
       if ( inputList.at( i ).canConvert<QObject*>() ) {

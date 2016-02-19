@@ -70,13 +70,13 @@ void WidthRatioNode::render( OutputStream *stream, Context *c ) const
   if ( !thisVal.isValid() || !maxVal.isValid() )
     return;
 
-  qreal tv = thisVal.toDouble();
-  qreal mv = maxVal.toDouble();
+  qreal tv = thisVal.value<double>();
+  qreal mv = maxVal.value<double>();
 
   if ( mv == 0 )
     return;
 
-  int maxWidth = m_maxWidth.resolve( c ).toInt();
+  int maxWidth = m_maxWidth.resolve( c ).value<int>();
 
   qreal result = ( tv / mv ) * maxWidth;
 

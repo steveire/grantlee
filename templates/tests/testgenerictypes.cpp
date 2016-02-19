@@ -831,7 +831,7 @@ void TestGenericTypes::testPointerNonQObject()
 
   QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "name" ) );
 
-  QCOMPARE( result.toString(), QStringLiteral( "Adele" ) );
+  QCOMPARE( result.value<QString>(), QStringLiteral( "Adele" ) );
 
   delete p;
 }

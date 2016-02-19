@@ -90,7 +90,7 @@ void RegroupNode::render( OutputStream *stream, Context *c ) const
     QVariantHash hash;
     if ( contextList.size() > 0 ) {
       QVariant hashVar = contextList.last();
-      hash = hashVar.toHash();
+      hash = hashVar.value<QVariantHash>();
     }
     if ( !hash.contains( QStringLiteral( "grouper" ) ) || hash.value( QStringLiteral( "grouper" ) ) != key ) {
       QVariantHash newHash;
@@ -99,7 +99,7 @@ void RegroupNode::render( OutputStream *stream, Context *c ) const
       contextList.append( newHash );
     }
 
-    QVariantList list = hash.value( QStringLiteral( "list" ) ).toList();
+    QVariantList list = hash.value( QStringLiteral( "list" ) ).value<QVariantList>();
     list.append( var );
     hash.insert( QStringLiteral( "list" ), list );
     contextList[contextList.size() - 1] = hash;
