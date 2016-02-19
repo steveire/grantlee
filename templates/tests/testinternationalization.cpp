@@ -41,7 +41,6 @@ class TestInternationalization : public CoverageObject
 public:
   explicit TestInternationalization(QObject* parent = 0)
     : CoverageObject(parent),
-      cLocalizer(new QtLocalizer(QLocale::c())),
       nullLocalizer(new NullLocalizer()),
       deLocalizer(new QtLocalizer(QLocale(QLocale::German, QLocale::Germany))),
       frLocalizer(new QtLocalizer(QLocale(QLocale::French, QLocale::France))),
@@ -49,6 +48,9 @@ public:
       en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates))),
       m_engine(new Engine(this))
   {
+    QLocale cLocale = QLocale::c();
+    cLocale.setNumberOptions(QLocale::OmitGroupSeparator);
+    cLocalizer.reset(new QtLocalizer(cLocale));
     m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
     INIT_LOCALIZER(cLocalizer)
     INIT_LOCALIZER(deLocalizer)
@@ -98,7 +100,7 @@ private Q_SLOTS:
   void testFailure_data();
 
 private:
-  const QSharedPointer<QtLocalizer> cLocalizer;
+  QSharedPointer<QtLocalizer> cLocalizer;
   const QSharedPointer<AbstractLocalizer> nullLocalizer;
   const QSharedPointer<QtLocalizer> deLocalizer;
   const QSharedPointer<QtLocalizer> frLocalizer;
@@ -338,7 +340,7 @@ void TestInternationalization::testLocalizedTemplate_data()
   dict.insert(QStringLiteral("date"), QDate(2005, 5, 7) );
   QTest::newRow("fragment-01")
     << QString::fromLatin1("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(1000) _(date) _(0.6) _(4.8) %}")
-    << QString::fromLatin1("1,000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
@@ -351,7 +353,7 @@ void TestInternationalization::testLocalizedTemplate_data()
 
   QTest::newRow("fragment-02")
     << QString::fromLatin1("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(integer) _(date) _(smallFloat) _(largeFloat) %}")
-    << QString::fromLatin1("1,000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
+    << QString::fromLatin1("1000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
     << QString::fromLatin1("1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
@@ -363,7 +365,7 @@ void TestInternationalization::testLocalizedTemplate_data()
 
   QTest::newRow("fragment-03")
     << QString::fromLatin1("{{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}")
-    << QString::fromLatin1("1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06")
+    << QString::fromLatin1("1000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06")
     << QString::fromLatin1("1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM")
     << QString::fromLatin1("1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05")
     << QString::fromLatin1("1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
@@ -379,7 +381,7 @@ void TestInternationalization::testLocalizedTemplate_data()
       "{% with_locale 'fr_FR' %}"
         "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
       "{% endwith_locale %}")
-    << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
+    << QString::fromUtf8("Today"           " -- 1000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
     << QString::fromUtf8("Today"           " -- 1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM"
@@ -406,7 +408,7 @@ void TestInternationalization::testLocalizedTemplate_data()
         "{% endwith_locale %}"
         "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}"
       "{% endwith_locale %}")
-    << QString::fromUtf8("Today"           " -- 1,000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
+    << QString::fromUtf8("Today"           " -- 1000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05"
                          "Aujourd&#39;hui" " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05"
                          "Heute"           " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
@@ -431,7 +433,7 @@ void TestInternationalization::testLocalizedTemplate_data()
   dict.insert( QStringLiteral( "list" ), QVariantList() << 1000);
   QTest::newRow("fragment-06")
     << QString::fromLatin1("{{ _(list.0) }}")
-      << QString::fromUtf8( "1,000" )
+      << QString::fromUtf8( "1000" )
       << QString::fromUtf8( "1,000" )
       << QString::fromUtf8( "1,000" )
       << QString::fromUtf8( "1.000" )
@@ -445,7 +447,7 @@ void TestInternationalization::testLocalizedTemplate_data()
 
   QTest::newRow("fragment-07")
     << QString::fromLatin1("{{ _(longlong) }} {{ _(float) }} {{ _(double) }}{{ _(hash) }}")
-    << QString::fromLatin1("1,000 0.60 4.80")
+    << QString::fromLatin1("1000 0.60 4.80")
     << QString::fromLatin1("1,000 0.60 4.80")
     << QString::fromLatin1("1,000 0.60 4.80")
     << QString::fromLatin1("1.000 0,60 4,80")
@@ -778,7 +780,7 @@ void TestInternationalization::testIntegers_data()
   QTest::newRow("integer-02")
     << 7000
     << QString::fromLatin1("7000")
-    << QString::fromLatin1("7,000")
+    << QString::fromLatin1("7000")
     << QString::fromLatin1("7,000")
     << QString::fromLatin1("7,000")
     << QString::fromLatin1("7.000")
