@@ -39,7 +39,7 @@ BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( par
 
 Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  const QStringList expr = smartSplit( tagContent );
+  const QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   if ( expr.size() != 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "block tag takes one argument" ) );
