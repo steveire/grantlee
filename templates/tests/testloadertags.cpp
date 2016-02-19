@@ -57,6 +57,12 @@ private Q_SLOTS:
     doTest();
   }
 
+  void testBlockTagErrors_data();
+  void testBlockTagErrors()
+  {
+    doTest();
+  }
+
 private:
 
   void doTest();
@@ -464,6 +470,20 @@ void TestLoaderTags::testExtendsTag_data()
   QTest::newRow( "exception03" ) << QString::fromLatin1( "{% extends 'inheritance01' %}{% block first %}2{% endblock %}{% extends 'inheritance16' %}" ) << dict << QString() << TagSyntaxError;
   // Raise exception for custom tags used in child with {% load %} tag in parent, not in child
   QTest::newRow( "exception04" ) << QString::fromLatin1( "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" ) << dict << QString() << InvalidBlockTagError;
+}
+
+void TestLoaderTags::testBlockTagErrors_data()
+{
+  QTest::addColumn<QString>( "input" );
+  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>( "output" );
+  QTest::addColumn<Grantlee::Error>( "error" );
+
+  Dict dict;
+
+  QTest::newRow( "block-error-01" ) << QString::fromLatin1("{% block repeat %}{% endblock %}{% block repeat %}{% endblock %}") << dict << QString() << TagSyntaxError;
+  QTest::newRow( "block-error-02" ) << QString::fromLatin1("{% block %}{% endblock %}") << dict << QString() << TagSyntaxError;
+  QTest::newRow( "block-error-03" ) << QString::fromLatin1("{% block foo bar %}{% endblock %}") << dict << QString() << TagSyntaxError;
 }
 
 
