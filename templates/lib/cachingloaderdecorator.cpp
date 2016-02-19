@@ -88,8 +88,10 @@ QPair< QString, QString > CachingLoaderDecorator::getMediaUri( const QString& fi
 Template CachingLoaderDecorator::loadByName( const QString& name, const Grantlee::Engine* engine ) const
 {
   Q_D( const CachingLoaderDecorator );
-  if ( d->m_cache.contains( name ) )
-    return d->m_cache.value( name );
+  QHash<QString, Template>::ConstIterator it = d->m_cache.constFind(name);
+  if (it != d->m_cache.constEnd() && !it.value()->error()) {
+    return it.value();
+  }
 
   const Template t = d->m_wrappedLoader->loadByName( name, engine );
 
