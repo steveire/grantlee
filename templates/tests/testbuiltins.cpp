@@ -195,6 +195,8 @@ private Q_SLOTS:
 
   void testObjects();
 
+  void testRenderAfterError();
+
   void testBasicSyntax_data();
   void testBasicSyntax() {
     doTest();
@@ -302,6 +304,37 @@ void TestBuiltinSyntax::testObjects()
   QMetaType::construct(qMetaTypeId<MetaEnumVariable>(), 0, 0);
 }
 
+void TestBuiltinSyntax::testRenderAfterError()
+{
+
+  Engine engine;
+  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
+
+  QSharedPointer<InMemoryTemplateLoader> loader(new InMemoryTemplateLoader);
+  loader->setTemplate(QLatin1String("template1"),
+                      QLatin1String("This template has an error {{ va>r }}"));
+  loader->setTemplate(QLatin1String("template2"),
+                      QLatin1String("Ok"));
+  loader->setTemplate(QLatin1String("main"),
+                      QLatin1String("{% include template_var %}"));
+
+  engine.addTemplateLoader( loader );
+
+  Context c;
+  Template t;
+
+  t = engine.loadByName(QLatin1String("main"));
+
+  c.insert(QLatin1String("template_var"), QLatin1String("template1"));
+  QString output = t->render(&c);
+  QCOMPARE(output, QString());
+  QCOMPARE(t->error(), TagSyntaxError);
+
+  c.insert(QLatin1String("template_var"), QLatin1String("template2"));
+  QCOMPARE(t->render(&c), QLatin1String("Ok"));
+  QCOMPARE(t->error(), NoError);
+}
+
 void TestBuiltinSyntax::initTestCase()
 {
   m_engine = getEngine();
@@ -330,6 +363,13 @@ void TestBuiltinSyntax::doTest()
   QFETCH( Grantlee::Error, error );
 
   Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+
+  if ( t->error() != NoError ) {
+    if ( t->error() != error )
+      qDebug() << t->errorString();
+    QCOMPARE( t->error(), error );
+    return;
+  }
 
   Context context( dict );
 

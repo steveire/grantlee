@@ -66,6 +66,7 @@ void TemplateImpl::setContent( const QString &templateString )
 
   try {
     d->m_nodeList = d->compileString( templateString );
+    d->setError( NoError, QString() );
   } catch ( Grantlee::Exception &e ) {
     qCWarning(GRANTLEE_TEMPLATE) << e.what();
     d->setError( e.errorCode(), e.what() );
@@ -91,6 +92,7 @@ OutputStream* TemplateImpl::render( OutputStream *stream, Context *c ) const
 
   try {
     d->m_nodeList.render( stream, c );
+    d->setError( NoError, QString() );
   } catch ( Grantlee::Exception &e ) {
     qCWarning(GRANTLEE_TEMPLATE) << e.what();
     d->setError( e.errorCode(), e.what() );

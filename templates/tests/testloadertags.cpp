@@ -96,6 +96,13 @@ void TestLoaderTags::doTest()
 
   Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
+  if ( t->error() != NoError ) {
+    if ( t->error() != error )
+      qDebug() << t->errorString();
+    QCOMPARE( t->error(), error );
+    return;
+  }
+
   Context context( dict );
 
   QString result = t->render( &context );
