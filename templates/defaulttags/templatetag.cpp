@@ -31,7 +31,7 @@ TemplateTagNodeFactory::TemplateTagNodeFactory()
 
 Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
   expr.takeAt( 0 );
   if ( expr.size() <= 0 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'templatetag' statement takes one argument" ) );
