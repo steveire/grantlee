@@ -38,7 +38,7 @@ class FirstOfNode : public Node
 {
   Q_OBJECT
 public:
-  explicit FirstOfNode( QList<FilterExpression> list, QObject *parent = 0 );
+  explicit FirstOfNode( const QList<FilterExpression> &list, QObject *parent = 0 );
 
   void render( OutputStream *stream, Context *c ) const;
 

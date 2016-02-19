@@ -56,7 +56,7 @@ WithLocaleNode::WithLocaleNode( const FilterExpression &localeName, QObject *par
 {
 }
 
-void WithLocaleNode::setNodeList( NodeList nodeList )
+void WithLocaleNode::setNodeList(const NodeList& nodeList )
 {
   m_list = nodeList;
 }

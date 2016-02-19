@@ -67,7 +67,7 @@ private:
   QScriptValue m_renderMethod;
 
 public Q_SLOTS:
-  void setNodeList( const QString &name, QObjectList );
+  void setNodeList(const QString &name, const QObjectList& );
 
 };
 
@@ -79,7 +79,7 @@ public:
   void setScriptEngine( QScriptEngine *engine );
 
   /* reimp */ void setEngine( Grantlee::Engine *engine );
-  void setFactory( QScriptValue factoryMethod );
+  void setFactory(const QScriptValue& factoryMethod );
 
   Node* getNode( const QString &tagContent, Parser *p = 0 ) const;
 

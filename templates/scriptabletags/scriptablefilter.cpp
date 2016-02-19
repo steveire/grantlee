@@ -25,7 +25,7 @@
 
 #include <QtScript/QScriptEngine>
 
-ScriptableFilter::ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine )
+ScriptableFilter::ScriptableFilter( const QScriptValue &filterObject, QScriptEngine *engine )
     : m_filterObject( filterObject ), m_scriptEngine( engine )
 {
 }

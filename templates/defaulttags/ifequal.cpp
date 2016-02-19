@@ -75,7 +75,7 @@ Node* IfNotEqualNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   return do_getNode( tagContent, p, true );
 }
 
-IfEqualNode::IfEqualNode( FilterExpression val1, FilterExpression val2, bool negate, QObject *parent )
+IfEqualNode::IfEqualNode(const FilterExpression& val1, const FilterExpression& val2, bool negate, QObject *parent )
     : Node( parent )
 {
   m_var1 = val1;
@@ -83,12 +83,12 @@ IfEqualNode::IfEqualNode( FilterExpression val1, FilterExpression val2, bool neg
   m_negate = negate;
 }
 
-void IfEqualNode::setTrueList( NodeList trueList )
+void IfEqualNode::setTrueList( const NodeList &trueList )
 {
   m_trueList = trueList;
 }
 
-void IfEqualNode::setFalseList( NodeList falseList )
+void IfEqualNode::setFalseList( const NodeList &falseList )
 {
   m_falseList = falseList;
 }

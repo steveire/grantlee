@@ -53,13 +53,13 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
   return n;
 }
 
-FilterNode::FilterNode( FilterExpression fe, QObject *parent )
+FilterNode::FilterNode( const FilterExpression &fe, QObject *parent )
     : Node( parent ), m_fe( fe )
 {
 
 }
 
-void FilterNode::setNodeList( NodeList filterList )
+void FilterNode::setNodeList(const NodeList& filterList )
 {
   m_filterList = filterList;
 }

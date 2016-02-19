@@ -43,7 +43,7 @@ public:
 
 
 
-  void setNodeList( NodeList list );
+  void setNodeList( const NodeList &list );
 
   void render( OutputStream *stream, Context *c ) const;
 

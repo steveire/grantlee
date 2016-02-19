@@ -45,7 +45,7 @@ Grantlee::Node* MediaFinderNodeFactory::getNode( const QString& tagContent, Pars
   return new MediaFinderNode( getFilterExpressionList( expr, p ), p );
 }
 
-MediaFinderNode::MediaFinderNode( QList<FilterExpression> mediaExpressionList, QObject* parent )
+MediaFinderNode::MediaFinderNode( const QList<FilterExpression>& mediaExpressionList, QObject* parent )
     : Node( parent ), m_mediaExpressionList( mediaExpressionList )
 {
 }

@@ -41,7 +41,7 @@ class WithNode : public Node
 public:
   WithNode( const FilterExpression &expression, const QString &name, QObject *parent = 0 );
 
-  void setNodeList( NodeList nodeList );
+  void setNodeList( const NodeList &nodeList );
 
   void render( OutputStream *stream, Context *c ) const;
 

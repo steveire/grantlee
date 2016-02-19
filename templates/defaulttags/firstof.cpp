@@ -43,7 +43,7 @@ Node* FirstOfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 
-FirstOfNode::FirstOfNode( QList<FilterExpression> list, QObject *parent )
+FirstOfNode::FirstOfNode(const QList<FilterExpression>& list, QObject *parent )
     : Node( parent ), m_variableList( list )
 {
 }

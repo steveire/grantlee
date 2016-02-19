@@ -48,10 +48,10 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent = 0 );
+  IfNode(const QList<QPair<bool, FilterExpression> >& boolVars, int linkType, QObject *parent = 0 );
 
-  void setTrueList( NodeList trueList );
-  void setFalseList( NodeList falseList );
+  void setTrueList( const NodeList &trueList );
+  void setFalseList( const NodeList &falseList );
 
   void render( OutputStream *stream, Context *c ) const;
 

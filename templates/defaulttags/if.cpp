@@ -88,7 +88,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 }
 
 
-IfNode::IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent )
+IfNode::IfNode( const QList<QPair<bool, FilterExpression > > &boolVars, int linkType, QObject *parent )
     : Node( parent ),
     m_boolVars( boolVars ),
     m_linkType( linkType )
@@ -96,12 +96,12 @@ IfNode::IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, Q
 
 }
 
-void IfNode::setTrueList( NodeList trueList )
+void IfNode::setTrueList( const NodeList &trueList )
 {
   m_trueList = trueList;
 }
 
-void IfNode::setFalseList( NodeList falseList )
+void IfNode::setFalseList(const NodeList& falseList )
 {
   m_falseList = falseList;
 }

@@ -38,9 +38,9 @@ class FilterNode : public Node
 {
   Q_OBJECT
 public:
-  explicit FilterNode( FilterExpression fe, QObject *parent = 0 );
+  explicit FilterNode(const FilterExpression& fe, QObject *parent = 0 );
 
-  void setNodeList( NodeList filterList );
+  void setNodeList( const NodeList &filterList );
 
   void render( OutputStream *stream, Context *c ) const;
 

@@ -91,7 +91,7 @@ RangeNode::RangeNode( const QString &name, const FilterExpression &startExpressi
 {
 }
 
-void RangeNode::setNodeList( NodeList list )
+void RangeNode::setNodeList(const NodeList& list )
 {
   m_list = list;
 }

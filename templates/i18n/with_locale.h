@@ -41,7 +41,7 @@ class WithLocaleNode : public Node
 public:
   WithLocaleNode( const FilterExpression &localeName, QObject *parent = 0 );
 
-  void setNodeList( NodeList nodeList );
+  void setNodeList( const NodeList &nodeList );
 
   void render( OutputStream *stream, Context *c ) const;
 

@@ -36,16 +36,17 @@ class ScriptableTagLibrary;
 class ScriptableLibraryContainer : public TagLibraryInterface
 {
 public:
-  ScriptableLibraryContainer( QHash<QString, AbstractNodeFactory*> factories, QHash<QString, Filter *> filters )
+  ScriptableLibraryContainer( const QHash<QString, AbstractNodeFactory*>& factories,
+                              const QHash<QString, Filter *> &filters )
       : m_nodeFactories( factories ), m_filters( filters ) {
   }
 
-  void setNodeFactories( const QHash<QString, AbstractNodeFactory*> factories )
+  void setNodeFactories( const QHash<QString, AbstractNodeFactory*>& factories )
   {
     m_nodeFactories = factories;
   }
 
-  void setFilters( const QHash<QString, Filter*> filters )
+  void setFilters( const QHash<QString, Filter*> &filters )
   {
     m_filters = filters;
   }

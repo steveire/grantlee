@@ -30,7 +30,7 @@ using namespace Grantlee;
 class ScriptableFilter : public Filter
 {
 public:
-  ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine );
+  ScriptableFilter(const QScriptValue& filterObject, QScriptEngine *engine );
   virtual ~ScriptableFilter();
 
   QVariant doFilter( const QVariant &input, const QVariant &argument, bool autoescape = false ) const;

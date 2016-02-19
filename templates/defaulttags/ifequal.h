@@ -50,10 +50,10 @@ class IfEqualNode : public Node
 {
   Q_OBJECT
 public:
-  IfEqualNode( FilterExpression val11, FilterExpression val2, bool negate, QObject *parent = 0 );
+  IfEqualNode( const FilterExpression &val11, const FilterExpression &val2, bool negate, QObject *parent = 0 );
 
-  void setTrueList( NodeList trueList );
-  void setFalseList( NodeList falseList );
+  void setTrueList( const NodeList &trueList );
+  void setFalseList(const NodeList& falseList );
 
   void render( OutputStream *stream, Context *c ) const;
 

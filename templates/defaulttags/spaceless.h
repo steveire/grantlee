@@ -42,7 +42,7 @@ class SpacelessNode : public Node
 public:
   SpacelessNode( QObject *parent = 0 );
 
-  void setList( NodeList nodeList );
+  void setList( const NodeList &nodeList );
 
   void render( OutputStream *stream, Context *c ) const;
 

@@ -66,7 +66,7 @@ AutoescapeNode::AutoescapeNode( int state, QObject *parent )
 }
 
 
-void AutoescapeNode::setList( NodeList list )
+void AutoescapeNode::setList(const NodeList& list )
 {
   m_list = list;
 }

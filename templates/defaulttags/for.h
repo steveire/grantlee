@@ -46,18 +46,19 @@ public:
     IsReversed
   };
 
-  ForNode( QStringList loopVars, FilterExpression fe, int reversed, QObject *parent = 0 );
+  ForNode( const QStringList &loopVars, const FilterExpression &fe, int reversed, QObject *parent = 0 );
 
-  void setLoopList( NodeList loopNodeList );
-  void setEmptyList( NodeList emptyList );
+  void setLoopList( const NodeList &loopNodeList );
+  void setEmptyList( const NodeList &emptyList );
 
   void render( OutputStream *stream, Context *c ) const;
 
 private:
   static void insertLoopVariables( Context *c, int listSize, int i );
-  void iterateHash( OutputStream *stream, Context* c, QVariantHash varHash, bool unpack );
+  void iterateHash(OutputStream *stream, Context* c, const QVariantHash& varHash, bool unpack );
   void renderLoop( OutputStream *stream, Context *c ) const;
-  void handleHashItem( OutputStream *stream, Context *c, QString key, QVariant value, int listSize, int i, bool unpack );
+  void handleHashItem(OutputStream *stream, Context *c, const QString& key,
+                      const QVariant &value, int listSize, int i, bool unpack );
 
   QStringList m_loopVars;
   FilterExpression m_filterExpression;

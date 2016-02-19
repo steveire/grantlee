@@ -52,7 +52,8 @@ Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   return new RegroupNode( target, expression, name, p );
 }
 
-RegroupNode::RegroupNode( FilterExpression target, FilterExpression expression, const QString &varName, QObject *parent )
+RegroupNode::RegroupNode(const FilterExpression& target, const FilterExpression& expression,
+                         const QString &varName, QObject *parent )
     : Node( parent ), m_target( target ), m_expression( expression ), m_varName( varName )
 {
 

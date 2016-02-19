@@ -205,7 +205,7 @@ void insertPeopleVariants<QHash<QString, QVariant> >( Grantlee::Context &c )
 }
 
 template<typename Container>
-void testSequentialIteration( Grantlee::Context c )
+void testSequentialIteration( Grantlee::Context &c )
 {
   Grantlee::Engine engine;
 
@@ -222,7 +222,7 @@ void testSequentialIteration( Grantlee::Context c )
 }
 
 template<typename Container>
-void testSequentialIndexing( Grantlee::Context c )
+void testSequentialIndexing( Grantlee::Context &c )
 {
   Grantlee::Engine engine;
 
@@ -241,12 +241,12 @@ void testSequentialIndexing( Grantlee::Context c )
 template<typename Container>
 struct SequentialContainerTester
 {
-  static void iteration(Grantlee::Context c)
+  static void iteration(Grantlee::Context &c)
   {
     testSequentialIteration<Container>(c);
   }
 
-  static void indexing(Grantlee::Context c)
+  static void indexing(Grantlee::Context &c)
   {
     testSequentialIndexing<Container>(c);
   }
@@ -255,7 +255,7 @@ struct SequentialContainerTester
 template<typename T>
 struct SequentialContainerTester<QSet<T> >
 {
-  static void iteration(Grantlee::Context c)
+  static void iteration(Grantlee::Context &c)
   {
     Grantlee::Engine engine;
 
@@ -282,7 +282,7 @@ struct SequentialContainerTester<QSet<T> >
 template<typename T>
 struct SequentialContainerTester<QLinkedList<T> >
 {
-  static void iteration(Grantlee::Context c)
+  static void iteration(Grantlee::Context &c)
   {
     testSequentialIteration<QLinkedList<T> >(c);
   }
@@ -295,7 +295,7 @@ struct SequentialContainerTester<QLinkedList<T> >
 template<typename T>
 struct SequentialContainerTester<std::list<T> >
 {
-  static void iteration(Grantlee::Context c)
+  static void iteration(Grantlee::Context &c)
   {
     testSequentialIteration<std::list<T> >(c);
   }
@@ -317,7 +317,7 @@ void doTestSequentialContainer_Variant()
 }
 
 template<typename Container>
-void testAssociativeValues( Grantlee::Context c, bool unordered = false )
+void testAssociativeValues( Grantlee::Context &c, bool unordered = false )
 {
   Grantlee::Engine engine;
 
@@ -341,7 +341,7 @@ void testAssociativeValues( Grantlee::Context c, bool unordered = false )
 }
 
 template<typename Container>
-void testAssociativeItems( Grantlee::Context c, bool unordered )
+void testAssociativeItems( Grantlee::Context &c, bool unordered )
 {
   Grantlee::Engine engine;
 

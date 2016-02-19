@@ -114,7 +114,7 @@ void ScriptableNodeFactory::setEngine( Engine* engine )
   m_scriptEngine->setProperty( "templateEngine", QVariant::fromValue( engine ) );
 }
 
-void ScriptableNodeFactory::setFactory( QScriptValue factoryMethod )
+void ScriptableNodeFactory::setFactory( const QScriptValue &factoryMethod )
 {
   m_factoryMethod = factoryMethod;
 }
@@ -147,7 +147,7 @@ QScriptEngine* ScriptableNode::engine()
   return m_scriptEngine;
 }
 
-void ScriptableNode::setNodeList( const QString &name, QObjectList objectList )
+void ScriptableNode::setNodeList( const QString &name, const QObjectList &objectList )
 {
   QScriptValue objectListArray = m_scriptEngine->newArray( objectList.size() );
 

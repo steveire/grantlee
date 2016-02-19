@@ -39,10 +39,10 @@ class IfChangedNode : public Node
 {
   Q_OBJECT
 public:
-  explicit IfChangedNode( QList<FilterExpression> feList, QObject *parent = 0 );
+  explicit IfChangedNode( const QList<FilterExpression> &feList, QObject *parent = 0 );
 
-  void setTrueList( NodeList trueList );
-  void setFalseList( NodeList falseList );
+  void setTrueList(const NodeList& trueList );
+  void setFalseList( const NodeList &falseList );
 
   void render( OutputStream *stream, Context *c ) const;
 

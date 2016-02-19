@@ -81,8 +81,8 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
 
 
-ForNode::ForNode( QStringList loopVars,
-                  FilterExpression fe,
+ForNode::ForNode( const QStringList &loopVars,
+                  const FilterExpression &fe,
                   int reversed,
                   QObject *parent )
     : Node( parent ),
@@ -93,12 +93,12 @@ ForNode::ForNode( QStringList loopVars,
 
 }
 
-void ForNode::setLoopList( NodeList loopNodeList )
+void ForNode::setLoopList(const NodeList& loopNodeList )
 {
   m_loopNodeList = loopNodeList;
 }
 
-void ForNode::setEmptyList( NodeList emptyList )
+void ForNode::setEmptyList(const NodeList& emptyList )
 {
   m_emptyNodeList = emptyList;
 }
@@ -133,7 +133,8 @@ void ForNode::renderLoop( OutputStream *stream, Context *c ) const
   }
 }
 
-void ForNode::handleHashItem( OutputStream *stream, Context *c, QString key, QVariant value, int listSize, int i, bool unpack )
+void ForNode::handleHashItem(OutputStream *stream, Context *c, const QString &key,
+                             const QVariant& value, int listSize, int i, bool unpack )
 {
   QVariantList list;
   insertLoopVariables( c, listSize, i );
@@ -151,7 +152,7 @@ void ForNode::handleHashItem( OutputStream *stream, Context *c, QString key, QVa
   renderLoop( stream, c );
 }
 
-void ForNode::iterateHash( OutputStream *stream, Context *c, QVariantHash varHash, bool unpack )
+void ForNode::iterateHash( OutputStream *stream, Context *c, const QVariantHash &varHash, bool unpack )
 {
   int listSize = varHash.size();
   int i = 0;

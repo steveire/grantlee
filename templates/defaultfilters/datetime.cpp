@@ -24,7 +24,7 @@
 
 #include <QtCore/QDateTime>
 
-QVariant timeSince( QDateTime early, QDateTime late )
+QVariant timeSince( const QDateTime &early, const QDateTime &late )
 {
   Q_ASSERT( early.isValid() );
   Q_ASSERT( late.isValid() );
@@ -86,7 +86,7 @@ QVariant timeSince( QDateTime early, QDateTime late )
   return firstChunk;
 }
 
-QVariant timeUntil( QDateTime dt, QDateTime now = QDateTime() )
+QVariant timeUntil( const QDateTime &dt, QDateTime now = QDateTime() )
 {
   if ( !now.isValid() )
     now = QDateTime::currentDateTime();

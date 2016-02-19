@@ -44,7 +44,10 @@ Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p ) con
 }
 
 
-WidthRatioNode::WidthRatioNode( FilterExpression valExpr, FilterExpression maxExpr, FilterExpression maxWidth, QObject *parent )
+WidthRatioNode::WidthRatioNode(const FilterExpression& valExpr,
+                               const FilterExpression& maxExpr,
+                               const FilterExpression& maxWidth,
+                               QObject *parent )
     : Node( parent )
 {
   m_valExpr = valExpr;

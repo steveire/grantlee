@@ -46,7 +46,7 @@ SpacelessNode::SpacelessNode( QObject *parent )
 
 }
 
-void SpacelessNode::setList( NodeList nodeList )
+void SpacelessNode::setList(const NodeList& nodeList )
 {
   m_nodeList = nodeList;
 }

@@ -66,7 +66,7 @@ Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   return n;
 }
 
-ExtendsNode::ExtendsNode( FilterExpression fe, QObject *parent )
+ExtendsNode::ExtendsNode(const FilterExpression& fe, QObject *parent )
     : Node( parent ),
     m_filterExpression( fe )
 {
@@ -77,7 +77,7 @@ ExtendsNode::~ExtendsNode()
 {
 }
 
-static QHash<QString, BlockNode*> createNodeMap( QList<BlockNode*> list )
+static QHash<QString, BlockNode*> createNodeMap( const QList<BlockNode*> &list )
 {
   QHash<QString, BlockNode*> map;
 

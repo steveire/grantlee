@@ -50,19 +50,19 @@ Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
   return n;
 }
 
-IfChangedNode::IfChangedNode( QList<FilterExpression> feList, QObject *parent )
+IfChangedNode::IfChangedNode(const QList<FilterExpression>& feList, QObject *parent )
     : Node( parent ), m_filterExpressions( feList )
 {
   m_lastSeen = QVariant();
   m_id = QString::number( reinterpret_cast<qint64>( this ) );
 }
 
-void IfChangedNode::setTrueList( NodeList trueList )
+void IfChangedNode::setTrueList( const NodeList &trueList )
 {
   m_trueList = trueList;
 }
 
-void IfChangedNode::setFalseList( NodeList falseList )
+void IfChangedNode::setFalseList(const NodeList& falseList )
 {
   m_falseList = falseList;
 }
