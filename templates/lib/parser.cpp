@@ -220,8 +220,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         throw Grantlee::Exception( EmptyBlockTagError, message );
       }
 
-      const QStringList tagContents = token.content.split( QLatin1Char( ' ' ) );
-      const QString command = tagContents.first();
+      const QString command = token.content.section(QLatin1Char(' '), 0, 0);
       AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
 
       // unknown tag.
