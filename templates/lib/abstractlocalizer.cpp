@@ -38,15 +38,15 @@ AbstractLocalizer::~AbstractLocalizer()
 
 QString AbstractLocalizer::localize( const QVariant& variant ) const
 {
-  if ( variant.type() == QVariant::Date )
+  if ( variant.userType() == qMetaTypeId<QDate>() )
     return localizeDate( variant.toDate() );
-  if ( variant.type() == QVariant::Time )
+  if ( variant.userType() == qMetaTypeId<QTime>() )
     return localizeTime( variant.toTime() );
-  if ( variant.type() == QVariant::DateTime )
+  if ( variant.userType() == qMetaTypeId<QDateTime>() )
     return localizeDateTime( variant.toDateTime() );
   else if ( isSafeString( variant ) )
     return localizeString( getSafeString( variant ).get() );
-  else if ( variant.type() == QVariant::Double || variant.userType() == QMetaType::Float )
+  else if ( variant.userType() == qMetaTypeId<double>() || variant.userType() == qMetaTypeId<float>() )
     return localizeNumber( variant.toReal() );
   else if ( variant.canConvert<int>() )
     return localizeNumber( variant.toInt() );

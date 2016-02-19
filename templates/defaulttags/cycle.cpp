@@ -52,7 +52,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     // {% cycle var %}
     QString name = expr.at( 1 );
     QVariant cycleNodes = p->property( _namedCycleNodes );
-    if ( cycleNodes.type() != QVariant::Hash ) {
+    if ( cycleNodes.userType() != qMetaTypeId<QVariantHash>() ) {
       throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "No named cycles in template. '%1' is not defined" ).arg( name ) );
     }
     QVariantHash hash = cycleNodes.toHash();
@@ -75,7 +75,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     Node *node = new CycleNode( getFilterExpressionList( list, p ), name, p );
     QVariant hashVariant = p->property( _namedCycleNodes );
     QVariantHash hash;
-    if ( hashVariant.type() == QVariant::Hash ) {
+    if ( hashVariant.userType() == qMetaTypeId<QVariantHash>() ) {
       hash = hashVariant.toHash();
     }
     QObject *nodeObject = node;

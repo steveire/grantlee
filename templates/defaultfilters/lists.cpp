@@ -57,7 +57,7 @@ QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument
   if ( input.canConvert<QVariantList>() )
     return input.value<QSequentialIterable>().size();
 
-  if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
+  if ( input.userType() == qMetaTypeId<SafeString>() || input.userType() == qMetaTypeId<QString>() )
     return getSafeString( input ).get().size();
 
   return QVariant();
@@ -66,13 +66,13 @@ QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument
 QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  if ( !input.isValid() || ( input.type() == QVariant::Int ) || ( input.type() == QVariant::DateTime ) )
+  if ( !input.isValid() || ( input.userType() == qMetaTypeId<int>() ) || ( input.userType() == qMetaTypeId<QDateTime>() ) )
     return QVariant();
 
   int size = 0;
   if ( input.canConvert<QVariantList>() )
     size = input.value<QSequentialIterable>().size();
-  else if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String )
+  else if ( input.userType() == qMetaTypeId<SafeString>() || input.userType() == qMetaTypeId<QString>() )
     size = getSafeString( input ).get().size();
 
   bool ok;
@@ -153,17 +153,17 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
 {
   Q_UNUSED( autoescape )
   Q_UNUSED( argument )
-  if ( _input.type() == QVariant::List )
+  if ( _input.userType() == qMetaTypeId<QVariantList>() )
     return _input;
   if ( _input.canConvert<QVariantList>())
     return _input.value<QVariantList>();
 
   QVariant input = _input;
 
-  if ( input.type() == QVariant::Int )
+  if ( input.userType() == qMetaTypeId<int>() )
     input.convert( QVariant::String );
 
-  if ( input.userType() == qMetaTypeId<SafeString>() || input.type() == QVariant::String ) {
+  if ( input.userType() == qMetaTypeId<SafeString>() || input.userType() == qMetaTypeId<QString>() ) {
     QVariantList list;
     Q_FOREACH( const QVariant &var, getSafeString( input ).get().split( QString(), QString::SkipEmptyParts ) )
       list << var;
@@ -197,12 +197,12 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
     QString sublist;
     QVariant sublistItem;
 
-    if ( titleObject.type() == QVariant::List ) {
+    if ( titleObject.userType() == qMetaTypeId<QVariantList>() ) {
       sublistItem = titleObject;
       title.get().clear();
     } else if ( i < listSize - 1 ) {
       QVariant nextItem = list.at( i + 1 );
-      if ( nextItem.type() == QVariant::List ) {
+      if ( nextItem.userType() == qMetaTypeId<QVariantList>() ) {
         sublistItem = nextItem;
       }
       ++i;
@@ -229,7 +229,7 @@ struct DictSortLessThan
     const QVariant r = rp.first;
     switch ( l.userType() ) {
     case QVariant::Invalid:
-        return (r.type() != QVariant::Invalid);
+        return (r.isValid());
     case QVariant::Int:
         return l.toInt() < r.toInt();
     case QVariant::UInt:
@@ -256,15 +256,15 @@ struct DictSortLessThan
     if ( l.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
       if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
         return l.value<Grantlee::SafeString>().get() < r.value<Grantlee::SafeString>().get();
-      } else if ( r.userType() == QVariant::String ) {
+      } else if ( r.userType() == qMetaTypeId<QString>() ) {
         return l.value<Grantlee::SafeString>().get() < r.toString();
       }
     } else if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
-      if ( l.userType() == QVariant::String ) {
+      if ( l.userType() == qMetaTypeId<QString>() ) {
         return l.toString() < r.value<Grantlee::SafeString>().get();
       }
-    } else if ( l.userType() == QVariant::String ) {
-      if ( r.userType() == QVariant::String ) {
+    } else if ( l.userType() == qMetaTypeId<QString>() ) {
+      if ( r.userType() == qMetaTypeId<QString>() ) {
         return l.toString() < r.toString();
       }
     }

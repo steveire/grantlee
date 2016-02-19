@@ -50,7 +50,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QVariant loadedBlocksVariant = p->property( __loadedBlocks );
   QVariantList blockVariantList;
 
-  if ( loadedBlocksVariant.isValid() && loadedBlocksVariant.type() == QVariant::List ) {
+  if ( loadedBlocksVariant.isValid() && loadedBlocksVariant.userType() == qMetaTypeId<QVariantList>() ) {
     blockVariantList = loadedBlocksVariant.toList();
     QListIterator<QVariant> it( blockVariantList );
     while ( it.hasNext() ) {

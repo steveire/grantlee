@@ -155,7 +155,7 @@ QVariant StringFormatFilter::doFilter( const QVariant& input, const QVariant &ar
   SafeString a;
   if ( isSafeString( input ) )
     a = getSafeString( input );
-  else if ( input.type() == QVariant::List ) {
+  else if ( input.userType() == qMetaTypeId<QVariantList>() ) {
     a = toString( input.toList() );
   }
 
@@ -336,7 +336,7 @@ QVariant SafeSequenceFilter::doFilter( const QVariant& input, const QVariant& ar
   Q_UNUSED( argument )
   Q_UNUSED( autoescape )
   QVariantList list;
-  if ( input.type() == QVariant::List )
+  if ( input.userType() == qMetaTypeId<QVariantList>() )
     Q_FOREACH( const QVariant &item, input.toList() )
       list << markSafe( getSafeString( item ) );
   return list;

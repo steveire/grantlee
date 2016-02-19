@@ -118,7 +118,7 @@ QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argum
 {
   Q_UNUSED( autoescape )
   QDateTime late;
-  if ( argument.type() != QVariant::DateTime )
+  if ( argument.userType() != qMetaTypeId<QDateTime>() )
     late = QDateTime::currentDateTime();
   else
     late = argument.toDateTime();
@@ -130,7 +130,7 @@ QVariant TimeUntilFilter::doFilter( const QVariant& input, const QVariant &argum
 {
   Q_UNUSED( autoescape )
   QDateTime early;
-  if ( argument.type() != QVariant::DateTime )
+  if ( argument.userType() != qMetaTypeId<QDateTime>() )
     early = QDateTime::currentDateTime();
   else
     early = argument.toDateTime();

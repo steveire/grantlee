@@ -32,26 +32,26 @@ QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, b
     return input;
   }
 
-  if ( input.type() == QVariant::List ) {
-    if ( argument.type() == QVariant::List )
+  if ( input.userType() == qMetaTypeId<QVariantList>() ) {
+    if ( argument.userType() == qMetaTypeId<QVariantList>() )
       return input.toList() + argument.toList();
     return input;
   }
 
-  if ( input.type() == QVariant::StringList ) {
+  if ( input.userType() == qMetaTypeId<QStringList>() ) {
     if ( argument == QVariant::StringList )
       return input.toStringList() + argument.toStringList();
     return input;
   }
 
-  if ( input.type() == QVariant::Int ) {
-    if ( argument.type() == QVariant::Int )
+  if ( input.userType() == qMetaTypeId<int>() ) {
+    if ( argument.userType() == qMetaTypeId<int>() )
       return input.toInt() + argument.toInt();
     return input;
   }
 
-  if ( input.type() == QVariant::UInt ) {
-    if ( argument.type() == QVariant::UInt )
+  if ( input.userType() == qMetaTypeId<uint>() ) {
+    if ( argument.userType() == qMetaTypeId<uint>() )
       return input.toUInt() + argument.toUInt();
     return input;
   }
@@ -62,14 +62,14 @@ QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, b
     return input;
   }
 
-  if ( input.type() == QVariant::LongLong ) {
-    if ( argument.type() == QVariant::LongLong )
+  if ( input.userType() == qMetaTypeId<long long>() ) {
+    if ( argument.userType() == qMetaTypeId<long long>() )
       return input.toLongLong() + argument.toLongLong();
     return input;
   }
 
-  if ( input.type() == QVariant::ULongLong ) {
-    if ( argument.type() == QVariant::ULongLong )
+  if ( input.userType() == qMetaTypeId<unsigned long long>() ) {
+    if ( input.userType() == qMetaTypeId<unsigned long long>() )
       return input.toULongLong() + argument.toULongLong();
     return input;
   }

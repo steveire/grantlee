@@ -48,7 +48,7 @@ QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argu
 {
   Q_UNUSED( autoescape )
   QScriptValueList args;
-  if ( input.type() == QVariant::List ) {
+  if ( input.userType() == qMetaTypeId<QVariantList>() ) {
     QVariantList inputList = input.toList();
     QScriptValue array = m_scriptEngine->newArray( inputList.size() );
     for ( int i = 0; i < inputList.size(); ++i ) {

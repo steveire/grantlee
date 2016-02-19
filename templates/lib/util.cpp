@@ -145,11 +145,11 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
   } else if ( rhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
     if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
       equal = ( rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>() );
-    } else if ( lhs.type() == QVariant::Int ) {
+    } else if ( lhs.userType() == qMetaTypeId<int>() ) {
       equal = ( rhs.value<MetaEnumVariable>() == lhs.toInt() );
     }
   } else if ( lhs.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-    if ( rhs.type() == QVariant::Int ) {
+    if ( rhs.userType() == qMetaTypeId<int>() ) {
       equal = ( lhs.value<MetaEnumVariable>() == rhs.toInt() );
     }
   } else {
@@ -170,16 +170,16 @@ Grantlee::SafeString Grantlee::toString( const QVariantList &list )
               + static_cast<QString>( getSafeString( item ).get() )
               + QLatin1Char( '\'' );
     }
-    if ( ( item.type() == QVariant::Int )
-      || ( item.type() == QVariant::UInt )
-      || ( item.type() == QVariant::Double )
-      || ( item.userType() == QMetaType::Float )
-      || ( item.type() == QVariant::LongLong )
-      || ( item.type() == QVariant::ULongLong )
+    if ( ( item.userType() == qMetaTypeId<int>() )
+      || ( item.userType() == qMetaTypeId<uint>() )
+      || ( item.userType() == qMetaTypeId<double>() )
+      || ( item.userType() == qMetaTypeId<float>() )
+      || ( item.userType() == qMetaTypeId<long long>() )
+      || ( item.userType() == qMetaTypeId<unsigned long long>() )
     ) {
       output += item.toString();
     }
-    if ( item.type() == QVariant::List ) {
+    if ( item.userType() == qMetaTypeId<QVariantList>() ) {
       output += static_cast<QString>( toString( item.toList() ).get() );
     }
     if ( ( it + 1 ) != end )

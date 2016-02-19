@@ -234,11 +234,11 @@ static QString substituteArguments( const QString &input, const QVariantList &ar
 {
   QString string = input;
   Q_FOREACH( const QVariant &arg, arguments ) {
-    if ( arg.type() == QVariant::Int )
+    if ( arg.userType() == qMetaTypeId<int>() )
       string = string.arg( arg.toInt() );
-    else if ( arg.type() == QVariant::Double )
+    else if ( arg.userType() == qMetaTypeId<double>() )
       string = string.arg( arg.toDouble() );
-    else if ( arg.type() == QVariant::DateTime )
+    else if ( arg.userType() == qMetaTypeId<QDateTime>() )
       string = string.arg( arg.toDateTime().toString() );
     else
       string = string.arg( arg.toString() );

@@ -223,7 +223,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
       Grantlee::SafeString argString;
       if ( arg.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
         argString = arg.value<Grantlee::SafeString>();
-      } else if ( arg.type() == QVariant::String ) {
+      } else if ( arg.userType() == qMetaTypeId<QString>() ) {
         argString = Grantlee::SafeString( arg.toString() );
       }
       if ( argVar.isConstant() ) {
@@ -238,7 +238,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
 
     var = filter->doFilter( var, arg, c->autoEscape() );
 
-    if ( var.userType() == qMetaTypeId<Grantlee::SafeString>() || var.type() == QVariant::String ) {
+    if ( var.userType() == qMetaTypeId<Grantlee::SafeString>() || var.userType() == qMetaTypeId<QString>() ) {
       if ( filter->isSafe() && varString.isSafe() ) {
         var = markSafe( getSafeString( var ) );
       } else if ( varString.needsEscape() ) {

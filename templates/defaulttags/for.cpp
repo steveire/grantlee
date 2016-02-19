@@ -236,7 +236,7 @@ void ForNode::render( OutputStream *stream, Context *c ) const
     insertLoopVariables( c, listSize, i );
 
     if ( unpack ) {
-      if ( v.type() == QVariant::List ) {
+      if ( v.userType() == qMetaTypeId<QVariantList>() ) {
         QVariantList vList = v.toList();
         int varsSize = qMin( m_loopVars.size(), vList.size() );
         int j = 0;
