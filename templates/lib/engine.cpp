@@ -42,6 +42,8 @@ static const char __scriptableLibName[] = "grantlee_scriptabletags";
 Engine::Engine( QObject *parent )
     : QObject( parent ), d_ptr( new EnginePrivate( this ) )
 {
+  QMetaType::registerComparators<SafeString>();
+
   d_ptr->m_defaultLibraries << QStringLiteral( "grantlee_defaulttags" )
                             << QStringLiteral( "grantlee_loadertags" )
                             << QStringLiteral( "grantlee_defaultfilters" );
