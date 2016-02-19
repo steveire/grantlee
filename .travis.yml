@@ -1,7 +1,7 @@
 language: cpp
 branches:
   only:
-    - master
+    - fix-travis
 
 os:
   - linux
