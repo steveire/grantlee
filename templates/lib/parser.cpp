@@ -207,20 +207,22 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
     } else {
       Q_ASSERT( token.tokenType == BlockToken );
-      if ( stopAt.contains( token.content ) ) {
-        // put the token back.
+      const QString command = token.content.section(QLatin1Char(' '), 0, 0);
+      if ( stopAt.contains( command ) ) {
+        // A matching token has been reached. Return control to
+        // the caller. Put the token back on the token list so the
+        // caller knows where it terminated.
         q->prependToken( token );
         return nodeList;
       }
 
-      if ( token.content.isEmpty() ) {
+      if ( command.isEmpty() ) {
         QString message;
         Q_ASSERT( q->hasNextToken() );
         message = QString::fromLatin1( "Empty block tag before \"%1\", line %2, %3" ).arg( token.content.left( 20 ) ).arg( token.linenumber ).arg( q->parent()->objectName() );
         throw Grantlee::Exception( EmptyBlockTagError, message );
       }
 
-      const QString command = token.content.section(QLatin1Char(' '), 0, 0);
       AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
 
       // unknown tag.

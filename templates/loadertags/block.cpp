@@ -68,10 +68,15 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
   BlockNode *n = new BlockNode( blockName, p );
-  const NodeList list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) << QStringLiteral( "endblock " ) + blockName );
+  const NodeList list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) );
+
+  Token endBlock = p->takeNextToken();
+  const QStringList acceptableBlocks = QStringList() << QStringLiteral( "endblock" ) << QStringLiteral( "endblock " ) + blockName;
+  if ( !acceptableBlocks.contains( endBlock.content ) ) {
+      p->invalidBlockTag( endBlock, QStringLiteral("endblock"), acceptableBlocks );
+  }
 
   n->setNodeList( list );
-  p->removeNextToken();
 
   return n;
 }
