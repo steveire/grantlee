@@ -15,3 +15,4 @@ QCoreApplication::translate("GR_FILENAME", "Today &amp; tomorrow");
 QCoreApplication::translate("GR_FILENAME", "%n people today", 0, QCoreApplication::CodecForTr, count);
 QCoreApplication::translate("GR_FILENAME", "Today is", "The current day is");
 QCoreApplication::translate("GR_FILENAME", "%n people visited today", "The number of people who have visited today", QCoreApplication::CodecForTr, count);
+QCoreApplication::translate("GR_FILENAME", "Snowman: ☃");

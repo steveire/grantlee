@@ -288,6 +288,14 @@ void TestInternationalization::testStrings_data()
                              << QString()
                              << QString()
                              << (QVariantList() << 1000 << QDate(2005, 5, 7) << 0.6 << 4.8 );
+
+  QTest::newRow("string-16") << "Snowman: ☃"
+                             << "Snowman: ☃"
+                             << "Schneemann: ☃"
+                             << QString::fromUtf8("bonhomme de neige: ☃")
+                             << QString()
+                             << QString()
+                             << QVariantList();
 }
 
 typedef QHash<QString, QVariant> Dict;

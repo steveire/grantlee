@@ -111,5 +111,10 @@
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="test_input.cpp" line="18"/>
+        <source>Snowman: ☃</source>
+        <translation>Schneemann: ☃</translation>
+    </message>
 </context>
 </TS>
