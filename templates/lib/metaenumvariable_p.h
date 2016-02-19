@@ -31,13 +31,13 @@ struct MetaEnumVariable
 
   }
 
-  MetaEnumVariable( const QMetaEnum &_enumerator )
+  MetaEnumVariable( QMetaEnum _enumerator )
     : enumerator( _enumerator ), value( -1 )
   {
 
   }
 
-  MetaEnumVariable( const QMetaEnum &_enumerator, int _value )
+  MetaEnumVariable( QMetaEnum _enumerator, int _value )
     : enumerator( _enumerator ), value( _value )
   {
   }
