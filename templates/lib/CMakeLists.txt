@@ -32,22 +32,6 @@ set (grantlee_templates_SRCS
   variable.cpp
 )
 
-set(scriptabletags_FILES
-  scriptablecontext.cpp
-  scriptablefilterexpression.cpp
-  scriptablenode.cpp
-  scriptableparser.cpp
-  scriptablesafestring.cpp
-  scriptabletags.cpp
-  scriptabletemplate.cpp
-  scriptablevariable.cpp
-  scriptablefilter.cpp
-)
-
-foreach(file ${scriptabletags_FILES})
-  list(APPEND scriptabletags_SRCS ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
-endforeach()
-
 set(Grantlee5_TEMPLATES_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
 
 # Help IDEs find some non-compiled files.
@@ -73,12 +57,34 @@ list(APPEND grantlee_templates_SRCS ${header_only_sources})
 
 add_library(Grantlee_Templates SHARED
   ${grantlee_templates_SRCS}
-  ${scriptabletags_SRCS}
 )
 add_library(Grantlee5::Templates ALIAS Grantlee_Templates)
 generate_export_header(Grantlee_Templates)
 set_property(TARGET Grantlee_Templates PROPERTY EXPORT_NAME Templates)
-target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
+
+if (Qt5Script_FOUND)
+  set(scriptabletags_FILES
+    scriptablecontext.cpp
+    scriptablefilterexpression.cpp
+    scriptablenode.cpp
+    scriptableparser.cpp
+    scriptablesafestring.cpp
+    scriptabletags.cpp
+    scriptabletemplate.cpp
+    scriptablevariable.cpp
+    scriptablefilter.cpp
+    )
+
+  foreach(file ${scriptabletags_FILES})
+    list(APPEND scriptabletags_SRCS ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
+  endforeach()
+
+  target_sources(Grantlee_Templates PRIVATE ${scriptabletags_SRCS})
+  target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
+  target_link_libraries(Grantlee_Templates
+    LINK_PRIVATE Qt5::Script
+  )
+endif()
 
 if (BUILD_TESTS)
   set(GRANTLEE_TESTS_EXPORT "GRANTLEE_TEMPLATES_EXPORT")
@@ -92,7 +98,6 @@ file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h" "${_conten
 
 target_link_libraries(Grantlee_Templates
   LINK_PUBLIC Qt5::Core
-  LINK_PRIVATE Qt5::Script
 )
 
 if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)

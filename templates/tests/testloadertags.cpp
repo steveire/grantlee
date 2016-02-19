@@ -79,7 +79,9 @@ void TestLoaderTags::initTestCase()
   m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH )
                                           << QString::fromLatin1( ":/plugins/" ) // For testtags.qs
                          );
+#ifdef HAVE_QTSCRIPT_LIB
   m_engine->addDefaultLibrary( QStringLiteral( "grantlee_scriptabletags" ) );
+#endif
 }
 
 void TestLoaderTags::cleanupTestCase()
@@ -244,6 +246,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   QTest::newRow( "inheritance16" ) << QString::fromLatin1( "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" ) << dict << QString::fromLatin1( "12out3_" ) << NoError;
 
+#ifdef HAVE_QTSCRIPT_LIB
   // {% load %} tag (parent -- setup for exception04)
   QString inh17 = QStringLiteral( "{% load testtags %}{% block first %}1234{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance17" ), inh17 );
@@ -256,6 +259,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   // {% load %} tag (within a child template)
   QTest::newRow( "inheritance19" ) << QString::fromLatin1( "{% extends 'inheritance01' %}{% block first %}{% load testtags %}{% echo 400 %}5678{% endblock %}" ) << dict << QString::fromLatin1( "140056783_" ) << NoError;
+#endif
 
   QString inh20 = QStringLiteral( "{% extends 'inheritance01' %}{% block first %}{{ block.super }}a{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance20" ), inh20 );

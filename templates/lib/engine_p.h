@@ -81,19 +81,25 @@ class EnginePrivate
 
   TagLibraryInterface* loadLibrary( const QString &name, uint minorVersion );
   QString getScriptLibraryName( const QString &name, uint minorVersion ) const;
+#ifdef QT_SCRIPT_LIB
   ScriptableLibraryContainer* loadScriptableLibrary( const QString &name, uint minorVersion );
+#endif
   PluginPointer<TagLibraryInterface> loadCppLibrary( const QString& name, uint minorVersion );
 
   Q_DECLARE_PUBLIC( Engine )
   Engine * const q_ptr;
 
   QHash<QString, PluginPointer<TagLibraryInterface> > m_libraries;
+#ifdef QT_SCRIPT_LIB
   QHash<QString, ScriptableLibraryContainer*> m_scriptableLibraries;
+#endif
 
   QList<QSharedPointer<AbstractTemplateLoader> > m_loaders;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
+#ifdef QT_SCRIPT_LIB
   ScriptableTagLibrary *m_scriptableTagLibrary;
+#endif
   bool m_smartTrimEnabled;
 };
 

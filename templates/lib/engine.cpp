@@ -24,7 +24,9 @@
 #include "exception.h"
 #include "grantlee_config_p.h"
 #include "grantlee_version.h"
+#ifdef QT_SCRIPT_LIB
 #include "scriptabletags.h"
+#endif
 #include "template_p.h"
 #include "templateloader.h"
 
@@ -50,7 +52,9 @@ Engine::Engine( QObject *parent )
 
 Engine::~Engine()
 {
+#ifdef QT_SCRIPT_LIB
   qDeleteAll( d_ptr->m_scriptableLibraries );
+#endif
   d_ptr->m_libraries.clear();
   delete d_ptr;
 }
@@ -142,6 +146,8 @@ bool acceptableVersion<0>(uint)
 void Engine::loadDefaultLibraries()
 {
   Q_D( Engine );
+
+#ifdef QT_SCRIPT_LIB
   // Make sure we can load default scriptable libraries if we're supposed to.
   if ( d->m_defaultLibraries.contains( QLatin1String( __scriptableLibName ) ) && !d->m_scriptableTagLibrary ) {
     d->m_scriptableTagLibrary = new ScriptableTagLibrary( this );
@@ -156,6 +162,7 @@ void Engine::loadDefaultLibraries()
       throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Could not load scriptable tags library" ) );
 #endif
   }
+#endif
 
   Q_FOREACH( const QString &libName, d->m_defaultLibraries ) {
     if ( libName == QLatin1String( __scriptableLibName ) )
@@ -179,6 +186,7 @@ void Engine::loadDefaultLibraries()
     // and Filters are accessed only by the Parser, which manages them after that.
     uint minorVersion = GRANTLEE_VERSION_MINOR;
     while ( acceptableVersion<GRANTLEE_MIN_PLUGIN_VERSION>(minorVersion) ) {
+#ifdef QT_SCRIPT_LIB
       // Although we don't use scripted libaries here, we need to recognize them being first
       // in the search path and not load a c++ plugin of the same name in that case.
       ScriptableLibraryContainer* scriptableLibrary = d->loadScriptableLibrary( libName, minorVersion );
@@ -186,6 +194,7 @@ void Engine::loadDefaultLibraries()
         scriptableLibrary->clear();
         break;
       }
+#endif
 
       PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( libName, minorVersion );
       if ( minorVersion == 0)
@@ -201,8 +210,10 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 {
   Q_D( Engine );
 
+#ifdef QT_SCRIPT_LIB
   if ( name == QLatin1String( __scriptableLibName ) )
     return 0;
+#endif
 
   // already loaded by the engine.
   if ( d->m_libraries.contains( name ) )
@@ -223,17 +234,23 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 
 TagLibraryInterface* EnginePrivate::loadLibrary( const QString &name, uint minorVersion )
 {
+#ifdef QT_SCRIPT_LIB
   TagLibraryInterface* scriptableLibrary = loadScriptableLibrary( name, minorVersion );
   if ( scriptableLibrary )
     return scriptableLibrary;
 
   // else this is not a scriptable library.
+#endif
 
   return loadCppLibrary( name, minorVersion ).data();
 }
 
 EnginePrivate::EnginePrivate( Engine *engine )
-  : q_ptr( engine ), m_scriptableTagLibrary( 0 ), m_smartTrimEnabled( false )
+  : q_ptr( engine )
+#ifdef QT_SCRIPT_LIB
+  , m_scriptableTagLibrary( 0 )
+#endif
+  , m_smartTrimEnabled( false )
 {
 }
 
@@ -271,6 +288,7 @@ QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVers
   return QString();
 }
 
+#ifdef QT_SCRIPT_LIB
 ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString &name, uint minorVersion )
 {
   if ( !m_scriptableTagLibrary )
@@ -303,6 +321,7 @@ ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString 
   m_scriptableLibraries.insert( libFileName, library );
   return library;
 }
+#endif
 
 PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion )
 {

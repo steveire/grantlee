@@ -98,6 +98,10 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
     add_test(${_testname} ${_testname}_exec )
     target_link_libraries(${_testname}_exec Grantlee5::Templates template_test_builtins)
 
+    if (Qt5Script_FOUND)
+      target_compile_definitions(${_testname}_exec PRIVATE HAVE_QTSCRIPT_LIB)
+    endif()
+
     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)
 endmacro(GRANTLEE_TEMPLATES_UNIT_TESTS)
@@ -107,13 +111,18 @@ grantlee_templates_unit_tests(
   testbuiltins
   testloadertags
   testdefaulttags
-  testscriptabletags
   testcachingloader
   testfilters
   testgenerictypes
   testgenericcontainers
 #   benchmarks
 )
+
+if (Qt5Script_FOUND)
+  grantlee_templates_unit_tests(
+    testscriptabletags
+  )
+endif()
 
 if (Qt5LinguistTools_FOUND)
   grantlee_templates_unit_tests(
