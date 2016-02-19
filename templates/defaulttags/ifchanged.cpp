@@ -41,7 +41,7 @@ Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) cons
   n->setTrueList( trueList );
   NodeList falseList;
 
-  if ( p->takeNextToken().content.trimmed() == QStringLiteral( "else" ) ) {
+  if ( p->takeNextToken().content == QStringLiteral( "else" ) ) {
     falseList = p->parse( n, QStringLiteral( "endifchanged" ) );
     n->setFalseList( falseList );
     p->removeNextToken();

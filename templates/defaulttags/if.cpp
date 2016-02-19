@@ -77,7 +77,7 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << QStringLiteral( "endif" ) );
   n->setTrueList( trueList );
   NodeList falseList;
-  if ( p->takeNextToken().content.trimmed() == QStringLiteral( "else" ) ) {
+  if ( p->takeNextToken().content == QStringLiteral( "else" ) ) {
     falseList = p->parse( n, QStringLiteral( "endif" ) );
     n->setFalseList( falseList );
     // skip past the endif tag

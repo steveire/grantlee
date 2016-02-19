@@ -145,7 +145,7 @@ void Parser::skipPast( const QString &tag )
 {
   while ( hasNextToken() ) {
     const Token token = takeNextToken();
-    if ( token.tokenType == BlockToken && token.content.trimmed() == tag )
+    if ( token.tokenType == BlockToken && token.content == tag )
       return;
   }
   throw Grantlee::Exception( UnclosedBlockTagError, QString::fromLatin1( "No closing tag found for %1" ).arg( tag ) );
