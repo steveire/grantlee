@@ -139,7 +139,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
         if (d->m_filters.isEmpty() || d->m_filters.last().second.isValid()) {
             const QString remainder = vs.right( vs.size() - lastPos );
             throw Grantlee::Exception( TagSyntaxError,
-                QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
+                QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
         }
         subString = subString.right( ssSize - 1 );
         const int lastFilter = d->m_filters.size();
@@ -160,7 +160,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     const QString remainder = vs.right( vs.size() - lastPos );
     if ( !remainder.isEmpty() ) {
       throw Grantlee::Exception( TagSyntaxError,
-          QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder ).arg( varString ) );
+          QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
     }
   } catch ( ... ) {
     delete d_ptr;

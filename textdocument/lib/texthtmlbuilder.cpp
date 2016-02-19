@@ -136,7 +136,7 @@ void TextHTMLBuilder::beginAnchor( const QString &href, const QString &name )
   Q_D( TextHTMLBuilder );
   if ( !href.isEmpty() ) {
     if ( !name.isEmpty() ) {
-      d->m_text.append( QString::fromLatin1( "<a href=\"%1\" name=\"%2\">" ).arg( href ).arg( name ) );
+      d->m_text.append( QString::fromLatin1( "<a href=\"%1\" name=\"%2\">" ).arg( href, name ) );
     } else {
       d->m_text.append( QString::fromLatin1( "<a href=\"%1\">" ).arg( href ) );
     }

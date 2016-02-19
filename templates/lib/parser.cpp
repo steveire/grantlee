@@ -250,7 +250,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
   }
 
   if ( !stopAt.isEmpty() ) {
-    const QString message = QString::fromLatin1( "Unclosed tag in template %1. Expected one of: (%2)" ).arg( q->parent()->objectName() ).arg( stopAt.join( QChar::fromLatin1( ' ' ) ) );
+    const QString message = QString::fromLatin1( "Unclosed tag in template %1. Expected one of: (%2)" ).arg( q->parent()->objectName(), stopAt.join( QChar::fromLatin1( ' ' ) ) );
     throw Grantlee::Exception( UnclosedBlockTagError, message );
   }
 
@@ -280,7 +280,7 @@ void Parser::invalidBlockTag(const Token &token, const QString &command, const Q
 {
   if ( !stopAt.empty() ) {
     throw Grantlee::Exception( InvalidBlockTagError, QString::fromLatin1( "Invalid block tag on line %1: '%2', expected '%3'" )
-                               .arg( token.linenumber ).arg( command ).arg( stopAt.join(QLatin1String("', '")) ) );
+                               .arg( token.linenumber ).arg( command, stopAt.join(QLatin1String("', '")) ) );
   } else {
     throw Grantlee::Exception( InvalidBlockTagError,
                                QString::fromLatin1( "Invalid block tag on line %1: '%2\''. Did you forget to register or load this tag?" )
