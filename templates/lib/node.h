@@ -151,6 +151,8 @@ public:
   */
   NodeList( const NodeList &list );
 
+  NodeList& operator=( const NodeList &list );
+
   /**
     Convenience constructor
   */

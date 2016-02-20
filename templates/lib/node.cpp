@@ -135,6 +135,14 @@ NodeList::NodeList( const NodeList &list )
   m_containsNonText = list.m_containsNonText;
 }
 
+NodeList& NodeList::operator=( const NodeList &list )
+{
+  static_cast<QList<Grantlee::Node*>&>(*this) =
+      static_cast<QList<Grantlee::Node*> >(list);
+  m_containsNonText = list.m_containsNonText;
+  return *this;
+}
+
 NodeList::NodeList( const QList<Grantlee::Node *> &list )
     : QList<Grantlee::Node*>( list )
 {
