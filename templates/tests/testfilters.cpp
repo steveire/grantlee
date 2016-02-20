@@ -433,7 +433,7 @@ void TestFilters::testStringFilters_data()
   QTest::newRow( "filter-slugify02" ) << QStringLiteral( "{{ a|slugify }} {{ b|slugify }}" ) << dict << QStringLiteral( "a-b a-amp-b" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QString::fromUtf8( "Schöne Grüße" ) );
+  dict.insert( QStringLiteral( "a" ), QStringLiteral( "Schöne Grüße" ) );
 
   QTest::newRow( "filter-slugify03" ) << QStringLiteral( "{{ a|slugify }}" ) << dict << QStringLiteral( "schone-grue" ) << NoError;
 
@@ -635,7 +635,7 @@ void TestFilters::testStringFilters_data()
   QTest::newRow( "filter-safe02" ) << QStringLiteral( "{% autoescape off %}{{ a }} -- {{ a|safe }}{% endautoescape %}" ) << dict << QStringLiteral( "<b>hello</b> -- <b>hello</b>" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "&" ) << QString::fromLatin1( "<" ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "&" ) << QStringLiteral( "<" ) );
 
   QTest::newRow( "filter-safeseq01" ) << "{{ a|join:\", \" }} -- {{ a|safeseq|join:\", \" }}" << dict << QStringLiteral( "&amp;, &lt; -- &, <" ) << NoError;
   QTest::newRow( "filter-safeseq02" ) << "{% autoescape off %}{{ a|join:\", \" }} -- {{ a|safeseq|join:\", \" }}{% endautoescape %}" << dict << QStringLiteral( "&, < -- &, <" ) << NoError;
@@ -660,21 +660,21 @@ void TestFilters::testListFilters_data()
 
   Dict dict;
 
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "a&b" ) << QString::fromLatin1( "x" ) );
-  dict.insert( QStringLiteral( "b" ), QVariantList() << QVariant::fromValue( markSafe( QString::fromLatin1( "a&b" ) ) ) << QString::fromLatin1( "x" ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "a&b" ) << QStringLiteral( "x" ) );
+  dict.insert( QStringLiteral( "b" ), QVariantList() << QVariant::fromValue( markSafe( QString::fromLatin1( "a&b" ) ) ) << QStringLiteral( "x" ) );
 
   QTest::newRow( "filter-first01" ) << QStringLiteral( "{{ a|first }} {{ b|first }}" ) << dict << QStringLiteral( "a&amp;b a&b" ) << NoError;
   QTest::newRow( "filter-first02" ) << QStringLiteral( "{% autoescape off %}{{ a|first }} {{ b|first }}{% endautoescape %}" ) << dict << QStringLiteral( "a&b a&b" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "x" ) << QString::fromLatin1( "a&b" ) );
-  dict.insert( QStringLiteral( "b" ), QVariantList() << QString::fromLatin1( "x" ) << QVariant::fromValue( markSafe( QString::fromLatin1( "a&b" ) ) ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "x" ) << QStringLiteral( "a&b" ) );
+  dict.insert( QStringLiteral( "b" ), QVariantList() << QStringLiteral( "x" ) << QVariant::fromValue( markSafe( QString::fromLatin1( "a&b" ) ) ) );
 
   QTest::newRow( "filter-last01" ) << QStringLiteral( "{{ a|last }} {{ b|last }}" ) << dict << QStringLiteral( "a&amp;b a&b" ) << NoError;
   QTest::newRow( "filter-last02" ) << QStringLiteral( "{% autoescape off %}{{ a|last }} {{ b|last }}{% endautoescape %}" ) << dict << QStringLiteral( "a&b a&b" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "a&b" ) << QString::fromLatin1( "a&b" ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "a&b" ) << QStringLiteral( "a&b" ) );
   dict.insert( QStringLiteral( "b" ), QVariantList() << QVariant::fromValue( markSafe( QString::fromLatin1( "a&b" ) ) ) << QVariant::fromValue( markSafe( QString::fromLatin1( "a&b" ) ) ) );
   QTest::newRow( "filter-random01" ) << QStringLiteral( "{{ a|random }} {{ b|random }}" ) << dict << QStringLiteral( "a&amp;b a&b" ) << NoError;
   QTest::newRow( "filter-random02" ) << QStringLiteral( "{% autoescape off %}{{ a|random }} {{ b|random }}{% endautoescape %}" ) << dict << QStringLiteral( "a&b a&b" ) << NoError;
@@ -689,7 +689,7 @@ void TestFilters::testListFilters_data()
   dict.clear();
   QVariantList sublist;
   sublist << QVariant( QStringLiteral( "<y" ) );
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "x>" ) << QVariant( sublist ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "x>" ) << QVariant( sublist ) );
 
   QTest::newRow( "filter-unordered_list01" ) << QStringLiteral( "{{ a|unordered_list }}" ) << dict << "\t<li>x&gt;\n\t<ul>\n\t\t<li>&lt;y</li>\n\t</ul>\n\t</li>" << NoError;
   QTest::newRow( "filter-unordered_list02" ) << QStringLiteral( "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" ) << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
@@ -697,7 +697,7 @@ void TestFilters::testListFilters_data()
   dict.clear();
   sublist.clear();
   sublist << markSafe( QString::fromLatin1( "<y" ) );
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "x>" ) << QVariant( sublist ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "x>" ) << QVariant( sublist ) );
 
   QTest::newRow( "filter-unordered_list03" ) << QStringLiteral( "{{ a|unordered_list }}" ) << dict << "\t<li>x&gt;\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
   QTest::newRow( "filter-unordered_list04" ) << QStringLiteral( "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" ) << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
@@ -705,13 +705,13 @@ void TestFilters::testListFilters_data()
   dict.clear();
   sublist.clear();
   sublist << QVariant( QStringLiteral( "<y" ) );
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "x>" ) << QVariant( sublist ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "x>" ) << QVariant( sublist ) );
 
   QTest::newRow( "filter-unordered_list05" ) << QStringLiteral( "{% autoescape off %}{{ a|unordered_list }}{% endautoescape %}" ) << dict << "\t<li>x>\n\t<ul>\n\t\t<li><y</li>\n\t</ul>\n\t</li>" << NoError;
 
   //  length filter.
   dict.clear();
-  dict.insert( QStringLiteral( "list" ), QVariantList() << QString::fromLatin1( "4" ) << QVariant() << true << QVariantHash() );
+  dict.insert( QStringLiteral( "list" ), QVariantList() << QStringLiteral( "4" ) << QVariant() << true << QVariantHash() );
 
   QTest::newRow( "length01" ) << QStringLiteral( "{{ list|length }}" ) << dict << QStringLiteral( "4" ) << NoError;
 
@@ -745,12 +745,12 @@ void TestFilters::testListFilters_data()
   //  length_is filter.
 
   dict.clear();
-  dict.insert( QStringLiteral( "some_list" ), QVariantList() << QString::fromLatin1( "4" ) << QVariant() << true << QVariantHash() );
+  dict.insert( QStringLiteral( "some_list" ), QVariantList() << QStringLiteral( "4" ) << QVariant() << true << QVariantHash() );
 
   QTest::newRow( "length_is01" ) << "{% if some_list|length_is:\"4\" %}Four{% endif %}" << dict << QStringLiteral( "Four" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "some_list" ), QVariantList() << QString::fromLatin1( "4" ) << QVariant() << true << QVariantHash() << 17 );
+  dict.insert( QStringLiteral( "some_list" ), QVariantList() << QStringLiteral( "4" ) << QVariant() << true << QVariantHash() << 17 );
 
   QTest::newRow( "length_is02" ) << "{% if some_list|length_is:\"4\" %}Four{% else %}Not Four{% endif %}" << dict << QStringLiteral( "Not Four" ) << NoError;
 
@@ -798,7 +798,7 @@ void TestFilters::testListFilters_data()
   QTest::newRow( "length_is11" ) << "{{ none|length_is:\"1\" }}" << dict << QString() << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "alpha" ) << QString::fromLatin1( "beta & me" ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "alpha" ) << QStringLiteral( "beta & me" ) );
 
   QTest::newRow( "join01" ) << "{{ a|join:\", \" }}" << dict << QStringLiteral( "alpha, beta &amp; me" ) << NoError;
   QTest::newRow( "join02" ) << "{% autoescape off %}{{ a|join:\", \" }}{% endautoescape %}" << dict << QStringLiteral( "alpha, beta & me" ) << NoError;
@@ -810,11 +810,11 @@ void TestFilters::testListFilters_data()
   QTest::newRow( "join05" ) << "{{ a|join:var }}" << dict << QStringLiteral( "alpha &amp; beta &amp; me") << NoError;
   dict.insert( QStringLiteral( "var" ), Grantlee::markSafe( QString::fromLatin1( " & " ) ) );
   QTest::newRow( "join06" ) << "{{ a|join:var }}" << dict << QStringLiteral( "alpha & beta &amp; me") << NoError;
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "Alpha" ) << QString::fromLatin1( "Beta & Me" ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "Alpha" ) << QStringLiteral( "Beta & Me" ) );
   dict.insert( QStringLiteral( "var" ), QStringLiteral( " & " ) );
   QTest::newRow( "join07" ) << "{{ a|join:var|lower }}" << dict << QStringLiteral( "alpha &amp; beta &amp; me") << NoError;
 
-  dict.insert( QStringLiteral( "a" ), QVariantList() << QString::fromLatin1( "Alpha" ) << QString::fromLatin1( "Beta & Me" ) );
+  dict.insert( QStringLiteral( "a" ), QVariantList() << QStringLiteral( "Alpha" ) << QStringLiteral( "Beta & Me" ) );
   dict.insert( QStringLiteral( "var" ), Grantlee::markSafe( QString::fromLatin1( " & " ) ) );
   QTest::newRow( "join08" ) << "{{ a|join:var|lower }}" << dict << QStringLiteral( "alpha & beta &amp; me") << NoError;
 

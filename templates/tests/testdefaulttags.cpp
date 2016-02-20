@@ -701,10 +701,10 @@ void TestDefaultTags::testForTag_data()
   dict.clear();
   list.clear();
   QVariantList innerList;
-  innerList << QString::fromLatin1( "one" ) << 1;
+  innerList << QStringLiteral( "one" ) << 1;
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "two" ) << 2;
+  innerList << QStringLiteral( "two" ) << 2;
   list.append( QVariant( innerList ) );
   dict.insert( QStringLiteral( "items" ), list );
   QTest::newRow( "for-tag-unpack01" ) << QStringLiteral( "{% for key,value in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict << QStringLiteral( "one:1/two:2/" ) << NoError;
@@ -724,10 +724,10 @@ void TestDefaultTags::testForTag_data()
   dict.clear();
   list.clear();
   innerList.clear();
-  innerList << QString::fromLatin1( "one" ) << 1 << QString::fromLatin1( "carrot" );
+  innerList << QStringLiteral( "one" ) << 1 << QStringLiteral( "carrot" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "two" ) << 2 << QString::fromLatin1( "orange" );
+  innerList << QStringLiteral( "two" ) << 2 << QStringLiteral( "orange" );
   list.append( QVariant( innerList ) );
   dict.insert( QStringLiteral( "items" ), list );
 
@@ -736,10 +736,10 @@ void TestDefaultTags::testForTag_data()
   dict.clear();
   list.clear();
   innerList.clear();
-  innerList << QString::fromLatin1( "one" ) << 1;
+  innerList << QStringLiteral( "one" ) << 1;
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "two" ) << 2;
+  innerList << QStringLiteral( "two" ) << 2;
   list.append( QVariant( innerList ) );
   dict.insert( QStringLiteral( "items" ), list );
 
@@ -748,10 +748,10 @@ void TestDefaultTags::testForTag_data()
   dict.clear();
   list.clear();
   innerList.clear();
-  innerList << QString::fromLatin1( "one" ) << 1 << QString::fromLatin1( "carrot" );
+  innerList << QStringLiteral( "one" ) << 1 << QStringLiteral( "carrot" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "two" ) << 2;
+  innerList << QStringLiteral( "two" ) << 2;
   list.append( QVariant( innerList ) );
   dict.insert( QStringLiteral( "items" ), list );
 
@@ -760,10 +760,10 @@ void TestDefaultTags::testForTag_data()
   dict.clear();
   list.clear();
   innerList.clear();
-  innerList << QString::fromLatin1( "one" ) << 1 << QString::fromLatin1( "carrot" );
+  innerList << QStringLiteral( "one" ) << 1 << QStringLiteral( "carrot" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "two" ) << 2 << QString::fromLatin1( "cheese" );
+  innerList << QStringLiteral( "two" ) << 2 << QStringLiteral( "cheese" );
   list.append( QVariant( innerList ) );
 
   dict.insert( QStringLiteral( "items" ), list );
@@ -1180,7 +1180,7 @@ void TestDefaultTags::testSpacelessTag_data()
   QTest::newRow( "spaceless02" ) << "{% spaceless %} <b> \n <i> text </i> \n </b> {% endspaceless %}" << dict << QStringLiteral( "<b><i> text </i></b>" ) << NoError;
   QTest::newRow( "spaceless03" ) << QStringLiteral( "{% spaceless %}<b><i>text</i></b>{% endspaceless %}" ) << dict << QStringLiteral( "<b><i>text</i></b>" ) << NoError;
 
-  dict.insert(QStringLiteral( "text" ), QString::fromLatin1( "This & that" ) );
+  dict.insert(QStringLiteral( "text" ), QStringLiteral( "This & that" ) );
   QTest::newRow( "spaceless04" ) << QStringLiteral( "{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}" ) << dict << QStringLiteral( "<b><i>This &amp; that</i></b>" ) << NoError;
   QTest::newRow( "spaceless05" ) << QStringLiteral( "{% autoescape off %}{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}{% endautoescape %}" ) << dict << QStringLiteral( "<b><i>This & that</i></b>" ) << NoError;
   QTest::newRow( "spaceless06" ) << QStringLiteral( "{% spaceless %}<b>  <i>{{ text|safe }}</i>  </b>{% endspaceless %}" ) << dict << QStringLiteral( "<b><i>This & that</i></b>" ) << NoError;
@@ -1364,34 +1364,34 @@ void TestDefaultTags::testIfChangedTag_data()
   QVariantList list;
   QVariantList innerList;
   QVariantList tuple;
-  tuple << 1 << QString::fromLatin1( "a" );
+  tuple << 1 << QStringLiteral( "a" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
-  tuple << 1 << QString::fromLatin1( "a" );
+  tuple << 1 << QStringLiteral( "a" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
-  tuple << 0 << QString::fromLatin1( "b" );
+  tuple << 0 << QStringLiteral( "b" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
-  tuple << 1 << QString::fromLatin1( "c" );
+  tuple << 1 << QStringLiteral( "c" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
   list.append( QVariant( innerList ) );
   innerList.clear();
 
-  tuple << 0 << QString::fromLatin1( "a" );
+  tuple << 0 << QStringLiteral( "a" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
-  tuple << 1 << QString::fromLatin1( "c" );
+  tuple << 1 << QStringLiteral( "c" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
-  tuple << 1 << QString::fromLatin1( "d" );
+  tuple << 1 << QStringLiteral( "d" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
-  tuple << 1 << QString::fromLatin1( "d" );
+  tuple << 1 << QStringLiteral( "d" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
-  tuple << 0 << QString::fromLatin1( "e" );
+  tuple << 0 << QStringLiteral( "e" );
   innerList.append( QVariant( tuple ) );
   tuple.clear();
   list.append( QVariant( innerList ) );

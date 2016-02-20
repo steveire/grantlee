@@ -507,7 +507,7 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.clear();
   hash.clear();
   QVariantList list;
-  list << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) << QString::fromLatin1( "d" );
+  list << QStringLiteral( "a" ) << QStringLiteral( "b" ) << QStringLiteral( "c" ) << QStringLiteral( "d" );
   hash.insert( QStringLiteral( "2" ), list );
   dict.insert( QStringLiteral( "1" ), hash );
   QTest::newRow( "basic-syntax29" ) << QStringLiteral( "{{ 1.2.3 }}" ) << dict << QStringLiteral( "d" ) << NoError;
@@ -515,13 +515,13 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.clear();
   list.clear();
   QVariantList innerList;
-  innerList << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" );
+  innerList << QStringLiteral( "x" ) << QStringLiteral( "x" ) << QStringLiteral( "x" ) << QStringLiteral( "x" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" );
+  innerList << QStringLiteral( "y" ) << QStringLiteral( "y" ) << QStringLiteral( "y" ) << QStringLiteral( "y" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) << QString::fromLatin1( "d" );
+  innerList << QStringLiteral( "a" ) << QStringLiteral( "b" ) << QStringLiteral( "c" ) << QStringLiteral( "d" );
   list.append( QVariant( innerList ) );
   dict.insert( QStringLiteral( "1" ), list );
 
@@ -530,13 +530,13 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.clear();
   list.clear();
   innerList.clear();
-  innerList << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" ) << QString::fromLatin1( "x" );
+  innerList << QStringLiteral( "x" ) << QStringLiteral( "x" ) << QStringLiteral( "x" ) << QStringLiteral( "x" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" ) << QString::fromLatin1( "y" );
+  innerList << QStringLiteral( "y" ) << QStringLiteral( "y" ) << QStringLiteral( "y" ) << QStringLiteral( "y" );
   list.append( QVariant( innerList ) );
   innerList.clear();
-  innerList << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) << QString::fromLatin1( "d" );
+  innerList << QStringLiteral( "a" ) << QStringLiteral( "b" ) << QStringLiteral( "c" ) << QStringLiteral( "d" );
   list.append( QVariant( innerList ) );
   dict.insert( QStringLiteral( "1" ), list );
 
@@ -696,7 +696,7 @@ void TestBuiltinSyntax::testListIndex_data()
   Dict dict;
 
   QVariantList l;
-  l << QString::fromLatin1( "first item" ) << QString::fromLatin1( "second item" );
+  l << QStringLiteral( "first item" ) << QStringLiteral( "second item" );
 
   dict.insert( QStringLiteral( "var" ), l );
 
@@ -806,7 +806,7 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   QTest::newRow( "filter-syntax16" ) << "{{ var|default_if_none:\"foo\\now\" }}" << dict << "foo\\now" << NoError;
   // Empty strings can be passed as arguments to filters
   dict.clear();
-  dict.insert( QStringLiteral( "var" ), QVariantList() << QString::fromLatin1( "a" ) << QString::fromLatin1( "b" ) << QString::fromLatin1( "c" ) );
+  dict.insert( QStringLiteral( "var" ), QVariantList() << QStringLiteral( "a" ) << QStringLiteral( "b" ) << QStringLiteral( "c" ) );
   QTest::newRow( "filter-syntax17" ) << "{{ var|join:\"\" }}" << dict << QStringLiteral( "abc" ) << NoError;
 
   // Make sure that any unicode strings are converted to bytestrings
@@ -887,7 +887,7 @@ void TestBuiltinSyntax::testEscaping_data()
   // Arguments to filters are 'safe' and manipulate their input unescaped.
   QTest::newRow( "escape04" ) << "{{ var|cut:\"&\" }}" << dict << QStringLiteral( "this  that" ) << NoError;
 
-  dict.insert( QStringLiteral( "varList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
+  dict.insert( QStringLiteral( "varList" ), QVariantList() << QStringLiteral( "Tom" ) << QStringLiteral( "Dick" ) << QStringLiteral( "Harry" ) );
   QTest::newRow( "escape05" ) << "{{ varList|join:\" & \" }}" << dict << QStringLiteral( "Tom & Dick & Harry" ) << NoError;
 
   // Unlike variable args.
@@ -900,7 +900,7 @@ void TestBuiltinSyntax::testEscaping_data()
   // Iterating outputs safe characters.
   dict.clear();
   QVariantList list;
-  list << QString::fromLatin1( "K" ) << QString::fromLatin1( "&" ) << QString::fromLatin1( "R" );
+  list << QStringLiteral( "K" ) << QStringLiteral( "&" ) << QStringLiteral( "R" );
   dict.insert( QStringLiteral( "list" ), list );
   QTest::newRow( "escape08" ) << QStringLiteral( "{% for letter in list %}{{ letter }},{% endfor %}" ) << dict << QStringLiteral( "K,&amp;,R," ) << NoError;
 

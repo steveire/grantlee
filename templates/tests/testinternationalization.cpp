@@ -233,7 +233,7 @@ void TestInternationalization::testStrings_data()
                              << QStringLiteral("1 fichier copié dans destinationFolder")
                              << QString()
                              << QStringLiteral("%n files copied to %1")
-                             << (QVariantList() << 1 << QString::fromLatin1("destinationFolder") );
+                             << (QVariantList() << 1 << QStringLiteral("destinationFolder") );
 
   QTest::newRow("string-09") << "%n file(s) copied to %1"
                              << "2 files copied to destinationFolder"
@@ -241,7 +241,7 @@ void TestInternationalization::testStrings_data()
                              << QStringLiteral("2 fichiers copiés dans destinationFolder")
                              << QString()
                              << QStringLiteral("%n files copied to %1")
-                             << (QVariantList() << 2 << QString::fromLatin1("destinationFolder") );
+                             << (QVariantList() << 2 << QStringLiteral("destinationFolder") );
 
   QTest::newRow("string-10") << "%n to %1"
                              << "1 copied to destinationFolder"
@@ -249,7 +249,7 @@ void TestInternationalization::testStrings_data()
                              << QStringLiteral("1 fichier est copié sur destinationFolder")
                              << QStringLiteral("Files are being copied")
                              << QStringLiteral("%n copied to %1")
-                             << (QVariantList() << 1 << QString::fromLatin1("destinationFolder"));
+                             << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
 
   QTest::newRow("string-11") << "%n to %1"
                              << "1 copied to destinationFolder"
@@ -257,7 +257,7 @@ void TestInternationalization::testStrings_data()
                              << QStringLiteral("1 fichier a été copié à destinationFolder")
                              << QStringLiteral("Files have already been copied")
                              << QStringLiteral("%n copied to %1")
-                             << (QVariantList() << 1 << QString::fromLatin1("destinationFolder"));
+                             << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
 
   QTest::newRow("string-12") << "%n to %1"
                              << "2 copied to destinationFolder"
@@ -265,7 +265,7 @@ void TestInternationalization::testStrings_data()
                              << QStringLiteral("2 fichiers sont copiés à destinationFolder")
                              << QStringLiteral("Files are being copied")
                              << QStringLiteral("%n copied to %1")
-                             << (QVariantList() << 2 << QString::fromLatin1("destinationFolder"));
+                             << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
 
   QTest::newRow("string-13") << "%n to %1"
                              << "2 copied to destinationFolder"
@@ -273,7 +273,7 @@ void TestInternationalization::testStrings_data()
                              << QStringLiteral("2 fichiers ont été copiés sur destinationFolder")
                              << QStringLiteral("Files have already been copied")
                              << QStringLiteral("%n copied to %1")
-                             << (QVariantList() << 2 << QString::fromLatin1("destinationFolder"));
+                             << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
 
   QTest::newRow("string-14") << "from %1 to %2"
                              << "from sourceFolder to destinationFolder"
@@ -281,7 +281,7 @@ void TestInternationalization::testStrings_data()
                              << QStringLiteral("à partir de sourceFolder destinationFolder")
                              << QStringLiteral("Files are being copied from %1 to %2")
                              << QString()
-                             << (QVariantList() << QString::fromLatin1("sourceFolder") << QString::fromLatin1("destinationFolder"));
+                             << (QVariantList() << QStringLiteral("sourceFolder") << QStringLiteral("destinationFolder"));
 
   QTest::newRow("string-15") << "%1 messages at %2, fraction of total: %3. Rating : %4"
                              << "1000 messages at 2005-05-07, fraction of total: 0.6. Rating : 4.8"

@@ -132,7 +132,7 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
   Dict dict;
 
   dict.insert( QStringLiteral( "boo" ), QStringLiteral( "Far" ) );
-  dict.insert( QStringLiteral( "booList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
+  dict.insert( QStringLiteral( "booList" ), QVariantList() << QStringLiteral( "Tom" ) << QStringLiteral( "Dick" ) << QStringLiteral( "Harry" ) );
 
   QTest::newRow( "scriptable-tags01" ) << "{% load scripteddefaults %}{% if2 \"something\\\" stupid\" %}{{ boo }}{% endif2 %}" << dict << QStringLiteral( "Far" ) << NoError;
 
