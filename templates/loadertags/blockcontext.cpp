@@ -49,7 +49,7 @@ BlockNode* BlockContext::pop( const QString& name )
   return list.takeLast();
 }
 
-void BlockContext::push( const QString& name, BlockNode const* blockNode ) const
+void BlockContext::push( const QString& name, BlockNode const* blockNode )
 {
   m_blocks[ name ].append( const_cast<BlockNode*>(blockNode) );
 }
