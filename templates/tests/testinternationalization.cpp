@@ -540,7 +540,7 @@ void TestInternationalization::testSafeContent_data()
     << QStringLiteral("-Aujourd'hui-")
     << dict;
 
-  dict.insert( QStringLiteral( "today_and_tomorrow_text" ), markSafe( QString::fromLatin1( "Today &amp; tomorrow" ) ) );
+  dict.insert( QStringLiteral( "today_and_tomorrow_text" ), markSafe( QStringLiteral( "Today &amp; tomorrow" ) ) );
 
   QTest::newRow("safe-09")
     << QStringLiteral("-{{ _(today_and_tomorrow_text) }}-")
