@@ -317,8 +317,8 @@ void QtLocalizer::popLocale()
 void QtLocalizer::loadCatalog( const QString &path, const QString& catalog )
 {
   Q_D( QtLocalizer );
-  QHash< QString, Locale* >::iterator it = d->m_availableLocales.begin();
-  const QHash< QString, Locale* >::iterator end = d->m_availableLocales.end();
+  QHash< QString, Locale* >::const_iterator it = d->m_availableLocales.constBegin();
+  const QHash< QString, Locale* >::const_iterator end = d->m_availableLocales.constEnd();
   for ( ; it != end; ++it ) {
     QTranslator *translator = new QTranslator();
     const bool loaded = translator->load( it.key() + QLatin1Char( '/' ) + catalog, path );
