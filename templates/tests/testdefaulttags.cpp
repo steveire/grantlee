@@ -52,7 +52,7 @@ public:
 
   /* reimp */ QPair<QString, QString> getMediaUri( const QString &fileName ) const {
     if ( m_existingMedia.contains( fileName ) )
-      return qMakePair( QString::fromLatin1( "/path/to/" ), fileName );
+      return qMakePair( QStringLiteral( "/path/to/" ), fileName );
     return QPair<QString, QString>();
   }
 
@@ -1598,7 +1598,7 @@ void TestDefaultTags::testUrlTypes_data()
 
   Dict dict;
   QTest::newRow( "url-types01" ) << "{% media_finder \"existing_image.png\" %}" << dict
-                                 << qMakePair( QString::fromLatin1( "file:///path/to/" ), QString::fromLatin1( "existing_image.png" ) );
+                                 << qMakePair( QStringLiteral( "file:///path/to/" ), QStringLiteral( "existing_image.png" ) );
 
   QTest::newRow( "url-types02" ) << "{% media_finder \"does_not_exist.png\" %}" << dict
                                  << qMakePair( QString(), QString() );
@@ -1607,7 +1607,7 @@ void TestDefaultTags::testUrlTypes_data()
   dict.insert( QStringLiteral( "nonexisting_img" ), QStringLiteral( "does_not_exist.png" ) );
 
   QTest::newRow( "url-types03" ) << QString::fromLatin1( "{% media_finder existing_img %}" ) << dict
-                                 << qMakePair( QString::fromLatin1( "file:///path/to/" ), QString::fromLatin1( "existing_image.png" ) );
+                                 << qMakePair( QStringLiteral( "file:///path/to/" ), QStringLiteral( "existing_image.png" ) );
 
 
   QTest::newRow( "url-types04" ) << QString::fromLatin1( "{% media_finder nonexisting_img %}" ) << dict
