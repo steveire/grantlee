@@ -311,26 +311,26 @@ void TestBuiltinSyntax::testRenderAfterError()
   engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
   QSharedPointer<InMemoryTemplateLoader> loader(new InMemoryTemplateLoader);
-  loader->setTemplate(QLatin1String("template1"),
-                      QLatin1String("This template has an error {{ va>r }}"));
-  loader->setTemplate(QLatin1String("template2"),
-                      QLatin1String("Ok"));
-  loader->setTemplate(QLatin1String("main"),
-                      QLatin1String("{% include template_var %}"));
+  loader->setTemplate(QStringLiteral("template1"),
+                      QStringLiteral("This template has an error {{ va>r }}"));
+  loader->setTemplate(QStringLiteral("template2"),
+                      QStringLiteral("Ok"));
+  loader->setTemplate(QStringLiteral("main"),
+                      QStringLiteral("{% include template_var %}"));
 
   engine.addTemplateLoader( loader );
 
   Context c;
   Template t;
 
-  t = engine.loadByName(QLatin1String("main"));
+  t = engine.loadByName(QStringLiteral("main"));
 
-  c.insert(QLatin1String("template_var"), QLatin1String("template1"));
+  c.insert(QStringLiteral("template_var"), QLatin1String("template1"));
   QString output = t->render(&c);
   QCOMPARE(output, QString());
   QCOMPARE(t->error(), TagSyntaxError);
 
-  c.insert(QLatin1String("template_var"), QLatin1String("template2"));
+  c.insert(QStringLiteral("template_var"), QLatin1String("template2"));
   QCOMPARE(t->render(&c), QLatin1String("Ok"));
   QCOMPARE(t->error(), NoError);
 }
