@@ -27,7 +27,7 @@
 #include "template.h"
 #include "util.h"
 
-const char * __loadedBlocks = "__loadedBlocks";
+static const char * const __loadedBlocks = "__loadedBlocks";
 
 // Terrible hack warning.
 #define BLOCK_CONTEXT_KEY 0
