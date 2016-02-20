@@ -142,29 +142,29 @@ void TestLoaderTags::testIncludeTag_data()
   loader->setTemplate( QStringLiteral( "basic-syntax01" ), QStringLiteral( "Something cool" ) );
   loader->setTemplate( QStringLiteral( "basic-syntax02" ), QStringLiteral( "{{ headline }}" ) );
 
-  QTest::newRow( "include01" ) << "{% include \"basic-syntax01\" %}" << dict << QString::fromLatin1( "Something cool" ) << NoError;
+  QTest::newRow( "include01" ) << "{% include \"basic-syntax01\" %}" << dict << QStringLiteral( "Something cool" ) << NoError;
 
   dict.insert( QStringLiteral( "headline" ), QStringLiteral( "Included" ) );
 
-  QTest::newRow( "include02" ) << "{% include \"basic-syntax02\" %}" << dict << QString::fromLatin1( "Included" ) << NoError;
+  QTest::newRow( "include02" ) << "{% include \"basic-syntax02\" %}" << dict << QStringLiteral( "Included" ) << NoError;
 
   dict.insert( QStringLiteral( "templateName" ), QStringLiteral( "basic-syntax02" ) );
 
-  QTest::newRow( "include03" ) << QString::fromLatin1( "{% include templateName %}" ) << dict << QString::fromLatin1( "Included" ) << NoError;
+  QTest::newRow( "include03" ) << QStringLiteral( "{% include templateName %}" ) << dict << QStringLiteral( "Included" ) << NoError;
 
   dict.clear();
-  QTest::newRow( "include04" ) << "a{% include \"nonexistent\" %}b" << dict << QString::fromLatin1( "ab" ) << TagSyntaxError;
+  QTest::newRow( "include04" ) << "a{% include \"nonexistent\" %}b" << dict << QStringLiteral( "ab" ) << TagSyntaxError;
 
   QString incl05 = QStringLiteral( "template with a space" );
   loader->setTemplate( QStringLiteral( "include 05" ), incl05 );
 
-  QTest::newRow( "include 05" ) << incl05 << dict << QString::fromLatin1( "template with a space" ) << NoError;
+  QTest::newRow( "include 05" ) << incl05 << dict << QStringLiteral( "template with a space" ) << NoError;
 
-  QTest::newRow( "include06" ) << "{% include \"include 05\" %}" << dict << QString::fromLatin1( "template with a space" ) << NoError;
+  QTest::newRow( "include06" ) << "{% include \"include 05\" %}" << dict << QStringLiteral( "template with a space" ) << NoError;
 
   dict.clear();
   dict.insert( QStringLiteral( "list" ), QVariantList() << QVariant() << QVariant() );
-  QTest::newRow( "include07" ) << "{% for i in list %}{% include \"include 05\" %}{% endfor %}" << dict << QString::fromLatin1( "template with a spacetemplate with a space" ) << NoError;
+  QTest::newRow( "include07" ) << "{% for i in list %}{% include \"include 05\" %}{% endfor %}" << dict << QStringLiteral( "template with a spacetemplate with a space" ) << NoError;
 
 }
 
@@ -178,15 +178,15 @@ void TestLoaderTags::testExtendsTag_data()
 
   Dict dict;
   // Basic test
-  QTest::newRow( "namedendblocks01" ) << QString::fromLatin1( "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock first %}3" ) << dict << QString::fromLatin1( "1_2_3" ) << NoError;
+  QTest::newRow( "namedendblocks01" ) << QStringLiteral( "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock first %}3" ) << dict << QStringLiteral( "1_2_3" ) << NoError;
   // Unbalanced blocks
-  QTest::newRow( "namedendblocks02" ) << QString::fromLatin1( "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" ) << dict << QString() << InvalidBlockTagError;
-  QTest::newRow( "namedendblocks03" ) << QString::fromLatin1( "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" ) << dict << QString() << InvalidBlockTagError;
-  QTest::newRow( "namedendblocks04" ) << QString::fromLatin1( "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" ) << dict << QString() << InvalidBlockTagError;
-  QTest::newRow( "namedendblocks05" ) << QString::fromLatin1( "1{% block first %}_{% block second %}2{% endblock first %}" ) << dict << QString() << InvalidBlockTagError;
+  QTest::newRow( "namedendblocks02" ) << QStringLiteral( "1{% block first %}_{% block second %}2{% endblock first %}_{% endblock second %}3" ) << dict << QString() << InvalidBlockTagError;
+  QTest::newRow( "namedendblocks03" ) << QStringLiteral( "1{% block first %}_{% block second %}2{% endblock %}_{% endblock second %}3" ) << dict << QString() << InvalidBlockTagError;
+  QTest::newRow( "namedendblocks04" ) << QStringLiteral( "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock third %}3" ) << dict << QString() << InvalidBlockTagError;
+  QTest::newRow( "namedendblocks05" ) << QStringLiteral( "1{% block first %}_{% block second %}2{% endblock first %}" ) << dict << QString() << InvalidBlockTagError;
   // Mixed named and unnamed endblocks
-  QTest::newRow( "namedendblocks06" ) << QString::fromLatin1( "1{% block first %}_{% block second %}2{% endblock %}_{% endblock first %}3" ) << dict << QString::fromLatin1( "1_2_3" ) << NoError;
-  QTest::newRow( "namedendblocks07" ) << QString::fromLatin1( "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock %}3" ) << dict << QString::fromLatin1( "1_2_3" ) << NoError;
+  QTest::newRow( "namedendblocks06" ) << QStringLiteral( "1{% block first %}_{% block second %}2{% endblock %}_{% endblock first %}3" ) << dict << QStringLiteral( "1_2_3" ) << NoError;
+  QTest::newRow( "namedendblocks07" ) << QStringLiteral( "1{% block first %}_{% block second %}2{% endblock second %}_{% endblock %}3" ) << dict << QStringLiteral( "1_2_3" ) << NoError;
 
 
   //## INHERITANCE ###########################################################
@@ -195,62 +195,62 @@ void TestLoaderTags::testExtendsTag_data()
   QString inh1 = QStringLiteral( "1{% block first %}&{% endblock %}3{% block second %}_{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance01" ), inh1 );
 
-  QTest::newRow( "inheritance01" ) << inh1 << dict << QString::fromLatin1( "1&3_" ) << NoError;
+  QTest::newRow( "inheritance01" ) << inh1 << dict << QStringLiteral( "1&3_" ) << NoError;
 
   QString inh2 = QStringLiteral( "{% extends \"inheritance01\" %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance02" ), inh2 );
 
   // Standard two-level inheritance
-  QTest::newRow( "inheritance02" ) << inh2 << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance02" ) << inh2 << dict << QStringLiteral( "1234" ) << NoError;
   // Three-level with no redefinitions on third level
-  QTest::newRow( "inheritance03" ) << QString::fromLatin1( "{% extends 'inheritance02' %}" ) << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance03" ) << QStringLiteral( "{% extends 'inheritance02' %}" ) << dict << QStringLiteral( "1234" ) << NoError;
   // Two-level with no redefinitions on second level
 
   QString inh4 = QStringLiteral( "{% extends \"inheritance01\" %}" );
   loader->setTemplate( QStringLiteral( "inheritance04" ), inh4 );
 
-  QTest::newRow( "inheritance04" ) << inh4 << dict << QString::fromLatin1( "1&3_" ) << NoError;
+  QTest::newRow( "inheritance04" ) << inh4 << dict << QStringLiteral( "1&3_" ) << NoError;
   // Two-level with double quotes instead of single quotes
-  QTest::newRow( "inheritance05" ) << "{% extends \"inheritance02\" %}" << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance05" ) << "{% extends \"inheritance02\" %}" << dict << QStringLiteral( "1234" ) << NoError;
 
   dict.insert( QStringLiteral( "foo" ), QStringLiteral( "inheritance02" ) );
   // Three-level with variable parent-template name
-  QTest::newRow( "inheritance06" ) << QString::fromLatin1( "{% extends foo %}" ) << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance06" ) << QStringLiteral( "{% extends foo %}" ) << dict << QStringLiteral( "1234" ) << NoError;
 
   QString inh7 = QStringLiteral( "{% extends 'inheritance01' %}{% block second %}5{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance07" ), inh7 );
 
   dict.clear();
   // Two-level with one block defined, one block not defined
-  QTest::newRow( "inheritance07" ) << inh7 << dict << QString::fromLatin1( "1&35" ) << NoError;
+  QTest::newRow( "inheritance07" ) << inh7 << dict << QStringLiteral( "1&35" ) << NoError;
   // Three-level with one block defined on this level, two blocks defined next level
-  QTest::newRow( "inheritance08" ) << QString::fromLatin1( "{% extends 'inheritance02' %}{% block second %}5{% endblock %}" ) << dict << QString::fromLatin1( "1235" ) << NoError;
+  QTest::newRow( "inheritance08" ) << QStringLiteral( "{% extends 'inheritance02' %}{% block second %}5{% endblock %}" ) << dict << QStringLiteral( "1235" ) << NoError;
 
   // Three-level with second and third levels blank
-  QTest::newRow( "inheritance09" ) << QString::fromLatin1( "{% extends 'inheritance04' %}" ) << dict << QString::fromLatin1( "1&3_" ) << NoError;
+  QTest::newRow( "inheritance09" ) << QStringLiteral( "{% extends 'inheritance04' %}" ) << dict << QStringLiteral( "1&3_" ) << NoError;
 
   dict.clear();
 
   // Three-level with space NOT in a block -- should be ignored
-  QTest::newRow( "inheritance10" ) << QString::fromLatin1( "{% extends 'inheritance04' %}      " ) << dict << QString::fromLatin1( "1&3_" ) << NoError;
+  QTest::newRow( "inheritance10" ) << QStringLiteral( "{% extends 'inheritance04' %}      " ) << dict << QStringLiteral( "1&3_" ) << NoError;
   // Three-level with both blocks defined on this level, but none on second level
-  QTest::newRow( "inheritance11" ) << QString::fromLatin1( "{% extends 'inheritance04' %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" ) << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance11" ) << QStringLiteral( "{% extends 'inheritance04' %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" ) << dict << QStringLiteral( "1234" ) << NoError;
   // Three-level with this level providing one and second level providing the other
-  QTest::newRow( "inheritance12" ) << QString::fromLatin1( "{% extends 'inheritance07' %}{% block first %}2{% endblock %}" ) << dict << QString::fromLatin1( "1235" ) << NoError;
+  QTest::newRow( "inheritance12" ) << QStringLiteral( "{% extends 'inheritance07' %}{% block first %}2{% endblock %}" ) << dict << QStringLiteral( "1235" ) << NoError;
   // Three-level with this level overriding second level
-  QTest::newRow( "inheritance13" ) << QString::fromLatin1( "{% extends 'inheritance02' %}{% block first %}a{% endblock %}{% block second %}b{% endblock %}" ) << dict << QString::fromLatin1( "1a3b" ) << NoError;
+  QTest::newRow( "inheritance13" ) << QStringLiteral( "{% extends 'inheritance02' %}{% block first %}a{% endblock %}{% block second %}b{% endblock %}" ) << dict << QStringLiteral( "1a3b" ) << NoError;
   // A block defined only in a child template shouldn't be displayed
-  QTest::newRow( "inheritance14" ) << QString::fromLatin1( "{% extends 'inheritance01' %}{% block newblock %}NO DISPLAY{% endblock %}" ) << dict << QString::fromLatin1( "1&3_" ) << NoError;
+  QTest::newRow( "inheritance14" ) << QStringLiteral( "{% extends 'inheritance01' %}{% block newblock %}NO DISPLAY{% endblock %}" ) << dict << QStringLiteral( "1&3_" ) << NoError;
 
 
   QString inh15 = QStringLiteral( "{% extends 'inheritance01' %}{% block first %}2{% block inner %}inner{% endblock %}{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance15" ), inh15 );
 
   // A block within another block
-  QTest::newRow( "inheritance15" ) << inh15 << dict << QString::fromLatin1( "12inner3_" ) << NoError;
+  QTest::newRow( "inheritance15" ) << inh15 << dict << QStringLiteral( "12inner3_" ) << NoError;
   // A block within another block (level 2)
 
-  QTest::newRow( "inheritance16" ) << QString::fromLatin1( "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" ) << dict << QString::fromLatin1( "12out3_" ) << NoError;
+  QTest::newRow( "inheritance16" ) << QStringLiteral( "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}" ) << dict << QStringLiteral( "12out3_" ) << NoError;
 
 #ifdef HAVE_QTSCRIPT_LIB
   // {% load %} tag (parent -- setup for exception04)
@@ -258,33 +258,33 @@ void TestLoaderTags::testExtendsTag_data()
   loader->setTemplate( QStringLiteral( "inheritance17" ), inh17 );
 
   dict.clear();
-  QTest::newRow( "inheritance17" ) << inh17 << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance17" ) << inh17 << dict << QStringLiteral( "1234" ) << NoError;
 
   // {% load %} tag (standard usage, without inheritance)
-  QTest::newRow( "inheritance18" ) << QString::fromLatin1( "{% load testtags %}{% echo this that theother %}5678" ) << dict << QString::fromLatin1( "this that theother5678" ) << NoError;
+  QTest::newRow( "inheritance18" ) << QStringLiteral( "{% load testtags %}{% echo this that theother %}5678" ) << dict << QStringLiteral( "this that theother5678" ) << NoError;
 
   // {% load %} tag (within a child template)
-  QTest::newRow( "inheritance19" ) << QString::fromLatin1( "{% extends 'inheritance01' %}{% block first %}{% load testtags %}{% echo 400 %}5678{% endblock %}" ) << dict << QString::fromLatin1( "140056783_" ) << NoError;
+  QTest::newRow( "inheritance19" ) << QStringLiteral( "{% extends 'inheritance01' %}{% block first %}{% load testtags %}{% echo 400 %}5678{% endblock %}" ) << dict << QStringLiteral( "140056783_" ) << NoError;
 #endif
 
   QString inh20 = QStringLiteral( "{% extends 'inheritance01' %}{% block first %}{{ block.super }}a{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance20" ), inh20 );
 
   // Two-level inheritance with {{ block.super }}
-  QTest::newRow( "inheritance20" ) << inh20 << dict << QString::fromLatin1( "1&a3_" ) << NoError;
+  QTest::newRow( "inheritance20" ) << inh20 << dict << QStringLiteral( "1&a3_" ) << NoError;
   // Three-level inheritance with {{ block.super }} from parent
-  QTest::newRow( "inheritance21" ) << QString::fromLatin1( "{% extends 'inheritance02' %}{% block first %}{{ block.super }}a{% endblock %}" ) << dict << QString::fromLatin1( "12a34" ) << NoError;
+  QTest::newRow( "inheritance21" ) << QStringLiteral( "{% extends 'inheritance02' %}{% block first %}{{ block.super }}a{% endblock %}" ) << dict << QStringLiteral( "12a34" ) << NoError;
   // Three-level inheritance with {{ block.super }} from grandparent
-  QTest::newRow( "inheritance22" ) << QString::fromLatin1( "{% extends 'inheritance04' %}{% block first %}{{ block.super }}a{% endblock %}" ) << dict << QString::fromLatin1( "1&a3_" ) << NoError;
+  QTest::newRow( "inheritance22" ) << QStringLiteral( "{% extends 'inheritance04' %}{% block first %}{{ block.super }}a{% endblock %}" ) << dict << QStringLiteral( "1&a3_" ) << NoError;
   // Three-level inheritance with {{ block.super }} from parent and grandparent
-  QTest::newRow( "inheritance23" ) << QString::fromLatin1( "{% extends 'inheritance20' %}{% block first %}{{ block.super }}b{% endblock %}" ) << dict << QString::fromLatin1( "1&ab3_" ) << NoError;
+  QTest::newRow( "inheritance23" ) << QStringLiteral( "{% extends 'inheritance20' %}{% block first %}{{ block.super }}b{% endblock %}" ) << dict << QStringLiteral( "1&ab3_" ) << NoError;
 
   // Inheritance from local context without use of template loader
 
   Template t = m_engine->newTemplate( QStringLiteral( "1{% block first %}_{% endblock %}3{% block second %}_{% endblock %}" ), QStringLiteral( "context_template" ) );
   dict.insert( QStringLiteral( "context_template" ), QVariant::fromValue( t ) );
 
-  QTest::newRow( "inheritance24" ) << QString::fromLatin1( "{% extends context_template %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" ) << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance24" ) << QStringLiteral( "{% extends context_template %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" ) << dict << QStringLiteral( "1234" ) << NoError;
 
   dict.clear();
   QVariantList list;
@@ -297,7 +297,7 @@ void TestLoaderTags::testExtendsTag_data()
   dict.insert( QStringLiteral( "context_template" ), list );
 
   // Inheritance from local context with variable parent template
-  QTest::newRow( "inheritance25" ) << QString::fromLatin1( "{% extends context_template.1 %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" ) << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance25" ) << QStringLiteral( "{% extends context_template.1 %}{% block first %}2{% endblock %}{% block second %}4{% endblock %}" ) << dict << QStringLiteral( "1234" ) << NoError;
 
   dict.clear();
 
@@ -306,35 +306,35 @@ void TestLoaderTags::testExtendsTag_data()
   loader->setTemplate( QStringLiteral( "inheritance26" ), inh26 );
 
   // Inheritance from a template that doesn't have any blocks
-  QTest::newRow( "inheritance27" ) << QString::fromLatin1( "{% extends 'inheritance26' %}" ) << dict << QString::fromLatin1( "no tags" ) << NoError;
+  QTest::newRow( "inheritance27" ) << QStringLiteral( "{% extends 'inheritance26' %}" ) << dict << QStringLiteral( "no tags" ) << NoError;
 
   QString inh28 = QStringLiteral( "{% block first %}!{% endblock %}" );
   loader->setTemplate( QStringLiteral( "inheritance 28" ), inh28 );
 
-  QTest::newRow( "inheritance 28" ) << inh28 << dict << QString::fromLatin1( "!" ) << NoError;
+  QTest::newRow( "inheritance 28" ) << inh28 << dict << QStringLiteral( "!" ) << NoError;
 
   // Inheritance from a template with a space in its name should work.
-  QTest::newRow( "inheritance29" ) << QString::fromLatin1( "{% extends 'inheritance 28' %}" ) << dict << QString::fromLatin1( "!" ) << NoError;
+  QTest::newRow( "inheritance29" ) << QStringLiteral( "{% extends 'inheritance 28' %}" ) << dict << QStringLiteral( "!" ) << NoError;
 
   dict.insert( QStringLiteral( "optional" ), QStringLiteral( "True" ) );
 
   QString inh30 = QStringLiteral( "1{% if optional %}{% block opt %}2{% endblock %}{% endif %}3" );
   loader->setTemplate( QStringLiteral( "inheritance30" ), inh30 );
 
-  QTest::newRow( "inheritance30" ) << inh30 << dict << QString::fromLatin1( "123" ) << NoError;
-  QTest::newRow( "inheritance31" ) << QString::fromLatin1( "{% extends 'inheritance30' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "1two3" ) << NoError;
+  QTest::newRow( "inheritance30" ) << inh30 << dict << QStringLiteral( "123" ) << NoError;
+  QTest::newRow( "inheritance31" ) << QStringLiteral( "{% extends 'inheritance30' %}{% block opt %}two{% endblock %}" ) << dict << QStringLiteral( "1two3" ) << NoError;
   dict.clear();
-  QTest::newRow( "inheritance32" ) << QString::fromLatin1( "{% extends 'inheritance30' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "13" ) << NoError;
+  QTest::newRow( "inheritance32" ) << QStringLiteral( "{% extends 'inheritance30' %}{% block opt %}two{% endblock %}" ) << dict << QStringLiteral( "13" ) << NoError;
 
   dict.insert( QStringLiteral( "optional" ), 1 );
   QString inh33 = QStringLiteral( "1{% ifequal optional 1 %}{% block opt %}2{% endblock %}{% endifequal %}3" );
   loader->setTemplate( QStringLiteral( "inheritance33" ), inh33 );
 
-  QTest::newRow( "inheritance33" ) << inh33 << dict << QString::fromLatin1( "123" ) << NoError;
+  QTest::newRow( "inheritance33" ) << inh33 << dict << QStringLiteral( "123" ) << NoError;
 
-  QTest::newRow( "inheritance34" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "1two3" ) << NoError;
+  QTest::newRow( "inheritance34" ) << QStringLiteral( "{% extends 'inheritance33' %}{% block opt %}two{% endblock %}" ) << dict << QStringLiteral( "1two3" ) << NoError;
   dict.clear();
-  QTest::newRow( "inheritance35" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}two{% endblock %}" ) << dict << QString::fromLatin1( "13" ) << NoError;
+  QTest::newRow( "inheritance35" ) << QStringLiteral( "{% extends 'inheritance33' %}{% block opt %}two{% endblock %}" ) << dict << QStringLiteral( "13" ) << NoError;
 
   dict.clear();
   dict.insert( QStringLiteral( "numbers" ), QVariantList() << 1 << 2 << 3 );
@@ -342,25 +342,25 @@ void TestLoaderTags::testExtendsTag_data()
   QString inh36 = QStringLiteral( "{% for n in numbers %}_{% block opt %}{{ n }}{% endblock %}{% endfor %}_" );
   loader->setTemplate( QStringLiteral( "inheritance36" ), inh36 );
 
-  QTest::newRow( "inheritance36" ) << inh36 << dict << QString::fromLatin1( "_1_2_3_" ) << NoError;
-  QTest::newRow( "inheritance37" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}X{% endblock %}" ) << dict << QString::fromLatin1( "_X_X_X_" ) << NoError;
+  QTest::newRow( "inheritance36" ) << inh36 << dict << QStringLiteral( "_1_2_3_" ) << NoError;
+  QTest::newRow( "inheritance37" ) << QStringLiteral( "{% extends 'inheritance36' %}{% block opt %}X{% endblock %}" ) << dict << QStringLiteral( "_X_X_X_" ) << NoError;
   dict.clear();
-  QTest::newRow( "inheritance38" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}X{% endblock %}" ) << dict << QString::fromLatin1( "_" ) << NoError;
+  QTest::newRow( "inheritance38" ) << QStringLiteral( "{% extends 'inheritance36' %}{% block opt %}X{% endblock %}" ) << dict << QStringLiteral( "_" ) << NoError;
 
   dict.insert( QStringLiteral( "optional" ), QStringLiteral( "True" ) );
 
-  QTest::newRow( "inheritance39" ) << QString::fromLatin1( "{% extends 'inheritance30' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "1new23" ) << NoError;
+  QTest::newRow( "inheritance39" ) << QStringLiteral( "{% extends 'inheritance30' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QStringLiteral( "1new23" ) << NoError;
 
   dict.insert( QStringLiteral( "optional" ), 1 );
 
-  QTest::newRow( "inheritance40" ) << QString::fromLatin1( "{% extends 'inheritance33' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "1new23" ) << NoError;
+  QTest::newRow( "inheritance40" ) << QStringLiteral( "{% extends 'inheritance33' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QStringLiteral( "1new23" ) << NoError;
 
   dict.clear();
   dict.insert( QStringLiteral( "numbers" ), QVariantList() << 1 << 2 << 3 );
 
-  QTest::newRow( "inheritance41" ) << QString::fromLatin1( "{% extends 'inheritance36' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QString::fromLatin1( "_new1_new2_new3_" ) << NoError;
+  QTest::newRow( "inheritance41" ) << QStringLiteral( "{% extends 'inheritance36' %}{% block opt %}new{{ block.super }}{% endblock %}" ) << dict << QStringLiteral( "_new1_new2_new3_" ) << NoError;
 
-  QTest::newRow( "inheritance42" ) << QString::fromLatin1( "{% extends 'inheritance02'|cut:' ' %}" ) << dict << QString::fromLatin1( "1234" ) << NoError;
+  QTest::newRow( "inheritance42" ) << QStringLiteral( "{% extends 'inheritance02'|cut:' ' %}" ) << dict << QStringLiteral( "1234" ) << NoError;
 
   /*
   // Tags that affect rendering have no afftect outside of a block in an extension template
@@ -463,13 +463,13 @@ void TestLoaderTags::testExtendsTag_data()
 */
   dict.clear();
   // Raise exception for invalid template name
-  QTest::newRow( "exception01" ) << QString::fromLatin1( "{% extends 'nonexistent' %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "exception01" ) << QStringLiteral( "{% extends 'nonexistent' %}" ) << dict << QString() << TagSyntaxError;
   // Raise exception for invalid template name (in variable)
-  QTest::newRow( "exception02" ) << QString::fromLatin1( "{% extends nonexistent %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "exception02" ) << QStringLiteral( "{% extends nonexistent %}" ) << dict << QString() << TagSyntaxError;
   // Raise exception for extra {% extends %} tags
-  QTest::newRow( "exception03" ) << QString::fromLatin1( "{% extends 'inheritance01' %}{% block first %}2{% endblock %}{% extends 'inheritance16' %}" ) << dict << QString() << TagSyntaxError;
+  QTest::newRow( "exception03" ) << QStringLiteral( "{% extends 'inheritance01' %}{% block first %}2{% endblock %}{% extends 'inheritance16' %}" ) << dict << QString() << TagSyntaxError;
   // Raise exception for custom tags used in child with {% load %} tag in parent, not in child
-  QTest::newRow( "exception04" ) << QString::fromLatin1( "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" ) << dict << QString() << InvalidBlockTagError;
+  QTest::newRow( "exception04" ) << QStringLiteral( "{% extends 'inheritance17' %}{% block first %}{% echo 400 %}5678{% endblock %}" ) << dict << QString() << InvalidBlockTagError;
 }
 
 void TestLoaderTags::testBlockTagErrors_data()
@@ -481,9 +481,9 @@ void TestLoaderTags::testBlockTagErrors_data()
 
   Dict dict;
 
-  QTest::newRow( "block-error-01" ) << QString::fromLatin1("{% block repeat %}{% endblock %}{% block repeat %}{% endblock %}") << dict << QString() << TagSyntaxError;
-  QTest::newRow( "block-error-02" ) << QString::fromLatin1("{% block %}{% endblock %}") << dict << QString() << TagSyntaxError;
-  QTest::newRow( "block-error-03" ) << QString::fromLatin1("{% block foo bar %}{% endblock %}") << dict << QString() << TagSyntaxError;
+  QTest::newRow( "block-error-01" ) << QStringLiteral("{% block repeat %}{% endblock %}{% block repeat %}{% endblock %}") << dict << QString() << TagSyntaxError;
+  QTest::newRow( "block-error-02" ) << QStringLiteral("{% block %}{% endblock %}") << dict << QString() << TagSyntaxError;
+  QTest::newRow( "block-error-03" ) << QStringLiteral("{% block foo bar %}{% endblock %}") << dict << QString() << TagSyntaxError;
 }
 
 

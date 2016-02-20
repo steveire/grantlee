@@ -67,7 +67,7 @@ static QList<QPair<QString, QString> > getJsEscapes()
 
   for( int i = 0; i < 32; ++i )
   {
-    jsEscapes << QPair<QString, QString>( QChar( i ), QStringLiteral( "\\u00" ) + QString::fromLatin1( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
+    jsEscapes << QPair<QString, QString>( QChar( i ), QStringLiteral( "\\u00" ) + QStringLiteral( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
   }
   return jsEscapes;
 }
