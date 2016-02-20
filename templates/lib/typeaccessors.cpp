@@ -151,9 +151,9 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
       if ( it.hasNext() ) {
         match = it.peekNext();
         nextPos = match.capturedStart();
-        output += s.mid( pos + matchedLength, nextPos - pos - 1 );
+        output += s.midRef( pos + matchedLength, nextPos - pos - 1 );
       } else {
-        output += s.right( s.length() - ( pos + matchedLength ) );
+        output += s.rightRef( s.length() - ( pos + matchedLength ) );
       }
     }
 
