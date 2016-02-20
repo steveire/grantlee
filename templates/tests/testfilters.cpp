@@ -888,11 +888,10 @@ void TestFilters::testListFilters_data()
                                               << QString::fromLatin1( "Irish" );
 
   for ( int i = 0; i < cities.size(); ++i ) {
-    QVariantList data;
-    data << cities.at( i );
-    data << countries.at( i );
-    data << languages.at( i );
-    listList << QVariant( data );
+    listList << QVariant( QVariantList()
+                          << cities.at( i )
+                          << countries.at( i )
+                          << languages.at( i ) );
   }
 
   dict.insert( QStringLiteral( "listList" ), listList );

@@ -147,10 +147,7 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
       const QAssociativeIterable::const_iterator end = iter.end();
       QVariantList list;
       for ( ; it != end; ++it ) {
-        QVariantList nested;
-        nested.push_back( it.key() );
-        nested.push_back( it.value() );
-        list.push_back( nested );
+        list.push_back( QVariantList() << it.key() << it.value() );
       }
       return list;
     }
