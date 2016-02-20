@@ -143,10 +143,10 @@ void ForNode::handleHashItem(OutputStream *stream, Context *c, const QString &ke
     // Iterating over a hash but not unpacking it.
     // convert each key-value pair to a list and insert it in the context.
     list << key << value;
-    c->insert( m_loopVars.first(), list );
+    c->insert( m_loopVars.at( 0 ), list );
     list.clear();
   } else {
-    c->insert( m_loopVars.first(), key );
+    c->insert( m_loopVars.at( 0 ), key );
     c->insert( m_loopVars.at( 1 ), value );
   }
   renderLoop( stream, c );
