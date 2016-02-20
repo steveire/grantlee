@@ -80,6 +80,7 @@ template<>
 QVector<QDateTime> getItems<QDateTime>()
 {
   QVector<QDateTime> items;
+  items.reserve(3);
   for ( int i = 0; i < 3; ++i ) {
     QDateTime d;
     d.setTime_t( 0 );
@@ -93,6 +94,7 @@ template<>
 QVector<QObject*> getItems<QObject*>()
 {
   QVector<QObject*> items;
+  items.reserve(3);
   for (int i = 9; i > 4; i -= 2)
   {
     QObject *obj = new QObject;
