@@ -31,7 +31,7 @@ class IfEqualNodeFactory : public AbstractNodeFactory
 public:
   IfEqualNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 protected:
   Node* do_getNode( const QString& tagContent, Parser *p, bool negate ) const;
@@ -43,7 +43,7 @@ class IfNotEqualNodeFactory : public IfEqualNodeFactory
 public:
   IfNotEqualNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 };
 
 class IfEqualNode : public Node
@@ -55,7 +55,7 @@ public:
   void setTrueList( const NodeList &trueList );
   void setFalseList(const NodeList& falseList );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   FilterExpression m_var1;

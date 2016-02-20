@@ -59,7 +59,7 @@ public:
   /**
     Destructor.
   */
-  ~Parser();
+  ~Parser() override;
 
   /**
     Advance the parser, using @p parent as the parent of new Nodes. The parser will stop

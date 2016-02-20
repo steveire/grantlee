@@ -30,7 +30,7 @@ class LoadNodeFactory : public AbstractNodeFactory
 public:
   LoadNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -40,7 +40,7 @@ class LoadNode : public Node
 public:
   LoadNode( QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 };
 
 #endif

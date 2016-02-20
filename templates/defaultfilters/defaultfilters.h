@@ -47,7 +47,7 @@ public:
       : QObject( parent ) {
   }
 
-  virtual QHash<QString, Filter*> filters( const QString &name = QString() ) {
+  QHash<QString, Filter*> filters( const QString &name = QString() ) override {
     Q_UNUSED( name );
 
     QHash<QString, Filter*> filters;

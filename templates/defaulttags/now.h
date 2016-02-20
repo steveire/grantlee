@@ -32,7 +32,7 @@ class NowNodeFactory : public AbstractNodeFactory
 public:
   NowNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 };
 
 class NowNode : public Node
@@ -41,7 +41,7 @@ class NowNode : public Node
 public:
   explicit NowNode( const QString &formatString, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   QString m_formatString;

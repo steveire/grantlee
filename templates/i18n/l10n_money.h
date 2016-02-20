@@ -36,7 +36,7 @@ class L10nMoneyNodeFactory : public AbstractNodeFactory
 public:
   L10nMoneyNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -46,7 +46,7 @@ class L10nMoneyVarNodeFactory : public AbstractNodeFactory
 public:
   L10nMoneyVarNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -55,7 +55,7 @@ class L10nMoneyNode : public Node
   Q_OBJECT
 public:
   L10nMoneyNode( const FilterExpression &value, const FilterExpression &currency, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   FilterExpression m_value;
@@ -67,7 +67,7 @@ class L10nMoneyVarNode : public Node
   Q_OBJECT
 public:
   L10nMoneyVarNode( const FilterExpression &value, const FilterExpression &currency, const QString &resultName, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   FilterExpression m_value;

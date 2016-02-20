@@ -32,7 +32,7 @@ class SpacelessNodeFactory : public AbstractNodeFactory
 public:
   SpacelessNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -44,7 +44,7 @@ public:
 
   void setList( const NodeList &nodeList );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   static QString stripSpacesBetweenTags( const QString &input );

@@ -50,7 +50,7 @@ public:
                     << QStringLiteral( "this&that.png" );
   }
 
-  /* reimp */ QPair<QString, QString> getMediaUri( const QString &fileName ) const {
+  /* reimp */ QPair<QString, QString> getMediaUri( const QString &fileName ) const override {
     if ( m_existingMedia.contains( fileName ) )
       return qMakePair( QStringLiteral( "/path/to/" ), fileName );
     return QPair<QString, QString>();

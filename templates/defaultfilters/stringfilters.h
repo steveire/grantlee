@@ -30,21 +30,21 @@ using namespace Grantlee;
 class AddSlashesFilter : public Filter
 {
 public:
-  virtual bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class CapFirstFilter : public Filter
 {
 public:
-  virtual bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class EscapeJsFilter : public Filter
@@ -52,7 +52,7 @@ class EscapeJsFilter : public Filter
 public:
   EscapeJsFilter();
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 
 private:
   QList<QPair<QString, QString> > m_jsEscapes;
@@ -61,169 +61,169 @@ private:
 class FixAmpersandsFilter : public Filter
 {
 public:
-  virtual bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 
 class CutFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class SafeFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class LineNumbersFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class LowerFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class StringFormatFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class TitleFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class TruncateWordsFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class UpperFilter : public Filter
 {
 public:
   // &amp; may be safe, but it will be changed to &AMP; which is not safe.
-  bool isSafe() const {
+  bool isSafe() const override {
     return false;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class WordCountFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class LJustFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class RJustFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class CenterFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class EscapeFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class ForceEscapeFilter : public Filter
 {
 public:
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class RemoveTagsFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class StripTagsFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class WordWrapFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 };
@@ -231,9 +231,9 @@ public:
 class FloatFormatFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 };
@@ -241,9 +241,9 @@ public:
 class SafeSequenceFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 };
@@ -251,9 +251,9 @@ public:
 class LineBreaksFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 };
@@ -261,9 +261,9 @@ public:
 class LineBreaksBrFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 };
@@ -271,9 +271,9 @@ public:
 class SlugifyFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 
-  bool isSafe() const {
+  bool isSafe() const override {
     return true;
   }
 };

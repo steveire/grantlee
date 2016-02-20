@@ -90,7 +90,7 @@ class GRANTLEE_TEMPLATES_EXPORT TemplateImpl : public QObject
 {
   Q_OBJECT
 public:
-  ~TemplateImpl();
+  ~TemplateImpl() override;
 
   /**
     Renders the template to a string given the Context @p c.

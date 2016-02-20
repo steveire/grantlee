@@ -127,11 +127,11 @@ public:
 
   }
 
-  QSharedPointer< OutputStream > clone(QTextStream *stream) const {
+  QSharedPointer< OutputStream > clone(QTextStream *stream) const override {
     return QSharedPointer<OutputStream>( new NoEscapeOutputStream( stream ) );
   }
 
-  virtual QString escape( const QString& input ) const {
+  QString escape( const QString& input ) const override {
     return input;
   }
 };
@@ -151,11 +151,11 @@ public:
 
   }
 
-  QSharedPointer< OutputStream > clone(QTextStream *stream) const {
+  QSharedPointer< OutputStream > clone(QTextStream *stream) const override {
     return QSharedPointer<OutputStream>( new JSOutputStream( stream ) );
   }
 
-  virtual QString escape( const QString& input ) const {
+  QString escape( const QString& input ) const override {
     QList<QPair<QString, QString> > jsEscapes;
     jsEscapes << QPair<QString, QString>( QChar::fromLatin1( '\\' ), QStringLiteral( "\\u005C" ) )
               << QPair<QString, QString>( QChar::fromLatin1( '\'' ),  QStringLiteral( "\\u0027" ) )

@@ -32,7 +32,7 @@ class ForNodeFactory : public AbstractNodeFactory
 public:
   ForNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -51,7 +51,7 @@ public:
   void setLoopList( const NodeList &loopNodeList );
   void setEmptyList( const NodeList &emptyList );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   static void insertLoopVariables( Context *c, int listSize, int i );

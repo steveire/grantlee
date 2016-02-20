@@ -44,9 +44,9 @@ class ScriptableTagLibrary : public QObject, public TagLibraryInterface
 public:
   ScriptableTagLibrary( QObject *parent = 0 );
 
-  virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() );
+  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) override;
 
-  virtual QHash<QString, Filter*> filters( const QString &name = QString() );
+  QHash<QString, Filter*> filters( const QString &name = QString() ) override;
 
 public Q_SLOTS:
   void addFactory( const QString &factoryName, const QString &tagname );

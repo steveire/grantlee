@@ -119,7 +119,7 @@ public:
   /**
     Destructor.
   */
-  ~Engine();
+  ~Engine() override;
 
   /**
     Returns the TemplateLoaders currently configured on the Engine.

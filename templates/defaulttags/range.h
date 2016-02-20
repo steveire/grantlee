@@ -30,7 +30,7 @@ class RangeNodeFactory: public AbstractNodeFactory
 public:
   RangeNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -45,7 +45,7 @@ public:
 
   void setNodeList( const NodeList &list );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   NodeList m_list;

@@ -46,7 +46,7 @@ public:
   I18nTagLibrary() {
   }
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
+  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) override {
     Q_UNUSED( name );
 
     QHash<QString, AbstractNodeFactory*> nodeFactories;

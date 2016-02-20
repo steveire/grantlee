@@ -128,13 +128,13 @@ public:
   /**
     Destructor
   */
-  virtual ~FileSystemTemplateLoader();
+  ~FileSystemTemplateLoader() override;
 
-  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const;
+  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const override;
 
-  /* reimp */ bool canLoadTemplate( const QString &name ) const;
+  /* reimp */ bool canLoadTemplate( const QString &name ) const override;
 
-  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const;
+  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const override;
 
   /**
     Sets the theme of this loader to @p themeName
@@ -174,13 +174,13 @@ class GRANTLEE_TEMPLATES_EXPORT InMemoryTemplateLoader : public AbstractTemplate
 {
 public:
   InMemoryTemplateLoader();
-  virtual ~InMemoryTemplateLoader();
+  ~InMemoryTemplateLoader() override;
 
-  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const;
+  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const override;
 
-  /* reimp */ bool canLoadTemplate( const QString &name ) const;
+  /* reimp */ bool canLoadTemplate( const QString &name ) const override;
 
-  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const;
+  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const override;
 
   /**
     Add a template content to this Loader.

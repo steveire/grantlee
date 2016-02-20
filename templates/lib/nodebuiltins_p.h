@@ -37,7 +37,7 @@ class GRANTLEE_TEMPLATES_EXPORT TextNode : public Node
 public:
   explicit TextNode( const QString &content, QObject *parent = 0 );
 
-  /* reimp */ void render( OutputStream *stream, Context *c ) const { // krazy:exclude:inline
+  /* reimp */ void render( OutputStream *stream, Context *c ) const override { // krazy:exclude:inline
     Q_UNUSED( c );
     ( *stream ) << m_content;
   }
@@ -57,7 +57,7 @@ class GRANTLEE_TEMPLATES_EXPORT VariableNode : public Node
 public:
   explicit VariableNode( const FilterExpression &fe, QObject *parent = 0 );
 
-  /* reimp */ void render( OutputStream *stream, Context *c ) const;
+  /* reimp */ void render( OutputStream *stream, Context *c ) const override;
 
 private:
   FilterExpression m_filterExpression;

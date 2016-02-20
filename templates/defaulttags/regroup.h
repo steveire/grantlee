@@ -32,7 +32,7 @@ class RegroupNodeFactory : public AbstractNodeFactory
 public:
   RegroupNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -43,7 +43,7 @@ public:
   RegroupNode( const FilterExpression &target, const FilterExpression &expression,
                const QString &varName, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   FilterExpression m_target;

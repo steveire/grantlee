@@ -95,34 +95,34 @@ public:
     Creates a new TextHTMLBuilder.
   */
   TextHTMLBuilder();
-  virtual ~TextHTMLBuilder();
+  ~TextHTMLBuilder() override;
 
-  /* reimp */ void beginStrong();
-  /* reimp */ void endStrong();
-  /* reimp */ void beginEmph();
-  /* reimp */ void endEmph();
-  /* reimp */ void beginUnderline();
-  /* reimp */ void endUnderline();
-  /* reimp */ void beginStrikeout();
-  /* reimp */ void endStrikeout();
-  /* reimp */ void beginForeground( const QBrush &brush );
-  /* reimp */ void endForeground();
-  /* reimp */ void beginBackground( const QBrush &brush );
-  /* reimp */ void endBackground();
-  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
-  /* reimp */ void endAnchor();
+  /* reimp */ void beginStrong() override;
+  /* reimp */ void endStrong() override;
+  /* reimp */ void beginEmph() override;
+  /* reimp */ void endEmph() override;
+  /* reimp */ void beginUnderline() override;
+  /* reimp */ void endUnderline() override;
+  /* reimp */ void beginStrikeout() override;
+  /* reimp */ void endStrikeout() override;
+  /* reimp */ void beginForeground( const QBrush &brush ) override;
+  /* reimp */ void endForeground() override;
+  /* reimp */ void beginBackground( const QBrush &brush ) override;
+  /* reimp */ void endBackground() override;
+  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
+  /* reimp */ void endAnchor() override;
 
   // Maybe this stuff should just be added to a list, and then when I add literal text,
   // add some kind of style attribute in one span instead of many.
-  /* reimp */ void beginFontFamily( const QString &family );
-  /* reimp */ void endFontFamily();
+  /* reimp */ void beginFontFamily( const QString &family ) override;
+  /* reimp */ void endFontFamily() override;
 
   /**
     Begin a new font point size
     @param size The new size to begin.
   */
-  /* reimp */ void beginFontPointSize( int size );
-  /* reimp */ void endFontPointSize();
+  /* reimp */ void beginFontPointSize( int size ) override;
+  /* reimp */ void endFontPointSize() override;
 
   /**
     Begin a new paragraph
@@ -132,54 +132,54 @@ public:
     @param leftMargin The new paragraph leftMargin
     @param rightMargin The new paragraph rightMargin
   */
-  /* reimp */ void beginParagraph( Qt::Alignment al = Qt::AlignLeft, qreal topMargin = 0.0, qreal bottomMargin = 0.0, qreal leftMargin = 0.0, qreal rightMargin = 0.0 );
+  /* reimp */ void beginParagraph( Qt::Alignment al = Qt::AlignLeft, qreal topMargin = 0.0, qreal bottomMargin = 0.0, qreal leftMargin = 0.0, qreal rightMargin = 0.0 ) override;
 
   /**
     Begin a new header element.
     @param level The new level to begin.
   */
-  /* reimp */ void beginHeader( int level );
+  /* reimp */ void beginHeader( int level ) override;
 
   /**
     End a header element.
     @param level The new level to end.
   */
-  /* reimp */ void endHeader( int level );
+  /* reimp */ void endHeader( int level ) override;
 
-  /* reimp */ void endParagraph();
-  /* reimp */ void addNewline();
+  /* reimp */ void endParagraph() override;
+  /* reimp */ void addNewline() override;
 
-  /* reimp */ void insertHorizontalRule( int width = -1 );
+  /* reimp */ void insertHorizontalRule( int width = -1 ) override;
 
-  /* reimp */ void insertImage( const QString &src, qreal width, qreal height );
+  /* reimp */ void insertImage( const QString &src, qreal width, qreal height ) override;
 
-  /* reimp */ void beginList( QTextListFormat::Style type );
+  /* reimp */ void beginList( QTextListFormat::Style type ) override;
 
-  /* reimp */ void endList();
+  /* reimp */ void endList() override;
 
-  /* reimp */ void beginListItem();
-  /* reimp */ void endListItem();
+  /* reimp */ void beginListItem() override;
+  /* reimp */ void endListItem() override;
 
-  /* reimp */ void beginSuperscript();
+  /* reimp */ void beginSuperscript() override;
 
-  /* reimp */ void endSuperscript();
+  /* reimp */ void endSuperscript() override;
 
-  /* reimp */ void beginSubscript();
+  /* reimp */ void beginSubscript() override;
 
-  /* reimp */ void endSubscript();
+  /* reimp */ void endSubscript() override;
 
 
-  /* reimp */ void beginTable( qreal cellpadding, qreal cellspacing, const QString &width );
+  /* reimp */ void beginTable( qreal cellpadding, qreal cellspacing, const QString &width ) override;
 
-  /* reimp */ void beginTableRow();
-  /* reimp */ void beginTableHeaderCell( const QString &width, int colspan, int rowspan );
+  /* reimp */ void beginTableRow() override;
+  /* reimp */ void beginTableHeaderCell( const QString &width, int colspan, int rowspan ) override;
 
-  /* reimp */ void beginTableCell( const QString &width, int colspan, int rowspan );
+  /* reimp */ void beginTableCell( const QString &width, int colspan, int rowspan ) override;
 
-  /* reimp */ void endTable();
-  /* reimp */ void endTableRow();
-  /* reimp */ void endTableHeaderCell();
-  /* reimp */ void endTableCell();
+  /* reimp */ void endTable() override;
+  /* reimp */ void endTableRow() override;
+  /* reimp */ void endTableHeaderCell() override;
+  /* reimp */ void endTableCell() override;
 
   /**
     Reimplemented from AbstractMarkupBuilder.
@@ -196,16 +196,16 @@ public:
       A sample &lt;b&gt;bold&lt;/b&gt; word.
     @endverbatim
   */
-  /* reimp */ void appendLiteralText( const QString &text );
+  /* reimp */ void appendLiteralText( const QString &text ) override;
 
   /**
     Append @p text without escaping.
 
     This is useful if extending MarkupDirector
   */
-  /* reimp */ void appendRawText( const QString &text );
+  /* reimp */ void appendRawText( const QString &text ) override;
 
-  /* reimp */ QString getResult();
+  /* reimp */ QString getResult() override;
 
 private:
   TextHTMLBuilderPrivate *d_ptr;

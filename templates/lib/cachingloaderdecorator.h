@@ -72,13 +72,13 @@ public:
   /**
     Destructor
   */
-  virtual ~CachingLoaderDecorator();
+  ~CachingLoaderDecorator() override;
 
-  /* reimp */ bool canLoadTemplate( const QString& name ) const;
+  /* reimp */ bool canLoadTemplate( const QString& name ) const override;
 
-  /* reimp */ QPair< QString, QString > getMediaUri( const QString& fileName ) const;
+  /* reimp */ QPair< QString, QString > getMediaUri( const QString& fileName ) const override;
 
-  /* reimp */ Template loadByName( const QString& name, const Grantlee::Engine* engine ) const;
+  /* reimp */ Template loadByName( const QString& name, const Grantlee::Engine* engine ) const override;
 
   /**
    * Clears the Templates objects cached in the decorator.

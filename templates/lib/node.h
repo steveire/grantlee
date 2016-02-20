@@ -87,7 +87,7 @@ public:
   /**
     Destructor.
   */
-  virtual ~Node();
+  ~Node() override;
 
   /**
     Reimplement this to render the template in the Context @p c.
@@ -294,7 +294,7 @@ public:
   /**
     Destructor.
   */
-  virtual ~AbstractNodeFactory();
+  ~AbstractNodeFactory() override;
 
   /**
     This method should be reimplemented to return a Node which can be rendered.

@@ -36,7 +36,7 @@ class BlockNodeFactory : public AbstractNodeFactory
 public:
   explicit BlockNodeFactory( QObject *parent = 0 );
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -46,11 +46,11 @@ class BlockNode : public Node
   Q_PROPERTY( Grantlee::SafeString super READ getSuper )
 public:
   BlockNode( const QString &blockName, QObject *parent = 0 );
-  ~BlockNode();
+  ~BlockNode() override;
 
   void setNodeList( const NodeList &list ) const;
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
   BlockNode* takeNodeParent();
 

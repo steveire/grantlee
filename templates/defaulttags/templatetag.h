@@ -31,7 +31,7 @@ class TemplateTagNodeFactory : public AbstractNodeFactory
 public:
   TemplateTagNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 };
 
 class TemplateTagNode : public Node
@@ -46,7 +46,7 @@ public:
   */
   explicit TemplateTagNode( const QString &tagName, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
   static bool isKeyword( const QString &name );
 

@@ -37,41 +37,41 @@ public:
     Creates a new MediaWikiMarkupBuilder
   */
   MediaWikiMarkupBuilder();
-  virtual ~MediaWikiMarkupBuilder();
+  ~MediaWikiMarkupBuilder() override;
 
-  /* reimp */ void beginStrong();
-  /* reimp */ void endStrong();
-  /* reimp */ void beginEmph();
-  /* reimp */ void endEmph();
-  /* reimp */ void beginUnderline();
-  /* reimp */ void endUnderline();
-  /* reimp */ void beginStrikeout();
-  /* reimp */ void endStrikeout();
+  /* reimp */ void beginStrong() override;
+  /* reimp */ void endStrong() override;
+  /* reimp */ void beginEmph() override;
+  /* reimp */ void endEmph() override;
+  /* reimp */ void beginUnderline() override;
+  /* reimp */ void endUnderline() override;
+  /* reimp */ void beginStrikeout() override;
+  /* reimp */ void endStrikeout() override;
 
-  /* reimp */ void endParagraph();
-  /* reimp */ void addNewline();
+  /* reimp */ void endParagraph() override;
+  /* reimp */ void addNewline() override;
 
-  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
-  /* reimp */ void endAnchor();
+  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
+  /* reimp */ void endAnchor() override;
 
-  /* reimp */ void beginHeader( int level );
-  /* reimp */ void endHeader( int level );
+  /* reimp */ void beginHeader( int level ) override;
+  /* reimp */ void endHeader( int level ) override;
 
-  /* reimp */ void beginList( QTextListFormat::Style type );
+  /* reimp */ void beginList( QTextListFormat::Style type ) override;
 
-  /* reimp */ void endList();
+  /* reimp */ void endList() override;
 
-  /* reimp */ void beginListItem();
-  /* reimp */ void endListItem();
+  /* reimp */ void beginListItem() override;
+  /* reimp */ void endListItem() override;
 
-  /* reimp */ void appendLiteralText( const QString &text );
+  /* reimp */ void appendLiteralText( const QString &text ) override;
 
   /**
     Escapes @p text appropriately for MediaWiki.
   */
   const QString escape( const QString &s );
 
-  /* reimp */ QString getResult();
+  /* reimp */ QString getResult() override;
 
 private:
   QList<QTextListFormat::Style> currentListItemStyles;

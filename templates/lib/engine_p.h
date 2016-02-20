@@ -60,12 +60,12 @@ public:
     m_filters.clear();
   }
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
+  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) override {
     Q_UNUSED( name );
     return m_nodeFactories;
   }
 
-  QHash<QString, Filter*> filters( const QString &name = QString() ) {
+  QHash<QString, Filter*> filters( const QString &name = QString() ) override {
     Q_UNUSED( name );
     return m_filters;
   }

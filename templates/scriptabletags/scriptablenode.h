@@ -59,7 +59,7 @@ public:
 
   QScriptEngine* engine();
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   QScriptEngine* m_scriptEngine;
@@ -78,10 +78,10 @@ public:
   ScriptableNodeFactory( QObject* parent = 0 );
   void setScriptEngine( QScriptEngine *engine );
 
-  /* reimp */ void setEngine( Grantlee::Engine *engine );
+  /* reimp */ void setEngine( Grantlee::Engine *engine ) override;
   void setFactory(const QScriptValue& factoryMethod );
 
-  Node* getNode( const QString &tagContent, Parser *p = 0 ) const;
+  Node* getNode( const QString &tagContent, Parser *p = 0 ) const override;
 
 private:
   QScriptEngine* m_scriptEngine;

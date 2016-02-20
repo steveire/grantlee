@@ -39,7 +39,7 @@ class ExtendsNodeFactory : public AbstractNodeFactory
 public:
   ExtendsNodeFactory( QObject *parent = 0 );
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -48,17 +48,17 @@ class ExtendsNode : public Node
   Q_OBJECT
 public:
   ExtendsNode( const FilterExpression &fe, QObject *parent = 0 );
-  ~ExtendsNode();
+  ~ExtendsNode() override;
 
   void setNodeList( const NodeList &list );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
   void appendNode( Node* node );
 
   Template getParent( Context *c ) const;
 
-  virtual bool mustBeFirst() {
+  bool mustBeFirst() override {
     return true;
   }
 

@@ -31,11 +31,11 @@ class ScriptableFilter : public Filter
 {
 public:
   ScriptableFilter(const QScriptValue& filterObject, QScriptEngine *engine );
-  virtual ~ScriptableFilter();
+  ~ScriptableFilter() override;
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument, bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument, bool autoescape = false ) const override;
 
-  bool isSafe() const;
+  bool isSafe() const override;
 
 private:
   QScriptValue m_filterObject;

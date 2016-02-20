@@ -63,7 +63,7 @@ public:
   /**
     Destructor
    */
-  virtual ~QtLocalizer();
+  ~QtLocalizer() override;
 
   /**
     Set the path to look for translations of the application strings.
@@ -90,22 +90,22 @@ public:
    */
   void installTranslator( QTranslator *translator, const QString &localeName = QLocale::system().name() );
 
-  virtual QString currentLocale() const;
-  virtual void pushLocale( const QString &localeName );
-  virtual void popLocale();
-  virtual void loadCatalog( const QString &path, const QString &catalog );
-  virtual void unloadCatalog( const QString &catalog );
+  QString currentLocale() const override;
+  void pushLocale( const QString &localeName ) override;
+  void popLocale() override;
+  void loadCatalog( const QString &path, const QString &catalog ) override;
+  void unloadCatalog( const QString &catalog ) override;
 
-  virtual QString localizeNumber( int number ) const;
-  virtual QString localizeNumber( qreal number ) const;
-  virtual QString localizeMonetaryValue( qreal value, const QString &currencyCode = QString() ) const;
-  virtual QString localizeDate( const QDate &date, QLocale::FormatType formatType = QLocale::ShortFormat ) const;
-  virtual QString localizeTime( const QTime &time, QLocale::FormatType formatType = QLocale::ShortFormat ) const;
-  virtual QString localizeDateTime( const QDateTime& dateTime, QLocale::FormatType formatType = QLocale::ShortFormat ) const;
-  virtual QString localizeString( const QString& string, const QVariantList &arguments = QVariantList() ) const;
-  virtual QString localizeContextString( const QString& string, const QString& context, const QVariantList &arguments = QVariantList() ) const;
-  virtual QString localizePluralContextString( const QString& string, const QString& pluralForm, const QString& context, const QVariantList &arguments = QVariantList() ) const;
-  virtual QString localizePluralString( const QString& string, const QString& pluralForm, const QVariantList &arguments = QVariantList() ) const;
+  QString localizeNumber( int number ) const override;
+  QString localizeNumber( qreal number ) const override;
+  QString localizeMonetaryValue( qreal value, const QString &currencyCode = QString() ) const override;
+  QString localizeDate( const QDate &date, QLocale::FormatType formatType = QLocale::ShortFormat ) const override;
+  QString localizeTime( const QTime &time, QLocale::FormatType formatType = QLocale::ShortFormat ) const override;
+  QString localizeDateTime( const QDateTime& dateTime, QLocale::FormatType formatType = QLocale::ShortFormat ) const override;
+  QString localizeString( const QString& string, const QVariantList &arguments = QVariantList() ) const override;
+  QString localizeContextString( const QString& string, const QString& context, const QVariantList &arguments = QVariantList() ) const override;
+  QString localizePluralContextString( const QString& string, const QString& pluralForm, const QString& context, const QVariantList &arguments = QVariantList() ) const override;
+  QString localizePluralString( const QString& string, const QString& pluralForm, const QVariantList &arguments = QVariantList() ) const override;
 
 private:
   Q_DECLARE_PRIVATE( QtLocalizer )

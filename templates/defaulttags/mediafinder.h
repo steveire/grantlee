@@ -30,7 +30,7 @@ class MediaFinderNodeFactory: public AbstractNodeFactory
 public:
   MediaFinderNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node* getNode( const QString &tagContent, Parser *p ) const override;
 
 };
 
@@ -40,7 +40,7 @@ class MediaFinderNode : public Node
 public:
   explicit MediaFinderNode(const QList<FilterExpression>& mediaExpressionList, QObject *parent = 0 );
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render( OutputStream *stream, Context *c ) const override;
 
 private:
   QList<FilterExpression> m_mediaExpressionList;

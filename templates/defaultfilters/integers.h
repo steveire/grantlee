@@ -30,13 +30,13 @@ using namespace Grantlee;
 class AddFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 class GetDigitFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const override;
 };
 
 
