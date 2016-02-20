@@ -47,7 +47,7 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     expr.removeLast();
   }
 
-  if ( expr.mid( expr.size() - 2 ).first() != QStringLiteral( "in" ) ) {
+  if ( expr.at( expr.size() - 2 ) != QStringLiteral( "in" ) ) {
     throw Grantlee::Exception( TagSyntaxError,
       QString::fromLatin1( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
   }
