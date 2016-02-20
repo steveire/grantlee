@@ -36,7 +36,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 # create coverage build type
 set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
-if (${CMAKE_VERSION} VERSION_GREATER 2.8.2 AND CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
                 "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage" "TestCocoon")
 endif()
