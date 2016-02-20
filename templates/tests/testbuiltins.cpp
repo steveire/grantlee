@@ -1006,7 +1006,7 @@ void TestBuiltinSyntax::testTemplatePathSafety()
 
   Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
 
-  loader->setTemplateDirs( QStringList() << QString::fromLatin1( "." ) );
+  loader->setTemplateDirs( QStringList() << QStringLiteral( "." ) );
 
   QFile f( inputPath );
   bool opened = f.open( QFile::WriteOnly | QFile::Text );
@@ -1041,7 +1041,7 @@ void TestBuiltinSyntax::testMediaPathSafety()
 
   Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
 
-  loader->setTemplateDirs( QStringList() << QString::fromLatin1( "." ) );
+  loader->setTemplateDirs( QStringList() << QStringLiteral( "." ) );
 
   QFile f( inputPath );
   bool opened = f.open( QFile::WriteOnly | QFile::Text );
@@ -1107,17 +1107,17 @@ void TestBuiltinSyntax::testTypeAccessorsUnordered_data()
   dict.insert( QStringLiteral( "hash" ), itemsHash );
 
   QTest::newRow( "type-accessors-hash-unordered01" ) << QStringLiteral( "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}" )
-                                      << dict << (QStringList() << QString::fromLatin1("one:1;")
-                                                                << QString::fromLatin1("two:2;")
-                                                                << QString::fromLatin1("three:3;")) << NoError;
+                                      << dict << (QStringList() << QStringLiteral("one:1;")
+                                                                << QStringLiteral("two:2;")
+                                                                << QStringLiteral("three:3;")) << NoError;
   QTest::newRow( "type-accessors-hash-unordered02" ) << QStringLiteral( "{% for key in hash.keys %}{{ key }};{% endfor %}" )
-                                      << dict << (QStringList() << QString::fromLatin1("one;")
-                                                                << QString::fromLatin1("two;")
-                                                                << QString::fromLatin1("three;")) << NoError;
+                                      << dict << (QStringList() << QStringLiteral("one;")
+                                                                << QStringLiteral("two;")
+                                                                << QStringLiteral("three;")) << NoError;
   QTest::newRow( "type-accessors-hash-unordered03" ) << QStringLiteral( "{% for value in hash.values %}{{ value }};{% endfor %}" )
-                                      << dict << (QStringList() << QString::fromLatin1("1;")
-                                                                << QString::fromLatin1("2;")
-                                                                << QString::fromLatin1("3;")) << NoError;
+                                      << dict << (QStringList() << QStringLiteral("1;")
+                                                                << QStringLiteral("2;")
+                                                                << QStringLiteral("3;")) << NoError;
 }
 
 

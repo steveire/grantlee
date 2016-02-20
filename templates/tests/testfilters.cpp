@@ -846,10 +846,10 @@ void TestFilters::testListFilters_data()
   dict.clear();
 
   QVariantList mapList;
-  const QStringList cities = QStringList() << QString::fromLatin1( "London" )
-                                           << QString::fromLatin1( "Berlin" )
-                                           << QString::fromLatin1( "Paris" )
-                                           << QString::fromLatin1( "Dublin" );
+  const QStringList cities = QStringList() << QStringLiteral( "London" )
+                                           << QStringLiteral( "Berlin" )
+                                           << QStringLiteral( "Paris" )
+                                           << QStringLiteral( "Dublin" );
   Q_FOREACH( const QString &city, cities ) {
     QVariantHash map;
     map.insert( QStringLiteral( "city" ), city );
@@ -876,16 +876,16 @@ void TestFilters::testListFilters_data()
 
   QVariantList listList;
 
-  const QStringList countries = QStringList() << QString::fromLatin1( "England" )
-                                              << QString::fromLatin1( "Germany" )
-                                              << QString::fromLatin1( "France" )
-                                              << QString::fromLatin1( "Ireland" );
+  const QStringList countries = QStringList() << QStringLiteral( "England" )
+                                              << QStringLiteral( "Germany" )
+                                              << QStringLiteral( "France" )
+                                              << QStringLiteral( "Ireland" );
 
 
-  const QStringList languages = QStringList() << QString::fromLatin1( "English" )
-                                              << QString::fromLatin1( "German" )
-                                              << QString::fromLatin1( "French" )
-                                              << QString::fromLatin1( "Irish" );
+  const QStringList languages = QStringList() << QStringLiteral( "English" )
+                                              << QStringLiteral( "German" )
+                                              << QStringLiteral( "French" )
+                                              << QStringLiteral( "Irish" );
 
   for ( int i = 0; i < cities.size(); ++i ) {
     listList << QVariant( QVariantList()

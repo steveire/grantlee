@@ -45,9 +45,9 @@ public:
   FakeTemplateLoader()
     : Grantlee::InMemoryTemplateLoader()
   {
-    m_existingMedia << QString::fromLatin1( "existing_image.png" )
-                    << QString::fromLatin1( "another_existing_image.png" )
-                    << QString::fromLatin1( "this&that.png" );
+    m_existingMedia << QStringLiteral( "existing_image.png" )
+                    << QStringLiteral( "another_existing_image.png" )
+                    << QStringLiteral( "this&that.png" );
   }
 
   /* reimp */ QPair<QString, QString> getMediaUri( const QString &fileName ) const {
@@ -651,7 +651,7 @@ void TestDefaultTags::testForTag_data()
   dict.insert( QStringLiteral( "values" ), list );
   QTest::newRow( "for-tag03" ) << QStringLiteral( "{% for val in values %}({{ val }} sdfsdf,){% endfor %}" ) << dict << QString() << NoError;
   QStringList emails;
-  emails << QString::fromLatin1( "one" ) << QString::fromLatin1( "two" );
+  emails << QStringLiteral( "one" ) << QStringLiteral( "two" );
   QVariantHash obj;
   obj.insert( QStringLiteral( "emails" ), emails );
   dict.insert( QStringLiteral( "contact" ), obj );
@@ -662,7 +662,7 @@ void TestDefaultTags::testForTag_data()
   QTest::newRow( "for-tag05" ) << QStringLiteral( "{% for val in contact.emails %}({{ val }},){% endfor %}" ) << dict << QString() << NoError;
   list.clear();
   dict.clear();
-  emails << QString::fromLatin1( "one" );
+  emails << QStringLiteral( "one" );
   dict.insert( QStringLiteral( "emails" ), emails );
   QTest::newRow( "for-tag06" ) << QStringLiteral( "{% for val in emails %}({{ val }},){% endfor %}" ) << dict << QStringLiteral( "(one,)" ) << NoError;
   list.clear();
