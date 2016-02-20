@@ -279,8 +279,6 @@ QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argume
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
-  QVariant result;
-  QVariantList resultList;
   QList<QPair<QVariant, QVariant> > keyList;
   const QSequentialIterable inList = input.value<QSequentialIterable>();
   Q_FOREACH( const QVariant &item, inList ) {

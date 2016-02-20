@@ -156,7 +156,6 @@ void ForNode::iterateHash( OutputStream *stream, Context *c, const QVariantHash 
 {
   int listSize = varHash.size();
   int i = 0;
-  QVariantList list;
 
   QHashIterator<QString, QVariant> it( varHash );
   if ( m_isReversed == IsReversed ) {
