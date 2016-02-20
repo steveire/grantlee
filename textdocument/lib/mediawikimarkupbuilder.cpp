@@ -75,7 +75,7 @@ void MediaWikiMarkupBuilder::addNewline()
 void MediaWikiMarkupBuilder::beginAnchor( const QString &href, const QString &name )
 {
   Q_UNUSED( name );
-  m_text.append( QString::fromLatin1( "[%1 " ).arg( href ) );
+  m_text.append( QStringLiteral( "[%1 " ).arg( href ) );
 }
 void MediaWikiMarkupBuilder::endAnchor()
 {

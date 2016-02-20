@@ -203,7 +203,7 @@ Template InMemoryTemplateLoader::loadByName( const QString& name, Engine const *
   if ( m_namedTemplates.contains( name ) ) {
     return engine->newTemplate( m_namedTemplates.value( name ), name );
   }
-  throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Couldn't load template %1. Template does not exist." ).arg( name ) );
+  throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Couldn't load template %1. Template does not exist." ).arg( name ) );
 }
 
 QPair<QString, QString> InMemoryTemplateLoader::getMediaUri( const QString& fileName ) const

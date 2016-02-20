@@ -123,7 +123,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
       if ( pos != lastPos ) {
         throw Grantlee::Exception( TagSyntaxError,
-            QString::fromLatin1( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
+            QStringLiteral( "Could not parse some characters: \"%1\"" ).arg( vs.mid( lastPos, pos ) ) );
       }
 
       if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) ) {
@@ -139,13 +139,13 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
         if (d->m_filters.isEmpty() || d->m_filters.at(d->m_filters.size() - 1).second.isValid()) {
             const QString remainder = vs.right( vs.size() - lastPos );
             throw Grantlee::Exception( TagSyntaxError,
-                QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
+                QStringLiteral( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
         }
         subString = subString.right( ssSize - 1 );
         const int lastFilter = d->m_filters.size();
         if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) )
           throw Grantlee::Exception( EmptyVariableError,
-              QString::fromLatin1( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
+              QStringLiteral( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
 
         d->m_filters[lastFilter -1].second = Variable( subString );
       } else {
@@ -160,7 +160,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
     const QString remainder = vs.right( vs.size() - lastPos );
     if ( !remainder.isEmpty() ) {
       throw Grantlee::Exception( TagSyntaxError,
-          QString::fromLatin1( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
+          QStringLiteral( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
     }
   } catch ( ... ) {
     delete d_ptr;

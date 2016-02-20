@@ -37,7 +37,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() < 2 ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expects at least one argument" ).arg( expr.first() ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 expects at least one argument" ).arg( expr.first() ) );
   }
 
   if ( expr.at( 1 ).contains( QLatin1Char( ',' ) ) ) {
@@ -53,11 +53,11 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     QString name = expr.at( 1 );
     QVariant cycleNodes = p->property( _namedCycleNodes );
     if ( cycleNodes.type() != QVariant::Hash ) {
-      throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "No named cycles in template. '%1' is not defined" ).arg( name ) );
+      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "No named cycles in template. '%1' is not defined" ).arg( name ) );
     }
     QVariantHash hash = cycleNodes.toHash();
     if ( !hash.contains( name ) ) {
-      throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Node not found: %1" ).arg( name ) );
+      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Node not found: %1" ).arg( name ) );
     }
     QVariant nodeVariant = hash.value( name );
     Q_ASSERT( nodeVariant.userType() == QMetaType::QObjectStar );

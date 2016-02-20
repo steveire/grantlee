@@ -35,7 +35,7 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   if ( expr.size() < 4 ) {
     throw Grantlee::Exception( TagSyntaxError,
-        QString::fromLatin1( "'for' statements should have at least four words: %1" ).arg( tagContent ) );
+        QStringLiteral( "'for' statements should have at least four words: %1" ).arg( tagContent ) );
   }
 
   expr.takeAt( 0 );
@@ -49,7 +49,7 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   if ( expr.at( expr.size() - 2 ) != QStringLiteral( "in" ) ) {
     throw Grantlee::Exception( TagSyntaxError,
-      QString::fromLatin1( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
+      QStringLiteral( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
   }
 
   Q_FOREACH( const QString &arg, expr.mid( 0, expr.size() - 2 ) ) {

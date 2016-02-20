@@ -35,7 +35,7 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 3 ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 tag takes two arguments." ).arg( expr.first() ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 tag takes two arguments." ).arg( expr.first() ) );
   }
 
   QStringList vars;

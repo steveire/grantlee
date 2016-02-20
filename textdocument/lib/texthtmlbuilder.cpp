@@ -110,7 +110,7 @@ void TextHTMLBuilder::endStrikeout()
 void TextHTMLBuilder::beginForeground( const QBrush &brush )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<span style=\"color:%1;\">" ).arg( brush.color().name() ) );
+  d->m_text.append( QStringLiteral( "<span style=\"color:%1;\">" ).arg( brush.color().name() ) );
 }
 
 void TextHTMLBuilder::endForeground()
@@ -122,7 +122,7 @@ void TextHTMLBuilder::endForeground()
 void TextHTMLBuilder::beginBackground( const QBrush &brush )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<span style=\"background-color:%1;\">" ).arg( brush.color().name() ) );
+  d->m_text.append( QStringLiteral( "<span style=\"background-color:%1;\">" ).arg( brush.color().name() ) );
 }
 
 void TextHTMLBuilder::endBackground()
@@ -136,13 +136,13 @@ void TextHTMLBuilder::beginAnchor( const QString &href, const QString &name )
   Q_D( TextHTMLBuilder );
   if ( !href.isEmpty() ) {
     if ( !name.isEmpty() ) {
-      d->m_text.append( QString::fromLatin1( "<a href=\"%1\" name=\"%2\">" ).arg( href, name ) );
+      d->m_text.append( QStringLiteral( "<a href=\"%1\" name=\"%2\">" ).arg( href, name ) );
     } else {
-      d->m_text.append( QString::fromLatin1( "<a href=\"%1\">" ).arg( href ) );
+      d->m_text.append( QStringLiteral( "<a href=\"%1\">" ).arg( href ) );
     }
   } else {
     if ( !name.isEmpty() ) {
-      d->m_text.append( QString::fromLatin1( "<a name=\"%1\">" ).arg( name ) );
+      d->m_text.append( QStringLiteral( "<a name=\"%1\">" ).arg( name ) );
     }
   }
 }
@@ -156,7 +156,7 @@ void TextHTMLBuilder::endAnchor()
 void TextHTMLBuilder::beginFontFamily( const QString &family )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<span style=\"font-family:%1;\">" ).arg( family ) );
+  d->m_text.append( QStringLiteral( "<span style=\"font-family:%1;\">" ).arg( family ) );
 }
 
 void TextHTMLBuilder::endFontFamily()
@@ -168,7 +168,7 @@ void TextHTMLBuilder::endFontFamily()
 void TextHTMLBuilder::beginFontPointSize( int size )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<span style=\"font-size:%1pt;\">" ).arg( QString::number( size ) ) );
+  d->m_text.append( QStringLiteral( "<span style=\"font-size:%1pt;\">" ).arg( QString::number( size ) ) );
 }
 
 void TextHTMLBuilder::endFontPointSize()
@@ -185,16 +185,16 @@ void TextHTMLBuilder::beginParagraph( Qt::Alignment al, qreal topMargin, qreal b
 //     {
   QString styleString;
   if ( topMargin != 0 ) {
-    styleString.append( QString::fromLatin1( "margin-top:%1;" ).arg( topMargin ) );
+    styleString.append( QStringLiteral( "margin-top:%1;" ).arg( topMargin ) );
   }
   if ( bottomMargin != 0 ) {
-    styleString.append( QString::fromLatin1( "margin-bottom:%1;" ).arg( bottomMargin ) );
+    styleString.append( QStringLiteral( "margin-bottom:%1;" ).arg( bottomMargin ) );
   }
   if ( leftMargin != 0 ) {
-    styleString.append( QString::fromLatin1( "margin-left:%1;" ).arg( leftMargin ) );
+    styleString.append( QStringLiteral( "margin-left:%1;" ).arg( leftMargin ) );
   }
   if ( rightMargin != 0 ) {
-    styleString.append( QString::fromLatin1( "margin-right:%1;" ).arg( rightMargin ) );
+    styleString.append( QStringLiteral( "margin-right:%1;" ).arg( rightMargin ) );
   }
 
   // Using == doesn't work here.
@@ -288,7 +288,7 @@ void TextHTMLBuilder::insertHorizontalRule( int width )
 {
   Q_D( TextHTMLBuilder );
   if ( width != -1 ) {
-    d->m_text.append( QString::fromLatin1( "<hr width=\"%1\" />\n" ).arg( width ) );
+    d->m_text.append( QStringLiteral( "<hr width=\"%1\" />\n" ).arg( width ) );
   }
   d->m_text.append( QStringLiteral( "<hr />\n" ) );
 }
@@ -296,9 +296,9 @@ void TextHTMLBuilder::insertHorizontalRule( int width )
 void TextHTMLBuilder::insertImage( const QString &src, qreal width, qreal height )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<img src=\"%1\" " ).arg( src ) );
-  if ( width != 0 ) d->m_text.append( QString::fromLatin1( "width=\"%2\" " ).arg( width ) );
-  if ( height != 0 ) d->m_text.append( QString::fromLatin1( "height=\"%2\" " ).arg( height ) );
+  d->m_text.append( QStringLiteral( "<img src=\"%1\" " ).arg( src ) );
+  if ( width != 0 ) d->m_text.append( QStringLiteral( "width=\"%2\" " ).arg( width ) );
+  if ( height != 0 ) d->m_text.append( QStringLiteral( "height=\"%2\" " ).arg( height ) );
   d->m_text.append( QStringLiteral( "/>" ) );
 }
 
@@ -395,7 +395,7 @@ void TextHTMLBuilder::endSubscript()
 void TextHTMLBuilder::beginTable( qreal cellpadding, qreal cellspacing, const QString &width )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<table cellpadding=\"%1\" cellspacing=\"%2\" width=\"%3\" border=\"1\">" )
+  d->m_text.append( QStringLiteral( "<table cellpadding=\"%1\" cellspacing=\"%2\" width=\"%3\" border=\"1\">" )
                     .arg( cellpadding )
                     .arg( cellspacing )
                     .arg( width ) );
@@ -410,13 +410,13 @@ void TextHTMLBuilder::beginTableRow()
 void TextHTMLBuilder::beginTableHeaderCell( const QString &width, int colspan, int rowspan )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<th width=\"%1\" colspan=\"%2\" rowspan=\"%3\">" ).arg( width ).arg( colspan ).arg( rowspan ) );
+  d->m_text.append( QStringLiteral( "<th width=\"%1\" colspan=\"%2\" rowspan=\"%3\">" ).arg( width ).arg( colspan ).arg( rowspan ) );
 }
 
 void TextHTMLBuilder::beginTableCell( const QString &width, int colspan, int rowspan )
 {
   Q_D( TextHTMLBuilder );
-  d->m_text.append( QString::fromLatin1( "<td width=\"%1\" colspan=\"%2\" rowspan=\"%3\">" ).arg( width ).arg( colspan ).arg( rowspan ) );
+  d->m_text.append( QStringLiteral( "<td width=\"%1\" colspan=\"%2\" rowspan=\"%3\">" ).arg( width ).arg( colspan ).arg( rowspan ) );
 }
 
 void TextHTMLBuilder::endTable()

@@ -115,7 +115,7 @@ QString PlainTextMarkupBuilderPrivate::getLetterString( int itemNumber )
     // Create the letter string by prepending one char at a time.
     // The itemNumber is converted to a number in the base 36 (number of letters in the
     // alphabet plus 10) after being increased by 10 (to pass out the digits 0 to 9).
-    letterString.prepend( QString::fromLatin1( "%1" ).arg(( itemNumber % LETTERSINALPHABET ) + DIGITSOFFSET,
+    letterString.prepend( QStringLiteral( "%1" ).arg(( itemNumber % LETTERSINALPHABET ) + DIGITSOFFSET,
                           0, // no padding while building this string.
                           LETTERSINALPHABET + DIGITSOFFSET ) );
     if (( itemNumber >= LETTERSINALPHABET ) ) {
@@ -136,7 +136,7 @@ QString PlainTextMarkupBuilderPrivate::getReferences()
 
     int index = 1;
     while ( !m_urls.isEmpty() ) {
-      refs.append( QString::fromLatin1( "[%1] %2\n" ).arg( index++ ).arg( m_urls.takeFirst() ) );
+      refs.append( QStringLiteral( "[%1] %2\n" ).arg( index++ ).arg( m_urls.takeFirst() ) );
     }
   }
   return refs;
@@ -214,7 +214,7 @@ void PlainTextMarkupBuilder::beginAnchor( const QString &href, const QString &na
 void PlainTextMarkupBuilder::endAnchor()
 {
   Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QString::fromLatin1( "[%1]" ).arg( d->m_urls.indexOf( d->activeLink ) + 1 ) );
+  d->m_text.append( QStringLiteral( "[%1]" ).arg( d->m_urls.indexOf( d->activeLink ) + 1 ) );
 }
 
 void PlainTextMarkupBuilder::endParagraph()
@@ -254,7 +254,7 @@ void PlainTextMarkupBuilder::insertImage( const QString &src, qreal width, qreal
 
   int ref = addReference( src );
 
-  d->m_text.append( QString::fromLatin1( "[%1]" ).arg( ref ) );
+  d->m_text.append( QStringLiteral( "[%1]" ).arg( ref ) );
 }
 
 void PlainTextMarkupBuilder::beginList( QTextListFormat::Style style )
@@ -293,19 +293,19 @@ void PlainTextMarkupBuilder::beginListItem()
     d->m_text.append( QStringLiteral( " -  " ) );
     break;
   case QTextListFormat::ListDecimal:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( itemNumber + 1 ) );
+    d->m_text.append( QStringLiteral( " %1. " ).arg( itemNumber + 1 ) );
     break;
   case QTextListFormat::ListLowerAlpha:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getLetterString( itemNumber ) ) );
+    d->m_text.append( QStringLiteral( " %1. " ).arg( d->getLetterString( itemNumber ) ) );
     break;
   case QTextListFormat::ListUpperAlpha:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getLetterString( itemNumber ).toUpper() ) );
+    d->m_text.append( QStringLiteral( " %1. " ).arg( d->getLetterString( itemNumber ).toUpper() ) );
     break;
   case QTextListFormat::ListLowerRoman:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getRomanString( itemNumber +1 ) ) );
+    d->m_text.append( QStringLiteral( " %1. " ).arg( d->getRomanString( itemNumber +1 ) ) );
     break;
   case QTextListFormat::ListUpperRoman:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getRomanString( itemNumber +1 ).toUpper() ) );
+    d->m_text.append( QStringLiteral( " %1. " ).arg( d->getRomanString( itemNumber +1 ).toUpper() ) );
     break;
   default:
     break;

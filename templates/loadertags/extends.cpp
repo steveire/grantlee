@@ -113,7 +113,7 @@ Template ExtendsNode::getParent( Context *c ) const
   const Template t = ti->engine()->loadByName( parentName );
 
   if ( !t )
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Template not found %1" ).arg( parentName ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Template not found %1" ).arg( parentName ) );
 
   if ( t->error() )
     throw Grantlee::Exception( t->error(), t->errorString() );

@@ -34,7 +34,7 @@ Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 4 || expr.at( 2 ) != QStringLiteral( "as" ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expected format is 'value as name'" ).arg( expr.first() ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 expected format is 'value as name'" ).arg( expr.first() ) );
   }
 
   FilterExpression fe( expr.at( 1 ), p );

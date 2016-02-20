@@ -209,9 +209,9 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
     }
     if ( sublistItem.isValid() ) {
       sublist = processList( sublistItem.toList(), tabs + 1, autoescape );
-      sublist = QString::fromLatin1( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent, sublist, indent, indent );
+      sublist = QStringLiteral( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent, sublist, indent, indent );
     }
-    output.append( QString::fromLatin1( "%1<li>%2%3</li>" ).arg( indent,
+    output.append( QStringLiteral( "%1<li>%2%3</li>" ).arg( indent,
                                                                  autoescape ? conditionalEscape( title ) : title,
                                                                  sublist ) );
     ++i;

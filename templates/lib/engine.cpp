@@ -228,7 +228,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
       break;
     minorVersion--;
   }
-  throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Plugin library '%1' not found." ).arg( name ) );
+  throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Plugin library '%1' not found." ).arg( name ) );
   return 0;
 }
 
@@ -380,7 +380,7 @@ Template Engine::loadByName( const QString &name ) const
   Template t = Template( new TemplateImpl( this ) );
   t->setObjectName( name );
   t->d_ptr->m_error = TagSyntaxError;
-  t->d_ptr->m_errorString = QString::fromLatin1( "Template not found, %1" ).arg( name );
+  t->d_ptr->m_errorString = QStringLiteral( "Template not found, %1" ).arg( name );
   return t;
 }
 

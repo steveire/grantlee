@@ -134,7 +134,7 @@ QVariant LineNumbersFilter::doFilter( const QVariant& input, const QVariant &arg
 
   const bool shouldEscape = ( autoescape && !safeString.isSafe() );
   for ( int i = 0; i < lines.size(); ++i ) {
-    lines[ i ] = QString::fromLatin1( "%1. %2" ).arg( i + 1, width ).arg(
+    lines[ i ] = QStringLiteral( "%1. %2" ).arg( i + 1, width ).arg(
                    shouldEscape ? QString( escape( lines.at( i ) ) ) : lines.at( i )
                  );
   }
@@ -265,9 +265,9 @@ QVariant RemoveTagsFilter::doFilter( const QVariant& input, const QVariant &argu
 {
   Q_UNUSED( autoescape )
   const QStringList tags = getSafeString( argument ).get().split( QLatin1Char( ' ' ) );
-  const QString tagRe = QString::fromLatin1( "(%1)" ).arg( tags.join( QChar::fromLatin1( '|' ) ) );
-  const QRegularExpression startTag( QString::fromLatin1( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
-  const QRegularExpression endTag( QString::fromLatin1( "</%1>" ).arg( tagRe ) );
+  const QString tagRe = QStringLiteral( "(%1)" ).arg( tags.join( QChar::fromLatin1( '|' ) ) );
+  const QRegularExpression startTag( QStringLiteral( "<%1(/?>|(\\s+[^>]*>))" ).arg( tagRe ) );
+  const QRegularExpression endTag( QStringLiteral( "</%1>" ).arg( tagRe ) );
 
   SafeString value = getSafeString( input );
   const bool safeInput = value.isSafe();
@@ -354,7 +354,7 @@ QVariant LineBreaksFilter::doFilter( const QVariant& input, const QVariant& argu
     if ( autoescape )
       _bit = conditionalEscape( _bit );
     _bit.get().replace( QLatin1Char( '\n' ), QStringLiteral( "<br />" ) );
-    output.append( QString::fromLatin1( "<p>%1</p>" ).arg( _bit ) );
+    output.append( QStringLiteral( "<p>%1</p>" ).arg( _bit ) );
   }
   return markSafe( output.join( QStringLiteral( "\n\n" ) ) );
 }

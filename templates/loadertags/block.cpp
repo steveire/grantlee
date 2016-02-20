@@ -57,7 +57,7 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       const QString blockNodeName = it.next().toString();
 
       if ( blockNodeName == blockName ) {
-        throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "'block' tag with name '%1' appears more than once." ).arg( blockName ) );
+        throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'block' tag with name '%1' appears more than once." ).arg( blockName ) );
       }
     }
   }

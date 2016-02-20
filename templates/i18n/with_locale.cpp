@@ -37,7 +37,7 @@ Node* WithLocaleNodeFactory::getNode( const QString &tagContent, Parser *p ) con
   QStringList expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expected format is for example 'with_locale \"de_DE\"'" ).arg( expr.first() ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 expected format is for example 'with_locale \"de_DE\"'" ).arg( expr.first() ) );
   }
 
   FilterExpression fe( expr.at( 1 ), p );

@@ -65,7 +65,7 @@ void BBCodeBuilder::endStrikeout()
 }
 void BBCodeBuilder::beginForeground( const QBrush &brush )
 {
-  m_text.append( QString::fromLatin1( "[COLOR=%1]" ).arg( brush.color().name() ) );
+  m_text.append( QStringLiteral( "[COLOR=%1]" ).arg( brush.color().name() ) );
 }
 void BBCodeBuilder::endForeground()
 {
@@ -77,7 +77,7 @@ void BBCodeBuilder::endForeground()
 void BBCodeBuilder::beginAnchor( const QString &href, const QString &name )
 {
   Q_UNUSED( name )
-  m_text.append( QString::fromLatin1( "[URL=%1]" ).arg( href ) );
+  m_text.append( QStringLiteral( "[URL=%1]" ).arg( href ) );
 }
 void BBCodeBuilder::endAnchor()
 {
@@ -88,7 +88,7 @@ void BBCodeBuilder::endAnchor()
 
 void BBCodeBuilder::beginFontPointSize( int size )
 {
-  m_text.append( QString::fromLatin1( "[SIZE=%1]" ).arg( QString::number( size ) ) );
+  m_text.append( QStringLiteral( "[SIZE=%1]" ).arg( QString::number( size ) ) );
 }
 void BBCodeBuilder::endFontPointSize()
 {
@@ -131,7 +131,7 @@ void BBCodeBuilder::insertImage( const QString &src, qreal width, qreal height )
 {
   Q_UNUSED( width );
   Q_UNUSED( height );
-  m_text.append( QString::fromLatin1( "[IMG]%1[/IMG]" ).arg( src ) );
+  m_text.append( QStringLiteral( "[IMG]%1[/IMG]" ).arg( src ) );
 }
 
 void BBCodeBuilder::beginList( QTextListFormat::Style type )

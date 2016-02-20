@@ -70,17 +70,17 @@ QVariant timeSince( const QDateTime &early, const QDateTime &late )
   QString firstChunk;
 
   if ( count != 1 )
-    firstChunk.append( QString::fromLatin1( "%1 %2" ).arg( count ).arg( pluralNames.at( i - 1 ) ) );
+    firstChunk.append( QStringLiteral( "%1 %2" ).arg( count ).arg( pluralNames.at( i - 1 ) ) );
   else {
-    firstChunk.append( QString::fromLatin1( "%1 %2" ).arg( count ).arg( singularNames.at( i - 1 ) ) );
+    firstChunk.append( QStringLiteral( "%1 %2" ).arg( count ).arg( singularNames.at( i - 1 ) ) );
   }
   if ( seconds.size() > i ) {
     int count2 = ( secsSince - ( seconds.at( i - 1 ) * count ) ) / seconds.at( i );
     if ( count2 != 0 ) {
       if ( count2 > 1 )
-        firstChunk.append( QString::fromLatin1( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i ) ) );
+        firstChunk.append( QStringLiteral( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i ) ) );
       else
-        firstChunk.append( QString::fromLatin1( ", %1 %2" ).arg( count2 ).arg( singularNames.at( i ) ) );
+        firstChunk.append( QStringLiteral( ", %1 %2" ).arg( count2 ).arg( singularNames.at( i ) ) );
     }
   }
   return firstChunk;

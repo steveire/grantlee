@@ -37,7 +37,7 @@ Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee:
   expr.removeFirst();
 
   QString expression = expr.join( QChar::fromLatin1( ' ' ) );
-  FilterExpression fe( QString::fromLatin1( "var|%1" ).arg( expression ), p );
+  FilterExpression fe( QStringLiteral( "var|%1" ).arg( expression ), p );
 
   QStringList filters = fe.filters();
   if ( filters.contains( QStringLiteral( "safe" ) ) || filters.contains( QStringLiteral( "escape" ) ) ) {

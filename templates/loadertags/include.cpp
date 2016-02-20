@@ -62,7 +62,7 @@ void IncludeNode::render( OutputStream *stream, Context *c ) const
   Template t = ti->engine()->loadByName( filename );
 
   if ( !t )
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Template not found %1" ).arg( filename ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Template not found %1" ).arg( filename ) );
 
   if ( t->error() )
     throw Grantlee::Exception( t->error(), t->errorString() );
@@ -85,7 +85,7 @@ void ConstantIncludeNode::render( OutputStream *stream, Context *c ) const
 
   Template t = ti->engine()->loadByName( m_name );
   if ( !t )
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Template not found %1" ).arg( m_name ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Template not found %1" ).arg( m_name ) );
 
   if ( t->error() )
     throw Grantlee::Exception( t->error(), t->errorString() );
