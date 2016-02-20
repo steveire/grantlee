@@ -126,7 +126,7 @@ QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument
 
   QVariantList varList = input.value<QVariantList>();
 
-  qsrand( QDateTime::currentDateTime().toTime_t() );
+  qsrand( QDateTime::currentDateTimeUtc().toTime_t() );
   int rnd = qrand() % varList.size();
   return varList.at( rnd );
 }
