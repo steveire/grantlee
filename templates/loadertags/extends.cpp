@@ -126,7 +126,7 @@ void ExtendsNode::render( OutputStream *stream, Context *c ) const
   const Template parentTemplate = getParent( c );
 
   if ( !parentTemplate ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "Cannot load template." ) );
+    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Cannot load template." ) );
   }
 
   QVariant &variant = c->renderContext()->data( 0 );
