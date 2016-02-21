@@ -11,6 +11,7 @@ add_library(grantlee_loadertags MODULE
 )
 set_property(TARGET grantlee_loadertags PROPERTY EXPORT_NAME loadertags)
 target_link_libraries(grantlee_loadertags Grantlee5::Templates)
+target_compile_features(grantlee_loadertags PRIVATE cxx_auto_type)
 grantlee_adjust_plugin_name(grantlee_loadertags)
 
 install(TARGETS grantlee_loadertags EXPORT grantlee_targets

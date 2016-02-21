@@ -11,6 +11,7 @@ add_library(grantlee_i18ntags MODULE
 )
 set_property(TARGET grantlee_i18ntags PROPERTY EXPORT_NAME i18ntags)
 target_link_libraries(grantlee_i18ntags Grantlee5::Templates)
+target_compile_features(grantlee_i18ntags PRIVATE cxx_auto_type)
 grantlee_adjust_plugin_name(grantlee_i18ntags)
 
 install(TARGETS grantlee_i18ntags EXPORT grantlee_targets

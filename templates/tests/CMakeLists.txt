@@ -89,6 +89,7 @@ add_library(template_test_builtins STATIC coverageobject.cpp
   ${_testresource_rcc_src}
 )
 target_link_libraries(template_test_builtins Qt5::Test)
+target_compile_definitions(template_test_builtins PUBLIC cxx_auto_type)
 
 macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
   foreach(_testname ${ARGN})

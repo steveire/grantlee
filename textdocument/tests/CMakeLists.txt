@@ -8,6 +8,7 @@ add_library(textdocument_test_builtins STATIC
   coverageobject.cpp
 )
 target_link_libraries(textdocument_test_builtins Qt5::Test)
+target_compile_features(textdocument_test_builtins PUBLIC cxx_auto_type)
 
 macro(GRANTLEE_TEXTDOCUMENT_UNIT_TESTS)
   foreach(_testname ${ARGN})

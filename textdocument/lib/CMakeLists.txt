@@ -24,7 +24,7 @@ add_library(Grantlee_TextDocument SHARED
 generate_export_header(Grantlee_TextDocument)
 add_library(Grantlee::TextDocument ALIAS Grantlee_TextDocument)
 set_property(TARGET Grantlee_TextDocument PROPERTY EXPORT_NAME TextDocument)
-
+target_compile_features(Grantlee_TextDocument PRIVATE cxx_auto_type)
 
 target_link_libraries(Grantlee_TextDocument
   LINK_PUBLIC Qt5::Gui

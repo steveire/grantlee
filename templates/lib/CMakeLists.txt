@@ -61,6 +61,7 @@ add_library(Grantlee_Templates SHARED
 add_library(Grantlee5::Templates ALIAS Grantlee_Templates)
 generate_export_header(Grantlee_Templates)
 set_property(TARGET Grantlee_Templates PROPERTY EXPORT_NAME Templates)
+target_compile_features(Grantlee_Templates PRIVATE cxx_auto_type)
 
 if (Qt5Script_FOUND)
   set(scriptabletags_FILES

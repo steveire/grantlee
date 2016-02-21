@@ -24,6 +24,7 @@ add_library(grantlee_defaulttags MODULE
 )
 set_property(TARGET grantlee_defaulttags PROPERTY EXPORT_NAME defaulttags)
 target_link_libraries(grantlee_defaulttags Grantlee5::Templates)
+target_compile_features(grantlee_defaulttags PRIVATE cxx_auto_type)
 grantlee_adjust_plugin_name(grantlee_defaulttags)
 
 install(TARGETS grantlee_defaulttags EXPORT grantlee_targets
