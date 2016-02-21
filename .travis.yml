@@ -2,6 +2,7 @@ language: cpp
 branches:
   only:
     - master
+    - next
 
 os:
   - linux
