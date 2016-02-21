@@ -4,23 +4,37 @@ branches:
     - master
     - next
 
-os:
-  - linux
-  - osx
-
-env:
-  - CONFIG=Release
-  - CONFIG=Debug
+matrix:
+  include:
+    - os: osx
+      env: CONFIGS="Debug Release" GENERATORS="Makefiles Ninja" COMPILERS="Clang"
+    #- os: osx
+      #env: CONFIGS="Debug_And_Release" GENERATORS="Xcode" COMPILERS="Clang"
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Makefiles Ninja" COMPILERS="GNU Clang"
+      addons:
+        apt:
+          packages: clang
+    - os: linux
+      env: CONFIGS="RelWithDebInfo" GENERATORS="Ninja" COMPILERS="Clang" MEMCHECK=true
+      addons:
+        apt:
+          packages: valgrind clang
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" QT_VERSION_MM=54 QT_VERSION_FULL=542
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" QT_VERSION_MM=53 QT_VERSION_FULL=532 CMAKE_VERSION_MM=3.1 CMAKE_VERSION_FULL=3.1.3
 
 before_install:
-  - CMAKE_VERSION_MM=3.2
-  - CMAKE_VERSION_FULL=$CMAKE_VERSION_MM.1
-  - QT_VERSION_MM=55
-  - QT_VERSION_FULL=551
+  - if [ -z "$CMAKE_VERSION_MM" ]; then export CMAKE_VERSION_MM=3.4; fi
+  - if [ -z "$CMAKE_VERSION_FULL" ]; then export CMAKE_VERSION_FULL=3.4.0; fi
+  - if [ -z "$QT_VERSION_FULL" ]; then export QT_VERSION_FULL=551; fi
+  - if [ -z "$QT_VERSION_MM" ]; then export QT_VERSION_MM=55; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     sudo apt-add-repository --yes ppa:beineri/opt-qt$QT_VERSION_FULL
       && sudo apt-get update -qq
       && sudo apt-get install -qq qt${QT_VERSION_MM}base qt${QT_VERSION_MM}script qt${QT_VERSION_MM}tools
+      && sudo apt-get install -qq ninja-build clang
       && export CMAKE_PREFIX_PATH=/opt/qt${QT_VERSION_MM}
       && wget --no-check-certificate http://www.cmake.org/files/v${CMAKE_VERSION_MM}/cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.sh
       && sudo sh cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
@@ -31,17 +45,92 @@ before_install:
       brew update;
       brew outdated cmake || brew upgrade cmake;
       brew install qt5;
+      brew install ninja;
       export CMAKE_PREFIX_PATH=$(brew --prefix qt5);
     fi
 
 before_script:
-   - mkdir build
-   - cd build
-   - cmake .. -DCMAKE_BUILD_TYPE=$CONFIG
+   - for generator in $GENERATORS;
+     do
+       for compiler in $COMPILERS;
+       do
+         for config in $CONFIGS;
+         do
+           if [ "$generator" = "Makefiles" ];
+           then
+             export generator_name="Unix Makefiles";
+           else
+             export generator_name=$generator;
+           fi;
+           if [ "$compiler" = "GNU" ];
+           then
+             export compiler_name="g++";
+           else
+             export compiler_name="clang++";
+           fi;
+           if [ "$config" = "Debug_And_Release" ];
+           then
+             export config_arg=;
+           else
+             export config_arg="-DCMAKE_BUILD_TYPE=$config";
+           fi;
+           mkdir build-$config-$generator-$compiler;
+           pushd build-$config-$generator-$compiler;
+           cmake .. $config_arg -G "$generator_name" -DCMAKE_CXX_COMPILER=$compiler_name && popd && continue;
+           popd;
+           failure=1;
+           break;
+         done;
+         if [ "$failure" != "" ]; then break; fi;
+       done;
+       if [ "$failure" != "" ]; then break; fi;
+     done;
+     if [ "$failure" != "" ]; then false; fi;
+
 
 script:
-   - cmake --build . --config $CONFIG
-   - ctest --output-on-failure
+   - if [ -n "MEMCHECK" ]; then export MEMCHECK_ARG="-DExperimentalMemCheck"; fi
+   - for config in $CONFIGS;
+     do
+       for generator in $GENERATORS;
+       do
+         for compiler in $COMPILERS;
+         do
+           if [ "$config" = "Debug_And_Release" ];
+           then
+             build_configs="Debug Release";
+           else
+             build_configs=$config;
+           fi;
+           for build_config in $build_configs;
+           do
+             pushd build-$config-$generator-$compiler;
+             cmake --build . --config $build_config;
+             ctest --output-on-failure && popd && continue;
+             popd;
+             failure=1;
+             break;
+           done;
+           if [ "$failure" != "" ]; then break; fi;
+         done;
+         if [ "$failure" != "" ]; then break; fi;
+       done;
+       if [ "$failure" != "" ]; then break; fi;
+     done;
+     if [ "$failure" != "" ]; then false; fi;
+
+    #cmake --build . --target ExperimentalSubmit
+    #cmake --build . --config $build_config
+    #ctest --output-on-failure $MEMCHECK_ARG
+             #cmake --build . --target ExperimentalStart;
+             #cmake --build . --target ExperimentalConfigure;
+             #cmake --build . --target ExperimentalBuild;
+             #cmake --build . --target install;
+             #cmake --build . --target ExperimentalTest;
+             #if [ "$MEMCHECK" = "true" ];
+             #then
+             #cmake --build . --target ExperimentalMemCheck;
+             #fi;
 
 notifications:
   email: false
