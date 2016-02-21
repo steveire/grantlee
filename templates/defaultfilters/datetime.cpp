@@ -29,7 +29,7 @@ QVariant timeSince( const QDateTime &early, const QDateTime &late )
   Q_ASSERT( early.isValid() );
   Q_ASSERT( late.isValid() );
 
-  int secsSince = early.secsTo( late );
+  qint64 secsSince = early.secsTo( late );
 
   if ( secsSince < 0 )
     return SafeString( QStringLiteral( "0 minutes" ) );
@@ -59,10 +59,10 @@ QVariant timeSince( const QDateTime &early, const QDateTime &late )
           << ( 60 * 60 ) // hour
           << ( 60 ); // minute
 
-  int count = secsSince;
+  qint64 count = secsSince;
   int i = 0;
   while ( i < seconds.size() ) {
-    count = ( int )( secsSince / seconds.at( i ) );
+    count = ( secsSince / seconds.at( i ) );
     ++i;
     if ( count != 0 )
       break;
@@ -75,7 +75,7 @@ QVariant timeSince( const QDateTime &early, const QDateTime &late )
     firstChunk.append( QStringLiteral( "%1 %2" ).arg( count ).arg( singularNames.at( i - 1 ) ) );
   }
   if ( seconds.size() > i ) {
-    int count2 = ( secsSince - ( seconds.at( i - 1 ) * count ) ) / seconds.at( i );
+    qint64 count2 = ( secsSince - ( seconds.at( i - 1 ) * count ) ) / seconds.at( i );
     if ( count2 != 0 ) {
       if ( count2 > 1 )
         firstChunk.append( QStringLiteral( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i ) ) );
