@@ -40,21 +40,21 @@ public:
 
   ~BBCodeBuilder() override;
 
-  /* reimp */ void beginStrong() override;
-  /* reimp */ void endStrong() override;
-  /* reimp */ void beginEmph() override;
-  /* reimp */ void endEmph() override;
-  /* reimp */ void beginUnderline() override;
-  /* reimp */ void endUnderline() override;
-  /* reimp */ void beginStrikeout() override;
-  /* reimp */ void endStrikeout() override;
-  /* reimp */ void beginForeground( const QBrush &brush ) override;
-  /* reimp */ void endForeground() override;
+  void beginStrong() override;
+  void endStrong() override;
+  void beginEmph() override;
+  void endEmph() override;
+  void beginUnderline() override;
+  void endUnderline() override;
+  void beginStrikeout() override;
+  void endStrikeout() override;
+  void beginForeground( const QBrush &brush ) override;
+  void endForeground() override;
 
   // Background colour not supported by BBCode.
 
-  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
-  /* reimp */ void endAnchor() override;
+  void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
+  void endAnchor() override;
 
   // Font family not supported by BBCode.
 
@@ -63,45 +63,45 @@ public:
     it is suitable for use in BBCode.
     @param size The size of font to begin.
   */
-  /* reimp */ void beginFontPointSize( int size ) override;
-  /* reimp */ void endFontPointSize() override;
+  void beginFontPointSize( int size ) override;
+  void endFontPointSize() override;
 
-  /* reimp */ void beginParagraph( Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0 ) override;
+  void beginParagraph( Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0 ) override;
 
-  /* reimp */ void endParagraph() override;
-  /* reimp */ void addNewline() override;
+  void endParagraph() override;
+  void addNewline() override;
 
-  /* reimp */ void insertImage( const QString &src, qreal width, qreal height ) override;
+  void insertImage( const QString &src, qreal width, qreal height ) override;
 
-  /* reimp */ void beginList( QTextListFormat::Style type ) override;
+  void beginList( QTextListFormat::Style type ) override;
 
-  /* reimp */ void endList() override;
-
-
-  /* reimp */ void beginListItem() override;
-
-  /* reimp */ void beginSuperscript() override;
-
-  /* reimp */ void endSuperscript() override;
-
-  /* reimp */ void beginSubscript() override;
-
-  /* reimp */ void endSubscript() override;
+  void endList() override;
 
 
-  /* reimp */ void beginTable( qreal, qreal, const QString & ) override;
+  void beginListItem() override;
 
-  /* reimp */ void beginTableRow() override;
+  void beginSuperscript() override;
+
+  void endSuperscript() override;
+
+  void beginSubscript() override;
+
+  void endSubscript() override;
 
 
-  /* reimp */ void appendLiteralText( const QString &text ) override;
+  void beginTable( qreal, qreal, const QString & ) override;
+
+  void beginTableRow() override;
+
+
+  void appendLiteralText( const QString &text ) override;
 
   /**
     Escapes @p text appropriately for BBCode.
   */
   const QString escape( const QString &text ) const;
 
-  /* reimp */ QString getResult() override;
+  QString getResult() override;
 
 private:
   QList<QTextListFormat::Style> m_currentListItemStyles;

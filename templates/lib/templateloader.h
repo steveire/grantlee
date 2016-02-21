@@ -130,11 +130,11 @@ public:
   */
   ~FileSystemTemplateLoader() override;
 
-  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const override;
+  Template loadByName( const QString &name, Engine const *engine ) const override;
 
-  /* reimp */ bool canLoadTemplate( const QString &name ) const override;
+  bool canLoadTemplate( const QString &name ) const override;
 
-  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const override;
+  QPair<QString, QString> getMediaUri( const QString& fileName ) const override;
 
   /**
     Sets the theme of this loader to @p themeName
@@ -176,11 +176,11 @@ public:
   InMemoryTemplateLoader();
   ~InMemoryTemplateLoader() override;
 
-  /* reimp */ Template loadByName( const QString &name, Engine const *engine ) const override;
+  Template loadByName( const QString &name, Engine const *engine ) const override;
 
-  /* reimp */ bool canLoadTemplate( const QString &name ) const override;
+  bool canLoadTemplate( const QString &name ) const override;
 
-  /* reimp */ QPair<QString, QString> getMediaUri( const QString& fileName ) const override;
+  QPair<QString, QString> getMediaUri( const QString& fileName ) const override;
 
   /**
     Add a template content to this Loader.

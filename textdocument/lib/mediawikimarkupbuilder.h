@@ -39,39 +39,39 @@ public:
   MediaWikiMarkupBuilder();
   ~MediaWikiMarkupBuilder() override;
 
-  /* reimp */ void beginStrong() override;
-  /* reimp */ void endStrong() override;
-  /* reimp */ void beginEmph() override;
-  /* reimp */ void endEmph() override;
-  /* reimp */ void beginUnderline() override;
-  /* reimp */ void endUnderline() override;
-  /* reimp */ void beginStrikeout() override;
-  /* reimp */ void endStrikeout() override;
+  void beginStrong() override;
+  void endStrong() override;
+  void beginEmph() override;
+  void endEmph() override;
+  void beginUnderline() override;
+  void endUnderline() override;
+  void beginStrikeout() override;
+  void endStrikeout() override;
 
-  /* reimp */ void endParagraph() override;
-  /* reimp */ void addNewline() override;
+  void endParagraph() override;
+  void addNewline() override;
 
-  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
-  /* reimp */ void endAnchor() override;
+  void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
+  void endAnchor() override;
 
-  /* reimp */ void beginHeader( int level ) override;
-  /* reimp */ void endHeader( int level ) override;
+  void beginHeader( int level ) override;
+  void endHeader( int level ) override;
 
-  /* reimp */ void beginList( QTextListFormat::Style type ) override;
+  void beginList( QTextListFormat::Style type ) override;
 
-  /* reimp */ void endList() override;
+  void endList() override;
 
-  /* reimp */ void beginListItem() override;
-  /* reimp */ void endListItem() override;
+  void beginListItem() override;
+  void endListItem() override;
 
-  /* reimp */ void appendLiteralText( const QString &text ) override;
+  void appendLiteralText( const QString &text ) override;
 
   /**
     Escapes @p text appropriately for MediaWiki.
   */
   const QString escape( const QString &s );
 
-  /* reimp */ QString getResult() override;
+  QString getResult() override;
 
 private:
   QList<QTextListFormat::Style> currentListItemStyles;

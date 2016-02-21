@@ -74,11 +74,11 @@ public:
   */
   ~CachingLoaderDecorator() override;
 
-  /* reimp */ bool canLoadTemplate( const QString& name ) const override;
+  bool canLoadTemplate( const QString& name ) const override;
 
-  /* reimp */ QPair< QString, QString > getMediaUri( const QString& fileName ) const override;
+  QPair< QString, QString > getMediaUri( const QString& fileName ) const override;
 
-  /* reimp */ Template loadByName( const QString& name, const Grantlee::Engine* engine ) const override;
+  Template loadByName( const QString& name, const Grantlee::Engine* engine ) const override;
 
   /**
    * Clears the Templates objects cached in the decorator.
