@@ -60,11 +60,8 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
       throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Node not found: %1" ).arg( name ) );
     }
     QVariant nodeVariant = hash.value( name );
-    Q_ASSERT( nodeVariant.userType() == QMetaType::QObjectStar );
-    QObject *obj = nodeVariant.value<QObject*>();
-    Node *node = qobject_cast<Node*>( obj );
-    Q_ASSERT( node );
-    return node;
+    Q_ASSERT( nodeVariant.canConvert<Node*>());
+    return nodeVariant.value<Node*>();
   }
 
   int exprSize = expr.size();
@@ -78,9 +75,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     if ( hashVariant.userType() == qMetaTypeId<QVariantHash>() ) {
       hash = hashVariant.value<QVariantHash>();
     }
-    QObject *nodeObject = node;
-    QVariant nodeVariant = QVariant::fromValue( nodeObject );
-    hash.insert( name, nodeVariant );
+    hash.insert( name, QVariant::fromValue( node ) );
     p->setProperty( _namedCycleNodes, QVariant( hash ) );
     return node;
   } else {
