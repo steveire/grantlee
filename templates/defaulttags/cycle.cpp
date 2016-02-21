@@ -68,7 +68,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   if ( exprSize > 4 && expr.at( exprSize - 2 ) == QStringLiteral( "as" ) ) {
     // {% cycle "foo" "bar" "bat" as var %}
     QString name = expr.at( exprSize - 1 );
-    QStringList list = expr.mid( 1, exprSize - 3 );
+    QList<QString> list = expr.mid( 1, exprSize - 3 );
     Node *node = new CycleNode( getFilterExpressionList( list, p ), name, p );
     QVariant hashVariant = p->property( _namedCycleNodes );
     QVariantHash hash;
@@ -79,7 +79,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     p->setProperty( _namedCycleNodes, QVariant( hash ) );
     return node;
   } else {
-    QStringList list = expr.mid( 1, exprSize - 1 );
+    QList<QString> list = expr.mid( 1, exprSize - 1 );
     return new CycleNode( getFilterExpressionList( list, p ), QString(), p );
   }
 }
