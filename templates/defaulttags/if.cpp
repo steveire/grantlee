@@ -82,11 +82,33 @@ Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 
   auto trueList = p->parse(n, QStringList() << QStringLiteral("else")
                                             << QStringLiteral("endif"));
-  n->setTrueList(trueList);
+
+  n->setTrueList( trueList );
+
   NodeList falseList;
-  if (p->takeNextToken().content == QStringLiteral("else")) {
-    falseList = p->parse(n, QStringLiteral("endif"));
-    n->setFalseList(falseList);
+  Token nextToken = p->takeNextToken();
+  QString nextTokenContent = nextToken.content.trimmed();
+  if ( nextTokenContent.startsWith( QLatin1String( "elif" ) ) ) {
+    Node *elif;
+    try {
+      elif = getNode( nextTokenContent, p );
+    } catch ( Grantlee::Exception e ) {
+      throw Grantlee::Exception( e.errorCode(), QStringLiteral( "%1, line %2, %3" )
+                                 .arg( e.what() )
+                                 .arg( nextToken.linenumber )
+                                 .arg( p->parent()->objectName() ) );
+    }
+    if ( !elif ) {
+      throw Grantlee::Exception( EmptyBlockTagError, QStringLiteral( "Failed to get node from elif, line %2, %3" )
+                                 .arg( nextToken.linenumber )
+                                 .arg( p->parent()->objectName() ) );
+    }
+    elif->setParent( n );
+
+    n->setFalseList( NodeList() << elif );
+  } else if ( nextTokenContent == QLatin1String( "else" ) ) {
+    falseList = p->parse( n, QStringLiteral( "endif" ) );
+    n->setFalseList( falseList );
     // skip past the endif tag
     p->removeNextToken();
   } // else empty falseList.
