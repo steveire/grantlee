@@ -142,35 +142,36 @@ void TestFilters::testDateBasedFilters_data()
   QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
+  QDateTime now = QDateTime::currentDateTimeUtc();
 
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addSecs( -70 ) );
+  dict.insert( QStringLiteral( "a" ), now.addSecs( -70 ) );
 
   QTest::newRow( "filter-timesince01" ) << QStringLiteral( "{{ a|timesince }}" ) << dict << QStringLiteral( "1 minute" ) << NoError;
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addDays( -1 ).addSecs( -60 ) );
+  dict.insert( QStringLiteral( "a" ), now.addDays( -1 ).addSecs( -60 ) );
 
   QTest::newRow( "filter-timesince02" ) << QStringLiteral( "{{ a|timesince }}" ) << dict << QStringLiteral( "1 day" ) << NoError;
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addSecs( -1 * 60 * 60 ).addSecs( -1 * 25 * 60 ).addSecs( -1 * 10 ) );
+  dict.insert( QStringLiteral( "a" ), now.addSecs( -1 * 60 * 60 ).addSecs( -1 * 25 * 60 ).addSecs( -1 * 10 ) );
   QTest::newRow( "filter-timesince03" ) << QStringLiteral( "{{ a|timesince }}" ) << dict << QStringLiteral( "1 hour, 25 minutes" ) << NoError;
 
   dict.clear();
 
   //  Compare to a given parameter
 
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addDays( -2 ) );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime().addDays( -1 ) );
+  dict.insert( QStringLiteral( "a" ), now.addDays( -2 ) );
+  dict.insert( QStringLiteral( "b" ), now.addDays( -1 ) );
 
   QTest::newRow( "filter-timesince04" ) << QStringLiteral( "{{ a|timesince:b }}" ) << dict << QStringLiteral( "1 day" ) << NoError;
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addDays( -2 ).addSecs( -60 ) );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime().addDays( -2 ) );
+  dict.insert( QStringLiteral( "a" ), now.addDays( -2 ).addSecs( -60 ) );
+  dict.insert( QStringLiteral( "b" ), now.addDays( -2 ) );
 
   QTest::newRow( "filter-timesince05" ) << QStringLiteral( "{{ a|timesince:b }}" ) << dict << QStringLiteral( "1 minute" ) << NoError;
 
@@ -181,26 +182,26 @@ void TestFilters::testDateBasedFilters_data()
   //  {"a":now_tz - timedelta(hours=8), "b":now_tz
 //   QTest::newRow( "filter-timesince06" ) << QString::fromLatin1( "{{ a|timesince:b }}" ) << dict << QString::fromLatin1( "8 hours" ) << NoError;
 
-  dict.insert( QStringLiteral( "earlier" ), QDateTime::currentDateTime().addDays( -7 ) );
+  dict.insert( QStringLiteral( "earlier" ), now.addDays( -7 ) );
   QTest::newRow( "filter-timesince07" ) << QStringLiteral( "{{ earlier|timesince }}" ) << dict << QStringLiteral( "1 week" ) << NoError;
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "now" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "earlier" ), QDateTime::currentDateTime().addDays( -7 ) );
+  dict.insert( QStringLiteral( "now" ), now );
+  dict.insert( QStringLiteral( "earlier" ), now.addDays( -7 ) );
 
   QTest::newRow( "filter-timesince08" ) << QStringLiteral( "{{ earlier|timesince:now }}" ) << dict << QStringLiteral( "1 week" ) << NoError;
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "later" ), QDateTime::currentDateTime().addDays( 7 ) );
+  dict.insert( QStringLiteral( "later" ), now.addDays( 7 ) );
 
   QTest::newRow( "filter-timesince09" ) << QStringLiteral( "{{ later|timesince }}" ) << dict << QStringLiteral( "0 minutes" ) << NoError;
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "now" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "later" ), QDateTime::currentDateTime().addDays( 7 ) );
+  dict.insert( QStringLiteral( "now" ), now );
+  dict.insert( QStringLiteral( "later" ), now.addDays( 7 ) );
 
   QTest::newRow( "filter-timesince10" ) << QStringLiteral( "{{ later|timesince:now }}" ) << dict << QStringLiteral( "0 minutes" ) << NoError;
 
@@ -226,68 +227,68 @@ void TestFilters::testDateBasedFilters_data()
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime() );
+  dict.insert( QStringLiteral( "a" ), now );
+  dict.insert( QStringLiteral( "b" ), now );
 
   QTest::newRow( "filter-timesince17" ) << QStringLiteral( "{{ a|timesince:b }}" ) << dict << QStringLiteral( "0 minutes" ) << NoError;
 
   dict.clear();
 
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime().addDays( 1 ) );
+  dict.insert( QStringLiteral( "a" ), now );
+  dict.insert( QStringLiteral( "b" ), now.addDays( 1 ) );
 
   QTest::newRow( "filter-timesince18" ) << QStringLiteral( "{{ a|timesince:b }}" ) << dict << QStringLiteral( "1 day" ) << NoError;
 
   //  Default compare with datetime.now()
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addSecs( 130 ) );
+  dict.insert( QStringLiteral( "a" ), now.addSecs( 130 ) );
 
   QTest::newRow( "filter-timeuntil01" ) << QStringLiteral( "{{ a|timeuntil }}" ) << dict << QStringLiteral( "2 minutes" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addDays( 1 ).addSecs( 10 ) );
+  dict.insert( QStringLiteral( "a" ), now.addDays( 1 ).addSecs( 10 ) );
 
   QTest::newRow( "filter-timeuntil02" ) << QStringLiteral( "{{ a|timeuntil }}" ) << dict << QStringLiteral( "1 day" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addSecs( 60 * 60 * 8 ).addSecs( 610 ) );
+  dict.insert( QStringLiteral( "a" ), now.addSecs( 60 * 60 * 8 ).addSecs( 610 ) );
 
   QTest::newRow( "filter-timeuntil03" ) << QStringLiteral( "{{ a|timeuntil }}" ) << dict << QStringLiteral( "8 hours, 10 minutes" ) << NoError;
 
   //  Compare to a given parameter
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addDays( -1 ) );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime().addDays( -2 ) );
+  dict.insert( QStringLiteral( "a" ), now.addDays( -1 ) );
+  dict.insert( QStringLiteral( "b" ), now.addDays( -2 ) );
 
   QTest::newRow( "filter-timeuntil04" ) << QStringLiteral( "{{ a|timeuntil:b }}" ) << dict << QStringLiteral( "1 day" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime().addDays( -1 ) );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime().addDays( -1 ).addSecs( -60 ) );
+  dict.insert( QStringLiteral( "a" ), now.addDays( -1 ) );
+  dict.insert( QStringLiteral( "b" ), now.addDays( -1 ).addSecs( -60 ) );
 
   QTest::newRow( "filter-timeuntil05" ) << QStringLiteral( "{{ a|timeuntil:b }}" ) << dict << QStringLiteral( "1 minute" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "earlier" ), QDateTime::currentDateTime().addDays( -7 ) );
+  dict.insert( QStringLiteral( "earlier" ), now.addDays( -7 ) );
 
   QTest::newRow( "filter-timeuntil06" ) << QStringLiteral( "{{ earlier|timeuntil }}" ) << dict << QStringLiteral( "0 minutes" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "now" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "earlier" ), QDateTime::currentDateTime().addDays( -7 ) );
+  dict.insert( QStringLiteral( "now" ), now );
+  dict.insert( QStringLiteral( "earlier" ), now.addDays( -7 ) );
 
   QTest::newRow( "filter-timeuntil07" ) << QStringLiteral( "{{ earlier|timeuntil:now }}" ) << dict << QStringLiteral( "0 minutes" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "later" ), QDateTime::currentDateTime().addDays( 7 ).addSecs( 5 ) );
+  dict.insert( QStringLiteral( "later" ), now.addDays( 7 ).addSecs( 5 ) );
 
   QTest::newRow( "filter-timeuntil08" ) << QStringLiteral( "{{ later|timeuntil }}" ) << dict << QStringLiteral( "1 week" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "now" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "later" ), QDateTime::currentDateTime().addDays( 7 ) );
+  dict.insert( QStringLiteral( "now" ), now );
+  dict.insert( QStringLiteral( "later" ), now.addDays( 7 ) );
 
   QTest::newRow( "filter-timeuntil09" ) << QStringLiteral( "{{ later|timeuntil:now }}" ) << dict << QStringLiteral( "1 week" ) << NoError;
 
@@ -300,13 +301,13 @@ void TestFilters::testDateBasedFilters_data()
 //   QTest::newRow( "filter-timeuntil11" ) << QString::fromLatin1( "{{ a|timeuntil:b }}" ) << dict << QString::fromLatin1( "0 minutes" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime() );
+  dict.insert( QStringLiteral( "a" ), now );
+  dict.insert( QStringLiteral( "b" ), now );
   QTest::newRow( "filter-timeuntil12" ) << QStringLiteral( "{{ a|timeuntil:b }}" ) << dict << QStringLiteral( "0 minutes" ) << NoError;
 
   dict.clear();
-  dict.insert( QStringLiteral( "a" ), QDateTime::currentDateTime() );
-  dict.insert( QStringLiteral( "b" ), QDateTime::currentDateTime().addDays( -1 ) );
+  dict.insert( QStringLiteral( "a" ), now );
+  dict.insert( QStringLiteral( "b" ), now.addDays( -1 ) );
 
   QTest::newRow( "filter-timeuntil13" ) << QStringLiteral( "{{ a|timeuntil:b }}" ) << dict << QStringLiteral( "1 day" ) << NoError;
 
