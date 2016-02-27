@@ -53,10 +53,11 @@ Installation
 To build Grantlee, you need at least Qt4.5 (with development packages) and CMake 2.6.
 Out-of-source builds are recommended:
 
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=$prefix ..
-make && make install
+    mkdir build
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX=$prefix ..
+    cmake --build .
+    cmake --build . --target install
 
 Licensing
 ---------
