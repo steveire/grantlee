@@ -50,7 +50,7 @@ The Grantlee distribution contains several components.
 Installation
 ------------
 
-To build Grantlee, you need at least Qt4.5 (with development packages) and CMake 2.6.
+To build Grantlee, you need at least Qt5.3 (with development packages) and CMake 3.1.
 Out-of-source builds are recommended:
 
     mkdir build
