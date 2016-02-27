@@ -70,12 +70,5 @@ The details of the license are in the COPYING file in the source distribution.
 Contributing
 ------------
 
-Grantlee is hosted on a git repository at http://gitorious.org/grantlee.
-
-To get started, clone the repository,
-
-  git clone git://gitorious.org/grantlee/grantlee.git
-
-and build it as above. Create a merge request for your changes to be pulled into
-the main repository.
+Grantlee is hosted on github, and welcomes pull requests and issues.
 
