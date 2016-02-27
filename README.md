@@ -2,6 +2,8 @@
 The Grantlee Libraries
 ======================
 
+[![Build Status](https://travis-ci.org/steveire/grantlee.svg?branch=master)](https://travis-ci.org/steveire/grantlee)
+
 * About Grantlee
 * Installation
 * Licensing
