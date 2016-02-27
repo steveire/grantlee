@@ -10,42 +10,26 @@ The Grantlee Libraries
 About Grantlee
 --------------
 
-Grantlee is a set of Free Software libraries written using the Qt framework.
+Grantlee is a set of Free Software libraries written using the [Qt framework](http://code.qt.io).
 Currently two libraries are shipped with Grantlee: Grantlee Templates and Grantlee
 TextDocument.
 
 The goal of Grantlee Templates is to make it easier for application developers to
 separate the structure of documents from the data they contain, opening the door
-for theming.
+for theming and advanced generation of other text such as code.
 
-The syntax is intended to follow the syntax of the Django template system, and
-the design of Django is reused in Grantlee. Django is covered by a BSD style license.
+The syntax uses the syntax of the [Django template system](https://docs.djangoproject.com/en/1.9/ref/templates/language/), and
+the core design of Django is reused in Grantlee.
+
+    <ul>
+    {% for athlete in athlete_list %}
+    <li>{{ athlete.name }}{% if athlete.isCaptain %} (C){% endif %}</li>
+    {% endfor %}
+    </ul>
 
 Part of the design of both template systems is that application developers can
 extend the syntax by implementing their own tags and filters. For details of how
-to do that, see the API documentation.
-
-For template authors, different applications using Grantlee will present the same
-interface and core syntax for creating new themes. For details of how to write
-templates, see the documentation.
-
-The Grantlee distribution contains several components.
-
-* templates contains the code for parsing and interpreting template
-    syntax, as well as interfaces for extending the syntax using plugins.
-* textdocument contains some classes for creating textual output from QTextDocuments.
-* examples contains some small applications demonstrating how Grantlee can be used.
-* loadertags contains the library of tags used to perform template
-    inclusion, and inheritance.
-* defaulttags contains the library of tags made available by default to
-    all templates. These tags include for example 'for', 'if', 'ifequal' etc.
-* defaultfilters contains the library of filters made available by default
-    to all templates. These filters include for example 'upper', 'lower', 'cut' etc.
-* scriptabletags contains a plugin library implementation using QtScript to
-    implement plugins.
-* tests contains the unit tests for Grantlee.
-* scripts contains convenience scripts for creating release tarballs, generating
-    documentation, creating translation files etc.
+to do that, see the [API documentation](http://www.grantlee.org/apidox/extension.html).
 
 Installation
 ------------
