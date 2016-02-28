@@ -81,6 +81,9 @@ if (Qt5Script_FOUND)
 
   target_sources(Grantlee_Templates PRIVATE ${scriptabletags_SRCS})
   target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
+  target_include_directories(Grantlee_Templates
+    INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>"
+  )
   target_link_libraries(Grantlee_Templates
     LINK_PRIVATE Qt5::Script
   )

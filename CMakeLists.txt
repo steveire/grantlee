@@ -100,7 +100,7 @@ set (LIB_SUFFIX "" CACHE STRING "Define suffix of library directory name (eg. '6
 set( LIB_INSTALL_DIR lib${LIB_SUFFIX} )
 set( PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/grantlee/${Grantlee5_MAJOR_MINOR_VERSION_STRING} )
 set( BIN_INSTALL_DIR bin )
-set( INCLUDE_INSTALL_DIR include )
+set( INCLUDE_INSTALL_DIR include/Grantlee5 )
 set( DATA_INSTALL_DIR share/apps )
 
 # set up RPATH/install_name_dir
