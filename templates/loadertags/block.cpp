@@ -110,7 +110,7 @@ void BlockNode::render( OutputStream *stream, Context *c ) const
     m_list.render( stream, c );
     m_stream = 0;
   } else {
-    BlockNode const * block = blockContext.pop( m_name );
+    auto block = static_cast<const BlockNode*>(blockContext.pop( m_name ));
     variant.setValue( blockContext );
     BlockNode const * push = block;
     if ( !block )
