@@ -127,8 +127,8 @@ public:
 
   }
 
-  virtual QSharedPointer< OutputStream > clone() const {
-    return QSharedPointer<OutputStream>( new NoEscapeOutputStream );
+  QSharedPointer< OutputStream > clone(QTextStream *stream) const {
+    return QSharedPointer<OutputStream>( new NoEscapeOutputStream( stream ) );
   }
 
   virtual QString escape( const QString& input ) const {
@@ -151,8 +151,8 @@ public:
 
   }
 
-  virtual QSharedPointer< OutputStream > clone() const {
-    return QSharedPointer<OutputStream>( new JSOutputStream );
+  QSharedPointer< OutputStream > clone(QTextStream *stream) const {
+    return QSharedPointer<OutputStream>( new JSOutputStream( stream ) );
   }
 
   virtual QString escape( const QString& input ) const {
@@ -963,7 +963,9 @@ void TestBuiltinSyntax::testAlternativeEscaping()
 {
   Engine *engine1 = getEngine();
 
-  Template t1 = engine1->newTemplate( QStringLiteral( "{{ var }}" ), QStringLiteral( "\"template1\"" ) );
+  Template t1 = engine1->newTemplate(
+        QStringLiteral( "{{ var }} {% spaceless %}{{ var }}{% endspaceless %}" ),
+        QStringLiteral( "\"template1\"" ) );
 
   QString input = QStringLiteral( "< > \r\n & \" \' # = % $" );
 
@@ -978,7 +980,7 @@ void TestBuiltinSyntax::testAlternativeEscaping()
 
   t1->render( &noEscapeOs, &c );
 
-  QCOMPARE( output, input );
+  QCOMPARE( output, QString(input + QLatin1String(" ") + input));
   output.clear();
 
   JSOutputStream jsOs( &ts );
@@ -986,6 +988,8 @@ void TestBuiltinSyntax::testAlternativeEscaping()
   t1->render( &jsOs, &c );
 
   QString jsOutput( QStringLiteral( "\\u003C \\u003E \\u000D\\u000A \\u0026 \\u0022 \\u0027 # \\u003D % $" ) );
+
+  jsOutput = jsOutput + QLatin1String(" ") + jsOutput;
 
   QCOMPARE( output, jsOutput );
 }
