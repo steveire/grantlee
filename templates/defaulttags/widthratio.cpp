@@ -31,7 +31,7 @@ WidthRatioNodeFactory::WidthRatioNodeFactory()
 
 Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() != 4 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "widthratio takes three arguments" ) );
@@ -57,7 +57,7 @@ WidthRatioNode::WidthRatioNode(const FilterExpression& valExpr,
 
 int WidthRatioNode::round( qreal number )
 {
-  int intPart = ( int )number;
+  auto intPart = ( int )number;
   if ( number < ( intPart + 0.5 ) )
     return intPart;
   return intPart + 1;
@@ -65,20 +65,20 @@ int WidthRatioNode::round( qreal number )
 
 void WidthRatioNode::render( OutputStream *stream, Context *c ) const
 {
-  QVariant thisVal = m_valExpr.resolve( c );
-  QVariant maxVal = m_maxExpr.resolve( c );
+  auto thisVal = m_valExpr.resolve( c );
+  auto maxVal = m_maxExpr.resolve( c );
   if ( !thisVal.isValid() || !maxVal.isValid() )
     return;
 
-  qreal tv = thisVal.value<double>();
-  qreal mv = maxVal.value<double>();
+  auto tv = thisVal.value<double>();
+  auto mv = maxVal.value<double>();
 
   if ( mv == 0 )
     return;
 
-  int maxWidth = m_maxWidth.resolve( c ).value<int>();
+  auto maxWidth = m_maxWidth.resolve( c ).value<int>();
 
-  qreal result = ( tv / mv ) * maxWidth;
+  auto result = ( tv / mv ) * maxWidth;
 
   result = round( result );
 

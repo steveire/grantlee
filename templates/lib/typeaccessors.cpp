@@ -53,7 +53,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
 
   if ( property == QStringLiteral( "isalnum" ) ) {
     const QString s = object.get();
-    QString::const_iterator it = s.constBegin();
+    auto it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isLetterOrNumber() )
         return falseString;
@@ -63,7 +63,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
   }
   if ( property == QStringLiteral( "isalpha" ) ) {
     const QString s = object.get();
-    QString::const_iterator it = s.constBegin();
+    auto it = s.constBegin();
     if ( it == s.constEnd() )
       return falseString;
     while ( it != s.constEnd() ) {
@@ -75,7 +75,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
   }
   if ( property == QStringLiteral( "isdigit" ) ) {
     const QString s = object.get();
-    QString::const_iterator it = s.constBegin();
+    auto it = s.constBegin();
     while ( it != s.constEnd() ) {
       if ( !it->isNumber() )
         return falseString;
@@ -94,7 +94,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
   if ( property == QStringLiteral( "istitle" ) ) {
     const QString s = object.get();
 
-    static const QRegularExpression titleRe = getIsTitleRE();
+    static const auto titleRe = getIsTitleRE();
     return ( titleRe.match( s ).hasMatch() ) ? falseString : trueString;
   }
   if ( property == QStringLiteral( "isupper" ) ) {
@@ -105,10 +105,10 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     return object.get().toLower();
   }
   if ( property == QStringLiteral( "splitlines" ) ) {
-    const QStringList strings = object.get().split( QLatin1Char( '\n' ) );
+    const auto strings = object.get().split( QLatin1Char( '\n' ) );
     QVariantList list;
-    QStringList::const_iterator it = strings.constBegin();
-    const QStringList::const_iterator end = strings.constEnd();
+    auto it = strings.constBegin();
+    const auto end = strings.constEnd();
     for ( ; it != end; ++it )
       list << *it;
     return list;
@@ -120,7 +120,7 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     const QString inputString = object.get();
     QString s;
     s.reserve( inputString.size() );
-    QString::const_iterator it = inputString.constBegin();
+    auto it = inputString.constBegin();
     while ( it != inputString.constEnd() ) {
       if ( it->isUpper() )
         s += it->toLower();
@@ -133,18 +133,18 @@ QVariant TypeAccessor<Grantlee::SafeString&>::lookUp( const Grantlee::SafeString
     return s;
   }
   if ( property == QStringLiteral( "title" ) ) {
-    static const QRegularExpression titleRe = getTitleRE();
+    static const auto titleRe = getTitleRE();
 
     const QString s = object.get();
     QString output;
     output.reserve( s.size() );
-    int pos = 0;
-    int nextPos = 0;
+    auto pos = 0;
+    auto nextPos = 0;
     int matchedLength;
 
-    QRegularExpressionMatchIterator it = titleRe.globalMatch( s );
+    auto it = titleRe.globalMatch( s );
     while ( it.hasNext() ) {
-      QRegularExpressionMatch match = it.next();
+      auto match = it.next();
       pos = match.capturedStart();
       output += match.captured().toUpper();
       matchedLength = match.capturedLength();
@@ -179,8 +179,8 @@ QVariant TypeAccessor<MetaEnumVariable&>::lookUp( const MetaEnumVariable &object
   if ( property == QStringLiteral( "keyCount" ) )
     return object.enumerator.keyCount();
 
-  bool ok = false;
-  const int listIndex = property.toInt( &ok );
+  auto ok = false;
+  const auto listIndex = property.toInt( &ok );
   if ( ok ) {
     if ( listIndex >= object.enumerator.keyCount() )
       return QVariant();

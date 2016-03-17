@@ -71,7 +71,7 @@ void TestScriptableTagsSyntax::initTestCase()
   Q_INIT_RESOURCE(testresource);
 
   m_engine = new Engine( this );
-  QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
+  auto appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH )
                                           << QStringLiteral( ":/plugins/" ) // For scripteddefaults.qs
                          );
@@ -90,7 +90,7 @@ void TestScriptableTagsSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   if ( t->error() != NoError ) {
     if ( t->error() != error )
@@ -101,7 +101,7 @@ void TestScriptableTagsSyntax::doTest()
 
   Context context( dict );
 
-  QString result = t->render( &context );
+  auto result = t->render( &context );
 
   if ( t->error() != NoError ) {
     if ( t->error() != error )

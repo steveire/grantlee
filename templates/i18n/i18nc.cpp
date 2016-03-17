@@ -39,12 +39,12 @@ I18ncNodeFactory::I18ncNodeFactory()
 
 Node* I18ncNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 3 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc tag takes at least two arguments" ) );
 
-  QString contextText = expr.at( 1 );
+  auto contextText = expr.at( 1 );
 
   if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
        && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -52,7 +52,7 @@ Node* I18ncNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   }
   contextText = contextText.mid( 1, contextText.size() - 2 );
 
-  QString sourceText = expr.at( 2 );
+  auto sourceText = expr.at( 2 );
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -61,7 +61,7 @@ Node* I18ncNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 
   QList<FilterExpression> feList;
-  for ( int i = 3; i < expr.size(); ++i ) {
+  for ( auto i = 3; i < expr.size(); ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
@@ -76,12 +76,12 @@ I18ncVarNodeFactory::I18ncVarNodeFactory()
 
 Grantlee::Node* I18ncVarNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 5 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc_var tag takes at least four arguments" ) );
 
-  QString contextText = expr.at( 1 );
+  auto contextText = expr.at( 1 );
 
   if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
        && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -89,7 +89,7 @@ Grantlee::Node* I18ncVarNodeFactory::getNode( const QString& tagContent, Parser*
   }
   contextText = contextText.mid( 1, contextText.size() - 2 );
 
-  QString sourceText = expr.at( 2 );
+  auto sourceText = expr.at( 2 );
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -98,11 +98,11 @@ Grantlee::Node* I18ncVarNodeFactory::getNode( const QString& tagContent, Parser*
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 
   QList<FilterExpression> feList;
-  for ( int i = 3; i < expr.size() - 2; ++i ) {
+  for ( auto i = 3; i < expr.size() - 2; ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
-  QString resultName = expr.last();
+  auto resultName = expr.last();
 
   return new I18ncVarNode( sourceText, contextText, feList, resultName );
 }
@@ -119,7 +119,7 @@ void I18ncNode::render( OutputStream* stream, Context* c ) const
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizeContextString( m_sourceText, m_context, args );
+  auto resultString = c->localizer()->localizeContextString( m_sourceText, m_context, args );
 
   streamValueInContext( stream, resultString, c );
 }
@@ -136,7 +136,7 @@ void I18ncVarNode::render( OutputStream* stream, Context* c ) const
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizeContextString( m_sourceText, m_context, args );
+  auto resultString = c->localizer()->localizeContextString( m_sourceText, m_context, args );
 
   c->insert( m_resultName, resultString );
 }

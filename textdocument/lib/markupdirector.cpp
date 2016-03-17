@@ -54,16 +54,16 @@ MarkupDirector::~MarkupDirector()
 void MarkupDirector::processDocumentContents( QTextFrame::iterator start, QTextFrame::iterator end )
 {
   while ( !start.atEnd() && start != end ) {
-    QTextFrame *frame = start.currentFrame();
+    auto frame = start.currentFrame();
     if ( frame ) {
-      QTextTable *table = qobject_cast<QTextTable*>( frame );
+      auto table = qobject_cast<QTextTable*>( frame );
       if ( table ) {
         start = processTable( start, table );
       } else {
         start = processFrame( start, frame );
       }
     } else {
-      QTextBlock block = start.currentBlock();
+      auto block = start.currentBlock();
       Q_ASSERT( block.isValid() );
       start = processBlock( start, block );
     }
@@ -83,8 +83,8 @@ QTextFrame::iterator MarkupDirector::processFrame( QTextFrame::iterator it, QTex
 QTextFrame::iterator MarkupDirector::processBlock( QTextFrame::iterator it, const QTextBlock &block )
 {
   if ( block.isValid() ) {
-    QTextBlockFormat fmt = block.blockFormat();
-    QTextObject *object = block.document()->objectForFormat( fmt );
+    auto fmt = block.blockFormat();
+    auto object = block.document()->objectForFormat( fmt );
     if ( object ) {
       return processObject( it, block, object );
     } else {
@@ -99,11 +99,11 @@ QTextFrame::iterator MarkupDirector::processBlock( QTextFrame::iterator it, cons
 
 QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTextTable* table )
 {
-  QTextTableFormat format = table->format();
+  auto format = table->format();
 
-  QVector<QTextLength> colLengths = format.columnWidthConstraints();
+  auto colLengths = format.columnWidthConstraints();
 
-  QTextLength tableWidth = format.width();
+  auto tableWidth = format.width();
   QString sWidth;
 
   if ( tableWidth.type() == QTextLength::PercentageLength ) {
@@ -116,11 +116,11 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
 
   m_builder->beginTable( format.cellPadding(), format.cellSpacing(), sWidth );
 
-  int headerRowCount = format.headerRowCount();
+  auto headerRowCount = format.headerRowCount();
 
   QList<QTextTableCell> alreadyProcessedCells;
 
-  for ( int row = 0; row < table->rows(); ++row ) {
+  for ( auto row = 0; row < table->rows(); ++row ) {
     // Put a thead element around here somewhere?
     // if (row < headerRowCount)
     // {
@@ -133,12 +133,12 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
     //http://www.webdesignfromscratch.com/html-tables.cfm
 
 
-    for ( int column = 0; column < table->columns(); ++column ) {
+    for ( auto column = 0; column < table->columns(); ++column ) {
 
-      QTextTableCell tableCell = table->cellAt( row, column );
+      auto tableCell = table->cellAt( row, column );
 
-      int columnSpan = tableCell.columnSpan();
-      int rowSpan = tableCell.rowSpan();
+      auto columnSpan = tableCell.columnSpan();
+      auto rowSpan = tableCell.rowSpan();
       if ( ( rowSpan > 1 ) || ( columnSpan > 1 ) ) {
         if ( alreadyProcessedCells.contains( tableCell ) ) {
           // Already processed this cell. Move on.
@@ -148,7 +148,7 @@ QTextFrame::iterator MarkupDirector::processTable( QTextFrame::iterator it, QTex
         }
       }
 
-      QTextLength cellWidth = colLengths.at( column );
+      auto cellWidth = colLengths.at( column );
 
       QString sCellWidth;
 
@@ -193,9 +193,9 @@ void MarkupDirector::processTableCell( const QTextTableCell &tableCell, QTextTab
 
 QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame::iterator it, const QTextBlock &_block, QTextList *list )
 {
-  QTextListFormat::Style style = list->format().style();
+  auto style = list->format().style();
   m_builder->beginList( style );
-  QTextBlock block = _block;
+  auto block = _block;
   while ( block.isValid() && block.textList() ) {
     m_builder->beginListItem();
     processBlockContents( it, block );
@@ -205,10 +205,10 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame:
       ++it;
     block = block.next();
     if ( block.isValid() ) {
-      QTextObject *obj = block.document()->objectForFormat( block.blockFormat() );
-      QTextBlockGroup *group = qobject_cast<QTextBlockGroup *>( obj );
+      auto obj = block.document()->objectForFormat( block.blockFormat() );
+      auto group = qobject_cast<QTextBlockGroup *>( obj );
       if ( group && group != list ) {
-        QPair<QTextFrame::iterator, QTextBlock> pair = processBlockGroup( it, block, group );
+        auto pair = processBlockGroup( it, block, group );
         it = pair.first;
         block = pair.second;
       }
@@ -220,8 +220,8 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processList( QTextFrame:
 
 QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator frameIt, const QTextBlock &block )
 {
-  QTextBlockFormat blockFormat = block.blockFormat();
-  Qt::Alignment blockAlignment = blockFormat.alignment();
+  auto blockFormat = block.blockFormat();
+  auto blockAlignment = blockFormat.alignment();
 
   // TODO: decide when to use <h1> etc.
 
@@ -232,7 +232,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
     return frameIt;
   }
 
-  QTextBlock::iterator it = block.begin();
+  auto it = block.begin();
 
   // The beginning is the end. This is an empty block. Insert a newline and move on.
   if ( it.atEnd() ) {
@@ -272,7 +272,7 @@ QTextFrame::iterator MarkupDirector::processBlockContents( QTextFrame::iterator 
 QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, const QTextFragment &fragment, QTextDocument const *doc )
 {
 //   Q_D( MarkupDirector );
-  QTextCharFormat charFormat = fragment.charFormat();
+  auto charFormat = fragment.charFormat();
 
   if ( charFormat.objectType() >= QTextFormat::UserObject ) {
     processCustomFragment( fragment, doc );
@@ -281,7 +281,7 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
     return it;
   }
 
-  QTextObject *textObject = doc->objectForFormat( charFormat );
+  auto textObject = doc->objectForFormat( charFormat );
   if ( textObject )
     return processCharTextObject( it, fragment, textObject );
 
@@ -319,9 +319,9 @@ QTextBlock::iterator MarkupDirector::processFragment( QTextBlock::iterator it, c
 
   // If a sequence such as '<br /><br />' is imported into a document with setHtml, LineSeparator
   // characters are inserted. Here I make sure to put them back.
-  QStringList sl = fragment.text().split( QChar( QChar::LineSeparator ) );
+  auto sl = fragment.text().split( QChar( QChar::LineSeparator ) );
   QStringListIterator i( sl );
-  bool paraClosed = false;
+  auto paraClosed = false;
   while ( i.hasNext() ) {
     m_builder->appendLiteralText( i.next() );
     if ( i.hasNext() ) {
@@ -353,7 +353,7 @@ void MarkupDirector::processCustomFragment( const QTextFragment& fragment, const
 
 QTextFrame::iterator MarkupDirector::processObject( QTextFrame::iterator it, const QTextBlock &block, QTextObject *object )
 {
-  QTextBlockGroup *group = qobject_cast<QTextBlockGroup *>( object );
+  auto group = qobject_cast<QTextBlockGroup *>( object );
   if ( group ) {
     return processBlockGroup( it, block, group ).first;
   }
@@ -364,16 +364,16 @@ QTextFrame::iterator MarkupDirector::processObject( QTextFrame::iterator it, con
 
 QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::skipBlockGroup( QTextFrame::iterator it, const QTextBlock &_block, QTextBlockGroup *blockGroup )
 {
-  QTextBlock block = _block;
-  QTextBlock lastBlock = _block;
-  QTextFrame::iterator lastIt = it;
-  QTextObject *obj = block.document()->objectForFormat( block.blockFormat() );
+  auto block = _block;
+  auto lastBlock = _block;
+  auto lastIt = it;
+  auto obj = block.document()->objectForFormat( block.blockFormat() );
   QTextBlockGroup *nextGroup;
 
   if ( !obj )
     return qMakePair( lastIt, lastBlock );
 
-  QTextBlockGroup *group = qobject_cast<QTextBlockGroup *>( obj );
+  auto group = qobject_cast<QTextBlockGroup *>( obj );
   if ( !group )
     return qMakePair( lastIt, lastBlock );
 
@@ -402,7 +402,7 @@ QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::skipBlockGroup( QTextFra
 
 QPair<QTextFrame::iterator, QTextBlock> MarkupDirector::processBlockGroup( QTextFrame::iterator it, const QTextBlock &block, QTextBlockGroup *blockGroup )
 {
-  QTextList *list = qobject_cast<QTextList *>( blockGroup );
+  auto list = qobject_cast<QTextList *>( blockGroup );
   if ( list ) {
     return processList( it, block, list );
   }
@@ -416,9 +416,9 @@ void MarkupDirector::processDocument( QTextDocument *doc )
 
 QTextBlock::iterator MarkupDirector::processCharTextObject( QTextBlock::iterator it, const QTextFragment &fragment, QTextObject *textObject )
 {
-  QTextCharFormat fragmentFormat = fragment.charFormat();
+  auto fragmentFormat = fragment.charFormat();
   if ( fragmentFormat.isImageFormat() ) {
-    QTextImageFormat imageFormat = fragmentFormat.toImageFormat();
+    auto imageFormat = fragmentFormat.toImageFormat();
     return processImage( it, imageFormat, textObject->document() );
   }
   if ( !it.atEnd() )
@@ -446,12 +446,12 @@ void MarkupDirector::processClosingElements( QTextBlock::iterator it )
   if ( d->m_openElements.isEmpty() )
     return;
 
-  QSet<int> elementsToClose = getElementsToClose( it );
+  auto elementsToClose = getElementsToClose( it );
 
   int previousSize;
-  int remainingSize = elementsToClose.size();
+  auto remainingSize = elementsToClose.size();
   while ( !elementsToClose.isEmpty() ) {
-    int tag = d->m_openElements.last();
+    auto tag = d->m_openElements.last();
     if ( elementsToClose.contains( tag ) ) {
       switch ( tag ) {
       case Strong:
@@ -512,13 +512,13 @@ void MarkupDirector::processClosingElements( QTextBlock::iterator it )
 void MarkupDirector::processOpeningElements( QTextBlock::iterator it )
 {
   Q_D( MarkupDirector );
-  QTextFragment fragment = it.fragment();
+  auto fragment = it.fragment();
 
   if ( !fragment.isValid() )
     return;
 
-  QTextCharFormat fragmentFormat = fragment.charFormat();
-  QList<int> elementsToOpenList = getElementsToOpen( it );
+  auto fragmentFormat = fragment.charFormat();
+  auto elementsToOpenList = getElementsToOpen( it );
 
   Q_FOREACH( int tag, elementsToOpenList ) {
     switch ( tag ) {
@@ -552,10 +552,10 @@ void MarkupDirector::processOpeningElements( QTextBlock::iterator it )
       break;
     case Anchor: {
       // TODO: Multiple anchor names here.
-      QStringList anchorNames = fragmentFormat.anchorNames();
+      auto anchorNames = fragmentFormat.anchorNames();
       if ( !anchorNames.isEmpty() ) {
         while ( !anchorNames.isEmpty() ) {
-          QString n = anchorNames.last();
+          auto n = anchorNames.last();
           anchorNames.removeLast();
           if ( anchorNames.isEmpty() ) {
             // Doesn't matter if anchorHref is empty.
@@ -595,32 +595,32 @@ QSet< int > MarkupDirector::getElementsToClose( QTextBlock::iterator it ) const
 
   if ( it.atEnd() ) {
     // End of block?. Close all open tags.
-    QSet< int > elementsToClose = d->m_openElements.toSet();
+    auto elementsToClose = d->m_openElements.toSet();
     return elementsToClose.unite( d->m_elementsToOpen );
   }
 
-  QTextFragment fragment = it.fragment();
+  auto fragment = it.fragment();
 
   if ( !fragment.isValid() )
     return closedElements;
 
-  QTextCharFormat fragmentFormat = fragment.charFormat();
+  auto fragmentFormat = fragment.charFormat();
 
-  int fontWeight = fragmentFormat.fontWeight();
-  bool fontItalic = fragmentFormat.fontItalic();
-  bool fontUnderline = fragmentFormat.fontUnderline();
-  bool fontStrikeout = fragmentFormat.fontStrikeOut();
+  auto fontWeight = fragmentFormat.fontWeight();
+  auto fontItalic = fragmentFormat.fontItalic();
+  auto fontUnderline = fragmentFormat.fontUnderline();
+  auto fontStrikeout = fragmentFormat.fontStrikeOut();
 
-  QBrush fontForeground = fragmentFormat.foreground();
-  QBrush fontBackground = fragmentFormat.background();
+  auto fontForeground = fragmentFormat.foreground();
+  auto fontBackground = fragmentFormat.background();
 
-  QString fontFamily = fragmentFormat.fontFamily();
-  int fontPointSize = fragmentFormat.font().pointSize();
-  QString anchorHref = fragmentFormat.anchorHref();
+  auto fontFamily = fragmentFormat.fontFamily();
+  auto fontPointSize = fragmentFormat.font().pointSize();
+  auto anchorHref = fragmentFormat.anchorHref();
 
-  QTextCharFormat::VerticalAlignment vAlign = fragmentFormat.verticalAlignment();
-  bool superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
-  bool subscript = ( vAlign == QTextCharFormat::AlignSubScript );
+  auto vAlign = fragmentFormat.verticalAlignment();
+  auto superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
+  auto subscript = ( vAlign == QTextCharFormat::AlignSubScript );
 
 
   if ( !fontStrikeout &&
@@ -696,27 +696,27 @@ QSet< int > MarkupDirector::getElementsToClose( QTextBlock::iterator it ) const
 QList< int > MarkupDirector::getElementsToOpen( QTextBlock::iterator it )
 {
   Q_D( MarkupDirector );
-  QTextFragment fragment = it.fragment();
+  auto fragment = it.fragment();
   if ( !fragment.isValid() ) {
     return QList< int >();
   }
-  QTextCharFormat fragmentFormat = fragment.charFormat();
+  auto fragmentFormat = fragment.charFormat();
 
-  int fontWeight = fragmentFormat.fontWeight();
-  bool fontItalic = fragmentFormat.fontItalic();
-  bool fontUnderline = fragmentFormat.fontUnderline();
-  bool fontStrikeout = fragmentFormat.fontStrikeOut();
+  auto fontWeight = fragmentFormat.fontWeight();
+  auto fontItalic = fragmentFormat.fontItalic();
+  auto fontUnderline = fragmentFormat.fontUnderline();
+  auto fontStrikeout = fragmentFormat.fontStrikeOut();
 
-  QBrush fontForeground = fragmentFormat.foreground();
-  QBrush fontBackground = fragmentFormat.background();
+  auto fontForeground = fragmentFormat.foreground();
+  auto fontBackground = fragmentFormat.background();
 
-  QString fontFamily = fragmentFormat.fontFamily();
-  int fontPointSize = fragmentFormat.font().pointSize();
-  QString anchorHref = fragmentFormat.anchorHref();
+  auto fontFamily = fragmentFormat.fontFamily();
+  auto fontPointSize = fragmentFormat.font().pointSize();
+  auto anchorHref = fragmentFormat.anchorHref();
 
-  QTextCharFormat::VerticalAlignment vAlign = fragmentFormat.verticalAlignment();
-  bool superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
-  bool subscript = ( vAlign == QTextCharFormat::AlignSubScript );
+  auto vAlign = fragmentFormat.verticalAlignment();
+  auto superscript = ( vAlign == QTextCharFormat::AlignSuperScript );
+  auto subscript = ( vAlign == QTextCharFormat::AlignSubScript );
 
   if ( superscript && !( d->m_openElements.contains( SuperScript ) ) ) {
     d->m_elementsToOpen.insert( SuperScript );
@@ -813,7 +813,7 @@ QList< int > MarkupDirector::sortOpeningOrder( QSet< int > openingOrder, QTextBl
       if ( !it.atEnd() ) {
         // Because I've iterated, this returns the elements that will
         // be closed by the next fragment.
-        QSet<int> elementsToClose = getElementsToClose( it );
+        auto elementsToClose = getElementsToClose( it );
 
         // The exact order these are opened in is irrelevant, as all will be closed on the same block.
         // See testDoubleFormat.

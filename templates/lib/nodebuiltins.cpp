@@ -34,7 +34,7 @@ VariableNode::VariableNode( const FilterExpression &fe, QObject *parent )
 
 void VariableNode::render( OutputStream *stream, Context *c ) const
 {
-  const QVariant v = m_filterExpression.resolve( c );
+  const auto v = m_filterExpression.resolve( c );
   if ( !v.isValid() )
     return;
   streamValueInContext( stream, v, c );

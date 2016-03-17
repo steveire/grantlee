@@ -34,28 +34,28 @@ CycleNodeFactory::CycleNodeFactory()
 
 Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 expects at least one argument" ).arg( expr.first() ) );
   }
 
   if ( expr.at( 1 ).contains( QLatin1Char( ',' ) ) ) {
-    QStringList csvlist = expr.at( 1 ).split( QLatin1Char( ',' ) );
+    auto csvlist = expr.at( 1 ).split( QLatin1Char( ',' ) );
     expr.removeAt( 1 );
-    for ( int i = 0; i < csvlist.size() ; ++i ) {
+    for ( auto i = 0; i < csvlist.size() ; ++i ) {
       expr.insert( i + 1, QChar::fromLatin1( '"' ) + csvlist.at( i ) + QChar::fromLatin1( '"' ) );
     }
   }
 
   if ( expr.size() == 2 ) {
     // {% cycle var %}
-    QString name = expr.at( 1 );
-    QVariant cycleNodes = p->property( _namedCycleNodes );
+    auto name = expr.at( 1 );
+    auto cycleNodes = p->property( _namedCycleNodes );
     if ( cycleNodes.userType() != qMetaTypeId<QVariantHash>() ) {
       throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "No named cycles in template. '%1' is not defined" ).arg( name ) );
     }
-    QVariantHash hash = cycleNodes.value<QVariantHash>();
+    auto hash = cycleNodes.value<QVariantHash>();
     if ( !hash.contains( name ) ) {
       throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Node not found: %1" ).arg( name ) );
     }
@@ -64,13 +64,13 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     return nodeVariant.value<Node*>();
   }
 
-  int exprSize = expr.size();
+  auto exprSize = expr.size();
   if ( exprSize > 4 && expr.at( exprSize - 2 ) == QStringLiteral( "as" ) ) {
     // {% cycle "foo" "bar" "bat" as var %}
-    QString name = expr.at( exprSize - 1 );
-    QList<QString> list = expr.mid( 1, exprSize - 3 );
-    Node *node = new CycleNode( getFilterExpressionList( list, p ), name, p );
-    QVariant hashVariant = p->property( _namedCycleNodes );
+    auto name = expr.at( exprSize - 1 );
+    auto list = expr.mid( 1, exprSize - 3 );
+    auto node = new CycleNode( getFilterExpressionList( list, p ), name, p );
+    auto hashVariant = p->property( _namedCycleNodes );
     QVariantHash hash;
     if ( hashVariant.userType() == qMetaTypeId<QVariantHash>() ) {
       hash = hashVariant.value<QVariantHash>();
@@ -79,7 +79,7 @@ Node* CycleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
     p->setProperty( _namedCycleNodes, QVariant( hash ) );
     return node;
   } else {
-    QList<QString> list = expr.mid( 1, exprSize - 1 );
+    auto list = expr.mid( 1, exprSize - 1 );
     return new CycleNode( getFilterExpressionList( list, p ), QString(), p );
   }
 }
@@ -102,7 +102,7 @@ void CycleNode::render( OutputStream *stream, Context *c ) const
 
   QString value;
   QTextStream textStream( &value );
-  QSharedPointer<OutputStream> temp = stream->clone( &textStream );
+  auto temp = stream->clone( &textStream );
 
   rotator.next().resolve( temp.data(), c ).toString();
 

@@ -34,7 +34,7 @@ WithLocaleNodeFactory::WithLocaleNodeFactory()
 
 Node* WithLocaleNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 expected format is for example 'with_locale \"de_DE\"'" ).arg( expr.first() ) );
@@ -42,8 +42,8 @@ Node* WithLocaleNodeFactory::getNode( const QString &tagContent, Parser *p ) con
 
   FilterExpression fe( expr.at( 1 ), p );
 
-  WithLocaleNode *n = new WithLocaleNode( fe, p );
-  NodeList nodeList = p->parse( n, QStringLiteral( "endwith_locale" ) );
+  auto n = new WithLocaleNode( fe, p );
+  auto nodeList = p->parse( n, QStringLiteral( "endwith_locale" ) );
   n->setNodeList( nodeList );
   p->removeNextToken();
 

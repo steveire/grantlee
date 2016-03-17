@@ -31,7 +31,7 @@ RegroupNodeFactory::RegroupNodeFactory()
 
 Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( QLatin1Char( ' ' ) );
+  auto expr = tagContent.split( QLatin1Char( ' ' ) );
 
   if ( expr.size() != 6 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "widthratio takes five arguments" ) );
@@ -47,7 +47,7 @@ Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   FilterExpression expression( QStringLiteral( "\"" ) + expr.at( 3 ) + QStringLiteral( "\"" ), p );
 
-  QString name = expr.at( 5 );
+  auto name = expr.at( 5 );
 
   return new RegroupNode( target, expression, name, p );
 }
@@ -62,7 +62,7 @@ RegroupNode::RegroupNode(const FilterExpression& target, const FilterExpression&
 void RegroupNode::render( OutputStream *stream, Context *c ) const
 {
   Q_UNUSED( stream )
-  QVariantList objList = m_target.toList( c );
+  auto objList = m_target.toList( c );
   if ( objList.isEmpty() ) {
     c->insert( m_varName, QVariantHash() );
     return;
@@ -82,14 +82,14 @@ void RegroupNode::render( OutputStream *stream, Context *c ) const
   const QString keyName = getSafeString( m_expression.resolve( c ) );
   QListIterator<QVariant> i( objList );
   while ( i.hasNext() ) {
-    const QVariant var = i.next();
+    const auto var = i.next();
     c->push();
     c->insert( QStringLiteral( "var" ), var );
     const QString key = getSafeString( FilterExpression( QStringLiteral( "var." ) + keyName, 0 ).resolve( c ) );
     c->pop();
     QVariantHash hash;
     if ( contextList.size() > 0 ) {
-      QVariant hashVar = contextList.last();
+      auto hashVar = contextList.last();
       hash = hashVar.value<QVariantHash>();
     }
     if ( !hash.contains( QStringLiteral( "grouper" ) ) || hash.value( QStringLiteral( "grouper" ) ) != key ) {
@@ -99,7 +99,7 @@ void RegroupNode::render( OutputStream *stream, Context *c ) const
       contextList.append( newHash );
     }
 
-    QVariantList list = hash.value( QStringLiteral( "list" ) ).value<QVariantList>();
+    auto list = hash.value( QStringLiteral( "list" ) ).value<QVariantList>();
     list.append( var );
     hash.insert( QStringLiteral( "list" ), list );
     contextList[contextList.size() - 1] = hash;

@@ -95,7 +95,7 @@ void TestFilters::initTestCase()
   loader = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
   m_engine->addTemplateLoader( loader );
 
-  QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
+  auto appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
   m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH )
                            << appDirPath + QStringLiteral( "/tests/" ) // For testtags.qs
                          );
@@ -113,11 +113,11 @@ void TestFilters::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   Context context( dict );
 
-  QString result = t->render( &context );
+  auto result = t->render( &context );
 
   if ( t->error() != NoError ) {
     if ( t->error() != error )
@@ -142,7 +142,7 @@ void TestFilters::testDateBasedFilters_data()
   QTest::addColumn<Grantlee::Error>( "error" );
 
   Dict dict;
-  QDateTime now = QDateTime::currentDateTimeUtc();
+  auto now = QDateTime::currentDateTimeUtc();
 
   dict.insert( QStringLiteral( "a" ), now.addSecs( -70 ) );
 
@@ -847,7 +847,7 @@ void TestFilters::testListFilters_data()
   dict.clear();
 
   QVariantList mapList;
-  const QStringList cities = QStringList() << QStringLiteral( "London" )
+  const auto cities = QStringList() << QStringLiteral( "London" )
                                            << QStringLiteral( "Berlin" )
                                            << QStringLiteral( "Paris" )
                                            << QStringLiteral( "Dublin" );
@@ -877,18 +877,18 @@ void TestFilters::testListFilters_data()
 
   QVariantList listList;
 
-  const QStringList countries = QStringList() << QStringLiteral( "England" )
+  const auto countries = QStringList() << QStringLiteral( "England" )
                                               << QStringLiteral( "Germany" )
                                               << QStringLiteral( "France" )
                                               << QStringLiteral( "Ireland" );
 
 
-  const QStringList languages = QStringList() << QStringLiteral( "English" )
+  const auto languages = QStringList() << QStringLiteral( "English" )
                                               << QStringLiteral( "German" )
                                               << QStringLiteral( "French" )
                                               << QStringLiteral( "Irish" );
 
-  for ( int i = 0; i < cities.size(); ++i ) {
+  for ( auto i = 0; i < cities.size(); ++i ) {
     listList << QVariant( QVariantList()
                           << cities.at( i )
                           << countries.at( i )

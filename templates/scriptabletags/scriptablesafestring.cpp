@@ -27,10 +27,10 @@
 QScriptValue markSafeFunction( QScriptContext *context,
                                QScriptEngine *engine )
 {
-  QScriptValue inputValue = context->argument( 0 );
+  auto inputValue = context->argument( 0 );
   if ( inputValue.isQObject() ) {
-    QObject *obj = inputValue.toQObject();
-    ScriptableSafeString *ssObj = qobject_cast<ScriptableSafeString*>( obj );
+    auto obj = inputValue.toQObject();
+    auto ssObj = qobject_cast<ScriptableSafeString*>( obj );
     if ( !ssObj )
       return engine->nullValue();
 
@@ -38,8 +38,8 @@ QScriptValue markSafeFunction( QScriptContext *context,
     return engine->newQObject( ssObj );
 
   } else if ( inputValue.isString() ) {
-    QString str = inputValue.toString();
-    ScriptableSafeString *ssObj = new ScriptableSafeString( engine );
+    auto str = inputValue.toString();
+    auto ssObj = new ScriptableSafeString( engine );
     ssObj->setContent( markSafe( str ) );
     return engine->newQObject( ssObj );
 

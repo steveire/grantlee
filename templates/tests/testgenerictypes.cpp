@@ -84,7 +84,7 @@ public:
   Person(std::string _name, int _age)
     : name(_name), age(_age)
   {
-    static int _uid = 0;
+    static auto _uid = 0;
     uid = ++_uid;
   }
 
@@ -144,7 +144,7 @@ void TestGenericTypes::testGenericClassType()
 
   engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
-  Grantlee::Template t1 = engine.newTemplate(
+  auto t1 = engine.newTemplate(
       QStringLiteral( "Person: \nName: {{p.name}}\nAge: {{p.age}}\nUnknown: {{p.unknown}}" ),
       QStringLiteral( "template1" ) );
 
@@ -171,9 +171,9 @@ static QMap<int, Person> getPeople()
 template<typename SequentialContainer>
 void insertPeopleVariants( Grantlee::Context &c )
 {
-  QMap<int, Person> people = getPeople();
-  QMap<int, Person>::const_iterator it = people.constBegin();
-  const QMap<int, Person>::const_iterator end = people.constEnd();
+  auto people = getPeople();
+  auto it = people.constBegin();
+  const auto end = people.constEnd();
   SequentialContainer container;
   for ( ; it != end; ++it )
     container.push_back( QVariant::fromValue( it.value() ) );
@@ -183,9 +183,9 @@ void insertPeopleVariants( Grantlee::Context &c )
 template<typename AssociativeContainer>
 void insertAssociatedPeopleVariants( Grantlee::Context &c )
 {
-  QMap<int, Person> people = getPeople();
-  QMap<int, Person>::const_iterator it = people.constBegin();
-  const QMap<int, Person>::const_iterator end = people.constEnd();
+  auto people = getPeople();
+  auto it = people.constBegin();
+  const auto end = people.constEnd();
   AssociativeContainer container;
   for ( ; it != end; ++it )
     container.insert( QString::number( it.key() ), QVariant::fromValue( it.value() ) );
@@ -264,7 +264,7 @@ struct SequentialContainerTester<QSet<T> >
     Grantlee::Template t1 = engine.newTemplate(
         QStringLiteral( "{% for person in people %}{{ person.name }},{% endfor %}" ),
         QStringLiteral( "people_template" ) );
-    QString result = t1->render( &c );
+    auto result = t1->render( &c );
     QStringList output;
     output << QStringLiteral("Claire,") << QStringLiteral("Grant,") << QStringLiteral("Alan,");
     Q_FOREACH(const QString &s, output) {
@@ -328,7 +328,7 @@ void testAssociativeValues( Grantlee::Context &c, bool unordered = false )
         QStringLiteral( "{% for person in people.values %}({{ person.name }}:{{ person.age }}),{% endfor %}" ),
         QStringLiteral( "people_template" ) );
 
-    QString result = t1->render( &c );
+    auto result = t1->render( &c );
     if ( !unordered )
       QCOMPARE( result, QStringLiteral( "(Claire:23),(Grant:32),(Alan:50)," ) );
     else {
@@ -351,7 +351,7 @@ void testAssociativeItems( Grantlee::Context &c, bool unordered )
     Grantlee::Template t1 = engine.newTemplate(
         QStringLiteral( "{% for item in people.items %}({{ item.1.name }}:{{ item.1.age }}),{% endfor %}" ),
         QStringLiteral( "people_template" ) );
-    QString result = t1->render( &c );
+    auto result = t1->render( &c );
     if ( !unordered )
       QCOMPARE( result, QStringLiteral( "(Claire:23),(Grant:32),(Alan:50)," ) );
     else {
@@ -395,9 +395,9 @@ void TestGenericTypes::testAssociativeContainer_Variant()
 template<typename SequentialContainer>
 void insertPeople( Grantlee::Context &c )
 {
-  QMap<int, Person> people = getPeople();
-  QMap<int, Person>::const_iterator it = people.constBegin();
-  const QMap<int, Person>::const_iterator end = people.constEnd();
+  auto people = getPeople();
+  auto it = people.constBegin();
+  const auto end = people.constEnd();
   SequentialContainer container;
   for ( ; it != end; ++it )
     container.insert( container.end(), it.value() );
@@ -407,9 +407,9 @@ void insertPeople( Grantlee::Context &c )
 template<>
 void insertPeople<QSet<Person> >( Grantlee::Context &c )
 {
-  QMap<int, Person> people = getPeople();
-  QMap<int, Person>::const_iterator it = people.constBegin();
-  const QMap<int, Person>::const_iterator end = people.constEnd();
+  auto people = getPeople();
+  auto it = people.constBegin();
+  const auto end = people.constEnd();
   QSet<Person> container;
   for ( ; it != end; ++it )
     container.insert( it.value() );
@@ -420,10 +420,10 @@ void insertPeople<QSet<Person> >( Grantlee::Context &c )
 template<>
 void insertPeople<ThreeArray<Person> >( Grantlee::Context &c )
 {
-  QMap<int, Person> people = getPeople();
-  QMap<int, Person>::const_iterator it = people.constBegin();
+  auto people = getPeople();
+  auto it = people.constBegin();
   ThreeArray<Person> container;
-  for ( int i = 0; i < 3; ++i, ++it ) {
+  for ( auto i = 0; i < 3; ++i, ++it ) {
     Q_ASSERT( it != people.constEnd() );
     container[i] = it.value();
   }
@@ -434,9 +434,9 @@ void insertPeople<ThreeArray<Person> >( Grantlee::Context &c )
 template<typename AssociativeContainer>
 void insertAssociatedPeople( Grantlee::Context &c )
 {
-  QMap<int, Person> people = getPeople();
-  QMap<int, Person>::const_iterator it = people.constBegin();
-  const QMap<int, Person>::const_iterator end = people.constEnd();
+  auto people = getPeople();
+  auto it = people.constBegin();
+  const auto end = people.constEnd();
   AssociativeContainer container;
   for ( ; it != end; ++it )
     container[QString::number( it.key() )] = it.value();
@@ -446,9 +446,9 @@ void insertAssociatedPeople( Grantlee::Context &c )
 template<typename AssociativeContainer>
 void insertAssociatedPeople_Number( Grantlee::Context &c )
 {
-  QMap<int, Person> people = getPeople();
-  QMap<int, Person>::const_iterator it = people.constBegin();
-  const QMap<int, Person>::const_iterator end = people.constEnd();
+  auto people = getPeople();
+  auto it = people.constBegin();
+  const auto end = people.constEnd();
   AssociativeContainer container;
   for ( ; it != end; ++it )
     container[it.key()] = it.value();
@@ -497,7 +497,7 @@ void doTestAssociativeContainer_Type_Number( bool unordered = false )
     Grantlee::Template t1 = engine.newTemplate(
         QStringLiteral( "{{ people.23.name }}" ),
         QStringLiteral( "claire_template" ) );
-    QString result = t1->render( &c );
+    auto result = t1->render( &c );
     QCOMPARE( result, QStringLiteral( "Claire" ) );
   }
 
@@ -561,7 +561,7 @@ void TestGenericTypes::testSharedPointer()
 
   engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
-  Grantlee::Template t1 = engine.newTemplate(
+  auto t1 = engine.newTemplate(
       QStringLiteral( "{{ p.name }} {{ p.age }}" ),
       QStringLiteral( "template1" ) );
 
@@ -583,7 +583,7 @@ void TestGenericTypes::testThirdPartySharedPointer()
 
   engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
-  Grantlee::Template t1 = engine.newTemplate(
+  auto t1 = engine.newTemplate(
       QStringLiteral( "{{ p.name }} {{ p.age }}" ),
       QStringLiteral( "template1" ) );
 
@@ -604,7 +604,7 @@ typedef QStack<QMap<int, QList<QVector<qint16> > > > StackMapListVectorInt;
 
 static QVector<qint16> getNumbers()
 {
-  static int n = 0;
+  static auto n = 0;
   QVector<qint16> nums;
   nums.push_back( ++n );
   nums.push_back( ++n );
@@ -614,7 +614,7 @@ static QVector<qint16> getNumbers()
 static ListVectorInt getNumberLists()
 {
   ListVectorInt list;
-  for ( int i = 0; i < 2; ++i ) {
+  for ( auto i = 0; i < 2; ++i ) {
     list.append( getNumbers() );
   }
   return list;
@@ -623,7 +623,7 @@ static ListVectorInt getNumberLists()
 static MapListVectorInt getNumberListMap()
 {
   MapListVectorInt map;
-  for ( int i = 0; i < 2; ++i ) {
+  for ( auto i = 0; i < 2; ++i ) {
     map.insert( i, getNumberLists() );
   }
   return map;
@@ -632,7 +632,7 @@ static MapListVectorInt getNumberListMap()
 static StackMapListVectorInt getMapStack()
 {
   StackMapListVectorInt stack;
-  for ( int i = 0; i < 2; ++i ) {
+  for ( auto i = 0; i < 2; ++i ) {
     stack.push( getNumberListMap() );
   }
   return stack;
@@ -654,7 +654,7 @@ void TestGenericTypes::testNestedContainers()
 #else
 #define STRING_LITERAL QStringLiteral
 #endif
-  Grantlee::Template t1 = engine.newTemplate(
+  auto t1 = engine.newTemplate(
     STRING_LITERAL( "{% for map in stack %}"
                       "(M {% for key, list in map.items %}"
                         "({{ key }} : (L {% for vector in list %}"
@@ -668,9 +668,9 @@ void TestGenericTypes::testNestedContainers()
 
 #undef STRING_LITERAL
 
-  QString result = t1->render( &c );
+  auto result = t1->render( &c );
 
-  QString expectedResult = QStringLiteral(
+  auto expectedResult = QStringLiteral(
     "(M (0 : (L (V 1,2,),(V 3,4,),),(1 : (L (V 5,6,),(V 7,8,),),),(M (0 : (L (V 9,10,),(V 11,12,),),(1 : (L (V 13,14,),(V 15,16,),),),"
   );
 
@@ -714,7 +714,7 @@ void TestGenericTypes::testCustomQObjectDerived()
 
   engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
-  CustomObject *customObject = new CustomObject(this);
+  auto customObject = new CustomObject(this);
   customObject->setProperty("someProp", QStringLiteral("propValue"));
 
 
@@ -722,25 +722,25 @@ void TestGenericTypes::testCustomQObjectDerived()
   c.insert( QStringLiteral( "custom" ), QVariant::fromValue( customObject ) );
 
   {
-    Grantlee::Template t1 = engine.newTemplate(
+    auto t1 = engine.newTemplate(
       QStringLiteral( "{{ custom.someProp }}"), QStringLiteral( "template1" ) );
 
-    QString result = t1->render( &c );
-    QString expectedResult = QStringLiteral("propValue");
+    auto result = t1->render( &c );
+    auto expectedResult = QStringLiteral("propValue");
 
     QCOMPARE(result, expectedResult);
   }
 
-  QObject *other = new OtherObject(this);
+  auto other = new OtherObject(this);
 
   c.insert(QStringLiteral("other"), other);
 
   {
-    Grantlee::Template t1 = engine.newTemplate(
+    auto t1 = engine.newTemplate(
       QStringLiteral( "{{ other.custom.nestedProp }}"), QStringLiteral( "template1" ) );
 
-    QString result = t1->render( &c );
-    QString expectedResult = QStringLiteral("nestedValue");
+    auto result = t1->render( &c );
+    auto expectedResult = QStringLiteral("nestedValue");
 
     QCOMPARE(result, expectedResult);
   }
@@ -781,9 +781,9 @@ void TestGenericTypes::testUnregistered()
 
   {
     UnregisteredType unregType;
-    QVariant v = QVariant::fromValue( unregType );
+    auto v = QVariant::fromValue( unregType );
 
-    QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
+    auto result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
     QVERIFY( !result.isValid() );
 
     QVERIFY( !v.canConvert<QVariantList>() );
@@ -793,8 +793,8 @@ void TestGenericTypes::testUnregistered()
 
   {
     RegisteredNotListType nonListType;
-    QVariant v = QVariant::fromValue( nonListType );
-    QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
+    auto v = QVariant::fromValue( nonListType );
+    auto result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
     QVERIFY( result.isValid() );
     QVERIFY( !v.canConvert<QVariantList>() );
   }
@@ -802,8 +802,8 @@ void TestGenericTypes::testUnregistered()
   {
     QMetaType::registerConverter<UnregisteredType, QVariantList>(&dummy);
     UnregisteredType unregType;
-    QVariant v = QVariant::fromValue( unregType );
-    QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
+    auto v = QVariant::fromValue( unregType );
+    auto result = Grantlee::MetaType::lookup( v, QStringLiteral( "property" ) );
     QVERIFY( !result.isValid() );
   }
 
@@ -824,12 +824,12 @@ GRANTLEE_END_LOOKUP
 
 void TestGenericTypes::testPointerNonQObject()
 {
-  Person *p = new Person( "Adele", 21 );
-  QVariant v = QVariant::fromValue(p);
+  auto p = new Person( "Adele", 21 );
+  auto v = QVariant::fromValue(p);
 
   Grantlee::registerMetaType<Person*>();
 
-  QVariant result = Grantlee::MetaType::lookup( v, QStringLiteral( "name" ) );
+  auto result = Grantlee::MetaType::lookup( v, QStringLiteral( "name" ) );
 
   QCOMPARE( result.value<QString>(), QStringLiteral( "Adele" ) );
 

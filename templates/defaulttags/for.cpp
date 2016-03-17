@@ -31,7 +31,7 @@ ForNodeFactory::ForNodeFactory()
 
 Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 4 ) {
     throw Grantlee::Exception( TagSyntaxError,
@@ -63,9 +63,9 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   FilterExpression fe( expr.last(), p );
 
-  ForNode *n = new ForNode( vars, fe, reversed, p );
+  auto n = new ForNode( vars, fe, reversed, p );
 
-  NodeList loopNodes = p->parse( n, QStringList() << QStringLiteral( "empty" ) << QStringLiteral( "endfor" ) );
+  auto loopNodes = p->parse( n, QStringList() << QStringLiteral( "empty" ) << QStringLiteral( "endfor" ) );
   n->setLoopList( loopNodes );
 
   NodeList emptyNodes;
@@ -109,14 +109,14 @@ static const char parentloop[] = "parentloop";
 void ForNode::insertLoopVariables( Context *c, int listSize, int i )
 {
   // some magic variables injected into the context while rendering.
-  static const QString counter0 = QStringLiteral( "counter0" );
-  static const QString counter = QStringLiteral( "counter" );
-  static const QString revcounter0 = QStringLiteral( "revcounter0" );
-  static const QString revcounter = QStringLiteral( "revcounter" );
-  static const QString first = QStringLiteral( "first" );
-  static const QString last = QStringLiteral( "last" );
+  static const auto counter0 = QStringLiteral( "counter0" );
+  static const auto counter = QStringLiteral( "counter" );
+  static const auto revcounter0 = QStringLiteral( "revcounter0" );
+  static const auto revcounter = QStringLiteral( "revcounter" );
+  static const auto first = QStringLiteral( "first" );
+  static const auto last = QStringLiteral( "last" );
 
-  QVariantHash forloopHash = c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>();
+  auto forloopHash = c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>();
   forloopHash.insert( counter0, i );
   forloopHash.insert( counter, i + 1 );
   forloopHash.insert( revcounter, listSize - i );
@@ -128,7 +128,7 @@ void ForNode::insertLoopVariables( Context *c, int listSize, int i )
 
 void ForNode::renderLoop( OutputStream *stream, Context *c ) const
 {
-  for ( int j = 0; j < m_loopNodeList.size();j++ ) {
+  for ( auto j = 0; j < m_loopNodeList.size();j++ ) {
     m_loopNodeList[j]->render( stream, c );
   }
 }
@@ -154,8 +154,8 @@ void ForNode::handleHashItem(OutputStream *stream, Context *c, const QString &ke
 
 void ForNode::iterateHash( OutputStream *stream, Context *c, const QVariantHash &varHash, bool unpack )
 {
-  int listSize = varHash.size();
-  int i = 0;
+  auto listSize = varHash.size();
+  auto i = 0;
 
   QHashIterator<QString, QVariant> it( varHash );
   if ( m_isReversed == IsReversed ) {
@@ -177,7 +177,7 @@ void ForNode::render( OutputStream *stream, Context *c ) const
 {
   QVariantHash forloopHash;
 
-  QVariant parentLoopVariant = c->lookup( QLatin1String( forloop ) );
+  auto parentLoopVariant = c->lookup( QLatin1String( forloop ) );
   if ( parentLoopVariant.isValid() ) {
     // This is a nested loop.
     forloopHash = parentLoopVariant.value<QVariantHash>();
@@ -185,7 +185,7 @@ void ForNode::render( OutputStream *stream, Context *c ) const
     c->insert( QLatin1String( forloop ), forloopHash );
   }
 
-  bool unpack = m_loopVars.size() > 1;
+  auto unpack = m_loopVars.size() > 1;
 
   c->push();
 
@@ -196,11 +196,11 @@ void ForNode::render( OutputStream *stream, Context *c ) const
 //     return result;
 //   }
 
-  QVariant varFE = m_filterExpression.resolve( c );
+  auto varFE = m_filterExpression.resolve( c );
 
   if (varFE.userType() == qMetaTypeId<MetaEnumVariable>())
   {
-    const MetaEnumVariable mev = varFE.value<MetaEnumVariable>();
+    const auto mev = varFE.value<MetaEnumVariable>();
 
     if ( mev.value != -1 ) {
       c->pop();
@@ -208,7 +208,7 @@ void ForNode::render( OutputStream *stream, Context *c ) const
     }
 
     QVariantList list;
-    for ( int row = 0; row < mev.enumerator.keyCount(); ++row ) {
+    for ( auto row = 0; row < mev.enumerator.keyCount(); ++row ) {
       list << QVariant::fromValue( MetaEnumVariable( mev.enumerator, row ) );
     }
     varFE = list;
@@ -219,8 +219,8 @@ void ForNode::render( OutputStream *stream, Context *c ) const
     return m_emptyNodeList.render( stream, c );
   }
 
-  QSequentialIterable iter = varFE.value<QSequentialIterable>();
-  const int listSize = iter.size();
+  auto iter = varFE.value<QSequentialIterable>();
+  const auto listSize = iter.size();
 
   // If it's an iterable type, iterate, otherwise it's a list of one.
   if ( listSize < 1 ) {
@@ -228,18 +228,18 @@ void ForNode::render( OutputStream *stream, Context *c ) const
     return m_emptyNodeList.render( stream, c );
   }
 
-  int i = 0;
-  for (QSequentialIterable::const_iterator it = m_isReversed == IsReversed ? iter.end() -1 : iter.begin();
+  auto i = 0;
+  for (auto it = m_isReversed == IsReversed ? iter.end() -1 : iter.begin();
        m_isReversed == IsReversed ? it != iter.begin() - 1: it != iter.end();
        m_isReversed == IsReversed ? --it : ++it) {
-    const QVariant v = *it;
+    const auto v = *it;
     insertLoopVariables( c, listSize, i );
 
     if ( unpack ) {
       if ( v.userType() == qMetaTypeId<QVariantList>() ) {
-        QVariantList vList = v.value<QVariantList>();
-        int varsSize = qMin( m_loopVars.size(), vList.size() );
-        int j = 0;
+        auto vList = v.value<QVariantList>();
+        auto varsSize = qMin( m_loopVars.size(), vList.size() );
+        auto j = 0;
         for ( ; j < varsSize; ++j ) {
           c->insert( m_loopVars.at( j ), vList.at( j ) );
         }
@@ -256,7 +256,7 @@ void ForNode::render( OutputStream *stream, Context *c ) const
         Q_FOREACH( const QString &loopVar, m_loopVars ) {
           c->push();
           c->insert( QStringLiteral( "var" ), v );
-          QVariant v = FilterExpression( QStringLiteral( "var." ) + loopVar, 0 ).resolve( c );
+          auto v = FilterExpression( QStringLiteral( "var." ) + loopVar, 0 ).resolve( c );
           c->pop();
           c->insert( loopVar, v );
         }

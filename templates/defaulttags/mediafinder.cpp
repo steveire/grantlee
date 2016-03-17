@@ -35,7 +35,7 @@ MediaFinderNodeFactory::MediaFinderNodeFactory()
 
 Grantlee::Node* MediaFinderNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() <= 1 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'media_finder' tag requires at least one argument" ) );
@@ -52,15 +52,15 @@ MediaFinderNode::MediaFinderNode( const QList<FilterExpression>& mediaExpression
 
 void MediaFinderNode::render( OutputStream *stream, Context* c ) const
 {
-  TemplateImpl *t = containerTemplate();
-  Engine const *engine = t->engine();
+  auto t = containerTemplate();
+  auto engine = t->engine();
 
   Q_FOREACH( const FilterExpression &fe, m_mediaExpressionList ) {
     if ( fe.isTrue( c ) ) {
-      QPair<QString, QString> fileUrl = engine->mediaUri( getSafeString( fe.resolve( c ) ) );
+      auto fileUrl = engine->mediaUri( getSafeString( fe.resolve( c ) ) );
       if ( fileUrl.second.isEmpty() )
         continue;
-      QString uri = QUrl::fromLocalFile( fileUrl.first ).toString();
+      auto uri = QUrl::fromLocalFile( fileUrl.first ).toString();
       c->addExternalMedia( uri, fileUrl.second );
       if ( c->urlType() == Context::AbsoluteUrls )
         streamValueInContext( stream, uri, c );

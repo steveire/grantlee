@@ -189,7 +189,7 @@ void TestDefaultTags::initTestCase()
   m_engine = new Engine( this );
   m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
 
-  QSharedPointer<FakeTemplateLoader> loader1 = QSharedPointer<FakeTemplateLoader>( new FakeTemplateLoader() );
+  auto loader1 = QSharedPointer<FakeTemplateLoader>( new FakeTemplateLoader() );
 
   m_engine->addTemplateLoader( loader1 );
 }
@@ -206,7 +206,7 @@ void TestDefaultTags::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   if ( t->error() != NoError ) {
     if ( t->error() != error )
@@ -217,7 +217,7 @@ void TestDefaultTags::doTest()
 
   Context context( dict );
 
-  QString result = t->render( &context );
+  auto result = t->render( &context );
 
   if ( t->error() != NoError ) {
     if ( t->error() != error )
@@ -603,14 +603,14 @@ void TestDefaultTags::testIfTag_data()
   dict.insert( QStringLiteral( "var" ), str );
   QTest::newRow( "if-truthiness08" ) << QStringLiteral( "{% if var %}Yes{% else %}No{% endif %}" ) << dict << QStringLiteral( "Yes" ) << NoError;
 
-  int i = 0;
+  auto i = 0;
   dict.insert( QStringLiteral( "var" ), i );
   QTest::newRow( "if-truthiness07" ) << QStringLiteral( "{% if var %}Yes{% else %}No{% endif %}" ) << dict << QStringLiteral( "No" ) << NoError;
   i = 7;
   dict.insert( QStringLiteral( "var" ), i );
   QTest::newRow( "if-truthiness08" ) << QStringLiteral( "{% if var %}Yes{% else %}No{% endif %}" ) << dict << QStringLiteral( "Yes" ) << NoError;
 
-  qreal r = 0.0;
+  auto r = 0.0;
   dict.insert( QStringLiteral( "var" ), r );
   QTest::newRow( "if-truthiness09" ) << QStringLiteral( "{% if var %}Yes{% else %}No{% endif %}" ) << dict << QStringLiteral( "No" ) << NoError;
   r = 7.1;
@@ -1158,7 +1158,7 @@ void TestDefaultTags::testNowTag_data()
 
   Dict dict;
 
-  QDate today = QDateTime::currentDateTime().date();
+  auto today = QDateTime::currentDateTime().date();
 
   QTest::newRow( "now01" ) << QStringLiteral( "{% now \"d M yyyy\"%}" ) << dict << ( QString::number( today.day() ) + QLatin1Char( ' ' ) +  QString::number( today.month() ) + QLatin1Char( ' ' ) + QString::number( today.year() ) ) << NoError;
 
@@ -1476,7 +1476,7 @@ void TestDefaultTags::testAutoescapeTag_data()
   // Strings (ASCII or unicode) already marked as "safe" are not
   // auto-escaped
   SafeString safeString( QStringLiteral( "<b>first</b>" ) );
-  QVariant safeStringVar = QVariant::fromValue<SafeString>( markSafe( safeString ) );
+  auto safeStringVar = QVariant::fromValue<SafeString>( markSafe( safeString ) );
   dict.insert( QStringLiteral( "first" ), safeStringVar );
 
   QTest::newRow( "autoescape-tag06" ) << QStringLiteral( "{{ first }}" ) << dict << QStringLiteral( "<b>first</b>" ) << NoError;
@@ -1620,10 +1620,10 @@ void TestDefaultTags::testUrlTypes()
   QFETCH( Dict, dict );
   QFETCH( StringPair, output );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
   QVERIFY( t->error() == NoError );
   Context c( dict );
-  QString result = t->render( &c );
+  auto result = t->render( &c );
   QVERIFY( t->error() == NoError );
   QVERIFY( result == output.first + output.second );
 
@@ -1659,10 +1659,10 @@ void TestDefaultTags::testRelativePaths()
   QFETCH( Dict, dict );
   QFETCH( QString, output );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
   QVERIFY( t->error() == NoError );
   Context c( dict );
-  QString result = t->render( &c );
+  auto result = t->render( &c );
   QVERIFY( t->error() == NoError );
   if ( !output.isEmpty() )
     QVERIFY( result == QStringLiteral( "file:///path/to/" ) + output );
@@ -1670,7 +1670,7 @@ void TestDefaultTags::testRelativePaths()
     QVERIFY( result.isEmpty() );
 
   c.setUrlType( Context::RelativeUrls );
-  QString relativePath = QStringLiteral( "relative/path" );
+  auto relativePath = QStringLiteral( "relative/path" );
   c.setRelativeMediaPath( relativePath );
   result = t->render( &c );
   QVERIFY( t->error() == NoError );

@@ -78,7 +78,7 @@ QPair<QString, QString> Engine::mediaUri( const QString &fileName ) const
 
   QPair<QString, QString> uri;
   while ( it.hasNext() ) {
-    const QSharedPointer<AbstractTemplateLoader> loader = it.next();
+    const auto loader = it.next();
     uri = loader->getMediaUri( fileName );
     if ( !uri.second.isEmpty() )
       break;
@@ -189,14 +189,14 @@ void Engine::loadDefaultLibraries()
 #ifdef QT_SCRIPT_LIB
       // Although we don't use scripted libaries here, we need to recognize them being first
       // in the search path and not load a c++ plugin of the same name in that case.
-      ScriptableLibraryContainer* scriptableLibrary = d->loadScriptableLibrary( libName, minorVersion );
+      auto scriptableLibrary = d->loadScriptableLibrary( libName, minorVersion );
       if ( scriptableLibrary ) {
         scriptableLibrary->clear();
         break;
       }
 #endif
 
-      PluginPointer<TagLibraryInterface> library = d->loadCppLibrary( libName, minorVersion );
+      auto library = d->loadCppLibrary( libName, minorVersion );
       if ( minorVersion == 0)
         break;
       minorVersion--;
@@ -221,7 +221,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 
   uint minorVersion = GRANTLEE_VERSION_MINOR;
   while ( acceptableVersion<GRANTLEE_MIN_PLUGIN_VERSION>(minorVersion) ) {
-    TagLibraryInterface* library = d->loadLibrary( name, minorVersion );
+    auto library = d->loadLibrary( name, minorVersion );
     if ( library )
       return library;
     if (minorVersion == 0)
@@ -235,7 +235,7 @@ TagLibraryInterface* Engine::loadLibrary( const QString &name )
 TagLibraryInterface* EnginePrivate::loadLibrary( const QString &name, uint minorVersion )
 {
 #ifdef QT_SCRIPT_LIB
-  TagLibraryInterface* scriptableLibrary = loadScriptableLibrary( name, minorVersion );
+  auto scriptableLibrary = loadScriptableLibrary( name, minorVersion );
   if ( scriptableLibrary )
     return scriptableLibrary;
 
@@ -256,14 +256,14 @@ EnginePrivate::EnginePrivate( Engine *engine )
 
 QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVersion ) const
 {
-  int pluginIndex = 0;
+  auto pluginIndex = 0;
   const QString prefix = QStringLiteral( "/grantlee/" )
                        + QString::number( GRANTLEE_VERSION_MAJOR )
                        + QLatin1Char( '.' )
                        + QString::number( minorVersion )
                        + QLatin1Char( '/' );
   while ( m_pluginDirs.size() > pluginIndex ) {
-    const QString nextDir = m_pluginDirs.at( pluginIndex++ );
+    const auto nextDir = m_pluginDirs.at( pluginIndex++ );
     const QString libFileName = nextDir
                               + prefix
                               + name
@@ -274,10 +274,10 @@ QString EnginePrivate::getScriptLibraryName( const QString &name, uint minorVers
       continue;
     return libFileName;
   }
-  QList<QSharedPointer<AbstractTemplateLoader> >::const_iterator it = m_loaders.constBegin();
-  const QList<QSharedPointer<AbstractTemplateLoader> >::const_iterator end = m_loaders.constEnd();
+  auto it = m_loaders.constBegin();
+  const auto end = m_loaders.constEnd();
   for ( ; it != end; ++it ) {
-    const QPair<QString, QString> pair = ( *it )->getMediaUri( prefix
+    const auto pair = ( *it )->getMediaUri( prefix
                                                             + name
                                                             + QStringLiteral( ".qs" ) );
 
@@ -299,13 +299,13 @@ ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString 
     return 0;
 #endif
 
-  const QString libFileName = getScriptLibraryName( name, minorVersion );
+  const auto libFileName = getScriptLibraryName( name, minorVersion );
 
   if ( libFileName.isEmpty() )
     return 0;
 
   if ( m_scriptableLibraries.contains( libFileName ) ) {
-    ScriptableLibraryContainer *library = m_scriptableLibraries.value( libFileName );
+    auto library = m_scriptableLibraries.value( libFileName );
     library->setNodeFactories( m_scriptableTagLibrary->nodeFactories( libFileName ) );
     library->setFilters( m_scriptableTagLibrary->filters( libFileName ) );
     return library;
@@ -314,10 +314,10 @@ ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString 
   PluginPointer<TagLibraryInterface> scriptableTagLibrary = m_libraries.value( __scriptableLibName );
 #endif
 
-  const QHash<QString, AbstractNodeFactory*> factories = m_scriptableTagLibrary->nodeFactories( libFileName );
-  const QHash<QString, Filter*> filters = m_scriptableTagLibrary->filters( libFileName );
+  const auto factories = m_scriptableTagLibrary->nodeFactories( libFileName );
+  const auto filters = m_scriptableTagLibrary->filters( libFileName );
 
-  ScriptableLibraryContainer *library = new ScriptableLibraryContainer( factories, filters );
+  auto library = new ScriptableLibraryContainer( factories, filters );
   m_scriptableLibraries.insert( libFileName, library );
   return library;
 }
@@ -325,10 +325,10 @@ ScriptableLibraryContainer* EnginePrivate::loadScriptableLibrary( const QString 
 
 PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString &name, uint minorVersion )
 {
-  int pluginIndex = 0;
+  auto pluginIndex = 0;
 
   while ( m_pluginDirs.size() > pluginIndex ) {
-    const QString nextDir = m_pluginDirs.at( pluginIndex++ );
+    const auto nextDir = m_pluginDirs.at( pluginIndex++ );
     const QString pluginDirString = nextDir
                                   + QStringLiteral( "/grantlee/" )
                                   + QString::number( GRANTLEE_VERSION_MAJOR )
@@ -341,13 +341,13 @@ PluginPointer<TagLibraryInterface> EnginePrivate::loadCppLibrary( const QString 
     if ( !pluginDir.exists() )
       continue;
 
-    const QStringList list = pluginDir.entryList( QStringList( name + QLatin1Char( '*' ) ) );
+    const auto list = pluginDir.entryList( QStringList( name + QLatin1Char( '*' ) ) );
 
     if ( list.isEmpty() )
       continue;
 
-    QString pluginPath=pluginDir.absoluteFilePath( list.first() );
-    PluginPointer<TagLibraryInterface> plugin = PluginPointer<TagLibraryInterface>( pluginPath );
+    auto pluginPath=pluginDir.absoluteFilePath( list.first() );
+    auto plugin = PluginPointer<TagLibraryInterface>( pluginPath );
 
     if ( plugin ) {
 #ifdef __COVERAGESCANNER__
@@ -366,18 +366,18 @@ Template Engine::loadByName( const QString &name ) const
 
   QListIterator<QSharedPointer<AbstractTemplateLoader> > it( d->m_loaders );
   while ( it.hasNext() ) {
-    const QSharedPointer<AbstractTemplateLoader> loader = it.next();
+    const auto loader = it.next();
 
     if ( !loader->canLoadTemplate( name ) )
       continue;
 
-    const Template t = loader->loadByName( name, this );
+    const auto t = loader->loadByName( name, this );
 
     if ( t ) {
       return t;
     }
   }
-  Template t = Template( new TemplateImpl( this ) );
+  auto t = Template( new TemplateImpl( this ) );
   t->setObjectName( name );
   t->d_ptr->m_error = TagSyntaxError;
   t->d_ptr->m_errorString = QStringLiteral( "Template not found, %1" ).arg( name );
@@ -387,7 +387,7 @@ Template Engine::loadByName( const QString &name ) const
 Template Engine::newTemplate( const QString &content, const QString &name ) const
 {
   Q_D( const Engine );
-  Template t = Template( new TemplateImpl( this, d->m_smartTrimEnabled ) );
+  auto t = Template( new TemplateImpl( this, d->m_smartTrimEnabled ) );
   t->setObjectName( name );
   t->setContent( content );
   return t;

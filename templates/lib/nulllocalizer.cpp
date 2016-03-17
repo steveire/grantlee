@@ -71,8 +71,8 @@ QString NullLocalizer::localizeMonetaryValue( qreal value, const QString& curren
 static void replacePercentN( QString *result, int n )
 {
   if ( n >= 0 ) {
-    int percentPos = 0;
-    int len = 0;
+    auto percentPos = 0;
+    auto len = 0;
     while ( ( percentPos = result->indexOf( QLatin1Char( '%' ), percentPos + len ) ) != -1 ) {
       len = 1;
       QString fmt;
@@ -94,7 +94,7 @@ static void replacePercentN( QString *result, int n )
 
 static QString substituteArguments( const QString &input, const QVariantList &arguments )
 {
-  QString string = input;
+  auto string = input;
   Q_FOREACH( const QVariant &arg, arguments ) {
     if ( arg.userType() == qMetaTypeId<int>() )
       string = string.arg( arg.value<int>() );
@@ -117,10 +117,10 @@ QString NullLocalizer::localizeContextString( const QString& string, const QStri
 QString NullLocalizer::localizePluralContextString( const QString& _string, const QString& _pluralForm, const QString& context, const QVariantList &_arguments ) const
 {
   Q_UNUSED( context )
-  const int count = _arguments.first().value<int>();
-  QVariantList arguments = _arguments;
-  QString string = _string;
-  QString pluralForm = _pluralForm;
+  const auto count = _arguments.first().value<int>();
+  auto arguments = _arguments;
+  auto string = _string;
+  auto pluralForm = _pluralForm;
   if ( _string.contains( QStringLiteral( "%n" ) ) ) {
     arguments.removeFirst();
     replacePercentN( &string, count );
@@ -136,10 +136,10 @@ QString NullLocalizer::localizeString( const QString& string, const QVariantList
 
 QString NullLocalizer::localizePluralString( const QString& _string, const QString& _pluralForm, const QVariantList &_arguments ) const
 {
-  const int count = _arguments.first().value<int>();
-  QVariantList arguments = _arguments;
-  QString string = _string;
-  QString pluralForm = _pluralForm;
+  const auto count = _arguments.first().value<int>();
+  auto arguments = _arguments;
+  auto string = _string;
+  auto pluralForm = _pluralForm;
   if ( _string.contains( QStringLiteral( "%n" ) ) ) {
     arguments.removeFirst();
     replacePercentN( &string, count );

@@ -54,13 +54,13 @@ static QVariant doQobjectLookUp( const QObject * const object, const QString &pr
   if (!object)
     return QVariant();
   if ( property == QStringLiteral( "children" ) ) {
-    const QObjectList childList = object->children();
+    const auto childList = object->children();
     if ( childList.isEmpty() )
       return QVariant();
     QVariantList children;
 
-    QObjectList::const_iterator it = childList.constBegin();
-    const QObjectList::const_iterator end = childList.constEnd();
+    auto it = childList.constBegin();
+    const auto end = childList.constEnd();
     for ( ; it != end; ++it )
       children.append( QVariant::fromValue( *it ) );
     return children;
@@ -70,10 +70,10 @@ static QVariant doQobjectLookUp( const QObject * const object, const QString &pr
     return object->objectName();
   }
   // Can't be const because of invokeMethod.
-  const QMetaObject *metaObj = object->metaObject();
+  auto metaObj = object->metaObject();
 
   QMetaProperty mp;
-  for ( int i = 0; i < metaObj->propertyCount(); ++i ) {
+  for ( auto i = 0; i < metaObj->propertyCount(); ++i ) {
     // TODO only read-only properties should be allowed here.
     // This might also handle the variant messing I hit before.
     mp = metaObj->property( i );
@@ -89,7 +89,7 @@ static QVariant doQobjectLookUp( const QObject * const object, const QString &pr
     return mp.read( object );
   }
   QMetaEnum me;
-  for ( int i = 0; i < metaObj->enumeratorCount(); ++i ) {
+  for ( auto i = 0; i < metaObj->enumeratorCount(); ++i ) {
     me = metaObj->enumerator( i );
 
     if ( QLatin1String( me.name() ) == property ) {
@@ -97,7 +97,7 @@ static QVariant doQobjectLookUp( const QObject * const object, const QString &pr
       return QVariant::fromValue( mev );
     }
 
-    const int value = me.keyToValue( property.toLatin1().constData() );
+    const auto value = me.keyToValue( property.toLatin1().constData() );
 
     if ( value < 0 )
       continue;
@@ -115,13 +115,13 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
     return doQobjectLookUp(object.value<QObject*>(), property);
   }
   if (object.canConvert<QVariantList>()) {
-    QSequentialIterable iter = object.value<QSequentialIterable>();
+    auto iter = object.value<QSequentialIterable>();
     if (property == QStringLiteral("size") || property == QStringLiteral( "count" ) ) {
       return iter.size();
     }
 
-    bool ok = false;
-    const int listIndex = property.toInt( &ok );
+    auto ok = false;
+    const auto listIndex = property.toInt( &ok );
 
     if ( !ok || listIndex >= iter.size() ) {
       return QVariant();
@@ -131,9 +131,9 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
   }
   if (object.canConvert<QVariantHash>()) {
 
-    QAssociativeIterable iter = object.value<QAssociativeIterable>();
+    auto iter = object.value<QAssociativeIterable>();
 
-    QVariant mappedValue = iter.value(property);
+    auto mappedValue = iter.value(property);
     if(mappedValue.isValid())
       return mappedValue;
 
@@ -143,8 +143,8 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
     }
 
     if ( property == QStringLiteral( "items" ) ) {
-      QAssociativeIterable::const_iterator it = iter.begin();
-      const QAssociativeIterable::const_iterator end = iter.end();
+      auto it = iter.begin();
+      const auto end = iter.end();
       QVariantList list;
       for ( ; it != end; ++it ) {
         list.push_back( QVariantList() << it.key() << it.value() );
@@ -153,8 +153,8 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
     }
 
     if ( property == QStringLiteral( "keys" ) ) {
-      QAssociativeIterable::const_iterator it = iter.begin();
-      const QAssociativeIterable::const_iterator end = iter.end();
+      auto it = iter.begin();
+      const auto end = iter.end();
       QVariantList list;
       for ( ; it != end; ++it ) {
         list.push_back( it.key() );
@@ -163,8 +163,8 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
     }
 
     if ( property == QStringLiteral( "values" ) ) {
-      QAssociativeIterable::const_iterator it = iter.begin();
-      const QAssociativeIterable::const_iterator end = iter.end();
+      auto it = iter.begin();
+      const auto end = iter.end();
       QVariantList list;
       for ( ; it != end; ++it ) {
         list.push_back( it.value() );

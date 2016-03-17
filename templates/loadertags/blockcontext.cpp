@@ -24,8 +24,8 @@
 
 void BlockContext::addBlocks( const QHash<QString, BlockNode*> &blocks )
 {
-  QHash<QString, BlockNode*>::const_iterator it = blocks.constBegin();
-  const QHash<QString, BlockNode*>::const_iterator end = blocks.constEnd();
+  auto it = blocks.constBegin();
+  const auto end = blocks.constEnd();
 
   for ( ; it != end; ++it ) {
     m_blocks[ it.key() ].prepend( it.value() );
@@ -34,7 +34,7 @@ void BlockContext::addBlocks( const QHash<QString, BlockNode*> &blocks )
 
 BlockNode* BlockContext::getBlock( const QString& name ) const
 {
-  QList<BlockNode*> list = m_blocks[ name ];
+  auto list = m_blocks[ name ];
   if ( list.isEmpty() )
     return 0;
 

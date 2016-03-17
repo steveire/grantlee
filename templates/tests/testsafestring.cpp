@@ -42,8 +42,8 @@ private Q_SLOTS:
 
 void TestSafeString::testCombining()
 {
-  QString string1 = QStringLiteral( "this & that" );
-  QString string2 = QStringLiteral( " over & under" );
+  auto string1 = QStringLiteral( "this & that" );
+  auto string2 = QStringLiteral( " over & under" );
   SafeString safeString1unsafe( string1 );
   SafeString safeString2unsafe( string2 );
   SafeString safeString1safe( string1, SafeString::IsSafe );
@@ -66,7 +66,7 @@ void TestSafeString::testCombining()
 
 void TestSafeString::testAppending()
 {
-  QString string1 = QStringLiteral( "this & that" );
+  auto string1 = QStringLiteral( "this & that" );
   SafeString safeString1unsafe( string1 );
   SafeString safeString1safe( string1, SafeString::IsSafe );
   SafeString safeString2safe( string1, SafeString::IsSafe );
@@ -88,7 +88,7 @@ void TestSafeString::testAppending()
 
 void TestSafeString::testChopping()
 {
-  QString string1 = QStringLiteral( "this & that" );
+  auto string1 = QStringLiteral( "this & that" );
   SafeString safeString1unsafe( string1 );
   SafeString safeString1safe( string1, SafeString::IsSafe );
 
@@ -102,10 +102,10 @@ void TestSafeString::testChopping()
 
 void TestSafeString::testReplacing()
 {
-  QString string1 = QStringLiteral( "x&\ny" );
+  auto string1 = QStringLiteral( "x&\ny" );
   SafeString safeString1safe( string1, SafeString::IsSafe );
 
-  SafeString result = safeString1safe.get().replace( QLatin1Char( '\n' ), QStringLiteral( "<br />" ) );
+  auto result = safeString1safe.get().replace( QLatin1Char( '\n' ), QStringLiteral( "<br />" ) );
   QVERIFY( !result.isSafe() );
   QVERIFY( !safeString1safe.isSafe() );
   QCOMPARE( result.get(), safeString1safe.get() );

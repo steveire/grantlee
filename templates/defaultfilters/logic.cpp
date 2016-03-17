@@ -49,7 +49,7 @@ QVariant DivisibleByFilter::doFilter( const QVariant& input, const QVariant &arg
 QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString arg = getSafeString( argument );
+  auto arg = getSafeString( argument );
   QString yes;
   QString no;
   QString maybe;
@@ -58,8 +58,8 @@ QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument,
     no = QStringLiteral( "no" );
     maybe = QStringLiteral( "maybe" );
   } else {
-    QStringList argList = arg.get().split( QLatin1Char( ',' ) );
-    int numArgs = argList.size();
+    auto argList = arg.get().split( QLatin1Char( ',' ) );
+    auto numArgs = argList.size();
     if (( numArgs < 2 ) || ( numArgs > 3 ) ) {
       return input.value<QString>();
     } else if ( numArgs == 2 ) {

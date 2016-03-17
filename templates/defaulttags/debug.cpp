@@ -43,8 +43,8 @@ DebugNode::DebugNode( QObject *parent )
 void DebugNode::render( OutputStream *stream, Context *c ) const
 {
   QString ret;
-  int i = 0;
-  QHash<QString, QVariant> h = c->stackHash( i++ );
+  auto i = 0;
+  auto h = c->stackHash( i++ );
 
   ret += QStringLiteral( "\n\nContext:\n" );
   while ( !h.isEmpty() ) {

@@ -74,13 +74,13 @@ QString PlainTextMarkupBuilderPrivate::getRomanString(int item)
       QString romanNumeral;
 
       // works for up to 4999 items
-      QString romanSymbols = QStringLiteral("iiivixxxlxcccdcmmmm");
+      auto romanSymbols = QStringLiteral("iiivixxxlxcccdcmmmm");
       int c[] = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
-      int n = item;
-      for (int i = 12; i >= 0; n %= c[i], i--) {
-          int q = n / c[i];
+      auto n = item;
+      for (auto i = 12; i >= 0; n %= c[i], i--) {
+          auto q = n / c[i];
           if (q > 0) {
-              int startDigit = i + (i+3)/4;
+              auto startDigit = i + (i+3)/4;
               int numDigits;
               if (i % 4) {
                   // c[i] == 4|5|9|40|50|90|400|500|900
@@ -134,7 +134,7 @@ QString PlainTextMarkupBuilderPrivate::getReferences()
   if ( !m_urls.isEmpty() ) {
     refs.append( QStringLiteral( "\n--------\n" ) );
 
-    int index = 1;
+    auto index = 1;
     while ( !m_urls.isEmpty() ) {
       refs.append( QStringLiteral( "[%1] %2\n" ).arg( index++ ).arg( m_urls.takeFirst() ) );
     }
@@ -252,7 +252,7 @@ void PlainTextMarkupBuilder::insertImage( const QString &src, qreal width, qreal
   Q_UNUSED( width )
   Q_UNUSED( height )
 
-  int ref = addReference( src );
+  auto ref = addReference( src );
 
   d->m_text.append( QStringLiteral( "[%1]" ).arg( ref ) );
 }
@@ -276,11 +276,11 @@ void PlainTextMarkupBuilder::endList()
 void PlainTextMarkupBuilder::beginListItem()
 {
   Q_D( PlainTextMarkupBuilder );
-  for ( int i = 0; i < d->currentListItemNumbers.size(); i++ ) {
+  for ( auto i = 0; i < d->currentListItemNumbers.size(); i++ ) {
     d->m_text.append( QStringLiteral( "    " ) );
   }
 
-  int itemNumber = d->currentListItemNumbers.last();
+  auto itemNumber = d->currentListItemNumbers.last();
 
   switch ( d->currentListItemStyles.last() ) {
   case QTextListFormat::ListDisc:
@@ -358,7 +358,7 @@ void PlainTextMarkupBuilder::appendRawText( const QString &text )
 QString PlainTextMarkupBuilder::getResult()
 {
   Q_D( PlainTextMarkupBuilder );
-  QString ret = d->m_text;
+  auto ret = d->m_text;
   ret.append( d->getReferences() );
   d->m_text.clear();
   return ret;

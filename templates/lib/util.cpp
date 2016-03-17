@@ -52,7 +52,7 @@ bool Grantlee::variantIsTrue( const QVariant &variant )
     return ( variant.value<float>() > 0 );
   }
   case QMetaType::QObjectStar: {
-    QObject *obj = variant.value<QObject *>();
+    auto obj = variant.value<QObject *>();
     if ( !obj )
       return false;
 
@@ -74,14 +74,14 @@ bool Grantlee::variantIsTrue( const QVariant &variant )
 
 Grantlee::SafeString Grantlee::markSafe( const Grantlee::SafeString &input )
 {
-  Grantlee::SafeString sret = input;
+  auto sret = input;
   sret.setSafety( Grantlee::SafeString::IsSafe );
   return sret;
 }
 
 Grantlee::SafeString Grantlee::markForEscaping( const Grantlee::SafeString &input )
 {
-  Grantlee::SafeString temp = input;
+  auto temp = input;
   if ( input.isSafe() || input.needsEscape() )
     return input;
 
@@ -100,7 +100,7 @@ Grantlee::SafeString Grantlee::getSafeString( const QVariant &input )
 
 bool Grantlee::isSafeString( const QVariant &input )
 {
-  const int type = input.userType();
+  const auto type = input.userType();
   return (( type == qMetaTypeId<Grantlee::SafeString>() )
           || type == QVariant::String );
 }
@@ -122,7 +122,7 @@ static QList<int> getPrimitives()
 
 bool Grantlee::supportedOutputType( const QVariant &input )
 {
-  static const QList<int> primitives = getPrimitives();
+  static const auto primitives = getPrimitives();
   return primitives.contains( input.userType() );
 }
 
@@ -133,7 +133,7 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
   // TODO: Redesign...
 
   // QVariant doesn't use operator== to compare its held data, so we do it manually instead for SafeString.
-  bool equal = false;
+  auto equal = false;
   if ( lhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
     if ( rhs.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
       equal = ( lhs.value<Grantlee::SafeString>() == rhs.value<Grantlee::SafeString>() );
@@ -161,10 +161,10 @@ bool Grantlee::equals( const QVariant &lhs, const QVariant &rhs )
 Grantlee::SafeString Grantlee::toString( const QVariantList &list )
 {
   QString output( QLatin1Char( '[' ) );
-  QVariantList::const_iterator it = list.constBegin();
-  const QVariantList::const_iterator end = list.constEnd();
+  auto it = list.constBegin();
+  const auto end = list.constEnd();
   while ( it != end ) {
-    const QVariant item = *it;
+    const auto item = *it;
     if ( isSafeString( item ) ) {
       output += QStringLiteral( "u\'" )
               + static_cast<QString>( getSafeString( item ).get() )

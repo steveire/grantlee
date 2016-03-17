@@ -43,7 +43,7 @@ using namespace Grantlee;
 
 QScriptValue tokenToScriptValue( QScriptEngine *engine, const Token &t )
 {
-  QScriptValue obj = engine->newObject();
+  auto obj = engine->newObject();
   obj.setProperty( QStringLiteral( "tokenType" ), t.tokenType );
   obj.setProperty( QStringLiteral( "content" ), t.content );
   return obj;
@@ -66,36 +66,36 @@ ScriptableTagLibrary::ScriptableTagLibrary( QObject *parent )
 //   qScriptRegisterMetaType(m_scriptEngine.data(), nodeToScriptValue, nodeFromScriptValue);
 
   // Make Node new-able
-  QScriptValue nodeCtor = m_scriptEngine->newFunction( ScriptableNodeConstructor );
-  QScriptValue nodeMetaObject = m_scriptEngine->newQMetaObject( &ScriptableNode::staticMetaObject, nodeCtor );
+  auto nodeCtor = m_scriptEngine->newFunction( ScriptableNodeConstructor );
+  auto nodeMetaObject = m_scriptEngine->newQMetaObject( &ScriptableNode::staticMetaObject, nodeCtor );
   m_scriptEngine->globalObject().setProperty( QStringLiteral( "Node" ), nodeMetaObject );
 
   // Make Variable new-able
-  QScriptValue variableCtor = m_scriptEngine->newFunction( ScriptableVariableConstructor );
-  QScriptValue variableMetaObject = m_scriptEngine->newQMetaObject( &VariableNode::staticMetaObject, variableCtor );
+  auto variableCtor = m_scriptEngine->newFunction( ScriptableVariableConstructor );
+  auto variableMetaObject = m_scriptEngine->newQMetaObject( &VariableNode::staticMetaObject, variableCtor );
   m_scriptEngine->globalObject().setProperty( QStringLiteral( "Variable" ), variableMetaObject );
 
   // Make FilterExpression new-able
-  QScriptValue filterExpressionCtor = m_scriptEngine->newFunction( ScriptableFilterExpressionConstructor );
-  QScriptValue filterExpressionMetaObject = m_scriptEngine->newQMetaObject( &ScriptableFilterExpression::staticMetaObject, filterExpressionCtor );
+  auto filterExpressionCtor = m_scriptEngine->newFunction( ScriptableFilterExpressionConstructor );
+  auto filterExpressionMetaObject = m_scriptEngine->newQMetaObject( &ScriptableFilterExpression::staticMetaObject, filterExpressionCtor );
   m_scriptEngine->globalObject().setProperty( QStringLiteral( "FilterExpression" ), filterExpressionMetaObject );
 
   // Make Template new-able
-  QScriptValue templateCtor = m_scriptEngine->newFunction( ScriptableTemplateConstructor );
-  QScriptValue templateMetaObject = m_scriptEngine->newQMetaObject( &ScriptableTemplate::staticMetaObject, templateCtor );
+  auto templateCtor = m_scriptEngine->newFunction( ScriptableTemplateConstructor );
+  auto templateMetaObject = m_scriptEngine->newQMetaObject( &ScriptableTemplate::staticMetaObject, templateCtor );
   m_scriptEngine->globalObject().setProperty( QStringLiteral( "Template" ), templateMetaObject );
 
   // Create a global Library object
-  QScriptValue libraryObject = m_scriptEngine->newQObject( this );
+  auto libraryObject = m_scriptEngine->newQObject( this );
   m_scriptEngine->globalObject().setProperty( QStringLiteral( "Library" ), libraryObject );
 
   // Create a global AbstractNodeFactory object to make smartSplit available.
-  ScriptableNodeFactory *nodeFactory = new ScriptableNodeFactory( this );
-  QScriptValue nodeFactoryObject = m_scriptEngine->newQObject( nodeFactory );
+  auto nodeFactory = new ScriptableNodeFactory( this );
+  auto nodeFactoryObject = m_scriptEngine->newQObject( nodeFactory );
   m_scriptEngine->globalObject().setProperty( QStringLiteral( "AbstractNodeFactory" ), nodeFactoryObject );
 
   // Make mark_safe a globally available object.
-  QScriptValue markSafeFunctionObject = m_scriptEngine->newFunction( markSafeFunction );
+  auto markSafeFunctionObject = m_scriptEngine->newFunction( markSafeFunction );
   m_scriptEngine->globalObject().setProperty( QStringLiteral( "mark_safe" ), markSafeFunctionObject );
 
 }
@@ -110,7 +110,7 @@ bool ScriptableTagLibrary::evaluateScript( const QString &name )
 
   QTextStream fstream( &scriptFile );
   fstream.setCodec( "UTF-8" );
-  const QString fileContent = fstream.readAll();
+  const auto fileContent = fstream.readAll();
 
   scriptFile.close();
 
@@ -154,12 +154,12 @@ QHash<QString, AbstractNodeFactory*> ScriptableTagLibrary::getFactories()
   QHashIterator<QString, QString> it( m_factoryNames );
   while ( it.hasNext() ) {
     it.next();
-    QString factoryName = it.value();
-    QString tagName = it.key();
+    auto factoryName = it.value();
+    auto tagName = it.key();
 
-    QScriptValue factoryObject = m_scriptEngine->globalObject().property( factoryName );
+    auto factoryObject = m_scriptEngine->globalObject().property( factoryName );
 
-    ScriptableNodeFactory *snf = new ScriptableNodeFactory();
+    auto snf = new ScriptableNodeFactory();
     snf->setScriptEngine( m_scriptEngine );
     snf->setFactory( factoryObject );
 
@@ -175,9 +175,9 @@ QHash<QString, Filter*> ScriptableTagLibrary::getFilters()
 
   QListIterator<QString> it( m_filterNames );
   while ( it.hasNext() ) {
-    QScriptValue filterObject = m_scriptEngine->globalObject().property( it.next() );
-    QString filterName = filterObject.property( QStringLiteral( "filterName" ) ).toString();
-    ScriptableFilter *filter = new ScriptableFilter( filterObject, m_scriptEngine );
+    auto filterObject = m_scriptEngine->globalObject().property( it.next() );
+    auto filterName = filterObject.property( QStringLiteral( "filterName" ) ).toString();
+    auto filter = new ScriptableFilter( filterObject, m_scriptEngine );
     filters.insert( filterName, filter );
   }
   if ( m_scriptEngine->hasUncaughtException() ) {

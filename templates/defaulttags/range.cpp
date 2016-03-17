@@ -33,10 +33,10 @@ RangeNodeFactory::RangeNodeFactory()
 
 Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   expr.takeAt( 0 );
-  int numArgs = expr.size();
+  auto numArgs = expr.size();
   if ( numArgs != 1 ) {
     if ( numArgs <= 2 ) {
       throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'range' tag requires at least three arguments" ) );
@@ -47,7 +47,7 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
     }
   }
 
-  const QString name = ( numArgs > 2 ) ? expr.at( numArgs - 1 ) : QString();
+  const auto name = ( numArgs > 2 ) ? expr.at( numArgs - 1 ) : QString();
   if ( numArgs > 2 )
     numArgs -= 2;
 
@@ -67,7 +67,7 @@ Grantlee::Node* RangeNodeFactory::getNode( const QString& tagContent, Parser* p 
     return 0;
   }
 
-  NodeList list = p->parse( n, QStringLiteral( "endrange" ) );
+  auto list = p->parse( n, QStringLiteral( "endrange" ) );
   p->removeNextToken();
 
   n->setNodeList( list );
@@ -111,12 +111,12 @@ void RangeNode::render( OutputStream *stream, Context* c ) const
     step = 1;
   }
 
-  const bool insertContext = !m_name.isEmpty();
+  const auto insertContext = !m_name.isEmpty();
 
   Q_ASSERT( start < stop );
 
   QString ret;
-  for ( int i = start; i < stop; i += step ) {
+  for ( auto i = start; i < stop; i += step ) {
     if ( insertContext ) {
       c->push();
       c->insert( m_name, i );

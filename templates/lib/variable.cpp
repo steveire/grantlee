@@ -89,7 +89,7 @@ Variable::Variable( const QString &var )
   Q_D( Variable );
   d->m_varString = var;
 
-  QString localVar = var;
+  auto localVar = var;
   if ( var.startsWith( QStringLiteral( "_(" ) ) ) {
     // The FilterExpression parser ensures this:
     Q_ASSERT( var.endsWith( QLatin1Char( ')' ) ) );
@@ -101,13 +101,13 @@ Variable::Variable( const QString &var )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Variable may not end with a dot: %1" ).arg( localVar ) );
   }
 
-  bool processedNumber = false;
+  auto processedNumber = false;
   {
-    const int intResult = QLocale::c().toInt(localVar, &processedNumber);
+    const auto intResult = QLocale::c().toInt(localVar, &processedNumber);
     if (processedNumber) {
       d->m_literal = intResult;
     } else {
-      const double doubleResult = QLocale::c().toDouble(localVar, &processedNumber);
+      const auto doubleResult = QLocale::c().toDouble(localVar, &processedNumber);
       if (processedNumber) {
         d->m_literal = doubleResult;
       }
@@ -117,8 +117,8 @@ Variable::Variable( const QString &var )
     if ( localVar.startsWith( QLatin1Char( '"' ) ) || localVar.startsWith( QLatin1Char( '\'' ) ) ) {
       // The FilterExpression parser ensures this:
       Q_ASSERT(localVar.endsWith( QLatin1Char( '\'' ) ) || localVar.endsWith( QLatin1Char( '"' ) ) );
-      const QString unesc = unescapeStringLiteral( localVar );
-      const Grantlee::SafeString ss = markSafe( unesc );
+      const auto unesc = unescapeStringLiteral( localVar );
+      const auto ss = markSafe( unesc );
       d->m_literal = QVariant::fromValue<Grantlee::SafeString>( ss );
     } else {
       if ( localVar.contains( QStringLiteral( "._" ) ) || ( localVar.startsWith( QLatin1Char( '_' ) ) ) ) {
@@ -177,17 +177,17 @@ QVariant Variable::resolve( Context *c ) const
   Q_D( const Variable );
   QVariant var;
   if ( !d->m_lookups.isEmpty() ) {
-    int i = 0;
+    auto i = 0;
     if ( d->m_lookups.at( i ) == QStringLiteral( "Qt" ) ) {
       ++i;
-      const QString nextPart = d->m_lookups.at( i );
+      const auto nextPart = d->m_lookups.at( i );
       ++i;
 
-      static const QMetaObject *globalMetaObject = StaticQtMetaObject::_smo();
+      static auto globalMetaObject = StaticQtMetaObject::_smo();
 
-      bool breakout = false;
-      for ( int j = 0; j < globalMetaObject->enumeratorCount(); ++j ) {
-        const QMetaEnum me = globalMetaObject->enumerator( j );
+      auto breakout = false;
+      for ( auto j = 0; j < globalMetaObject->enumeratorCount(); ++j ) {
+        const auto me = globalMetaObject->enumerator( j );
 
         if ( QLatin1String( me.name() ) == nextPart ) {
           const MetaEnumVariable mev( me );
@@ -195,7 +195,7 @@ QVariant Variable::resolve( Context *c ) const
           break;
         }
 
-        for ( int k = 0; k < me.keyCount(); ++k ) {
+        for ( auto k = 0; k < me.keyCount(); ++k ) {
           if ( QLatin1String( me.key( k ) ) == nextPart ) {
             const MetaEnumVariable mev( me, k );
             var = QVariant::fromValue( mev );

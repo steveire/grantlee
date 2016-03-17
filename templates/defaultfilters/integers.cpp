@@ -79,7 +79,7 @@ QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, b
 QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString value = getSafeString( input );
+  auto value = getSafeString( input );
 
   bool ok;
   ( void )value.get().toInt( &ok );
@@ -89,7 +89,7 @@ QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argume
   if ( value.get().size() < 1 )
     return value;
 
-  int arg = getSafeString( argument ).get().toInt();
+  auto arg = getSafeString( argument ).get().toInt();
 
   if ( value.get().size() < arg )
     return value;

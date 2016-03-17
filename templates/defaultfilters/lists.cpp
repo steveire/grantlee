@@ -31,19 +31,19 @@ QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, 
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
-  QSequentialIterable iter = input.value<QSequentialIterable>();
+  auto iter = input.value<QSequentialIterable>();
 
   QString ret;
-  for (QSequentialIterable::const_iterator it = iter.begin();
+  for (auto it = iter.begin();
        it != iter.end(); ++it) {
-    const QVariant var = *it;
-    Grantlee::SafeString s = getSafeString( var );
+    const auto var = *it;
+    auto s = getSafeString( var );
     if ( autoescape )
       s = conditionalEscape( s );
 
     ret.append( s );
     if ( (it + 1) != iter.end() ) {
-      SafeString argString = getSafeString( argument );
+      auto argString = getSafeString( argument );
       ret.append( conditionalEscape( argString ) );
     }
   }
@@ -69,14 +69,14 @@ QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argume
   if ( !input.isValid() || ( input.userType() == qMetaTypeId<int>() ) || ( input.userType() == qMetaTypeId<QDateTime>() ) )
     return QVariant();
 
-  int size = 0;
+  auto size = 0;
   if ( input.canConvert<QVariantList>() )
     size = input.value<QSequentialIterable>().size();
   else if ( input.userType() == qMetaTypeId<SafeString>() || input.userType() == qMetaTypeId<QString>() )
     size = getSafeString( input ).get().size();
 
   bool ok;
-  int argInt = getSafeString( argument ).get().toInt( &ok );
+  auto argInt = getSafeString( argument ).get().toInt( &ok );
 
   if ( !ok )
     return QVariant();
@@ -92,7 +92,7 @@ QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument,
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
-  QSequentialIterable iter = input.value<QSequentialIterable>();
+  auto iter = input.value<QSequentialIterable>();
 
   if ( iter.size() == 0 )
     return QString();
@@ -108,7 +108,7 @@ QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, 
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
-  QSequentialIterable iter = input.value<QSequentialIterable>();
+  auto iter = input.value<QSequentialIterable>();
 
   if ( iter.size() == 0 )
     return QString();
@@ -124,22 +124,22 @@ QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
-  QVariantList varList = input.value<QVariantList>();
+  auto varList = input.value<QVariantList>();
 
   qsrand( QDateTime::currentDateTimeUtc().toTime_t() );
-  int rnd = qrand() % varList.size();
+  auto rnd = qrand() % varList.size();
   return varList.at( rnd );
 }
 
 QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString argString = getSafeString( argument );
-  int splitterIndex = argString.get().indexOf( QLatin1Char( ':' ) );
+  auto argString = getSafeString( argument );
+  auto splitterIndex = argString.get().indexOf( QLatin1Char( ':' ) );
   QString inputString = getSafeString( input );
   if ( splitterIndex >= 0 ) {
-    int left = argString.get().left( splitterIndex ).get().toInt();
-    int right = argString.get().right( splitterIndex ).get().toInt();
+    auto left = argString.get().left( splitterIndex ).get().toInt();
+    auto right = argString.get().right( splitterIndex ).get().toInt();
     if ( right < 0 ) {
       right = inputString.size() + right;
     }
@@ -158,7 +158,7 @@ QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argum
   if ( _input.canConvert<QVariantList>())
     return _input.value<QVariantList>();
 
-  QVariant input = _input;
+  auto input = _input;
 
   if ( input.userType() == qMetaTypeId<int>() )
     input.convert( QVariant::String );
@@ -185,15 +185,15 @@ QVariant UnorderedListFilter::doFilter( const QVariant& input, const QVariant& a
 SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs, bool autoescape ) const
 {
   QString indent;
-  for ( int i = 0; i < tabs; ++i )
+  for ( auto i = 0; i < tabs; ++i )
     indent.append( QLatin1Char( '\t' ) );
   QStringList output;
 
-  int i = 0;
-  int listSize = list.size();
+  auto i = 0;
+  auto listSize = list.size();
   while ( i < listSize ) {
-    QVariant titleObject = list.at( i );
-    SafeString title = getSafeString( titleObject );
+    auto titleObject = list.at( i );
+    auto title = getSafeString( titleObject );
     QString sublist;
     QVariant sublistItem;
 
@@ -201,7 +201,7 @@ SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs,
       sublistItem = titleObject;
       title.get().clear();
     } else if ( i < listSize - 1 ) {
-      QVariant nextItem = list.at( i + 1 );
+      auto nextItem = list.at( i + 1 );
       if ( nextItem.userType() == qMetaTypeId<QVariantList>() ) {
         sublistItem = nextItem;
       }
@@ -225,8 +225,8 @@ struct DictSortLessThan
 {
   bool operator()( const QPair<QVariant, QVariant> &lp, const QPair<QVariant, QVariant> &rp ) const
   {
-    const QVariant l = lp.first;
-    const QVariant r = rp.first;
+    const auto l = lp.first;
+    const auto r = rp.first;
     switch ( l.userType() ) {
     case QVariant::Invalid:
         return (r.isValid());
@@ -280,16 +280,16 @@ QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argume
     return QVariant();
 
   QList<QPair<QVariant, QVariant> > keyList;
-  const QSequentialIterable inList = input.value<QSequentialIterable>();
+  const auto inList = input.value<QSequentialIterable>();
   Q_FOREACH( const QVariant &item, inList ) {
-    QVariant var = item;
+    auto var = item;
 
     const Variable v( getSafeString( argument ) );
 
     if ( v.literal().isValid() ) {
       var = MetaType::lookup( var, v.literal().value<QString>() );
     } else {
-      const QStringList lookups = v.lookups();
+      const auto lookups = v.lookups();
       Q_FOREACH( const QString &lookup, lookups ) {
         var = MetaType::lookup( var, lookup );
       }
@@ -301,8 +301,8 @@ QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argume
   qStableSort( keyList.begin(), keyList.end(), lt );
 
   QVariantList outList;
-  QList<QPair<QVariant, QVariant> >::const_iterator it = keyList.constBegin();
-  const QList<QPair<QVariant, QVariant> >::const_iterator end = keyList.constEnd();
+  auto it = keyList.constBegin();
+  const auto end = keyList.constEnd();
   for ( ; it != end; ++it ) {
     outList << it->second;
   }

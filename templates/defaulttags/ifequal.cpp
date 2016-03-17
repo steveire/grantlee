@@ -32,7 +32,7 @@ IfEqualNodeFactory::IfEqualNodeFactory()
 
 Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool negate ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() != 3 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 tag takes two arguments." ).arg( expr.first() ) );
@@ -43,10 +43,10 @@ Node* IfEqualNodeFactory::do_getNode( const QString &tagContent, Parser *p, bool
   FilterExpression val1( expr.at( 1 ), p );
   FilterExpression val2( expr.at( 2 ), p );
 
-  IfEqualNode *n = new IfEqualNode( val1 , val2, negate, p );
+  auto n = new IfEqualNode( val1 , val2, negate, p );
 
   const QString endTag( QStringLiteral( "end" ) + expr.first() );
-  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << endTag );
+  auto trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << endTag );
   n->setTrueList( trueList );
   NodeList falseList;
   if ( p->takeNextToken().content == QStringLiteral( "else" ) ) {
@@ -95,10 +95,10 @@ void IfEqualNode::setFalseList( const NodeList &falseList )
 
 void IfEqualNode::render( OutputStream *stream, Context *c ) const
 {
-  QVariant var1 = m_var1.resolve( c );
-  QVariant var2 = m_var2.resolve( c );
+  auto var1 = m_var1.resolve( c );
+  auto var2 = m_var2.resolve( c );
 
-  bool equal = equals( var1, var2 );
+  auto equal = equals( var1, var2 );
 
   if ((( m_negate && !equal ) || ( !m_negate && equal ) ) )
     m_trueList.render( stream, c );

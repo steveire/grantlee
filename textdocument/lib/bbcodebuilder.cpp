@@ -212,7 +212,7 @@ const QString BBCodeBuilder::escape( const QString &s ) const
 
 QString BBCodeBuilder::getResult()
 {
-  QString ret = m_text;
+  auto ret = m_text;
   m_text.clear();
   return ret;
 }

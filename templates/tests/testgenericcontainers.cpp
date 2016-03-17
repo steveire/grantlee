@@ -81,7 +81,7 @@ QVector<QDateTime> getItems<QDateTime>()
 {
   QVector<QDateTime> items;
   items.reserve(3);
-  for ( int i = 0; i < 3; ++i ) {
+  for ( auto i = 0; i < 3; ++i ) {
     QDateTime d;
     d.setTime_t( 0 );
     d = d.addDays( i );
@@ -95,9 +95,9 @@ QVector<QObject*> getItems<QObject*>()
 {
   QVector<QObject*> items;
   items.reserve(3);
-  for (int i = 9; i > 4; i -= 2)
+  for (auto i = 9; i > 4; i -= 2)
   {
-    QObject *obj = new QObject;
+    auto obj = new QObject;
 
     obj->setObjectName(QString::number(i));
     items.push_back(obj);
@@ -115,7 +115,7 @@ struct ContainerPopulator
   }
   static void populateAssociative( Container &container )
   {
-    int i = 0;
+    auto i = 0;
     Q_FOREACH(const typename Container::mapped_type item, getItems<typename Container::mapped_type>())
       container[i++] = item;
   }
@@ -136,7 +136,7 @@ struct ContainerPopulator<QMap<QString, T> >
 {
   static void populateAssociative( QMap<QString, T> &container )
   {
-    int i = 0;
+    auto i = 0;
     Q_FOREACH(const T item, getItems<T>())
       container.insert(QString::number(i++), item);
   }
@@ -147,7 +147,7 @@ struct ContainerPopulator<QHash<QString, T> >
 {
   static void populateAssociative( QHash<QString, T> &container )
   {
-    int i = 0;
+    auto i = 0;
     Q_FOREACH(const T item, getItems<T>())
       container.insert(QString::number(i++), item);
   }
@@ -158,7 +158,7 @@ struct ContainerPopulator<std::map<QString, T> >
 {
   static void populateAssociative( std::map<QString, T> &container )
   {
-    int i = 0;
+    auto i = 0;
     Q_FOREACH(const T item, getItems<T>())
       container[QString::number(i++)] = item;
   }
@@ -280,9 +280,9 @@ void testContainer( const QString &stringTemplate, const QVariant &containerVari
   Grantlee::Context c;
   c.insert( QStringLiteral( "container" ), containerVariant );
 
-  Grantlee::Template t1 = engine.newTemplate( stringTemplate, QStringLiteral( "template1" ) );
+  auto t1 = engine.newTemplate( stringTemplate, QStringLiteral( "template1" ) );
 
-  QString result = t1->render( &c );
+  auto result = t1->render( &c );
   if (!unordered)
     QCOMPARE(result, expectedResults.join(QString()));
   else {
@@ -291,9 +291,9 @@ void testContainer( const QString &stringTemplate, const QVariant &containerVari
       QVERIFY(result.contains(expectedResult));
   }
 
-  Grantlee::Template t2 = engine.newTemplate( QStringLiteral( "-{{ container.doesnotexist }}-" ), QStringLiteral( "template2" ) );
+  auto t2 = engine.newTemplate( QStringLiteral( "-{{ container.doesnotexist }}-" ), QStringLiteral( "template2" ) );
 
-  QString result2 = t2->render( &c );
+  auto result2 = t2->render( &c );
 
   QCOMPARE( result2, QStringLiteral( "--" ) );
 }

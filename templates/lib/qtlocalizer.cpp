@@ -59,7 +59,7 @@ class QtLocalizerPrivate
   QtLocalizerPrivate( QtLocalizer *qq, const QLocale &locale )
     : q_ptr( qq )
   {
-    Locale *localeStruct = new Locale( locale );
+    auto localeStruct = new Locale( locale );
     m_availableLocales.insert( locale.name(), localeStruct );
     m_locales.push_back( localeStruct );
   }
@@ -99,8 +99,8 @@ using namespace Grantlee;
 static void replacePercentN( QString *result, int n )
 {
   if ( n >= 0 ) {
-    int percentPos = 0;
-    int len = 0;
+    auto percentPos = 0;
+    auto len = 0;
     while ( ( percentPos = result->indexOf( QLatin1Char( '%' ), percentPos + len ) ) != -1 ) {
       len = 1;
       QString fmt;
@@ -130,12 +130,12 @@ QString QtLocalizerPrivate::translate( const QString& input, const QString& cont
     return result;
   }
 
-  Locale *locale = m_locales.last();
+  auto locale = m_locales.last();
   Q_FOREACH( QTranslator *translator, locale->themeTranslators ) {
     result = translator->translate( "GR_FILENAME", input.toUtf8().constData(), context.toUtf8().constData(), count );
   }
   if ( result.isEmpty() ) {
-    QVector<QTranslator*> translators = locale->externalSystemTranslators + locale->systemTranslators;
+    auto translators = locale->externalSystemTranslators + locale->systemTranslators;
     if ( translators.isEmpty() )
       return QCoreApplication::translate( "GR_FILENAME", input.toUtf8().constData(), context.toUtf8().constData(), count );
     Q_FOREACH( QTranslator *translator, translators ) {
@@ -148,7 +148,7 @@ QString QtLocalizerPrivate::translate( const QString& input, const QString& cont
     replacePercentN( &result, count );
     return result;
   }
-  QString fallback = input;
+  auto fallback = input;
   replacePercentN( &fallback, count );
   return fallback;
 }
@@ -219,7 +219,7 @@ QString QtLocalizer::localizeNumber( qreal number ) const
 QString QtLocalizer::localizeMonetaryValue( qreal value, const QString& currencyCode ) const
 {
   Q_D( const QtLocalizer );
-  QString currencySymbol = QStringLiteral( "$" );
+  auto currencySymbol = QStringLiteral( "$" );
   if ( currencyCode == QStringLiteral( "EUR" ) ) {
     currencySymbol = QChar( 0x20AC );
   } else if ( currencyCode == QStringLiteral( "GBP" ) ) {
@@ -232,7 +232,7 @@ QString QtLocalizer::localizeMonetaryValue( qreal value, const QString& currency
 
 static QString substituteArguments( const QString &input, const QVariantList &arguments )
 {
-  QString string = input;
+  auto string = input;
   Q_FOREACH( const QVariant &arg, arguments ) {
     if ( arg.userType() == qMetaTypeId<int>() )
       string = string.arg( arg.value<int>() );
@@ -249,14 +249,14 @@ static QString substituteArguments( const QString &input, const QVariantList &ar
 QString QtLocalizer::localizeContextString( const QString& string, const QString& context, const QVariantList &arguments ) const
 {
   Q_D( const QtLocalizer );
-  const QString translated = d->translate( string, context );
+  const auto translated = d->translate( string, context );
   return substituteArguments( translated, arguments );
 }
 
 QString QtLocalizer::localizeString( const QString& string, const QVariantList &arguments ) const
 {
   Q_D( const QtLocalizer );
-  const QString translated = d->translate( string, QString() );
+  const auto translated = d->translate( string, QString() );
   return substituteArguments( translated, arguments );
 }
 
@@ -264,9 +264,9 @@ QString QtLocalizer::localizePluralContextString( const QString& string, const Q
 {
   Q_UNUSED( pluralForm )
   Q_D( const QtLocalizer );
-  QVariantList arguments = _arguments;
-  const int N = arguments.takeFirst().toInt();
-  const QString translated = d->translate( string, context, N );
+  auto arguments = _arguments;
+  const auto N = arguments.takeFirst().toInt();
+  const auto translated = d->translate( string, context, N );
   return substituteArguments( translated, arguments );
 }
 
@@ -274,9 +274,9 @@ QString QtLocalizer::localizePluralString( const QString& string, const QString&
 {
   Q_UNUSED( pluralForm )
   Q_D( const QtLocalizer );
-  QVariantList arguments = _arguments;
-  const int N = arguments.takeFirst().toInt();
-  const QString translated = d->translate( string, QString(), N );
+  auto arguments = _arguments;
+  const auto N = arguments.takeFirst().toInt();
+  const auto translated = d->translate( string, QString(), N );
   return substituteArguments( translated, arguments );
 }
 
@@ -292,11 +292,11 @@ void QtLocalizer::pushLocale( const QString& localeName )
   Locale *localeStruct = 0;
   if ( !d->m_availableLocales.contains( localeName ) ) {
     localeStruct = new Locale( QLocale( localeName ) );
-    QTranslator *qtTranslator = new QTranslator;
+    auto qtTranslator = new QTranslator;
     qtTranslator->load( QStringLiteral( "qt_" ) + localeName,
                         QLibraryInfo::location( QLibraryInfo::TranslationsPath ) );
     localeStruct->systemTranslators.append( qtTranslator );
-    QTranslator *appTranslator = new QTranslator;
+    auto appTranslator = new QTranslator;
     appTranslator->load( d->m_appTranslatorPrefix + localeName, d->m_appTranslatorPath );
     localeStruct->systemTranslators.append( appTranslator );
     d->m_availableLocales.insert( localeName, localeStruct );
@@ -317,11 +317,11 @@ void QtLocalizer::popLocale()
 void QtLocalizer::loadCatalog( const QString &path, const QString& catalog )
 {
   Q_D( QtLocalizer );
-  QHash< QString, Locale* >::const_iterator it = d->m_availableLocales.constBegin();
-  const QHash< QString, Locale* >::const_iterator end = d->m_availableLocales.constEnd();
+  auto it = d->m_availableLocales.constBegin();
+  const auto end = d->m_availableLocales.constEnd();
   for ( ; it != end; ++it ) {
-    QTranslator *translator = new QTranslator();
-    const bool loaded = translator->load( it.key() + QLatin1Char( '/' ) + catalog, path );
+    auto translator = new QTranslator();
+    const auto loaded = translator->load( it.key() + QLatin1Char( '/' ) + catalog, path );
     if ( !loaded )
       continue;
 
@@ -334,10 +334,10 @@ void QtLocalizer::loadCatalog( const QString &path, const QString& catalog )
 void QtLocalizer::unloadCatalog( const QString& catalog )
 {
   Q_D( QtLocalizer );
-  QHash< QString, Locale* >::const_iterator it = d->m_availableLocales.constBegin();
-  const QHash< QString, Locale* >::const_iterator end = d->m_availableLocales.constEnd();
+  auto it = d->m_availableLocales.constBegin();
+  const auto end = d->m_availableLocales.constEnd();
   for ( ; it != end; ++it ) {
-    QVector<QTranslator*>::iterator tranIt = ( *it )->themeTranslators.begin();
+    auto tranIt = ( *it )->themeTranslators.begin();
     while ( tranIt != ( *it )->themeTranslators.end() ) {
       if ( ( *tranIt )->objectName() == catalog ) {
         delete *tranIt;

@@ -39,12 +39,12 @@ I18ncpNodeFactory::I18ncpNodeFactory()
 
 Node* I18ncpNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 4 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18ncp tag takes at least three arguments" ) );
 
-  QString contextText = expr.at( 1 );
+  auto contextText = expr.at( 1 );
 
   if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
        && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -52,7 +52,7 @@ Node* I18ncpNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   }
   contextText = contextText.mid( 1, contextText.size() - 2 );
 
-  QString sourceText = expr.at( 2 );
+  auto sourceText = expr.at( 2 );
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -60,9 +60,9 @@ Node* I18ncpNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   }
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 
-  QString pluralText = expr.at( 3 );
+  auto pluralText = expr.at( 3 );
 
-  int argsStart = 4;
+  auto argsStart = 4;
   if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
        && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
     argsStart = 3;
@@ -72,7 +72,7 @@ Node* I18ncpNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   }
 
   QList<FilterExpression> feList;
-  for ( int i = argsStart; i < expr.size(); ++i ) {
+  for ( auto i = argsStart; i < expr.size(); ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
@@ -87,13 +87,13 @@ I18ncpVarNodeFactory::I18ncpVarNodeFactory()
 
 Grantlee::Node* I18ncpVarNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 6 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18ncp_var tag takes at least five arguments" ) );
   }
 
-  QString contextText = expr.at( 1 );
+  auto contextText = expr.at( 1 );
 
   if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
        && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -101,7 +101,7 @@ Grantlee::Node* I18ncpVarNodeFactory::getNode( const QString& tagContent, Parser
   }
   contextText = contextText.mid( 1, contextText.size() - 2 );
 
-  QString sourceText = expr.at( 2 );
+  auto sourceText = expr.at( 2 );
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -109,9 +109,9 @@ Grantlee::Node* I18ncpVarNodeFactory::getNode( const QString& tagContent, Parser
   }
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 
-  QString pluralText = expr.at( 3 );
+  auto pluralText = expr.at( 3 );
 
-  int argsStart = 4;
+  auto argsStart = 4;
   if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
        && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
     argsStart = 3;
@@ -121,11 +121,11 @@ Grantlee::Node* I18ncpVarNodeFactory::getNode( const QString& tagContent, Parser
   }
 
   QList<FilterExpression> feList;
-  for ( int i = argsStart; i < expr.size() - 2; ++i ) {
+  for ( auto i = argsStart; i < expr.size() - 2; ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
-  QString resultName = expr.last();
+  auto resultName = expr.last();
 
   return new I18ncpVarNode( contextText, sourceText, pluralText, feList, resultName );
 }
@@ -142,7 +142,7 @@ void I18ncpNode::render( OutputStream* stream, Context* c ) const
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizePluralContextString( m_sourceText, m_pluralText, m_contextText, args );
+  auto resultString = c->localizer()->localizePluralContextString( m_sourceText, m_pluralText, m_contextText, args );
 
   streamValueInContext( stream, resultString, c );
 }
@@ -159,7 +159,7 @@ void I18ncpVarNode::render( OutputStream* stream, Context* c ) const
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizePluralContextString( m_sourceText, m_pluralText, m_contextText, args );
+  auto resultString = c->localizer()->localizePluralContextString( m_sourceText, m_pluralText, m_contextText, args );
 
   c->insert( m_resultName, resultString );
 }

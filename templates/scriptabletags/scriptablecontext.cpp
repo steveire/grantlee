@@ -56,7 +56,7 @@ QString ScriptableContext::render( const QObjectList &list ) const
   NodeList nodeList;
   QListIterator<QObject *> it( list );
   while ( it.hasNext() ) {
-    Node *node = qobject_cast<Node*>( it.next() );
+    auto node = qobject_cast<Node*>( it.next() );
     if ( node )
       nodeList << node;
   }

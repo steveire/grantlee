@@ -29,7 +29,7 @@ QVariant timeSince( const QDateTime &early, const QDateTime &late )
   Q_ASSERT( early.isValid() );
   Q_ASSERT( late.isValid() );
 
-  qint64 secsSince = early.secsTo( late );
+  auto secsSince = early.secsTo( late );
 
   if ( secsSince < 0 )
     return SafeString( QStringLiteral( "0 minutes" ) );
@@ -59,8 +59,8 @@ QVariant timeSince( const QDateTime &early, const QDateTime &late )
           << ( 60 * 60 ) // hour
           << ( 60 ); // minute
 
-  qint64 count = secsSince;
-  int i = 0;
+  auto count = secsSince;
+  auto i = 0;
   while ( i < seconds.size() ) {
     count = ( secsSince / seconds.at( i ) );
     ++i;
@@ -75,7 +75,7 @@ QVariant timeSince( const QDateTime &early, const QDateTime &late )
     firstChunk.append( QStringLiteral( "%1 %2" ).arg( count ).arg( singularNames.at( i - 1 ) ) );
   }
   if ( seconds.size() > i ) {
-    qint64 count2 = ( secsSince - ( seconds.at( i - 1 ) * count ) ) / seconds.at( i );
+    auto count2 = ( secsSince - ( seconds.at( i - 1 ) * count ) ) / seconds.at( i );
     if ( count2 != 0 ) {
       if ( count2 > 1 )
         firstChunk.append( QStringLiteral( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i ) ) );
@@ -97,9 +97,9 @@ QVariant timeUntil( const QDateTime &dt, QDateTime now = QDateTime() )
 QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  QDateTime d = QDateTime::fromString( getSafeString( input ), QStringLiteral( "yyyy-MM-ddThh:mm:ss" ) );
+  auto d = QDateTime::fromString( getSafeString( input ), QStringLiteral( "yyyy-MM-ddThh:mm:ss" ) );
 
-  SafeString argString = getSafeString( argument );
+  auto argString = getSafeString( argument );
 
   if ( !argString.get().isEmpty() )
     return d.toString( argString );
@@ -110,7 +110,7 @@ QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, 
 QVariant TimeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
 {
   Q_UNUSED( autoescape )
-  SafeString argString = getSafeString( argument );
+  auto argString = getSafeString( argument );
   return QDateTime::fromString( getSafeString( input ), QStringLiteral( "yyyy-MM-ddThh:mm:ss" ) ).toString( argString );
 }
 

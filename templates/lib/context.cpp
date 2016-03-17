@@ -117,9 +117,9 @@ QVariant Context::lookup( const QString &str ) const
   // return a variant from the stack.
   QListIterator<QVariantHash> i( d->m_variantHashStack );
   while ( i.hasNext() ) {
-    const QVariantHash h = i.next();
+    const auto h = i.next();
     if ( h.contains( str ) ) {
-      QVariant var = h.value( str );
+      auto var = h.value( str );
       // If the user passed a string into the context, turn it into a Grantlee::SafeString.
       if ( var.userType() == qMetaTypeId<QString>() ) {
         var = QVariant::fromValue<Grantlee::SafeString>( getSafeString( var.value<QString>() ) );

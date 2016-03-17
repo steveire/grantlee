@@ -32,12 +32,12 @@ IfChangedNodeFactory::IfChangedNodeFactory()
 
 Node* IfChangedNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
+  auto expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   expr.takeAt( 0 );
-  IfChangedNode *n =  new IfChangedNode( getFilterExpressionList( expr, p ), p );
+  auto n =  new IfChangedNode( getFilterExpressionList( expr, p ), p );
 
-  NodeList trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << QStringLiteral( "endifchanged" ) );
+  auto trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << QStringLiteral( "endifchanged" ) );
   n->setTrueList( trueList );
   NodeList falseList;
 
@@ -71,21 +71,21 @@ void IfChangedNode::render( OutputStream *stream, Context *c ) const
 {
   if ( c->lookup( QStringLiteral( "forloop" ) ).isValid() && ( !c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>().contains( m_id ) ) ) {
     m_lastSeen = QVariant();
-    QVariantHash hash = c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>();
+    auto hash = c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>();
     hash.insert( m_id, 1 );
     c->insert( QStringLiteral( "forloop" ), hash );
   }
 
   QString watchedString;
   QTextStream watchedTextStream( &watchedString );
-  QSharedPointer<OutputStream> watchedStream = stream->clone( &watchedTextStream );
+  auto watchedStream = stream->clone( &watchedTextStream );
   if ( m_filterExpressions.size() == 0 ) {
     m_trueList.render( watchedStream.data(), c );
   }
   QListIterator<FilterExpression> i( m_filterExpressions );
   QVariantList watchedVars;
   while ( i.hasNext() ) {
-    QVariant var = i.next().resolve( c );
+    auto var = i.next().resolve( c );
     if ( !var.isValid() ) {
       // silent error
       return;
@@ -98,7 +98,7 @@ void IfChangedNode::render( OutputStream *stream, Context *c ) const
   // {% for %} loop in the template.
   if (( watchedVars != m_lastSeen.value<QVariantList>() )
       || ( !watchedString.isEmpty() && ( watchedString != m_lastSeen.value<QString>() ) ) ) {
-    bool firstLoop = !m_lastSeen.isValid();
+    auto firstLoop = !m_lastSeen.isValid();
     if ( !watchedString.isNull() )
       m_lastSeen = watchedString;
     else

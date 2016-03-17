@@ -36,7 +36,7 @@ QScriptValue ScriptableVariableConstructor( QScriptContext *context,
   // It should be the owning scriptableNode. I think I can get that from the scriptContext.
 
   QObject *parent = 0;
-  ScriptableVariable *object = new ScriptableVariable( engine, parent );
+  auto object = new ScriptableVariable( engine, parent );
   object->setContent( context->argument( 0 ).toString() );
 
   return engine->newQObject( object );
@@ -61,10 +61,10 @@ void ScriptableVariable::setContent( const QString& content )
 
 QVariant ScriptableVariable::resolve( ScriptableContext* c )
 {
-  QVariant var = m_variable.resolve( c->context() );
+  auto var = m_variable.resolve( c->context() );
 
   if ( Grantlee::isSafeString( var ) ) {
-      ScriptableSafeString *ssObj = new ScriptableSafeString( m_engine );
+      auto ssObj = new ScriptableSafeString( m_engine );
       ssObj->setContent( getSafeString( var ) );
       return m_engine->newQObject( ssObj ).toVariant();
   }

@@ -70,11 +70,11 @@ void ParserPrivate::openLibrary( TagLibraryInterface *library )
   Q_Q( Parser );
   QHashIterator<QString, AbstractNodeFactory*> nodeIt( library->nodeFactories() );
 
-  TemplateImpl *ti = qobject_cast<TemplateImpl *>( q->parent() );
+  auto ti = qobject_cast<TemplateImpl *>( q->parent() );
 
-  Engine const *cengine = ti->engine();
+  auto cengine = ti->engine();
   Q_ASSERT( cengine );
-  Engine *engine = const_cast<Engine *>( cengine );
+  auto engine = const_cast<Engine *>( cengine );
 
   while ( nodeIt.hasNext() ) {
     nodeIt.next();
@@ -84,7 +84,7 @@ void ParserPrivate::openLibrary( TagLibraryInterface *library )
   QHashIterator<QString, Filter*> filterIt( library->filters() );
   while ( filterIt.hasNext() ) {
     filterIt.next();
-    QSharedPointer<Filter> f = QSharedPointer<Filter>( filterIt.value() );
+    auto f = QSharedPointer<Filter>( filterIt.value() );
     m_filters.insert( filterIt.key(), f );
   }
 }
@@ -94,15 +94,15 @@ Parser::Parser( const QList<Token> &tokenList, QObject *parent )
 {
   Q_D( Parser );
 
-  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent );
+  auto ti = qobject_cast<TemplateImpl *>( parent );
 
-  Engine const *cengine = ti->engine();
+  auto cengine = ti->engine();
   Q_ASSERT( cengine );
 
-  Engine *engine = const_cast<Engine *>( cengine );
+  auto engine = const_cast<Engine *>( cengine );
   engine->loadDefaultLibraries();
   Q_FOREACH( const QString &libraryName, engine->defaultLibraries() ) {
-    TagLibraryInterface *library = engine->loadLibrary( libraryName );
+    auto library = engine->loadLibrary( libraryName );
     if ( !library )
       continue;
     d->openLibrary( library );
@@ -120,11 +120,11 @@ Parser::~Parser()
 void Parser::loadLib( const QString &name )
 {
   Q_D( Parser );
-  TemplateImpl *ti = qobject_cast<TemplateImpl *>( parent() );
-  Engine const *cengine = ti->engine();
+  auto ti = qobject_cast<TemplateImpl *>( parent() );
+  auto cengine = ti->engine();
   Q_ASSERT( cengine );
-  Engine *engine = const_cast<Engine *>( cengine );
-  TagLibraryInterface *library = engine->loadLibrary( name );
+  auto engine = const_cast<Engine *>( cengine );
+  auto library = engine->loadLibrary( name );
   if ( !library )
     return;
   d->openLibrary( library );
@@ -144,7 +144,7 @@ NodeList ParserPrivate::extendNodeList( NodeList list, Node *node )
 void Parser::skipPast( const QString &tag )
 {
   while ( hasNextToken() ) {
-    const Token token = takeNextToken();
+    const auto token = takeNextToken();
     if ( token.tokenType == BlockToken && token.content == tag )
       return;
   }
@@ -183,7 +183,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
   NodeList nodeList;
 
   while ( q->hasNextToken() ) {
-    const Token token = q->takeNextToken();
+    const auto token = q->takeNextToken();
     if ( token.tokenType == TextToken ) {
       nodeList = extendNodeList( nodeList, new TextNode( token.content, parent ) );
     } else if ( token.tokenType == VariableToken ) {
@@ -207,7 +207,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
       nodeList = extendNodeList( nodeList, new VariableNode( filterExpression, parent ) );
     } else {
       Q_ASSERT( token.tokenType == BlockToken );
-      const QString command = token.content.section(QLatin1Char(' '), 0, 0);
+      const auto command = token.content.section(QLatin1Char(' '), 0, 0);
       if ( stopAt.contains( command ) ) {
         // A matching token has been reached. Return control to
         // the caller. Put the token back on the token list so the
@@ -223,7 +223,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
         throw Grantlee::Exception( EmptyBlockTagError, message );
       }
 
-      AbstractNodeFactory *nodeFactory = m_nodeFactories[command];
+      auto nodeFactory = m_nodeFactories[command];
 
       // unknown tag.
       if ( !nodeFactory ) {
@@ -250,7 +250,7 @@ NodeList ParserPrivate::parse( QObject *parent, const QStringList &stopAt )
   }
 
   if ( !stopAt.isEmpty() ) {
-    const QString message = QStringLiteral( "Unclosed tag in template %1. Expected one of: (%2)" ).arg( q->parent()->objectName(), stopAt.join( QChar::fromLatin1( ' ' ) ) );
+    const auto message = QStringLiteral( "Unclosed tag in template %1. Expected one of: (%2)" ).arg( q->parent()->objectName(), stopAt.join( QChar::fromLatin1( ' ' ) ) );
     throw Grantlee::Exception( UnclosedBlockTagError, message );
   }
 

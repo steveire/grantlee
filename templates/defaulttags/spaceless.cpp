@@ -33,8 +33,8 @@ SpacelessNodeFactory::SpacelessNodeFactory()
 Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
   Q_UNUSED( tagContent )
-  SpacelessNode *n = new SpacelessNode( p );
-  NodeList list = p->parse( n, QStringLiteral( "endspaceless" ) );
+  auto n = new SpacelessNode( p );
+  auto list = p->parse( n, QStringLiteral( "endspaceless" ) );
   n->setList( list );
   p->removeNextToken();
   return n;
@@ -53,7 +53,7 @@ void SpacelessNode::setList(const NodeList& nodeList )
 
 QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
 {
-  QString stripped = input;
+  auto stripped = input;
 
   static const QRegularExpression re( QStringLiteral( ">\\s+<" ) );
   stripped.replace( re, QStringLiteral( "><" ) );
@@ -65,7 +65,7 @@ void SpacelessNode::render( OutputStream *stream, Context *c ) const
 {
   QString output;
   QTextStream textStream( &output );
-  QSharedPointer<OutputStream> temp = stream->clone( &textStream );
+  auto temp = stream->clone( &textStream );
   m_nodeList.render( temp.data(), c );
   ( *stream ) << markSafe( stripSpacesBetweenTags( output.trimmed() ) );
 }

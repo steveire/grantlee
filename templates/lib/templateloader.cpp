@@ -112,7 +112,7 @@ QStringList FileSystemTemplateLoader::templateDirs() const
 bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
 {
   Q_D(const FileSystemTemplateLoader);
-  int i = 0;
+  auto i = 0;
   QFile file;
 
   while ( !file.exists() ) {
@@ -133,7 +133,7 @@ bool FileSystemTemplateLoader::canLoadTemplate( const QString &name ) const
 Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine const *engine ) const
 {
   Q_D(const FileSystemTemplateLoader);
-  int i = 0;
+  auto i = 0;
   QFile file;
 
   while ( !file.exists() ) {
@@ -155,7 +155,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
 
   QTextStream fstream( &file );
   fstream.setCodec( "UTF-8" );
-  const QString fileContent = fstream.readAll();
+  const auto fileContent = fstream.readAll();
 
   return engine->newTemplate( fileContent, fileName );
 }
@@ -163,7 +163,7 @@ Template FileSystemTemplateLoader::loadByName( const QString &fileName, Engine c
 QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fileName ) const
 {
   Q_D(const FileSystemTemplateLoader);
-  int i = 0;
+  auto i = 0;
   QFile file;
   while ( !file.exists() ) {
     if ( i >= d->m_templateDirs.size() )
@@ -178,7 +178,7 @@ QPair<QString, QString> FileSystemTemplateLoader::getMediaUri( const QString& fi
     }
 
     if ( file.exists() ) {
-      QString path = fi.absoluteFilePath();
+      auto path = fi.absoluteFilePath();
       path.chop( fileName.size() );
       return qMakePair( path, fileName );
     }

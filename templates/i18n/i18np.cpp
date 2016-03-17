@@ -39,12 +39,12 @@ I18npNodeFactory::I18npNodeFactory()
 
 Node* I18npNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 3 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18np tag takes at least two arguments" ) );
 
-  QString sourceText = expr.at( 1 );
+  auto sourceText = expr.at( 1 );
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -52,9 +52,9 @@ Node* I18npNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   }
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 
-  QString pluralText = expr.at( 2 );
+  auto pluralText = expr.at( 2 );
 
-  int argsStart = 3;
+  auto argsStart = 3;
   if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
        && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
     argsStart = 2;
@@ -64,7 +64,7 @@ Node* I18npNodeFactory::getNode( const QString& tagContent, Parser* p ) const
   }
 
   QList<FilterExpression> feList;
-  for ( int i = argsStart; i < expr.size(); ++i ) {
+  for ( auto i = argsStart; i < expr.size(); ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
@@ -79,12 +79,12 @@ I18npVarNodeFactory::I18npVarNodeFactory()
 
 Grantlee::Node* I18npVarNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 5 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18np_var tag takes at least four arguments" ) );
 
-  QString sourceText = expr.at( 1 );
+  auto sourceText = expr.at( 1 );
 
   if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
        && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
@@ -92,9 +92,9 @@ Grantlee::Node* I18npVarNodeFactory::getNode( const QString& tagContent, Parser*
   }
   sourceText = sourceText.mid( 1, sourceText.size() - 2 );
 
-  QString pluralText = expr.at( 2 );
+  auto pluralText = expr.at( 2 );
 
-  int argsStart = 3;
+  auto argsStart = 3;
   if ( !( pluralText.startsWith( QLatin1Char( '"' ) ) && pluralText.endsWith( QLatin1Char( '"' ) ) )
        && !( pluralText.startsWith( QLatin1Char( '\'' ) ) && pluralText.endsWith( QLatin1Char( '\'' ) ) ) ) {
     argsStart = 2;
@@ -104,11 +104,11 @@ Grantlee::Node* I18npVarNodeFactory::getNode( const QString& tagContent, Parser*
   }
 
   QList<FilterExpression> feList;
-  for ( int i = argsStart; i < expr.size() - 2; ++i ) {
+  for ( auto i = argsStart; i < expr.size() - 2; ++i ) {
     feList.append( FilterExpression( expr.at( i ), p ) );
   }
 
-  QString resultName = expr.last();
+  auto resultName = expr.last();
 
   return new I18npVarNode( sourceText, pluralText, feList, resultName );
 }
@@ -125,7 +125,7 @@ void I18npNode::render( OutputStream* stream, Context* c ) const
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizePluralString( m_sourceText, m_pluralText, args );
+  auto resultString = c->localizer()->localizePluralString( m_sourceText, m_pluralText, args );
 
   streamValueInContext( stream, resultString, c );
 }
@@ -142,7 +142,7 @@ void I18npVarNode::render( OutputStream* stream, Context* c ) const
   QVariantList args;
   Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
     args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizePluralString( m_sourceText, m_pluralText, args );
+  auto resultString = c->localizer()->localizePluralString( m_sourceText, m_pluralText, args );
 
   c->insert( m_resultName, resultString );
 }

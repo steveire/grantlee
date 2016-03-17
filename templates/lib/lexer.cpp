@@ -83,35 +83,35 @@ typedef CharacterTransition<'{', FinalizeAndMarkStartSyntax> SyntaxBoundaryHandl
 template<typename Transition>
 void addTransition( TextProcessingState *source, Lexer *lexer, TextProcessingState *target )
 {
-  Transition *tr = new Transition( lexer, source );
+  auto tr = new Transition( lexer, source );
   tr->setTargetState( target );
 }
 
 TextProcessingMachine* createMachine( Lexer *lexer, Lexer::TrimType type )
 {
-  TextProcessingMachine *machine = new TextProcessingMachine;
+  auto machine = new TextProcessingMachine;
 
-  TextProcessingState *notFinished = new TextProcessingState( machine );
-  TextProcessingState *finished = new TextProcessingState( machine );
+  auto notFinished = new TextProcessingState( machine );
+  auto finished = new TextProcessingState( machine );
   machine->setInitialState( notFinished );
 
-  TextProcessingState *processingText = new ChurningState( lexer, notFinished );
-  TextProcessingState *processingPostNewline = new TextProcessingState( notFinished );
-  TextProcessingState *processingBeginTemplateSyntax = new TextProcessingState( notFinished );
-  TextProcessingState *processingTag = new TextProcessingState( notFinished );
-  TextProcessingState *processingComment = new TextProcessingState( notFinished );
-  TextProcessingState *processingValue = new TextProcessingState( notFinished );
-  TextProcessingState *maybeProcessingValue = new TextProcessingState( notFinished );
-  TextProcessingState *processingEndTag = new TextProcessingState( notFinished );
-  TextProcessingState *processingEndComment = new TextProcessingState( notFinished );
-  TextProcessingState *processingEndValue = new TextProcessingState( notFinished );
+  auto processingText = new ChurningState( lexer, notFinished );
+  auto processingPostNewline = new TextProcessingState( notFinished );
+  auto processingBeginTemplateSyntax = new TextProcessingState( notFinished );
+  auto processingTag = new TextProcessingState( notFinished );
+  auto processingComment = new TextProcessingState( notFinished );
+  auto processingValue = new TextProcessingState( notFinished );
+  auto maybeProcessingValue = new TextProcessingState( notFinished );
+  auto processingEndTag = new TextProcessingState( notFinished );
+  auto processingEndComment = new TextProcessingState( notFinished );
+  auto processingEndValue = new TextProcessingState( notFinished );
   TextProcessingState *processingPostTemplateSyntax;
 
   if ( type == Lexer::SmartTrim )
     processingPostTemplateSyntax = new TextProcessingState( notFinished );
   else
     processingPostTemplateSyntax = new FinalizeTokenState( lexer, notFinished );
-  TextProcessingState *processingPostTemplateSyntaxWhitespace = new TextProcessingState( notFinished );
+  auto processingPostTemplateSyntaxWhitespace = new TextProcessingState( notFinished );
 
   if ( type == Lexer::SmartTrim )
     notFinished->setInitialState( processingPostNewline );
@@ -181,19 +181,19 @@ TextProcessingMachine* createMachine( Lexer *lexer, Lexer::TrimType type )
   }
 
   {
-    EofHandler *handler = new EofHandler( lexer, notFinished );
+    auto handler = new EofHandler( lexer, notFinished );
     handler->setTargetState( finished );
     notFinished->setEndTransition( handler );
   }
 
   if ( type == Lexer::SmartTrim ) {
     {
-      EofHandlerWithTrimming *handler = new EofHandlerWithTrimming( lexer, processingPostTemplateSyntaxWhitespace );
+      auto handler = new EofHandlerWithTrimming( lexer, processingPostTemplateSyntaxWhitespace );
       handler->setTargetState( finished );
       processingPostTemplateSyntaxWhitespace->setEndTransition( handler );
     }
     {
-      EofHandlerWithTrimming *handler = new EofHandlerWithTrimming( lexer, processingPostTemplateSyntax );
+      auto handler = new EofHandlerWithTrimming( lexer, processingPostTemplateSyntax );
       handler->setTargetState( finished );
       processingPostTemplateSyntax->setEndTransition( handler );
     }
@@ -229,12 +229,12 @@ void Lexer::reset()
 
 QList<Token> Lexer::tokenize(TrimType type)
 {
-  TextProcessingMachine* machine = createMachine( this, type );
+  auto machine = createMachine( this, type );
 
   machine->start();
 
-  QString::const_iterator it = m_templateString.constBegin();
-  const QString::const_iterator end = m_templateString.constEnd();
+  auto it = m_templateString.constBegin();
+  const auto end = m_templateString.constEnd();
 
   reset();
   for ( ; it != end; ++it, ++m_upto )
@@ -267,8 +267,8 @@ void Lexer::markNewline()
 
 void Lexer::finalizeToken()
 {
-  int nextPosition = m_upto;
-  const bool validSyntax = m_endSyntaxPosition > m_startSyntaxPosition && ( m_startSyntaxPosition >= m_processedUpto );
+  auto nextPosition = m_upto;
+  const auto validSyntax = m_endSyntaxPosition > m_startSyntaxPosition && ( m_startSyntaxPosition >= m_processedUpto );
 
   if ( validSyntax ) {
     Q_ASSERT( m_startSyntaxPosition >= 0 );
@@ -279,7 +279,7 @@ void Lexer::finalizeToken()
 
 void Lexer::finalizeTokenWithTrimmedWhitespace()
 {
-  int nextPosition = m_upto;
+  auto nextPosition = m_upto;
   // We know this to be true because the state machine has already guaranteed
   // it. This method is only called from transition and state actions which
   // occur after valid syntax.
@@ -312,7 +312,7 @@ void Lexer::finalizeToken( int nextPosition, bool processSyntax )
 
   m_processedUpto = m_endSyntaxPosition;
 
-  const QChar differentiator = *( m_templateString.constData() + m_startSyntaxPosition );
+  const auto differentiator = *( m_templateString.constData() + m_startSyntaxPosition );
   if ( differentiator == QLatin1Char( '#' ) )
     return;
 

@@ -42,21 +42,21 @@ ExtendsNodeFactory::ExtendsNodeFactory( QObject *parent )
 
 Node* ExtendsNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  const QStringList expr = smartSplit( tagContent );
+  const auto expr = smartSplit( tagContent );
 
   if ( expr.size() != 2 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: Include tag takes only one argument" ) );
 
   FilterExpression fe( expr.at( 1 ), p );
 
-  ExtendsNode *n = new ExtendsNode( fe, p );
+  auto n = new ExtendsNode( fe, p );
 
-  TemplateImpl *t = qobject_cast<TemplateImpl *>( p->parent() );
+  auto t = qobject_cast<TemplateImpl *>( p->parent() );
 
   if ( !t )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Extends tag is not in a template." ) );
 
-  const NodeList nodeList = p->parse( t );
+  const auto nodeList = p->parse( t );
   n->setNodeList( nodeList );
 
   if ( t->findChildren<ExtendsNode *>().size() > 1 ) {
@@ -81,8 +81,8 @@ static QHash<QString, BlockNode*> createNodeMap( const QList<BlockNode*> &list )
 {
   QHash<QString, BlockNode*> map;
 
-  QList<BlockNode*>::const_iterator it = list.constBegin();
-  const QList<BlockNode*>::const_iterator end = list.constEnd();
+  auto it = list.constBegin();
+  const auto end = list.constEnd();
 
   for ( ; it != end; ++it ) {
     map.insert( ( *it )->name(), *it );
@@ -95,22 +95,22 @@ void ExtendsNode::setNodeList( const NodeList &list )
 {
   m_list = list;
 
-  const QList<BlockNode*> blockList = m_list.findChildren<BlockNode*>();
+  const auto blockList = m_list.findChildren<BlockNode*>();
   m_blocks = createNodeMap( blockList );
 }
 
 Template ExtendsNode::getParent( Context *c ) const
 {
-  const QVariant parentVar = m_filterExpression.resolve( c );
+  const auto parentVar = m_filterExpression.resolve( c );
   if ( parentVar.userType() == qMetaTypeId<Grantlee::Template>() ) {
     return parentVar.value<Template>();
   }
 
   QString parentName = getSafeString( parentVar );
 
-  TemplateImpl *ti = containerTemplate();
+  auto ti = containerTemplate();
 
-  const Template t = ti->engine()->loadByName( parentName );
+  const auto t = ti->engine()->loadByName( parentName );
 
   if ( !t )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Template not found %1" ).arg( parentName ) );
@@ -123,27 +123,27 @@ Template ExtendsNode::getParent( Context *c ) const
 
 void ExtendsNode::render( OutputStream *stream, Context *c ) const
 {
-  const Template parentTemplate = getParent( c );
+  const auto parentTemplate = getParent( c );
 
   if ( !parentTemplate ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Cannot load template." ) );
   }
 
   QVariant &variant = c->renderContext()->data( 0 );
-  BlockContext blockContext = variant.value<BlockContext>();
+  auto blockContext = variant.value<BlockContext>();
   blockContext.addBlocks( m_blocks );
   variant.setValue( blockContext );
 
-  const NodeList nodeList = parentTemplate->nodeList();
+  const auto nodeList = parentTemplate->nodeList();
 
-  const QHash<QString, BlockNode*> parentBlocks = createNodeMap( parentTemplate->findChildren<BlockNode*>() );
+  const auto parentBlocks = createNodeMap( parentTemplate->findChildren<BlockNode*>() );
   QListIterator<Node*> i( nodeList );
 
   while ( i.hasNext() ) {
-    Node* n = i.next();
-    TextNode *tn = qobject_cast<TextNode*>( n );
+    auto n = i.next();
+    auto tn = qobject_cast<TextNode*>( n );
     if ( !tn ) {
-      ExtendsNode *en = qobject_cast<ExtendsNode*>( n );
+      auto en = qobject_cast<ExtendsNode*>( n );
       if ( !en ) {
         blockContext.addBlocks( parentBlocks );
         variant.setValue( blockContext );

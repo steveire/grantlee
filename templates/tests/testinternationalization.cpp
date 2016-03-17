@@ -48,7 +48,7 @@ public:
       en_USLocalizer(new QtLocalizer(QLocale(QLocale::English, QLocale::UnitedStates))),
       m_engine(new Engine(this))
   {
-    QLocale cLocale = QLocale::c();
+    auto cLocale = QLocale::c();
     cLocale.setNumberOptions(QLocale::OmitGroupSeparator);
     cLocalizer.reset(new QtLocalizer(cLocale));
     m_engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
@@ -58,16 +58,16 @@ public:
     INIT_LOCALIZER(en_GBLocalizer)
     INIT_LOCALIZER(en_USLocalizer)
     {
-      QTranslator *deTranslator = new QTranslator(this);
-      const bool result = deTranslator->load( QStringLiteral( ":/test_de_DE" ) );
+      auto deTranslator = new QTranslator(this);
+      const auto result = deTranslator->load( QStringLiteral( ":/test_de_DE" ) );
       Q_UNUSED(result);
       Q_ASSERT(result);
       deLocalizer->installTranslator(deTranslator, QStringLiteral( "de_DE" ) );
     }
 
     {
-      QTranslator *frTranslator = new QTranslator(this);
-      const bool result = frTranslator->load( QStringLiteral( ":/test_fr_FR.qm" ) );
+      auto frTranslator = new QTranslator(this);
+      const auto result = frTranslator->load( QStringLiteral( ":/test_fr_FR.qm" ) );
       Q_UNUSED(result);
       Q_ASSERT(result);
       frLocalizer->installTranslator(frTranslator, QStringLiteral( "fr_FR" ) );
@@ -312,7 +312,7 @@ void TestInternationalization::testLocalizedTemplate()
   QFETCH(QString, frFragment);
   QFETCH(Dict, dict);
 
-  Template t = m_engine->newTemplate( input, QString());
+  auto t = m_engine->newTemplate( input, QString());
   Context c(dict);
   c.setLocalizer(cLocalizer);
   QCOMPARE(t->render(&c), cFragment);
@@ -471,7 +471,7 @@ void TestInternationalization::testSafeContent()
   QFETCH(QString, frFragment);
   QFETCH(Dict, dict);
 
-  Template t = m_engine->newTemplate( input, QString());
+  auto t = m_engine->newTemplate( input, QString());
   Context c(dict);
   c.setLocalizer(cLocalizer);
   QCOMPARE(t->render(&c), cFragment);
@@ -679,7 +679,7 @@ void TestInternationalization::testFailure()
 {
   QFETCH(QString, input);
 
-  Template t = m_engine->newTemplate( input, QString());
+  auto t = m_engine->newTemplate( input, QString());
   QVERIFY(t->error() != NoError);
 }
 

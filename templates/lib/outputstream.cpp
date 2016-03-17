@@ -43,7 +43,7 @@ OutputStream::~OutputStream()
 
 QString OutputStream::escape( const QString &input ) const
 {
-  QString temp = input;
+  auto temp = input;
   temp.replace( QLatin1Char( '&' ), QStringLiteral( "&amp;" ) );
   temp.replace( QLatin1Char( '<' ), QStringLiteral( "&lt;" ) );
   temp.replace( QLatin1Char( '>' ), QStringLiteral( "&gt;" ) );

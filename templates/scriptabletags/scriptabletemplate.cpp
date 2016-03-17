@@ -31,17 +31,17 @@
 QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
     QScriptEngine *engine )
 {
-  QString content = context->argument( 0 ).toString();
-  QString name = context->argument( 1 ).toString();
-  QObject *parent = context->argument( 2 ).toQObject();
-  Engine *templateEngine = engine->property( "templateEngine" ).value<Engine *>();
+  auto content = context->argument( 0 ).toString();
+  auto name = context->argument( 1 ).toString();
+  auto parent = context->argument( 2 ).toQObject();
+  auto templateEngine = engine->property( "templateEngine" ).value<Engine *>();
 
   if ( !templateEngine )
     return QScriptValue();
 
-  Template t = templateEngine->newTemplate( content, name );
+  auto t = templateEngine->newTemplate( content, name );
 
-  ScriptableTemplate *object = new ScriptableTemplate( t, parent );
+  auto object = new ScriptableTemplate( t, parent );
   return engine->newQObject( object );
 }
 
@@ -58,7 +58,7 @@ QString ScriptableTemplate::render( ScriptableContext* c ) const
 
 QObjectList ScriptableTemplate::nodeList() const
 {
-  NodeList nodeList = m_template->nodeList();
+  auto nodeList = m_template->nodeList();
   QObjectList objList;
 
   QListIterator<Node *> it( nodeList );
@@ -75,7 +75,7 @@ void ScriptableTemplate::setNodeList( const QObjectList& list )
   QListIterator<QObject *> it( list );
 
   while ( it.hasNext() ) {
-    Node *n = qobject_cast<Node*>( it.next() );
+    auto n = qobject_cast<Node*>( it.next() );
     if ( n ) {
       nodeList << n;
     }

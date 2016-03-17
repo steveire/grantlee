@@ -102,24 +102,24 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 {
   Q_D( FilterExpression );
 
-  int pos = 0;
-  int lastPos = 0;
+  auto pos = 0;
+  auto lastPos = 0;
   int len;
   QString subString;
 
-  QString vs = varString;
+  auto vs = varString;
 
-  static const QRegularExpression sFilterRe = getFilterRegexp();
+  static const auto sFilterRe = getFilterRegexp();
 
   // This is one fo the few constructors that can throw so we make sure to delete its d->pointer.
   try {
-    QRegularExpressionMatchIterator i = sFilterRe.globalMatch(vs);
+    auto i = sFilterRe.globalMatch(vs);
     while (i.hasNext()) {
-      QRegularExpressionMatch match = i.next();
+      auto match = i.next();
       len = match.capturedLength();
       pos = match.capturedStart();
       subString = match.captured();
-      const int ssSize = subString.size();
+      const auto ssSize = subString.size();
 
       if ( pos != lastPos ) {
         throw Grantlee::Exception( TagSyntaxError,
@@ -128,7 +128,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
       if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) ) {
         subString = subString.right( ssSize - 1 );
-        QSharedPointer<Filter> f = parser->getFilter( subString );
+        auto f = parser->getFilter( subString );
 
         Q_ASSERT( f );
 
@@ -137,12 +137,12 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
 
       } else if ( subString.startsWith( QLatin1Char( FILTER_ARGUMENT_SEPARATOR ) ) ) {
         if (d->m_filters.isEmpty() || d->m_filters.at(d->m_filters.size() - 1).second.isValid()) {
-            const QString remainder = vs.right( vs.size() - lastPos );
+            const auto remainder = vs.right( vs.size() - lastPos );
             throw Grantlee::Exception( TagSyntaxError,
                 QStringLiteral( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
         }
         subString = subString.right( ssSize - 1 );
-        const int lastFilter = d->m_filters.size();
+        const auto lastFilter = d->m_filters.size();
         if ( subString.startsWith( QLatin1Char( FILTER_SEPARATOR ) ) )
           throw Grantlee::Exception( EmptyVariableError,
               QStringLiteral( "Missing argument to filter: %1" ).arg( d->m_filterNames[lastFilter -1] ) );
@@ -157,7 +157,7 @@ FilterExpression::FilterExpression( const QString &varString, Parser *parser )
       lastPos = pos;
     }
 
-    const QString remainder = vs.right( vs.size() - lastPos );
+    const auto remainder = vs.right( vs.size() - lastPos );
     if ( !remainder.isEmpty() ) {
       throw Grantlee::Exception( TagSyntaxError,
           QStringLiteral( "Could not parse the remainder, %1 from %2" ).arg( remainder, varString ) );
@@ -209,15 +209,15 @@ FilterExpression &FilterExpression::operator=( const FilterExpression & other )
 QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
 {
   Q_D( const FilterExpression );
-  QVariant var = d->m_variable.resolve( c );
+  auto var = d->m_variable.resolve( c );
 
-  QVector<ArgFilter>::const_iterator it = d->m_filters.constBegin();
-  const QVector<ArgFilter>::const_iterator end = d->m_filters.constEnd();
+  auto it = d->m_filters.constBegin();
+  const auto end = d->m_filters.constEnd();
   for ( ; it != end; ++it ) {
-    QSharedPointer<Filter> filter = it->first;
+    auto filter = it->first;
     filter->setStream( stream );
-    const Variable argVar = it->second;
-    QVariant arg = argVar.resolve( c );
+    const auto argVar = it->second;
+    auto arg = argVar.resolve( c );
 
     if ( arg.isValid() ) {
       Grantlee::SafeString argString;
@@ -234,7 +234,7 @@ QVariant FilterExpression::resolve( OutputStream *stream, Context *c ) const
       }
     }
 
-    const SafeString varString = getSafeString( var );
+    const auto varString = getSafeString( var );
 
     var = filter->doFilter( var, arg, c->autoEscape() );
 
@@ -260,7 +260,7 @@ QVariant FilterExpression::resolve( Context *c ) const
 
 QVariantList FilterExpression::toList( Context *c ) const
 {
-  const QVariant var = resolve( c );
+  const auto var = resolve( c );
   if (!var.canConvert<QVariantList>())
     return QVariantList();
   return var.value<QVariantList>();

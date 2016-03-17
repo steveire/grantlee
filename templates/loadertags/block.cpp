@@ -39,22 +39,22 @@ BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( par
 
 Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  const QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
+  const auto expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
 
   if ( expr.size() != 2 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "block tag takes one argument" ) );
   }
 
-  const QString blockName = expr.at( 1 );
+  const auto blockName = expr.at( 1 );
 
-  QVariant loadedBlocksVariant = p->property( __loadedBlocks );
+  auto loadedBlocksVariant = p->property( __loadedBlocks );
   QVariantList blockVariantList;
 
   if ( loadedBlocksVariant.isValid() && loadedBlocksVariant.userType() == qMetaTypeId<QVariantList>() ) {
     blockVariantList = loadedBlocksVariant.value<QVariantList>();
     QListIterator<QVariant> it( blockVariantList );
     while ( it.hasNext() ) {
-      const QString blockNodeName = it.next().value<QString>();
+      const auto blockNodeName = it.next().value<QString>();
 
       if ( blockNodeName == blockName ) {
         throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'block' tag with name '%1' appears more than once." ).arg( blockName ) );
@@ -67,11 +67,11 @@ Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 
   p->setProperty( __loadedBlocks, loadedBlocksVariant );
 
-  BlockNode *n = new BlockNode( blockName, p );
-  const NodeList list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) );
+  auto n = new BlockNode( blockName, p );
+  const auto list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) );
 
-  Token endBlock = p->takeNextToken();
-  const QStringList acceptableBlocks = QStringList() << QStringLiteral( "endblock" ) << QStringLiteral( "endblock " ) + blockName;
+  auto endBlock = p->takeNextToken();
+  const auto acceptableBlocks = QStringList() << QStringLiteral( "endblock" ) << QStringLiteral( "endblock " ) + blockName;
   if ( !acceptableBlocks.contains( endBlock.content ) ) {
       p->invalidBlockTag( endBlock, QStringLiteral("endblock"), acceptableBlocks );
   }
@@ -99,7 +99,7 @@ void BlockNode::setNodeList( const NodeList &list ) const
 void BlockNode::render( OutputStream *stream, Context *c ) const
 {
   QVariant &variant = c->renderContext()->data( BLOCK_CONTEXT_KEY );
-  BlockContext blockContext = variant.value<BlockContext>();
+  auto blockContext = variant.value<BlockContext>();
 
   c->push();
 
@@ -112,11 +112,11 @@ void BlockNode::render( OutputStream *stream, Context *c ) const
   } else {
     auto block = static_cast<const BlockNode*>(blockContext.pop( m_name ));
     variant.setValue( blockContext );
-    BlockNode const * push = block;
+    auto push = block;
     if ( !block )
       block = this;
 
-    const NodeList list = block->m_list;
+    const auto list = block->m_list;
 
     block = new BlockNode( block->m_name, 0 );
     block->setNodeList( list );
@@ -138,12 +138,12 @@ SafeString BlockNode::getSuper() const
 {
   if ( m_context->renderContext()->contains( BLOCK_CONTEXT_KEY ) ) {
     QVariant &variant = m_context->renderContext()->data( BLOCK_CONTEXT_KEY );
-    const BlockContext blockContext = variant.value<BlockContext>();
-    BlockNode *block = blockContext.getBlock( m_name );
+    const auto blockContext = variant.value<BlockContext>();
+    auto block = blockContext.getBlock( m_name );
     if ( block ) {
       QString superContent;
       QTextStream superTextStream( &superContent );
-      QSharedPointer<OutputStream> superStream = m_stream->clone( &superTextStream );
+      auto superStream = m_stream->clone( &superTextStream );
       const_cast<BlockNode*>( this )->render( superStream.data(), m_context );
       return markSafe( superContent );
     }

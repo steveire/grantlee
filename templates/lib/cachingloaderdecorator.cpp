@@ -91,7 +91,7 @@ Template CachingLoaderDecorator::loadByName( const QString& name, const Grantlee
   if ( d->m_cache.contains( name ) )
     return d->m_cache.value( name );
 
-  const Template t = d->m_wrappedLoader->loadByName( name, engine );
+  const auto t = d->m_wrappedLoader->loadByName( name, engine );
 
   d->m_cache.insert( name, t );
 

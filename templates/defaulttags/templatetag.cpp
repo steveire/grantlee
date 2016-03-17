@@ -31,13 +31,13 @@ TemplateTagNodeFactory::TemplateTagNodeFactory()
 
 Node* TemplateTagNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
+  auto expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
   expr.takeAt( 0 );
   if ( expr.size() <= 0 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'templatetag' statement takes one argument" ) );
   }
 
-  QString name = expr.first();
+  auto name = expr.first();
 
   if ( !TemplateTagNode::isKeyword( name ) ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Not a template tag" ) );
@@ -69,13 +69,13 @@ static QHash<QString, QString> getKeywordMap()
 
 bool TemplateTagNode::isKeyword( const QString &name )
 {
-  static QHash<QString, QString> map = getKeywordMap();
+  static auto map = getKeywordMap();
   return map.contains( name );
 }
 
 void TemplateTagNode::render( OutputStream *stream, Context *c ) const
 {
   Q_UNUSED( c )
-  static QHash<QString, QString> map = getKeywordMap();
+  static auto map = getKeywordMap();
   ( *stream ) << map.value( m_name );
 }

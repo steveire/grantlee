@@ -31,9 +31,9 @@ FirstOfNodeFactory::FirstOfNodeFactory()
 
 Node* FirstOfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
-  const QString tagName = expr.takeAt( 0 );
+  const auto tagName = expr.takeAt( 0 );
 
   if ( expr.size() <= 0 ) {
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "%1 expects at least one argument" ).arg( tagName ) );

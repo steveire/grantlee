@@ -98,7 +98,7 @@ void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Co
   if ( input.userType() == qMetaTypeId<QVariantList>() ) {
     inputString = toString( input.value<QVariantList>() );
   } else if ( input.userType() == qMetaTypeId<MetaEnumVariable>() ) {
-    const MetaEnumVariable mev = input.value<MetaEnumVariable>();
+    const auto mev = input.value<MetaEnumVariable>();
     if ( mev.value >= 0 )
       ( *stream ) << QString::number( mev.value );
   } else {
@@ -112,8 +112,8 @@ void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Co
 
 TemplateImpl* Node::containerTemplate() const
 {
-  QObject *_parent = parent();
-  TemplateImpl *ti = qobject_cast<TemplateImpl *>( _parent );
+  auto _parent = parent();
+  auto ti = qobject_cast<TemplateImpl *>( _parent );
   while ( _parent && !ti ) {
     _parent = _parent->parent();
     ti = qobject_cast<TemplateImpl *>( _parent );
@@ -147,7 +147,7 @@ NodeList::NodeList( const QList<Grantlee::Node *> &list )
     : QList<Grantlee::Node*>( list )
 {
   Q_FOREACH( Grantlee::Node *node, list ) {
-    TextNode *textNode = qobject_cast<TextNode *>( node );
+    auto textNode = qobject_cast<TextNode *>( node );
     if ( !textNode ) {
       m_containsNonText = true;
       return;
@@ -163,7 +163,7 @@ NodeList::~NodeList()
 void NodeList::append( Grantlee::Node *node )
 {
   if ( !m_containsNonText ) {
-    TextNode *textNode = qobject_cast<TextNode *>( node );
+    auto textNode = qobject_cast<TextNode *>( node );
     if ( !textNode )
       m_containsNonText = true;
   }
@@ -175,7 +175,7 @@ void NodeList::append( QList<Grantlee::Node*> nodeList )
 {
   if ( !m_containsNonText ) {
     Q_FOREACH( Grantlee::Node *node, nodeList ) {
-      TextNode *textNode = qobject_cast<TextNode *>( node );
+      auto textNode = qobject_cast<TextNode *>( node );
       if ( !textNode ) {
         m_containsNonText = true;
         break;
@@ -193,7 +193,7 @@ bool NodeList::containsNonText() const
 
 void NodeList::render( OutputStream *stream, Context *c ) const
 {
-  for ( int i = 0; i < this->size(); ++i ) {
+  for ( auto i = 0; i < this->size(); ++i ) {
     this->at( i )->render( stream, c );
   }
 
@@ -216,7 +216,7 @@ QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QS
   QList<FilterExpression> fes;
   QListIterator<QString> it( list );
   while ( it.hasNext() ) {
-    const QString varString = it.next();
+    const auto varString = it.next();
     fes << FilterExpression( varString, p );
   }
   return fes;
@@ -227,9 +227,9 @@ QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
   Q_D(const AbstractNodeFactory);
   QStringList l;
 
-  QRegularExpressionMatchIterator i = d->smartSplitRe.globalMatch(str);
+  auto i = d->smartSplitRe.globalMatch(str);
   while (i.hasNext()) {
-    QRegularExpressionMatch match = i.next();
+    auto match = i.next();
     l.append(match.captured());
   }
 

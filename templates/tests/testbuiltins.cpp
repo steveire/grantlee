@@ -169,15 +169,15 @@ public:
               << QPair<QString, QString>( QChar( 0x2028 ), QStringLiteral( "\\u2028" ) )
               << QPair<QString, QString>( QChar( 0x2029 ), QStringLiteral( "\\u2029" ) );
 
-    for( int i = 0; i < 32; ++i )
+    for( auto i = 0; i < 32; ++i )
     {
       jsEscapes << QPair<QString, QString>( QChar( i ), QStringLiteral( "\\u00" ) + QStringLiteral( "%1" ).arg( i, 2, 16, QLatin1Char( '0' ) ).toUpper() );
     }
 
     QListIterator<QPair<QString, QString> > it( jsEscapes );
-    QString retString = input;
+    auto retString = input;
     while ( it.hasNext() ) {
-      QPair<QString, QString> escape = it.next();
+      auto escape = it.next();
       retString = retString.replace( escape.first, escape.second );
     }
     return retString;
@@ -326,7 +326,7 @@ void TestBuiltinSyntax::testRenderAfterError()
   t = engine.loadByName(QStringLiteral("main"));
 
   c.insert(QStringLiteral("template_var"), QLatin1String("template1"));
-  QString output = t->render(&c);
+  auto output = t->render(&c);
   QCOMPARE(output, QString());
   QCOMPARE(t->error(), TagSyntaxError);
 
@@ -345,7 +345,7 @@ void TestBuiltinSyntax::initTestCase()
 
 Engine* TestBuiltinSyntax::getEngine()
 {
-  Engine *engine = new Engine( this );
+  auto engine = new Engine( this );
   engine->setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
   return engine;
 }
@@ -362,7 +362,7 @@ void TestBuiltinSyntax::doTest()
   QFETCH( QString, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   if ( t->error() != NoError ) {
     if ( t->error() != error )
@@ -373,7 +373,7 @@ void TestBuiltinSyntax::doTest()
 
   Context context( dict );
 
-  QString result = t->render( &context );
+  auto result = t->render( &context );
   if ( t->error() != NoError ) {
     if ( t->error() != error )
       qDebug() << t->errorString();
@@ -429,7 +429,7 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   // Attribute syntax allows a template to call an object's attribute
 
-  QObject *someClass = new SomeClass( this );
+  auto someClass = new SomeClass( this );
   dict.insert( QStringLiteral( "var" ), QVariant::fromValue( someClass ) );
 
   QTest::newRow( "basic-syntax09" ) << QStringLiteral( "{{ var.method }}" ) << dict << QStringLiteral( "SomeClass::method" ) << NoError;
@@ -588,7 +588,7 @@ void TestBuiltinSyntax::testEnums_data()
 
   Dict dict;
 
-  QObject *otherClass = new OtherClass( this );
+  auto otherClass = new OtherClass( this );
   dict.insert( QStringLiteral( "var" ), QVariant::fromValue( otherClass ) );
 
   QTest::newRow( "class-enums01" ) << QStringLiteral( "{{ var.Lions }}" ) << dict << QStringLiteral( "0" ) << NoError;
@@ -628,7 +628,7 @@ void TestBuiltinSyntax::testEnums_data()
 
   dict.clear();
 
-  QObject *someClass = new SomeClass( this );
+  auto someClass = new SomeClass( this );
   dict.insert( QStringLiteral( "var" ), QVariant::fromValue( someClass ) );
 
   QTest::newRow( "class-enums27" ) << QStringLiteral( "{{ var.Employee }}" ) << dict << QStringLiteral( "0" ) << NoError;
@@ -917,43 +917,43 @@ void TestBuiltinSyntax::testEscaping_data()
 
 void TestBuiltinSyntax::testMultipleStates()
 {
-  Engine *engine1 = getEngine();
+  auto engine1 = getEngine();
 
-  QSharedPointer<InMemoryTemplateLoader> loader1 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
+  auto loader1 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
 
   loader1->setTemplate( QStringLiteral( "template1" ), QStringLiteral( "Template 1" ) );
   engine1->addTemplateLoader( loader1 );
 
-  Template t1 = engine1->newTemplate( QStringLiteral( "{% include \"template1\" %}" ), QStringLiteral( "\"template1\"" ) );
+  auto t1 = engine1->newTemplate( QStringLiteral( "{% include \"template1\" %}" ), QStringLiteral( "\"template1\"" ) );
 
-  Engine *engine2 = getEngine();
+  auto engine2 = getEngine();
 
-  QSharedPointer<InMemoryTemplateLoader> loader2 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
+  auto loader2 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
 
   loader2->setTemplate( QStringLiteral( "template2" ), QStringLiteral( "Template 2" ) );
 
   engine2->addTemplateLoader( loader2 );
 
-  Template t2 = engine2->newTemplate( QStringLiteral( "{% include \"template2\" %}" ), QStringLiteral( "\"template2\"" ) );
+  auto t2 = engine2->newTemplate( QStringLiteral( "{% include \"template2\" %}" ), QStringLiteral( "\"template2\"" ) );
 
-  Engine *engine3 = getEngine();
+  auto engine3 = getEngine();
 
-  QSharedPointer<InMemoryTemplateLoader> loader3 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
+  auto loader3 = QSharedPointer<InMemoryTemplateLoader>( new InMemoryTemplateLoader() );
 
   loader3->setTemplate( QStringLiteral( "template3" ), QStringLiteral( "Template 3" ) );
 
   engine3->addTemplateLoader( loader3 );
 
-  Template t3 = engine3->newTemplate( QStringLiteral( "{% include var %}" ), QStringLiteral( "var" ) );
+  auto t3 = engine3->newTemplate( QStringLiteral( "{% include var %}" ), QStringLiteral( "var" ) );
 
   QVariantHash h;
   h.insert( QStringLiteral( "var" ), QStringLiteral( "template3" ) );
   Context c( h );
   t1->render( &c );
 
-  QString expected1 = QStringLiteral( "Template 1" );
-  QString expected2 = QStringLiteral( "Template 2" );
-  QString expected3 = QStringLiteral( "Template 3" );
+  auto expected1 = QStringLiteral( "Template 1" );
+  auto expected2 = QStringLiteral( "Template 2" );
+  auto expected3 = QStringLiteral( "Template 3" );
   QCOMPARE( t1->render( &c ), expected1 );
   QCOMPARE( t2->render( &c ), expected2 );
   QCOMPARE( t3->render( &c ), expected3 );
@@ -961,13 +961,13 @@ void TestBuiltinSyntax::testMultipleStates()
 
 void TestBuiltinSyntax::testAlternativeEscaping()
 {
-  Engine *engine1 = getEngine();
+  auto engine1 = getEngine();
 
-  Template t1 = engine1->newTemplate(
+  auto t1 = engine1->newTemplate(
         QStringLiteral( "{{ var }} {% spaceless %}{{ var }}{% endspaceless %}" ),
         QStringLiteral( "\"template1\"" ) );
 
-  QString input = QStringLiteral( "< > \r\n & \" \' # = % $" );
+  auto input = QStringLiteral( "< > \r\n & \" \' # = % $" );
 
   QVariantHash h;
   h.insert( QStringLiteral( "var" ), input );
@@ -1008,17 +1008,17 @@ void TestBuiltinSyntax::testTemplatePathSafety()
   QFETCH( QString, inputPath );
   QFETCH( QString, output );
 
-  Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
+  auto loader = new FileSystemTemplateLoader();
 
   loader->setTemplateDirs( QStringList() << QStringLiteral( "." ) );
 
   QFile f( inputPath );
-  bool opened = f.open( QFile::WriteOnly | QFile::Text );
+  auto opened = f.open( QFile::WriteOnly | QFile::Text );
   QVERIFY( opened );
   f.write( inputPath.toUtf8() );
   f.close();
 
-  Template t = loader->loadByName( inputPath, m_engine );
+  auto t = loader->loadByName( inputPath, m_engine );
   Context c;
   if ( output.isEmpty() )
     QVERIFY( !t );
@@ -1043,17 +1043,17 @@ void TestBuiltinSyntax::testMediaPathSafety()
   QFETCH( QString, inputPath );
   QFETCH( QString, output );
 
-  Grantlee::FileSystemTemplateLoader *loader = new FileSystemTemplateLoader();
+  auto loader = new FileSystemTemplateLoader();
 
   loader->setTemplateDirs( QStringList() << QStringLiteral( "." ) );
 
   QFile f( inputPath );
-  bool opened = f.open( QFile::WriteOnly | QFile::Text );
+  auto opened = f.open( QFile::WriteOnly | QFile::Text );
   QVERIFY( opened );
   f.write( inputPath.toUtf8() );
   f.close();
 
-  QPair<QString, QString> uri = loader->getMediaUri( inputPath );
+  auto uri = loader->getMediaUri( inputPath );
   if ( output.isEmpty() )
     QVERIFY( uri.second.isEmpty() );
   else
@@ -1070,11 +1070,11 @@ void TestBuiltinSyntax::testTypeAccessorsUnordered()
   QFETCH( QStringList, output );
   QFETCH( Grantlee::Error, error );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   Context context( dict );
 
-  QString result = t->render( &context );
+  auto result = t->render( &context );
   if ( t->error() != NoError ) {
     if ( t->error() != error )
       qDebug() << t->errorString();
@@ -1273,15 +1273,15 @@ void TestBuiltinSyntax::testTypeAccessors_data()
 
 #define SON(obj) obj->setObjectName( QStringLiteral( #obj ) )
 
-  QObject *obj1 = new QObject( this );
+  auto obj1 = new QObject( this );
   SON( obj1 );
-  QObject *obj2 = new QObject( this );
+  auto obj2 = new QObject( this );
   SON( obj2 );
   obj2->setParent( obj1 );
-  QObject *obj3 = new QObject( this );
+  auto obj3 = new QObject( this );
   obj3->setParent( obj2 );
   SON( obj3 );
-  QObject *obj4 = new QObject( this );
+  auto obj4 = new QObject( this );
   obj4->setParent( obj2 );
   SON( obj4 );
 
@@ -1323,7 +1323,7 @@ void TestBuiltinSyntax::testDynamicProperties_data()
 
   Dict dict;
 
-  QObject *obj = new QObject( this );
+  auto obj = new QObject( this );
   obj->setProperty( "prop", 7 );
   dict.insert( QStringLiteral( "var" ), QVariant::fromValue( static_cast<QObject*>( obj ) ) );
 
@@ -1335,13 +1335,13 @@ void TestBuiltinSyntax::testGarbageInput()
 {
   QFETCH( QString, input );
 
-  Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+  auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
   Dict dict;
 
   Context context( dict );
 
-  QString result = t->render( &context );
+  auto result = t->render( &context );
 
   QCOMPARE( t->error(), NoError );
 
@@ -1454,9 +1454,9 @@ void TestBuiltinSyntax::testInsignificantWhitespace()
   QVERIFY(m_engine->smartTrimEnabled());
 
   {
-    Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+    auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
-    QString result = t->render( &context );
+    auto result = t->render( &context );
 
     QCOMPARE( t->error(), NoError );
 
@@ -1464,9 +1464,9 @@ void TestBuiltinSyntax::testInsignificantWhitespace()
   }
   m_engine->setSmartTrimEnabled(false);
   {
-    Template t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
+    auto t = m_engine->newTemplate( input, QLatin1String( QTest::currentDataTag() ) );
 
-    QString result = t->render( &context );
+    auto result = t->render( &context );
 
     QCOMPARE( t->error(), NoError );
 

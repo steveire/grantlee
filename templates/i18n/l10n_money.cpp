@@ -34,7 +34,7 @@ L10nMoneyNodeFactory::L10nMoneyNodeFactory()
 
 Node* L10nMoneyNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 2 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: l10n_money tag takes at least one argument" ) );
@@ -58,7 +58,7 @@ L10nMoneyVarNodeFactory::L10nMoneyVarNodeFactory()
 Grantlee::Node* L10nMoneyVarNodeFactory::getNode( const QString& tagContent, Parser* p ) const
 {
 
-  QStringList expr = smartSplit( tagContent );
+  auto expr = smartSplit( tagContent );
 
   if ( expr.size() < 4 )
     throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: l10n_money tag takes at least three arguments" ) );
@@ -71,7 +71,7 @@ Grantlee::Node* L10nMoneyVarNodeFactory::getNode( const QString& tagContent, Par
   if ( expr.size() == 3 )
     currency = FilterExpression( expr.at( 2 ), p );
 
-  QString resultName = expr.last();
+  auto resultName = expr.last();
 
   return new L10nMoneyVarNode( value, currency, resultName );
 }
@@ -85,7 +85,7 @@ L10nMoneyNode::L10nMoneyNode( const FilterExpression &value, const FilterExpress
 
 void L10nMoneyNode::render( OutputStream* stream, Context* c ) const
 {
-  QString resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).value<double>(), getSafeString( m_currency.resolve( c ) ).get() );
+  auto resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).value<double>(), getSafeString( m_currency.resolve( c ) ).get() );
 
   streamValueInContext( stream, resultString, c );
 }
@@ -99,7 +99,7 @@ L10nMoneyVarNode::L10nMoneyVarNode( const FilterExpression &value, const FilterE
 void L10nMoneyVarNode::render( OutputStream* stream, Context* c ) const
 {
   Q_UNUSED( stream )
-  QString resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).value<double>(), getSafeString( m_currency.resolve( c ) ).get() );
+  auto resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).value<double>(), getSafeString( m_currency.resolve( c ) ).get() );
 
   c->insert( m_resultName, resultString );
 }
