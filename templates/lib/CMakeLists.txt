@@ -62,29 +62,7 @@ add_library(Grantlee5::Templates ALIAS Grantlee_Templates)
 generate_export_header(Grantlee_Templates)
 set_property(TARGET Grantlee_Templates PROPERTY EXPORT_NAME Templates)
 
-if (Qt5Script_FOUND)
-  set(scriptabletags_FILES
-    scriptablecontext.cpp
-    scriptablefilterexpression.cpp
-    scriptablenode.cpp
-    scriptableparser.cpp
-    scriptablesafestring.cpp
-    scriptabletags.cpp
-    scriptabletemplate.cpp
-    scriptablevariable.cpp
-    scriptablefilter.cpp
-    )
-
-  foreach(file ${scriptabletags_FILES})
-    list(APPEND scriptabletags_SRCS ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
-  endforeach()
-
-  target_sources(Grantlee_Templates PRIVATE ${scriptabletags_SRCS})
-  target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
-  target_link_libraries(Grantlee_Templates
-    LINK_PRIVATE Qt5::Script
-  )
-endif()
+target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
 
 if (BUILD_TESTS)
   set(GRANTLEE_TESTS_EXPORT "GRANTLEE_TEMPLATES_EXPORT")
