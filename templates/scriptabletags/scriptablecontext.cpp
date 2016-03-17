@@ -23,46 +23,37 @@
 #include "context.h"
 #include "node.h"
 
-
-ScriptableContext::ScriptableContext( Context *c, QObject *parent )
-    : QObject( parent ), m_c( c )
+ScriptableContext::ScriptableContext(Context *c, QObject *parent)
+    : QObject(parent), m_c(c)
 {
-
 }
 
-
-QVariant ScriptableContext::lookup( const QString &name )
+QVariant ScriptableContext::lookup(const QString &name)
 {
-  return m_c->lookup( name );
+  return m_c->lookup(name);
 }
 
-void ScriptableContext::insert( const QString &name, const QVariant &variant )
+void ScriptableContext::insert(const QString &name, const QVariant &variant)
 {
-  m_c->insert( name, variant );
+  m_c->insert(name, variant);
 }
 
-void ScriptableContext::push()
-{
-  m_c->push();
-}
+void ScriptableContext::push() { m_c->push(); }
 
-void ScriptableContext::pop()
-{
-  m_c->pop();
-}
+void ScriptableContext::pop() { m_c->pop(); }
 
-QString ScriptableContext::render( const QObjectList &list ) const
+QString ScriptableContext::render(const QObjectList &list) const
 {
   NodeList nodeList;
-  QListIterator<QObject *> it( list );
-  while ( it.hasNext() ) {
-    auto node = qobject_cast<Node*>( it.next() );
-    if ( node )
+  QListIterator<QObject *> it(list);
+  while (it.hasNext()) {
+    auto node = qobject_cast<Node *>(it.next());
+    if (node)
       nodeList << node;
   }
   QString ret;
-  QTextStream t( &ret );
-  OutputStream stream( &t );
-  nodeList.render( &stream, m_c );
+  QTextStream t(&ret);
+  OutputStream stream(&t);
+  nodeList.render(&stream, m_c);
   return ret;
 }

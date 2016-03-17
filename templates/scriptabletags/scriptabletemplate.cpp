@@ -23,37 +23,36 @@
 #include <QtScript/QScriptContext>
 #include <QtScript/QScriptEngine>
 
-#include "engine.h"
 #include "context.h"
+#include "engine.h"
 #include "node.h"
 #include "scriptablecontext.h"
 
-QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
-    QScriptEngine *engine )
+QScriptValue ScriptableTemplateConstructor(QScriptContext *context,
+                                           QScriptEngine *engine)
 {
-  auto content = context->argument( 0 ).toString();
-  auto name = context->argument( 1 ).toString();
-  auto parent = context->argument( 2 ).toQObject();
-  auto templateEngine = engine->property( "templateEngine" ).value<Engine *>();
+  auto content = context->argument(0).toString();
+  auto name = context->argument(1).toString();
+  auto parent = context->argument(2).toQObject();
+  auto templateEngine = engine->property("templateEngine").value<Engine *>();
 
-  if ( !templateEngine )
+  if (!templateEngine)
     return QScriptValue();
 
-  auto t = templateEngine->newTemplate( content, name );
+  auto t = templateEngine->newTemplate(content, name);
 
-  auto object = new ScriptableTemplate( t, parent );
-  return engine->newQObject( object );
+  auto object = new ScriptableTemplate(t, parent);
+  return engine->newQObject(object);
 }
 
-ScriptableTemplate::ScriptableTemplate( Grantlee::Template t, QObject* parent )
-    : QObject( parent ), m_template( t )
+ScriptableTemplate::ScriptableTemplate(Grantlee::Template t, QObject *parent)
+    : QObject(parent), m_template(t)
 {
-
 }
 
-QString ScriptableTemplate::render( ScriptableContext* c ) const
+QString ScriptableTemplate::render(ScriptableContext *c) const
 {
-  return m_template->render( c->context() );
+  return m_template->render(c->context());
 }
 
 QObjectList ScriptableTemplate::nodeList() const
@@ -61,24 +60,24 @@ QObjectList ScriptableTemplate::nodeList() const
   auto nodeList = m_template->nodeList();
   QObjectList objList;
 
-  QListIterator<Node *> it( nodeList );
-  while ( it.hasNext() ) {
+  QListIterator<Node *> it(nodeList);
+  while (it.hasNext()) {
     objList << it.next();
   }
   return objList;
 }
 
-void ScriptableTemplate::setNodeList( const QObjectList& list )
+void ScriptableTemplate::setNodeList(const QObjectList &list)
 {
   NodeList nodeList;
 
-  QListIterator<QObject *> it( list );
+  QListIterator<QObject *> it(list);
 
-  while ( it.hasNext() ) {
-    auto n = qobject_cast<Node*>( it.next() );
-    if ( n ) {
+  while (it.hasNext()) {
+    auto n = qobject_cast<Node *>(it.next());
+    if (n) {
       nodeList << n;
     }
   }
-  m_template->setNodeList( nodeList );
+  m_template->setNodeList(nodeList);
 }

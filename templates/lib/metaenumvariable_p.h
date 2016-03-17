@@ -23,38 +23,31 @@
 
 #include <QtCore/QMetaEnum>
 
-struct MetaEnumVariable
-{
-  MetaEnumVariable()
-    : value(-1)
-  {
+struct MetaEnumVariable {
+  MetaEnumVariable() : value(-1) {}
 
-  }
-
-  MetaEnumVariable( QMetaEnum _enumerator )
-    : enumerator( _enumerator ), value( -1 )
-  {
-
-  }
-
-  MetaEnumVariable( QMetaEnum _enumerator, int _value )
-    : enumerator( _enumerator ), value( _value )
+  MetaEnumVariable(QMetaEnum _enumerator) : enumerator(_enumerator), value(-1)
   {
   }
 
-  bool operator==( const MetaEnumVariable &other ) const {
-    return ( enumerator.scope() == other.enumerator.scope() && enumerator.name() == other.enumerator.name() )
-        && value == other.value;
+  MetaEnumVariable(QMetaEnum _enumerator, int _value)
+      : enumerator(_enumerator), value(_value)
+  {
   }
 
-  bool operator==( int otherValue ) const {
-    return value == otherValue;
+  bool operator==(const MetaEnumVariable &other) const
+  {
+    return (enumerator.scope() == other.enumerator.scope()
+            && enumerator.name() == other.enumerator.name())
+           && value == other.value;
   }
+
+  bool operator==(int otherValue) const { return value == otherValue; }
 
   QMetaEnum enumerator;
   int value;
 };
 
-Q_DECLARE_METATYPE( MetaEnumVariable )
+Q_DECLARE_METATYPE(MetaEnumVariable)
 
 #endif

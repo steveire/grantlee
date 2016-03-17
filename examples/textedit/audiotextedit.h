@@ -27,11 +27,10 @@ class AudioTextEdit : public QTextEdit
 {
   Q_OBJECT
 public:
-  AudioTextEdit(QWidget* parent = 0);
+  AudioTextEdit(QWidget *parent = 0);
 
 protected:
- bool eventFilter(QObject *obj, QEvent *event);
-
+  bool eventFilter(QObject *obj, QEvent *event);
 };
 
 #endif

@@ -22,18 +22,12 @@
 
 #include <QtPlugin>
 
-
-MyObject::MyObject( int stop, QObject *parent )
-    : QObject( parent )
+MyObject::MyObject(int stop, QObject *parent) : QObject(parent)
 {
-  m_data.fill( 'o', 2000000 );
+  m_data.fill('o', 2000000);
 
-  if ( stop > 0 )
-    ( void ) new MyObject( --stop, this );
-
+  if (stop > 0)
+    (void)new MyObject(--stop, this);
 }
 
-int MyObject::double_it( int input )
-{
-  return input * 2;
-}
+int MyObject::double_it(int input) { return input * 2; }

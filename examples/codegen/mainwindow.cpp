@@ -20,14 +20,14 @@
 
 #include "mainwindow.h"
 
-#include <QSplitter>
 #include <QLabel>
+#include <QSplitter>
 #include <QTextBrowser>
 
 #include <QDebug>
 
-#include "grantlee_templates.h"
 #include "grantlee_paths.h"
+#include "grantlee_templates.h"
 
 #include "designwidget.h"
 
@@ -39,29 +39,20 @@
 class NoEscapeOutputStream : public Grantlee::OutputStream
 {
 public:
-  NoEscapeOutputStream()
-    : Grantlee::OutputStream()
+  NoEscapeOutputStream() : Grantlee::OutputStream() {}
+
+  NoEscapeOutputStream(QTextStream *stream) : OutputStream(stream) {}
+
+  virtual QSharedPointer<Grantlee::OutputStream> clone() const
   {
-
+    return QSharedPointer<Grantlee::OutputStream>(new NoEscapeOutputStream);
   }
 
-  NoEscapeOutputStream(QTextStream* stream)
-    : OutputStream( stream )
-  {
-
-  }
-
-  virtual QSharedPointer< Grantlee::OutputStream > clone() const {
-    return QSharedPointer<Grantlee::OutputStream>( new NoEscapeOutputStream );
-  }
-
-  virtual QString escape( const QString& input ) const {
-    return input;
-  }
+  virtual QString escape(const QString &input) const { return input; }
 };
 
-MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags flags)
-  : QMainWindow(parent, flags)
+MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
+    : QMainWindow(parent, flags)
 {
   QSplitter *splitter = new QSplitter(this);
   splitter->setStretchFactor(1, 5);
@@ -75,38 +66,38 @@ MainWindow::MainWindow(QWidget* parent, Qt::WindowFlags flags)
 
   setCentralWidget(splitter);
 
-  connect(m_designWidget, SIGNAL(generateClicked(bool)), SLOT(generateOutput()));
+  connect(m_designWidget, SIGNAL(generateClicked(bool)),
+          SLOT(generateOutput()));
 
   m_engine = new Grantlee::Engine(this);
-  m_engine->setPluginPaths( QStringList() << GRANTLEE_PLUGIN_PATH << ":/plugins" );
-  m_engine->addDefaultLibrary( "grantlee_scriptabletags" );
+  m_engine->setPluginPaths(QStringList() << GRANTLEE_PLUGIN_PATH
+                                         << ":/plugins");
+  m_engine->addDefaultLibrary("grantlee_scriptabletags");
   m_engine->setSmartTrimEnabled(true);
 
-  m_loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>( new Grantlee::FileSystemTemplateLoader );
-  m_loader->setTemplateDirs( QStringList() << ":/templates" );
+  m_loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>(
+      new Grantlee::FileSystemTemplateLoader);
+  m_loader->setTemplateDirs(QStringList() << ":/templates");
   m_engine->addTemplateLoader(m_loader);
   m_engine->addDefaultLibrary("custom_tags");
 }
 
-MainWindow::~MainWindow()
-{
-
-}
+MainWindow::~MainWindow() {}
 
 void MainWindow::generateOutput()
 {
   m_tabWidget->clear();
 
   QString outputType = m_designWidget->outputType();
-  m_loader->setTheme( outputType );
+  m_loader->setTheme(outputType);
 
   if (outputType == "cpp")
     return generateCpp();
 
-  Grantlee::Template classTemplate = m_engine->loadByName("class." + outputType);
+  Grantlee::Template classTemplate
+      = m_engine->loadByName("class." + outputType);
 
-  if (classTemplate->error())
-  {
+  if (classTemplate->error()) {
     createOutputTab("Class", classTemplate->errorString());
     return;
   }
@@ -118,15 +109,15 @@ void MainWindow::generateOutput()
   NoEscapeOutputStream stream(&textStream);
 
   classTemplate->render(&stream, &c);
-  createOutputTab("Class", classTemplate->error() ? classTemplate->errorString() : output);
+  createOutputTab("Class", classTemplate->error() ? classTemplate->errorString()
+                                                  : output);
 }
 
 void MainWindow::generateCpp()
 {
   Grantlee::Template headerTemplate = m_engine->loadByName("header.h");
 
-  if (headerTemplate->error())
-  {
+  if (headerTemplate->error()) {
     createOutputTab("Header", headerTemplate->errorString());
     return;
   }
@@ -138,45 +129,51 @@ void MainWindow::generateCpp()
   NoEscapeOutputStream stream(&textStream);
 
   headerTemplate->render(&stream, &c);
-  createOutputTab("Header", headerTemplate->error() ? headerTemplate->errorString() : output);
+  createOutputTab("Header", headerTemplate->error()
+                                ? headerTemplate->errorString()
+                                : output);
   if (headerTemplate->error())
     return;
 
   output.clear();
 
-  Grantlee::Template implementationTemplate = m_engine->loadByName("implementation.cpp");
+  Grantlee::Template implementationTemplate
+      = m_engine->loadByName("implementation.cpp");
 
-  if (implementationTemplate->error())
-  {
+  if (implementationTemplate->error()) {
     createOutputTab("Implementation", implementationTemplate->errorString());
     return;
   }
 
   implementationTemplate->render(&stream, &c);
-  createOutputTab("Implementation", implementationTemplate->error() ? implementationTemplate->errorString() : output);
+  createOutputTab("Implementation", implementationTemplate->error()
+                                        ? implementationTemplate->errorString()
+                                        : output);
   if (implementationTemplate->error())
     return;
   output.clear();
 
-  if (c.lookup("pimpl").toBool())
-  {
-    Grantlee::Template privateHeaderTemplate = m_engine->loadByName("private_header.h");
+  if (c.lookup("pimpl").toBool()) {
+    Grantlee::Template privateHeaderTemplate
+        = m_engine->loadByName("private_header.h");
 
-    if (privateHeaderTemplate->error())
-    {
+    if (privateHeaderTemplate->error()) {
       createOutputTab("Private Header", privateHeaderTemplate->errorString());
       return;
     }
-    c.insert( "className", Grantlee::getSafeString(c.lookup("className")) + QString("Private"));
-    c.insert( "baseClass", QVariant() );
+    c.insert("className", Grantlee::getSafeString(c.lookup("className"))
+                              + QString("Private"));
+    c.insert("baseClass", QVariant());
     privateHeaderTemplate->render(&stream, &c);
-    createOutputTab("Private Header", privateHeaderTemplate->error() ? privateHeaderTemplate->errorString() : output);
+    createOutputTab("Private Header", privateHeaderTemplate->error()
+                                          ? privateHeaderTemplate->errorString()
+                                          : output);
     if (privateHeaderTemplate->error())
       return;
   }
 }
 
-void MainWindow::createOutputTab(const QString& label, const QString& content)
+void MainWindow::createOutputTab(const QString &label, const QString &content)
 {
   QTextBrowser *browser = new QTextBrowser(m_tabWidget);
   QFont f;

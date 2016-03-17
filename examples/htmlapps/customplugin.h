@@ -18,7 +18,6 @@
 
 */
 
-
 #ifndef CUSTOM_TAGS_H
 #define CUSTOM_TAGS_H
 
@@ -31,26 +30,26 @@ using namespace Grantlee;
 class CustomPlugin : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  CustomPlugin( QObject *parent = 0 )
-      : QObject( parent ) {
-  }
+  CustomPlugin(QObject *parent = 0) : QObject(parent) {}
 
-  virtual QHash< QString, AbstractNodeFactory* > nodeFactories(const QString& name = QString()) {
-    Q_UNUSED( name );
-    QHash< QString, AbstractNodeFactory* > facts;
-    facts.insert( "rssfeed", new RssFeedNodeFactory() );
-    facts.insert( "xmlrole", new XmlRoleNodeFactory() );
-    facts.insert( "xmlns", new XmlNamespaceNodeFactory() );
+  virtual QHash<QString, AbstractNodeFactory *>
+  nodeFactories(const QString &name = QString())
+  {
+    Q_UNUSED(name);
+    QHash<QString, AbstractNodeFactory *> facts;
+    facts.insert("rssfeed", new RssFeedNodeFactory());
+    facts.insert("xmlrole", new XmlRoleNodeFactory());
+    facts.insert("xmlns", new XmlNamespaceNodeFactory());
     return facts;
   }
 
-  virtual QHash< QString, Filter* > filters(const QString& name = QString())
+  virtual QHash<QString, Filter *> filters(const QString &name = QString())
   {
-    Q_UNUSED( name );
-    QHash< QString, Filter* > _filters;
+    Q_UNUSED(name);
+    QHash<QString, Filter *> _filters;
     _filters.insert("resize", new ResizeFilter);
     return _filters;
   }

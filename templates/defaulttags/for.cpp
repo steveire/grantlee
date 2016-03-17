@@ -21,57 +21,61 @@
 #include "for.h"
 
 #include "../lib/exception.h"
-#include "parser.h"
 #include "metaenumvariable_p.h"
+#include "parser.h"
 
-ForNodeFactory::ForNodeFactory()
+ForNodeFactory::ForNodeFactory() {}
+
+Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = smartSplit(tagContent);
 
-}
-
-Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  auto expr = smartSplit( tagContent );
-
-  if ( expr.size() < 4 ) {
-    throw Grantlee::Exception( TagSyntaxError,
-        QStringLiteral( "'for' statements should have at least four words: %1" ).arg( tagContent ) );
+  if (expr.size() < 4) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("'for' statements should have at least four words: %1")
+            .arg(tagContent));
   }
 
-  expr.takeAt( 0 );
+  expr.takeAt(0);
   QStringList vars;
 
   int reversed = ForNode::IsNotReversed;
-  if ( expr.last() == QStringLiteral( "reversed" ) ) {
+  if (expr.last() == QStringLiteral("reversed")) {
     reversed = ForNode::IsReversed;
     expr.removeLast();
   }
 
-  if ( expr.at( expr.size() - 2 ) != QStringLiteral( "in" ) ) {
-    throw Grantlee::Exception( TagSyntaxError,
-      QStringLiteral( "'for' statements should use the form 'for x in y': %1" ).arg( tagContent ) );
+  if (expr.at(expr.size() - 2) != QStringLiteral("in")) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("'for' statements should use the form 'for x in y': %1")
+            .arg(tagContent));
   }
 
-  Q_FOREACH( const QString &arg, expr.mid( 0, expr.size() - 2 ) ) {
-    vars << arg.split( QLatin1Char( ',' ), QString::SkipEmptyParts );
+  Q_FOREACH (const QString &arg, expr.mid(0, expr.size() - 2)) {
+    vars << arg.split(QLatin1Char(','), QString::SkipEmptyParts);
   }
 
-  Q_FOREACH( const QString &var, vars ) {
-    if ( var.isNull() )
-      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'for' tag received invalid argument" ) );
+  Q_FOREACH (const QString &var, vars) {
+    if (var.isNull())
+      throw Grantlee::Exception(
+          TagSyntaxError,
+          QStringLiteral("'for' tag received invalid argument"));
   }
 
-  FilterExpression fe( expr.last(), p );
+  FilterExpression fe(expr.last(), p);
 
-  auto n = new ForNode( vars, fe, reversed, p );
+  auto n = new ForNode(vars, fe, reversed, p);
 
-  auto loopNodes = p->parse( n, QStringList() << QStringLiteral( "empty" ) << QStringLiteral( "endfor" ) );
-  n->setLoopList( loopNodes );
+  auto loopNodes = p->parse(n, QStringList() << QStringLiteral("empty")
+                                             << QStringLiteral("endfor"));
+  n->setLoopList(loopNodes);
 
   NodeList emptyNodes;
-  if ( p->takeNextToken().content == QStringLiteral( "empty" ) ) {
-    emptyNodes = p->parse( n, QStringLiteral( "endfor" ) );
-    n->setEmptyList( emptyNodes );
+  if (p->takeNextToken().content == QStringLiteral("empty")) {
+    emptyNodes = p->parse(n, QStringLiteral("endfor"));
+    n->setEmptyList(emptyNodes);
     // skip past the endfor tag
     p->removeNextToken();
   }
@@ -79,26 +83,19 @@ Node* ForNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   return n;
 }
 
-
-
-ForNode::ForNode( const QStringList &loopVars,
-                  const FilterExpression &fe,
-                  int reversed,
-                  QObject *parent )
-    : Node( parent ),
-    m_loopVars( loopVars ),
-    m_filterExpression( fe ),
-    m_isReversed( reversed )
+ForNode::ForNode(const QStringList &loopVars, const FilterExpression &fe,
+                 int reversed, QObject *parent)
+    : Node(parent), m_loopVars(loopVars), m_filterExpression(fe),
+      m_isReversed(reversed)
 {
-
 }
 
-void ForNode::setLoopList(const NodeList& loopNodeList )
+void ForNode::setLoopList(const NodeList &loopNodeList)
 {
   m_loopNodeList = loopNodeList;
 }
 
-void ForNode::setEmptyList(const NodeList& emptyList )
+void ForNode::setEmptyList(const NodeList &emptyList)
 {
   m_emptyNodeList = emptyList;
 }
@@ -106,165 +103,171 @@ void ForNode::setEmptyList(const NodeList& emptyList )
 static const char forloop[] = "forloop";
 static const char parentloop[] = "parentloop";
 
-void ForNode::insertLoopVariables( Context *c, int listSize, int i )
+void ForNode::insertLoopVariables(Context *c, int listSize, int i)
 {
   // some magic variables injected into the context while rendering.
-  static const auto counter0 = QStringLiteral( "counter0" );
-  static const auto counter = QStringLiteral( "counter" );
-  static const auto revcounter0 = QStringLiteral( "revcounter0" );
-  static const auto revcounter = QStringLiteral( "revcounter" );
-  static const auto first = QStringLiteral( "first" );
-  static const auto last = QStringLiteral( "last" );
+  static const auto counter0 = QStringLiteral("counter0");
+  static const auto counter = QStringLiteral("counter");
+  static const auto revcounter0 = QStringLiteral("revcounter0");
+  static const auto revcounter = QStringLiteral("revcounter");
+  static const auto first = QStringLiteral("first");
+  static const auto last = QStringLiteral("last");
 
-  auto forloopHash = c->lookup( QStringLiteral( "forloop" ) ).value<QVariantHash>();
-  forloopHash.insert( counter0, i );
-  forloopHash.insert( counter, i + 1 );
-  forloopHash.insert( revcounter, listSize - i );
-  forloopHash.insert( revcounter0, listSize - i - 1 );
-  forloopHash.insert( first, ( i == 0 ) );
-  forloopHash.insert( last, ( i == listSize - 1 ) );
-  c->insert( QLatin1String( forloop ), forloopHash );
+  auto forloopHash = c->lookup(QStringLiteral("forloop")).value<QVariantHash>();
+  forloopHash.insert(counter0, i);
+  forloopHash.insert(counter, i + 1);
+  forloopHash.insert(revcounter, listSize - i);
+  forloopHash.insert(revcounter0, listSize - i - 1);
+  forloopHash.insert(first, (i == 0));
+  forloopHash.insert(last, (i == listSize - 1));
+  c->insert(QLatin1String(forloop), forloopHash);
 }
 
-void ForNode::renderLoop( OutputStream *stream, Context *c ) const
+void ForNode::renderLoop(OutputStream *stream, Context *c) const
 {
-  for ( auto j = 0; j < m_loopNodeList.size();j++ ) {
-    m_loopNodeList[j]->render( stream, c );
+  for (auto j = 0; j < m_loopNodeList.size(); j++) {
+    m_loopNodeList[j]->render(stream, c);
   }
 }
 
-void ForNode::handleHashItem(OutputStream *stream, Context *c, const QString &key,
-                             const QVariant& value, int listSize, int i, bool unpack )
+void ForNode::handleHashItem(OutputStream *stream, Context *c,
+                             const QString &key, const QVariant &value,
+                             int listSize, int i, bool unpack)
 {
   QVariantList list;
-  insertLoopVariables( c, listSize, i );
+  insertLoopVariables(c, listSize, i);
 
-  if ( !unpack ) {
+  if (!unpack) {
     // Iterating over a hash but not unpacking it.
     // convert each key-value pair to a list and insert it in the context.
     list << key << value;
-    c->insert( m_loopVars.at( 0 ), list );
+    c->insert(m_loopVars.at(0), list);
     list.clear();
   } else {
-    c->insert( m_loopVars.at( 0 ), key );
-    c->insert( m_loopVars.at( 1 ), value );
+    c->insert(m_loopVars.at(0), key);
+    c->insert(m_loopVars.at(1), value);
   }
-  renderLoop( stream, c );
+  renderLoop(stream, c);
 }
 
-void ForNode::iterateHash( OutputStream *stream, Context *c, const QVariantHash &varHash, bool unpack )
+void ForNode::iterateHash(OutputStream *stream, Context *c,
+                          const QVariantHash &varHash, bool unpack)
 {
   auto listSize = varHash.size();
   auto i = 0;
 
-  QHashIterator<QString, QVariant> it( varHash );
-  if ( m_isReversed == IsReversed ) {
-    while ( it.hasPrevious() ) {
+  QHashIterator<QString, QVariant> it(varHash);
+  if (m_isReversed == IsReversed) {
+    while (it.hasPrevious()) {
       it.previous();
-      handleHashItem( stream, c, it.key(), it.value(), listSize, i, unpack );
+      handleHashItem(stream, c, it.key(), it.value(), listSize, i, unpack);
       ++i;
     }
   } else {
-    while ( it.hasNext() ) {
+    while (it.hasNext()) {
       it.next();
-      handleHashItem( stream, c, it.key(), it.value(), listSize, i, unpack );
+      handleHashItem(stream, c, it.key(), it.value(), listSize, i, unpack);
       ++i;
     }
   }
 }
 
-void ForNode::render( OutputStream *stream, Context *c ) const
+void ForNode::render(OutputStream *stream, Context *c) const
 {
   QVariantHash forloopHash;
 
-  auto parentLoopVariant = c->lookup( QLatin1String( forloop ) );
-  if ( parentLoopVariant.isValid() ) {
+  auto parentLoopVariant = c->lookup(QLatin1String(forloop));
+  if (parentLoopVariant.isValid()) {
     // This is a nested loop.
     forloopHash = parentLoopVariant.value<QVariantHash>();
-    forloopHash.insert( QLatin1String( parentloop ), parentLoopVariant.value<QVariantHash>() );
-    c->insert( QLatin1String( forloop ), forloopHash );
+    forloopHash.insert(QLatin1String(parentloop),
+                       parentLoopVariant.value<QVariantHash>());
+    c->insert(QLatin1String(forloop), forloopHash);
   }
 
   auto unpack = m_loopVars.size() > 1;
 
   c->push();
 
-//   if ( var.type() == QVariant::Hash ) {
-//     QVariantHash varHash = var.toHash();
-//     result = iterateHash( c, varHash, unpack );
-//     c->pop();
-//     return result;
-//   }
+  //   if ( var.type() == QVariant::Hash ) {
+  //     QVariantHash varHash = var.toHash();
+  //     result = iterateHash( c, varHash, unpack );
+  //     c->pop();
+  //     return result;
+  //   }
 
-  auto varFE = m_filterExpression.resolve( c );
+  auto varFE = m_filterExpression.resolve(c);
 
-  if (varFE.userType() == qMetaTypeId<MetaEnumVariable>())
-  {
+  if (varFE.userType() == qMetaTypeId<MetaEnumVariable>()) {
     const auto mev = varFE.value<MetaEnumVariable>();
 
-    if ( mev.value != -1 ) {
+    if (mev.value != -1) {
       c->pop();
-      return m_emptyNodeList.render( stream, c );
+      return m_emptyNodeList.render(stream, c);
     }
 
     QVariantList list;
-    for ( auto row = 0; row < mev.enumerator.keyCount(); ++row ) {
-      list << QVariant::fromValue( MetaEnumVariable( mev.enumerator, row ) );
+    for (auto row = 0; row < mev.enumerator.keyCount(); ++row) {
+      list << QVariant::fromValue(MetaEnumVariable(mev.enumerator, row));
     }
     varFE = list;
   }
 
   if (!varFE.canConvert<QVariantList>()) {
     c->pop();
-    return m_emptyNodeList.render( stream, c );
+    return m_emptyNodeList.render(stream, c);
   }
 
   auto iter = varFE.value<QSequentialIterable>();
   const auto listSize = iter.size();
 
   // If it's an iterable type, iterate, otherwise it's a list of one.
-  if ( listSize < 1 ) {
+  if (listSize < 1) {
     c->pop();
-    return m_emptyNodeList.render( stream, c );
+    return m_emptyNodeList.render(stream, c);
   }
 
   auto i = 0;
-  for (auto it = m_isReversed == IsReversed ? iter.end() -1 : iter.begin();
-       m_isReversed == IsReversed ? it != iter.begin() - 1: it != iter.end();
+  for (auto it = m_isReversed == IsReversed ? iter.end() - 1 : iter.begin();
+       m_isReversed == IsReversed ? it != iter.begin() - 1 : it != iter.end();
        m_isReversed == IsReversed ? --it : ++it) {
     const auto v = *it;
-    insertLoopVariables( c, listSize, i );
+    insertLoopVariables(c, listSize, i);
 
-    if ( unpack ) {
-      if ( v.userType() == qMetaTypeId<QVariantList>() ) {
+    if (unpack) {
+      if (v.userType() == qMetaTypeId<QVariantList>()) {
         auto vList = v.value<QVariantList>();
-        auto varsSize = qMin( m_loopVars.size(), vList.size() );
+        auto varsSize = qMin(m_loopVars.size(), vList.size());
         auto j = 0;
-        for ( ; j < varsSize; ++j ) {
-          c->insert( m_loopVars.at( j ), vList.at( j ) );
+        for (; j < varsSize; ++j) {
+          c->insert(m_loopVars.at(j), vList.at(j));
         }
         // If any of the named vars don't have an item in the context,
         // insert an invalid object for them.
-        for ( ; j < m_loopVars.size(); ++j ) {
-          c->insert( m_loopVars.at( j ), QVariant() );
+        for (; j < m_loopVars.size(); ++j) {
+          c->insert(m_loopVars.at(j), QVariant());
         }
 
       } else {
-        // We don't have a hash, but we have to unpack several values from each item
+        // We don't have a hash, but we have to unpack several values
+        // from each
+        // item
         // in the list. And each item in the list is not itself a list.
-        // Probably have a list of objects that we're taking properties from.
-        Q_FOREACH( const QString &loopVar, m_loopVars ) {
+        // Probably have a list of objects that we're taking properties
+        // from.
+        Q_FOREACH (const QString &loopVar, m_loopVars) {
           c->push();
-          c->insert( QStringLiteral( "var" ), v );
-          auto v = FilterExpression( QStringLiteral( "var." ) + loopVar, 0 ).resolve( c );
+          c->insert(QStringLiteral("var"), v);
+          auto v = FilterExpression(QStringLiteral("var.") + loopVar, 0)
+                       .resolve(c);
           c->pop();
-          c->insert( loopVar, v );
+          c->insert(loopVar, v);
         }
       }
     } else {
-      c->insert( m_loopVars[0], v );
+      c->insert(m_loopVars[0], v);
     }
-    renderLoop( stream, c );
+    renderLoop(stream, c);
     ++i;
   }
   c->pop();

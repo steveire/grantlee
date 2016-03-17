@@ -8,13 +8,16 @@
 
 #include "templatereply.h"
 
-LocalRequestManager::LocalRequestManager(Grantlee::Engine *engine, QObject* parent)
-  : QNetworkAccessManager(parent), m_engine( engine )
+LocalRequestManager::LocalRequestManager(Grantlee::Engine *engine,
+                                         QObject *parent)
+    : QNetworkAccessManager(parent), m_engine(engine)
 {
-
 }
 
-QNetworkReply* LocalRequestManager::createRequest(QNetworkAccessManager::Operation op, const QNetworkRequest& request, QIODevice* outgoingData)
+QNetworkReply *
+LocalRequestManager::createRequest(QNetworkAccessManager::Operation op,
+                                   const QNetworkRequest &request,
+                                   QIODevice *outgoingData)
 {
   QUrl requestUrl = request.url();
   if (requestUrl.scheme() != "template") {
@@ -27,7 +30,7 @@ QNetworkReply* LocalRequestManager::createRequest(QNetworkAccessManager::Operati
     qDebug() << t->errorString();
   }
 
-  QList<QPair<QString, QString> > query = requestUrl.queryItems();
+  QList<QPair<QString, QString>> query = requestUrl.queryItems();
   if (outgoingData) {
     QUrl postData;
     postData.setEncodedQuery(outgoingData->readAll());

@@ -24,56 +24,42 @@
 
 #include "util.h"
 
-QScriptValue markSafeFunction( QScriptContext *context,
-                               QScriptEngine *engine )
+QScriptValue markSafeFunction(QScriptContext *context, QScriptEngine *engine)
 {
-  auto inputValue = context->argument( 0 );
-  if ( inputValue.isQObject() ) {
+  auto inputValue = context->argument(0);
+  if (inputValue.isQObject()) {
     auto obj = inputValue.toQObject();
-    auto ssObj = qobject_cast<ScriptableSafeString*>( obj );
-    if ( !ssObj )
+    auto ssObj = qobject_cast<ScriptableSafeString *>(obj);
+    if (!ssObj)
       return engine->nullValue();
 
-    ssObj->setSafety( true );
-    return engine->newQObject( ssObj );
+    ssObj->setSafety(true);
+    return engine->newQObject(ssObj);
 
-  } else if ( inputValue.isString() ) {
+  } else if (inputValue.isString()) {
     auto str = inputValue.toString();
-    auto ssObj = new ScriptableSafeString( engine );
-    ssObj->setContent( markSafe( str ) );
-    return engine->newQObject( ssObj );
-
+    auto ssObj = new ScriptableSafeString(engine);
+    ssObj->setContent(markSafe(str));
+    return engine->newQObject(ssObj);
   }
   return engine->nullValue();
-
 }
 
-ScriptableSafeString::ScriptableSafeString( QObject* parent ): QObject( parent )
-{
+ScriptableSafeString::ScriptableSafeString(QObject *parent) : QObject(parent) {}
 
-}
-
-void ScriptableSafeString::setContent( const Grantlee::SafeString& content )
+void ScriptableSafeString::setContent(const Grantlee::SafeString &content)
 {
   m_safeString = content;
 }
 
-SafeString ScriptableSafeString::wrappedString() const
+SafeString ScriptableSafeString::wrappedString() const { return m_safeString; }
+
+bool ScriptableSafeString::isSafe() const { return m_safeString.isSafe(); }
+
+void ScriptableSafeString::setSafety(bool safeness)
 {
-  return m_safeString;
+  m_safeString.setSafety(safeness ? Grantlee::SafeString::IsSafe
+                                  : Grantlee::SafeString::IsNotSafe);
 }
 
-bool ScriptableSafeString::isSafe() const
-{
-  return m_safeString.isSafe();
-}
-
-void ScriptableSafeString::setSafety( bool safeness )
-{
-  m_safeString.setSafety( safeness ? Grantlee::SafeString::IsSafe : Grantlee::SafeString::IsNotSafe );
-}
-
-QString ScriptableSafeString::rawString()
-{
-  return m_safeString;
-}
+QString ScriptableSafeString::rawString() { return m_safeString; }

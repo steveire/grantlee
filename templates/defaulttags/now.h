@@ -25,27 +25,25 @@
 
 using namespace Grantlee;
 
-
 class NowNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
   NowNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const override;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class NowNode : public Node
 {
   Q_OBJECT
 public:
-  explicit NowNode( const QString &formatString, QObject *parent = 0 );
+  explicit NowNode(const QString &formatString, QObject *parent = 0);
 
-  void render( OutputStream *stream, Context *c ) const override;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   QString m_formatString;
-
 };
 
 #endif

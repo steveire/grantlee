@@ -25,8 +25,8 @@
 
 #include "i18n.h"
 #include "i18nc.h"
-#include "i18np.h"
 #include "i18ncp.h"
+#include "i18np.h"
 #include "l10n_money.h"
 #include "with_locale.h"
 
@@ -40,31 +40,37 @@ using namespace Grantlee;
 class I18nTagLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  I18nTagLibrary() {
-  }
+  I18nTagLibrary() {}
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) override {
-    Q_UNUSED( name );
+  QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
+                                                      = QString()) override
+  {
+    Q_UNUSED(name);
 
-    QHash<QString, AbstractNodeFactory*> nodeFactories;
-    nodeFactories.insert( QStringLiteral( "i18n" ), new I18nNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "i18n_var" ), new I18nVarNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "i18nc" ), new I18ncNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "i18nc_var" ), new I18ncVarNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "i18np" ), new I18npNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "i18np_var" ), new I18npVarNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "i18ncp" ), new I18ncpNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "i18ncp_var" ), new I18ncpVarNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "l10n_money" ), new L10nMoneyNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "l10n_money_var" ), new L10nMoneyVarNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "with_locale" ), new WithLocaleNodeFactory() );
+    QHash<QString, AbstractNodeFactory *> nodeFactories;
+    nodeFactories.insert(QStringLiteral("i18n"), new I18nNodeFactory());
+    nodeFactories.insert(QStringLiteral("i18n_var"), new I18nVarNodeFactory());
+    nodeFactories.insert(QStringLiteral("i18nc"), new I18ncNodeFactory());
+    nodeFactories.insert(QStringLiteral("i18nc_var"),
+                         new I18ncVarNodeFactory());
+    nodeFactories.insert(QStringLiteral("i18np"), new I18npNodeFactory());
+    nodeFactories.insert(QStringLiteral("i18np_var"),
+                         new I18npVarNodeFactory());
+    nodeFactories.insert(QStringLiteral("i18ncp"), new I18ncpNodeFactory());
+    nodeFactories.insert(QStringLiteral("i18ncp_var"),
+                         new I18ncpVarNodeFactory());
+    nodeFactories.insert(QStringLiteral("l10n_money"),
+                         new L10nMoneyNodeFactory());
+    nodeFactories.insert(QStringLiteral("l10n_money_var"),
+                         new L10nMoneyVarNodeFactory());
+    nodeFactories.insert(QStringLiteral("with_locale"),
+                         new WithLocaleNodeFactory());
     // TODO: Compat and block tags
     return nodeFactories;
   }
 };
-
 
 #endif

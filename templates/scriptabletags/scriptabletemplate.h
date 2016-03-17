@@ -39,25 +39,24 @@ class ScriptableContext;
 
 using namespace Grantlee;
 
-QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
-    QScriptEngine *engine );
+QScriptValue ScriptableTemplateConstructor(QScriptContext *context,
+                                           QScriptEngine *engine);
 
 class ScriptableTemplate : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableTemplate( Template t, QObject* parent = 0 );
+  explicit ScriptableTemplate(Template t, QObject *parent = 0);
 
 public Q_SLOTS:
-  QString render( ScriptableContext *c ) const;
+  QString render(ScriptableContext *c) const;
 
   QObjectList nodeList() const;
 
-  void setNodeList( const QObjectList &list );
+  void setNodeList(const QObjectList &list);
 
 private:
   Template m_template;
-
 };
 
 #endif

@@ -20,44 +20,42 @@
 
 #include "audiotextedit.h"
 
-#include <QFileDialog>
 #include <QDebug>
+#include <QFileDialog>
 
 #include "phonon/mediaobject.h"
 
 #include "audioobject.h"
 
-AudioTextEdit::AudioTextEdit(QWidget* parent)
-  : QTextEdit(parent)
+AudioTextEdit::AudioTextEdit(QWidget *parent) : QTextEdit(parent)
 {
-  viewport()->installEventFilter( this );
+  viewport()->installEventFilter(this);
 }
 
-bool AudioTextEdit::eventFilter(QObject* obj, QEvent* event)
+bool AudioTextEdit::eventFilter(QObject *obj, QEvent *event)
 {
-  if ( event->type() != QEvent::MouseButtonPress )
+  if (event->type() != QEvent::MouseButtonPress)
     return QObject::eventFilter(obj, event);
 
-  QMouseEvent *mouseEvent = static_cast<QMouseEvent *>( event );
-  QTextCursor textCursor = cursorForPosition( mouseEvent->pos() );
+  QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+  QTextCursor textCursor = cursorForPosition(mouseEvent->pos());
 
   QTextCharFormat currentFormat = textCursor.charFormat();
   textCursor.movePosition(QTextCursor::Right);
   QTextCharFormat previousFormat = textCursor.charFormat();
 
   QTextCharFormat audioFormat;
-  if ( currentFormat.objectType() != AudioType )
-  {
-    if ( previousFormat.objectType() != AudioType )
+  if (currentFormat.objectType() != AudioType) {
+    if (previousFormat.objectType() != AudioType)
       return QObject::eventFilter(obj, event);
     else
       audioFormat = previousFormat;
   } else
     audioFormat = currentFormat;
 
-  Phonon::MediaObject *music =
-         Phonon::createPlayer(Phonon::MusicCategory,
-                              Phonon::MediaSource(audioFormat.property( AudioProperty ).toString()));
+  Phonon::MediaObject *music = Phonon::createPlayer(
+      Phonon::MusicCategory,
+      Phonon::MediaSource(audioFormat.property(AudioProperty).toString()));
   music->play();
 
   return true;

@@ -35,24 +35,20 @@ class ScriptableContext : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableContext( Context *c, QObject* parent = 0 );
+  explicit ScriptableContext(Context *c, QObject *parent = 0);
 
-  Context* context() {
-    return m_c;
-  }
+  Context *context() { return m_c; }
 
 public Q_SLOTS:
-  QVariant lookup( const QString &name );
-  void insert( const QString &name, const QVariant &variant );
+  QVariant lookup(const QString &name);
+  void insert(const QString &name, const QVariant &variant);
   void push();
   void pop();
 
-  QString render( const QObjectList &list ) const;
-
+  QString render(const QObjectList &list) const;
 
 private:
   Context *m_c;
-
 };
 
 #endif

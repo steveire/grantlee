@@ -56,81 +56,71 @@ QT_FORWARD_DECLARE_CLASS(QWebView)
 
 class TextEdit : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    TextEdit(QWidget *parent = 0);
+  TextEdit(QWidget *parent = 0);
 
 protected:
-    virtual void closeEvent(QCloseEvent *e);
+  virtual void closeEvent(QCloseEvent *e);
 
 private:
-    void setupFileActions();
-    void setupEditActions();
-    void setupTextActions();
-    bool load(const QString &f);
-    bool maybeSave();
-    void setCurrentFileName(const QString &fileName);
+  void setupFileActions();
+  void setupEditActions();
+  void setupTextActions();
+  bool load(const QString &f);
+  bool maybeSave();
+  void setCurrentFileName(const QString &fileName);
 
 private Q_SLOTS:
-    void fileNew();
-    void fileOpen();
-    bool fileSave();
-    bool fileSaveAs();
-    void filePrint();
-    void filePrintPreview();
-    void filePrintPdf();
+  void fileNew();
+  void fileOpen();
+  bool fileSave();
+  bool fileSaveAs();
+  void filePrint();
+  void filePrintPreview();
+  void filePrintPdf();
 
-    void exportThemedHtml();
-    void exportPlainText();
-    void addAudio();
+  void exportThemedHtml();
+  void exportPlainText();
+  void addAudio();
 
-    void textBold();
-    void textUnderline();
-    void textItalic();
-    void textFamily(const QString &f);
-    void textSize(const QString &p);
-    void textStyle(int styleIndex);
-    void textColor();
-    void textAlign(QAction *a);
+  void textBold();
+  void textUnderline();
+  void textItalic();
+  void textFamily(const QString &f);
+  void textSize(const QString &p);
+  void textStyle(int styleIndex);
+  void textColor();
+  void textAlign(QAction *a);
 
-    void currentCharFormatChanged(const QTextCharFormat &format);
-    void cursorPositionChanged();
+  void currentCharFormatChanged(const QTextCharFormat &format);
+  void cursorPositionChanged();
 
-    void clipboardDataChanged();
-    void about();
-    void printPreview(QPrinter *);
+  void clipboardDataChanged();
+  void about();
+  void printPreview(QPrinter *);
 
 private:
-    void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
-    void fontChanged(const QFont &f);
-    void colorChanged(const QColor &c);
-    void alignmentChanged(Qt::Alignment a);
+  void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
+  void fontChanged(const QFont &f);
+  void colorChanged(const QColor &c);
+  void alignmentChanged(Qt::Alignment a);
 
-    QAction *actionSave,
-        *actionTextBold,
-        *actionTextUnderline,
-        *actionTextItalic,
-        *actionTextColor,
-        *actionAlignLeft,
-        *actionAlignCenter,
-        *actionAlignRight,
-        *actionAlignJustify,
-        *actionUndo,
-        *actionRedo,
-        *actionCut,
-        *actionCopy,
-        *actionPaste;
+  QAction *actionSave, *actionTextBold, *actionTextUnderline, *actionTextItalic,
+      *actionTextColor, *actionAlignLeft, *actionAlignCenter, *actionAlignRight,
+      *actionAlignJustify, *actionUndo, *actionRedo, *actionCut, *actionCopy,
+      *actionPaste;
 
-    QComboBox *comboStyle;
-    QFontComboBox *comboFont;
-    QComboBox *comboSize;
+  QComboBox *comboStyle;
+  QFontComboBox *comboFont;
+  QComboBox *comboSize;
 
-    QToolBar *tb;
-    QString fileName;
-    QTextEdit *abstractTextEdit;
-    QTextEdit *textEdit;
-    QWebView *webView;
+  QToolBar *tb;
+  QString fileName;
+  QTextEdit *abstractTextEdit;
+  QTextEdit *textEdit;
+  QWebView *webView;
 };
 
 #endif

@@ -28,102 +28,101 @@
 
 using namespace Grantlee;
 
-Q_GLOBAL_STATIC( CustomTypeRegistry, customTypes )
+Q_GLOBAL_STATIC(CustomTypeRegistry, customTypes)
 
-
-void Grantlee::MetaType::internalLock()
-{
-  return customTypes()->mutex.lock();
-}
+void Grantlee::MetaType::internalLock() { return customTypes()->mutex.lock(); }
 
 void Grantlee::MetaType::internalUnlock()
 {
   return customTypes()->mutex.unlock();
 }
 
-void Grantlee::MetaType::registerLookUpOperator( int id, LookupFunction f )
+void Grantlee::MetaType::registerLookUpOperator(int id, LookupFunction f)
 {
-  Q_ASSERT( id > 0 );
-  Q_ASSERT( f );
+  Q_ASSERT(id > 0);
+  Q_ASSERT(f);
 
-  customTypes()->registerLookupOperator( id, f );
+  customTypes()->registerLookupOperator(id, f);
 }
 
-static QVariant doQobjectLookUp( const QObject * const object, const QString &property )
+static QVariant doQobjectLookUp(const QObject *const object,
+                                const QString &property)
 {
   if (!object)
     return QVariant();
-  if ( property == QStringLiteral( "children" ) ) {
+  if (property == QStringLiteral("children")) {
     const auto childList = object->children();
-    if ( childList.isEmpty() )
+    if (childList.isEmpty())
       return QVariant();
     QVariantList children;
 
     auto it = childList.constBegin();
     const auto end = childList.constEnd();
-    for ( ; it != end; ++it )
-      children.append( QVariant::fromValue( *it ) );
+    for (; it != end; ++it)
+      children.append(QVariant::fromValue(*it));
     return children;
   }
 
-  if ( property == QStringLiteral( "objectName" ) ) {
+  if (property == QStringLiteral("objectName")) {
     return object->objectName();
   }
   // Can't be const because of invokeMethod.
   auto metaObj = object->metaObject();
 
   QMetaProperty mp;
-  for ( auto i = 0; i < metaObj->propertyCount(); ++i ) {
+  for (auto i = 0; i < metaObj->propertyCount(); ++i) {
     // TODO only read-only properties should be allowed here.
     // This might also handle the variant messing I hit before.
-    mp = metaObj->property( i );
+    mp = metaObj->property(i);
 
-    if ( QString::fromUtf8( mp.name() ) != property )
+    if (QString::fromUtf8(mp.name()) != property)
       continue;
 
-    if ( mp.isEnumType() ) {
-      MetaEnumVariable mev( mp.enumerator(), mp.read( object ).value<int>() );
-      return QVariant::fromValue( mev );
+    if (mp.isEnumType()) {
+      MetaEnumVariable mev(mp.enumerator(), mp.read(object).value<int>());
+      return QVariant::fromValue(mev);
     }
 
-    return mp.read( object );
+    return mp.read(object);
   }
   QMetaEnum me;
-  for ( auto i = 0; i < metaObj->enumeratorCount(); ++i ) {
-    me = metaObj->enumerator( i );
+  for (auto i = 0; i < metaObj->enumeratorCount(); ++i) {
+    me = metaObj->enumerator(i);
 
-    if ( QLatin1String( me.name() ) == property ) {
-      MetaEnumVariable mev( me );
-      return QVariant::fromValue( mev );
+    if (QLatin1String(me.name()) == property) {
+      MetaEnumVariable mev(me);
+      return QVariant::fromValue(mev);
     }
 
-    const auto value = me.keyToValue( property.toLatin1().constData() );
+    const auto value = me.keyToValue(property.toLatin1().constData());
 
-    if ( value < 0 )
+    if (value < 0)
       continue;
 
-    const MetaEnumVariable mev( me, value );
+    const MetaEnumVariable mev(me, value);
 
-    return QVariant::fromValue( mev );
+    return QVariant::fromValue(mev);
   }
-  return object->property( property.toUtf8().constData() );
+  return object->property(property.toUtf8().constData());
 }
 
-QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &property )
+QVariant Grantlee::MetaType::lookup(const QVariant &object,
+                                    const QString &property)
 {
-  if (object.canConvert<QObject*>()) {
-    return doQobjectLookUp(object.value<QObject*>(), property);
+  if (object.canConvert<QObject *>()) {
+    return doQobjectLookUp(object.value<QObject *>(), property);
   }
   if (object.canConvert<QVariantList>()) {
     auto iter = object.value<QSequentialIterable>();
-    if (property == QStringLiteral("size") || property == QStringLiteral( "count" ) ) {
+    if (property == QStringLiteral("size")
+        || property == QStringLiteral("count")) {
       return iter.size();
     }
 
     auto ok = false;
-    const auto listIndex = property.toInt( &ok );
+    const auto listIndex = property.toInt(&ok);
 
-    if ( !ok || listIndex >= iter.size() ) {
+    if (!ok || listIndex >= iter.size()) {
       return QVariant();
     }
 
@@ -134,50 +133,50 @@ QVariant Grantlee::MetaType::lookup( const QVariant &object, const QString &prop
     auto iter = object.value<QAssociativeIterable>();
 
     auto mappedValue = iter.value(property);
-    if(mappedValue.isValid())
+    if (mappedValue.isValid())
       return mappedValue;
 
-    if (property == QStringLiteral("size") || property == QStringLiteral( "count" ) )
-    {
+    if (property == QStringLiteral("size")
+        || property == QStringLiteral("count")) {
       return iter.size();
     }
 
-    if ( property == QStringLiteral( "items" ) ) {
+    if (property == QStringLiteral("items")) {
       auto it = iter.begin();
       const auto end = iter.end();
       QVariantList list;
-      for ( ; it != end; ++it ) {
-        list.push_back( QVariantList() << it.key() << it.value() );
+      for (; it != end; ++it) {
+        list.push_back(QVariantList() << it.key() << it.value());
       }
       return list;
     }
 
-    if ( property == QStringLiteral( "keys" ) ) {
+    if (property == QStringLiteral("keys")) {
       auto it = iter.begin();
       const auto end = iter.end();
       QVariantList list;
-      for ( ; it != end; ++it ) {
-        list.push_back( it.key() );
+      for (; it != end; ++it) {
+        list.push_back(it.key());
       }
       return list;
     }
 
-    if ( property == QStringLiteral( "values" ) ) {
+    if (property == QStringLiteral("values")) {
       auto it = iter.begin();
       const auto end = iter.end();
       QVariantList list;
-      for ( ; it != end; ++it ) {
-        list.push_back( it.value() );
+      for (; it != end; ++it) {
+        list.push_back(it.value());
       }
       return list;
     }
 
     return QVariant();
   }
-  return customTypes()->lookup( object, property );
+  return customTypes()->lookup(object, property);
 }
 
-bool Grantlee::MetaType::lookupAlreadyRegistered( int id )
+bool Grantlee::MetaType::lookupAlreadyRegistered(int id)
 {
-  return customTypes()->lookupAlreadyRegistered( id );
+  return customTypes()->lookupAlreadyRegistered(id);
 }

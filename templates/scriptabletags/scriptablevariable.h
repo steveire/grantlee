@@ -32,22 +32,22 @@ class ScriptableContext;
 
 using namespace Grantlee;
 
-QScriptValue ScriptableVariableConstructor( QScriptContext *context,
-    QScriptEngine *engine );
+QScriptValue ScriptableVariableConstructor(QScriptContext *context,
+                                           QScriptEngine *engine);
 
 class ScriptableVariable : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableVariable( QObject *parent = 0 );
-  ScriptableVariable( QScriptEngine *engine, QObject *parent = 0 );
+  ScriptableVariable(QObject *parent = 0);
+  ScriptableVariable(QScriptEngine *engine, QObject *parent = 0);
 
-  void setContent( const QString &content );
+  void setContent(const QString &content);
 
 public Q_SLOTS:
-  QVariant resolve( ScriptableContext *c );
+  QVariant resolve(ScriptableContext *c);
 
-  bool isTrue( ScriptableContext *c );
+  bool isTrue(ScriptableContext *c);
 
 private:
   Variable m_variable;

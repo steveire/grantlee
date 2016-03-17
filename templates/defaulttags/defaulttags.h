@@ -54,38 +54,45 @@ using namespace Grantlee;
 class DefaultTagLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  DefaultTagLibrary( QObject *parent = 0 )
-      : QObject( parent ) {
-  }
+  DefaultTagLibrary(QObject *parent = 0) : QObject(parent) {}
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) override {
-    Q_UNUSED( name );
+  QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
+                                                      = QString()) override
+  {
+    Q_UNUSED(name);
 
-    QHash<QString, AbstractNodeFactory*> nodeFactories;
+    QHash<QString, AbstractNodeFactory *> nodeFactories;
 
-    nodeFactories.insert( QStringLiteral( "autoescape" ), new AutoescapeNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "comment" ), new CommentNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "cycle" ), new CycleNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "debug" ), new DebugNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "filter" ), new FilterNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "firstof" ), new FirstOfNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "for" ), new ForNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "if" ), new IfNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "ifchanged" ), new IfChangedNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "ifequal" ), new IfEqualNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "ifnotequal" ), new IfNotEqualNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "load" ), new LoadNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "media_finder" ), new MediaFinderNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "now" ), new NowNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "range" ), new RangeNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "regroup" ), new RegroupNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "spaceless" ), new SpacelessNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "templatetag" ), new TemplateTagNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "widthratio" ), new WidthRatioNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "with" ), new WithNodeFactory() );
+    nodeFactories.insert(QStringLiteral("autoescape"),
+                         new AutoescapeNodeFactory());
+    nodeFactories.insert(QStringLiteral("comment"), new CommentNodeFactory());
+    nodeFactories.insert(QStringLiteral("cycle"), new CycleNodeFactory());
+    nodeFactories.insert(QStringLiteral("debug"), new DebugNodeFactory());
+    nodeFactories.insert(QStringLiteral("filter"), new FilterNodeFactory());
+    nodeFactories.insert(QStringLiteral("firstof"), new FirstOfNodeFactory());
+    nodeFactories.insert(QStringLiteral("for"), new ForNodeFactory());
+    nodeFactories.insert(QStringLiteral("if"), new IfNodeFactory());
+    nodeFactories.insert(QStringLiteral("ifchanged"),
+                         new IfChangedNodeFactory());
+    nodeFactories.insert(QStringLiteral("ifequal"), new IfEqualNodeFactory());
+    nodeFactories.insert(QStringLiteral("ifnotequal"),
+                         new IfNotEqualNodeFactory());
+    nodeFactories.insert(QStringLiteral("load"), new LoadNodeFactory());
+    nodeFactories.insert(QStringLiteral("media_finder"),
+                         new MediaFinderNodeFactory());
+    nodeFactories.insert(QStringLiteral("now"), new NowNodeFactory());
+    nodeFactories.insert(QStringLiteral("range"), new RangeNodeFactory());
+    nodeFactories.insert(QStringLiteral("regroup"), new RegroupNodeFactory());
+    nodeFactories.insert(QStringLiteral("spaceless"),
+                         new SpacelessNodeFactory());
+    nodeFactories.insert(QStringLiteral("templatetag"),
+                         new TemplateTagNodeFactory());
+    nodeFactories.insert(QStringLiteral("widthratio"),
+                         new WidthRatioNodeFactory());
+    nodeFactories.insert(QStringLiteral("with"), new WithNodeFactory());
 
     return nodeFactories;
   }

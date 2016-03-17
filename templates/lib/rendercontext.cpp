@@ -29,54 +29,42 @@ namespace Grantlee
 
 class RenderContextPrivate
 {
-  RenderContextPrivate( RenderContext * qq )
-    : q_ptr( qq )
-  {
+  RenderContextPrivate(RenderContext *qq) : q_ptr(qq) {}
 
-  }
+  Q_DECLARE_PUBLIC(RenderContext)
+  RenderContext *const q_ptr;
 
-  Q_DECLARE_PUBLIC( RenderContext )
-  RenderContext * const q_ptr;
-
-  QList<QHash<const Node *, QVariant> > m_variantHashStack;
+  QList<QHash<const Node *, QVariant>> m_variantHashStack;
 };
-
 }
 
-RenderContext::RenderContext()
-  : d_ptr( new RenderContextPrivate( this ) )
-{
+RenderContext::RenderContext() : d_ptr(new RenderContextPrivate(this)) {}
 
-}
-
-RenderContext::~RenderContext()
-{
-  delete d_ptr;
-}
+RenderContext::~RenderContext() { delete d_ptr; }
 
 void RenderContext::push()
 {
-  Q_D( RenderContext );
+  Q_D(RenderContext);
   const QHash<const Node *, QVariant> hash;
-  d->m_variantHashStack.prepend( hash );
+  d->m_variantHashStack.prepend(hash);
 }
 
-bool RenderContext::contains( Node * const scopeNode ) const
+bool RenderContext::contains(Node *const scopeNode) const
 {
-  Q_D( const RenderContext );
-  Q_ASSERT( !d->m_variantHashStack.isEmpty() );
-  return d->m_variantHashStack.last().contains( scopeNode );
+  Q_D(const RenderContext);
+  Q_ASSERT(!d->m_variantHashStack.isEmpty());
+  return d->m_variantHashStack.last().contains(scopeNode);
 }
 
-QVariant& RenderContext::data( const Node * const scopeNode )
+QVariant &RenderContext::data(const Node *const scopeNode)
 {
-  Q_D( RenderContext );
-  Q_ASSERT( !d->m_variantHashStack.isEmpty() );
-  return d->m_variantHashStack.last()[ scopeNode ];
+  Q_D(RenderContext);
+  Q_ASSERT(!d->m_variantHashStack.isEmpty());
+  return d->m_variantHashStack.last()[scopeNode];
 }
 
 void RenderContext::pop()
 {
-  Q_D( RenderContext );
+  Q_D(RenderContext);
   d->m_variantHashStack.removeFirst();
 }

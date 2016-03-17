@@ -21,21 +21,21 @@
 #ifndef BENCHMARKING_H
 #define BENCHMARKING_H
 
-#include <QtTest/QTest>
 #include <QtCore/QObject>
+#include <QtTest/QTest>
 
-#include "lexer_p.h"
-#include "template.h"
-#include "engine.h"
-#include "context.h"
-#include "filterexpression.h"
-#include "parser.h"
-#include "grantlee_paths.h"
 #include "../../coverageobject.h"
+#include "context.h"
+#include "engine.h"
+#include "filterexpression.h"
+#include "grantlee_paths.h"
+#include "lexer_p.h"
+#include "parser.h"
+#include "template.h"
 
 typedef QHash<QString, QVariant> Dict;
 
-Q_DECLARE_METATYPE( Grantlee::Error )
+Q_DECLARE_METATYPE(Grantlee::Error)
 
 using namespace Grantlee;
 
@@ -46,159 +46,154 @@ class Benchmarking : public CoverageObject
 private Q_SLOTS:
   void initTestCase();
 
-  void testTokenizing_data() {
-    getData();
-  }
+  void testTokenizing_data() { getData(); }
   void testTokenizing();
 
-  void testParsing_data() {
-    getData();
-  }
+  void testParsing_data() { getData(); }
   void testParsing();
 
-  void testRendering_data() {
-    getData();
-  }
+  void testRendering_data() { getData(); }
   void testRendering();
 
   void cleanupTestCase();
 
 private:
-
   void getData();
-  QVariantHash getDictData( int size );
-  QString getTemplate( int size );
+  QVariantHash getDictData(int size);
+  QString getTemplate(int size);
   Engine *m_engine;
   QString m_templateGeneratorString;
   Template m_templateGenerator;
-
 };
 
 void Benchmarking::initTestCase()
 {
-  m_engine = new Engine( this );
+  m_engine = new Engine(this);
 
-  QString appDirPath = QFileInfo( QCoreApplication::applicationDirPath() ).absoluteDir().path();
+  QString appDirPath
+      = QFileInfo(QCoreApplication::applicationDirPath()).absoluteDir().path();
 
-  m_engine->setPluginPaths( QStringList( QStringLiteral( GRANTLEE_PLUGIN_PATH ) ) );
+  m_engine->setPluginPaths(QStringList(QStringLiteral(GRANTLEE_PLUGIN_PATH)));
 
-  m_templateGeneratorString =
-    QStringLiteral( "Lorem {% for i in items %}"
-                   " Ipsum {% templatetag openblock %} if boo {% templatetag closeblock %} "
-                   "bar {% templatetag openvariable %} bat|upper {% templatetag closevariable %} baz {{ i }} dolor"
-                   " {% templatetag openblock %} endif {% templatetag closeblock %} sit."
-                   "{% endfor %} amet.\n" );
+  m_templateGeneratorString = QStringLiteral("Lorem {% for i in items %} Ipsum {% templatetag openblock %} if boo {% templatetag closeblock %} bar {% templatetag openvariable %} bat|upper {% templatetag closevariable %} baz {{ i }} dolor {% templatetag openblock %} endif {% templatetag closeblock %} sit.{% endfor %} amet.\n");
 
-  m_templateGenerator = m_engine->newTemplate( m_templateGeneratorString, QStringLiteral( "generator" ) );
-
+  m_templateGenerator = m_engine->newTemplate(m_templateGeneratorString,
+                                              QStringLiteral("generator"));
 }
 
-void Benchmarking::cleanupTestCase()
-{
-}
+void Benchmarking::cleanupTestCase() {}
 
 void Benchmarking::testTokenizing()
 {
-  QFETCH( QString, input );
-  QFETCH( Dict, dict );
+  QFETCH(QString, input);
+  QFETCH(Dict, dict);
 
-  Lexer l( input );
+  Lexer l(input);
 
   QList<Token> tokens;
-  QBENCHMARK( tokens = l.tokenize() );
+  QBENCHMARK(tokens = l.tokenize());
 }
 
 void Benchmarking::testParsing()
 {
-  QFETCH( QString, input );
-  QFETCH( Dict, dict );
+  QFETCH(QString, input);
+  QFETCH(Dict, dict);
 
-  Lexer l( input );
+  Lexer l(input);
 
   QList<Token> tokens;
   tokens = l.tokenize();
 
-  Template t = m_engine->newTemplate( QString(), QString() );
+  Template t = m_engine->newTemplate(QString(), QString());
 
-  Parser p( tokens, t.data() );
+  Parser p(tokens, t.data());
   NodeList list;
 
-  QBENCHMARK { p.setTokens( tokens ); list = p.parse( t.data() ); }
+  QBENCHMARK
+  {
+    p.setTokens(tokens);
+    list = p.parse(t.data());
+  }
 }
 
 void Benchmarking::testRendering()
 {
-  QFETCH( QString, input );
-  QFETCH( Dict, dict );
+  QFETCH(QString, input);
+  QFETCH(Dict, dict);
 
-  Template t = m_engine->newTemplate( input, QStringLiteral( "testtemplate" ) );
+  Template t = m_engine->newTemplate(input, QStringLiteral("testtemplate"));
 
-  Context context( dict );
+  Context context(dict);
 
-  QFile outputFile( QStringLiteral( "./output" ) );
-  outputFile.open( QFile::WriteOnly );
-  QTextStream tstream( &outputFile );
+  QFile outputFile(QStringLiteral("./output"));
+  outputFile.open(QFile::WriteOnly);
+  QTextStream tstream(&outputFile);
 
-  OutputStream os( &tstream );
+  OutputStream os(&tstream);
 
-  QBENCHMARK( t->render( &os, &context ) );
+  QBENCHMARK(t->render(&os, &context));
 }
 
 void Benchmarking::getData()
 {
-  QTest::addColumn<QString>( "input" );
-  QTest::addColumn<Dict>( "dict" );
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
 
   Dict dict;
 
-  dict.insert( QStringLiteral( "boo" ), QStringLiteral( "Far" ) );
-  dict.insert( QStringLiteral( "bat" ), QStringLiteral( "Cat" ) );
-  dict.insert( QStringLiteral( "booList" ), QVariantList() << QString::fromLatin1( "Tom" ) << QString::fromLatin1( "Dick" ) << QString::fromLatin1( "Harry" ) );
+  dict.insert(QStringLiteral("boo"), QStringLiteral("Far"));
+  dict.insert(QStringLiteral("bat"), QStringLiteral("Cat"));
+  dict.insert(QStringLiteral("booList"), QVariantList()
+                                             << QString::fromLatin1("Tom")
+                                             << QString::fromLatin1("Dick")
+                                             << QString::fromLatin1("Harry"));
 
   // Using Grantlee to create Grantlee templates. How recursive...
 
-//   QList<int> repeatSizes;
-//   repeatSizes << 10 << 100 << 200 << 300 << 1000 << 1500 << 2000 << 3000 << 4000;
+  //   QList<int> repeatSizes;
+  //   repeatSizes << 10 << 100 << 200 << 300 << 1000 << 1500 << 2000 << 3000
+  //   <<
+  //   4000;
 
-//   Q_FOREACH(int size, repeatSizes)
-//   {
-//     const char * name = QStringLiteral( "growing-%1" ).arg( size ).toLatin1();
-//     QTest::newRow( name ) << getTemplate( size ) << dict;
-//   }
+  //   Q_FOREACH(int size, repeatSizes)
+  //   {
+  //     const char * name = QStringLiteral("growing-%1").arg( size
+  //     ).toLatin1();
+  //     QTest::newRow( name ) << getTemplate( size ) << dict;
+  //   }
 
-  QTest::newRow( "growing-10"   ) << getTemplate( 10   ) << dict;
-  QTest::newRow( "growing-20"   ) << getTemplate( 20   ) << dict;
-  QTest::newRow( "growing-30"   ) << getTemplate( 30   ) << dict;
-  QTest::newRow( "growing-100"  ) << getTemplate( 100  ) << dict;
-  QTest::newRow( "growing-300"  ) << getTemplate( 300  ) << dict;
-  QTest::newRow( "growing-700"  ) << getTemplate( 700  ) << dict;
-  QTest::newRow( "growing-1000" ) << getTemplate( 1000 ) << dict;
-  QTest::newRow( "growing-2000" ) << getTemplate( 2000 ) << dict;
-  QTest::newRow( "growing-2500" ) << getTemplate( 2500 ) << dict;
-  QTest::newRow( "growing-2700" ) << getTemplate( 2700 ) << dict;
-  QTest::newRow( "growing-3000" ) << getTemplate( 3000 ) << dict;
+  QTest::newRow("growing-10") << getTemplate(10) << dict;
+  QTest::newRow("growing-20") << getTemplate(20) << dict;
+  QTest::newRow("growing-30") << getTemplate(30) << dict;
+  QTest::newRow("growing-100") << getTemplate(100) << dict;
+  QTest::newRow("growing-300") << getTemplate(300) << dict;
+  QTest::newRow("growing-700") << getTemplate(700) << dict;
+  QTest::newRow("growing-1000") << getTemplate(1000) << dict;
+  QTest::newRow("growing-2000") << getTemplate(2000) << dict;
+  QTest::newRow("growing-2500") << getTemplate(2500) << dict;
+  QTest::newRow("growing-2700") << getTemplate(2700) << dict;
+  QTest::newRow("growing-3000") << getTemplate(3000) << dict;
 }
 
-QVariantHash Benchmarking::getDictData( int size )
+QVariantHash Benchmarking::getDictData(int size)
 {
   QVariantHash h;
   QVariantList list;
 
-  for ( int i = 0 ; i < size; i++ )
+  for (int i = 0; i < size; i++)
     list << i;
-  h.insert( QStringLiteral( "items" ), list );
+  h.insert(QStringLiteral("items"), list);
 
   return h;
 }
 
-QString Benchmarking::getTemplate( int size )
+QString Benchmarking::getTemplate(int size)
 {
-  Context c( getDictData( size ) );
-  return m_templateGenerator->render( &c );
+  Context c(getDictData(size));
+  return m_templateGenerator->render(&c);
 }
 
-
-QTEST_MAIN( Benchmarking )
+QTEST_MAIN(Benchmarking)
 #include "benchmarks.moc"
 
 #endif

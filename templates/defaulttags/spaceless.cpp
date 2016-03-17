@@ -25,47 +25,36 @@
 #include "parser.h"
 #include "util.h"
 
-SpacelessNodeFactory::SpacelessNodeFactory()
-{
+SpacelessNodeFactory::SpacelessNodeFactory() {}
 
-}
-
-Node* SpacelessNodeFactory::getNode( const QString &tagContent, Parser *p ) const
+Node *SpacelessNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
-  Q_UNUSED( tagContent )
-  auto n = new SpacelessNode( p );
-  auto list = p->parse( n, QStringLiteral( "endspaceless" ) );
-  n->setList( list );
+  Q_UNUSED(tagContent)
+  auto n = new SpacelessNode(p);
+  auto list = p->parse(n, QStringLiteral("endspaceless"));
+  n->setList(list);
   p->removeNextToken();
   return n;
 }
 
-SpacelessNode::SpacelessNode( QObject *parent )
-    : Node( parent )
-{
+SpacelessNode::SpacelessNode(QObject *parent) : Node(parent) {}
 
-}
+void SpacelessNode::setList(const NodeList &nodeList) { m_nodeList = nodeList; }
 
-void SpacelessNode::setList(const NodeList& nodeList )
-{
-  m_nodeList = nodeList;
-}
-
-QString SpacelessNode::stripSpacesBetweenTags( const QString& input )
+QString SpacelessNode::stripSpacesBetweenTags(const QString &input)
 {
   auto stripped = input;
 
-  static const QRegularExpression re( QStringLiteral( ">\\s+<" ) );
-  stripped.replace( re, QStringLiteral( "><" ) );
+  static const QRegularExpression re(QStringLiteral(">\\s+<"));
+  stripped.replace(re, QStringLiteral("><"));
   return stripped;
 }
 
-
-void SpacelessNode::render( OutputStream *stream, Context *c ) const
+void SpacelessNode::render(OutputStream *stream, Context *c) const
 {
   QString output;
-  QTextStream textStream( &output );
-  auto temp = stream->clone( &textStream );
-  m_nodeList.render( temp.data(), c );
-  ( *stream ) << markSafe( stripSpacesBetweenTags( output.trimmed() ) );
+  QTextStream textStream(&output);
+  auto temp = stream->clone(&textStream);
+  m_nodeList.render(temp.data(), c);
+  (*stream) << markSafe(stripSpacesBetweenTags(output.trimmed()));
 }

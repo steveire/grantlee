@@ -22,77 +22,81 @@
 
 #include "util.h"
 
-QVariant AddFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant AddFilter::doFilter(const QVariant &input, const QVariant &argument,
+                             bool autoescape) const
 {
-  Q_UNUSED( autoescape )
+  Q_UNUSED(autoescape)
 
-  if ( isSafeString( input ) ) {
-    if ( isSafeString( argument ) )
-      return getSafeString( input ) + getSafeString( argument );
+  if (isSafeString(input)) {
+    if (isSafeString(argument))
+      return getSafeString(input) + getSafeString(argument);
     return input;
   }
 
-  if ( input.userType() == qMetaTypeId<QVariantList>() ) {
-    if ( argument.userType() == qMetaTypeId<QVariantList>() )
+  if (input.userType() == qMetaTypeId<QVariantList>()) {
+    if (argument.userType() == qMetaTypeId<QVariantList>())
       return input.value<QVariantList>() + argument.value<QVariantList>();
     return input;
   }
 
-  if ( input.userType() == qMetaTypeId<QStringList>() ) {
-    if ( argument == QVariant::StringList )
+  if (input.userType() == qMetaTypeId<QStringList>()) {
+    if (argument == QVariant::StringList)
       return input.value<QStringList>() + argument.value<QStringList>();
     return input;
   }
 
-  if ( input.userType() == qMetaTypeId<int>() ) {
-    if ( argument.userType() == qMetaTypeId<int>() )
+  if (input.userType() == qMetaTypeId<int>()) {
+    if (argument.userType() == qMetaTypeId<int>())
       return input.value<int>() + argument.value<int>();
     return input;
   }
 
-  if ( input.userType() == qMetaTypeId<uint>() ) {
-    if ( argument.userType() == qMetaTypeId<uint>() )
+  if (input.userType() == qMetaTypeId<uint>()) {
+    if (argument.userType() == qMetaTypeId<uint>())
       return input.value<uint>() + argument.value<uint>();
     return input;
   }
 
-  if ( input.canConvert<double>() ) {
-    if ( argument.canConvert<double>() )
+  if (input.canConvert<double>()) {
+    if (argument.canConvert<double>())
       return input.value<double>() + argument.value<double>();
     return input;
   }
 
-  if ( input.userType() == qMetaTypeId<long long>() ) {
-    if ( argument.userType() == qMetaTypeId<long long>() )
+  if (input.userType() == qMetaTypeId<long long>()) {
+    if (argument.userType() == qMetaTypeId<long long>())
       return input.value<long long>() + argument.value<long long>();
     return input;
   }
 
-  if ( input.userType() == qMetaTypeId<unsigned long long>() ) {
-    if ( input.userType() == qMetaTypeId<unsigned long long>() )
-      return input.value<unsigned long long>() + argument.value<unsigned long long>();
+  if (input.userType() == qMetaTypeId<unsigned long long>()) {
+    if (input.userType() == qMetaTypeId<unsigned long long>())
+      return input.value<unsigned long long>()
+             + argument.value<unsigned long long>();
     return input;
   }
   return input;
 }
 
-QVariant GetDigitFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant GetDigitFilter::doFilter(const QVariant &input,
+                                  const QVariant &argument,
+                                  bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  auto value = getSafeString( input );
+  Q_UNUSED(autoescape)
+  auto value = getSafeString(input);
 
   bool ok;
-  ( void )value.get().toInt( &ok );
-  if ( !ok )
+  (void)value.get().toInt(&ok);
+  if (!ok)
     return QString();
 
-  if ( value.get().size() < 1 )
+  if (value.get().size() < 1)
     return value;
 
-  auto arg = getSafeString( argument ).get().toInt();
+  auto arg = getSafeString(argument).get().toInt();
 
-  if ( value.get().size() < arg )
+  if (value.get().size() < arg)
     return value;
 
-  return SafeString( value.get().at( value.get().size() - arg ) );
+  return SafeString(value.get().at(value.get().size() - arg));
 }

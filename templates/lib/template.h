@@ -49,16 +49,20 @@ class TemplatePrivate;
   @brief The Template class is a tree of nodes which may be rendered.
 
   All Templates are created through the Grantlee::Engine class.
-  A template is created by parsing some text markup passed into the Engine, or by
+  A template is created by parsing some text markup passed into the Engine, or
+  by
   reading it from a file.
 
-  Note that Template is actually a typedef for a QSharedPointer<TemplateImpl>, so all of its members should be accessed with operator->().
+  Note that Template is actually a typedef for a QSharedPointer<TemplateImpl>,
+  so all of its members should be accessed with operator->().
 
-  The result of parsing is a Template object which can be rendered multiple times with multiple different Contexts.
+  The result of parsing is a Template object which can be rendered multiple
+  times with multiple different Contexts.
 
   @code
     Engine *engine = getEngine();
-    Template t = engine->newTemplate( "{{ name }} is aged {{ age }}", "simple template" );
+    Template t = engine->newTemplate( "{{ name }} is aged {{ age }}", "simple
+  template" );
     if ( t->error() )
     {
       // Tokenizing or parsing error, or couldn't find custom tags or filters.
@@ -82,7 +86,8 @@ class TemplatePrivate;
     }
   @endcode
 
-  If there is an error in parsing or rendering, the error and errorString methods can be used to check the source of the error.
+  If there is an error in parsing or rendering, the error and errorString
+  methods can be used to check the source of the error.
 
   @author Stephen Kelly <steveire@gmail.com>
 */
@@ -95,12 +100,12 @@ public:
   /**
     Renders the template to a string given the Context @p c.
   */
-  QString render( Context *c ) const;
+  QString render(Context *c) const;
 
   /**
     Renders the Template to the OutputStream @p stream given the Context c.
   */
-  OutputStream* render( OutputStream *stream, Context *c ) const;
+  OutputStream *render(OutputStream *stream, Context *c) const;
 
 #ifndef Q_QDOC
   /**
@@ -111,7 +116,7 @@ public:
   /**
     @internal
   */
-  void setNodeList( const NodeList &list );
+  void setNodeList(const NodeList &list);
 #endif
 
   /**
@@ -127,29 +132,30 @@ public:
   /**
     Returns the Engine that created this Template.
   */
-  Engine const * engine() const;
+  Engine const *engine() const;
 
 #ifndef Q_QDOC
 protected:
-  TemplateImpl( Engine const *engine, QObject *parent = 0 );
-  TemplateImpl( Engine const *engine, bool smartTrim, QObject *parent = 0 );
+  TemplateImpl(Engine const *engine, QObject *parent = 0);
+  TemplateImpl(Engine const *engine, bool smartTrim, QObject *parent = 0);
 
-  void setContent( const QString &templateString );
+  void setContent(const QString &templateString);
 #endif
 
 private:
-  //Don't allow setting the parent on a Template, which is memory managed as a QSharedPointer.
+  // Don't allow setting the parent on a Template, which is memory managed as
+  // a
+  // QSharedPointer.
   using QObject::setParent;
 
 private:
-  Q_DECLARE_PRIVATE( Template )
-  TemplatePrivate * const d_ptr;
+  Q_DECLARE_PRIVATE(Template)
+  TemplatePrivate *const d_ptr;
 #ifndef Q_QDOC
   friend class Engine;
   friend class Parser;
 #endif
 };
-
 }
 
 #endif

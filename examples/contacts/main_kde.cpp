@@ -22,20 +22,20 @@
 
 #include "kdelocalizer.h"
 
-#include <kapplication.h>
 #include <kaboutdata.h>
+#include <kapplication.h>
 #include <kcmdlineargs.h>
 
 #include "grantlee_paths.h"
 
 #define TEMPLATE_DIR GRANTLEE_TEMPLATE_PATH "/gettext/"
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-  const QByteArray& ba = QByteArray( "contacts_kde" );
-  const KLocalizedString name = ki18n( "Grantlee KDE i18n example" );
-  KAboutData aboutData( ba, ba, name, ba, name );
-  KCmdLineArgs::init( argc, argv, &aboutData );
+  const QByteArray &ba = QByteArray("contacts_kde");
+  const KLocalizedString name = ki18n("Grantlee KDE i18n example");
+  KAboutData aboutData(ba, ba, name, ba, name);
+  KCmdLineArgs::init(argc, argv, &aboutData);
 
   KApplication app;
 

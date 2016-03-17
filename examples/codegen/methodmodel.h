@@ -21,25 +21,24 @@
 #ifndef METHOD_MODEL_H
 #define METHOD_MODEL_H
 
-#include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <QStandardItemModel>
 
 class MethodModel : public QStandardItemModel
 {
   Q_OBJECT
 public:
-  MethodModel(QObject* parent = 0);
-
+  MethodModel(QObject *parent = 0);
 };
 
 class ArgsModel : public QSortFilterProxyModel
 {
   Q_OBJECT
 public:
-  ArgsModel(QObject* parent = 0);
+  ArgsModel(QObject *parent = 0);
 
-  virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
+  virtual QVariant headerData(int section, Qt::Orientation orientation,
+                              int role = Qt::DisplayRole) const;
 };
 
 #endif

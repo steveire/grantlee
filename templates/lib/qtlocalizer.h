@@ -33,7 +33,8 @@ class QtLocalizerPrivate;
 /**
   @brief Provides internationalization based on QLocale and QTranslator.
 
-  This class implements access to the Qt Localization system. Localizaable types such
+  This class implements access to the Qt Localization system. Localizaable types
+  such
   as strings, numbers, dates and times can be processed.
 
   @code
@@ -58,7 +59,7 @@ public:
   /**
     Constructs a new QtLocalizer using the @p locale
   */
-  QtLocalizer( const QLocale &locale = QLocale::system() );
+  QtLocalizer(const QLocale &locale = QLocale::system());
 
   /**
     Destructor
@@ -68,13 +69,15 @@ public:
   /**
     Set the path to look for translations of the application strings.
    */
-  void setAppTranslatorPath( const QString &path );
+  void setAppTranslatorPath(const QString &path);
 
   /**
-    Set the prefix of translation files. For example, if the German translation file is called <tt>myapp_de_DE.qm</tt>,
+    Set the prefix of translation files. For example, if the German
+    translation
+    file is called <tt>myapp_de_DE.qm</tt>,
     the prefix should be set to <tt>myapp_</tt>.
    */
-  void setAppTranslatorPrefix( const QString &prefix );
+  void setAppTranslatorPrefix(const QString &prefix);
 
   /**
     Install a @p translator to use for a particular @p localeName.
@@ -88,31 +91,48 @@ public:
       de_localizer->installTranslator(deTranslator, "de_DE");
     @endcode
    */
-  void installTranslator( QTranslator *translator, const QString &localeName = QLocale::system().name() );
+  void installTranslator(QTranslator *translator,
+                         const QString &localeName = QLocale::system().name());
 
   QString currentLocale() const override;
-  void pushLocale( const QString &localeName ) override;
+  void pushLocale(const QString &localeName) override;
   void popLocale() override;
-  void loadCatalog( const QString &path, const QString &catalog ) override;
-  void unloadCatalog( const QString &catalog ) override;
+  void loadCatalog(const QString &path, const QString &catalog) override;
+  void unloadCatalog(const QString &catalog) override;
 
-  QString localizeNumber( int number ) const override;
-  QString localizeNumber( qreal number ) const override;
-  QString localizeMonetaryValue( qreal value, const QString &currencyCode = QString() ) const override;
-  QString localizeDate( const QDate &date, QLocale::FormatType formatType = QLocale::ShortFormat ) const override;
-  QString localizeTime( const QTime &time, QLocale::FormatType formatType = QLocale::ShortFormat ) const override;
-  QString localizeDateTime( const QDateTime& dateTime, QLocale::FormatType formatType = QLocale::ShortFormat ) const override;
-  QString localizeString( const QString& string, const QVariantList &arguments = QVariantList() ) const override;
-  QString localizeContextString( const QString& string, const QString& context, const QVariantList &arguments = QVariantList() ) const override;
-  QString localizePluralContextString( const QString& string, const QString& pluralForm, const QString& context, const QVariantList &arguments = QVariantList() ) const override;
-  QString localizePluralString( const QString& string, const QString& pluralForm, const QVariantList &arguments = QVariantList() ) const override;
+  QString localizeNumber(int number) const override;
+  QString localizeNumber(qreal number) const override;
+  QString localizeMonetaryValue(qreal value, const QString &currencyCode
+                                             = QString()) const override;
+  QString localizeDate(const QDate &date,
+                       QLocale::FormatType formatType
+                       = QLocale::ShortFormat) const override;
+  QString localizeTime(const QTime &time,
+                       QLocale::FormatType formatType
+                       = QLocale::ShortFormat) const override;
+  QString localizeDateTime(const QDateTime &dateTime,
+                           QLocale::FormatType formatType
+                           = QLocale::ShortFormat) const override;
+  QString localizeString(const QString &string,
+                         const QVariantList &arguments
+                         = QVariantList()) const override;
+  QString localizeContextString(const QString &string, const QString &context,
+                                const QVariantList &arguments
+                                = QVariantList()) const override;
+  QString localizePluralContextString(const QString &string,
+                                      const QString &pluralForm,
+                                      const QString &context,
+                                      const QVariantList &arguments
+                                      = QVariantList()) const override;
+  QString localizePluralString(const QString &string, const QString &pluralForm,
+                               const QVariantList &arguments
+                               = QVariantList()) const override;
 
 private:
-  Q_DECLARE_PRIVATE( QtLocalizer )
-  Q_DISABLE_COPY( QtLocalizer )
-  QtLocalizerPrivate * const d_ptr;
+  Q_DECLARE_PRIVATE(QtLocalizer)
+  Q_DISABLE_COPY(QtLocalizer)
+  QtLocalizerPrivate *const d_ptr;
 };
-
 }
 
 #endif

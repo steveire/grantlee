@@ -31,23 +31,21 @@ class DebugNodeFactory : public AbstractNodeFactory
 public:
   DebugNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const override;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class DebugNode : public Node
 {
   Q_OBJECT
 public:
-  DebugNode( QObject *parent = 0 );
+  DebugNode(QObject *parent = 0);
 
-  void render( OutputStream *stream, Context *c ) const override;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   FilterExpression m_filterExpression;
   QString m_name;
   NodeList m_list;
-
 };
 
 #endif

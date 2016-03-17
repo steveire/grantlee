@@ -39,34 +39,33 @@ class Parser;
 class ScriptableTagLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  ScriptableTagLibrary( QObject *parent = 0 );
+  ScriptableTagLibrary(QObject *parent = 0);
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) override;
+  QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
+                                                      = QString()) override;
 
-  QHash<QString, Filter*> filters( const QString &name = QString() ) override;
+  QHash<QString, Filter *> filters(const QString &name = QString()) override;
 
 public Q_SLOTS:
-  void addFactory( const QString &factoryName, const QString &tagname );
-  void addFilter( const QString &filterName );
+  void addFactory(const QString &factoryName, const QString &tagname);
+  void addFilter(const QString &filterName);
 
 protected:
-  bool evaluateScript( const QString &name );
-  QHash<QString, AbstractNodeFactory*> getFactories();
-  QHash<QString, Filter*> getFilters();
+  bool evaluateScript(const QString &name);
+  QHash<QString, AbstractNodeFactory *> getFactories();
+  QHash<QString, Filter *> getFilters();
 
 private:
-//   ScriptEnginePointer m_scriptEngine;
+  //   ScriptEnginePointer m_scriptEngine;
   QScriptEngine *m_scriptEngine;
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
+  QHash<QString, AbstractNodeFactory *> m_nodeFactories;
   QHash<QString, QString> m_factoryNames;
   QStringList m_filterNames;
-  QHash<QString, Filter*> m_filters;
-
+  QHash<QString, Filter *> m_filters;
 };
-
 }
 
 #endif

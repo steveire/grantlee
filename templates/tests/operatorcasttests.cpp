@@ -23,21 +23,16 @@
 class QString
 {
 public:
-  void operation1()
-  {
-    std::cout << "QString operation 1" << std::endl;
-  }
-  void operation2()
-  {
-    std::cout << "QString operation 2" << std::endl;
-  }
+  void operation1() { std::cout << "QString operation 1" << std::endl; }
+  void operation2() { std::cout << "QString operation 2" << std::endl; }
 };
 
 class QVariant
 {
 public:
   QVariant() {}
-  QVariant( const QString & ) {
+  QVariant(const QString &)
+  {
     std::cout << "QVariant::QVariant(QString)" << std::endl;
   }
 };
@@ -45,7 +40,8 @@ public:
 class SafeString : public QString
 {
 public:
-  operator QVariant() const {
+  operator QVariant() const
+  {
     std::cout << "SafeString::operator QVariant()" << std::endl;
     return QVariant();
   }
@@ -56,16 +52,19 @@ class WrappingSafeString
 public:
   WrappingSafeString() {}
 
-  WrappingSafeString( const QString & ) {
+  WrappingSafeString(const QString &)
+  {
     std::cout << "WrappingSafeString::WrappingSafeString(QString)" << std::endl;
   }
 
-  operator QVariant() const {
+  operator QVariant() const
+  {
     std::cout << "WrappingSafeString::operator QVariant()" << std::endl;
     return QVariant();
   }
 
-  operator QString() const {
+  operator QString() const
+  {
     std::cout << "WrappingSafeString::operator QString()" << std::endl;
     return QString();
   }
@@ -74,27 +73,28 @@ public:
 class WrappingSubclassSafeString
 {
 public:
-  WrappingSubclassSafeString() : m_isSafe( false ), m_wrappedSubclass( this ) {}
+  WrappingSubclassSafeString() : m_isSafe(false), m_wrappedSubclass(this) {}
 
-  WrappingSubclassSafeString( const QString & )  : m_isSafe( false ), m_wrappedSubclass( this ) {
-    std::cout << "WrappingSubclassSafeString::WrappingSubclassSafeString(QString)" << std::endl;
+  WrappingSubclassSafeString(const QString &)
+      : m_isSafe(false), m_wrappedSubclass(this)
+  {
+    std::cout
+        << "WrappingSubclassSafeString::WrappingSubclassSafeString(QString)"
+        << std::endl;
   }
 
-  bool isSafe() const {
-    return m_isSafe;
-  };
-  void setSafe( bool safe ) {
-    m_isSafe = safe;
-  }
+  bool isSafe() const { return m_isSafe; };
+  void setSafe(bool safe) { m_isSafe = safe; }
 
   class Subclass : public QString
   {
     friend class WrappingSubclassSafeString;
-    Subclass( WrappingSubclassSafeString *wsss ) : m_wsss( wsss ) {}
+    Subclass(WrappingSubclassSafeString *wsss) : m_wsss(wsss) {}
     WrappingSubclassSafeString *m_wsss;
 
   public:
-    void operation2() {
+    void operation2()
+    {
       m_wsss->m_isSafe = false;
       std::cout << "overridden string operation 2 (wrapping)" << std::endl;
     }
@@ -102,16 +102,16 @@ public:
 
   Subclass m_wrappedSubclass;
 
-  Subclass* operator->() {
-    return &m_wrappedSubclass;
-  }
+  Subclass *operator->() { return &m_wrappedSubclass; }
 
-  operator QVariant() const {
+  operator QVariant() const
+  {
     std::cout << "WrappingSubclassSafeString::operator QVariant()" << std::endl;
     return QVariant();
   }
 
-  operator QString() const {
+  operator QString() const
+  {
     std::cout << "WrappingSubclassSafeString::operator QString()" << std::endl;
     return m_wrappedSubclass;
   }
@@ -124,83 +124,47 @@ class UsingSafeString : private QString
 {
 public:
   UsingSafeString() {}
-  UsingSafeString( const QString & ) {}
+  UsingSafeString(const QString &) {}
 
-  void operation2() {
+  void operation2()
+  {
     std::cout << "overridden string operation 2 (using)" << std::endl;
   };
 
   using QString::operation1;
 
-  operator QVariant() {
-    return QVariant();
-  }
+  operator QVariant() { return QVariant(); }
 
-  operator QString() {
-    return QString();
-  }
+  operator QString() { return QString(); }
 };
 
-QVariant f1()
-{
-  return QString();
-}
+QVariant f1() { return QString(); }
 
-QVariant f2()
-{
-  return SafeString();
-}
+QVariant f2() { return SafeString(); }
 
-QVariant f3()
-{
-  return WrappingSafeString();
-}
+QVariant f3() { return WrappingSafeString(); }
 
-QString f4()
-{
-  return WrappingSafeString();
-}
+QString f4() { return WrappingSafeString(); }
 
-WrappingSafeString f5()
-{
-  return QString();
-}
+WrappingSafeString f5() { return QString(); }
 
-QVariant f6()
-{
-  return WrappingSubclassSafeString();
-}
+QVariant f6() { return WrappingSubclassSafeString(); }
 
-QString f7()
-{
-  return WrappingSubclassSafeString();
-}
+QString f7() { return WrappingSubclassSafeString(); }
 
-WrappingSubclassSafeString f8()
-{
-  return QString();
-}
+WrappingSubclassSafeString f8() { return QString(); }
 
 #ifdef BROKEN
 
-QVariant f9()
-{
-  return UsingSafeString();
-}
+QVariant f9() { return UsingSafeString(); }
 
-QString f10()
-{
-  return UsingSafeString();
-}
+QString f10() { return UsingSafeString(); }
 
-UsingSafeString f11()
-{
-  return QString();
-}
+UsingSafeString f11() { return QString(); }
 
 #endif
 
-int main( int argc, char ** argv )
+int main(int argc, char **argv)
 {
   f1();
   f2();
@@ -217,11 +181,11 @@ int main( int argc, char ** argv )
 #endif
 
   WrappingSubclassSafeString wsss;
-  wsss.setSafe( true );
+  wsss.setSafe(true);
   wsss->operation1();
-  std::cout << ( wsss.isSafe() ? "IsSafe" : "IsNotSafe" ) << std::endl;
+  std::cout << (wsss.isSafe() ? "IsSafe" : "IsNotSafe") << std::endl;
   wsss->operation2();
-  std::cout << ( wsss.isSafe() ? "IsSafe" : "IsNotSafe" ) << std::endl;
+  std::cout << (wsss.isSafe() ? "IsSafe" : "IsNotSafe") << std::endl;
 
   return 0;
 }

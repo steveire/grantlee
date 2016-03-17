@@ -24,8 +24,8 @@
 #include "grantlee/abstractmarkupbuilder.h"
 #include "grantlee/bbcodebuilder.h"
 #include "grantlee/markupdirector.h"
+#include "grantlee/mediawikimarkupbuilder.h"
 #include "grantlee/plaintextmarkupbuilder.h"
 #include "grantlee/texthtmlbuilder.h"
-#include "grantlee/mediawikimarkupbuilder.h"
 
 #endif

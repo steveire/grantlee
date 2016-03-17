@@ -36,8 +36,7 @@ class I18ncNodeFactory : public AbstractNodeFactory
 public:
   I18ncNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const override;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class I18ncVarNodeFactory : public AbstractNodeFactory
@@ -46,16 +45,16 @@ class I18ncVarNodeFactory : public AbstractNodeFactory
 public:
   I18ncVarNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const override;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class I18ncNode : public Node
 {
   Q_OBJECT
 public:
-  I18ncNode( const QString &sourceText, const QString &context, const QList<FilterExpression> &feList, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c ) const override;
+  I18ncNode(const QString &sourceText, const QString &context,
+            const QList<FilterExpression> &feList, QObject *parent = 0);
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   QString m_sourceText;
@@ -67,8 +66,10 @@ class I18ncVarNode : public Node
 {
   Q_OBJECT
 public:
-  I18ncVarNode( const QString &sourceText, const QString &context, const QList<FilterExpression> &feList, const QString &resultName, QObject *parent = 0 );
-  void render( OutputStream *stream, Context *c ) const override;
+  I18ncVarNode(const QString &sourceText, const QString &context,
+               const QList<FilterExpression> &feList, const QString &resultName,
+               QObject *parent = 0);
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   QString m_sourceText;

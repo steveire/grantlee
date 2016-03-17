@@ -26,7 +26,8 @@
 
 #include <QtCore/QDateTime>
 
-QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant JoinFilter::doFilter(const QVariant &input, const QVariant &argument,
+                              bool autoescape) const
 {
   if (!input.canConvert<QVariantList>())
     return QVariant();
@@ -34,237 +35,257 @@ QVariant JoinFilter::doFilter( const QVariant& input, const QVariant &argument, 
   auto iter = input.value<QSequentialIterable>();
 
   QString ret;
-  for (auto it = iter.begin();
-       it != iter.end(); ++it) {
+  for (auto it = iter.begin(); it != iter.end(); ++it) {
     const auto var = *it;
-    auto s = getSafeString( var );
-    if ( autoescape )
-      s = conditionalEscape( s );
+    auto s = getSafeString(var);
+    if (autoescape)
+      s = conditionalEscape(s);
 
-    ret.append( s );
-    if ( (it + 1) != iter.end() ) {
-      auto argString = getSafeString( argument );
-      ret.append( conditionalEscape( argString ) );
+    ret.append(s);
+    if ((it + 1) != iter.end()) {
+      auto argString = getSafeString(argument);
+      ret.append(conditionalEscape(argString));
     }
   }
-  return markSafe( ret );
+  return markSafe(ret);
 }
 
-QVariant LengthFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant LengthFilter::doFilter(const QVariant &input, const QVariant &argument,
+                                bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  Q_UNUSED( argument )
-  if ( input.canConvert<QVariantList>() )
+  Q_UNUSED(autoescape)
+  Q_UNUSED(argument)
+  if (input.canConvert<QVariantList>())
     return input.value<QSequentialIterable>().size();
 
-  if ( input.userType() == qMetaTypeId<SafeString>() || input.userType() == qMetaTypeId<QString>() )
-    return getSafeString( input ).get().size();
+  if (input.userType() == qMetaTypeId<SafeString>()
+      || input.userType() == qMetaTypeId<QString>())
+    return getSafeString(input).get().size();
 
   return QVariant();
 }
 
-QVariant LengthIsFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant LengthIsFilter::doFilter(const QVariant &input,
+                                  const QVariant &argument,
+                                  bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  if ( !input.isValid() || ( input.userType() == qMetaTypeId<int>() ) || ( input.userType() == qMetaTypeId<QDateTime>() ) )
+  Q_UNUSED(autoescape)
+  if (!input.isValid() || (input.userType() == qMetaTypeId<int>())
+      || (input.userType() == qMetaTypeId<QDateTime>()))
     return QVariant();
 
   auto size = 0;
-  if ( input.canConvert<QVariantList>() )
+  if (input.canConvert<QVariantList>())
     size = input.value<QSequentialIterable>().size();
-  else if ( input.userType() == qMetaTypeId<SafeString>() || input.userType() == qMetaTypeId<QString>() )
-    size = getSafeString( input ).get().size();
+  else if (input.userType() == qMetaTypeId<SafeString>()
+           || input.userType() == qMetaTypeId<QString>())
+    size = getSafeString(input).get().size();
 
   bool ok;
-  auto argInt = getSafeString( argument ).get().toInt( &ok );
+  auto argInt = getSafeString(argument).get().toInt(&ok);
 
-  if ( !ok )
+  if (!ok)
     return QVariant();
 
   return size == argInt;
 }
 
-QVariant FirstFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant FirstFilter::doFilter(const QVariant &input, const QVariant &argument,
+                               bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  Q_UNUSED( argument )
+  Q_UNUSED(autoescape)
+  Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
   auto iter = input.value<QSequentialIterable>();
 
-  if ( iter.size() == 0 )
+  if (iter.size() == 0)
     return QString();
 
   return *iter.begin();
 }
 
-QVariant LastFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant LastFilter::doFilter(const QVariant &input, const QVariant &argument,
+                              bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  Q_UNUSED( argument )
+  Q_UNUSED(autoescape)
+  Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
   auto iter = input.value<QSequentialIterable>();
 
-  if ( iter.size() == 0 )
+  if (iter.size() == 0)
     return QString();
 
   return *(iter.end() - 1);
 }
 
-QVariant RandomFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant RandomFilter::doFilter(const QVariant &input, const QVariant &argument,
+                                bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  Q_UNUSED( argument )
+  Q_UNUSED(autoescape)
+  Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
   auto varList = input.value<QVariantList>();
 
-  qsrand( QDateTime::currentDateTimeUtc().toTime_t() );
+  qsrand(QDateTime::currentDateTimeUtc().toTime_t());
   auto rnd = qrand() % varList.size();
-  return varList.at( rnd );
+  return varList.at(rnd);
 }
 
-QVariant SliceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant SliceFilter::doFilter(const QVariant &input, const QVariant &argument,
+                               bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  auto argString = getSafeString( argument );
-  auto splitterIndex = argString.get().indexOf( QLatin1Char( ':' ) );
-  QString inputString = getSafeString( input );
-  if ( splitterIndex >= 0 ) {
-    auto left = argString.get().left( splitterIndex ).get().toInt();
-    auto right = argString.get().right( splitterIndex ).get().toInt();
-    if ( right < 0 ) {
+  Q_UNUSED(autoescape)
+  auto argString = getSafeString(argument);
+  auto splitterIndex = argString.get().indexOf(QLatin1Char(':'));
+  QString inputString = getSafeString(input);
+  if (splitterIndex >= 0) {
+    auto left = argString.get().left(splitterIndex).get().toInt();
+    auto right = argString.get().right(splitterIndex).get().toInt();
+    if (right < 0) {
       right = inputString.size() + right;
     }
-    return inputString.mid( left, right );
+    return inputString.mid(left, right);
   } else {
-    return QString( inputString.at( argument.value<int>() ) );
+    return QString(inputString.at(argument.value<int>()));
   }
 }
 
-QVariant MakeListFilter::doFilter( const QVariant& _input, const QVariant& argument, bool autoescape ) const
+QVariant MakeListFilter::doFilter(const QVariant &_input,
+                                  const QVariant &argument,
+                                  bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  Q_UNUSED( argument )
-  if ( _input.userType() == qMetaTypeId<QVariantList>() )
+  Q_UNUSED(autoescape)
+  Q_UNUSED(argument)
+  if (_input.userType() == qMetaTypeId<QVariantList>())
     return _input;
-  if ( _input.canConvert<QVariantList>())
+  if (_input.canConvert<QVariantList>())
     return _input.value<QVariantList>();
 
   auto input = _input;
 
-  if ( input.userType() == qMetaTypeId<int>() )
-    input.convert( QVariant::String );
+  if (input.userType() == qMetaTypeId<int>())
+    input.convert(QVariant::String);
 
-  if ( input.userType() == qMetaTypeId<SafeString>() || input.userType() == qMetaTypeId<QString>() ) {
+  if (input.userType() == qMetaTypeId<SafeString>()
+      || input.userType() == qMetaTypeId<QString>()) {
     QVariantList list;
-    Q_FOREACH( const QVariant &var, getSafeString( input ).get().split( QString(), QString::SkipEmptyParts ) )
+    Q_FOREACH (const QVariant &var, getSafeString(input).get().split(
+                                        QString(), QString::SkipEmptyParts))
       list << var;
     return list;
   }
   return QVariant();
 }
 
-QVariant UnorderedListFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+QVariant UnorderedListFilter::doFilter(const QVariant &input,
+                                       const QVariant &argument,
+                                       bool autoescape) const
 {
-  Q_UNUSED( argument )
+  Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
-  return markSafe( processList( input.value<QVariantList>(), 1, autoescape ) );
+  return markSafe(processList(input.value<QVariantList>(), 1, autoescape));
 }
 
-SafeString UnorderedListFilter::processList( const QVariantList& list, int tabs, bool autoescape ) const
+SafeString UnorderedListFilter::processList(const QVariantList &list, int tabs,
+                                            bool autoescape) const
 {
   QString indent;
-  for ( auto i = 0; i < tabs; ++i )
-    indent.append( QLatin1Char( '\t' ) );
+  for (auto i = 0; i < tabs; ++i)
+    indent.append(QLatin1Char('\t'));
   QStringList output;
 
   auto i = 0;
   auto listSize = list.size();
-  while ( i < listSize ) {
-    auto titleObject = list.at( i );
-    auto title = getSafeString( titleObject );
+  while (i < listSize) {
+    auto titleObject = list.at(i);
+    auto title = getSafeString(titleObject);
     QString sublist;
     QVariant sublistItem;
 
-    if ( titleObject.userType() == qMetaTypeId<QVariantList>() ) {
+    if (titleObject.userType() == qMetaTypeId<QVariantList>()) {
       sublistItem = titleObject;
       title.get().clear();
-    } else if ( i < listSize - 1 ) {
-      auto nextItem = list.at( i + 1 );
-      if ( nextItem.userType() == qMetaTypeId<QVariantList>() ) {
+    } else if (i < listSize - 1) {
+      auto nextItem = list.at(i + 1);
+      if (nextItem.userType() == qMetaTypeId<QVariantList>()) {
         sublistItem = nextItem;
       }
       ++i;
     }
-    if ( sublistItem.isValid() ) {
-      sublist = processList( sublistItem.value<QVariantList>(), tabs + 1, autoescape );
-      sublist = QStringLiteral( "\n%1<ul>\n%2\n%3</ul>\n%4" ).arg( indent, sublist, indent, indent );
+    if (sublistItem.isValid()) {
+      sublist = processList(sublistItem.value<QVariantList>(), tabs + 1,
+                            autoescape);
+      sublist = QStringLiteral("\n%1<ul>\n%2\n%3</ul>\n%4")
+                    .arg(indent, sublist, indent, indent);
     }
-    output.append( QStringLiteral( "%1<li>%2%3</li>" ).arg( indent,
-                                                                 autoescape ? conditionalEscape( title ) : title,
-                                                                 sublist ) );
+    output.append(QStringLiteral("%1<li>%2%3</li>")
+                      .arg(indent,
+                           autoescape ? conditionalEscape(title) : title,
+                           sublist));
     ++i;
   }
 
   // Should be QLatin1Char() ?
-  return output.join( QChar::fromLatin1( '\n' ) );
+  return output.join(QChar::fromLatin1('\n'));
 }
 
-struct DictSortLessThan
-{
-  bool operator()( const QPair<QVariant, QVariant> &lp, const QPair<QVariant, QVariant> &rp ) const
+struct DictSortLessThan {
+  bool operator()(const QPair<QVariant, QVariant> &lp,
+                  const QPair<QVariant, QVariant> &rp) const
   {
     const auto l = lp.first;
     const auto r = rp.first;
-    switch ( l.userType() ) {
+    switch (l.userType()) {
     case QVariant::Invalid:
-        return (r.isValid());
+      return (r.isValid());
     case QVariant::Int:
-        return l.value<int>() < r.value<int>();
+      return l.value<int>() < r.value<int>();
     case QVariant::UInt:
-        return l.value<uint>() < r.value<uint>();
+      return l.value<uint>() < r.value<uint>();
     case QVariant::LongLong:
-        return l.value<long long>() < r.value<long long>();
+      return l.value<long long>() < r.value<long long>();
     case QVariant::ULongLong:
-        return l.value<unsigned long long>() < r.value<unsigned long long>();
+      return l.value<unsigned long long>() < r.value<unsigned long long>();
     case QMetaType::Float:
-        return l.value<float>() < r.value<float>();
+      return l.value<float>() < r.value<float>();
     case QVariant::Double:
-        return l.value<double>() < r.value<double>();
+      return l.value<double>() < r.value<double>();
     case QVariant::Char:
-        return l.value<QChar>() < r.value<QChar>();
+      return l.value<QChar>() < r.value<QChar>();
     case QVariant::Date:
-        return l.value<QDate>() < r.value<QDate>();
+      return l.value<QDate>() < r.value<QDate>();
     case QVariant::Time:
-        return l.value<QTime>() < r.value<QTime>();
+      return l.value<QTime>() < r.value<QTime>();
     case QVariant::DateTime:
-        return l.value<QDateTime>() < r.value<QDateTime>();
+      return l.value<QDateTime>() < r.value<QDateTime>();
     case QMetaType::QObjectStar:
-        return l.value<QObject*>() < r.value<QObject*>();
+      return l.value<QObject *>() < r.value<QObject *>();
     }
-    if ( l.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
-      if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
-        return l.value<Grantlee::SafeString>().get() < r.value<Grantlee::SafeString>().get();
-      } else if ( r.userType() == qMetaTypeId<QString>() ) {
+    if (l.userType() == qMetaTypeId<Grantlee::SafeString>()) {
+      if (r.userType() == qMetaTypeId<Grantlee::SafeString>()) {
+        return l.value<Grantlee::SafeString>().get()
+               < r.value<Grantlee::SafeString>().get();
+      } else if (r.userType() == qMetaTypeId<QString>()) {
         return l.value<Grantlee::SafeString>().get() < r.value<QString>();
       }
-    } else if ( r.userType() == qMetaTypeId<Grantlee::SafeString>() ) {
-      if ( l.userType() == qMetaTypeId<QString>() ) {
+    } else if (r.userType() == qMetaTypeId<Grantlee::SafeString>()) {
+      if (l.userType() == qMetaTypeId<QString>()) {
         return l.value<QString>() < r.value<Grantlee::SafeString>().get();
       }
-    } else if ( l.userType() == qMetaTypeId<QString>() ) {
-      if ( r.userType() == qMetaTypeId<QString>() ) {
+    } else if (l.userType() == qMetaTypeId<QString>()) {
+      if (r.userType() == qMetaTypeId<QString>()) {
         return l.value<QString>() < r.value<QString>();
       }
     }
@@ -272,38 +293,40 @@ struct DictSortLessThan
   }
 };
 
-QVariant DictSortFilter::doFilter( const QVariant& input, const QVariant& argument, bool autoescape ) const
+QVariant DictSortFilter::doFilter(const QVariant &input,
+                                  const QVariant &argument,
+                                  bool autoescape) const
 {
-  Q_UNUSED( autoescape )
+  Q_UNUSED(autoescape)
 
   if (!input.canConvert<QVariantList>())
     return QVariant();
 
-  QList<QPair<QVariant, QVariant> > keyList;
+  QList<QPair<QVariant, QVariant>> keyList;
   const auto inList = input.value<QSequentialIterable>();
-  Q_FOREACH( const QVariant &item, inList ) {
+  Q_FOREACH (const QVariant &item, inList) {
     auto var = item;
 
-    const Variable v( getSafeString( argument ) );
+    const Variable v(getSafeString(argument));
 
-    if ( v.literal().isValid() ) {
-      var = MetaType::lookup( var, v.literal().value<QString>() );
+    if (v.literal().isValid()) {
+      var = MetaType::lookup(var, v.literal().value<QString>());
     } else {
       const auto lookups = v.lookups();
-      Q_FOREACH( const QString &lookup, lookups ) {
-        var = MetaType::lookup( var, lookup );
+      Q_FOREACH (const QString &lookup, lookups) {
+        var = MetaType::lookup(var, lookup);
       }
     }
-    keyList << qMakePair( var, item );
+    keyList << qMakePair(var, item);
   }
 
   DictSortLessThan lt;
-  qStableSort( keyList.begin(), keyList.end(), lt );
+  qStableSort(keyList.begin(), keyList.end(), lt);
 
   QVariantList outList;
   auto it = keyList.constBegin();
   const auto end = keyList.constEnd();
-  for ( ; it != end; ++it ) {
+  for (; it != end; ++it) {
     outList << it->second;
   }
   return outList;

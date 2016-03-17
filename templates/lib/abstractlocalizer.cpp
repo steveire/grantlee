@@ -26,29 +26,24 @@
 
 using namespace Grantlee;
 
-AbstractLocalizer::AbstractLocalizer()
+AbstractLocalizer::AbstractLocalizer() {}
+
+AbstractLocalizer::~AbstractLocalizer() {}
+
+QString AbstractLocalizer::localize(const QVariant &variant) const
 {
-
-}
-
-AbstractLocalizer::~AbstractLocalizer()
-{
-
-}
-
-QString AbstractLocalizer::localize( const QVariant& variant ) const
-{
-  if ( variant.userType() == qMetaTypeId<QDate>() )
-    return localizeDate( variant.value<QDate>() );
-  if ( variant.userType() == qMetaTypeId<QTime>() )
-    return localizeTime( variant.value<QTime>() );
-  if ( variant.userType() == qMetaTypeId<QDateTime>() )
-    return localizeDateTime( variant.value<QDateTime>() );
-  else if ( isSafeString( variant ) )
-    return localizeString( getSafeString( variant ).get() );
-  else if ( variant.userType() == qMetaTypeId<double>() || variant.userType() == qMetaTypeId<float>() )
-    return localizeNumber( variant.value<double>() );
-  else if ( variant.canConvert<int>() )
-    return localizeNumber( variant.value<int>() );
+  if (variant.userType() == qMetaTypeId<QDate>())
+    return localizeDate(variant.value<QDate>());
+  if (variant.userType() == qMetaTypeId<QTime>())
+    return localizeTime(variant.value<QTime>());
+  if (variant.userType() == qMetaTypeId<QDateTime>())
+    return localizeDateTime(variant.value<QDateTime>());
+  else if (isSafeString(variant))
+    return localizeString(getSafeString(variant).get());
+  else if (variant.userType() == qMetaTypeId<double>()
+           || variant.userType() == qMetaTypeId<float>())
+    return localizeNumber(variant.value<double>());
+  else if (variant.canConvert<int>())
+    return localizeNumber(variant.value<int>());
   return QString();
 }

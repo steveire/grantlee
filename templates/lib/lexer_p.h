@@ -21,8 +21,8 @@
 #ifndef GRANTLEE_LEXER_P_H
 #define GRANTLEE_LEXER_P_H
 
-#include "token.h"
 #include "textprocessingmachine_p.h"
+#include "token.h"
 
 template <typename T> class QList;
 
@@ -32,15 +32,12 @@ namespace Grantlee
 class Lexer
 {
 public:
-  Lexer( const QString &templateString );
+  Lexer(const QString &templateString);
   ~Lexer();
 
-  enum TrimType {
-    NoSmartTrim,
-    SmartTrim
-  };
+  enum TrimType { NoSmartTrim, SmartTrim };
 
-  QList<Token> tokenize( TrimType type = NoSmartTrim );
+  QList<Token> tokenize(TrimType type = NoSmartTrim);
 
   void markStartSyntax();
   void markEndSyntax();
@@ -51,7 +48,7 @@ public:
 
 private:
   void reset();
-  void finalizeToken( int nextPosition, bool processSyntax );
+  void finalizeToken(int nextPosition, bool processSyntax);
 
 private:
   QString m_templateString;
@@ -65,124 +62,104 @@ private:
   int m_newlinePosition;
 };
 
-struct NullLexerAction
-{
-  static void doAction( Lexer * ) {}
+struct NullLexerAction {
+  static void doAction(Lexer *) {}
 };
 
-template<typename TType, typename Test, typename Action1 = NullLexerAction, typename Action2 = NullLexerAction>
+template <typename TType, typename Test, typename Action1 = NullLexerAction,
+          typename Action2 = NullLexerAction>
 class LexerObject : public TType
 {
 public:
-  LexerObject( Lexer* lexer, State<typename TType::Type>* sourceState = 0 )
-    : TType( sourceState ), m_lexer( lexer )
+  LexerObject(Lexer *lexer, State<typename TType::Type> *sourceState = 0)
+      : TType(sourceState), m_lexer(lexer)
   {
-
   }
 
-  bool characterTest( QString::const_iterator character )
+  bool characterTest(QString::const_iterator character)
   {
-    return Test::characterTest( character );
+    return Test::characterTest(character);
   }
 
-  void onTransition()
-  {
-    return Action1::doAction( m_lexer );
-  }
+  void onTransition() { return Action1::doAction(m_lexer); }
 
-  void onEntry()
-  {
-    return Action1::doAction( m_lexer );
-  }
+  void onEntry() { return Action1::doAction(m_lexer); }
 
-  void onExit()
-  {
-    return Action2::doAction( m_lexer );
-  }
+  void onExit() { return Action2::doAction(m_lexer); }
 private:
-  Lexer * const m_lexer;
+  Lexer *const m_lexer;
 };
 
-struct TokenFinalizer
-{
-  static void doAction( Lexer *lexer ) {
-    lexer->finalizeToken();
-  }
+struct TokenFinalizer {
+  static void doAction(Lexer *lexer) { lexer->finalizeToken(); }
 };
 
-struct TokenFinalizerWithTrimming
-{
-  static void doAction( Lexer *lexer ) {
+struct TokenFinalizerWithTrimming {
+  static void doAction(Lexer *lexer)
+  {
     lexer->finalizeTokenWithTrimmedWhitespace();
   }
 };
 
-struct TokenFinalizerWithTrimmingAndNewline
-{
-  static void doAction( Lexer *lexer ) {
+struct TokenFinalizerWithTrimmingAndNewline {
+  static void doAction(Lexer *lexer)
+  {
     lexer->finalizeTokenWithTrimmedWhitespace();
     lexer->markNewline();
   }
 };
 
-struct MarkStartSyntax
-{
-  static void doAction( Lexer *lexer ) {
-    lexer->markStartSyntax();
-  }
+struct MarkStartSyntax {
+  static void doAction(Lexer *lexer) { lexer->markStartSyntax(); }
 };
 
-struct FinalizeAndMarkStartSyntax
-{
-  static void doAction( Lexer *lexer ) {
+struct FinalizeAndMarkStartSyntax {
+  static void doAction(Lexer *lexer)
+  {
     lexer->finalizeToken();
     lexer->markStartSyntax();
   }
 };
 
-struct MarksClearer
-{
-  static void doAction( Lexer *lexer ) {
-    lexer->clearMarkers();
-  }
+struct MarksClearer {
+  static void doAction(Lexer *lexer) { lexer->clearMarkers(); }
 };
 
-struct MarkEndSyntax
-{
-  static void doAction( Lexer *lexer ) {
-    lexer->markEndSyntax();
-  }
+struct MarkEndSyntax {
+  static void doAction(Lexer *lexer) { lexer->markEndSyntax(); }
 };
 
-struct MarkNewline
-{
-  static void doAction( Lexer *lexer ) {
-    lexer->markNewline();
-  }
+struct MarkNewline {
+  static void doAction(Lexer *lexer) { lexer->markNewline(); }
 };
 
-template<char c, typename Action = NullLexerAction>
-class CharacterTransition : public LexerObject<State<CharTransitionInterface>::Transition, CharacterTest<c>, Action>
+template <char c, typename Action = NullLexerAction>
+class CharacterTransition
+    : public LexerObject<State<CharTransitionInterface>::Transition,
+                         CharacterTest<c>, Action>
 {
 public:
-  CharacterTransition( Lexer* lexer, State<CharTransitionInterface>* sourceState = 0 )
-    : LexerObject<State<CharTransitionInterface>::Transition, CharacterTest<c>, Action>( lexer, sourceState )
+  CharacterTransition(Lexer *lexer,
+                      State<CharTransitionInterface> *sourceState = 0)
+      : LexerObject<State<CharTransitionInterface>::Transition,
+                    CharacterTest<c>, Action>(lexer, sourceState)
   {
-
   }
 };
 
-template<char c, typename Action = NullLexerAction>
-class NegateCharacterTransition : public LexerObject<State<CharTransitionInterface>::Transition, Negate<CharacterTest<c> >, Action>
+template <char c, typename Action = NullLexerAction>
+class NegateCharacterTransition
+    : public LexerObject<State<CharTransitionInterface>::Transition,
+                         Negate<CharacterTest<c>>, Action>
 {
 public:
-  NegateCharacterTransition( Lexer* lexer, State<CharTransitionInterface>* sourceState = 0 )
-    : LexerObject<State<CharTransitionInterface>::Transition, Negate<CharacterTest<c> >, Action>( lexer, sourceState )
+  NegateCharacterTransition(Lexer *lexer,
+                            State<CharTransitionInterface> *sourceState = 0)
+      : LexerObject<State<CharTransitionInterface>::Transition,
+                    Negate<CharacterTest<c>>, Action>(lexer, sourceState)
   {
-
   }
 };
-
 }
 
 #endif

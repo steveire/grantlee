@@ -18,22 +18,22 @@
 
 */
 
-#include <QtTest/QTest>
-#include <QtCore/QFileInfo>
 #include <QtCore/QDebug>
+#include <QtCore/QFileInfo>
+#include <QtTest/QTest>
 
-#include "template.h"
-#include "engine.h"
+#include "cachingloaderdecorator.h"
 #include "context.h"
+#include "coverageobject.h"
+#include "engine.h"
 #include "filterexpression.h"
 #include "grantlee_paths.h"
-#include "coverageobject.h"
-#include "cachingloaderdecorator.h"
+#include "template.h"
 #include <metaenumvariable_p.h>
 
 typedef QHash<QString, QVariant> Dict;
 
-Q_DECLARE_METATYPE( Grantlee::Error )
+Q_DECLARE_METATYPE(Grantlee::Error)
 
 using namespace Grantlee;
 
@@ -48,19 +48,19 @@ private Q_SLOTS:
 void TestCachingLoader::testRenderAfterError()
 {
   Engine engine;
-  engine.setPluginPaths( QStringList() << QStringLiteral( GRANTLEE_PLUGIN_PATH ) );
+  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
 
   QSharedPointer<InMemoryTemplateLoader> loader(new InMemoryTemplateLoader);
   loader->setTemplate(QStringLiteral("template1"),
                       QStringLiteral("This template has an error {{ va>r }}"));
-  loader->setTemplate(QStringLiteral("template2"),
-                      QStringLiteral("Ok"));
+  loader->setTemplate(QStringLiteral("template2"), QStringLiteral("Ok"));
   loader->setTemplate(QStringLiteral("main"),
                       QStringLiteral("{% include template_var %}"));
 
-  QSharedPointer<Grantlee::CachingLoaderDecorator> cache( new Grantlee::CachingLoaderDecorator( loader ) );
+  QSharedPointer<Grantlee::CachingLoaderDecorator> cache(
+      new Grantlee::CachingLoaderDecorator(loader));
 
-  engine.addTemplateLoader( cache );
+  engine.addTemplateLoader(cache);
 
   Context c;
   Template t;

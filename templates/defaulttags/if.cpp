@@ -23,63 +23,70 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
-IfNodeFactory::IfNodeFactory()
+IfNodeFactory::IfNodeFactory() {}
+
+Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
-
-}
-
-
-Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  auto expr = smartSplit( tagContent );
-  auto commandName = expr.takeAt( 0 );
-  if ( expr.size() <= 0 ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'%1' statement requires at least one argument" ).arg(commandName) );
+  auto expr = smartSplit(tagContent);
+  auto commandName = expr.takeAt(0);
+  if (expr.size() <= 0) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("'%1' statement requires at least one argument")
+            .arg(commandName));
   }
 
   int linkType = IfNode::OrLink;
 
-  auto exprString = expr.join( QChar::fromLatin1( ' ' ) );
+  auto exprString = expr.join(QChar::fromLatin1(' '));
 
-  auto boolPairs = exprString.split( QStringLiteral( " and " ) );
+  auto boolPairs = exprString.split(QStringLiteral(" and "));
 
-  if ( boolPairs.size() == 1 ) {
-    boolPairs = exprString.split( QStringLiteral( " or " ) );
+  if (boolPairs.size() == 1) {
+    boolPairs = exprString.split(QStringLiteral(" or "));
   } else {
     linkType = IfNode::AndLink;
-    if ( exprString.contains( QStringLiteral( " or " ) ) ) {
-      throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'%1' tags can't mix 'and' and 'or'" ).arg(commandName) );
+    if (exprString.contains(QStringLiteral(" or "))) {
+      throw Grantlee::Exception(
+          TagSyntaxError, QStringLiteral("'%1' tags can't mix 'and' and 'or'")
+                              .arg(commandName));
     }
   }
 
-  QList<QPair<bool, FilterExpression > > boolVars;
-  Q_FOREACH( const QString &boolStr, boolPairs ) {
+  QList<QPair<bool, FilterExpression>> boolVars;
+  Q_FOREACH (const QString &boolStr, boolPairs) {
     QPair<bool, FilterExpression> pair;
-    if ( boolStr.contains( QLatin1Char( ' ' ) ) ) {
-      auto bits = boolStr.split( QChar::fromLatin1( ' ' ) );
-      if ( bits.size() != 2 ) {
-        throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'%1' statement improperly formatted" ).arg(commandName) );
+    if (boolStr.contains(QLatin1Char(' '))) {
+      auto bits = boolStr.split(QChar::fromLatin1(' '));
+      if (bits.size() != 2) {
+        throw Grantlee::Exception(
+            TagSyntaxError,
+            QStringLiteral("'%1' statement improperly formatted")
+                .arg(commandName));
       }
-      if ( bits.first() != QStringLiteral( "not" ) ) {
-        throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Expected 'not' in %1 statement" ).arg(commandName) );
+      if (bits.first() != QStringLiteral("not")) {
+        throw Grantlee::Exception(
+            TagSyntaxError,
+            QStringLiteral("Expected 'not' in %1 statement").arg(commandName));
       }
       pair.first = true;
-      pair.second = FilterExpression( bits.at( 1 ).trimmed(), p );
+      pair.second = FilterExpression(bits.at(1).trimmed(), p);
     } else {
       pair.first = false;
-      pair.second = FilterExpression( boolStr.trimmed(), p );
+      pair.second = FilterExpression(boolStr.trimmed(), p);
     }
-    boolVars.append( pair );
+    boolVars.append(pair);
   }
 
-  auto n = new IfNode( boolVars, linkType, p );
+  auto n = new IfNode(boolVars, linkType, p);
 
-  auto trueList = p->parse( n, QStringList() << QStringLiteral( "else" ) << QStringLiteral( "endif" ) );
-  n->setTrueList( trueList );
+  auto trueList = p->parse(n, QStringList() << QStringLiteral("else")
+                                            << QStringLiteral("endif"));
+  n->setTrueList(trueList);
   NodeList falseList;
-  if ( p->takeNextToken().content == QStringLiteral( "else" ) ) {
-    falseList = p->parse( n, QStringLiteral( "endif" ) );
-    n->setFalseList( falseList );
+  if (p->takeNextToken().content == QStringLiteral("else")) {
+    falseList = p->parse(n, QStringLiteral("endif"));
+    n->setFalseList(falseList);
     // skip past the endif tag
     p->removeNextToken();
   } // else empty falseList.
@@ -87,50 +94,45 @@ Node* IfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
   return n;
 }
 
-
-IfNode::IfNode( const QList<QPair<bool, FilterExpression > > &boolVars, int linkType, QObject *parent )
-    : Node( parent ),
-    m_boolVars( boolVars ),
-    m_linkType( linkType )
+IfNode::IfNode(const QList<QPair<bool, FilterExpression>> &boolVars,
+               int linkType, QObject *parent)
+    : Node(parent), m_boolVars(boolVars), m_linkType(linkType)
 {
-
 }
 
-void IfNode::setTrueList( const NodeList &trueList )
-{
-  m_trueList = trueList;
-}
+void IfNode::setTrueList(const NodeList &trueList) { m_trueList = trueList; }
 
-void IfNode::setFalseList(const NodeList& falseList )
+void IfNode::setFalseList(const NodeList &falseList)
 {
   m_falseList = falseList;
 }
 
-void IfNode::render( OutputStream *stream, Context *c ) const
+void IfNode::render(OutputStream *stream, Context *c) const
 {
-  // Evaluate the expression. rendering variables with the context as needed. and processing nodes recursively
+  // Evaluate the expression. rendering variables with the context as needed.
+  // and processing nodes recursively
   // in either trueList or falseList as determined by booleanExpression.
 
-  if ( m_linkType == OrLink ) {
-    for ( auto i = 0; i < m_boolVars.size(); i++ ) {
-      auto pair = m_boolVars.at( i );
+  if (m_linkType == OrLink) {
+    for (auto i = 0; i < m_boolVars.size(); i++) {
+      auto pair = m_boolVars.at(i);
       auto negate = pair.first;
 
-      auto isTrue = pair.second.isTrue( c );
+      auto isTrue = pair.second.isTrue(c);
 
-      if ( isTrue != negate ) {
-        renderTrueList( stream, c );
+      if (isTrue != negate) {
+        renderTrueList(stream, c);
         return;
       }
     }
-//     return renderFalseList(c);
+    //     return renderFalseList(c);
   } else {
     auto renderTrue = true;
-    for ( auto i = 0; i < m_boolVars.size(); i++ ) {
-      auto pair = m_boolVars.at( i );
+    for (auto i = 0; i < m_boolVars.size(); i++) {
+      auto pair = m_boolVars.at(i);
       auto negate = pair.first;
 
-      auto isTrue = pair.second.isTrue( c );
+      auto isTrue = pair.second.isTrue(c);
 
       // Karnaugh map:
       //          VariantIsTrue
@@ -138,27 +140,26 @@ void IfNode::render( OutputStream *stream, Context *c ) const
       //         0| 0 | 1 |
       // negate  1| 1 | 0 |
 
-      if (( !isTrue && !negate )
-          || ( isTrue && negate ) ) {
+      if ((!isTrue && !negate) || (isTrue && negate)) {
         renderTrue = false;
         break;
       }
     }
-    if ( renderTrue ) {
-      renderTrueList( stream, c );
+    if (renderTrue) {
+      renderTrueList(stream, c);
       return;
     }
   }
 
-  renderFalseList( stream, c );
+  renderFalseList(stream, c);
 }
 
-void IfNode::renderTrueList( OutputStream *stream, Context *c ) const
+void IfNode::renderTrueList(OutputStream *stream, Context *c) const
 {
-  return m_trueList.render( stream, c );
+  return m_trueList.render(stream, c);
 }
 
-void IfNode::renderFalseList( OutputStream *stream, Context *c ) const
+void IfNode::renderFalseList(OutputStream *stream, Context *c) const
 {
-  return m_falseList.render( stream, c );
+  return m_falseList.render(stream, c);
 }

@@ -22,22 +22,22 @@
 
 using namespace Grantlee;
 
-TextNode::TextNode( const QString &content, QObject *parent )
-    : Node( parent ), m_content( content )
+TextNode::TextNode(const QString &content, QObject *parent)
+    : Node(parent), m_content(content)
 {
 }
 
-VariableNode::VariableNode( const FilterExpression &fe, QObject *parent )
-    : Node( parent ), m_filterExpression( fe )
+VariableNode::VariableNode(const FilterExpression &fe, QObject *parent)
+    : Node(parent), m_filterExpression(fe)
 {
 }
 
-void VariableNode::render( OutputStream *stream, Context *c ) const
+void VariableNode::render(OutputStream *stream, Context *c) const
 {
-  const auto v = m_filterExpression.resolve( c );
-  if ( !v.isValid() )
+  const auto v = m_filterExpression.resolve(c);
+  if (!v.isValid())
     return;
-  streamValueInContext( stream, v, c );
+  streamValueInContext(stream, v, c);
 }
 
 #include "moc_nodebuiltins_p.cpp"

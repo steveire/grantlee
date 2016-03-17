@@ -20,59 +20,57 @@
 
 #include "scriptablevariable.h"
 
-#include <QtScript/QScriptEngine>
 #include <QDebug>
+#include <QtScript/QScriptEngine>
 
 #include "scriptablecontext.h"
 #include "scriptablesafestring.h"
 #include "util.h"
 
-Q_SCRIPT_DECLARE_QMETAOBJECT( ScriptableVariable, QObject* )
+Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableVariable, QObject *)
 
-QScriptValue ScriptableVariableConstructor( QScriptContext *context,
-    QScriptEngine *engine )
+QScriptValue ScriptableVariableConstructor(QScriptContext *context,
+                                           QScriptEngine *engine)
 {
   // TODO: Decide what the parent should be;
-  // It should be the owning scriptableNode. I think I can get that from the scriptContext.
+  // It should be the owning scriptableNode. I think I can get that from the
+  // scriptContext.
 
   QObject *parent = 0;
-  auto object = new ScriptableVariable( engine, parent );
-  object->setContent( context->argument( 0 ).toString() );
+  auto object = new ScriptableVariable(engine, parent);
+  object->setContent(context->argument(0).toString());
 
-  return engine->newQObject( object );
+  return engine->newQObject(object);
 }
 
-ScriptableVariable::ScriptableVariable( QObject *parent )
-    : QObject( parent ), m_engine( 0 )
+ScriptableVariable::ScriptableVariable(QObject *parent)
+    : QObject(parent), m_engine(0)
 {
-
 }
 
-ScriptableVariable::ScriptableVariable( QScriptEngine *engine, QObject *parent )
-    : QObject( parent ), m_engine( engine )
+ScriptableVariable::ScriptableVariable(QScriptEngine *engine, QObject *parent)
+    : QObject(parent), m_engine(engine)
 {
-
 }
 
-void ScriptableVariable::setContent( const QString& content )
+void ScriptableVariable::setContent(const QString &content)
 {
-  m_variable = Variable( content );
+  m_variable = Variable(content);
 }
 
-QVariant ScriptableVariable::resolve( ScriptableContext* c )
+QVariant ScriptableVariable::resolve(ScriptableContext *c)
 {
-  auto var = m_variable.resolve( c->context() );
+  auto var = m_variable.resolve(c->context());
 
-  if ( Grantlee::isSafeString( var ) ) {
-      auto ssObj = new ScriptableSafeString( m_engine );
-      ssObj->setContent( getSafeString( var ) );
-      return m_engine->newQObject( ssObj ).toVariant();
+  if (Grantlee::isSafeString(var)) {
+    auto ssObj = new ScriptableSafeString(m_engine);
+    ssObj->setContent(getSafeString(var));
+    return m_engine->newQObject(ssObj).toVariant();
   }
   return var;
 }
 
-
-bool ScriptableVariable::isTrue( ScriptableContext* c )
+bool ScriptableVariable::isTrue(ScriptableContext *c)
 {
-  return m_variable.isTrue( c->context() );
+  return m_variable.isTrue(c->context());
 }

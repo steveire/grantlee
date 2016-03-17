@@ -26,72 +26,75 @@
 #include "template.h"
 #include "util.h"
 
-IncludeNodeFactory::IncludeNodeFactory()
+IncludeNodeFactory::IncludeNodeFactory() {}
+
+Node *IncludeNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = smartSplit(tagContent);
 
-}
+  if (expr.size() != 2)
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("Error: Include tag takes only one argument"));
 
-Node* IncludeNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  auto expr = smartSplit( tagContent );
-
-  if ( expr.size() != 2 )
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: Include tag takes only one argument" ) );
-
-  auto includeName = expr.at( 1 );
+  auto includeName = expr.at(1);
   auto size = includeName.size();
 
-  if (( includeName.startsWith( QLatin1Char( '"' ) ) && includeName.endsWith( QLatin1Char( '"' ) ) )
-      || ( includeName.startsWith( QLatin1Char( '\'' ) ) && includeName.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    return new ConstantIncludeNode( includeName.mid( 1, size - 2 ) );
+  if ((includeName.startsWith(QLatin1Char('"'))
+       && includeName.endsWith(QLatin1Char('"')))
+      || (includeName.startsWith(QLatin1Char('\''))
+          && includeName.endsWith(QLatin1Char('\'')))) {
+    return new ConstantIncludeNode(includeName.mid(1, size - 2));
   }
-  return new IncludeNode( FilterExpression( includeName, p ), p );
+  return new IncludeNode(FilterExpression(includeName, p), p);
 }
 
-IncludeNode::IncludeNode( const FilterExpression &fe, QObject *parent )
-    : Node( parent ), m_filterExpression( fe )
+IncludeNode::IncludeNode(const FilterExpression &fe, QObject *parent)
+    : Node(parent), m_filterExpression(fe)
 {
 }
 
-void IncludeNode::render( OutputStream *stream, Context *c ) const
+void IncludeNode::render(OutputStream *stream, Context *c) const
 {
-  QString filename = getSafeString( m_filterExpression.resolve( c ) );
+  QString filename = getSafeString(m_filterExpression.resolve(c));
 
   auto ti = containerTemplate();
 
-  auto t = ti->engine()->loadByName( filename );
+  auto t = ti->engine()->loadByName(filename);
 
-  if ( !t )
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Template not found %1" ).arg( filename ) );
+  if (!t)
+    throw Grantlee::Exception(
+        TagSyntaxError, QStringLiteral("Template not found %1").arg(filename));
 
-  if ( t->error() )
-    throw Grantlee::Exception( t->error(), t->errorString() );
+  if (t->error())
+    throw Grantlee::Exception(t->error(), t->errorString());
 
-  t->render( stream, c );
+  t->render(stream, c);
 
-  if ( t->error() )
-    throw Grantlee::Exception( t->error(), t->errorString() );
+  if (t->error())
+    throw Grantlee::Exception(t->error(), t->errorString());
 }
 
-ConstantIncludeNode::ConstantIncludeNode( const QString &name, QObject *parent )
-    : Node( parent )
+ConstantIncludeNode::ConstantIncludeNode(const QString &name, QObject *parent)
+    : Node(parent)
 {
   m_name = name;
 }
 
-void ConstantIncludeNode::render( OutputStream *stream, Context *c ) const
+void ConstantIncludeNode::render(OutputStream *stream, Context *c) const
 {
   auto ti = containerTemplate();
 
-  auto t = ti->engine()->loadByName( m_name );
-  if ( !t )
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Template not found %1" ).arg( m_name ) );
+  auto t = ti->engine()->loadByName(m_name);
+  if (!t)
+    throw Grantlee::Exception(
+        TagSyntaxError, QStringLiteral("Template not found %1").arg(m_name));
 
-  if ( t->error() )
-    throw Grantlee::Exception( t->error(), t->errorString() );
+  if (t->error())
+    throw Grantlee::Exception(t->error(), t->errorString());
 
-  t->render( stream, c );
+  t->render(stream, c);
 
-  if ( t->error() )
-    throw Grantlee::Exception( t->error(), t->errorString() );
+  if (t->error())
+    throw Grantlee::Exception(t->error(), t->errorString());
 }

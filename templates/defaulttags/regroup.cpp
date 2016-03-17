@@ -24,85 +24,97 @@
 #include "parser.h"
 #include "util.h"
 
-RegroupNodeFactory::RegroupNodeFactory()
+RegroupNodeFactory::RegroupNodeFactory() {}
+
+Node *RegroupNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = tagContent.split(QLatin1Char(' '));
 
-}
-
-Node* RegroupNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  auto expr = tagContent.split( QLatin1Char( ' ' ) );
-
-  if ( expr.size() != 6 ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "widthratio takes five arguments" ) );
+  if (expr.size() != 6) {
+    throw Grantlee::Exception(
+        TagSyntaxError, QStringLiteral("widthratio takes five arguments"));
   }
-  FilterExpression target( expr.at( 1 ), p );
-  if ( expr.at( 2 ) != QStringLiteral( "by" ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "second argument must be 'by'" ) );
-  }
-
-  if ( expr.at( 4 ) != QStringLiteral( "as" ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "fourth argument must be 'as'" ) );
+  FilterExpression target(expr.at(1), p);
+  if (expr.at(2) != QStringLiteral("by")) {
+    throw Grantlee::Exception(TagSyntaxError,
+                              QStringLiteral("second argument must be 'by'"));
   }
 
-  FilterExpression expression( QStringLiteral( "\"" ) + expr.at( 3 ) + QStringLiteral( "\"" ), p );
+  if (expr.at(4) != QStringLiteral("as")) {
+    throw Grantlee::Exception(TagSyntaxError,
+                              QStringLiteral("fourth argument must be 'as'"));
+  }
 
-  auto name = expr.at( 5 );
+  FilterExpression expression(
+      QStringLiteral("\"") + expr.at(3) + QStringLiteral("\""), p);
 
-  return new RegroupNode( target, expression, name, p );
+  auto name = expr.at(5);
+
+  return new RegroupNode(target, expression, name, p);
 }
 
-RegroupNode::RegroupNode(const FilterExpression& target, const FilterExpression& expression,
-                         const QString &varName, QObject *parent )
-    : Node( parent ), m_target( target ), m_expression( expression ), m_varName( varName )
+RegroupNode::RegroupNode(const FilterExpression &target,
+                         const FilterExpression &expression,
+                         const QString &varName, QObject *parent)
+    : Node(parent), m_target(target), m_expression(expression),
+      m_varName(varName)
 {
-
 }
 
-void RegroupNode::render( OutputStream *stream, Context *c ) const
+void RegroupNode::render(OutputStream *stream, Context *c) const
 {
-  Q_UNUSED( stream )
-  auto objList = m_target.toList( c );
-  if ( objList.isEmpty() ) {
-    c->insert( m_varName, QVariantHash() );
+  Q_UNUSED(stream)
+  auto objList = m_target.toList(c);
+  if (objList.isEmpty()) {
+    c->insert(m_varName, QVariantHash());
     return;
   }
 
   // What's going on?
   //
-  // objList is a flat list of objects with a common parameter. For example, Person objects with
+  // objList is a flat list of objects with a common parameter. For example,
+  // Person objects with
   // a name parameter. The list is already sorted.
-  // Say the objList contains ["David Beckham", "David Blain", "Keira Nightly"] etc.
-  // We want to regroup the list into separate lists of people with the same first name.
-  // ie objHash should be: {"David": ["David Beckham", "David Blain"], "Keira": ["Keira Nightly"]}
+  // Say the objList contains ["David Beckham", "David Blain", "Keira
+  // Nightly"]
+  // etc.
+  // We want to regroup the list into separate lists of people with the same
+  // first name.
+  // ie objHash should be: {"David": ["David Beckham", "David Blain"],
+  // "Keira":
+  // ["Keira Nightly"]}
   //
-  // We then insert the objHash into the Context ready for rendering later in a for loop.
+  // We then insert the objHash into the Context ready for rendering later in
+  // a
+  // for loop.
 
   QVariantList contextList;
-  const QString keyName = getSafeString( m_expression.resolve( c ) );
-  QListIterator<QVariant> i( objList );
-  while ( i.hasNext() ) {
+  const QString keyName = getSafeString(m_expression.resolve(c));
+  QListIterator<QVariant> i(objList);
+  while (i.hasNext()) {
     const auto var = i.next();
     c->push();
-    c->insert( QStringLiteral( "var" ), var );
-    const QString key = getSafeString( FilterExpression( QStringLiteral( "var." ) + keyName, 0 ).resolve( c ) );
+    c->insert(QStringLiteral("var"), var);
+    const QString key = getSafeString(
+        FilterExpression(QStringLiteral("var.") + keyName, 0).resolve(c));
     c->pop();
     QVariantHash hash;
-    if ( contextList.size() > 0 ) {
+    if (contextList.size() > 0) {
       auto hashVar = contextList.last();
       hash = hashVar.value<QVariantHash>();
     }
-    if ( !hash.contains( QStringLiteral( "grouper" ) ) || hash.value( QStringLiteral( "grouper" ) ) != key ) {
+    if (!hash.contains(QStringLiteral("grouper"))
+        || hash.value(QStringLiteral("grouper")) != key) {
       QVariantHash newHash;
-      hash.insert( QStringLiteral( "grouper" ), key );
-      hash.insert( QStringLiteral( "list" ), QVariantList() );
-      contextList.append( newHash );
+      hash.insert(QStringLiteral("grouper"), key);
+      hash.insert(QStringLiteral("list"), QVariantList());
+      contextList.append(newHash);
     }
 
-    auto list = hash.value( QStringLiteral( "list" ) ).value<QVariantList>();
-    list.append( var );
-    hash.insert( QStringLiteral( "list" ), list );
+    auto list = hash.value(QStringLiteral("list")).value<QVariantList>();
+    list.append(var);
+    hash.insert(QStringLiteral("list"), list);
     contextList[contextList.size() - 1] = hash;
   }
-  c->insert( m_varName, contextList );
+  c->insert(m_varName, contextList);
 }

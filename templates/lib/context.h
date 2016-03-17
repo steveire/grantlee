@@ -38,11 +38,13 @@ class ContextPrivate;
 /**
   @brief The Context class holds the context to render a template with.
 
-  For application developers, using the Context class is a matter of inserting keys and
+  For application developers, using the Context class is a matter of inserting
+  keys and
   values as appropriate for rendering a template using the insert method.
 
   @code
-    Template t = engine->newTemplate( "Name is {% name %} and age is {% age %}.", "some_template" );
+    Template t = engine->newTemplate( "Name is {% name %} and age is {% age
+  %}.", "some_template" );
 
     Context c1;
     c1.insert( "name", "Tom" );
@@ -56,7 +58,8 @@ class ContextPrivate;
     t->render(c2); // Returns "Name is Harry and age is 34."
   @endcode
 
-  Note that one Template may be rendered multiple times with different contexts. Note also that any QVariant may be inserted
+  Note that one Template may be rendered multiple times with different contexts.
+  Note also that any QVariant may be inserted
   into a Context object. Most commonly, QObjects will be used here.
   @see @ref custom_objects
 
@@ -64,9 +67,12 @@ class ContextPrivate;
 
   For template tag developers, some other Context API is relevant.
 
-  It is possible to push and pop layers of context while a template is being rendered. This is useful if your template
-  tag makes additional variables temporarily available in a part of a template. Template tags should only modify layers of context
-  that they push themselves, and should pop any layers created before finishing its rendering step.
+  It is possible to push and pop layers of context while a template is being
+  rendered. This is useful if your template
+  tag makes additional variables temporarily available in a part of a template.
+  Template tags should only modify layers of context
+  that they push themselves, and should pop any layers created before finishing
+  its rendering step.
 
   See for example the @gr_tag{with} tag. In a template such as
   @code
@@ -76,7 +82,8 @@ class ContextPrivate;
     {% endwith %}
   @endcode
 
-  In this case, lowerName is available in the context only between the @gr_tag{with} and @gr_tag{endwith} tags. The implementation of
+  In this case, lowerName is available in the context only between the
+  @gr_tag{with} and @gr_tag{endwith} tags. The implementation of
   the @gr_tag{with} tag render method is:
 
   @code
@@ -90,7 +97,8 @@ class ContextPrivate;
     }
   @endcode
 
-  Note that a context may temporarily override a variable in a parent context. This is why it is important to push a new context when
+  Note that a context may temporarily override a variable in a parent context.
+  This is why it is important to push a new context when
   adding items to context and pop it when finished.
 
   @code
@@ -109,41 +117,42 @@ class ContextPrivate;
 class GRANTLEE_TEMPLATES_EXPORT Context
 {
 public:
-
   /**
     Creates an empty context
   */
   Context();
   /**
-    Sets every key in the hash as a property name with the variant as the value.
+    Sets every key in the hash as a property name with the variant as the
+    value.
   */
-  explicit Context( const QVariantHash &hash );
-
+  explicit Context(const QVariantHash &hash);
 
   /**
     Copy Constructor
   */
-  Context( const Context &other );
+  Context(const Context &other);
 
   /**
     Assignmant operator
   */
-  Context& operator =( const Context &other );
+  Context &operator=(const Context &other);
 
 #ifndef Q_QDOC
   /**
     @internal
 
-    Whether to automatically escape all context content. This is not usually used directly. Use the @gr_tag{autoescape} tag instead.
+    Whether to automatically escape all context content. This is not usually
+    used directly. Use the @gr_tag{autoescape} tag instead.
   */
   bool autoEscape() const;
 
   /**
     @internal
 
-    Sets whether to automatically escape all context content. This is not usually used directly. Use the @gr_tag{autoescape} tag instead.
+    Sets whether to automatically escape all context content. This is not
+    usually used directly. Use the @gr_tag{autoescape} tag instead.
   */
-  void setAutoEscape( bool autoescape );
+  void setAutoEscape(bool autoescape);
 #endif
   /**
     Destructor
@@ -153,17 +162,19 @@ public:
   /**
     Returns the context object identified by the key @p str
   */
-  QVariant lookup( const QString &str ) const;
+  QVariant lookup(const QString &str) const;
 
   /**
-    Insert the context object @p object identified by @p name into the Context.
+    Insert the context object @p object identified by @p name into the
+    Context.
   */
-  void insert( const QString &name, QObject *object );
+  void insert(const QString &name, QObject *object);
 
   /**
-    Insert the context object @p variant identified by @p name into the Context.
+    Insert the context object @p variant identified by @p name into the
+    Context.
   */
-  void insert( const QString &name, const QVariant &variant );
+  void insert(const QString &name, const QVariant &variant);
 
   /**
     Pushes a new context.
@@ -181,7 +192,7 @@ public:
   /**
     @internal Returns the context hash at depth @p depth.
   */
-  QVariantHash stackHash( int depth ) const;
+  QVariantHash stackHash(int depth) const;
 
   /**
     @internal
@@ -193,12 +204,13 @@ public:
     @internal
     Sets whether template being rendered is being mutated to @p mutating.
   */
-  void setMutating( bool mutating );
+  void setMutating(bool mutating);
 
   /**
     @internal
   */
-  void addExternalMedia( const QString &absolutePart, const QString &relativePart );
+  void addExternalMedia(const QString &absolutePart,
+                        const QString &relativePart);
 
   /**
     @internal
@@ -211,7 +223,7 @@ public:
 
     The Context takes ownerwhip of the localizer.
   */
-  void setLocalizer( QSharedPointer<AbstractLocalizer> localizer );
+  void setLocalizer(QSharedPointer<AbstractLocalizer> localizer);
 
   /**
     Returns the localizer currently in use.
@@ -221,22 +233,21 @@ public:
   /**
     Returns the external media encountered in the Template while rendering.
   */
-  QList<QPair<QString, QString> > externalMedia() const;
+  QList<QPair<QString, QString>> externalMedia() const;
 
   /**
     The type of urls to external media that should be put in the template.
   */
-  enum UrlType
-  {
-    AbsoluteUrls,   ///< Absolute URLs should be put in the template.
-    RelativeUrls    ///< Relative URLs should be put in the template.
+  enum UrlType {
+    AbsoluteUrls, ///< Absolute URLs should be put in the template.
+    RelativeUrls  ///< Relative URLs should be put in the template.
   };
 
   /**
     Sets the type of external media URL to be used in the template to @p type.
     @see @ref media_finder_tag
   */
-  void setUrlType( UrlType type );
+  void setUrlType(UrlType type);
 
   /**
     The type of URL used in the template.
@@ -244,10 +255,11 @@ public:
   UrlType urlType() const;
 
   /**
-    Sets the relative path to external media to be used in templates to @p relativePath
+    Sets the relative path to external media to be used in templates to @p
+    relativePath
     @see @ref media_finder_tag
   */
-  void setRelativeMediaPath( const QString &relativePath );
+  void setRelativeMediaPath(const QString &relativePath);
 
   /**
     The relative path to external media to be used in templates.
@@ -255,17 +267,18 @@ public:
   QString relativeMediaPath() const;
 
   /**
-   * Returns a modifiable RenderContext for the Node @p scopeNode. This may be used to make
-   * Template rendering threadsafe so that render state does not need to be stored in the
+   * Returns a modifiable RenderContext for the Node @p scopeNode. This may be
+   * used to make
+   * Template rendering threadsafe so that render state does not need to be
+   * stored in the
    * Node implementation itself.
    */
-  RenderContext* renderContext() const;
+  RenderContext *renderContext() const;
 
 private:
-  Q_DECLARE_PRIVATE( Context )
-  ContextPrivate * const d_ptr;
+  Q_DECLARE_PRIVATE(Context)
+  ContextPrivate *const d_ptr;
 };
-
 }
 
 #endif

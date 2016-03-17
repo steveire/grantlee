@@ -22,28 +22,27 @@
 
 #include <grantlee_templates.h>
 
-
-#include <QtCore/QBuffer>
-#include <QtCore/QFile>
-#include <QtCore/QDebug>
-#include <QtCore/QEventLoop>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-#include <QXmlQuery>
-#include <QXmlResultItems>
 #include <QAbstractXmlNodeModel>
 #include <QXmlNodeModelIndex>
+#include <QXmlQuery>
+#include <QXmlResultItems>
+#include <QtCore/QBuffer>
+#include <QtCore/QDebug>
+#include <QtCore/QEventLoop>
+#include <QtCore/QFile>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
 
 Q_DECLARE_METATYPE(QXmlQuery)
 
-RssFeedNodeFactory::RssFeedNodeFactory(QObject* parent)
-  : Grantlee::AbstractNodeFactory(parent)
+RssFeedNodeFactory::RssFeedNodeFactory(QObject *parent)
+    : Grantlee::AbstractNodeFactory(parent)
 {
-
 }
 
-Grantlee::Node* RssFeedNodeFactory::getNode(const QString& tagContent, Grantlee::Parser* p) const
+Grantlee::Node *RssFeedNodeFactory::getNode(const QString &tagContent,
+                                            Grantlee::Parser *p) const
 {
   QStringList expr = smartSplit(tagContent);
   Grantlee::FilterExpression url(expr.at(1), p);
@@ -51,7 +50,7 @@ Grantlee::Node* RssFeedNodeFactory::getNode(const QString& tagContent, Grantlee:
 
   RssFeedNode *n = new RssFeedNode(url, query);
 
-  QList<Grantlee::Node*> nodes = p->parse(n, "endrssfeed");
+  QList<Grantlee::Node *> nodes = p->parse(n, "endrssfeed");
   p->takeNextToken();
 
   n->setChildNodes(nodes);
@@ -59,28 +58,31 @@ Grantlee::Node* RssFeedNodeFactory::getNode(const QString& tagContent, Grantlee:
   return n;
 }
 
-RssFeedNode::RssFeedNode(const Grantlee::FilterExpression& url, const Grantlee::FilterExpression& query, QObject* parent)
-  : Grantlee::Node(parent), m_url(url), m_query(query)
+RssFeedNode::RssFeedNode(const Grantlee::FilterExpression &url,
+                         const Grantlee::FilterExpression &query,
+                         QObject *parent)
+    : Grantlee::Node(parent), m_url(url), m_query(query)
 {
-
 }
 
-void RssFeedNode::setChildNodes(QList< Grantlee::Node* > childNodes)
+void RssFeedNode::setChildNodes(QList<Grantlee::Node *> childNodes)
 {
   m_childNodes = childNodes;
 }
 
-void RssFeedNode::render(Grantlee::OutputStream* stream, Grantlee::Context* c) const
+void RssFeedNode::render(Grantlee::OutputStream *stream,
+                         Grantlee::Context *c) const
 {
-  QNetworkAccessManager *mgr = new QNetworkAccessManager(const_cast<RssFeedNode*>(this));
+  QNetworkAccessManager *mgr
+      = new QNetworkAccessManager(const_cast<RssFeedNode *>(this));
   QUrl url(Grantlee::getSafeString(m_url.resolve(c)));
   QNetworkReply *reply = mgr->get(QNetworkRequest(url));
   QEventLoop eLoop;
-  connect( mgr, SIGNAL( finished( QNetworkReply * ) ), &eLoop, SLOT( quit() ) );
-  eLoop.exec( QEventLoop::ExcludeUserInputEvents );
+  connect(mgr, SIGNAL(finished(QNetworkReply *)), &eLoop, SLOT(quit()));
+  eLoop.exec(QEventLoop::ExcludeUserInputEvents);
 
   c->push();
-  foreach(Grantlee::Node *n, m_childNodes) {
+  foreach (Grantlee::Node *n, m_childNodes) {
     if (!n->inherits(XmlNamespaceNode::staticMetaObject.className()))
       continue;
     Grantlee::OutputStream _dummy;
@@ -98,14 +100,19 @@ void RssFeedNode::render(Grantlee::OutputStream* stream, Grantlee::Context* c) c
   QHash<QString, QVariant> h = c->lookup("_ns").toHash();
   QHash<QString, QVariant>::const_iterator it = h.constBegin();
   const QHash<QString, QVariant>::const_iterator end = h.constEnd();
-  for ( ; it != end; ++it ) {
+  for (; it != end; ++it) {
     if (it.key().isEmpty()) {
-      ns += QStringLiteral( "declare default element namespace " ) + QLatin1Literal( " \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral("declare default element namespace ")
+            + QLatin1Literal(" \"") + it.value().toString()
+            + QLatin1Literal("\";\n");
     } else {
-      ns += QStringLiteral( "declare namespace " ) + it.key() + QLatin1Literal( " = \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral("declare namespace ") + it.key()
+            + QLatin1Literal(" = \"") + it.value().toString()
+            + QLatin1Literal("\";\n");
     }
   }
-  query.setQuery(ns + "doc($inputDocument)" + Grantlee::getSafeString(m_query.resolve(c)).get());
+  query.setQuery(ns + "doc($inputDocument)"
+                 + Grantlee::getSafeString(m_query.resolve(c)).get());
 
   QXmlResultItems result;
   query.evaluateTo(&result);
@@ -113,38 +120,36 @@ void RssFeedNode::render(Grantlee::OutputStream* stream, Grantlee::Context* c) c
   QXmlItem item(result.next());
   int count = 0;
   while (!item.isNull()) {
-      if (count++ > 20)
-        break;
-      query.setFocus(item);
-      c->push();
-      foreach(Grantlee::Node *n, m_childNodes) {
-        if (n->inherits(XmlNamespaceNode::staticMetaObject.className()))
-          continue;
-        c->insert("_q", QVariant::fromValue(query));
-        n->render(stream, c);
-      }
-      c->pop();
-      item = result.next();
+    if (count++ > 20)
+      break;
+    query.setFocus(item);
+    c->push();
+    foreach (Grantlee::Node *n, m_childNodes) {
+      if (n->inherits(XmlNamespaceNode::staticMetaObject.className()))
+        continue;
+      c->insert("_q", QVariant::fromValue(query));
+      n->render(stream, c);
+    }
+    c->pop();
+    item = result.next();
   }
   c->pop();
 }
 
-XmlRoleNodeFactory::XmlRoleNodeFactory(QObject* parent)
-{
+XmlRoleNodeFactory::XmlRoleNodeFactory(QObject *parent) {}
 
-}
-
-Grantlee::Node* XmlRoleNodeFactory::getNode(const QString &tagContent, Grantlee::Parser *p) const
+Grantlee::Node *XmlRoleNodeFactory::getNode(const QString &tagContent,
+                                            Grantlee::Parser *p) const
 {
   QStringList expr = smartSplit(tagContent);
   Grantlee::FilterExpression query(expr.at(1), p);
   return new XmlRoleNode(query);
 }
 
-XmlRoleNode::XmlRoleNode(const Grantlee::FilterExpression &query, QObject* parent)
-  : m_query(query), m_count(0)
+XmlRoleNode::XmlRoleNode(const Grantlee::FilterExpression &query,
+                         QObject *parent)
+    : m_query(query), m_count(0)
 {
-
 }
 
 static QString unescape(const QString &_input)
@@ -157,32 +162,35 @@ static QString unescape(const QString &_input)
   return input;
 }
 
-void XmlRoleNode::render(Grantlee::OutputStream *stream, Grantlee::Context *c) const
+void XmlRoleNode::render(Grantlee::OutputStream *stream,
+                         Grantlee::Context *c) const
 {
   QXmlQuery q = c->lookup("_q").value<QXmlQuery>();
   QHash<QString, QVariant> h = c->lookup("_ns").toHash();
   QString ns;
   QHash<QString, QVariant>::const_iterator it = h.constBegin();
   const QHash<QString, QVariant>::const_iterator end = h.constEnd();
-  for ( ; it != end; ++it ) {
+  for (; it != end; ++it) {
     if (it.key().isEmpty()) {
-      ns += QStringLiteral( "declare default element namespace " ) + QLatin1Literal( " \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral("declare default element namespace ")
+            + QLatin1Literal(" \"") + it.value().toString()
+            + QLatin1Literal("\";\n");
     } else {
-      ns += QStringLiteral( "declare namespace " ) + it.key() + QLatin1Literal( " = \"" ) + it.value().toString() + QLatin1Literal( "\";\n" );
+      ns += QStringLiteral("declare namespace ") + it.key()
+            + QLatin1Literal(" = \"") + it.value().toString()
+            + QLatin1Literal("\";\n");
     }
   }
   q.setQuery(ns + Grantlee::getSafeString(m_query.resolve(c)));
   QString s;
   q.evaluateTo(&s);
-  ( *stream ) << unescape(s);
+  (*stream) << unescape(s);
 }
 
-XmlNamespaceNodeFactory::XmlNamespaceNodeFactory(QObject* parent)
-{
+XmlNamespaceNodeFactory::XmlNamespaceNodeFactory(QObject *parent) {}
 
-}
-
-Grantlee::Node* XmlNamespaceNodeFactory::getNode(const QString &tagContent, Grantlee::Parser *p) const
+Grantlee::Node *XmlNamespaceNodeFactory::getNode(const QString &tagContent,
+                                                 Grantlee::Parser *p) const
 {
   QStringList expr = smartSplit(tagContent);
   Grantlee::FilterExpression query(expr.at(1), p);
@@ -192,13 +200,14 @@ Grantlee::Node* XmlNamespaceNodeFactory::getNode(const QString &tagContent, Gran
   return new XmlNamespaceNode(query, name);
 }
 
-XmlNamespaceNode::XmlNamespaceNode(const Grantlee::FilterExpression &query, const QString &name, QObject* parent)
-  : m_query(query), m_name(name)
+XmlNamespaceNode::XmlNamespaceNode(const Grantlee::FilterExpression &query,
+                                   const QString &name, QObject *parent)
+    : m_query(query), m_name(name)
 {
-
 }
 
-void XmlNamespaceNode::render(Grantlee::OutputStream *stream, Grantlee::Context *c) const
+void XmlNamespaceNode::render(Grantlee::OutputStream *stream,
+                              Grantlee::Context *c) const
 {
   QString q = Grantlee::getSafeString(m_query.resolve(c));
   QHash<QString, QVariant> h = c->lookup("_ns").toHash();
@@ -206,7 +215,8 @@ void XmlNamespaceNode::render(Grantlee::OutputStream *stream, Grantlee::Context 
   c->insert("_ns", h);
 }
 
-QVariant ResizeFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant ResizeFilter::doFilter(const QVariant &input, const QVariant &argument,
+                                bool autoescape) const
 {
   QString url = Grantlee::getSafeString(input);
   url.replace("_s", "_z");

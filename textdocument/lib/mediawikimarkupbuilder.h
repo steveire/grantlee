@@ -32,7 +32,6 @@ namespace Grantlee
 class MediaWikiMarkupBuilder : public AbstractMarkupBuilder
 {
 public:
-
   /**
     Creates a new MediaWikiMarkupBuilder
   */
@@ -51,25 +50,26 @@ public:
   void endParagraph() override;
   void addNewline() override;
 
-  void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
+  void beginAnchor(const QString &href = QString(),
+                   const QString &name = QString()) override;
   void endAnchor() override;
 
-  void beginHeader( int level ) override;
-  void endHeader( int level ) override;
+  void beginHeader(int level) override;
+  void endHeader(int level) override;
 
-  void beginList( QTextListFormat::Style type ) override;
+  void beginList(QTextListFormat::Style type) override;
 
   void endList() override;
 
   void beginListItem() override;
   void endListItem() override;
 
-  void appendLiteralText( const QString &text ) override;
+  void appendLiteralText(const QString &text) override;
 
   /**
     Escapes @p text appropriately for MediaWiki.
   */
-  const QString escape( const QString &s );
+  const QString escape(const QString &s);
 
   QString getResult() override;
 
@@ -78,7 +78,6 @@ private:
 
   QString m_text;
 };
-
 }
 
 #endif

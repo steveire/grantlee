@@ -1,27 +1,27 @@
 
 #include "mainwindow.h"
 
-#include <QtCore/QDebug>
 #include <QHBoxLayout>
 #include <QWebView>
+#include <QtCore/QDebug>
 
-#include <grantlee_templates.h>
 #include "grantlee_paths.h"
+#include <grantlee_templates.h>
 
 #include "localrequestmanager.h"
 #include <QCoreApplication>
 
-MainWindow::MainWindow(QWidget* parent)
-  : QWidget(parent)
+MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 {
   QHBoxLayout *layout = new QHBoxLayout(this);
 
   QWebView *wv = new QWebView;
 
   Grantlee::Engine *engine = new Grantlee::Engine(this);
-  engine->addDefaultLibrary( "customplugin" );
+  engine->addDefaultLibrary("customplugin");
 
-  QSharedPointer<Grantlee::FileSystemTemplateLoader> loader(new Grantlee::FileSystemTemplateLoader);
+  QSharedPointer<Grantlee::FileSystemTemplateLoader> loader(
+      new Grantlee::FileSystemTemplateLoader);
   loader->setTemplateDirs(QStringList() << GRANTLEE_TEMPLATE_PATH);
   engine->addTemplateLoader(loader);
 

@@ -32,35 +32,30 @@
 class KDELocalizerPrivate
 {
   KDELocalizerPrivate(KDELocalizer *qq, KLocale *locale)
-    : q_ptr(qq), m_locale(locale ? locale : KGlobal::locale() )
+      : q_ptr(qq), m_locale(locale ? locale : KGlobal::locale())
   {
-
   }
   Q_DECLARE_PUBLIC(KDELocalizer)
-  KDELocalizer * const q_ptr;
+  KDELocalizer *const q_ptr;
 
   QStringList m_applicationCatalogs;
   QStringList m_catalogs;
-  QStack<KLocale*> m_localeStack;
+  QStack<KLocale *> m_localeStack;
   KLocale *m_locale;
 };
 
-KDELocalizer::KDELocalizer(KLocale* locale)
-  : d_ptr(new KDELocalizerPrivate(this, locale))
+KDELocalizer::KDELocalizer(KLocale *locale)
+    : d_ptr(new KDELocalizerPrivate(this, locale))
 {
-
 }
 
-KDELocalizer::~KDELocalizer()
-{
-  delete d_ptr;
-}
+KDELocalizer::~KDELocalizer() { delete d_ptr; }
 
-void KDELocalizer::insertApplicationCatalogs(const QStringList& catalogs)
+void KDELocalizer::insertApplicationCatalogs(const QStringList &catalogs)
 {
   Q_D(KDELocalizer);
   d->m_applicationCatalogs = catalogs;
-  Q_FOREACH(const QString &catalog, d->m_applicationCatalogs) {
+  Q_FOREACH (const QString &catalog, d->m_applicationCatalogs) {
     d->m_locale->insertCatalog(catalog);
   }
 }
@@ -71,7 +66,7 @@ QString KDELocalizer::currentLocale() const
   return d->m_locale->language();
 }
 
-void KDELocalizer::pushLocale(const QString& localeName)
+void KDELocalizer::pushLocale(const QString &localeName)
 {
   Q_D(KDELocalizer);
   d->m_localeStack.push(d->m_locale);
@@ -79,11 +74,12 @@ void KDELocalizer::pushLocale(const QString& localeName)
   QString country;
   if (parts.size() == 2)
     country = parts.at(1).toLower();
-  d->m_locale = new KLocale(KGlobal::mainComponent().catalogName(), localeName, country);
-  Q_FOREACH(const QString &catalog, d->m_applicationCatalogs) {
+  d->m_locale = new KLocale(KGlobal::mainComponent().catalogName(), localeName,
+                            country);
+  Q_FOREACH (const QString &catalog, d->m_applicationCatalogs) {
     d->m_locale->insertCatalog(catalog);
   }
-  Q_FOREACH(const QString &catalog, d->m_catalogs) {
+  Q_FOREACH (const QString &catalog, d->m_catalogs) {
     d->m_locale->insertCatalog(catalog);
   }
 }
@@ -97,7 +93,7 @@ void KDELocalizer::popLocale()
   d->m_localeStack.pop();
 }
 
-void KDELocalizer::loadCatalog(const QString &path, const QString& catalog)
+void KDELocalizer::loadCatalog(const QString &path, const QString &catalog)
 {
   Q_D(KDELocalizer);
   KGlobal::dirs()->addResourceDir("locale", path, true);
@@ -106,16 +102,17 @@ void KDELocalizer::loadCatalog(const QString &path, const QString& catalog)
   d->m_locale->insertCatalog(catalog);
 }
 
-void KDELocalizer::unloadCatalog(const QString& catalog)
+void KDELocalizer::unloadCatalog(const QString &catalog)
 {
   Q_D(KDELocalizer);
-//   Does not exist (probably not necessary either):
+  //   Does not exist (probably not necessary either):
   // KGlobal::dirs()->removeResourceDir("locale", path + '/' + catalog, true);
   d->m_catalogs.removeAll(catalog);
   d->m_locale->removeCatalog(catalog);
 }
 
-QString KDELocalizer::localizeDate(const QDate& date, QLocale::FormatType formatType) const
+QString KDELocalizer::localizeDate(const QDate &date,
+                                   QLocale::FormatType formatType) const
 {
   Q_D(const KDELocalizer);
   KLocale::DateFormat klocaleFormat = KLocale::ShortDate;
@@ -125,7 +122,8 @@ QString KDELocalizer::localizeDate(const QDate& date, QLocale::FormatType format
   return d->m_locale->formatDate(date, klocaleFormat);
 }
 
-QString KDELocalizer::localizeTime(const QTime& time, QLocale::FormatType formatType) const
+QString KDELocalizer::localizeTime(const QTime &time,
+                                   QLocale::FormatType formatType) const
 {
   Q_D(const KDELocalizer);
   KLocale::TimeFormatOptions klocaleFormat = KLocale::TimeDefault;
@@ -135,7 +133,8 @@ QString KDELocalizer::localizeTime(const QTime& time, QLocale::FormatType format
   return d->m_locale->formatLocaleTime(time, klocaleFormat);
 }
 
-QString KDELocalizer::localizeDateTime(const QDateTime& dateTime, QLocale::FormatType formatType) const
+QString KDELocalizer::localizeDateTime(const QDateTime &dateTime,
+                                       QLocale::FormatType formatType) const
 {
   Q_D(const KDELocalizer);
   KLocale::DateFormat klocaleFormat = KLocale::ShortDate;
@@ -145,7 +144,8 @@ QString KDELocalizer::localizeDateTime(const QDateTime& dateTime, QLocale::Forma
   return d->m_locale->formatDateTime(dateTime, klocaleFormat);
 }
 
-QString KDELocalizer::localizeMonetaryValue(qreal value, const QString& currencyCode) const
+QString KDELocalizer::localizeMonetaryValue(qreal value,
+                                            const QString &currencyCode) const
 {
   Q_D(const KDELocalizer);
   KCurrencyCode code(currencyCode);
@@ -164,42 +164,52 @@ QString KDELocalizer::localizeNumber(qreal number) const
   return d->m_locale->formatNumber(number);
 }
 
-static KLocalizedString substituteArguments(const KLocalizedString &_string, const QVariantList &args)
+static KLocalizedString substituteArguments(const KLocalizedString &_string,
+                                            const QVariantList &args)
 {
   KLocalizedString string = _string;
-  Q_FOREACH(const QVariant &arg, args) {
+  Q_FOREACH (const QVariant &arg, args) {
     if (arg.type() == QVariant::Int)
       string = string.subs(arg.toInt());
     else if (arg.type() == QVariant::Double)
       string = string.subs(arg.toDouble());
     else
-        string = string.subs(arg.toString());
+      string = string.subs(arg.toString());
   }
   return string;
 }
 
-QString KDELocalizer::localizeContextString(const QString& string, const QString& context, const QVariantList &arguments ) const
+QString KDELocalizer::localizeContextString(const QString &string,
+                                            const QString &context,
+                                            const QVariantList &arguments) const
 {
   Q_D(const KDELocalizer);
   KLocalizedString localizedString = ki18nc(context.toUtf8(), string.toUtf8());
   return substituteArguments(localizedString, arguments).toString(d->m_locale);
 }
 
-QString KDELocalizer::localizePluralContextString(const QString& string, const QString& pluralForm, const QString& context, const QVariantList &arguments ) const
+QString KDELocalizer::localizePluralContextString(
+    const QString &string, const QString &pluralForm, const QString &context,
+    const QVariantList &arguments) const
 {
   Q_D(const KDELocalizer);
-  KLocalizedString localizedString = ki18ncp(context.toUtf8(), string.toUtf8(), pluralForm.toUtf8());
+  KLocalizedString localizedString
+      = ki18ncp(context.toUtf8(), string.toUtf8(), pluralForm.toUtf8());
   return substituteArguments(localizedString, arguments).toString(d->m_locale);
 }
 
-QString KDELocalizer::localizePluralString(const QString& string, const QString& pluralForm, const QVariantList &arguments ) const
+QString KDELocalizer::localizePluralString(const QString &string,
+                                           const QString &pluralForm,
+                                           const QVariantList &arguments) const
 {
   Q_D(const KDELocalizer);
-  KLocalizedString localizedString = ki18np(string.toUtf8(), pluralForm.toUtf8());
+  KLocalizedString localizedString
+      = ki18np(string.toUtf8(), pluralForm.toUtf8());
   return substituteArguments(localizedString, arguments).toString(d->m_locale);
 }
 
-QString KDELocalizer::localizeString(const QString& string, const QVariantList &arguments ) const
+QString KDELocalizer::localizeString(const QString &string,
+                                     const QVariantList &arguments) const
 {
   Q_D(const KDELocalizer);
   KLocalizedString localizedString = ki18n(string.toUtf8());

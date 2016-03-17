@@ -28,23 +28,21 @@ using namespace Grantlee;
 class CleanHtmlFilter : public Filter
 {
 public:
-  virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+  virtual QVariant doFilter(const QVariant &input,
+                            const QVariant &argument = QVariant(),
+                            bool autoescape = false) const;
 
-  virtual bool isSafe() const
-  {
-    return true;
-  }
+  virtual bool isSafe() const { return true; }
 };
 
 class PlainTextFilter : public Filter
 {
 public:
-  virtual QVariant doFilter(const QVariant& input, const QVariant& argument = QVariant(), bool autoescape = false) const;
+  virtual QVariant doFilter(const QVariant &input,
+                            const QVariant &argument = QVariant(),
+                            bool autoescape = false) const;
 
-  virtual bool isSafe() const
-  {
-    return true;
-  }
+  virtual bool isSafe() const { return true; }
 };
 
 #endif

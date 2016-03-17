@@ -21,9 +21,8 @@
 #ifndef GRANTLEE_PLAINTEXTMARKUPBUILDER_H
 #define GRANTLEE_PLAINTEXTMARKUPBUILDER_H
 
-
 #ifdef Q_OS_WIN
-#pragma warning( disable : 4250 )
+#pragma warning(disable : 4250)
 #endif
 
 #define LETTERSINALPHABET 26
@@ -43,14 +42,16 @@ class PlainTextMarkupBuilderPrivate;
 /// @headerfile plaintextmarkupbuilder.h grantlee/plaintextmarkupbuilder.h
 
 /**
-  @brief The PlainTextHTMLMarkupBuilder creates a simple marked up plain text document.
+  @brief The PlainTextHTMLMarkupBuilder creates a simple marked up plain text
+  document.
 
   This class creates a simple plain text markup.
 
   Text that may be represented as
 
   @code
-    A paragraph with <b>bold</b> text, <i>italic</i> text, and <u>underlined</u> text.
+    A paragraph with <b>bold</b> text, <i>italic</i> text, and <u>underlined</u>
+  text.
   @endcode
 
   would be output as
@@ -59,9 +60,13 @@ class PlainTextMarkupBuilderPrivate;
     A paragraph with *bold* text /italic/ text, and _underlined_ text.
   @endcode
 
-  The markup is intended to be simple, plain and easily human readable. No markup is created for different font-familiy, font-size, foreground or background colors.
+  The markup is intended to be simple, plain and easily human readable. No
+  markup is created for different font-familiy, font-size, foreground or
+  background colors.
 
-  Lists are marked up by preceding the list element with '*' for disc, 'o' for circle, 'X' for square, or a letter or number. Lists are also indented if nested.
+  Lists are marked up by preceding the list element with '*' for disc, 'o' for
+  circle, 'X' for square, or a letter or number. Lists are also indented if
+  nested.
   eg:
 
   @code
@@ -74,11 +79,14 @@ class PlainTextMarkupBuilderPrivate;
     C. Seven
   @endcode
 
-  External references such as external urls and images are represented in the body text as a reference, and references are maintained at the bottom of the output.
+  External references such as external urls and images are represented in the
+  body text as a reference, and references are maintained at the bottom of the
+  output.
 
   Eg,
   @code
-    Here is a link to <a href="http://www.kde.org">KDE</a> and the <a href="http://pim.kde.org">KDEPIM project</a>.
+    Here is a link to <a href="http://www.kde.org">KDE</a> and the <a
+  href="http://pim.kde.org">KDEPIM project</a>.
   @endcode
 
   becomes:
@@ -93,7 +101,8 @@ class PlainTextMarkupBuilderPrivate;
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_TEXTDOCUMENT_EXPORT PlainTextMarkupBuilder : virtual public AbstractMarkupBuilder
+class GRANTLEE_TEXTDOCUMENT_EXPORT PlainTextMarkupBuilder
+    : virtual public AbstractMarkupBuilder
 {
 public:
   /** Construct a new PlainTextHTMLMarkupBuilder. */
@@ -110,36 +119,39 @@ public:
   void beginStrikeout() override;
   void endStrikeout() override;
 
-  void beginAnchor( const QString &href = QString(), const QString &name = QString() ) override;
+  void beginAnchor(const QString &href = QString(),
+                   const QString &name = QString()) override;
 
   void endAnchor() override;
 
-  void beginForeground( const QBrush &brush ) override;
+  void beginForeground(const QBrush &brush) override;
 
   void endForeground() override;
 
-  void beginBackground( const QBrush &brush ) override;
+  void beginBackground(const QBrush &brush) override;
 
   void endBackground() override;
 
-  void beginFontFamily( const QString &family ) override;
+  void beginFontFamily(const QString &family) override;
 
   void endFontFamily() override;
 
-  void beginFontPointSize( int size ) override;
+  void beginFontPointSize(int size) override;
 
   void endFontPointSize() override;
 
-  void beginParagraph( Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0 ) override;
+  void beginParagraph(Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0,
+                      qreal bottom = 0.0, qreal left = 0.0,
+                      qreal right = 0.0) override;
 
   void endParagraph() override;
   void addNewline() override;
 
-  void insertHorizontalRule( int width = -1 ) override;
+  void insertHorizontalRule(int width = -1) override;
 
-  void insertImage( const QString &src, qreal width, qreal height ) override;
+  void insertImage(const QString &src, qreal width, qreal height) override;
 
-  void beginList( QTextListFormat::Style style ) override;
+  void beginList(QTextListFormat::Style style) override;
 
   void endList() override;
 
@@ -155,13 +167,15 @@ public:
 
   void endSubscript() override;
 
-  void beginTable( qreal cellpadding, qreal cellspacing, const QString &width ) override;
+  void beginTable(qreal cellpadding, qreal cellspacing,
+                  const QString &width) override;
 
   void beginTableRow() override;
 
-  void beginTableHeaderCell( const QString &width, int colSpan, int rowSpan ) override;
+  void beginTableHeaderCell(const QString &width, int colSpan,
+                            int rowSpan) override;
 
-  void beginTableCell( const QString &width, int colSpan, int rowSpan ) override;
+  void beginTableCell(const QString &width, int colSpan, int rowSpan) override;
 
   void endTable() override;
 
@@ -171,18 +185,19 @@ public:
 
   void endTableCell() override;
 
-  void beginHeader( int level ) override;
+  void beginHeader(int level) override;
 
-  void endHeader( int level ) override;
+  void endHeader(int level) override;
 
-  void appendLiteralText( const QString &text ) override;
+  void appendLiteralText(const QString &text) override;
 
-  void appendRawText( const QString &text ) override;
+  void appendRawText(const QString &text) override;
 
   /**
-    Adds a reference to @p reference to the internal list of references in the document.
+    Adds a reference to @p reference to the internal list of references in the
+    document.
   */
-  int addReference( const QString &reference );
+  int addReference(const QString &reference);
 
   /**
     Returns the finalised plain text markup, including references at the end.
@@ -190,11 +205,9 @@ public:
   QString getResult() override;
 
 private:
-  PlainTextMarkupBuilderPrivate * const d_ptr;
-  Q_DECLARE_PRIVATE( PlainTextMarkupBuilder )
-
+  PlainTextMarkupBuilderPrivate *const d_ptr;
+  Q_DECLARE_PRIVATE(PlainTextMarkupBuilder)
 };
-
 }
 
 #endif

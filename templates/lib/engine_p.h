@@ -36,17 +36,19 @@ class ScriptableTagLibrary;
 class ScriptableLibraryContainer : public TagLibraryInterface
 {
 public:
-  ScriptableLibraryContainer( const QHash<QString, AbstractNodeFactory*>& factories,
-                              const QHash<QString, Filter *> &filters )
-      : m_nodeFactories( factories ), m_filters( filters ) {
+  ScriptableLibraryContainer(
+      const QHash<QString, AbstractNodeFactory *> &factories,
+      const QHash<QString, Filter *> &filters)
+      : m_nodeFactories(factories), m_filters(filters)
+  {
   }
 
-  void setNodeFactories( const QHash<QString, AbstractNodeFactory*>& factories )
+  void setNodeFactories(const QHash<QString, AbstractNodeFactory *> &factories)
   {
     m_nodeFactories = factories;
   }
 
-  void setFilters( const QHash<QString, Filter*> &filters )
+  void setFilters(const QHash<QString, Filter *> &filters)
   {
     m_filters = filters;
   }
@@ -54,48 +56,52 @@ public:
   // Warning: should only be called by Engine::loadDefaultLibraries
   void clear()
   {
-    qDeleteAll( m_nodeFactories );
-    qDeleteAll( m_filters );
+    qDeleteAll(m_nodeFactories);
+    qDeleteAll(m_filters);
     m_nodeFactories.clear();
     m_filters.clear();
   }
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) override {
-    Q_UNUSED( name );
+  QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
+                                                      = QString()) override
+  {
+    Q_UNUSED(name);
     return m_nodeFactories;
   }
 
-  QHash<QString, Filter*> filters( const QString &name = QString() ) override {
-    Q_UNUSED( name );
+  QHash<QString, Filter *> filters(const QString &name = QString()) override
+  {
+    Q_UNUSED(name);
     return m_filters;
   }
 
 private:
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
-  QHash<QString, Filter*> m_filters;
-
+  QHash<QString, AbstractNodeFactory *> m_nodeFactories;
+  QHash<QString, Filter *> m_filters;
 };
 
 class EnginePrivate
 {
-  EnginePrivate( Engine *engine );
+  EnginePrivate(Engine *engine);
 
-  TagLibraryInterface* loadLibrary( const QString &name, uint minorVersion );
-  QString getScriptLibraryName( const QString &name, uint minorVersion ) const;
+  TagLibraryInterface *loadLibrary(const QString &name, uint minorVersion);
+  QString getScriptLibraryName(const QString &name, uint minorVersion) const;
 #ifdef QT_SCRIPT_LIB
-  ScriptableLibraryContainer* loadScriptableLibrary( const QString &name, uint minorVersion );
+  ScriptableLibraryContainer *loadScriptableLibrary(const QString &name,
+                                                    uint minorVersion);
 #endif
-  PluginPointer<TagLibraryInterface> loadCppLibrary( const QString& name, uint minorVersion );
+  PluginPointer<TagLibraryInterface> loadCppLibrary(const QString &name,
+                                                    uint minorVersion);
 
-  Q_DECLARE_PUBLIC( Engine )
-  Engine * const q_ptr;
+  Q_DECLARE_PUBLIC(Engine)
+  Engine *const q_ptr;
 
-  QHash<QString, PluginPointer<TagLibraryInterface> > m_libraries;
+  QHash<QString, PluginPointer<TagLibraryInterface>> m_libraries;
 #ifdef QT_SCRIPT_LIB
-  QHash<QString, ScriptableLibraryContainer*> m_scriptableLibraries;
+  QHash<QString, ScriptableLibraryContainer *> m_scriptableLibraries;
 #endif
 
-  QList<QSharedPointer<AbstractTemplateLoader> > m_loaders;
+  QList<QSharedPointer<AbstractTemplateLoader>> m_loaders;
   QStringList m_pluginDirs;
   QStringList m_defaultLibraries;
 #ifdef QT_SCRIPT_LIB
@@ -103,7 +109,6 @@ class EnginePrivate
 #endif
   bool m_smartTrimEnabled;
 };
-
 }
 
 #endif

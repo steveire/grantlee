@@ -21,8 +21,8 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include <QTranslator>
 #include <QLibraryInfo>
+#include <QTranslator>
 
 #include <grantlee_templates.h>
 
@@ -32,22 +32,27 @@
 
 static QSharedPointer<Grantlee::AbstractLocalizer> getLocalizer()
 {
-  QSharedPointer<Grantlee::QtLocalizer> localizer = QSharedPointer<Grantlee::QtLocalizer>( new Grantlee::QtLocalizer );
+  QSharedPointer<Grantlee::QtLocalizer> localizer
+      = QSharedPointer<Grantlee::QtLocalizer>(new Grantlee::QtLocalizer);
   localizer->setAppTranslatorPrefix("contacts_");
   localizer->setAppTranslatorPath(qApp->applicationDirPath());
 
-  QStringList locales = QStringList() << "en_US" << "en_GB" << "de_DE" << "fr_FR";
+  QStringList locales = QStringList() << "en_US"
+                                      << "en_GB"
+                                      << "de_DE"
+                                      << "fr_FR";
   if (!locales.contains(QLocale::system().name()))
     locales.append(QLocale::system().name());
-  Q_FOREACH(const QString &localeName, locales) {
+  Q_FOREACH (const QString &localeName, locales) {
     QTranslator *qtTranslator = new QTranslator;
     qtTranslator->load("qt_" + localeName,
-            QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+                       QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     qtTranslator->setObjectName("qt_" + localeName);
     localizer->installTranslator(qtTranslator, localeName);
 
     QTranslator *myappTranslator = new QTranslator;
-    myappTranslator->load("contacts_" + localeName + ".qm", qApp->applicationDirPath());
+    myappTranslator->load("contacts_" + localeName + ".qm",
+                          qApp->applicationDirPath());
     myappTranslator->setObjectName("contacts_" + localeName);
     localizer->installTranslator(myappTranslator, localeName);
   }
@@ -55,18 +60,17 @@ static QSharedPointer<Grantlee::AbstractLocalizer> getLocalizer()
   return localizer.staticCast<Grantlee::AbstractLocalizer>();
 }
 
-template<>
-void AppMainWindow<Grantlee::QtLocalizer>::initLocalizer()
+template <> void AppMainWindow<Grantlee::QtLocalizer>::initLocalizer()
 {
   m_localizer = getLocalizer();
 }
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    AppMainWindow<Grantlee::QtLocalizer> win(TEMPLATE_DIR);
-    win.show();
+  AppMainWindow<Grantlee::QtLocalizer> win(TEMPLATE_DIR);
+  win.show();
 
-    return app.exec();
+  return app.exec();
 }

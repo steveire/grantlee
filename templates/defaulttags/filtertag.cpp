@@ -20,58 +20,57 @@
 
 #include "filtertag.h"
 
-#include "filterexpression.h"
 #include "../lib/exception.h"
+#include "filterexpression.h"
 #include "parser.h"
 #include "util.h"
 
-FilterNodeFactory::FilterNodeFactory()
-{
+FilterNodeFactory::FilterNodeFactory() {}
 
-}
-
-Grantlee::Node* FilterNodeFactory::getNode( const QString& tagContent, Grantlee::Parser* p ) const
+Grantlee::Node *FilterNodeFactory::getNode(const QString &tagContent,
+                                           Grantlee::Parser *p) const
 {
-  auto expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
+  auto expr = tagContent.split(QLatin1Char(' '), QString::SkipEmptyParts);
 
   expr.removeFirst();
 
-  auto expression = expr.join( QChar::fromLatin1( ' ' ) );
-  FilterExpression fe( QStringLiteral( "var|%1" ).arg( expression ), p );
+  auto expression = expr.join(QChar::fromLatin1(' '));
+  FilterExpression fe(QStringLiteral("var|%1").arg(expression), p);
 
   auto filters = fe.filters();
-  if ( filters.contains( QStringLiteral( "safe" ) ) || filters.contains( QStringLiteral( "escape" ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Use the \"autoescape\" tag instead." ) );
+  if (filters.contains(QStringLiteral("safe"))
+      || filters.contains(QStringLiteral("escape"))) {
+    throw Grantlee::Exception(
+        TagSyntaxError, QStringLiteral("Use the \"autoescape\" tag instead."));
   }
 
-  auto n = new FilterNode( fe, p );
+  auto n = new FilterNode(fe, p);
 
-  auto filterNodes = p->parse( n, QStringLiteral( "endfilter" ) );
+  auto filterNodes = p->parse(n, QStringLiteral("endfilter"));
   p->removeNextToken();
 
-  n->setNodeList( filterNodes );
+  n->setNodeList(filterNodes);
   return n;
 }
 
-FilterNode::FilterNode( const FilterExpression &fe, QObject *parent )
-    : Node( parent ), m_fe( fe )
+FilterNode::FilterNode(const FilterExpression &fe, QObject *parent)
+    : Node(parent), m_fe(fe)
 {
-
 }
 
-void FilterNode::setNodeList(const NodeList& filterList )
+void FilterNode::setNodeList(const NodeList &filterList)
 {
   m_filterList = filterList;
 }
 
-void FilterNode::render( OutputStream *stream, Context* c ) const
+void FilterNode::render(OutputStream *stream, Context *c) const
 {
   QString output;
-  QTextStream textStream( &output );
-  auto temp = stream->clone( &textStream );
-  m_filterList.render( temp.data(), c );
+  QTextStream textStream(&output);
+  auto temp = stream->clone(&textStream);
+  m_filterList.render(temp.data(), c);
   c->push();
-  c->insert( QStringLiteral( "var" ), output );
-  m_fe.resolve( stream, c );
+  c->insert(QStringLiteral("var"), output);
+  m_fe.resolve(stream, c);
   c->pop();
 }

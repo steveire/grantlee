@@ -25,75 +25,77 @@
 
 #include <QtScript/QScriptEngine>
 
-ScriptableFilter::ScriptableFilter( const QScriptValue &filterObject, QScriptEngine *engine )
-    : m_filterObject( filterObject ), m_scriptEngine( engine )
+ScriptableFilter::ScriptableFilter(const QScriptValue &filterObject,
+                                   QScriptEngine *engine)
+    : m_filterObject(filterObject), m_scriptEngine(engine)
 {
 }
 
-ScriptableFilter::~ScriptableFilter()
-{
-
-}
+ScriptableFilter::~ScriptableFilter() {}
 
 bool ScriptableFilter::isSafe() const
 {
-  auto safety = m_filterObject.property( QStringLiteral( "isSafe" ) );
-  if ( safety.isBool() ) {
+  auto safety = m_filterObject.property(QStringLiteral("isSafe"));
+  if (safety.isBool()) {
     return safety.toBool();
   }
   return false;
 }
 
-QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argument, bool autoescape ) const
+QVariant ScriptableFilter::doFilter(const QVariant &input,
+                                    const QVariant &argument,
+                                    bool autoescape) const
 {
-  Q_UNUSED( autoescape )
+  Q_UNUSED(autoescape)
   QScriptValueList args;
-  if ( input.userType() == qMetaTypeId<QVariantList>() ) {
+  if (input.userType() == qMetaTypeId<QVariantList>()) {
     auto inputList = input.value<QVariantList>();
-    auto array = m_scriptEngine->newArray( inputList.size() );
-    for ( auto i = 0; i < inputList.size(); ++i ) {
-      if ( inputList.at( i ).canConvert<QObject*>() ) {
-        array.setProperty( i, m_scriptEngine->newQObject( inputList.at( i ).value<QObject*>() ) );
+    auto array = m_scriptEngine->newArray(inputList.size());
+    for (auto i = 0; i < inputList.size(); ++i) {
+      if (inputList.at(i).canConvert<QObject *>()) {
+        array.setProperty(
+            i, m_scriptEngine->newQObject(inputList.at(i).value<QObject *>()));
       } else {
-        array.setProperty( i, m_scriptEngine->newVariant( inputList.at( i ) ) );
+        array.setProperty(i, m_scriptEngine->newVariant(inputList.at(i)));
       }
     }
     args << array;
   } else {
-    if ( isSafeString( input ) ) {
-      auto ssObj = new ScriptableSafeString( m_scriptEngine );
-      ssObj->setContent( getSafeString( input ) );
-      args << m_scriptEngine->newQObject( ssObj );
-    } else if ( input.canConvert<QObject*>() ) {
-      args << m_scriptEngine->newQObject( input.value<QObject*>() );
+    if (isSafeString(input)) {
+      auto ssObj = new ScriptableSafeString(m_scriptEngine);
+      ssObj->setContent(getSafeString(input));
+      args << m_scriptEngine->newQObject(ssObj);
+    } else if (input.canConvert<QObject *>()) {
+      args << m_scriptEngine->newQObject(input.value<QObject *>());
     } else {
-      args << m_scriptEngine->newVariant( input );
+      args << m_scriptEngine->newVariant(input);
     }
   }
 
-  if ( argument.userType() == qMetaTypeId<SafeString>() ) {
-    auto ssObj = new ScriptableSafeString( m_scriptEngine );
-    ssObj->setContent( getSafeString( argument ) );
-    args << m_scriptEngine->newQObject( ssObj );
+  if (argument.userType() == qMetaTypeId<SafeString>()) {
+    auto ssObj = new ScriptableSafeString(m_scriptEngine);
+    ssObj->setContent(getSafeString(argument));
+    args << m_scriptEngine->newQObject(ssObj);
   } else {
-    args << m_scriptEngine->newVariant( argument );
+    args << m_scriptEngine->newVariant(argument);
   }
   auto filterObject = m_filterObject;
-  auto returnValue = filterObject.call( QScriptValue(), args );
+  auto returnValue = filterObject.call(QScriptValue(), args);
 
-  if ( returnValue.isString() ) {
-    return getSafeString( returnValue.toString() );
-  } else if ( returnValue.isQObject() ) {
-    auto returnedObject = qscriptvalue_cast<QObject *>( returnValue );
-    auto returnedStringObject = qobject_cast<ScriptableSafeString*>( returnedObject );
-    if ( !returnedStringObject )
+  if (returnValue.isString()) {
+    return getSafeString(returnValue.toString());
+  } else if (returnValue.isQObject()) {
+    auto returnedObject = qscriptvalue_cast<QObject *>(returnValue);
+    auto returnedStringObject
+        = qobject_cast<ScriptableSafeString *>(returnedObject);
+    if (!returnedStringObject)
       return QVariant();
     auto returnedString = returnedStringObject->wrappedString();
     return returnedString;
-  } else if ( returnValue.isVariant() ) {
-    return qscriptvalue_cast<QVariant>( returnValue );
-  } else if ( returnValue.isArray() ) {
-    return qscriptvalue_cast<QVariantList>( returnValue );
+  } else if (returnValue.isVariant()) {
+    return qscriptvalue_cast<QVariant>(returnValue);
+  } else if (returnValue.isArray()) {
+    return qscriptvalue_cast<QVariantList>(returnValue);
   }
   return QVariant();
 }

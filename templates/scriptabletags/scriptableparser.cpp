@@ -23,51 +23,35 @@
 
 #include "parser.h"
 
-
-ScriptableParser::ScriptableParser( Grantlee::Parser* p, QObject* parent )
-    : QObject( parent ), m_p( p )
+ScriptableParser::ScriptableParser(Grantlee::Parser *p, QObject *parent)
+    : QObject(parent), m_p(p)
 {
 }
 
-void ScriptableParser::removeNextToken()
+void ScriptableParser::removeNextToken() { m_p->removeNextToken(); }
+
+bool ScriptableParser::hasNextToken() const { return m_p->hasNextToken(); }
+
+void ScriptableParser::loadLib(const QString &name) { m_p->loadLib(name); }
+
+Token ScriptableParser::takeNextToken() { return m_p->takeNextToken(); }
+
+void ScriptableParser::skipPast(const QString &tag) { m_p->skipPast(tag); }
+
+QObjectList ScriptableParser::parse(QObject *parent, const QString &stopAt)
 {
-  m_p->removeNextToken();
+  return parse(parent, QStringList() << stopAt);
 }
 
-bool ScriptableParser::hasNextToken() const
+QObjectList ScriptableParser::parse(QObject *parent, const QStringList &stopAt)
 {
-  return m_p->hasNextToken();
-}
+  auto node = qobject_cast<Node *>(parent);
+  Q_ASSERT(node);
 
-void ScriptableParser::loadLib( const QString& name )
-{
-  m_p->loadLib( name );
-}
-
-Token ScriptableParser::takeNextToken()
-{
-  return m_p->takeNextToken();
-}
-
-void ScriptableParser::skipPast( const QString& tag )
-{
-  m_p->skipPast( tag );
-}
-
-QObjectList ScriptableParser::parse( QObject *parent, const QString& stopAt )
-{
-  return parse( parent, QStringList() << stopAt );
-}
-
-QObjectList ScriptableParser::parse( QObject *parent, const QStringList& stopAt )
-{
-  auto node = qobject_cast<Node*>( parent );
-  Q_ASSERT( node );
-
-  auto nodeList = m_p->parse( node, stopAt );
+  auto nodeList = m_p->parse(node, stopAt);
   QObjectList objList;
-  QListIterator<Node*> it( nodeList );
-  while ( it.hasNext() ) {
+  QListIterator<Node *> it(nodeList);
+  while (it.hasNext()) {
     objList << it.next();
   }
   return objList;

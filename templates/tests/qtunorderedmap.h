@@ -29,16 +29,13 @@
 #include <tr1/unordered_map>
 #endif
 
-template <typename Key>
-struct QtHasher {
-  size_t operator()( Key k ) const {
-    return qHash( k );
-  }
+template <typename Key> struct QtHasher {
+  size_t operator()(Key k) const { return qHash(k); }
 };
 
-template<typename Key, typename Value>
-struct QtUnorderedMap : public std::tr1::unordered_map<Key, Value, QtHasher<Key> > {
-
+template <typename Key, typename Value>
+struct QtUnorderedMap
+    : public std::tr1::unordered_map<Key, Value, QtHasher<Key>> {
 };
 
 #endif

@@ -30,17 +30,17 @@ class FirstOfNodeFactory : public AbstractNodeFactory
 public:
   FirstOfNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const override;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class FirstOfNode : public Node
 {
   Q_OBJECT
 public:
-  explicit FirstOfNode( const QList<FilterExpression> &list, QObject *parent = 0 );
+  explicit FirstOfNode(const QList<FilterExpression> &list,
+                       QObject *parent = 0);
 
-  void render( OutputStream *stream, Context *c ) const override;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   QList<FilterExpression> m_variableList;

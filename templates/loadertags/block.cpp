@@ -27,108 +27,114 @@
 #include "template.h"
 #include "util.h"
 
-static const char * const __loadedBlocks = "__loadedBlocks";
+static const char *const __loadedBlocks = "__loadedBlocks";
 
 // Terrible hack warning.
 #define BLOCK_CONTEXT_KEY 0
 
-BlockNodeFactory::BlockNodeFactory( QObject *parent ) : AbstractNodeFactory( parent )
+BlockNodeFactory::BlockNodeFactory(QObject *parent)
+    : AbstractNodeFactory(parent)
 {
-
 }
 
-Node* BlockNodeFactory::getNode( const QString &tagContent, Parser *p ) const
+Node *BlockNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
-  const auto expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
+  const auto expr = tagContent.split(QLatin1Char(' '), QString::SkipEmptyParts);
 
-  if ( expr.size() != 2 ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "block tag takes one argument" ) );
+  if (expr.size() != 2) {
+    throw Grantlee::Exception(TagSyntaxError,
+                              QStringLiteral("block tag takes one argument"));
   }
 
-  const auto blockName = expr.at( 1 );
+  const auto blockName = expr.at(1);
 
-  auto loadedBlocksVariant = p->property( __loadedBlocks );
+  auto loadedBlocksVariant = p->property(__loadedBlocks);
   QVariantList blockVariantList;
 
-  if ( loadedBlocksVariant.isValid() && loadedBlocksVariant.userType() == qMetaTypeId<QVariantList>() ) {
+  if (loadedBlocksVariant.isValid()
+      && loadedBlocksVariant.userType() == qMetaTypeId<QVariantList>()) {
     blockVariantList = loadedBlocksVariant.value<QVariantList>();
-    QListIterator<QVariant> it( blockVariantList );
-    while ( it.hasNext() ) {
+    QListIterator<QVariant> it(blockVariantList);
+    while (it.hasNext()) {
       const auto blockNodeName = it.next().value<QString>();
 
-      if ( blockNodeName == blockName ) {
-        throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "'block' tag with name '%1' appears more than once." ).arg( blockName ) );
+      if (blockNodeName == blockName) {
+        throw Grantlee::Exception(
+            TagSyntaxError,
+            QStringLiteral("'block' tag with name '%1' appears more than once.")
+                .arg(blockName));
       }
     }
   }
   // Block not already in list.
-  blockVariantList.append( blockName );
-  loadedBlocksVariant = QVariant( blockVariantList );
+  blockVariantList.append(blockName);
+  loadedBlocksVariant = QVariant(blockVariantList);
 
-  p->setProperty( __loadedBlocks, loadedBlocksVariant );
+  p->setProperty(__loadedBlocks, loadedBlocksVariant);
 
-  auto n = new BlockNode( blockName, p );
-  const auto list = p->parse( n, QStringList() << QStringLiteral( "endblock" ) );
+  auto n = new BlockNode(blockName, p);
+  const auto list = p->parse(n, QStringList() << QStringLiteral("endblock"));
 
   auto endBlock = p->takeNextToken();
-  const auto acceptableBlocks = QStringList() << QStringLiteral( "endblock" ) << QStringLiteral( "endblock " ) + blockName;
-  if ( !acceptableBlocks.contains( endBlock.content ) ) {
-      p->invalidBlockTag( endBlock, QStringLiteral("endblock"), acceptableBlocks );
+  const auto acceptableBlocks = QStringList()
+                                << QStringLiteral("endblock")
+                                << QStringLiteral("endblock ") + blockName;
+  if (!acceptableBlocks.contains(endBlock.content)) {
+    p->invalidBlockTag(endBlock, QStringLiteral("endblock"), acceptableBlocks);
   }
 
-  n->setNodeList( list );
+  n->setNodeList(list);
 
   return n;
 }
 
-BlockNode::BlockNode( const QString &name, QObject *parent )
-    : Node( parent ), m_name( name ), m_stream( 0 )
+BlockNode::BlockNode(const QString &name, QObject *parent)
+    : Node(parent), m_name(name), m_stream(0)
 {
-  qRegisterMetaType<Grantlee::SafeString>( "Grantlee::SafeString" );
+  qRegisterMetaType<Grantlee::SafeString>("Grantlee::SafeString");
 }
 
-BlockNode::~BlockNode()
-{
-}
+BlockNode::~BlockNode() {}
 
-void BlockNode::setNodeList( const NodeList &list ) const
-{
-  m_list = list;
-}
+void BlockNode::setNodeList(const NodeList &list) const { m_list = list; }
 
-void BlockNode::render( OutputStream *stream, Context *c ) const
+void BlockNode::render(OutputStream *stream, Context *c) const
 {
-  QVariant &variant = c->renderContext()->data( BLOCK_CONTEXT_KEY );
+  QVariant &variant = c->renderContext()->data(BLOCK_CONTEXT_KEY);
   auto blockContext = variant.value<BlockContext>();
 
   c->push();
 
-  if ( blockContext.isEmpty() ) {
+  if (blockContext.isEmpty()) {
     m_context = c;
     m_stream = stream;
-    c->insert( QStringLiteral( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( this ) ) ) );
-    m_list.render( stream, c );
+    c->insert(QStringLiteral("block"),
+              QVariant::fromValue(
+                  const_cast<QObject *>(static_cast<const QObject *>(this))));
+    m_list.render(stream, c);
     m_stream = 0;
   } else {
-    auto block = static_cast<const BlockNode*>(blockContext.pop( m_name ));
-    variant.setValue( blockContext );
+    auto block = static_cast<const BlockNode *>(blockContext.pop(m_name));
+    variant.setValue(blockContext);
     auto push = block;
-    if ( !block )
+    if (!block)
       block = this;
 
     const auto list = block->m_list;
 
-    block = new BlockNode( block->m_name, 0 );
-    block->setNodeList( list );
+    block = new BlockNode(block->m_name, 0);
+    block->setNodeList(list);
     block->m_context = c;
     block->m_stream = stream;
-    c->insert( QStringLiteral( "block" ), QVariant::fromValue( const_cast<QObject*>(static_cast<const QObject *>( block ) ) ) );
-    list.render( stream, c );
+    c->insert(QStringLiteral("block"),
+              QVariant::fromValue(
+                  const_cast<QObject *>(static_cast<const QObject *>(block))));
+    list.render(stream, c);
 
     delete block;
-    if ( push ) {
-      blockContext.push( m_name, push );
-      variant.setValue( blockContext );
+    if (push) {
+      blockContext.push(m_name, push);
+      variant.setValue(blockContext);
     }
   }
   c->pop();
@@ -136,27 +142,21 @@ void BlockNode::render( OutputStream *stream, Context *c ) const
 
 SafeString BlockNode::getSuper() const
 {
-  if ( m_context->renderContext()->contains( BLOCK_CONTEXT_KEY ) ) {
-    QVariant &variant = m_context->renderContext()->data( BLOCK_CONTEXT_KEY );
+  if (m_context->renderContext()->contains(BLOCK_CONTEXT_KEY)) {
+    QVariant &variant = m_context->renderContext()->data(BLOCK_CONTEXT_KEY);
     const auto blockContext = variant.value<BlockContext>();
-    auto block = blockContext.getBlock( m_name );
-    if ( block ) {
+    auto block = blockContext.getBlock(m_name);
+    if (block) {
       QString superContent;
-      QTextStream superTextStream( &superContent );
-      auto superStream = m_stream->clone( &superTextStream );
-      const_cast<BlockNode*>( this )->render( superStream.data(), m_context );
-      return markSafe( superContent );
+      QTextStream superTextStream(&superContent);
+      auto superStream = m_stream->clone(&superTextStream);
+      const_cast<BlockNode *>(this)->render(superStream.data(), m_context);
+      return markSafe(superContent);
     }
   }
   return SafeString();
 }
 
-NodeList BlockNode::nodeList() const
-{
-  return m_list;
-}
+NodeList BlockNode::nodeList() const { return m_list; }
 
-QString BlockNode::name() const
-{
-  return m_name;
-}
+QString BlockNode::name() const { return m_name; }

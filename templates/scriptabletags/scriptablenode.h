@@ -40,53 +40,49 @@ typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
 
 using namespace Grantlee;
 
-QScriptValue ScriptableNodeConstructor( QScriptContext *context,
-                                        QScriptEngine *engine );
+QScriptValue ScriptableNodeConstructor(QScriptContext *context,
+                                       QScriptEngine *engine);
 
+QScriptValue nodeToScriptValue(QScriptEngine *engine, Node *const &node);
 
-QScriptValue nodeToScriptValue( QScriptEngine *engine, Node* const &node );
-
-void nodeFromScriptValue( const QScriptValue &object, Node* &out );
+void nodeFromScriptValue(const QScriptValue &object, Node *&out);
 
 class ScriptableNode : public Node
 {
   Q_OBJECT
 public:
-  ScriptableNode( QObject* parent = 0 );
-  void setScriptEngine( QScriptEngine* engine );
-  void init( const QScriptValue &concreteNode,
-             const QScriptValue &renderMethod );
+  ScriptableNode(QObject *parent = 0);
+  void setScriptEngine(QScriptEngine *engine);
+  void init(const QScriptValue &concreteNode, const QScriptValue &renderMethod);
 
-  QScriptEngine* engine();
+  QScriptEngine *engine();
 
-  void render( OutputStream *stream, Context *c ) const override;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
-  QScriptEngine* m_scriptEngine;
+  QScriptEngine *m_scriptEngine;
   QScriptValue m_concreteNode;
   QScriptValue m_renderMethod;
 
 public Q_SLOTS:
-  void setNodeList(const QString &name, const QObjectList& );
-
+  void setNodeList(const QString &name, const QObjectList &);
 };
 
 class ScriptableNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  ScriptableNodeFactory( QObject* parent = 0 );
-  void setScriptEngine( QScriptEngine *engine );
+  ScriptableNodeFactory(QObject *parent = 0);
+  void setScriptEngine(QScriptEngine *engine);
 
-  /* reimp */ void setEngine( Grantlee::Engine *engine ) override;
-  void setFactory(const QScriptValue& factoryMethod );
+  /* reimp */ void setEngine(Grantlee::Engine *engine) override;
+  void setFactory(const QScriptValue &factoryMethod);
 
-  Node* getNode( const QString &tagContent, Parser *p = 0 ) const override;
+  Node *getNode(const QString &tagContent, Parser *p = 0) const override;
 
 private:
-  QScriptEngine* m_scriptEngine;
+  QScriptEngine *m_scriptEngine;
   QScriptValue m_factoryMethod;
 };
-
 
 #endif

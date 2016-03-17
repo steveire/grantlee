@@ -22,13 +22,13 @@
 
 #include <QApplication>
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    MainWindow mw;
-    mw.show();
-    mw.resize(1200, 770);
+  MainWindow mw;
+  mw.show();
+  mw.resize(1200, 770);
 
-    return app.exec();
+  return app.exec();
 }

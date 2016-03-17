@@ -31,40 +31,37 @@ class IfNodeFactory : public AbstractNodeFactory
 public:
   IfNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const override;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class IfNode : public Node
 {
   Q_OBJECT
 public:
-  enum LinkType {
-    OrLink,
-    AndLink
-  };
+  enum LinkType { OrLink, AndLink };
 
   /**
   The expression.
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  IfNode(const QList<QPair<bool, FilterExpression> >& boolVars, int linkType, QObject *parent = 0 );
+  IfNode(const QList<QPair<bool, FilterExpression>> &boolVars, int linkType,
+         QObject *parent = 0);
 
-  void setTrueList( const NodeList &trueList );
-  void setFalseList( const NodeList &falseList );
+  void setTrueList(const NodeList &trueList);
+  void setFalseList(const NodeList &falseList);
 
-  void render( OutputStream *stream, Context *c ) const override;
+  void render(OutputStream *stream, Context *c) const override;
 
 protected:
-  void renderTrueList( OutputStream *stream, Context *c ) const;
-  void renderFalseList( OutputStream *stream, Context *c ) const;
+  void renderTrueList(OutputStream *stream, Context *c) const;
+  void renderFalseList(OutputStream *stream, Context *c) const;
 
 private:
-  QList<QPair<bool, FilterExpression > > m_boolVars;
+  QList<QPair<bool, FilterExpression>> m_boolVars;
   NodeList m_trueList;
   NodeList m_falseList;
   int m_linkType;
-
 };
 
 #endif

@@ -34,18 +34,15 @@ namespace Grantlee
 
 class NodePrivate
 {
-  NodePrivate( Node *node )
-      : q_ptr( node ) {
-
-  }
-  Q_DECLARE_PUBLIC( Node )
-  Node * const q_ptr;
+  NodePrivate(Node *node) : q_ptr(node) {}
+  Q_DECLARE_PUBLIC(Node)
+  Node *const q_ptr;
 };
 
 class AbstractNodeFactoryPrivate
 {
-  AbstractNodeFactoryPrivate( AbstractNodeFactory *factory )
-      : q_ptr( factory ) {
+  AbstractNodeFactoryPrivate(AbstractNodeFactory *factory) : q_ptr(factory)
+  {
 #if defined(Q_CC_MSVC)
 // MSVC doesn't like static string concatenations like L"foo" "bar", as
 // results from QStringLiteral, so use QLatin1String here instead.
@@ -53,102 +50,93 @@ class AbstractNodeFactoryPrivate
 #else
 #define STRING_LITERAL QStringLiteral
 #endif
-  smartSplitRe = QRegularExpression(
-                  STRING_LITERAL( "("                   // match
-                    "(?:[^\\s\\\'\\\"]*"                // things that are not whitespace or escaped quote chars
-                      "(?:"                             // followed by
-                        "(?:\""                         // Either a quote starting with "
-                          "(?:[^\"\\\\]|\\\\.)*\""      // followed by anything that is not the end of the quote
-                        "|\'"                           // Or a quote starting with '
-                          "(?:[^\'\\\\]|\\\\.)*\'"      // followed by anything that is not the end of the quote
-                        ")"                             // (End either)
-                        "[^\\s\'\"]*"                   // To the start of the next such fragment
-                      ")+"                              // Perform multiple matches of the above.
-                    ")"                                 // End of quoted string handling.
-                    "|\\S+"                             // Apart from quoted strings, match non-whitespace fragments also
-                  ")"                                   // End match
-                ) );
+    smartSplitRe = QRegularExpression(
+        STRING_LITERAL("("                  // match
+                       "(?:[^\\s\\\'\\\"]*" // things that are not whitespace or
+                                            // escaped quote chars
+                       "(?:"                // followed by
+                       "(?:\""              // Either a quote starting with "
+                       "(?:[^\"\\\\]|\\\\.)*\"" // followed by anything that is
+                                                // not the end of the quote
+                       "|\'"                    // Or a quote starting with '
+                       "(?:[^\'\\\\]|\\\\.)*\'" // followed by anything that is
+                                                // not the end of the quote
+                       ")"                      // (End either)
+                       "[^\\s\'\"]*" // To the start of the next such fragment
+                       ")+"          // Perform multiple matches of the above.
+                       ")"           // End of quoted string handling.
+                       "|\\S+"       // Apart from quoted strings, match
+                                     // non-whitespace fragments also
+                       ")"           // End match
+                       ));
 
 #undef STRING_LITERAL
   }
 
-  Q_DECLARE_PUBLIC( AbstractNodeFactory )
-  AbstractNodeFactory * const q_ptr;
+  Q_DECLARE_PUBLIC(AbstractNodeFactory)
+  AbstractNodeFactory *const q_ptr;
 
 public:
   QRegularExpression smartSplitRe;
 };
-
 }
 
-Node::Node( QObject *parent ) : QObject( parent ),
-    d_ptr( new NodePrivate( this ) )
-{
+Node::Node(QObject *parent) : QObject(parent), d_ptr(new NodePrivate(this)) {}
 
-}
+Node::~Node() { delete d_ptr; }
 
-Node::~Node()
-{
-  delete d_ptr;
-}
-
-void Node::streamValueInContext( OutputStream *stream, const QVariant& input, Context* c ) const
+void Node::streamValueInContext(OutputStream *stream, const QVariant &input,
+                                Context *c) const
 {
   Grantlee::SafeString inputString;
-  if ( input.userType() == qMetaTypeId<QVariantList>() ) {
-    inputString = toString( input.value<QVariantList>() );
-  } else if ( input.userType() == qMetaTypeId<MetaEnumVariable>() ) {
+  if (input.userType() == qMetaTypeId<QVariantList>()) {
+    inputString = toString(input.value<QVariantList>());
+  } else if (input.userType() == qMetaTypeId<MetaEnumVariable>()) {
     const auto mev = input.value<MetaEnumVariable>();
-    if ( mev.value >= 0 )
-      ( *stream ) << QString::number( mev.value );
+    if (mev.value >= 0)
+      (*stream) << QString::number(mev.value);
   } else {
-    inputString = getSafeString( input );
+    inputString = getSafeString(input);
   }
-  if ( c->autoEscape() && !inputString.isSafe() )
-    inputString.setNeedsEscape( true );
+  if (c->autoEscape() && !inputString.isSafe())
+    inputString.setNeedsEscape(true);
 
-  ( *stream ) << inputString;
+  (*stream) << inputString;
 }
 
-TemplateImpl* Node::containerTemplate() const
+TemplateImpl *Node::containerTemplate() const
 {
   auto _parent = parent();
-  auto ti = qobject_cast<TemplateImpl *>( _parent );
-  while ( _parent && !ti ) {
+  auto ti = qobject_cast<TemplateImpl *>(_parent);
+  while (_parent && !ti) {
     _parent = _parent->parent();
-    ti = qobject_cast<TemplateImpl *>( _parent );
+    ti = qobject_cast<TemplateImpl *>(_parent);
   }
-  Q_ASSERT( ti );
+  Q_ASSERT(ti);
   return ti;
 }
 
+NodeList::NodeList() : QList<Grantlee::Node *>(), m_containsNonText(false) {}
 
-NodeList::NodeList()
-    : QList<Grantlee::Node*>(), m_containsNonText( false )
-{
-
-}
-
-NodeList::NodeList( const NodeList &list )
-    : QList<Grantlee::Node*>( list )
+NodeList::NodeList(const NodeList &list) : QList<Grantlee::Node *>(list)
 {
   m_containsNonText = list.m_containsNonText;
 }
 
-NodeList& NodeList::operator=( const NodeList &list )
+NodeList &NodeList::operator=(const NodeList &list)
 {
-  static_cast<QList<Grantlee::Node*>&>(*this) =
-      static_cast<QList<Grantlee::Node*> >(list);
+  static_cast<QList<Grantlee::Node *> &>(*this)
+      = static_cast<QList<Grantlee::Node *>>(list);
   m_containsNonText = list.m_containsNonText;
   return *this;
 }
 
-NodeList::NodeList( const QList<Grantlee::Node *> &list )
-    : QList<Grantlee::Node*>( list )
+NodeList::NodeList(const QList<Grantlee::Node *> &list)
+    : QList<Grantlee::Node *>(list)
 {
-  Q_FOREACH( Grantlee::Node *node, list ) {
-    auto textNode = qobject_cast<TextNode *>( node );
-    if ( !textNode ) {
+  Q_FOREACH (Grantlee::Node *node, list) {
+    auto textNode = qobject_cast<TextNode *>(node);
+    if (!textNode) {
       m_containsNonText = true;
       return;
     }
@@ -156,73 +144,66 @@ NodeList::NodeList( const QList<Grantlee::Node *> &list )
   m_containsNonText = false;
 }
 
-NodeList::~NodeList()
-{
-}
+NodeList::~NodeList() {}
 
-void NodeList::append( Grantlee::Node *node )
+void NodeList::append(Grantlee::Node *node)
 {
-  if ( !m_containsNonText ) {
-    auto textNode = qobject_cast<TextNode *>( node );
-    if ( !textNode )
+  if (!m_containsNonText) {
+    auto textNode = qobject_cast<TextNode *>(node);
+    if (!textNode)
       m_containsNonText = true;
   }
 
-  QList<Grantlee::Node *>::append( node );
+  QList<Grantlee::Node *>::append(node);
 }
 
-void NodeList::append( QList<Grantlee::Node*> nodeList )
+void NodeList::append(QList<Grantlee::Node *> nodeList)
 {
-  if ( !m_containsNonText ) {
-    Q_FOREACH( Grantlee::Node *node, nodeList ) {
-      auto textNode = qobject_cast<TextNode *>( node );
-      if ( !textNode ) {
+  if (!m_containsNonText) {
+    Q_FOREACH (Grantlee::Node *node, nodeList) {
+      auto textNode = qobject_cast<TextNode *>(node);
+      if (!textNode) {
         m_containsNonText = true;
         break;
       }
     }
   }
 
-  QList<Grantlee::Node *>::append( nodeList );
+  QList<Grantlee::Node *>::append(nodeList);
 }
 
-bool NodeList::containsNonText() const
-{
-  return m_containsNonText;
-}
+bool NodeList::containsNonText() const { return m_containsNonText; }
 
-void NodeList::render( OutputStream *stream, Context *c ) const
+void NodeList::render(OutputStream *stream, Context *c) const
 {
-  for ( auto i = 0; i < this->size(); ++i ) {
-    this->at( i )->render( stream, c );
+  for (auto i = 0; i < this->size(); ++i) {
+    this->at(i)->render(stream, c);
   }
 
   return;
 }
 
-AbstractNodeFactory::AbstractNodeFactory( QObject *parent )
-    : QObject( parent ), d_ptr( new AbstractNodeFactoryPrivate( this ) )
+AbstractNodeFactory::AbstractNodeFactory(QObject *parent)
+    : QObject(parent), d_ptr(new AbstractNodeFactoryPrivate(this))
 {
-
 }
 
-AbstractNodeFactory::~AbstractNodeFactory()
-{
-  delete d_ptr;
-}
+AbstractNodeFactory::~AbstractNodeFactory() { delete d_ptr; }
 
-QList< FilterExpression > AbstractNodeFactory::getFilterExpressionList( const QStringList &list, Parser *p ) const
+QList<FilterExpression>
+AbstractNodeFactory::getFilterExpressionList(const QStringList &list,
+                                             Parser *p) const
 {
   QList<FilterExpression> fes;
-  QListIterator<QString> it( list );
-  while ( it.hasNext() ) {
+  QListIterator<QString> it(list);
+  while (it.hasNext()) {
     const auto varString = it.next();
-    fes << FilterExpression( varString, p );
+    fes << FilterExpression(varString, p);
   }
   return fes;
 }
 
-QStringList AbstractNodeFactory::smartSplit( const QString &str ) const
+QStringList AbstractNodeFactory::smartSplit(const QString &str) const
 {
   Q_D(const AbstractNodeFactory);
   QStringList l;

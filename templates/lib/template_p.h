@@ -33,18 +33,17 @@ class Engine;
 
 class TemplatePrivate
 {
-  TemplatePrivate( Engine const *engine, bool smartTrim, TemplateImpl *t )
-      : q_ptr( t ), m_error( NoError ), m_smartTrim( smartTrim )
-      , m_engine( engine )
+  TemplatePrivate(Engine const *engine, bool smartTrim, TemplateImpl *t)
+      : q_ptr(t), m_error(NoError), m_smartTrim(smartTrim), m_engine(engine)
   {
   }
 
   void parse();
-  NodeList compileString( const QString &str );
-  void setError( Error type, const QString &message ) const;
+  NodeList compileString(const QString &str);
+  void setError(Error type, const QString &message) const;
 
-  Q_DECLARE_PUBLIC( TemplateImpl )
-  TemplateImpl * const q_ptr;
+  Q_DECLARE_PUBLIC(TemplateImpl)
+  TemplateImpl *const q_ptr;
 
   mutable Error m_error;
   mutable QString m_errorString;
@@ -54,9 +53,7 @@ class TemplatePrivate
 
   friend class Grantlee::Engine;
   friend class Parser;
-
 };
-
 }
 
 #endif

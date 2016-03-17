@@ -6,17 +6,19 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
 
-#include <grantlee/template.h>
 #include <grantlee/context.h>
+#include <grantlee/template.h>
 
 class TemplateReply : public QNetworkReply
 {
   Q_OBJECT
 public:
-  TemplateReply(const QNetworkRequest &req, const QNetworkAccessManager::Operation op, Grantlee::Template t, Grantlee::Context c, QObject *parent = 0);
+  TemplateReply(const QNetworkRequest &req,
+                const QNetworkAccessManager::Operation op, Grantlee::Template t,
+                Grantlee::Context c, QObject *parent = 0);
 
   virtual void abort();
-  virtual qint64 readData(char* data, qint64 maxlen);
+  virtual qint64 readData(char *data, qint64 maxlen);
   virtual bool atEnd() const;
   virtual qint64 bytesAvailable() const;
   virtual bool canReadLine() const;

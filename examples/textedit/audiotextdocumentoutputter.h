@@ -22,40 +22,42 @@
 #define AUDIOTEXTDOCUMENTDIRECTOR_H
 
 #include <grantlee/markupdirector.h>
-#include <grantlee/texthtmlbuilder.h>
 #include <grantlee/plaintextmarkupbuilder.h>
+#include <grantlee/texthtmlbuilder.h>
 
 #include "audioobject.h"
 
 class AbstractAudioBuilder : virtual public Grantlee::AbstractMarkupBuilder
 {
 public:
-  virtual void addAudioTag( const QString &source ) = 0;
+  virtual void addAudioTag(const QString &source) = 0;
 };
 
-class AudioTextHtmlBuilder : public Grantlee::TextHTMLBuilder, public AbstractAudioBuilder
+class AudioTextHtmlBuilder : public Grantlee::TextHTMLBuilder,
+                             public AbstractAudioBuilder
 {
 public:
   AudioTextHtmlBuilder();
 
-  /* reimp */ void addAudioTag( const QString &source );
+  /* reimp */ void addAudioTag(const QString &source);
 };
 
-class AudioPlainTextBuilder : public Grantlee::PlainTextMarkupBuilder, public AbstractAudioBuilder
+class AudioPlainTextBuilder : public Grantlee::PlainTextMarkupBuilder,
+                              public AbstractAudioBuilder
 {
 public:
   AudioPlainTextBuilder();
 
-  /* reimp */ void addAudioTag( const QString &source );
+  /* reimp */ void addAudioTag(const QString &source);
 };
 
 class AudioTextDocumentDirector : public Grantlee::MarkupDirector
 {
 public:
+  AudioTextDocumentDirector(AbstractAudioBuilder *builder);
 
-  AudioTextDocumentDirector(AbstractAudioBuilder* builder);
-
-  /* reimp */ void processCustomFragment( const QTextFragment& fragment, const QTextDocument* doc);
+  /* reimp */ void processCustomFragment(const QTextFragment &fragment,
+                                         const QTextDocument *doc);
 
 private:
   AbstractAudioBuilder *m_builder;

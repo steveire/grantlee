@@ -23,40 +23,25 @@
 
 #include <QItemDelegate>
 
-static const char * sTypes[] = {
-  "int",
-  "qreal",
-  "QString",
-  "QStringList",
-  "QDateTime",
-  "QPoint",
-  "QFile",
-  "QDir",
-  "QUrl",
-  "QSize",
-  "QRect",
-  "QObject *",
-  "QVariant",
-  "QModelIndex",
-  "QColor",
-  "QWidget *",
-  "QAction *",
-  "QModelIndex"
-};
+static const char *sTypes[]
+    = {"int",       "qreal",     "QString",    "QStringList", "QDateTime",
+       "QPoint",    "QFile",     "QDir",       "QUrl",        "QSize",
+       "QRect",     "QObject *", "QVariant",   "QModelIndex", "QColor",
+       "QWidget *", "QAction *", "QModelIndex"};
 
 class ComboBoxDelegate : public QItemDelegate
 {
   Q_OBJECT
 public:
-  enum Type
-  {
-    NotEditable,
-    Editable
-  };
-  ComboBoxDelegate(const QStringList &data, Type type = NotEditable, QObject* parent = 0);
+  enum Type { NotEditable, Editable };
+  ComboBoxDelegate(const QStringList &data, Type type = NotEditable,
+                   QObject *parent = 0);
 
-  virtual QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-  virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
+  virtual QWidget *createEditor(QWidget *parent,
+                                const QStyleOptionViewItem &option,
+                                const QModelIndex &index) const;
+  virtual QSize sizeHint(const QStyleOptionViewItem &option,
+                         const QModelIndex &index) const;
 
 private:
   mutable QHash<int, QSize> m_sizes;

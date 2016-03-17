@@ -38,11 +38,14 @@ class VariablePrivate;
 
   This class is only relevant to Template tag authors.
 
-  When processing a template tag in a AbstractNodeFactory implementation, it will sometimes make sense
-  to process arguments to the tag as Grantlee::Variables. Note that usually they should be processed as
+  When processing a template tag in a AbstractNodeFactory implementation, it
+  will sometimes make sense
+  to process arguments to the tag as Grantlee::Variables. Note that usually they
+  should be processed as
   FilterExpression objects instead.
 
-  Arguments to the tag can be used to construct Variables, which may then be resolved into the objects they
+  Arguments to the tag can be used to construct Variables, which may then be
+  resolved into the objects they
   represent in the given Context in the render stage.
 
   @author Stephen Kelly <steveire@gmail.com>
@@ -58,12 +61,12 @@ public:
   /**
     Creates a Variable represented by the given @p var
   */
-  explicit Variable( const QString &var );
+  explicit Variable(const QString &var);
 
   /**
     Copy constructor
   */
-  Variable( const Variable &other );
+  Variable(const Variable &other);
 
   /**
     Destructor
@@ -73,7 +76,7 @@ public:
   /**
     Assignment operator.
   */
-  Variable &operator=( const Variable &other );
+  Variable &operator=(const Variable &other);
 
   /**
     Returns whether this Variable is valid.
@@ -83,15 +86,16 @@ public:
   /**
     Returns whether this Variable evaluates to true with the Context @p c.
   */
-  bool isTrue( Context *c ) const;
+  bool isTrue(Context *c) const;
 
   /**
     Resolves this Variable with the Context @p c.
   */
-  QVariant resolve( Context *c ) const;
+  QVariant resolve(Context *c) const;
 
   /**
-    Returns whether this Variable is a constant in the Template. A constant is represented as a static string in the template
+    Returns whether this Variable is a constant in the Template. A constant is
+    represented as a static string in the template
 
     @code
       Text content
@@ -101,12 +105,14 @@ public:
   bool isConstant() const;
 
   /**
-    Returns whether this variable is localized, that is, if it is wrapped with _(). @see @ref i18n_l10n
+    Returns whether this variable is localized, that is, if it is wrapped with
+    _(). @see @ref i18n_l10n
    */
   bool isLocalized() const;
 
   /**
-    Returns whether this variable is a literal string or number. A literal Variable does not have any lookup components.
+    Returns whether this variable is a literal string or number. A literal
+    Variable does not have any lookup components.
    */
   QVariant literal() const;
 
@@ -116,10 +122,9 @@ public:
   QStringList lookups() const;
 
 private:
-  Q_DECLARE_PRIVATE( Variable )
-  VariablePrivate * const d_ptr;
+  Q_DECLARE_PRIVATE(Variable)
+  VariablePrivate *const d_ptr;
 };
-
 }
 
 #endif

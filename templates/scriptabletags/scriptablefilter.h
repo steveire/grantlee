@@ -30,17 +30,17 @@ using namespace Grantlee;
 class ScriptableFilter : public Filter
 {
 public:
-  ScriptableFilter(const QScriptValue& filterObject, QScriptEngine *engine );
+  ScriptableFilter(const QScriptValue &filterObject, QScriptEngine *engine);
   ~ScriptableFilter() override;
 
-  QVariant doFilter( const QVariant &input, const QVariant &argument, bool autoescape = false ) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument,
+                    bool autoescape = false) const override;
 
   bool isSafe() const override;
 
 private:
   QScriptValue m_filterObject;
   QScriptEngine *m_scriptEngine;
-
 };
 
 #endif

@@ -39,27 +39,24 @@ class ScriptableParser : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableParser( Parser *p, QObject* parent = 0 );
+  explicit ScriptableParser(Parser *p, QObject *parent = 0);
 
-  Parser* parser() {
-    return m_p;
-  }
+  Parser *parser() { return m_p; }
 
 public Q_SLOTS:
-  QObjectList parse( QObject *parent, const QString &stopAt );
-  QObjectList parse( QObject *parent, const QStringList &stopAt = QStringList() );
+  QObjectList parse(QObject *parent, const QString &stopAt);
+  QObjectList parse(QObject *parent, const QStringList &stopAt = QStringList());
 
-  void skipPast( const QString &tag );
+  void skipPast(const QString &tag);
 
   Token takeNextToken();
   bool hasNextToken() const;
   void removeNextToken();
 
-  void loadLib( const QString &name );
+  void loadLib(const QString &name);
 
 private:
   Parser *m_p;
-
 };
 
 #endif

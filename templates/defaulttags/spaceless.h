@@ -25,32 +25,29 @@
 
 using namespace Grantlee;
 
-
 class SpacelessNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
   SpacelessNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const override;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class SpacelessNode : public Node
 {
   Q_OBJECT
 public:
-  SpacelessNode( QObject *parent = 0 );
+  SpacelessNode(QObject *parent = 0);
 
-  void setList( const NodeList &nodeList );
+  void setList(const NodeList &nodeList);
 
-  void render( OutputStream *stream, Context *c ) const override;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
-  static QString stripSpacesBetweenTags( const QString &input );
+  static QString stripSpacesBetweenTags(const QString &input);
 
   NodeList m_nodeList;
-
 };
 
 #endif

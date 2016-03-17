@@ -22,44 +22,35 @@
 
 #include "parser.h"
 
-DebugNodeFactory::DebugNodeFactory()
-{
+DebugNodeFactory::DebugNodeFactory() {}
 
+Node *DebugNodeFactory::getNode(const QString &tagContent, Parser *p) const
+{
+  Q_UNUSED(tagContent)
+  return new DebugNode(p);
 }
 
-Node* DebugNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  Q_UNUSED( tagContent )
-  return new DebugNode( p );
-}
+DebugNode::DebugNode(QObject *parent) : Node(parent) {}
 
-
-DebugNode::DebugNode( QObject *parent )
-    : Node( parent )
-{
-
-}
-
-void DebugNode::render( OutputStream *stream, Context *c ) const
+void DebugNode::render(OutputStream *stream, Context *c) const
 {
   QString ret;
   auto i = 0;
-  auto h = c->stackHash( i++ );
+  auto h = c->stackHash(i++);
 
-  ret += QStringLiteral( "\n\nContext:\n" );
-  while ( !h.isEmpty() ) {
-    QHashIterator<QString, QVariant> it( h );
-    while ( it.hasNext() ) {
+  ret += QStringLiteral("\n\nContext:\n");
+  while (!h.isEmpty()) {
+    QHashIterator<QString, QVariant> it(h);
+    while (it.hasNext()) {
       it.next();
-      ret += QStringLiteral( "key " ) + it.key() + QStringLiteral( ", " )
-          + QStringLiteral( "type " )
-          + QLatin1String( it.value().typeName() )
-          + QLatin1Char( '\n' );
+      ret += QStringLiteral("key ") + it.key() + QStringLiteral(", ")
+             + QStringLiteral("type ") + QLatin1String(it.value().typeName())
+             + QLatin1Char('\n');
     }
-    h = c->stackHash( i++ );
+    h = c->stackHash(i++);
   }
 
-  ret += QStringLiteral( "End context:\n\n" );
+  ret += QStringLiteral("End context:\n\n");
 
-  ( *stream ) << ret;
+  (*stream) << ret;
 }
