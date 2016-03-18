@@ -1,3 +1,6 @@
+sudo: required
+dist: trusty
+
 language: cpp
 branches:
   only:
@@ -31,7 +34,7 @@ before_install:
   - if [ -z "$QT_VERSION_FULL" ]; then export QT_VERSION_FULL=551; fi
   - if [ -z "$QT_VERSION_MM" ]; then export QT_VERSION_MM=55; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    sudo apt-add-repository --yes ppa:beineri/opt-qt$QT_VERSION_FULL
+    sudo apt-add-repository --yes ppa:beineri/opt-qt${QT_VERSION_FULL}-trusty
       && sudo apt-get update -qq
       && sudo apt-get install -qq qt${QT_VERSION_MM}base qt${QT_VERSION_MM}script qt${QT_VERSION_MM}tools
       && sudo apt-get install -qq ninja-build clang
