@@ -11,13 +11,28 @@ clone_folder: c:\dev\grantlee
 
 environment:
   matrix:
+  #- CMAKE_GENERATOR: "MinGW Makefiles"
+    #QT5: C:\Qt\5.5\mingw492_32
   - CMAKE_GENERATOR: "Visual Studio 12"
     QT5: C:\Qt\5.5\msvc2013
   - CMAKE_GENERATOR: "Visual Studio 12 Win64"
     QT5: C:\Qt\5.5\msvc2013_64
+  #- CMAKE_GENERATOR: "MinGW Makefiles"
+    #QT5: C:\Qt\5.4\mingw491_32
+  - CMAKE_GENERATOR: "Visual Studio 12"
+    QT5: C:\Qt\5.4\msvc2013_opengl
+  - CMAKE_GENERATOR: "Visual Studio 12 Win64"
+    QT5: C:\Qt\5.4\msvc2013_64_opengl
+  #- CMAKE_GENERATOR: "MinGW Makefiles"
+    #QT5: C:\Qt\5.3\mingw482_32
+  - CMAKE_GENERATOR: "Visual Studio 12"
+    QT5: C:\Qt\5.3\msvc2013_opengl
+  - CMAKE_GENERATOR: "Visual Studio 12 Win64"
+    QT5: C:\Qt\5.3\msvc2013_64_opengl
 
 before_build:
-- set Path=%QT5%\bin;%Path%
+- set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+- set PATH=%QT5%\bin;%PATH%
 
 build:
 
