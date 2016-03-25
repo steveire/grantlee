@@ -65,7 +65,7 @@ Node *CycleNodeFactory::getNode(const QString &tagContent, Parser *p) const
     }
     auto nodeVariant = hash.value(name);
     Q_ASSERT(nodeVariant.canConvert<Node *>());
-    return nodeVariant.value<Node*>();
+    return nodeVariant.value<Node *>();
   }
 
   auto exprSize = expr.size();
