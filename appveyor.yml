@@ -3,6 +3,7 @@ version: '{build}'
 branches:
   only:
     - master
+    - next
 
 init:
   - git config --global core.autocrlf input
