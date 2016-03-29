@@ -1,4 +1,4 @@
-/*
+﻿/*
   This file is part of the Grantlee template system.
 
   Copyright (c) 2010 Stephen Kelly <steveire@gmail.com>
@@ -351,7 +351,7 @@ void TestInternationalization::testLocalizedTemplate_data()
       << QStringLiteral("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
       << QStringLiteral(
              "1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
-      << QStringLiteral("1 000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
+      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
       << dict;
 
   dict.insert(QStringLiteral("integer"), 1000);
@@ -366,7 +366,7 @@ void TestInternationalization::testLocalizedTemplate_data()
       << QStringLiteral("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
       << QStringLiteral(
              "1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
-      << QStringLiteral("1 000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
+      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
       << dict;
 
   dict.insert(QStringLiteral("time"), QTime(4, 5, 6));
@@ -383,7 +383,7 @@ void TestInternationalization::testLocalizedTemplate_data()
       << QStringLiteral(
              "1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
       << QStringLiteral(
-             "1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+             "1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
       << dict;
 
   QTest::newRow("fragment-04")
@@ -410,7 +410,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05")
       << QString::fromUtf8(
              "Today"
@@ -420,7 +420,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05")
       << QString::fromUtf8(
              "Today"
@@ -430,7 +430,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05")
       << QString::fromUtf8(
              "Heute"
@@ -440,17 +440,17 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05")
       << QString::fromUtf8(
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05")
       << dict;
 
@@ -481,7 +481,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
@@ -494,7 +494,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
@@ -507,7 +507,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
@@ -520,20 +520,20 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05")
       << QString::fromUtf8(
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1 000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
+             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
@@ -544,7 +544,7 @@ void TestInternationalization::testLocalizedTemplate_data()
   QTest::newRow("fragment-06")
       << QStringLiteral("{{ _(list.0) }}") << QStringLiteral("1000")
       << QStringLiteral("1,000") << QStringLiteral("1,000")
-      << QStringLiteral("1.000") << QStringLiteral("1 000") << dict;
+      << QStringLiteral("1.000") << QStringLiteral("1\u00A0000") << dict;
 
   dict.clear();
   dict.insert(QStringLiteral("longlong"), (qlonglong)1000);
@@ -557,7 +557,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              "{{ _(longlong) }} {{ _(float) }} {{ _(double) }}{{ _(hash) }}")
       << QStringLiteral("1000 0.60 4.80") << QStringLiteral("1,000 0.60 4.80")
       << QStringLiteral("1,000 0.60 4.80") << QStringLiteral("1.000 0,60 4,80")
-      << QStringLiteral("1 000 0,60 4,80") << dict;
+      << QStringLiteral("1\u00A0000 0,60 4,80") << dict;
 
   QTest::newRow("fragment-08") << QStringLiteral("{{ 'this'|cut:_(\"i\") }}")
                                << QStringLiteral("ths") << QStringLiteral("ths")
@@ -840,7 +840,7 @@ void TestInternationalization::testIntegers_data()
   QTest::newRow("integer-02")
       << 7000 << QStringLiteral("7000") << QStringLiteral("7000")
       << QStringLiteral("7,000") << QStringLiteral("7,000")
-      << QStringLiteral("7.000") << QStringLiteral("7 000");
+      << QStringLiteral("7.000") << QStringLiteral("7\u00A0000");
 }
 
 void TestInternationalization::testFloats()
