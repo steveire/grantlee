@@ -68,6 +68,11 @@ target_compile_features(Grantlee_Templates
     cxx_override
 )
 
+target_compile_definitions(Grantlee_Templates
+  PRIVATE
+    PLUGINS_PREFER_DEBUG_POSTFIX=$<CONFIG:Debug>
+)
+
 if (Qt5Script_FOUND)
   set(scriptabletags_FILES
     scriptablecontext.cpp

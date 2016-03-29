@@ -355,10 +355,21 @@ EnginePrivate::loadCppLibrary(const QString &name, uint minorVersion)
     if (!pluginDir.exists())
       continue;
 
-    const auto list = pluginDir.entryList(QStringList(name + QLatin1Char('*')));
+    auto list = pluginDir.entryList(QStringList(name
+#if PLUGINS_PREFER_DEBUG_POSTFIX
+                                                      + QLatin1Char('d')
+#endif
+                                                      + QLatin1Char('*')));
 
-    if (list.isEmpty())
+    if (list.isEmpty()) {
+#if PLUGINS_PREFER_DEBUG_POSTFIX
+      list = pluginDir.entryList(QStringList(name + QLatin1Char('*')));
+      if (list.isEmpty())
+          continue;
+#else
       continue;
+#endif
+    }
 
     auto pluginPath = pluginDir.absoluteFilePath(list.first());
     auto plugin = PluginPointer<TagLibraryInterface>(pluginPath);
