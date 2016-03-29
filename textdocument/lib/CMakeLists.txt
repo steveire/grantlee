@@ -30,6 +30,18 @@ target_compile_features(Grantlee_TextDocument
   PUBLIC
     cxx_override
 )
+if (CMAKE_GENERATOR MATCHES "Visual Studio")
+  set_property(TARGET Grantlee_TextDocument PROPERTY DEBUG_POSTFIX "d")
+
+  foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER ${cfg} CFG)
+    set_target_properties(Grantlee_TextDocument
+      PROPERTIES
+      LIBRARY_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_BINARY_DIR}"
+      RUNTIME_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_BINARY_DIR}"
+      )
+  endforeach()
+endif()
 
 target_link_libraries(Grantlee_TextDocument
   LINK_PUBLIC Qt5::Gui

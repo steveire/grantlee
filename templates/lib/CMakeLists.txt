@@ -68,6 +68,19 @@ target_compile_features(Grantlee_Templates
     cxx_override
 )
 
+if (CMAKE_GENERATOR MATCHES "Visual Studio")
+
+  set_property(TARGET Grantlee_Templates PROPERTY DEBUG_POSTFIX "d")
+
+  foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER ${cfg} CFG)
+    set_target_properties(Grantlee_Templates
+      PROPERTIES
+      LIBRARY_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_BINARY_DIR}"
+      RUNTIME_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_BINARY_DIR}"
+      )
+  endforeach()
+endif()
 target_compile_definitions(Grantlee_Templates
   PRIVATE
     PLUGINS_PREFER_DEBUG_POSTFIX=$<CONFIG:Debug>
