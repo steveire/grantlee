@@ -20,7 +20,9 @@ environment:
     QT5: C:\Qt\5.5\msvc2013_64
 
 before_build:
-  - set PATH=%QT5%\bin;c:\dev\grantlee\build\templates\lib;c:\dev\grantlee\build\textdocument\lib;%PATH%
+  - set PATH=C:\cygwin\bin;%QT5%\bin;c:\dev\grantlee\build\templates\lib;c:\dev\grantlee\build\textdocument\lib;%PATH%
+  - sed -i "s|std::equal(b, e, lb)|std::equal(b, e,\n#if defined(Q_CC_MSVC)\nstdext::make_unchecked_array_iterator(lb)\n#else\nlb\n#endif\n)|" %QT5%\include\QtCore\qlist.h
+  - set PATH=%PATH:C:\cygwin\bin;=%
   #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 build:
