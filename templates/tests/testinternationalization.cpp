@@ -298,11 +298,13 @@ void TestInternationalization::testStrings_data()
       << QString() << QString()
       << (QVariantList() << 1000 << QDate(2005, 5, 7) << 0.6 << 4.8);
 
+#ifndef Q_CC_MSVC
   QTest::newRow("string-16")
       << "Snowman: ☃"
       << "Snowman: ☃"
       << "Schneemann: ☃" << QStringLiteral("bonhomme de neige: ☃") << QString()
       << QString() << QVariantList();
+#endif
 }
 
 typedef QHash<QString, QVariant> Dict;
@@ -386,6 +388,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              "1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
       << dict;
 
+#ifndef Q_CC_MSVC
   QTest::newRow("fragment-04")
       << QString::fromLatin1(
              "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ "
@@ -539,6 +542,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05")
       << dict;
+#endif
 
   dict.insert(QStringLiteral("list"), QVariantList() << 1000);
   QTest::newRow("fragment-06")
