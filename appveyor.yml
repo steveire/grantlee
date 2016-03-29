@@ -98,6 +98,6 @@ build_script:
   - cmake --build . --config Debug
   - cmake --build . --config Release
 
-# test_script:
-#   - cmd: ctest --output-on-failure -C "Debug"
-#   - cmd: ctest --output-on-failure -C "Release"
+test_script:
+  - cmd: ctest --output-on-failure -C "Debug"
+  - cmd: ctest --output-on-failure -C "Release"
