@@ -20,7 +20,7 @@ environment:
     QT5: C:\Qt\5.5\msvc2013_64
 
 before_build:
-- set Path=%QT5%\bin;%Path%
+  - set PATH=%QT5%\bin;c:\dev\grantlee\build\templates\lib;c:\dev\grantlee\build\textdocument\lib;%PATH%
 
 build:
 
