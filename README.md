@@ -2,7 +2,8 @@
 The Grantlee Libraries
 ======================
 
-[![Build Status](https://travis-ci.org/steveire/grantlee.svg?branch=master)](https://travis-ci.org/steveire/grantlee)
+[![OSX/Linux Build Status](https://travis-ci.org/steveire/grantlee.svg?branch=master)](https://travis-ci.org/steveire/grantlee)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/steveire/grantlee?branch=master&svg=true)](https://ci.appveyor.com/project/steveire/grantlee/branch/master)
 
 * About Grantlee
 * Installation
