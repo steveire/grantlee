@@ -24,6 +24,9 @@
 #include "metaenumvariable_p.h"
 #include "parser.h"
 
+#define FOR_LOOP "forloop"
+#define PARENT_LOOP "parentloop"
+
 ForNodeFactory::ForNodeFactory() {}
 
 Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
@@ -110,27 +113,17 @@ void ForNode::setEmptyList(const NodeList &emptyList)
   m_emptyNodeList = emptyList;
 }
 
-static const char forloop[] = "forloop";
-static const char parentloop[] = "parentloop";
-
 void ForNode::insertLoopVariables(Context *c, int listSize, int i)
 {
   // some magic variables injected into the context while rendering.
-  static const auto counter0 = QStringLiteral("counter0");
-  static const auto counter = QStringLiteral("counter");
-  static const auto revcounter0 = QStringLiteral("revcounter0");
-  static const auto revcounter = QStringLiteral("revcounter");
-  static const auto first = QStringLiteral("first");
-  static const auto last = QStringLiteral("last");
-
   auto forloopHash = c->lookup(QStringLiteral("forloop")).value<QVariantHash>();
-  forloopHash.insert(counter0, i);
-  forloopHash.insert(counter, i + 1);
-  forloopHash.insert(revcounter, listSize - i);
-  forloopHash.insert(revcounter0, listSize - i - 1);
-  forloopHash.insert(first, (i == 0));
-  forloopHash.insert(last, (i == listSize - 1));
-  c->insert(QLatin1String(forloop), forloopHash);
+  forloopHash.insert(QStringLiteral("counter0"), i);
+  forloopHash.insert(QStringLiteral("counter"), i + 1);
+  forloopHash.insert(QStringLiteral("revcounter"), listSize - i);
+  forloopHash.insert(QStringLiteral("revcounter0"), listSize - i - 1);
+  forloopHash.insert(QStringLiteral("first"), (i == 0));
+  forloopHash.insert(QStringLiteral("last"), (i == listSize - 1));
+  c->insert(QStringLiteral(FOR_LOOP), forloopHash);
 }
 
 void ForNode::renderLoop(OutputStream *stream, Context *c) const
@@ -282,12 +275,12 @@ void ForNode::render(OutputStream *stream, Context *c) const
 {
   QVariantHash forloopHash;
 
-  QVariant parentLoopVariant = c->lookup(QLatin1String(forloop));
+  QVariant parentLoopVariant = c->lookup(QStringLiteral(FOR_LOOP));
   if (parentLoopVariant.isValid()) {
     // This is a nested loop.
     forloopHash = parentLoopVariant.toHash();
-    forloopHash.insert(QLatin1String(parentloop), parentLoopVariant.toHash());
-    c->insert(QLatin1String(forloop), forloopHash);
+    forloopHash.insert(QStringLiteral(PARENT_LOOP), parentLoopVariant.toHash());
+    c->insert(QStringLiteral(FOR_LOOP), forloopHash);
   }
 
   bool unpack = m_loopVars.size() > 1;
