@@ -852,19 +852,15 @@ void TestDefaultTags::testForTag_data()
       << dict << QStringLiteral("xxl") << NoError;
 
   dict.clear();
-  list.clear();
-  QVariantList innerList;
-  innerList << QStringLiteral("one") << 1;
-  list.append(QVariant(innerList));
-  innerList.clear();
-  innerList << QStringLiteral("two") << 2;
-  list.append(QVariant(innerList));
-  dict.insert(QStringLiteral("items"), list);
+
+  QVariantMap map; // Hash has no predictable order
+  map.insert(QStringLiteral("one"), 1);
+  map.insert(QStringLiteral("two"), 2);
+  dict.insert(QStringLiteral("items"), map);
   QTest::newRow("for-tag-unpack01")
       << QStringLiteral(
              "{% for key,value in items %}{{ key }}:{{ value }}/{% endfor %}")
       << dict << QStringLiteral("one:1/two:2/") << NoError;
-
   QTest::newRow("for-tag-unpack03")
       << QStringLiteral(
              "{% for key, value in items %}{{ key }}:{{ value }}/{% endfor %}")
@@ -898,6 +894,8 @@ void TestDefaultTags::testForTag_data()
 
   // Otherwise, silently truncate if the length of loopvars differs to the
   // length of each set of items.
+
+  QVariantList innerList;
 
   dict.clear();
   list.clear();

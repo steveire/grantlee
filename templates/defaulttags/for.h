@@ -51,6 +51,19 @@ public:
 private:
   static void insertLoopVariables(Context *c, int listSize, int i);
   void renderLoop(OutputStream *stream, Context *c) const;
+  inline void renderSequential(OutputStream *stream, Context *c,
+                               QVariant &varFE, bool unpack) const;
+  inline void renderAssociative(OutputStream *stream, Context *c,
+                                QVariant &varFE) const;
+  inline void renderAssociativeItem(OutputStream *stream, Context *c,
+                                    const QString &keyName,
+                                    const QString &valueName,
+                                    const QVariant &key, const QVariant &value,
+                                    int listSize, int i) const;
+  inline void renderAssociativeItemList(OutputStream *stream, Context *c,
+                                        const QString &keyName,
+                                        const QVariantList &values,
+                                        int listSize, int i) const;
 
   QStringList m_loopVars;
   FilterExpression m_filterExpression;

@@ -140,47 +140,11 @@ void ForNode::renderLoop(OutputStream *stream, Context *c) const
   }
 }
 
-void ForNode::render(OutputStream *stream, Context *c) const
+void ForNode::renderSequential(OutputStream *stream, Context *c,
+                               QVariant &varFE, bool unpack) const
 {
-  QVariantHash forloopHash;
-
-  auto parentLoopVariant = c->lookup(QLatin1String(forloop));
-  if (parentLoopVariant.isValid()) {
-    // This is a nested loop.
-    forloopHash = parentLoopVariant.value<QVariantHash>();
-    forloopHash.insert(QLatin1String(parentloop),
-                       parentLoopVariant.value<QVariantHash>());
-    c->insert(QLatin1String(forloop), forloopHash);
-  }
-
-  auto unpack = m_loopVars.size() > 1;
-
-  c->push();
-
-  auto varFE = m_filterExpression.resolve(c);
-
-  if (varFE.userType() == qMetaTypeId<MetaEnumVariable>()) {
-    const auto mev = varFE.value<MetaEnumVariable>();
-
-    if (mev.value != -1) {
-      c->pop();
-      return m_emptyNodeList.render(stream, c);
-    }
-
-    QVariantList list;
-    for (auto row = 0; row < mev.enumerator.keyCount(); ++row) {
-      list << QVariant::fromValue(MetaEnumVariable(mev.enumerator, row));
-    }
-    varFE = list;
-  }
-
-  if (!varFE.canConvert<QVariantList>()) {
-    c->pop();
-    return m_emptyNodeList.render(stream, c);
-  }
-
-  auto iter = varFE.value<QSequentialIterable>();
-  const auto listSize = iter.size();
+  QSequentialIterable iter = varFE.value<QSequentialIterable>();
+  const int listSize = iter.size();
 
   // If it's an iterable type, iterate, otherwise it's a list of one.
   if (listSize < 1) {
@@ -232,4 +196,129 @@ void ForNode::render(OutputStream *stream, Context *c) const
     ++i;
   }
   c->pop();
+}
+
+void ForNode::renderAssociative(OutputStream *stream, Context *c,
+                                QVariant &varFE) const
+{
+  QAssociativeIterable iter = varFE.value<QAssociativeIterable>();
+  const int listSize = iter.size();
+
+  // If it's an iterable type, iterate, otherwise it's a list of one.
+  if (listSize < 1) {
+    c->pop();
+    return m_emptyNodeList.render(stream, c);
+  }
+
+  const QString keyVar = m_loopVars.at(0);
+  QString valueVar;
+  bool singleLoopVar = m_loopVars.size() == 1;
+  if (!singleLoopVar) {
+    valueVar = m_loopVars.at(1);
+  }
+
+  int i = 0;
+  if (m_isReversed == IsReversed) {
+    if (singleLoopVar) {
+      for (QAssociativeIterable::const_iterator it = iter.end() - 1;
+           it != iter.begin() - 1; --it) {
+        renderAssociativeItemList(stream, c, keyVar,
+                                  QVariantList() << it.key() << *it, listSize,
+                                  i++);
+      }
+    } else {
+      for (QAssociativeIterable::const_iterator it = iter.end() - 1;
+           it != iter.begin() - 1; --it) {
+        renderAssociativeItem(stream, c, keyVar, valueVar, it.key(), *it,
+                              listSize, i++);
+      }
+    }
+  } else {
+    if (singleLoopVar) {
+      for (QAssociativeIterable::const_iterator it = iter.begin();
+           it != iter.end(); ++it) {
+        renderAssociativeItemList(stream, c, keyVar,
+                                  QVariantList() << it.key() << *it, listSize,
+                                  i++);
+      }
+    } else {
+      for (QAssociativeIterable::const_iterator it = iter.begin();
+           it != iter.end(); ++it) {
+        renderAssociativeItem(stream, c, keyVar, valueVar, it.key(), *it,
+                              listSize, i++);
+      }
+    }
+  }
+  c->pop();
+}
+
+void ForNode::renderAssociativeItem(OutputStream *stream, Context *c,
+                                    const QString &keyName,
+                                    const QString &valueName,
+                                    const QVariant &key, const QVariant &value,
+                                    int listSize, int i) const
+{
+  insertLoopVariables(c, listSize, i);
+
+  c->insert(keyName, key);
+  c->insert(valueName, value);
+
+  renderLoop(stream, c);
+}
+
+void ForNode::renderAssociativeItemList(OutputStream *stream, Context *c,
+                                        const QString &keyName,
+                                        const QVariantList &values,
+                                        int listSize, int i) const
+{
+  insertLoopVariables(c, listSize, i);
+
+  c->insert(keyName, values);
+
+  renderLoop(stream, c);
+}
+
+void ForNode::render(OutputStream *stream, Context *c) const
+{
+  QVariantHash forloopHash;
+
+  QVariant parentLoopVariant = c->lookup(QLatin1String(forloop));
+  if (parentLoopVariant.isValid()) {
+    // This is a nested loop.
+    forloopHash = parentLoopVariant.toHash();
+    forloopHash.insert(QLatin1String(parentloop), parentLoopVariant.toHash());
+    c->insert(QLatin1String(forloop), forloopHash);
+  }
+
+  bool unpack = m_loopVars.size() > 1;
+
+  c->push();
+
+  QVariant varFE = m_filterExpression.resolve(c);
+
+  if (varFE.userType() == qMetaTypeId<MetaEnumVariable>()) {
+    const MetaEnumVariable mev = varFE.value<MetaEnumVariable>();
+
+    if (mev.value != -1) {
+      c->pop();
+      return m_emptyNodeList.render(stream, c);
+    }
+
+    QVariantList list;
+    for (int row = 0; row < mev.enumerator.keyCount(); ++row) {
+      list << QVariant::fromValue(MetaEnumVariable(mev.enumerator, row));
+    }
+    varFE = list;
+  }
+
+  if (varFE.canConvert<QVariantList>()) {
+    renderSequential(stream, c, varFE, unpack);
+    return;
+  } else if (varFE.canConvert<QVariantHash>() && m_loopVars.size() <= 2) {
+    renderAssociative(stream, c, varFE);
+    return;
+  }
+
+  c->pop();
+  return m_emptyNodeList.render(stream, c);
 }
