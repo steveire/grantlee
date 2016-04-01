@@ -422,7 +422,11 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("{% if foo or bar %}yes{% else %}no{% endif %}") << dict
       << QStringLiteral("yes") << NoError;
 
-  // TODO: multiple ORs
+  dict.clear();
+  dict.insert(QStringLiteral("baz"), true);
+  QTest::newRow("if-tag-or09")
+      << QStringLiteral("{% if foo or bar or baz %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
 
   // NOT
 
@@ -431,23 +435,13 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow("if-tag-not01")
       << QStringLiteral("{% if not foo %}no{% else %}yes{% endif %}") << dict
       << QStringLiteral("yes") << NoError;
+
+  dict.insert(QStringLiteral("foo"), true);
   QTest::newRow("if-tag-not02")
-      << QStringLiteral("{% if not %}yes{% else %}no{% endif %}") << dict
-      << QStringLiteral("no") << NoError;
+      << QStringLiteral("{% if not not foo %}no{% else %}yes{% endif %}")
+      << dict << QStringLiteral("no") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("not"), true);
-  QTest::newRow("if-tag-not03")
-      << QStringLiteral("{% if not %}yes{% else %}no{% endif %}") << dict
-      << QStringLiteral("yes") << NoError;
-  QTest::newRow("if-tag-not04")
-      << QStringLiteral("{% if not not %}no{% else %}yes{% endif %}") << dict
-      << QStringLiteral("yes") << NoError;
-
-  dict.clear();
-  QTest::newRow("if-tag-not05")
-      << QStringLiteral("{% if not not %}no{% else %}yes{% endif %}") << dict
-      << QStringLiteral("no") << NoError;
   QTest::newRow("if-tag-not06")
       << QStringLiteral("{% if foo and not bar %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("no") << NoError;
@@ -650,10 +644,8 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("{% if not foo or not bar %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("yes") << NoError;
 
-  // AND and OR raises a TemplateSyntaxError
-  QTest::newRow("if-tag-error01")
-      << QStringLiteral("{% if foo or bar and baz %}yes{% else %}no{% endif %}")
-      << dict << QString() << TagSyntaxError;
+  QTest::newRow("if-tag-error01") << QStringLiteral("{% if %}yes{% endif %}")
+                                  << dict << QString() << TagSyntaxError;
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), true);
@@ -670,10 +662,19 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("{% if not foo or %}yes{% else %}no{% endif %}") << dict
       << QString() << TagSyntaxError;
   QTest::newRow("if-tag-error06")
-      << QStringLiteral("{% if %}yes{% else %}no{% endif %}") << dict
-      << QString() << TagSyntaxError;
-  QTest::newRow("if-tag-error07") << QStringLiteral("{% if foo %}yes") << dict
-                                  << QString() << UnclosedBlockTagError;
+      << QStringLiteral("{% if abc def %}yes{% endif %}") << dict << QString()
+      << TagSyntaxError;
+  QTest::newRow("if-tag-error07")
+      << QStringLiteral("{% if not %}yes{% endif %}") << dict << QString()
+      << TagSyntaxError;
+  QTest::newRow("if-tag-error08")
+      << QStringLiteral("{% if and %}yes{% endif %}") << dict << QString()
+      << TagSyntaxError;
+  QTest::newRow("if-tag-error09") << QStringLiteral("{% if or %}yes{% endif %}")
+                                  << dict << QString() << TagSyntaxError;
+  QTest::newRow("if-tag-error12")
+      << QStringLiteral("{% if a not b %}yes{% endif %}") << dict << QString()
+      << TagSyntaxError;
 
   // Truthiness
   dict.clear();
