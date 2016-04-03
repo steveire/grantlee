@@ -11,8 +11,8 @@ matrix:
   include:
     - os: osx
       env: CONFIGS="Debug Release" GENERATORS="Makefiles Ninja" COMPILERS="Clang"
-    #- os: osx
-      #env: CONFIGS="Debug_And_Release" GENERATORS="Xcode" COMPILERS="Clang"
+    - os: osx
+      env: CONFIGS="Debug_And_Release" GENERATORS="Xcode" COMPILERS="Clang"
     - os: linux
       env: CONFIGS="Debug Release" GENERATORS="Makefiles Ninja" COMPILERS="GNU Clang"
       addons:
