@@ -55,6 +55,8 @@ set(header_only_sources
 )
 list(APPEND grantlee_templates_SRCS ${header_only_sources})
 
+set_source_files_properties(taglibraryinterface.h PROPERTIES SKIP_AUTOMOC TRUE)
+
 add_library(Grantlee_Templates SHARED
   ${grantlee_templates_SRCS}
 )
