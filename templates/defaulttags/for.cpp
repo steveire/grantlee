@@ -58,7 +58,7 @@ Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
   }
 
   Q_FOREACH (const QString &var, vars) {
-    if (var.isNull())
+    if (var.isEmpty())
       throw Grantlee::Exception(
           TagSyntaxError,
           QStringLiteral("'for' tag received invalid argument"));

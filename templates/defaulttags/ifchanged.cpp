@@ -101,7 +101,7 @@ void IfChangedNode::render(OutputStream *stream, Context *c) const
       || (!watchedString.isEmpty()
           && (watchedString != m_lastSeen.value<QString>()))) {
     auto firstLoop = !m_lastSeen.isValid();
-    if (!watchedString.isNull())
+    if (!watchedString.isEmpty())
       m_lastSeen = watchedString;
     else
       m_lastSeen = watchedVars;
