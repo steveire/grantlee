@@ -50,11 +50,7 @@ public:
 
 private:
   static void insertLoopVariables(Context *c, int listSize, int i);
-  void iterateHash(OutputStream *stream, Context *c,
-                   const QVariantHash &varHash, bool unpack);
   void renderLoop(OutputStream *stream, Context *c) const;
-  void handleHashItem(OutputStream *stream, Context *c, const QString &key,
-                      const QVariant &value, int listSize, int i, bool unpack);
 
   QStringList m_loopVars;
   FilterExpression m_filterExpression;

@@ -852,47 +852,6 @@ void TestDefaultTags::testForTag_data()
       << dict << QStringLiteral("xxl") << NoError;
 
   dict.clear();
-  QVariantHash hash;
-  //   hash.insert( QStringLiteral("one"), 1 );
-  //   hash.insert( QStringLiteral("two"), 2 );
-  //   dict.insert( QStringLiteral("items"), hash );
-  //   QTest::newRow( "for-tag-unpack-dict01" ) << QString::fromLatin1( "{%
-  //   for
-  //   key,value in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-  //
-  //   QTest::newRow( "for-tag-unpack-dict03" ) << QString::fromLatin1( "{%
-  //   for
-  //   key, value in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-  //   QTest::newRow( "for-tag-unpack-dict04" ) << QString::fromLatin1( "{%
-  //   for
-  //   key , value in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-  //   QTest::newRow( "for-tag-unpack-dict05" ) << QString::fromLatin1( "{%
-  //   for
-  //   key ,value in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-  //   QTest::newRow( "for-tag-unpack-dict06" ) << QString::fromLatin1( "{%
-  //   for
-  //   key value in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-  //   QTest::newRow( "for-tag-unpack-dict07" ) << QString::fromLatin1( "{%
-  //   for
-  //   key,,value in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-  //   QTest::newRow( "for-tag-unpack-dict08" ) << QString::fromLatin1( "{%
-  //   for
-  //   key,value, in items %}{{ key }}:{{ value }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-  //
-  //   // Ensure that a single loopvar doesn't truncate the list in val.
-  //   QTest::newRow( "for-tag-unpack-dict09" ) << QString::fromLatin1( "{%
-  //   for
-  //   val in items %}{{ val.0 }}:{{ val.1 }}/{% endfor %}" ) << dict <<
-  //   QString::fromLatin1( "one:1/two:2/" ) << NoError;
-
-  dict.clear();
   list.clear();
   QVariantList innerList;
   innerList << QStringLiteral("one") << 1;

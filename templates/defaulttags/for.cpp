@@ -130,48 +130,6 @@ void ForNode::renderLoop(OutputStream *stream, Context *c) const
   }
 }
 
-void ForNode::handleHashItem(OutputStream *stream, Context *c,
-                             const QString &key, const QVariant &value,
-                             int listSize, int i, bool unpack)
-{
-  QVariantList list;
-  insertLoopVariables(c, listSize, i);
-
-  if (!unpack) {
-    // Iterating over a hash but not unpacking it.
-    // convert each key-value pair to a list and insert it in the context.
-    list << key << value;
-    c->insert(m_loopVars.at(0), list);
-    list.clear();
-  } else {
-    c->insert(m_loopVars.at(0), key);
-    c->insert(m_loopVars.at(1), value);
-  }
-  renderLoop(stream, c);
-}
-
-void ForNode::iterateHash(OutputStream *stream, Context *c,
-                          const QVariantHash &varHash, bool unpack)
-{
-  auto listSize = varHash.size();
-  auto i = 0;
-
-  QHashIterator<QString, QVariant> it(varHash);
-  if (m_isReversed == IsReversed) {
-    while (it.hasPrevious()) {
-      it.previous();
-      handleHashItem(stream, c, it.key(), it.value(), listSize, i, unpack);
-      ++i;
-    }
-  } else {
-    while (it.hasNext()) {
-      it.next();
-      handleHashItem(stream, c, it.key(), it.value(), listSize, i, unpack);
-      ++i;
-    }
-  }
-}
-
 void ForNode::render(OutputStream *stream, Context *c) const
 {
   QVariantHash forloopHash;
@@ -188,13 +146,6 @@ void ForNode::render(OutputStream *stream, Context *c) const
   auto unpack = m_loopVars.size() > 1;
 
   c->push();
-
-  //   if ( var.type() == QVariant::Hash ) {
-  //     QVariantHash varHash = var.toHash();
-  //     result = iterateHash( c, varHash, unpack );
-  //     c->pop();
-  //     return result;
-  //   }
 
   auto varFE = m_filterExpression.resolve(c);
 
