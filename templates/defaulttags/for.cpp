@@ -53,9 +53,19 @@ Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
             .arg(tagContent));
   }
 
+  QString loopVarString;
   Q_FOREACH (const QString &arg, expr.mid(0, expr.size() - 2)) {
-    vars << arg.split(QLatin1Char(','), QString::SkipEmptyParts);
+    if (loopVarString.endsWith(QLatin1Char(','))
+        || arg.startsWith(QLatin1Char(',')) || loopVarString.isEmpty()) {
+      loopVarString.append(arg);
+    } else {
+      // comas MUST separe for arguments
+      throw Grantlee::Exception(
+          TagSyntaxError,
+          QStringLiteral("'for' tag missing ',' separator for arguments"));
+    }
   }
+  vars = loopVarString.split(QLatin1Char(','));
 
   Q_FOREACH (const QString &var, vars) {
     if (var.isEmpty())

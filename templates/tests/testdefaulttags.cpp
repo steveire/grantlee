@@ -880,15 +880,15 @@ void TestDefaultTags::testForTag_data()
   QTest::newRow("for-tag-unpack06")
       << QStringLiteral(
              "{% for key value in items %}{{ key }}:{{ value }}/{% endfor %}")
-      << dict << QStringLiteral("one:1/two:2/") << NoError;
+      << dict << QString() << TagSyntaxError;
   QTest::newRow("for-tag-unpack07")
       << QStringLiteral(
              "{% for key,,value in items %}{{ key }}:{{ value }}/{% endfor %}")
-      << dict << QStringLiteral("one:1/two:2/") << NoError;
+      << dict << QString() << TagSyntaxError;
   QTest::newRow("for-tag-unpack08")
       << QStringLiteral(
              "{% for key,value, in items %}{{ key }}:{{ value }}/{% endfor %}")
-      << dict << QStringLiteral("one:1/two:2/") << NoError;
+      << dict << QString() << TagSyntaxError;
 
   // Ensure that a single loopvar doesn't truncate the list in val.
   QTest::newRow("for-tag-unpack09")
