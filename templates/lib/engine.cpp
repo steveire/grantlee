@@ -357,15 +357,15 @@ EnginePrivate::loadCppLibrary(const QString &name, uint minorVersion)
 
     auto list = pluginDir.entryList(QStringList(name
 #if PLUGINS_PREFER_DEBUG_POSTFIX
-                                                      + QLatin1Char('d')
+                                                + QLatin1Char('d')
 #endif
-                                                      + QLatin1Char('*')));
+                                                + QLatin1Char('*')));
 
     if (list.isEmpty()) {
 #if PLUGINS_PREFER_DEBUG_POSTFIX
       list = pluginDir.entryList(QStringList(name + QLatin1Char('*')));
       if (list.isEmpty())
-          continue;
+        continue;
 #else
       continue;
 #endif
