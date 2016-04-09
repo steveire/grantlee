@@ -288,6 +288,30 @@ void TestDefaultTags::testFirstOfTag_data()
                              << QStringLiteral("a") << TagSyntaxError;
 }
 
+class BadIfObject : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(bool isTrue READ isTrue)
+  Q_PROPERTY(bool isFalse READ isFalse)
+  Q_PROPERTY(bool isBad READ isBad)
+public:
+  BadIfObject(QObject *parent = 0) : QObject(parent), mIsBadCalled(false) {}
+
+  bool isTrue() const { return true; }
+
+  bool isFalse() const { return false; }
+
+  bool isBad() const
+  {
+    mIsBadCalled = true;
+    return true;
+  }
+
+  bool isBadCalled() { return mIsBadCalled; }
+private:
+  mutable bool mIsBadCalled;
+};
+
 void TestDefaultTags::testIfTag_data()
 {
   QTest::addColumn<QString>("input");
@@ -675,6 +699,23 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow("if-tag-error12")
       << QStringLiteral("{% if a not b %}yes{% endif %}") << dict << QString()
       << TagSyntaxError;
+
+  // Short circuit
+  dict.clear();
+  {
+    auto bio = QSharedPointer<BadIfObject>::create();
+    dict.insert(QStringLiteral("x"), QVariant::fromValue(bio));
+    QTest::newRow("if-tag-shortcircuit01")
+        << QStringLiteral(
+               "{% if x.isTrue or x.isBad %}yes{% else %}no{% endif %}")
+        << dict << QStringLiteral("yes") << NoError;
+
+    QTest::newRow("if-tag-shortcircuit02")
+        << QStringLiteral(
+               "{% if x.isFalse and x.isBad %}yes{% else %}no{% endif %}")
+        << dict << QStringLiteral("no") << NoError;
+    dict.clear();
+  }
 
   // Truthiness
   dict.clear();
