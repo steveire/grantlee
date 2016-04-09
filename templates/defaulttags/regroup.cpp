@@ -99,7 +99,7 @@ void RegroupNode::render(OutputStream *stream, Context *c) const
         FilterExpression(QStringLiteral("var.") + keyName, 0).resolve(c));
     c->pop();
     QVariantHash hash;
-    if (contextList.size() > 0) {
+    if (!contextList.isEmpty()) {
       auto hashVar = contextList.last();
       hash = hashVar.value<QVariantHash>();
     }

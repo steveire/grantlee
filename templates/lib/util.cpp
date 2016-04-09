@@ -62,10 +62,10 @@ bool Grantlee::variantIsTrue(const QVariant &variant)
     return true;
   }
   case QVariant::List: {
-    return (variant.value<QVariantList>().size() > 0);
+    return !variant.value<QVariantList>().isEmpty();
   }
   case QVariant::Hash: {
-    return (variant.value<QVariantHash>().size() > 0);
+    return !variant.value<QVariantHash>().isEmpty();
   }
   }
 
