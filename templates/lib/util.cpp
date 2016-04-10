@@ -43,13 +43,13 @@ bool Grantlee::variantIsTrue(const QVariant &variant)
     return variant.value<bool>();
   }
   case QVariant::Int: {
-    return (variant.value<int>() > 0);
+    return variant.value<int>() > 0;
   }
   case QVariant::Double: {
-    return (variant.value<double>() > 0);
+    return variant.value<double>() > 0;
   }
   case QMetaType::Float: {
-    return (variant.value<float>() > 0);
+    return variant.value<float>() > 0;
   }
   case QMetaType::QObjectStar: {
     auto obj = variant.value<QObject *>();
