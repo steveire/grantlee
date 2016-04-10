@@ -717,6 +717,28 @@ void TestDefaultTags::testIfTag_data()
     dict.clear();
   }
 
+  QTest::newRow("if-tag-badarg01")
+      << QStringLiteral("{% if x|default_if_none:y %}yes{% endif %}") << dict
+      << QString() << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("y"), 0);
+  QTest::newRow("if-tag-badarg02")
+      << QStringLiteral("{% if x|default_if_none:y %}yes{% endif %}") << dict
+      << QString() << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("y"), 1);
+  QTest::newRow("if-tag-badarg03")
+      << QStringLiteral("{% if x|default_if_none:y %}yes{% endif %}") << dict
+      << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  QTest::newRow("if-tag-badarg04")
+      << QStringLiteral(
+             "{% if x|default_if_none:y %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("no") << NoError;
+
   // Truthiness
   dict.clear();
   QVariantHash hash;
