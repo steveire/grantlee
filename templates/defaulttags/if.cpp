@@ -29,7 +29,7 @@ Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
   auto expr = smartSplit(tagContent);
   auto commandName = expr.takeAt(0);
-  if (expr.size() <= 0) {
+  if (expr.isEmpty()) {
     throw Grantlee::Exception(
         TagSyntaxError,
         QStringLiteral("'%1' statement requires at least one argument")
