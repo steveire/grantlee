@@ -58,10 +58,44 @@ private:
   QSharedPointer<IfToken> mCurrentToken;
 };
 
+static bool contains(const QVariant &needle, const QVariant &var)
+{
+  if (var.canConvert<QVariantList>()) {
+    auto container = var.value<QVariantList>();
+    if (Grantlee::isSafeString(needle)) {
+      return container.contains(Grantlee::getSafeString(needle).get());
+    }
+    return container.contains(needle);
+  }
+  if (var.canConvert<QVariantHash>()) {
+    auto container = var.value<QVariantHash>();
+    if (Grantlee::isSafeString(needle)) {
+      return container.contains(Grantlee::getSafeString(needle).get());
+    }
+    return container.contains(needle.toString());
+  }
+  return false;
+}
+
 class IfToken
 {
 public:
-  enum OpCode { Invalid, Literal, OrCode, AndCode, NotCode, Sentinal };
+  enum OpCode {
+    Invalid,
+    Literal,
+    OrCode,
+    AndCode,
+    NotCode,
+    InCode,
+    NotInCode,
+    EqCode,
+    NeqCode,
+    GtCode,
+    GteCode,
+    LtCode,
+    LteCode,
+    Sentinal
+  };
 
   static QSharedPointer<IfToken> makeSentinal()
   {
@@ -129,6 +163,14 @@ void IfToken::led(QSharedPointer<IfToken> left, IfParser *parser)
     break;
   case IfToken::OrCode:
   case IfToken::AndCode:
+  case IfToken::InCode:
+  case IfToken::NotInCode:
+  case IfToken::EqCode:
+  case IfToken::NeqCode:
+  case IfToken::GtCode:
+  case IfToken::GteCode:
+  case IfToken::LtCode:
+  case IfToken::LteCode:
     mArgs.first = left;
     mArgs.second = parser->expression(mLbp);
     return;
@@ -211,6 +253,30 @@ QSharedPointer<IfToken> IfParser::createNode(const QString &content) const
   if (content == QLatin1String("and")) {
     return QSharedPointer<IfToken>::create(7, content, IfToken::AndCode);
   }
+  if (content == QLatin1String("in")) {
+    return QSharedPointer<IfToken>::create(9, content, IfToken::InCode);
+  }
+  if (content == QLatin1String("not in")) {
+    return QSharedPointer<IfToken>::create(9, content, IfToken::NotInCode);
+  }
+  if (content == QLatin1String("==")) {
+    return QSharedPointer<IfToken>::create(10, content, IfToken::EqCode);
+  }
+  if (content == QLatin1String("!=")) {
+    return QSharedPointer<IfToken>::create(10, content, IfToken::NeqCode);
+  }
+  if (content == QLatin1String(">")) {
+    return QSharedPointer<IfToken>::create(10, content, IfToken::GtCode);
+  }
+  if (content == QLatin1String(">=")) {
+    return QSharedPointer<IfToken>::create(10, content, IfToken::GteCode);
+  }
+  if (content == QLatin1String("<")) {
+    return QSharedPointer<IfToken>::create(10, content, IfToken::LtCode);
+  }
+  if (content == QLatin1String("<=")) {
+    return QSharedPointer<IfToken>::create(10, content, IfToken::LteCode);
+  }
   if (content == QStringLiteral("not")) {
     return QSharedPointer<IfToken>::create(8, content, IfToken::NotCode);
   }
@@ -232,6 +298,22 @@ QVariant IfToken::evaluate(Context *c) const
              && Grantlee::variantIsTrue(mArgs.second->evaluate(c));
     case NotCode:
       return !Grantlee::variantIsTrue(mArgs.first->evaluate(c));
+    case InCode:
+      return contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
+    case NotInCode:
+      return !contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
+    case EqCode:
+      return mArgs.first->evaluate(c) == mArgs.second->evaluate(c);
+    case NeqCode:
+      return mArgs.first->evaluate(c) != mArgs.second->evaluate(c);
+    case GtCode:
+      return mArgs.first->evaluate(c) > mArgs.second->evaluate(c);
+    case GteCode:
+      return mArgs.first->evaluate(c) >= mArgs.second->evaluate(c);
+    case LtCode:
+      return mArgs.first->evaluate(c) < mArgs.second->evaluate(c);
+    case LteCode:
+      return mArgs.first->evaluate(c) <= mArgs.second->evaluate(c);
     default:
       Q_ASSERT(!"Invalid OpCode");
       return QVariant();
