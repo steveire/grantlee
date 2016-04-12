@@ -60,7 +60,9 @@ private:
 
 static bool contains(const QVariant &needle, const QVariant &var)
 {
-  if (var.canConvert<QVariantList>()) {
+  if (Grantlee::isSafeString(var)) {
+    return getSafeString(var).get().contains(getSafeString(needle));
+  } else if (var.canConvert<QVariantList>()) {
     auto container = var.value<QVariantList>();
     if (Grantlee::isSafeString(needle)) {
       return container.contains(Grantlee::getSafeString(needle).get());

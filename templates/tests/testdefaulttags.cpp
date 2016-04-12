@@ -512,6 +512,49 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("{% if 2 not in x %}yes{% else %}no{% endif %}") << dict
       << QStringLiteral("yes") << NoError;
 
+  // operator in with string
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QStringLiteral("green"));
+  QTest::newRow("if-tag-operator-in-string01")
+      << QStringLiteral(
+             "{% if \"green\" in colors %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QStringLiteral("red"));
+  QTest::newRow("if-tag-operator-in-string02")
+      << QStringLiteral(
+             "{% if \"green\" in colors %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("no") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QStringLiteral("green"));
+  QTest::newRow("if-tag-operator-in-string03")
+      << QStringLiteral(
+             "{% if \"green\" in colors %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QStringLiteral("red"));
+  QTest::newRow("if-tag-operator-in-string04")
+      << QStringLiteral(
+             "{% if \"green\" in colors %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("no") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("color"), QStringLiteral("green"));
+  dict.insert(QStringLiteral("colors"), QStringLiteral("green"));
+  QTest::newRow("if-tag-operator-in-string05")
+      << QStringLiteral("{% if color in colors %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("color"), QStringLiteral("green"));
+  dict.insert(QStringLiteral("colors"), QStringLiteral("red"));
+  QTest::newRow("if-tag-operator-in-string06")
+      << QStringLiteral("{% if color in colors %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("no") << NoError;
+
   // AND
 
   dict.clear();
