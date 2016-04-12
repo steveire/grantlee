@@ -100,12 +100,19 @@ void ForNode::setEmptyList(const NodeList &emptyList)
   m_emptyNodeList = emptyList;
 }
 
-static const char forloop[] = "forloop";
-static const char parentloop[] = "parentloop";
+static QString forLoopString()
+{
+    return QStringLiteral("forloop");
+}
+
+static QString parentLoopString()
+{
+    return QStringLiteral("parentloop");
+}
 
 void ForNode::insertLoopVariables(Context *c, int listSize, int i)
 {
-  auto forloopHash = c->lookup(QStringLiteral("forloop")).value<QVariantHash>();
+  auto forloopHash = c->lookup(forLoopString()).value<QVariantHash>();
   // some magic variables injected into the context while rendering.
   forloopHash.insert(QStringLiteral("counter0"), i);
   forloopHash.insert(QStringLiteral("counter"), i + 1);
@@ -113,7 +120,7 @@ void ForNode::insertLoopVariables(Context *c, int listSize, int i)
   forloopHash.insert(QStringLiteral("revcounter0"), listSize - i - 1);
   forloopHash.insert(QStringLiteral("first"), (i == 0));
   forloopHash.insert(QStringLiteral("last"), (i == listSize - 1));
-  c->insert(QLatin1String(forloop), forloopHash);
+  c->insert(forLoopString(), forloopHash);
 }
 
 void ForNode::renderLoop(OutputStream *stream, Context *c) const
@@ -127,13 +134,13 @@ void ForNode::render(OutputStream *stream, Context *c) const
 {
   QVariantHash forloopHash;
 
-  auto parentLoopVariant = c->lookup(QLatin1String(forloop));
+  auto parentLoopVariant = c->lookup(forLoopString());
   if (parentLoopVariant.isValid()) {
     // This is a nested loop.
     forloopHash = parentLoopVariant.value<QVariantHash>();
-    forloopHash.insert(QLatin1String(parentloop),
+    forloopHash.insert(parentLoopString(),
                        parentLoopVariant.value<QVariantHash>());
-    c->insert(QLatin1String(forloop), forloopHash);
+    c->insert(forLoopString(), forloopHash);
   }
 
   auto unpack = m_loopVars.size() > 1;
