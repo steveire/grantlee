@@ -105,21 +105,14 @@ static const char parentloop[] = "parentloop";
 
 void ForNode::insertLoopVariables(Context *c, int listSize, int i)
 {
-  // some magic variables injected into the context while rendering.
-  static const auto counter0 = QStringLiteral("counter0");
-  static const auto counter = QStringLiteral("counter");
-  static const auto revcounter0 = QStringLiteral("revcounter0");
-  static const auto revcounter = QStringLiteral("revcounter");
-  static const auto first = QStringLiteral("first");
-  static const auto last = QStringLiteral("last");
-
   auto forloopHash = c->lookup(QStringLiteral("forloop")).value<QVariantHash>();
-  forloopHash.insert(counter0, i);
-  forloopHash.insert(counter, i + 1);
-  forloopHash.insert(revcounter, listSize - i);
-  forloopHash.insert(revcounter0, listSize - i - 1);
-  forloopHash.insert(first, (i == 0));
-  forloopHash.insert(last, (i == listSize - 1));
+  // some magic variables injected into the context while rendering.
+  forloopHash.insert(QStringLiteral("counter0"), i);
+  forloopHash.insert(QStringLiteral("counter"), i + 1);
+  forloopHash.insert(QStringLiteral("revcounter"), listSize - i);
+  forloopHash.insert(QStringLiteral("revcounter0"), listSize - i - 1);
+  forloopHash.insert(QStringLiteral("first"), (i == 0));
+  forloopHash.insert(QStringLiteral("last"), (i == listSize - 1));
   c->insert(QLatin1String(forloop), forloopHash);
 }
 
