@@ -60,6 +60,17 @@ private:
   QStringList m_existingMedia;
 };
 
+class Zoo : public QObject
+{
+  Q_OBJECT
+public:
+  Zoo(QObject *parent = 0) : QObject(parent) {}
+
+  enum Animals { Lions, Tigers, Bears };
+
+  Q_ENUMS(Animals)
+};
+
 using namespace Grantlee;
 
 class TestDefaultTags : public CoverageObject
@@ -443,6 +454,25 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow("if-tag-eq05")
       << QStringLiteral("{% if foo == \'\' %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("no") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("foostring"), QStringLiteral("foo"));
+  QTest::newRow("if-tag-eq06")
+      << QStringLiteral("{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("foostring"), QStringLiteral("foo"));
+  QTest::newRow("if-tag-eq06")
+      << QStringLiteral("{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("zoo"), QVariant::fromValue(new Zoo(this)));
+  dict.insert(QStringLiteral("tigersEnum"), QVariant::fromValue<int>(Zoo::Tigers));
+  QTest::newRow("if-tag-eq07")
+      << QStringLiteral("{% if tigersEnum == zoo.Tigers %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
 
   // Comparison
 

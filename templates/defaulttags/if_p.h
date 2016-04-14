@@ -305,9 +305,9 @@ QVariant IfToken::evaluate(Context *c) const
     case NotInCode:
       return !contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case EqCode:
-      return mArgs.first->evaluate(c) == mArgs.second->evaluate(c);
+      return Grantlee::equals(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case NeqCode:
-      return mArgs.first->evaluate(c) != mArgs.second->evaluate(c);
+      return !Grantlee::equals(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case GtCode:
       return mArgs.first->evaluate(c) > mArgs.second->evaluate(c);
     case GteCode:
