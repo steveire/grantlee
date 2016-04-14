@@ -444,6 +444,16 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("{% if foo == \'\' %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("no") << NoError;
 
+  dict.clear();
+  QTest::newRow("if-tag-eq06")
+      << QStringLiteral("{% if \"foo\" == \"foo\" %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+  dict.clear();
+  dict.insert(QStringLiteral("foo"), QStringLiteral("bar"));
+  QTest::newRow("if-tag-eq07")
+      << QStringLiteral("{% if foo == \"bar\" %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+
   // Comparison
 
   dict.clear();
@@ -554,6 +564,33 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow("if-tag-operator-in-string06")
       << QStringLiteral("{% if color in colors %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("no") << NoError;
+
+  // operator in with bytearray
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QStringLiteral("green"));
+  QTest::newRow("if-tag-operator-in-ba-1") << QStringLiteral("{% if \"green\" in colors %}yes{% else %}no{% endif %}") << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QStringLiteral("red"));
+  QTest::newRow("if-tag-operator-in-ba-2") << QStringLiteral("{% if \"green\" in colors %}yes{% else %}no{% endif %}") << dict << QStringLiteral("no") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QByteArrayLiteral("green"));
+  QTest::newRow("if-tag-operator-in-ba-2") << QStringLiteral("{% if \"green\" in colors %}yes{% else %}no{% endif %}") << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("colors"), QByteArrayLiteral("red"));
+  QTest::newRow("if-tag-operator-in-ba-3") << QStringLiteral("{% if \"green\" in colors %}yes{% else %}no{% endif %}") << dict << QStringLiteral("no") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("color"), QByteArrayLiteral("green"));
+  dict.insert(QStringLiteral("colors"), QByteArrayLiteral("green"));
+  QTest::newRow("if-tag-operator-in-ba-2") << QStringLiteral("{% if color in colors %}yes{% else %}no{% endif %}") << dict << QStringLiteral("yes") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("color"), QByteArrayLiteral("green"));
+  dict.insert(QStringLiteral("colors"), QByteArrayLiteral("red"));
+  QTest::newRow("if-tag-operator-in-ba-3") << QStringLiteral("{% if color in colors %}yes{% else %}no{% endif %}") << dict << QStringLiteral("no") << NoError;
 
   // AND
 

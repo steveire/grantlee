@@ -301,21 +301,33 @@ QVariant IfToken::evaluate(Context *c) const
     case NotCode:
       return !Grantlee::variantIsTrue(mArgs.first->evaluate(c));
     case InCode:
-      return contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
+      return Grantlee::contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case NotInCode:
-      return !contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
+      return !Grantlee::contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case EqCode:
-      return mArgs.first->evaluate(c) == mArgs.second->evaluate(c);
+      return Grantlee::equals(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case NeqCode:
-      return mArgs.first->evaluate(c) != mArgs.second->evaluate(c);
+      return !Grantlee::equals(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case GtCode:
-      return mArgs.first->evaluate(c) > mArgs.second->evaluate(c);
+    {
+      const QVariant left = mArgs.first->evaluate(c);
+      const QVariant right = mArgs.second->evaluate(c);
+      return !Grantlee::lessThan(left, right) && !Grantlee::equals(left, right);
+    }
     case GteCode:
-      return mArgs.first->evaluate(c) >= mArgs.second->evaluate(c);
+    {
+      const QVariant left = mArgs.first->evaluate(c);
+      const QVariant right = mArgs.second->evaluate(c);
+      return !Grantlee::lessThan(left, right) || Grantlee::equals(left, right);
+    }
     case LtCode:
-      return mArgs.first->evaluate(c) < mArgs.second->evaluate(c);
+      return Grantlee::lessThan(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case LteCode:
-      return mArgs.first->evaluate(c) <= mArgs.second->evaluate(c);
+    {
+      const QVariant left = mArgs.first->evaluate(c);
+      const QVariant right = mArgs.second->evaluate(c);
+      return Grantlee::lessThan(left, right) || Grantlee::equals(left, right);
+    }
     default:
       Q_ASSERT(!"Invalid OpCode");
       return QVariant();

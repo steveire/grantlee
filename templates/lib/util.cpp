@@ -130,16 +130,12 @@ bool Grantlee::equals(const QVariant &lhs, const QVariant &rhs)
   // QVariant doesn't use operator== to compare its held data, so we do it
   // manually instead for SafeString.
   auto equal = false;
-  if (lhs.userType() == qMetaTypeId<Grantlee::SafeString>()) {
-    if (rhs.userType() == qMetaTypeId<Grantlee::SafeString>()) {
-      equal = (lhs.value<Grantlee::SafeString>()
-               == rhs.value<Grantlee::SafeString>());
-    } else if (rhs.userType() == QVariant::String) {
-      equal = (lhs.value<Grantlee::SafeString>() == rhs.value<QString>());
-    }
-  } else if (rhs.userType() == qMetaTypeId<Grantlee::SafeString>()
-             && lhs.userType() == QVariant::String) {
-    equal = (rhs.value<Grantlee::SafeString>() == lhs.value<QString>());
+  if (lhs.userType() == qMetaTypeId<Grantlee::SafeString>() &&
+      (rhs.userType() == qMetaTypeId<QString>() || rhs.userType() == qMetaTypeId<QByteArray>())) {
+    equal = lhs.value<Grantlee::SafeString>() == rhs.value<QString>();
+  } else if (rhs.userType() == qMetaTypeId<Grantlee::SafeString>() &&
+      (lhs.userType() == qMetaTypeId<QString>() || lhs.userType() == qMetaTypeId<QByteArray>())) {
+    equal = rhs.value<Grantlee::SafeString>() == lhs.value<QString>();
   } else if (rhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
     if (lhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
       equal = (rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>());
@@ -154,6 +150,102 @@ bool Grantlee::equals(const QVariant &lhs, const QVariant &rhs)
     equal = ((lhs == rhs) && (lhs.userType() == rhs.userType()));
   }
   return equal;
+}
+
+bool Grantlee::lessThan(const QVariant &lhs, const QVariant &rhs)
+{
+  // TODO: Redesign...
+
+  // QVariant doesn't use operator== to compare SafeString to QString or QByteArray
+  if (lhs.userType() == qMetaTypeId<Grantlee::SafeString>()) {
+    if (rhs.userType() == QVariant::String || rhs.userType() == QVariant::ByteArray) {
+      return lhs.value<Grantlee::SafeString>() < rhs.value<QString>();
+    }
+  } else if (rhs.userType() == qMetaTypeId<Grantlee::SafeString>() && (lhs.userType() == QVariant::String || lhs.userType() == QVariant::ByteArray)) {
+    if (lhs.userType() == QVariant::String) {
+      return rhs.value<Grantlee::SafeString>() < lhs.value<QString>();
+    }
+  } else if (rhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
+    if (lhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
+      return rhs.value<MetaEnumVariable>().value < lhs.value<MetaEnumVariable>().value;
+    } else if (lhs.type() == QVariant::Int) {
+      return rhs.value<MetaEnumVariable>().value < lhs.value<int>();
+    }
+  } else if (lhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
+    if (rhs.type() == QVariant::Int) {
+      return lhs.value<MetaEnumVariable>().value < rhs.value<int>();
+    }
+  }
+
+  return lhs < rhs;
+}
+
+bool Grantlee::contains( const QVariant &lhs, const QVariant &rhs )
+{
+  // TODO: Redesign...
+
+  int rUserType = rhs.userType();
+  int lUserType = lhs.userType();
+  if (rUserType == qMetaTypeId<Grantlee::SafeString>()) {
+    const QString right = rhs.value<Grantlee::SafeString>();
+    if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+      return right.contains(lhs.value<QString>());
+    } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>() ) {
+      const QString left = lhs.value<Grantlee::SafeString>();
+      return right.contains(left);
+    }
+  } else if (rUserType == QVariant::String) {
+      const QString right = rhs.value<QString>();
+      if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+        return right.contains(lhs.value<QString>());
+      } else if (lUserType == qMetaTypeId<Grantlee::SafeString>()) {
+        const QString left = lhs.value<Grantlee::SafeString>();
+        return right.contains(left);
+      }
+  } else if (rUserType == QVariant::ByteArray) {
+      if (lUserType == QVariant::String) {
+        const QString right = QString::fromUtf8(rhs.value<QByteArray>());
+        return right.contains(lhs.value<QString>());
+      } else if (lUserType == QVariant::ByteArray) {
+        const QByteArray right = rhs.value<QByteArray>();
+        return right.contains(lhs.value<QByteArray>());
+      } else if (lUserType == qMetaTypeId<Grantlee::SafeString>()) {
+        const QString right = QString::fromUtf8( rhs.value<QByteArray>());
+        const QString left = lhs.value<Grantlee::SafeString>();
+        return right.contains(left);
+      }
+  } else if (rUserType == QVariant::List) {
+    QVariantList list = rhs.toList();
+    Q_FOREACH (const QVariant &item, list) {
+      if (equals( item, lhs)) {
+        return true;
+      }
+    }
+    return false;
+  } else if (rUserType == QVariant::StringList) {
+    QStringList list = rhs.toStringList();
+    if (lUserType == QVariant::String || lUserType == QVariant::ByteArray) {
+      return list.contains(lhs.value<QString>());
+    } else if ( lUserType == qMetaTypeId<Grantlee::SafeString>()) {
+      QString left = lhs.value<Grantlee::SafeString>();
+      return list.contains(left);
+    }
+    return false;
+  }
+
+  if (rhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
+    if (lhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
+      return rhs.value<MetaEnumVariable>() == lhs.value<MetaEnumVariable>();
+    } else if (lhs.type() == QVariant::Int) {
+      return rhs.value<MetaEnumVariable>() == lhs.value<int>();
+    }
+  } else if (lhs.userType() == qMetaTypeId<MetaEnumVariable>()) {
+    if (rhs.type() == QVariant::Int) {
+      return lhs.value<MetaEnumVariable>() == rhs.value<int>();
+    }
+  }
+
+  return lhs == rhs;
 }
 
 Grantlee::SafeString Grantlee::toString(const QVariantList &list)
