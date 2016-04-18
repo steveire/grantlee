@@ -5,6 +5,15 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 5.1 --
+-------------------
+* Implement advanced operators for the {% if %} tag
+* Use 'd' postfix for plugins built in debug mode
+* Use 'd' postfix for libraries built in debug mode by Visual Studio
+* Make it possible to build without QtScript and QtLinguistTools
+* Bump Grantlee CMake requirement to 3.1.
+* Bump Grantlee Qt requirement to 5.3.
+
 -- Version 5.0.0 --
 -------------------
 * Drop Qt 4 build. Make Qt 5 a hard requirement.
