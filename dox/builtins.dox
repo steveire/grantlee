@@ -6,7 +6,7 @@ namespace Grantlee
 
   @section django_builtins Tags and filters ported from Django
 
-  See the <a href="http://docs.djangoproject.com/en/1.1/ref/templates/builtins/">Builtins documentation for Django 1.1</a> for an overview of the builtin tags and filters available in %Grantlee. Almost all tags and filter in django are available in %Grantlee. Exceptions are <a href="http://docs.djangoproject.com/en/1.1/ref/templates/builtins/#url">the url tag</a>, because %Grantlee does not have a views system. Additionally the ssi tag is disabled because of potential security risks. The dictdort, dictsortreversed, filesizeformat, iriencode, phone2numeric, pluralize, pprint, title, truncatewords_html, urlencode, urlize and urlizetrunc filters have not yet been ported due to time constraints.
+  See the <a href="https://docs.djangoproject.com/en/1.9/ref/templates/builtins/">Builtins documentation for Django 1.1</a> for an overview of the builtin tags and filters available in %Grantlee. Almost all tags and filter in django are available in %Grantlee. Exceptions are <a href="https://docs.djangoproject.com/en/1.9/ref/templates/builtins/#url">the url tag</a>, because %Grantlee does not have a views system. Additionally the ssi tag is disabled because of potential security risks. The dictdort, dictsortreversed, filesizeformat, iriencode, phone2numeric, pluralize, pprint, title, truncatewords_html, urlencode, urlize and urlizetrunc filters have not yet been ported due to time constraints.
 
   @section grantlee_extras Additional tags available in Grantlee
 

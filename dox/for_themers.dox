@@ -344,7 +344,7 @@ namespace Grantlee
 
   would not escape the content between the autoescape and endautoescape tags. This should only be used for content which is actually already safe.
 
-  @see http://docs.djangoproject.com/en/1.1/topics/templates/#for-individual-variables
+  @see https://docs.djangoproject.com/en/1.9/ref/templates/language/#for-individual-variables
 
   @subsection extending_syntax Extending the syntax
 
