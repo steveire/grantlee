@@ -620,6 +620,12 @@ void TestFilters::testStringFilters_data()
       << "{{ a|truncatewords:\"2\" }} {{ b|truncatewords:\"2\"}}" << dict
       << QStringLiteral("alpha &amp; ... alpha &amp; ...") << NoError;
 
+  dict.clear();
+  QTest::newRow("filter-truncatewords03") << "{{xx|truncatewords:\"0\"}}" << dict
+                                          << QString() << NoError;
+  QTest::newRow("filter-truncatewords04") << "{{xx|truncatewords:\"-1\"}}" << dict
+                                          << QString() << NoError;
+
   //  The "upper" filter messes up entities (which are case-sensitive),
   //  so it's not safe for non-escaping purposes.
 
