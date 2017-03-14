@@ -806,6 +806,13 @@ void TestFilters::testStringFilters_data()
       << ".{{ a|center:\"5\" }}. .{{ b|center:\"5\" }}." << dict
       << QStringLiteral(". a&amp;b . . a&b .") << NoError;
 
+  QTest::newRow("filter-center03") << ".{{a|center:\"-1\"}}." << dict
+                                   << QStringLiteral(".a&amp;b.") << NoError;
+  QTest::newRow("filter-center04") << ".{{a|center:\"-1999999999\"}}." << dict
+                                   << QStringLiteral(".a&amp;b.") << NoError;
+  QTest::newRow("filter-center05") << ".{{a|center:\"1999999999\"}}." << dict
+                                   << QStringLiteral(".a&amp;b.") << NoError;
+
   dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("x&y"));
   dict.insert(QStringLiteral("b"),
