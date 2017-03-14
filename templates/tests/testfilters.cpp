@@ -257,6 +257,12 @@ void TestFilters::testDateBasedFilters_data()
                                       << dict << QStringLiteral("1 day")
                                       << NoError;
 
+  dict.clear();
+  QTest::newRow("filter-timesince19") << QStringLiteral("{{xx|timesince}}") << dict
+                                      << QStringLiteral("") << NoError;
+  QTest::newRow("filter-timesince20") << QStringLiteral("{{|timesince}}") << dict
+                                      << QStringLiteral("") << NoError;
+
   //  Default compare with datetime.now()
 
   dict.clear();
@@ -354,6 +360,12 @@ void TestFilters::testDateBasedFilters_data()
   QTest::newRow("filter-timeuntil13") << QStringLiteral("{{ a|timeuntil:b }}")
                                       << dict << QStringLiteral("1 day")
                                       << NoError;
+
+  dict.clear();
+  QTest::newRow("filter-timeuntil14") << QStringLiteral("{{xx|timeuntil}}") << dict
+                                      << QStringLiteral("") << NoError;
+  QTest::newRow("filter-timeuntil15") << QStringLiteral("{{|timeuntil}}") << dict
+                                      << QStringLiteral("") << NoError;
 
   QDateTime d(QDate(2008, 1, 1));
 
