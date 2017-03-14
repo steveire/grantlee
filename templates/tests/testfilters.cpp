@@ -1553,6 +1553,20 @@ void TestFilters::testIntegerFilters_data()
   QTest::newRow("filter-getdigit04") << QStringLiteral("{{ 123|get_digit:4 }}")
                                      << dict << QStringLiteral("123")
                                      << NoError;
+  QTest::newRow("filter-getdigit05") << QStringLiteral("{{ 123|get_digit:0 }}")
+                                     << dict << QStringLiteral("123")
+                                     << NoError;
+  QTest::newRow("filter-getdigit06") << QStringLiteral("{{ 123|get_digit:-1 }}")
+                                     << dict << QStringLiteral("123")
+                                     << NoError;
+
+  dict.clear();
+  QTest::newRow("filter-getdigit07") << QStringLiteral("{{xx|get_digit}}")
+                                     << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-getdigit08") << QStringLiteral("{{|get_digit}}")
+                                     << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-getdigit09") << QStringLiteral("{{xx|get_digit:\"\xc2\xb2\"}}")
+                                     << dict << QStringLiteral("") << NoError;
 }
 
 QTEST_MAIN(TestFilters)
