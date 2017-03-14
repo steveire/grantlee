@@ -759,6 +759,15 @@ void TestFilters::testStringFilters_data()
       << "a &amp;\nb a &\nb" << NoError;
 
   dict.clear();
+  QTest::newRow("filter-wordwrap03")
+      << QStringLiteral("{{xx|wordwrap}}") << dict
+      << "" << NoError;
+
+  QTest::newRow("filter-wordwrap04")
+      << QStringLiteral("{{|wordwrap}}") << dict
+      << "" << NoError;
+
+  dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("a&b"));
   dict.insert(QStringLiteral("b"),
               QVariant::fromValue(markSafe(QStringLiteral("a&b"))));
