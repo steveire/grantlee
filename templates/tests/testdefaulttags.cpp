@@ -1299,6 +1299,12 @@ void TestDefaultTags::testForTag_data()
   QTest::newRow("for-tag-empty03")
       << QStringLiteral("{% for val in values %}{{ val }}{% empty %}values array not found{% endfor %}")
       << dict << QStringLiteral("values array not found") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("values"), QVariantList() << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("c"));
+  QTest::newRow("for-tag-degenerate01")
+      << QStringLiteral("{% for a,b|f in values %}{% endfor %}") << dict
+      << QStringLiteral("") << TagSyntaxError;
 }
 
 void TestDefaultTags::testIfEqualTag_data()
