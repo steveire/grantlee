@@ -1305,6 +1305,10 @@ void TestDefaultTags::testForTag_data()
   QTest::newRow("for-tag-degenerate01")
       << QStringLiteral("{% for a,b|f in values %}{% endfor %}") << dict
       << QStringLiteral("") << TagSyntaxError;
+
+  QTest::newRow("for-tag-degenerate02")
+      << QStringLiteral("{% for  in values reversed %}{% endfor %}") << dict
+      << QStringLiteral("") << TagSyntaxError;
 }
 
 void TestDefaultTags::testIfEqualTag_data()
