@@ -584,6 +584,17 @@ void TestBuiltinSyntax::testBasicSyntax_data()
                                   << TagSyntaxError;
   QTest::newRow("basic-syntax41") << "{{ abc|removetags:_(\'fred }}" << dict
                                   << QString() << TagSyntaxError;
+
+  // giant string handling
+  dict.clear();
+  QTest::newRow("basic-syntax42") << QStringLiteral("{% if xx == '%1 %}yes{% endif %}").arg(QString(25000, QChar::fromLatin1('a')))
+                                  << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax43") << QStringLiteral("{% if xx == \"%1 %}yes{% endif %}").arg(QString(25000, QChar::fromLatin1('a')))
+                                  << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax44") << QStringLiteral("{% if xx == '%1' %}yes{% endif %}").arg(QString(25000, QChar::fromLatin1('a')))
+                                  << dict << QString() << NoError;
+  QTest::newRow("basic-syntax45") << QStringLiteral("{% if xx == \"%1\" %}yes{% endif %}").arg(QString(25000, QChar::fromLatin1('a')))
+                                  << dict << QString() << NoError;
 }
 
 void TestBuiltinSyntax::testEnums_data()
