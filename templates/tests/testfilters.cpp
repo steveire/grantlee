@@ -257,6 +257,12 @@ void TestFilters::testDateBasedFilters_data()
                                       << dict << QStringLiteral("1 day")
                                       << NoError;
 
+  dict.clear();
+  QTest::newRow("filter-timesince19") << QStringLiteral("{{xx|timesince}}") << dict
+                                      << QStringLiteral("") << NoError;
+  QTest::newRow("filter-timesince20") << QStringLiteral("{{|timesince}}") << dict
+                                      << QStringLiteral("") << NoError;
+
   //  Default compare with datetime.now()
 
   dict.clear();
@@ -354,6 +360,12 @@ void TestFilters::testDateBasedFilters_data()
   QTest::newRow("filter-timeuntil13") << QStringLiteral("{{ a|timeuntil:b }}")
                                       << dict << QStringLiteral("1 day")
                                       << NoError;
+
+  dict.clear();
+  QTest::newRow("filter-timeuntil14") << QStringLiteral("{{xx|timeuntil}}") << dict
+                                      << QStringLiteral("") << NoError;
+  QTest::newRow("filter-timeuntil15") << QStringLiteral("{{|timeuntil}}") << dict
+                                      << QStringLiteral("") << NoError;
 
   QDateTime d(QDate(2008, 1, 1));
 
@@ -608,6 +620,12 @@ void TestFilters::testStringFilters_data()
       << "{{ a|truncatewords:\"2\" }} {{ b|truncatewords:\"2\"}}" << dict
       << QStringLiteral("alpha &amp; ... alpha &amp; ...") << NoError;
 
+  dict.clear();
+  QTest::newRow("filter-truncatewords03") << "{{xx|truncatewords:\"0\"}}" << dict
+                                          << QString() << NoError;
+  QTest::newRow("filter-truncatewords04") << "{{xx|truncatewords:\"-1\"}}" << dict
+                                          << QString() << NoError;
+
   //  The "upper" filter messes up entities (which are case-sensitive),
   //  so it's not safe for non-escaping purposes.
 
@@ -747,6 +765,15 @@ void TestFilters::testStringFilters_data()
       << "a &amp;\nb a &\nb" << NoError;
 
   dict.clear();
+  QTest::newRow("filter-wordwrap03")
+      << QStringLiteral("{{xx|wordwrap}}") << dict
+      << "" << NoError;
+
+  QTest::newRow("filter-wordwrap04")
+      << QStringLiteral("{{|wordwrap}}") << dict
+      << "" << NoError;
+
+  dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("a&b"));
   dict.insert(QStringLiteral("b"),
               QVariant::fromValue(markSafe(QStringLiteral("a&b"))));
@@ -778,6 +805,13 @@ void TestFilters::testStringFilters_data()
   QTest::newRow("filter-center02")
       << ".{{ a|center:\"5\" }}. .{{ b|center:\"5\" }}." << dict
       << QStringLiteral(". a&amp;b . . a&b .") << NoError;
+
+  QTest::newRow("filter-center03") << ".{{a|center:\"-1\"}}." << dict
+                                   << QStringLiteral(".a&amp;b.") << NoError;
+  QTest::newRow("filter-center04") << ".{{a|center:\"-1999999999\"}}." << dict
+                                   << QStringLiteral(".a&amp;b.") << NoError;
+  QTest::newRow("filter-center05") << ".{{a|center:\"1999999999\"}}." << dict
+                                   << QStringLiteral(".a&amp;b.") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("x&y"));
@@ -988,6 +1022,15 @@ void TestFilters::testListFilters_data()
       << dict << QStringLiteral("a&b a&b") << NoError;
 
   dict.clear();
+  dict.insert(QStringLiteral("empty_list"), QVariantList());
+  QTest::newRow("filter-random03")
+      << QStringLiteral("{{empty_list|random}}")
+      << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-random04")
+      << QStringLiteral("{{|random}}")
+      << dict << QStringLiteral("") << NoError;
+
+  dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("a&b"));
   dict.insert(QStringLiteral("b"),
               QVariant::fromValue(markSafe(QStringLiteral("a&b"))));
@@ -999,6 +1042,14 @@ void TestFilters::testListFilters_data()
       << "{% autoescape off %}{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}{% "
          "endautoescape %}"
       << dict << QStringLiteral("&b &b") << NoError;
+
+  dict.clear();
+  QTest::newRow("filter-slice03")
+      << "{{xx|slice}}" << dict
+      << QStringLiteral("") << NoError;
+  QTest::newRow("filter-slice04")
+      << "{{|slice}}" << dict
+      << QStringLiteral("") << NoError;
 
   dict.clear();
   QVariantList sublist;
@@ -1515,6 +1566,20 @@ void TestFilters::testIntegerFilters_data()
   QTest::newRow("filter-getdigit04") << QStringLiteral("{{ 123|get_digit:4 }}")
                                      << dict << QStringLiteral("123")
                                      << NoError;
+  QTest::newRow("filter-getdigit05") << QStringLiteral("{{ 123|get_digit:0 }}")
+                                     << dict << QStringLiteral("123")
+                                     << NoError;
+  QTest::newRow("filter-getdigit06") << QStringLiteral("{{ 123|get_digit:-1 }}")
+                                     << dict << QStringLiteral("123")
+                                     << NoError;
+
+  dict.clear();
+  QTest::newRow("filter-getdigit07") << QStringLiteral("{{xx|get_digit}}")
+                                     << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-getdigit08") << QStringLiteral("{{|get_digit}}")
+                                     << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-getdigit09") << QStringLiteral("{{xx|get_digit:\"\xc2\xb2\"}}")
+                                     << dict << QStringLiteral("") << NoError;
 }
 
 QTEST_MAIN(TestFilters)
