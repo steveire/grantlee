@@ -1009,6 +1009,15 @@ void TestFilters::testListFilters_data()
       << dict << QStringLiteral("a&b a&b") << NoError;
 
   dict.clear();
+  dict.insert(QStringLiteral("empty_list"), QVariantList());
+  QTest::newRow("filter-random03")
+      << QStringLiteral("{{empty_list|random}}")
+      << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-random04")
+      << QStringLiteral("{{|random}}")
+      << dict << QStringLiteral("") << NoError;
+
+  dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("a&b"));
   dict.insert(QStringLiteral("b"),
               QVariant::fromValue(markSafe(QStringLiteral("a&b"))));
