@@ -73,7 +73,7 @@ namespace Grantlee
 
   The %Grantlee project mailing list is kde-pim@kde.org, and the IRC channel is \#grantlee on freenode.
 
-  The source repository is located at http://gitorious.org/grantlee
+  The source repository is located at https://github.com/steveire/grantlee
 
   - Existing bugs https://bugs.kde.org/buglist.cgi?product=grantlee
   - File new bug https://bugs.kde.org/enter_bug.cgi?product=grantlee
