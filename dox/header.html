@@ -22,6 +22,12 @@ $(document).ready(function() {
 			buffer += this.innerText + "\n";
 		});
 
+    buffer = buffer.
+      replace(/&/g,'&amp;').
+      replace(/</g,'&lt;').
+      replace(/>/g,'&gt;')
+      ;
+
 		$block.html(
 			'<pre><code class="c++">'+buffer+'</code></pre>'
 		);
