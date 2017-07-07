@@ -28,6 +28,7 @@
 #include "i18ncp.h"
 #include "i18np.h"
 #include "l10n_money.h"
+#include "l10n_filesize.h"
 #include "with_locale.h"
 
 namespace Grantlee
@@ -66,6 +67,10 @@ public:
                          new L10nMoneyNodeFactory());
     nodeFactories.insert(QStringLiteral("l10n_money_var"),
                          new L10nMoneyVarNodeFactory());
+    nodeFactories.insert(QStringLiteral("l10n_filesize"),
+                         new L10nFileSizeNodeFactory());
+    nodeFactories.insert(QStringLiteral("l10n_filesize_var"),
+                         new L10nFileSizeVarNodeFactory());
     nodeFactories.insert(QStringLiteral("with_locale"),
                          new WithLocaleNodeFactory());
     // TODO: Compat and block tags

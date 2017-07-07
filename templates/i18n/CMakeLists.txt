@@ -7,6 +7,7 @@ add_library(grantlee_i18ntags MODULE
   i18np.cpp
   i18ncp.cpp
   l10n_money.cpp
+  l10n_filesize.cpp
   with_locale.cpp
 )
 set_property(TARGET grantlee_i18ntags PROPERTY EXPORT_NAME i18ntags)
