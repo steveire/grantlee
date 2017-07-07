@@ -156,6 +156,65 @@ bool Grantlee::equals(const QVariant &lhs, const QVariant &rhs)
   return equal;
 }
 
+std::pair<qreal,QString> Grantlee::calcFileSize(qreal size, int unitSystem, qreal multiplier)
+{
+  std::pair<qreal,QString> ret;
+
+  qreal _size = size * multiplier;
+  int _unitSystem = unitSystem;
+
+  if ((_unitSystem != 2) && (_unitSystem != 10)) {
+      qWarning("%s", "Unrecognized file size unit system. Falling back to decmal unit system.");
+      _unitSystem = 10;
+  }
+
+  static const QStringList binaryUnits({
+                                           QStringLiteral("bytes"),
+                                           QStringLiteral("KiB"),
+                                           QStringLiteral("MiB"),
+                                           QStringLiteral("GiB"),
+                                           QStringLiteral("TiB"),
+                                           QStringLiteral("PiB"),
+                                           QStringLiteral("EiB"),
+                                           QStringLiteral("ZiB"),
+                                           QStringLiteral("YiB")
+                                       });
+
+  static const QStringList decimalUnits({
+                                           QStringLiteral("bytes"),
+                                           QStringLiteral("KB"),
+                                           QStringLiteral("MB"),
+                                           QStringLiteral("GB"),
+                                           QStringLiteral("TB"),
+                                           QStringLiteral("PB"),
+                                           QStringLiteral("EB"),
+                                           QStringLiteral("ZB"),
+                                           QStringLiteral("YB")
+                                       });
+
+  bool found = false;
+  int count = 0;
+  const qreal baseVal = (_unitSystem == 10) ? 1000.0f : 1024.0f;
+  qreal current = 1.0f;
+  int units = decimalUnits.size();
+  while (!found && (count < units)) {
+      current *= baseVal;
+      if (_size < current) {
+          found = true;
+          break;
+      }
+      count++;
+  }
+
+  qreal devider = current/baseVal;
+  _size = _size/devider;
+
+  ret.first = _size;
+  ret.second = (_unitSystem == 10) ? decimalUnits.at(count) : binaryUnits.at(count);
+
+  return ret;
+}
+
 Grantlee::SafeString Grantlee::toString(const QVariantList &list)
 {
   QString output(QLatin1Char('['));

@@ -85,6 +85,18 @@ GRANTLEE_TEMPLATES_EXPORT bool supportedOutputType(const QVariant &input);
 */
 GRANTLEE_TEMPLATES_EXPORT bool equals(const QVariant &lhs, const QVariant &rhs);
 
+/**
+  Converts @p size into the nearest file size unit like MB or MiB, based on the
+  @p unitSystem value. Use @c 2 for the @p unitSystem to get binary units, use @c 10 to get
+  decimal units - by default, decimal units will be returned. The @p multiplier
+  can be used if the input @ size is not in pure bytes. If @p size is for example given
+  in @a KiB, use a multiplier of @a 1024.
+
+  The returned pair will have the converted size as @a first and the unit as @a second.
+*/
+GRANTLEE_TEMPLATES_EXPORT std::pair<qreal,QString> calcFileSize(qreal size, int unitSystem, qreal multiplier);
+
+
 #ifndef Q_QDOC
 /**
   @internal
