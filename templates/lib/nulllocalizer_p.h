@@ -65,6 +65,10 @@ public:
   QString localizePluralString(const QString &string, const QString &pluralForm,
                                const QVariantList &arguments
                                = QVariantList()) const override;
+  QString localizeFileSize(qreal size,
+                           int precision,
+                           int unitSystem,
+                           qreal multiplier) const override;
 
 private:
   Q_DISABLE_COPY(NullLocalizer)
