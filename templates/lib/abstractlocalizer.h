@@ -158,6 +158,22 @@ public:
                                               const QVariantList &arguments
                                               = QVariantList()) const = 0;
 
+  /**
+   * Localizes @p size as file size value where @p precision defines the decimal
+   * precision and @p unitSystem the used unit system. For @p unitSystem @c 2 and @c 10
+   * can be used. While @c 2 will output with binary prefix like KiB and MiB, @c 10 will
+   * output in decimal notation like kB and MB. Default unit system should be decimal (10).
+   * Because @size has to be the byte value, you can use the @p multiplier to convert it
+   * into byte if it is for example only available as KiB value - then simply use a
+   * multiplier of 1024 if you want to have it with binary prefix.
+   *
+   * Internally you can use calcFileSize() from util.h to get the size and the unit.
+   */
+  virtual QString localizeFileSize(qreal size,
+                                   int precision,
+                                   int unitSystem,
+                                   qreal multiplier) const = 0;
+
 private:
   Q_DISABLE_COPY(AbstractLocalizer)
 };
