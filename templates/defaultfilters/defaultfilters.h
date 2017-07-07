@@ -67,6 +67,7 @@ public:
     filters.insert(QStringLiteral("first"), new FirstFilter());
     filters.insert(QStringLiteral("fix_ampersands"), new FixAmpersandsFilter());
     filters.insert(QStringLiteral("floatformat"), new FloatFormatFilter());
+    filters.insert(QStringLiteral("filesizeformat"), new FileSizeFormatFilter());
     filters.insert(QStringLiteral("force_escape"), new ForceEscapeFilter());
     filters.insert(QStringLiteral("get_digit"), new GetDigitFilter());
     filters.insert(QStringLiteral("join"), new JoinFilter());
