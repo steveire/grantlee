@@ -748,8 +748,10 @@ void TestBuiltinSyntax::testEnums_data()
   QTest::newRow("qt-enums06") << QStringLiteral("{{ Qt.Alignment.2.key }}")
                               << dict << QStringLiteral("AlignRight")
                               << NoError;
-  QTest::newRow("qt-enums06") << QStringLiteral("{{ Qt.DoesNotExist }}") << dict
+  QTest::newRow("qt-enums07") << QStringLiteral("{{ Qt.DoesNotExist }}") << dict
                               << QString() << NoError;
+  QTest::newRow("qt-enums08") << QStringLiteral("{{ Qt }}") << dict << QString()
+                              << NoError;
 }
 
 void TestBuiltinSyntax::testListIndex_data()

@@ -172,6 +172,9 @@ QVariant Variable::resolve(Context *c) const
     auto i = 0;
     if (d->m_lookups.at(i) == QStringLiteral("Qt")) {
       ++i;
+      if (d->m_lookups.size() <= i)
+        return QVariant();
+
       const auto nextPart = d->m_lookups.at(i);
       ++i;
 
