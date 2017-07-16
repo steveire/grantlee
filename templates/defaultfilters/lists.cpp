@@ -147,6 +147,9 @@ QVariant SliceFilter::doFilter(const QVariant &input, const QVariant &argument,
   auto argString = getSafeString(argument);
   auto splitterIndex = argString.get().indexOf(QLatin1Char(':'));
   QString inputString = getSafeString(input);
+  if (inputString.isEmpty())
+    return QVariant();
+
   if (splitterIndex >= 0) {
     auto left = argString.get().left(splitterIndex).get().toInt();
     auto right = argString.get().right(splitterIndex).get().toInt();

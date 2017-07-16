@@ -1020,6 +1020,12 @@ void TestFilters::testListFilters_data()
       << dict << QStringLiteral("&b &b") << NoError;
 
   dict.clear();
+  QTest::newRow("filter-slice03") << "{{xx|slice}}" << dict
+                                  << QStringLiteral("") << NoError;
+  QTest::newRow("filter-slice04") << "{{|slice}}" << dict << QStringLiteral("")
+                                  << NoError;
+
+  dict.clear();
   QVariantList sublist;
   sublist << QVariant(QStringLiteral("<y"));
   dict.insert(QStringLiteral("a"), QVariantList() << QStringLiteral("x>")
