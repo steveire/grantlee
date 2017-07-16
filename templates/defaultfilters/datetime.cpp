@@ -84,14 +84,6 @@ QVariant timeSince(const QDateTime &early, const QDateTime &late)
   return firstChunk;
 }
 
-QVariant timeUntil(const QDateTime &dt, QDateTime now = QDateTime())
-{
-  if (!now.isValid())
-    now = QDateTime::currentDateTime();
-
-  return timeSince(now, dt);
-}
-
 QVariant DateFilter::doFilter(const QVariant &input, const QVariant &argument,
                               bool autoescape) const
 {
