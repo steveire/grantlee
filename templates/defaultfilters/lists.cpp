@@ -135,6 +135,9 @@ QVariant RandomFilter::doFilter(const QVariant &input, const QVariant &argument,
 
   auto varList = input.value<QVariantList>();
 
+  if (varList.isEmpty())
+    return QVariant();
+
   qsrand(QDateTime::currentDateTimeUtc().toTime_t());
   auto rnd = qrand() % varList.size();
   return varList.at(rnd);
