@@ -120,7 +120,10 @@ QVariant TimeSinceFilter::doFilter(const QVariant &input,
   else
     late = argument.value<QDateTime>();
 
-  return timeSince(input.value<QDateTime>(), late);
+  auto early = input.value<QDateTime>();
+  if (!early.isValid())
+    return QVariant();
+  return timeSince(early, late);
 }
 
 QVariant TimeUntilFilter::doFilter(const QVariant &input,
@@ -134,5 +137,8 @@ QVariant TimeUntilFilter::doFilter(const QVariant &input,
   else
     early = argument.value<QDateTime>();
 
-  return timeSince(early, input.value<QDateTime>());
+  auto late = input.value<QDateTime>();
+  if (!late.isValid())
+    return QVariant();
+  return timeSince(early, late);
 }
