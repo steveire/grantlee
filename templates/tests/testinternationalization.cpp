@@ -578,6 +578,87 @@ void TestInternationalization::testLocalizedTemplate_data()
                                << QStringLiteral("ths") << QStringLiteral("ths")
                                << QStringLiteral("ths") << QStringLiteral("ths")
                                << QStringLiteral("ths") << dict;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_int_mib"), 1048576);
+
+  QTest::newRow("fragment-09")
+      << QStringLiteral("{% l10n_filesize fs_int_mib %}")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1.05 MB")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1,05 MB")
+      << QStringLiteral("1,05 MB") << dict;
+
+  QTest::newRow("fragment-10")
+      << QStringLiteral("{% l10n_filesize_var fs_int_mib size_var %}{{ size_var }}")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1.05 MB")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1,05 MB")
+      << QStringLiteral("1,05 MB") << dict;
+
+  QTest::newRow("fragment-11")
+      << QStringLiteral("{% l10n_filesize fs_int_mib 2 %}")
+      << QStringLiteral("1.00 MiB") << QStringLiteral("1.00 MiB")
+      << QStringLiteral("1.00 MiB") << QStringLiteral("1,00 MiB")
+      << QStringLiteral("1,00 MiB") << dict;
+
+  QTest::newRow("fragment-12")
+      << QStringLiteral("{% l10n_filesize_var fs_int_mib 2 size_var %}{{ size_var }}")
+      << QStringLiteral("1.00 MiB") << QStringLiteral("1.00 MiB")
+      << QStringLiteral("1.00 MiB") << QStringLiteral("1,00 MiB")
+      << QStringLiteral("1,00 MiB") << dict;
+
+  QTest::newRow("fragment-13")
+      << QStringLiteral("{% l10n_filesize fs_int_mib 10 3 %}")
+      << QStringLiteral("1.049 MB") << QStringLiteral("1.049 MB")
+      << QStringLiteral("1.049 MB") << QStringLiteral("1,049 MB")
+      << QStringLiteral("1,049 MB") << dict;
+
+  QTest::newRow("fragment-14")
+      << QStringLiteral("{% l10n_filesize_var fs_int_mib 10 3 size_var %}{{ size_var }}")
+      << QStringLiteral("1.049 MB") << QStringLiteral("1.049 MB")
+      << QStringLiteral("1.049 MB") << QStringLiteral("1,049 MB")
+      << QStringLiteral("1,049 MB") << dict;
+
+  QTest::newRow("fragment-15")
+      << QStringLiteral("{% l10n_filesize fs_int_mib 10 2 1024 %}")
+      << QStringLiteral("1.07 GB") << QStringLiteral("1.07 GB")
+      << QStringLiteral("1.07 GB") << QStringLiteral("1,07 GB")
+      << QStringLiteral("1,07 GB") << dict;
+
+  QTest::newRow("fragment-16")
+      << QStringLiteral("{% l10n_filesize_var fs_int_mib 10 2 1024 size_var %}{{ size_var }}")
+      << QStringLiteral("1.07 GB") << QStringLiteral("1.07 GB")
+      << QStringLiteral("1.07 GB") << QStringLiteral("1,07 GB")
+      << QStringLiteral("1,07 GB") << dict;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_float_mib"), 1024.5);
+
+  QTest::newRow("fragment-17")
+      << QStringLiteral("{% l10n_filesize fs_float_mib 10 2 1024 %}")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1.05 MB")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1,05 MB")
+      << QStringLiteral("1,05 MB") << dict;
+
+  QTest::newRow("fragment-18")
+      << QStringLiteral("{% l10n_filesize_var fs_float_mib 10 2 1024 size_var %}{{ size_var }}")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1.05 MB")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1,05 MB")
+      << QStringLiteral("1,05 MB") << dict;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_string_mib"), QStringLiteral("1024.5"));
+
+  QTest::newRow("fragment-19")
+      << QStringLiteral("{% l10n_filesize fs_string_mib 10 2 1024 %}")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1.05 MB")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1,05 MB")
+      << QStringLiteral("1,05 MB") << dict;
+
+  QTest::newRow("fragment-20")
+      << QStringLiteral("{% l10n_filesize_var fs_string_mib 10 2 1024 size_var %}{{ size_var }}")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1.05 MB")
+      << QStringLiteral("1.05 MB") << QStringLiteral("1,05 MB")
+      << QStringLiteral("1,05 MB") << dict;
 }
 
 void TestInternationalization::testSafeContent()
