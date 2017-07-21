@@ -104,8 +104,7 @@ public:
     return QSharedPointer<IfToken>::create(0, QString(), Sentinal);
   }
 
-  using ArgsType
-      = std::pair<QSharedPointer<IfToken>, QSharedPointer<IfToken>>;
+  using ArgsType = std::pair<QSharedPointer<IfToken>, QSharedPointer<IfToken>>;
 
   IfToken(int lbp, const QString &tokenName, OpCode opCode) : mArgs()
   {
@@ -305,9 +304,11 @@ QVariant IfToken::evaluate(Context *c) const
     case NotInCode:
       return !contains(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
     case EqCode:
-      return Grantlee::equals(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
+      return Grantlee::equals(mArgs.first->evaluate(c),
+                              mArgs.second->evaluate(c));
     case NeqCode:
-      return !Grantlee::equals(mArgs.first->evaluate(c), mArgs.second->evaluate(c));
+      return !Grantlee::equals(mArgs.first->evaluate(c),
+                               mArgs.second->evaluate(c));
     case GtCode:
       return mArgs.first->evaluate(c) > mArgs.second->evaluate(c);
     case GteCode:

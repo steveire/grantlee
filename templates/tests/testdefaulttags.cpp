@@ -458,20 +458,24 @@ void TestDefaultTags::testIfTag_data()
   dict.clear();
   dict.insert(QStringLiteral("foostring"), QStringLiteral("foo"));
   QTest::newRow("if-tag-eq06")
-      << QStringLiteral("{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
+      << QStringLiteral(
+             "{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foostring"), QStringLiteral("foo"));
   QTest::newRow("if-tag-eq06")
-      << QStringLiteral("{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
+      << QStringLiteral(
+             "{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("zoo"), QVariant::fromValue(new Zoo(this)));
-  dict.insert(QStringLiteral("tigersEnum"), QVariant::fromValue<int>(Zoo::Tigers));
+  dict.insert(QStringLiteral("tigersEnum"),
+              QVariant::fromValue<int>(Zoo::Tigers));
   QTest::newRow("if-tag-eq07")
-      << QStringLiteral("{% if tigersEnum == zoo.Tigers %}yes{% else %}no{% endif %}")
+      << QStringLiteral(
+             "{% if tigersEnum == zoo.Tigers %}yes{% else %}no{% endif %}")
       << dict << QStringLiteral("yes") << NoError;
 
   // Comparison

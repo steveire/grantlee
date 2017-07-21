@@ -77,8 +77,7 @@ Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 IfNode::IfNode(QObject *parent) : Node(parent) {}
 
 void IfNode::setNodelistConditions(
-    const QVector<QPair<QSharedPointer<IfToken>, NodeList>>
-        &conditionNodelists)
+    const QVector<QPair<QSharedPointer<IfToken>, NodeList>> &conditionNodelists)
 {
   mConditionNodelists = conditionNodelists;
 }

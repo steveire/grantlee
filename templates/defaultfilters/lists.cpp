@@ -135,6 +135,9 @@ QVariant RandomFilter::doFilter(const QVariant &input, const QVariant &argument,
 
   auto varList = input.value<QVariantList>();
 
+  if (varList.isEmpty())
+    return QVariant();
+
   qsrand(QDateTime::currentDateTimeUtc().toTime_t());
   auto rnd = qrand() % varList.size();
   return varList.at(rnd);
@@ -147,6 +150,9 @@ QVariant SliceFilter::doFilter(const QVariant &input, const QVariant &argument,
   auto argString = getSafeString(argument);
   auto splitterIndex = argString.get().indexOf(QLatin1Char(':'));
   QString inputString = getSafeString(input);
+  if (inputString.isEmpty())
+    return QVariant();
+
   if (splitterIndex >= 0) {
     auto left = argString.get().left(splitterIndex).get().toInt();
     auto right = argString.get().right(splitterIndex).get().toInt();

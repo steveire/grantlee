@@ -257,6 +257,12 @@ void TestFilters::testDateBasedFilters_data()
                                       << dict << QStringLiteral("1 day")
                                       << NoError;
 
+  dict.clear();
+  QTest::newRow("filter-timesince19") << QStringLiteral("{{xx|timesince}}")
+                                      << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-timesince20") << QStringLiteral("{{|timesince}}")
+                                      << dict << QStringLiteral("") << NoError;
+
   //  Default compare with datetime.now()
 
   dict.clear();
@@ -354,6 +360,12 @@ void TestFilters::testDateBasedFilters_data()
   QTest::newRow("filter-timeuntil13") << QStringLiteral("{{ a|timeuntil:b }}")
                                       << dict << QStringLiteral("1 day")
                                       << NoError;
+
+  dict.clear();
+  QTest::newRow("filter-timeuntil14") << QStringLiteral("{{xx|timeuntil}}")
+                                      << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-timeuntil15") << QStringLiteral("{{|timeuntil}}")
+                                      << dict << QStringLiteral("") << NoError;
 
   QDateTime d(QDate(2008, 1, 1));
 
@@ -747,6 +759,13 @@ void TestFilters::testStringFilters_data()
       << "a &amp;\nb a &\nb" << NoError;
 
   dict.clear();
+  QTest::newRow("filter-wordwrap03") << QStringLiteral("{{xx|wordwrap}}")
+                                     << dict << "" << NoError;
+
+  QTest::newRow("filter-wordwrap04") << QStringLiteral("{{|wordwrap}}") << dict
+                                     << "" << NoError;
+
+  dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("a&b"));
   dict.insert(QStringLiteral("b"),
               QVariant::fromValue(markSafe(QStringLiteral("a&b"))));
@@ -988,6 +1007,13 @@ void TestFilters::testListFilters_data()
       << dict << QStringLiteral("a&b a&b") << NoError;
 
   dict.clear();
+  dict.insert(QStringLiteral("empty_list"), QVariantList());
+  QTest::newRow("filter-random03") << QStringLiteral("{{empty_list|random}}")
+                                   << dict << QStringLiteral("") << NoError;
+  QTest::newRow("filter-random04") << QStringLiteral("{{|random}}") << dict
+                                   << QStringLiteral("") << NoError;
+
+  dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("a&b"));
   dict.insert(QStringLiteral("b"),
               QVariant::fromValue(markSafe(QStringLiteral("a&b"))));
@@ -999,6 +1025,12 @@ void TestFilters::testListFilters_data()
       << "{% autoescape off %}{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}{% "
          "endautoescape %}"
       << dict << QStringLiteral("&b &b") << NoError;
+
+  dict.clear();
+  QTest::newRow("filter-slice03") << "{{xx|slice}}" << dict
+                                  << QStringLiteral("") << NoError;
+  QTest::newRow("filter-slice04") << "{{|slice}}" << dict << QStringLiteral("")
+                                  << NoError;
 
   dict.clear();
   QVariantList sublist;
