@@ -102,7 +102,12 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
 {
     bool convertNumbers = true;
 
-    qreal size = m_size.resolve(c).toReal(&convertNumbers);
+    qreal size = 0.0f;
+    if (m_size.resolve(c).canConvert<qreal>()) {
+        size = m_size.resolve(c).toReal(&convertNumbers);
+    } else {
+        size = getSafeString(m_size.resolve(c)).get().toDouble(&convertNumbers);
+    }
     if (!convertNumbers) {
         qWarning("%s", "Failed to convert input file size into a floating point number.");
         return;
@@ -160,7 +165,12 @@ void L10nFileSizeVarNode::render(OutputStream *stream, Context *c) const
     Q_UNUSED(stream)
     bool convertNumbers = true;
 
-    qreal size = m_size.resolve(c).toReal(&convertNumbers);
+    qreal size = 0.0f;
+    if (m_size.resolve(c).canConvert<qreal>()) {
+        size = m_size.resolve(c).toReal(&convertNumbers);
+    } else {
+        size = getSafeString(m_size.resolve(c)).get().toDouble(&convertNumbers);
+    }
     if (!convertNumbers) {
         qWarning("%s", "Failed to convert input file size into a floating point number.");
         return;
