@@ -206,6 +206,10 @@ std::pair<qreal,QString> Grantlee::calcFileSize(qreal size, int unitSystem, qrea
       count++;
   }
 
+  if (count >= units) {
+      count = (units - 1);
+  }
+
   qreal devider = current/baseVal;
   _size = _size/devider;
 
