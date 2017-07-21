@@ -39,14 +39,14 @@ Node *L10nFileSizeNodeFactory::getNode(const QString &tagContent, Parser *p) con
 
     FilterExpression size(parts.at(0), p);
 
-    FilterExpression precision;
+    FilterExpression unitSystem;
     if (parts.size() > 1) {
-        precision = FilterExpression(parts.at(1), p);
+        unitSystem = FilterExpression(parts.at(1), p);
     }
 
-    FilterExpression unitSystem;
+    FilterExpression precision;
     if (parts.size() > 2) {
-        unitSystem = FilterExpression(parts.at(2), p);
+        precision = FilterExpression(parts.at(2), p);
     }
 
     FilterExpression multiplier;
@@ -69,14 +69,14 @@ Node *L10nFileSizeVarNodeFactory::getNode(const QString &tagContent, Parser *p) 
 
   FilterExpression size(parts.at(0), p);
 
-  FilterExpression precision;
+  FilterExpression unitSystem;
   if (parts.size() > 1) {
-      precision = FilterExpression(parts.at(1), p);
+      unitSystem = FilterExpression(parts.at(1), p);
   }
 
-  FilterExpression unitSystem;
+  FilterExpression precision;
   if (parts.size() > 2) {
-      unitSystem = FilterExpression(parts.at(2), p);
+      precision = FilterExpression(parts.at(2), p);
   }
 
   FilterExpression multiplier;
