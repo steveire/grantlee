@@ -136,6 +136,10 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
         multiplier = 1.0f;
     }
 
+    if (((unitSystem == 10) && ((size * multiplier) < 1000)) || ((unitSystem == 2) && ((size * multiplier) < 1024))) {
+        precision = 0;
+    }
+
     const std::pair<qreal,QString> fspair = calcFileSize(size, unitSystem, multiplier);
 
     QString resultString;
@@ -197,6 +201,10 @@ void L10nFileSizeVarNode::render(OutputStream *stream, Context *c) const
     if (multiplier == 0.0f) {
         qWarning("%s", "It makes no sense to mulitply the file size by zero. Using default value 1.0.");
         multiplier = 1.0f;
+    }
+
+    if (((unitSystem == 10) && ((size * multiplier) < 1000)) || ((unitSystem == 2) && ((size * multiplier) < 1024))) {
+        precision = 0;
     }
 
     const std::pair<qreal,QString> fspair = calcFileSize(size, unitSystem, multiplier);

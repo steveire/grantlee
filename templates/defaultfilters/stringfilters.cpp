@@ -520,8 +520,17 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
           if (!numberConvert) {
               qWarning("%s", "Failed to convert file size format multiplier into double value. Falling back to default 1.0");
               multiplier = 1.0f;
+          } else {
+              if (multiplier == 0.0f) {
+                  qWarning("%s", "It makes no sense to multiply the file size by zero. Using default value 1.0.");
+                  multiplier = 1.0f;
+              }
           }
       }
+  }
+
+  if (((unitSystem == 10) && ((size * multiplier) < 1000)) || ((unitSystem == 2) && ((size * multiplier) < 1024))) {
+      precision = 0;
   }
 
   const std::pair<qreal,QString> sizePair = calcFileSize(size, unitSystem, multiplier);
