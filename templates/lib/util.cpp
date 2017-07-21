@@ -160,12 +160,29 @@ std::pair<qreal,QString> Grantlee::calcFileSize(qreal size, int unitSystem, qrea
 {
   std::pair<qreal,QString> ret;
 
-  qreal _size = size * multiplier;
   int _unitSystem = unitSystem;
 
   if ((_unitSystem != 2) && (_unitSystem != 10)) {
       qWarning("%s", "Unrecognized file size unit system. Falling back to decmal unit system.");
       _unitSystem = 10;
+  }
+
+  if (size == 0.0) {
+      ret.first = 0.0;
+      ret.second = QStringLiteral("bytes");
+      return ret;
+  } else if ((size == 1.0) || (size == -1.0)) {
+      ret.first = 1.0;
+      ret.second = QStringLiteral("byte");
+      return ret;
+  }
+
+  qreal _size = size * multiplier;
+
+  const bool positiveValue = (_size > 0);
+
+  if (!positiveValue) {
+      _size *= -1;
   }
 
   static const QStringList binaryUnits({
@@ -212,6 +229,10 @@ std::pair<qreal,QString> Grantlee::calcFileSize(qreal size, int unitSystem, qrea
 
   qreal devider = current/baseVal;
   _size = _size/devider;
+
+  if (!positiveValue) {
+      _size *= -1.0;
+  }
 
   ret.first = _size;
   ret.second = (_unitSystem == 10) ? decimalUnits.at(count) : binaryUnits.at(count);

@@ -136,8 +136,16 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
         multiplier = 1.0f;
     }
 
-    if (((unitSystem == 10) && ((size * multiplier) < 1000)) || ((unitSystem == 2) && ((size * multiplier) < 1024))) {
-        precision = 0;
+    const double sizeMult = size * multiplier;
+
+    if (unitSystem == 10) {
+        if ((sizeMult > -1000) && (sizeMult < 1000)) {
+            precision = 0;
+        }
+    } else if (unitSystem == 2) {
+        if ((sizeMult > - 1024) && (sizeMult < 1024)) {
+            precision = 0;
+        }
     }
 
     const std::pair<qreal,QString> fspair = calcFileSize(size, unitSystem, multiplier);
@@ -203,8 +211,16 @@ void L10nFileSizeVarNode::render(OutputStream *stream, Context *c) const
         multiplier = 1.0f;
     }
 
-    if (((unitSystem == 10) && ((size * multiplier) < 1000)) || ((unitSystem == 2) && ((size * multiplier) < 1024))) {
-        precision = 0;
+    const double sizeMult = size * multiplier;
+
+    if (unitSystem == 10) {
+        if ((sizeMult > -1000) && (sizeMult < 1000)) {
+            precision = 0;
+        }
+    } else if (unitSystem == 2) {
+        if ((sizeMult > - 1024) && (sizeMult < 1024)) {
+            precision = 0;
+        }
     }
 
     const std::pair<qreal,QString> fspair = calcFileSize(size, unitSystem, multiplier);
