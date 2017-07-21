@@ -52,39 +52,39 @@ class L10nFileSizeNode : public Node
 {
   Q_OBJECT
 public:
-  L10nFileSizeNode(const Grantlee::FilterExpression &size,
-                   const Grantlee::FilterExpression &unitSystem,
-                   const Grantlee::FilterExpression &precision,
-                   const Grantlee::FilterExpression &multiplier,
+  L10nFileSizeNode(const FilterExpression &size,
+                   const FilterExpression &unitSystem,
+                   const FilterExpression &precision,
+                   const FilterExpression &multiplier,
                    QObject *parent = nullptr);
 
   void render(OutputStream *stream, Context *c) const override;
 
 private:
-  Grantlee::FilterExpression m_size;
-  Grantlee::FilterExpression m_unitSystem;
-  Grantlee::FilterExpression m_precision;
-  Grantlee::FilterExpression m_multiplier;
+  FilterExpression m_size;
+  FilterExpression m_unitSystem;
+  FilterExpression m_precision;
+  FilterExpression m_multiplier;
 };
 
 class L10nFileSizeVarNode : public Node
 {
   Q_OBJECT
 public:
-  L10nFileSizeVarNode(const Grantlee::FilterExpression &size,
-                      const Grantlee::FilterExpression &unitSystem,
-                      const Grantlee::FilterExpression &precision,
-                      const Grantlee::FilterExpression &multiplier,
+  L10nFileSizeVarNode(const FilterExpression &size,
+                      const FilterExpression &unitSystem,
+                      const FilterExpression &precision,
+                      const FilterExpression &multiplier,
                       const QString &resultName,
                       QObject *parent = nullptr);
 
   void render(OutputStream *stream, Context *c) const override;
 
 private:
-  Grantlee::FilterExpression m_size;
-  Grantlee::FilterExpression m_unitSystem;
-  Grantlee::FilterExpression m_precision;
-  Grantlee::FilterExpression m_multiplier;
+  FilterExpression m_size;
+  FilterExpression m_unitSystem;
+  FilterExpression m_precision;
+  FilterExpression m_multiplier;
   QString m_resultName;
 };
 

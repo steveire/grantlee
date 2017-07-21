@@ -34,24 +34,24 @@ Node *L10nFileSizeNodeFactory::getNode(const QString &tagContent, Parser *p) con
     QStringList parts = smartSplit(tagContent);
     parts.removeFirst(); // not interested in the name of the tag
     if (parts.isEmpty()) {
-        throw Grantlee::Exception(Grantlee::TagSyntaxError, QStringLiteral("Error: l10n_filesize requires at least the file size as first parameter"));
+        throw Exception(TagSyntaxError, QStringLiteral("Error: l10n_filesize requires at least the file size as first parameter"));
     }
 
-    Grantlee::FilterExpression size(parts.at(0), p);
+    FilterExpression size(parts.at(0), p);
 
-    Grantlee::FilterExpression precision;
+    FilterExpression precision;
     if (parts.size() > 1) {
-        precision = Grantlee::FilterExpression(parts.at(1), p);
+        precision = FilterExpression(parts.at(1), p);
     }
 
-    Grantlee::FilterExpression unitSystem;
+    FilterExpression unitSystem;
     if (parts.size() > 2) {
-        unitSystem = Grantlee::FilterExpression(parts.at(2), p);
+        unitSystem = FilterExpression(parts.at(2), p);
     }
 
-    Grantlee::FilterExpression multiplier;
+    FilterExpression multiplier;
     if (parts.size() > 3) {
-        multiplier = Grantlee::FilterExpression(parts.at(3), p);
+        multiplier = FilterExpression(parts.at(3), p);
     }
 
     return new L10nFileSizeNode(size, unitSystem, precision, multiplier, p);
@@ -59,29 +59,29 @@ Node *L10nFileSizeNodeFactory::getNode(const QString &tagContent, Parser *p) con
 
 L10nFileSizeVarNodeFactory::L10nFileSizeVarNodeFactory() {}
 
-Grantlee::Node *L10nFileSizeVarNodeFactory::getNode(const QString &tagContent, Parser *p) const
+Node *L10nFileSizeVarNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
   QStringList parts = smartSplit(tagContent);
   parts.removeFirst(); // not interested in the name of the tag
   if (parts.size() < 2) {
-      throw Grantlee::Exception(Grantlee::TagSyntaxError, QStringLiteral("Error: l10n_filesize_var tag takes at least 2 arguments, the file size and the variable name"));
+      throw Exception(TagSyntaxError, QStringLiteral("Error: l10n_filesize_var tag takes at least 2 arguments, the file size and the variable name"));
   }
 
-  Grantlee::FilterExpression size(parts.at(0), p);
+  FilterExpression size(parts.at(0), p);
 
-  Grantlee::FilterExpression precision;
+  FilterExpression precision;
   if (parts.size() > 1) {
-      precision = Grantlee::FilterExpression(parts.at(1), p);
+      precision = FilterExpression(parts.at(1), p);
   }
 
-  Grantlee::FilterExpression unitSystem;
+  FilterExpression unitSystem;
   if (parts.size() > 2) {
-      unitSystem = Grantlee::FilterExpression(parts.at(2), p);
+      unitSystem = FilterExpression(parts.at(2), p);
   }
 
-  Grantlee::FilterExpression multiplier;
+  FilterExpression multiplier;
   if (parts.size() > 3) {
-      multiplier = Grantlee::FilterExpression(parts.at(3), p);
+      multiplier = FilterExpression(parts.at(3), p);
   }
 
   auto resultName = parts.last();
@@ -89,10 +89,10 @@ Grantlee::Node *L10nFileSizeVarNodeFactory::getNode(const QString &tagContent, P
   return new L10nFileSizeVarNode(size, unitSystem, precision, multiplier, resultName, p);
 }
 
-L10nFileSizeNode::L10nFileSizeNode(const Grantlee::FilterExpression &size,
-                                   const Grantlee::FilterExpression &unitSystem,
-                                   const Grantlee::FilterExpression &precision,
-                                   const Grantlee::FilterExpression &multiplier,
+L10nFileSizeNode::L10nFileSizeNode(const FilterExpression &size,
+                                   const FilterExpression &unitSystem,
+                                   const FilterExpression &precision,
+                                   const FilterExpression &multiplier,
                                    QObject *parent)
     : Node(parent), m_size(size), m_unitSystem(unitSystem), m_precision(precision), m_multiplier(multiplier)
 {
@@ -145,10 +145,10 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
     streamValueInContext(stream, resultString, c);
 }
 
-L10nFileSizeVarNode::L10nFileSizeVarNode(const Grantlee::FilterExpression &size,
-                                         const Grantlee::FilterExpression &unitSystem,
-                                         const Grantlee::FilterExpression &precision,
-                                         const Grantlee::FilterExpression &multiplier,
+L10nFileSizeVarNode::L10nFileSizeVarNode(const FilterExpression &size,
+                                         const FilterExpression &unitSystem,
+                                         const FilterExpression &precision,
+                                         const FilterExpression &multiplier,
                                          const QString &resultName, QObject *parent)
     : Node(parent), m_size(size), m_unitSystem(unitSystem), m_precision(precision), m_multiplier(multiplier),
       m_resultName(resultName)
