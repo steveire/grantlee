@@ -476,7 +476,7 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
   QVariant ret;
 
   Q_UNUSED(autoescape)
-  auto arg = getSafeString(argument);
+  const auto arg = getSafeString(argument);
   bool numberConvert = true;
 
   qreal size = 0.0f;
@@ -497,8 +497,8 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
   qreal multiplier = 1.0f;
 
   if (!arg.get().isEmpty()) {
-      const QStringList argList = arg.get().split(QLatin1Char(','), QString::SkipEmptyParts);
-      auto numArgs = argList.size();
+      const auto argList = arg.get().split(QLatin1Char(','), QString::SkipEmptyParts);
+      const auto numArgs = argList.size();
       if (numArgs > 0) {
           unitSystem = argList.at(0).toInt(&numberConvert);
           if (!numberConvert) {
