@@ -32,9 +32,9 @@ L10nFileSizeNodeFactory::L10nFileSizeNodeFactory() {}
 Node *L10nFileSizeNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
     QStringList parts = smartSplit(tagContent);
-    parts.removeFirst(); // not intereseted in the name of the tag
+    parts.removeFirst(); // not interested in the name of the tag
     if (parts.isEmpty()) {
-        throw Grantlee::Exception(Grantlee::TagSyntaxError, QStringLiteral("Error: l10n_filesize requires at least the file size"));
+        throw Grantlee::Exception(Grantlee::TagSyntaxError, QStringLiteral("Error: l10n_filesize requires at least the file size as first parameter"));
     }
 
     Grantlee::FilterExpression size(parts.at(0), p);
@@ -62,9 +62,9 @@ L10nFileSizeVarNodeFactory::L10nFileSizeVarNodeFactory() {}
 Grantlee::Node *L10nFileSizeVarNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
   QStringList parts = smartSplit(tagContent);
-  parts.removeFirst(); // not intereseted in the name of the tag
-  if (parts.size() < 5) {
-      throw Grantlee::Exception(Grantlee::TagSyntaxError, QStringLiteral("Error: l10n_filesize_var tag takes at least 4 arguments"));
+  parts.removeFirst(); // not interested in the name of the tag
+  if (parts.size() < 2) {
+      throw Grantlee::Exception(Grantlee::TagSyntaxError, QStringLiteral("Error: l10n_filesize_var tag takes at least 2 arguments, the file size and the variable name"));
   }
 
   Grantlee::FilterExpression size(parts.at(0), p);
@@ -110,7 +110,7 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
 
     int unitSystem = m_unitSystem.isValid() ? m_unitSystem.resolve(c).toInt(&convertNumbers) : 10;
     if (!convertNumbers) {
-        qWarning("%s", "Failed to convert unit system for file size into integer value. Using default decima system as default.");
+        qWarning("%s", "Failed to convert unit system for file size into integer value. Using default decimal system as default.");
         unitSystem = 10;
     }
 
