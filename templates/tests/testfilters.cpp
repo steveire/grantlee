@@ -951,6 +951,41 @@ void TestFilters::testStringFilters_data()
   QTest::newRow("filter-striptags02")
       << QStringLiteral("{% autoescape off %}{{ a|striptags }} {{ b|striptags }}{% endautoescape %}")
       << dict << QStringLiteral("x y x y") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_int_mib"), 1048576);
+
+  QTest::newRow("filter-filesizeformat01")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat }}") << dict
+      << QStringLiteral("1.05 MB") << NoError;
+
+  QTest::newRow("filter-filesizeformat02")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat:\"2\" }}") << dict
+      << QStringLiteral("1.00 MiB") << NoError;
+
+  QTest::newRow("filter-filesizeformat03")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat:\"10,3\" }}") << dict
+      << QStringLiteral("1.049 MB") << NoError;
+
+  QTest::newRow("filter-filesizeformat04")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat:\"10,2,1024\" }}") << dict
+      << QStringLiteral("1.07 GB") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_float_mib"), 1024.5);
+
+  QTest::newRow("filter-filesizeformat05")
+      << QStringLiteral("{{ fs_float_mib|filesizeformat:\"10,2,1024\" }}") << dict
+      << QStringLiteral("1.05 MB") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_string_mib"), QStringLiteral("1024.5"));
+
+  QTest::newRow("filter-filesizeformat06")
+      << QStringLiteral("{{ fs_string_mib|filesizeformat:\"10,2,1024\" }}") << dict
+      << QStringLiteral("1.05 MB") << NoError;
+
+
 }
 
 void TestFilters::testListFilters_data()
