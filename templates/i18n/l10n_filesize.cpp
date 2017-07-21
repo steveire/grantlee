@@ -131,7 +131,16 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
         multiplier = 1.0f;
     }
 
-    auto resultString = c->localizer()->localizeFileSize(size, precision, unitSystem, multiplier);
+    const std::pair<qreal,QString> fspair = calcFileSize(size, unitSystem, multiplier);
+
+    QString resultString;
+
+    if (precision == 2) {
+        resultString = c->localizer()->localizeNumber(fspair.first) + QChar(QChar::Space) + fspair.second;
+    } else {
+        QLocale l(c->localizer()->currentLocale());
+        resultString = l.toString(fspair.first, 'f', precision) + QChar(QChar::Space) + fspair.second;
+    }
 
     streamValueInContext(stream, resultString, c);
 }
@@ -180,7 +189,16 @@ void L10nFileSizeVarNode::render(OutputStream *stream, Context *c) const
         multiplier = 1.0f;
     }
 
-    auto resultString = c->localizer()->localizeFileSize(size, precision, unitSystem, multiplier);
+    const std::pair<qreal,QString> fspair = calcFileSize(size, unitSystem, multiplier);
+
+    QString resultString;
+
+    if (precision == 2) {
+        resultString = c->localizer()->localizeNumber(fspair.first) + QChar(QChar::Space) + fspair.second;
+    } else {
+        QLocale l(c->localizer()->currentLocale());
+        resultString = l.toString(fspair.first, 'f', precision) + QChar(QChar::Space) + fspair.second;
+    }
 
     c->insert(m_resultName, resultString);
 }
