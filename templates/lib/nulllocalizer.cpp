@@ -19,7 +19,6 @@
 */
 
 #include "nulllocalizer_p.h"
-#include "util.h"
 
 #include <QtCore/QDateTime>
 
@@ -158,20 +157,6 @@ NullLocalizer::localizePluralString(const QString &_string,
   }
   return count > 0 ? substituteArguments(pluralForm, arguments)
                    : substituteArguments(string, arguments);
-}
-
-QString NullLocalizer::localizeFileSize(qreal size,
-                                        int precision,
-                                        int unitSystem,
-                                        qreal multiplier) const
-{
-    QString sizeStr;
-
-    const std::pair<qreal,QString> fspair = calcFileSize(size, unitSystem, multiplier);
-
-    sizeStr = QString::number(fspair.first, 'f', precision) + QLatin1Char(' ') + fspair.second;
-
-    return sizeStr;
 }
 
 QString NullLocalizer::currentLocale() const { return QString(); }
