@@ -479,9 +479,17 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
   auto arg = getSafeString(argument);
   bool numberConvert = true;
 
-  qreal size = input.toReal(&numberConvert);
-  if (!numberConvert) {
-      qWarning("%s", "Failed to convert input file size into floatin point value.");
+  qreal size = 0.0f;
+  if (input.canConvert<qreal>()) {
+      size = input.toReal(&numberConvert);
+      if (!numberConvert) {
+          qWarning("%s", "Failed to convert input file size into floating point value.");
+      }
+  } else {
+      size = getSafeString(input).get().toDouble(&numberConvert);
+      if (!numberConvert) {
+          qWarning("%s", "Failed to convert input file size into floating point value.");
+      }
   }
 
   int unitSystem = 10;
@@ -489,7 +497,7 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
   qreal multiplier = 1.0f;
 
   if (!arg.get().isEmpty()) {
-      QStringList argList = arg.get().split(QLatin1Char(','), QString::SkipEmptyParts);
+      const QStringList argList = arg.get().split(QLatin1Char(','), QString::SkipEmptyParts);
       auto numArgs = argList.size();
       if (numArgs > 0) {
           unitSystem = argList.at(0).toInt(&numberConvert);
