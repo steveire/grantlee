@@ -1005,18 +1005,25 @@ void TestFilters::testStringFilters_data()
   dict.insert(QStringLiteral("fs_neg_1"), -100);
   dict.insert(QStringLiteral("fs_neg_2"), -1000 * 1000 *50);
 
+  // fixes tests on MSVC2013
+  QString fsInput;
+  fsInput  = QStringLiteral("{{ fs_bytes|filesizeformat }} {{ fs_kb|filesizeformat }} {{ fs_10kb|filesizeformat }} {{ fs_1000kb|filesizeformat }} ");
+  fsInput += QStringLiteral("{{ fs_mb|filesizeformat }} {{ fs_50mb|filesizeformat }} {{ fs_1000mb|filesizeformat }} {{ fs_gb|filesizeformat }} ");
+  fsInput += QStringLiteral("{{ fs_tb|filesizeformat }} {{ fs_pb|filesizeformat }} {{ fs_eb|filesizeformat }} {{ fs_zb|filesizeformat }} ");
+  fsInput += QStringLiteral("{{ fs_yb|filesizeformat }} {{ fs_2000yb|filesizeformat }} {{ fs_0b1|filesizeformat }} {{ fs_0b2|filesizeformat }} ");
+  fsInput += QStringLiteral("{{ fs_neg_1|filesizeformat }} {{ fs_neg_2|filesizeformat }}");
+
+  QString fsExpect;
+  fsExpect  = QStringLiteral("999 bytes 1.00 KB 10.00 KB 1000.00 KB ");
+  fsExpect += QStringLiteral("1.00 MB 50.00 MB 1000.00 MB 1.00 GB ");
+  fsExpect += QStringLiteral("1.00 TB 1.00 PB 2.00 EB 1.00 ZB ");
+  fsExpect += QStringLiteral("1.00 YB 2000.00 YB 0 bytes 0 bytes ");
+  fsExpect += QStringLiteral("-100 bytes -50.00 MB");
+
   QTest::newRow("filter-filesizeformat07")
-     << QStringLiteral("{{ fs_bytes|filesizeformat }} {{ fs_kb|filesizeformat }} {{ fs_10kb|filesizeformat }} {{ fs_1000kb|filesizeformat }} "
-                       "{{ fs_mb|filesizeformat }} {{ fs_50mb|filesizeformat }} {{ fs_1000mb|filesizeformat }} {{ fs_gb|filesizeformat }} "
-                       "{{ fs_tb|filesizeformat }} {{ fs_pb|filesizeformat }} {{ fs_eb|filesizeformat }} {{ fs_zb|filesizeformat }} "
-                       "{{ fs_yb|filesizeformat }} {{ fs_2000yb|filesizeformat }} {{ fs_0b1|filesizeformat }} {{ fs_0b2|filesizeformat }} "
-                       "{{ fs_neg_1|filesizeformat }} {{ fs_neg_2|filesizeformat }}")
+     << fsInput
      << dict
-     << QStringLiteral("999 bytes 1.00 KB 10.00 KB 1000.00 KB "
-                       "1.00 MB 50.00 MB 1000.00 MB 1.00 GB "
-                       "1.00 TB 1.00 PB 2.00 EB 1.00 ZB "
-                       "1.00 YB 2000.00 YB 0 bytes 0 bytes "
-                       "-100 bytes -50.00 MB")
+     << fsExpect
      << NoError;
 }
 
