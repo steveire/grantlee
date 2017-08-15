@@ -96,38 +96,41 @@ namespace Grantlee
   Here is an example of a @gr_tag{current_time} tag which displays the current time.
 
   @code
-    class CurrentTimeTag : public Grantlee::AbstractNodeFactory
-    {
-      Grantlee::Node *getNode(const QString &tagContent, Parser *p) const
-      {
-        // You almost always want to use smartSplit.
-        QStringList parts = smartSplit(tagContent);
-        parts.removeFirst(); // Not interested in the name of the tag.
-
-        if (!parts.isEmpty())
-          // The remaining parts are the arguments to the tag. If an incorrect number of arguments
-          // is supplied, and exception should be thrown.
-          throw Grantlee::Exception( TagSyntaxError, "current_time does not take any arguments" );
-
-        return new CurrentTimeNode();
-      }
-    };
-
     class CurrentTimeNode : public Grantlee::Node
     {
-      Q_OBJECT
-    public:
-      CurrentTimeNode(QObject *parent)
-        : QObject(parent)
-      {
+          Q_OBJECT
 
-      }
+       public:
+          CurrentTimeNode( QObject *parent = nullptr )
+             : Grantlee::Node( parent )
+          {
+          }
 
-      void render( Grantlee::OutputStream *stream, Context *c) const
-      {
-        Q_UNUSED(c);
-        return QDateTime::currentDateTime().toString();
-      }
+          virtual void render( Grantlee::OutputStream *stream, Grantlee::Context *c) const override
+          {
+             Q_UNUSED(c);
+             
+             (*stream) <<  QDateTime::currentDateTime().toString();
+          }
+    };
+
+    class CurrentTimeTagFactory : public Grantlee::AbstractNodeFactory
+    {
+          Grantlee::Node *getNode(const QString &tagContent, Grantlee::Parser *p) const override
+          {
+             Q_UNUSED(p);
+
+             // You almost always want to use smartSplit.
+             QStringList parts = smartSplit(tagContent);
+             parts.removeFirst(); // Not interested in the name of the tag.
+
+             if (!parts.isEmpty())
+                // The remaining parts are the arguments to the tag. If an incorrect number of arguments
+                // is supplied, and exception should be thrown.
+                throw Grantlee::Exception( Grantlee::TagSyntaxError, "current_time does not take any arguments" );
+
+             return new CurrentTimeNode();
+          }
     };
   @endcode
 
