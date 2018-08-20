@@ -22,9 +22,9 @@
 
 #include "parser.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
-ScriptableParser::ScriptableParser(Grantlee::Parser *p, QScriptEngine *engine)
+ScriptableParser::ScriptableParser(Grantlee::Parser *p, QJSEngine *engine)
     : QObject(engine), m_p(p), m_engine(engine)
 {
 }
@@ -35,7 +35,7 @@ bool ScriptableParser::hasNextToken() const { return m_p->hasNextToken(); }
 
 void ScriptableParser::loadLib(const QString &name) { m_p->loadLib(name); }
 
-QScriptValue ScriptableParser::takeNextToken()
+QJSValue ScriptableParser::takeNextToken()
 {
   Token t = m_p->takeNextToken();
   auto obj = m_engine->newObject();

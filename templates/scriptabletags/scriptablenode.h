@@ -21,11 +21,11 @@
 #ifndef SCRIPTABLE_NODE_H
 #define SCRIPTABLE_NODE_H
 
-#include <QtScript/QScriptValue>
+#include <QtQml/QJSValue>
 
 #include "node.h"
 
-class QScriptEngine;
+class QJSEngine;
 
 namespace Grantlee
 {
@@ -40,17 +40,17 @@ class ScriptableNode : public Node
   Q_OBJECT
 public:
   ScriptableNode(QObject *parent = 0);
-  void setScriptEngine(QScriptEngine *engine);
-  void init(const QScriptValue &concreteNode, const QScriptValue &renderMethod);
+  void setScriptEngine(QJSEngine *engine);
+  void init(const QJSValue &concreteNode, const QJSValue &renderMethod);
 
-  QScriptEngine *engine();
+  QJSEngine *engine();
 
   void render(OutputStream *stream, Context *c) const override;
 
 private:
-  QScriptEngine *m_scriptEngine;
-  QScriptValue m_concreteNode;
-  QScriptValue m_renderMethod;
+  QJSEngine *m_scriptEngine;
+  QJSValue m_concreteNode;
+  QJSValue m_renderMethod;
 
 public Q_SLOTS:
   void setNodeList(const QString &name, const QObjectList &);
@@ -61,16 +61,16 @@ class ScriptableNodeFactory : public AbstractNodeFactory
   Q_OBJECT
 public:
   ScriptableNodeFactory(QObject *parent = 0);
-  void setScriptEngine(QScriptEngine *engine);
+  void setScriptEngine(QJSEngine *engine);
 
   /* reimp */ void setEngine(Grantlee::Engine *engine) override;
-  void setFactory(const QScriptValue &factoryMethod);
+  void setFactory(const QJSValue &factoryMethod);
 
   Node *getNode(const QString &tagContent, Parser *p = 0) const override;
 
 private:
-  QScriptEngine *m_scriptEngine;
-  QScriptValue m_factoryMethod;
+  QJSEngine *m_scriptEngine;
+  QJSValue m_factoryMethod;
 };
 
 #endif

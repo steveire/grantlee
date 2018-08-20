@@ -1,6 +1,10 @@
 
 find_package(Qt5Core 5.2.0 REQUIRED)
-find_package(Qt5Script 5.2.0)
+find_package(Qt5Qml 5.2.0)
+
+if (TARGET Qt5::Qml)
+    set_property(TARGET Qt5::Qml APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS QT_SCRIPT_LIB)
+endif()
 
 add_subdirectory(lib)
 

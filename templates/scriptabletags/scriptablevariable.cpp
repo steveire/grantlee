@@ -20,7 +20,7 @@
 
 #include "scriptablevariable.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
 #include "scriptablesafestring.h"
 #include "util.h"
@@ -30,7 +30,7 @@ ScriptableVariable::ScriptableVariable(QObject *parent)
 {
 }
 
-ScriptableVariable::ScriptableVariable(QScriptEngine *engine, QObject *parent)
+ScriptableVariable::ScriptableVariable(QJSEngine *engine, QObject *parent)
     : QObject(parent), m_engine(engine)
 {
 }

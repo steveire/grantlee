@@ -21,7 +21,7 @@
 #ifndef SCRIPTABLE_FILTER_H
 #define SCRIPTABLE_FILTER_H
 
-#include <QtScript/QScriptValue>
+#include <QtQml/QJSValue>
 
 #include "filter.h"
 
@@ -30,7 +30,7 @@ using namespace Grantlee;
 class ScriptableFilter : public Filter
 {
 public:
-  ScriptableFilter(const QScriptValue &filterObject, QScriptEngine *engine);
+  ScriptableFilter(const QJSValue &filterObject, QJSEngine *engine);
   ~ScriptableFilter() override;
 
   QVariant doFilter(const QVariant &input, const QVariant &argument,
@@ -39,8 +39,8 @@ public:
   bool isSafe() const override;
 
 private:
-  QScriptValue m_filterObject;
-  QScriptEngine *m_scriptEngine;
+  QJSValue m_filterObject;
+  QJSEngine *m_scriptEngine;
 };
 
 #endif

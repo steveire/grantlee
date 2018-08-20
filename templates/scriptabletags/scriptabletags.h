@@ -24,9 +24,9 @@
 #include "node.h"
 #include "taglibraryinterface.h"
 
-#include <QtScript/QScriptValue>
+#include <QtQml/QJSValue>
 
-class QScriptEngine;
+class QJSEngine;
 
 namespace Grantlee
 {
@@ -36,22 +36,23 @@ class Parser;
 class ScriptableHelperFunctions : public QObject
 {
   Q_OBJECT
-  QScriptEngine *m_scriptEngine;
+  QJSEngine *m_scriptEngine;
 
 public:
-  ScriptableHelperFunctions(QScriptEngine *scriptEngine)
+  ScriptableHelperFunctions(QJSEngine *scriptEngine)
       : m_scriptEngine(scriptEngine)
   {
   }
 
-  Q_INVOKABLE QScriptValue markSafeFunction(QScriptValue inputValue);
-  Q_INVOKABLE QScriptValue ScriptableFilterExpressionConstructor(
-      QString name, QObject *parserObj = nullptr);
-  Q_INVOKABLE QScriptValue ScriptableNodeConstructor(QScriptValue callContext);
-  Q_INVOKABLE QScriptValue ScriptableVariableConstructor(QString name);
-  Q_INVOKABLE QScriptValue ScriptableTemplateConstructor(QString content,
-                                                         QString name,
-                                                         QObject *parent);
+  Q_INVOKABLE QJSValue markSafeFunction(QJSValue inputValue);
+  Q_INVOKABLE QJSValue ScriptableFilterExpressionConstructor(QString name,
+                                                             QObject *parserObj
+                                                             = nullptr);
+  Q_INVOKABLE QJSValue ScriptableNodeConstructor(QJSValue callContext);
+  Q_INVOKABLE QJSValue ScriptableVariableConstructor(QString name);
+  Q_INVOKABLE QJSValue ScriptableTemplateConstructor(QString content,
+                                                     QString name,
+                                                     QObject *parent);
 };
 
 class ScriptableTagLibrary : public QObject, public TagLibraryInterface
@@ -77,8 +78,8 @@ protected:
   QHash<QString, Filter *> getFilters();
 
 private:
-  QScriptEngine *m_scriptEngine;
-  QScriptValue m_functions;
+  QJSEngine *m_scriptEngine;
+  QJSValue m_functions;
   QHash<QString, AbstractNodeFactory *> m_nodeFactories;
   QHash<QString, QString> m_factoryNames;
   QStringList m_filterNames;

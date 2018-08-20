@@ -23,10 +23,10 @@
 
 #include "util.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
-ScriptableFilter::ScriptableFilter(const QScriptValue &filterObject,
-                                   QScriptEngine *engine)
+ScriptableFilter::ScriptableFilter(const QJSValue &filterObject,
+                                   QJSEngine *engine)
     : m_filterObject(filterObject), m_scriptEngine(engine)
 {
 }
@@ -47,7 +47,7 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
                                     bool autoescape) const
 {
   Q_UNUSED(autoescape)
-  QScriptValueList args;
+  QJSValueList args;
   if (input.userType() == qMetaTypeId<QVariantList>()) {
     auto inputList = input.value<QVariantList>();
     auto array = m_scriptEngine->newArray(inputList.size());
@@ -56,7 +56,7 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
         array.setProperty(
             i, m_scriptEngine->newQObject(inputList.at(i).value<QObject *>()));
       } else {
-        array.setProperty(i, m_scriptEngine->newVariant(inputList.at(i)));
+        array.setProperty(i, m_scriptEngine->toScriptValue(inputList.at(i)));
       }
     }
     args << array;
@@ -68,7 +68,7 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
     } else if (input.canConvert<QObject *>()) {
       args << m_scriptEngine->newQObject(input.value<QObject *>());
     } else {
-      args << m_scriptEngine->newVariant(input);
+      args << m_scriptEngine->toScriptValue(input);
     }
   }
 
@@ -77,15 +77,15 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
     ssObj->setContent(getSafeString(argument));
     args << m_scriptEngine->newQObject(ssObj);
   } else {
-    args << m_scriptEngine->newVariant(argument);
+    args << m_scriptEngine->toScriptValue(argument);
   }
   auto filterObject = m_filterObject;
-  auto returnValue = filterObject.call(QScriptValue(), args);
+  auto returnValue = filterObject.call(args);
 
   if (returnValue.isString()) {
     return getSafeString(returnValue.toString());
   } else if (returnValue.isQObject()) {
-    auto returnedObject = qscriptvalue_cast<QObject *>(returnValue);
+    auto returnedObject = qjsvalue_cast<QObject *>(returnValue);
     auto returnedStringObject
         = qobject_cast<ScriptableSafeString *>(returnedObject);
     if (!returnedStringObject)
@@ -93,9 +93,9 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
     auto returnedString = returnedStringObject->wrappedString();
     return returnedString;
   } else if (returnValue.isVariant()) {
-    return qscriptvalue_cast<QVariant>(returnValue);
+    return qjsvalue_cast<QVariant>(returnValue);
   } else if (returnValue.isArray()) {
-    return qscriptvalue_cast<QVariantList>(returnValue);
+    return qjsvalue_cast<QVariantList>(returnValue);
   }
   return QVariant();
 }

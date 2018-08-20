@@ -20,7 +20,7 @@
 
 #include "scriptablefilterexpression.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
 #include "parser.h"
 #include "scriptablesafestring.h"
@@ -33,7 +33,7 @@ ScriptableFilterExpression::ScriptableFilterExpression(QObject *parent)
 {
 }
 
-ScriptableFilterExpression::ScriptableFilterExpression(QScriptEngine *engine,
+ScriptableFilterExpression::ScriptableFilterExpression(QJSEngine *engine,
                                                        QObject *parent)
     : QObject(parent), m_engine(engine)
 {

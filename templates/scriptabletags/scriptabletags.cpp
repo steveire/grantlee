@@ -23,8 +23,8 @@
 #include <QtCore/QFile>
 #include <QtPlugin>
 
-#include <QtScript/QScriptEngine>
-#include <QtScript/QScriptValueIterator>
+#include <QtQml/QJSEngine>
+#include <QtQml/QJSValueIterator>
 
 #include "nodebuiltins_p.h"
 
@@ -45,14 +45,13 @@ Q_DECLARE_METATYPE(Token)
 
 using namespace Grantlee;
 
-QScriptValue
-ScriptableHelperFunctions::markSafeFunction(QScriptValue inputValue)
+QJSValue ScriptableHelperFunctions::markSafeFunction(QJSValue inputValue)
 {
   if (inputValue.isQObject()) {
     auto obj = inputValue.toQObject();
     auto ssObj = qobject_cast<ScriptableSafeString *>(obj);
     if (!ssObj)
-      return m_scriptEngine->nullValue();
+      return QJSValue::NullValue;
 
     ssObj->setSafety(true);
     return m_scriptEngine->newQObject(ssObj);
@@ -63,10 +62,10 @@ ScriptableHelperFunctions::markSafeFunction(QScriptValue inputValue)
     ssObj->setContent(markSafe(str));
     return m_scriptEngine->newQObject(ssObj);
   }
-  return m_scriptEngine->nullValue();
+  return QJSValue::NullValue;
 }
 
-QScriptValue ScriptableHelperFunctions::ScriptableFilterExpressionConstructor(
+QJSValue ScriptableHelperFunctions::ScriptableFilterExpressionConstructor(
     QString name, QObject *parserObj)
 {
   auto object = new ScriptableFilterExpression(m_scriptEngine);
@@ -78,22 +77,20 @@ QScriptValue ScriptableHelperFunctions::ScriptableFilterExpressionConstructor(
   return m_scriptEngine->newQObject(object);
 }
 
-QScriptValue
-ScriptableHelperFunctions::ScriptableNodeConstructor(QScriptValue callContext)
+QJSValue
+ScriptableHelperFunctions::ScriptableNodeConstructor(QJSValue callContext)
 {
-  QScriptValueIterator it(callContext);
+  QJSValueIterator it(callContext);
   it.next();
   auto scriptableNodeName = it.value().toString();
   auto concreteNode
       = m_scriptEngine->globalObject().property(scriptableNodeName);
 
-  QScriptValueList args;
-  while (it.hasNext()) {
-    it.next();
+  QJSValueList args;
+  while (it.next())
     args << it.value();
-  }
 
-  concreteNode.call(concreteNode, args);
+  concreteNode = concreteNode.callAsConstructor(args);
 
   auto renderMethod = concreteNode.property(QStringLiteral("render"));
 
@@ -104,14 +101,14 @@ ScriptableHelperFunctions::ScriptableNodeConstructor(QScriptValue callContext)
   return m_scriptEngine->newQObject(object);
 }
 
-QScriptValue ScriptableHelperFunctions::ScriptableTemplateConstructor(
+QJSValue ScriptableHelperFunctions::ScriptableTemplateConstructor(
     QString content, QString name, QObject *parent)
 {
   auto templateEngine
       = m_scriptEngine->property("templateEngine").value<Engine *>();
 
   if (!templateEngine)
-    return QScriptValue();
+    return QJSValue();
 
   auto t = templateEngine->newTemplate(content, name);
 
@@ -119,8 +116,7 @@ QScriptValue ScriptableHelperFunctions::ScriptableTemplateConstructor(
   return m_scriptEngine->newQObject(object);
 }
 
-QScriptValue
-ScriptableHelperFunctions::ScriptableVariableConstructor(QString name)
+QJSValue ScriptableHelperFunctions::ScriptableVariableConstructor(QString name)
 {
   // TODO: Decide what the parent should be;
   // It should be the owning scriptableNode. I think I can get that from the
@@ -134,10 +130,12 @@ ScriptableHelperFunctions::ScriptableVariableConstructor(QString name)
 }
 
 ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
-    : QObject(parent), m_scriptEngine(new QScriptEngine(this)),
+    : QObject(parent), m_scriptEngine(new QJSEngine(this)),
       m_functions(m_scriptEngine->newQObject(
           new ScriptableHelperFunctions(m_scriptEngine)))
 {
+  qRegisterMetaType<QObjectList>("QObjectList");
+
   m_scriptEngine->globalObject().setProperty(
       QStringLiteral("internalGrantleeFunctions"), m_functions);
 
@@ -199,13 +197,10 @@ bool ScriptableTagLibrary::evaluateScript(const QString &name)
 
   scriptFile.close();
 
-  m_scriptEngine->evaluate(fileContent);
+  QJSValue result = m_scriptEngine->evaluate(fileContent);
+  if (result.isError())
+    throw Grantlee::Exception(TagSyntaxError, result.toString());
 
-  if (m_scriptEngine->hasUncaughtException()) {
-    throw Grantlee::Exception(TagSyntaxError,
-                              m_scriptEngine->uncaughtExceptionBacktrace().join(
-                                  QChar::fromLatin1(' ')));
-  }
   return true;
 }
 
@@ -268,11 +263,6 @@ QHash<QString, Filter *> ScriptableTagLibrary::getFilters()
         = filterObject.property(QStringLiteral("filterName")).toString();
     auto filter = new ScriptableFilter(filterObject, m_scriptEngine);
     filters.insert(filterName, filter);
-  }
-  if (m_scriptEngine->hasUncaughtException()) {
-    throw Grantlee::Exception(TagSyntaxError,
-                              m_scriptEngine->uncaughtExceptionBacktrace().join(
-                                  QChar::fromLatin1(' ')));
   }
 
   return filters;
