@@ -23,39 +23,32 @@
 
 #include <QtCore/QObject>
 
-#include <QtScript/QScriptValue>
+#include <QtQml/QJSValue>
 
 #include "filterexpression.h"
-
-class QScriptContext;
-
-class ScriptableContext;
-
-QScriptValue ScriptableFilterExpressionConstructor(QScriptContext *context,
-                                                   QScriptEngine *engine);
 
 class ScriptableFilterExpression : public QObject
 {
   Q_OBJECT
 public:
   ScriptableFilterExpression(QObject *parent = 0);
-  ScriptableFilterExpression(QScriptEngine *engine, QObject *parent = 0);
+  ScriptableFilterExpression(QJSEngine *engine, QObject *parent = 0);
 
   void init(const QString &content, Grantlee::Parser *parser);
 
 public Q_SLOTS:
-  QVariant resolve(ScriptableContext *c);
+  QVariant resolve(QObject *c);
 
-  bool isTrue(ScriptableContext *c);
+  bool isTrue(QObject *c);
 
   bool equals(ScriptableFilterExpression *other,
-              ScriptableContext *scriptableC);
+              QObject *scriptableC);
 
-  // list? QScriptValueList? Make this a ScriptClass?
+  // list? QJSValueList? Make this a ScriptClass?
 
 private:
   Grantlee::FilterExpression m_filterExpression;
-  QScriptEngine *m_engine;
+  QJSEngine *m_engine;
 };
 
 #endif

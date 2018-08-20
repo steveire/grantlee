@@ -22,9 +22,10 @@
 #include "scriptablenode.h"
 
 #include "parser.h"
+#include <QtQml/QJSEngine>
 
-ScriptableParser::ScriptableParser(Grantlee::Parser *p, QObject *parent)
-    : QObject(parent), m_p(p)
+ScriptableParser::ScriptableParser(Grantlee::Parser *p, QJSEngine *engine)
+    : QObject(engine), m_p(p), m_engine(engine)
 {
 }
 
@@ -34,16 +35,23 @@ bool ScriptableParser::hasNextToken() const { return m_p->hasNextToken(); }
 
 void ScriptableParser::loadLib(const QString &name) { m_p->loadLib(name); }
 
-Token ScriptableParser::takeNextToken() { return m_p->takeNextToken(); }
+QJSValue ScriptableParser::takeNextToken()
+{
+  Token t = m_p->takeNextToken();
+  auto obj = m_engine->newObject();
+  obj.setProperty(QStringLiteral("tokenType"), t.tokenType);
+  obj.setProperty(QStringLiteral("content"), t.content);
+  return obj;
+}
 
 void ScriptableParser::skipPast(const QString &tag) { m_p->skipPast(tag); }
 
-QObjectList ScriptableParser::parse(QObject *parent, const QString &stopAt)
+QList<QObject *> ScriptableParser::parse(QObject *parent, const QString &stopAt)
 {
   return parse(parent, QStringList() << stopAt);
 }
 
-QObjectList ScriptableParser::parse(QObject *parent, const QStringList &stopAt)
+QList<QObject *> ScriptableParser::parse(QObject *parent, const QStringList &stopAt)
 {
   auto node = qobject_cast<Node *>(parent);
   Q_ASSERT(node);

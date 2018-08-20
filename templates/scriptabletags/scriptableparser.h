@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
-#include <QtScript/QScriptValue>
+#include <QtQml/QJSValue>
 
 #include "token.h"
 
@@ -39,17 +39,17 @@ class ScriptableParser : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableParser(Parser *p, QObject *parent = 0);
+  explicit ScriptableParser(Parser *p, QJSEngine *engine);
 
   Parser *parser() { return m_p; }
 
 public Q_SLOTS:
-  QObjectList parse(QObject *parent, const QString &stopAt);
-  QObjectList parse(QObject *parent, const QStringList &stopAt = QStringList());
+  QList<QObject *> parse(QObject *parent, const QString &stopAt);
+  QList<QObject *> parse(QObject *parent, const QStringList &stopAt = QStringList());
 
   void skipPast(const QString &tag);
 
-  Token takeNextToken();
+  QJSValue takeNextToken();
   bool hasNextToken() const;
   void removeNextToken();
 
@@ -57,6 +57,7 @@ public Q_SLOTS:
 
 private:
   Parser *m_p;
+  QJSEngine *m_engine;
 };
 
 #endif

@@ -22,36 +22,31 @@
 #define SCRIPTABLE_VARIABLE_H
 
 #include <QtCore/QObject>
-#include <QtScript/QScriptValue>
+#include <QtQml/QJSValue>
 
 #include "variable.h"
-
-class QScriptContext;
 
 class ScriptableContext;
 
 using namespace Grantlee;
-
-QScriptValue ScriptableVariableConstructor(QScriptContext *context,
-                                           QScriptEngine *engine);
 
 class ScriptableVariable : public QObject
 {
   Q_OBJECT
 public:
   ScriptableVariable(QObject *parent = 0);
-  ScriptableVariable(QScriptEngine *engine, QObject *parent = 0);
+  ScriptableVariable(QJSEngine *engine, QObject *parent = 0);
 
   void setContent(const QString &content);
 
 public Q_SLOTS:
-  QVariant resolve(ScriptableContext *c);
+  QVariant resolve(QObject *c);
 
-  bool isTrue(ScriptableContext *c);
+  bool isTrue(QObject *c);
 
 private:
   Variable m_variable;
-  QScriptEngine *m_engine;
+  QJSEngine *m_engine;
 };
 
 #endif

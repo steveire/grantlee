@@ -77,7 +77,7 @@ void TestLoaderTags::initTestCase()
                            << QStringLiteral(GRANTLEE_PLUGIN_PATH)
                            << QStringLiteral(":/plugins/") // For testtags.qs
                            );
-#ifdef HAVE_QTSCRIPT_LIB
+#ifdef HAVE_QTQML_LIB
   m_engine->addDefaultLibrary(QStringLiteral("grantlee_scriptabletags"));
 #endif
 }
@@ -300,7 +300,7 @@ void TestLoaderTags::testExtendsTag_data()
              "{% extends 'inheritance15' %}{% block inner %}out{% endblock %}")
       << dict << QStringLiteral("12out3_") << NoError;
 
-#ifdef HAVE_QTSCRIPT_LIB
+#ifdef HAVE_QTQML_LIB
   // {% load %} tag (parent -- setup for exception04)
   auto inh17 = QStringLiteral(
       "{% load testtags %}{% block first %}1234{% endblock %}");

@@ -88,7 +88,7 @@ target_compile_definitions(Grantlee_Templates
     PLUGINS_PREFER_DEBUG_POSTFIX=$<CONFIG:Debug>
 )
 
-if (Qt5Script_FOUND)
+if (Qt5Qml_FOUND)
   set(scriptabletags_FILES
     scriptablecontext.cpp
     scriptablefilterexpression.cpp
@@ -108,7 +108,7 @@ if (Qt5Script_FOUND)
   target_sources(Grantlee_Templates PRIVATE ${scriptabletags_SRCS})
   target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
   target_link_libraries(Grantlee_Templates
-    LINK_PRIVATE Qt5::Script
+    LINK_PRIVATE Qt5::Qml
   )
 endif()
 

@@ -20,30 +20,7 @@
 
 #include "scriptablesafestring.h"
 
-#include <QtScript/QScriptEngine>
-
-#include "util.h"
-
-QScriptValue markSafeFunction(QScriptContext *context, QScriptEngine *engine)
-{
-  auto inputValue = context->argument(0);
-  if (inputValue.isQObject()) {
-    auto obj = inputValue.toQObject();
-    auto ssObj = qobject_cast<ScriptableSafeString *>(obj);
-    if (!ssObj)
-      return engine->nullValue();
-
-    ssObj->setSafety(true);
-    return engine->newQObject(ssObj);
-
-  } else if (inputValue.isString()) {
-    auto str = inputValue.toString();
-    auto ssObj = new ScriptableSafeString(engine);
-    ssObj->setContent(markSafe(str));
-    return engine->newQObject(ssObj);
-  }
-  return engine->nullValue();
-}
+#include <QtQml/QJSEngine>
 
 ScriptableSafeString::ScriptableSafeString(QObject *parent) : QObject(parent) {}
 

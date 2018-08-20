@@ -20,7 +20,7 @@
 
 #include "scriptablenode.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
 #include "context.h"
 #include "engine.h"
@@ -29,53 +29,18 @@
 #include "scriptablecontext.h"
 #include "scriptableparser.h"
 
-QScriptValue nodeToScriptValue(QScriptEngine *engine, Node *const &node)
-{
-  return engine->newQObject(node);
-}
-
-void nodeFromScriptValue(const QScriptValue &object, Node *&out)
-{
-  out = qobject_cast<Node *>(object.toQObject());
-}
-
-Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableNode, Node *)
-
-QScriptValue ScriptableNodeConstructor(QScriptContext *context,
-                                       QScriptEngine *engine)
-{
-  auto scriptableNodeName = context->argument(0).toString();
-  auto concreteNode = engine->globalObject().property(scriptableNodeName);
-
-  QScriptValueList args;
-  // First is the node type
-  for (auto i = 1; i < context->argumentCount(); ++i) {
-    args << context->argument(i);
-  }
-
-  concreteNode.call(concreteNode, args);
-
-  auto renderMethod = concreteNode.property(QStringLiteral("render"));
-
-  auto object = new ScriptableNode(engine);
-  object->setObjectName(scriptableNodeName);
-  object->setScriptEngine(engine);
-  object->init(concreteNode, renderMethod);
-  return engine->newQObject(object);
-}
-
 ScriptableNode::ScriptableNode(QObject *parent)
     : Node(parent), m_scriptEngine(0)
 {
 }
 
-void ScriptableNode::setScriptEngine(QScriptEngine *engine)
+void ScriptableNode::setScriptEngine(QJSEngine *engine)
 {
   m_scriptEngine = engine;
 }
 
-void ScriptableNode::init(const QScriptValue &concreteNode,
-                          const QScriptValue &renderMethod)
+void ScriptableNode::init(const QJSValue &concreteNode,
+                          const QJSValue &renderMethod)
 {
   m_concreteNode = concreteNode;
   m_renderMethod = renderMethod;
@@ -86,15 +51,17 @@ void ScriptableNode::render(OutputStream *stream, Context *c) const
   ScriptableContext sc(c);
   auto contextObject = m_scriptEngine->newQObject(&sc);
 
-  QScriptValueList args;
+  QJSValueList args;
   args << contextObject;
 
   // Call the render method in the context of the concreteNode
-  auto value
-      = const_cast<QScriptValue &>(m_renderMethod).call(m_concreteNode, args);
+  auto value =  const_cast<QJSValue &>(m_renderMethod).callWithInstance(m_concreteNode, args);
 
-  if (value.isValid() && !value.isUndefined())
+  if (!value.isError() && !value.isUndefined())
     (*stream) << value.toString();
+
+  if (value.isError())
+    throw Grantlee::Exception(TagSyntaxError, value.toString());
 }
 
 ScriptableNodeFactory::ScriptableNodeFactory(QObject *parent)
@@ -102,7 +69,7 @@ ScriptableNodeFactory::ScriptableNodeFactory(QObject *parent)
 {
 }
 
-void ScriptableNodeFactory::setScriptEngine(QScriptEngine *engine)
+void ScriptableNodeFactory::setScriptEngine(QJSEngine *engine)
 {
   m_scriptEngine = engine;
 }
@@ -112,42 +79,35 @@ void ScriptableNodeFactory::setEngine(Engine *engine)
   m_scriptEngine->setProperty("templateEngine", QVariant::fromValue(engine));
 }
 
-void ScriptableNodeFactory::setFactory(const QScriptValue &factoryMethod)
+void ScriptableNodeFactory::setFactory(const QJSValue &factoryMethod)
 {
   m_factoryMethod = factoryMethod;
 }
 
 Node *ScriptableNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
-  if (m_scriptEngine->hasUncaughtException()) {
-    throw Grantlee::Exception(TagSyntaxError,
-                              m_scriptEngine->uncaughtExceptionBacktrace().join(
-                                  QChar::fromLatin1(' ')));
-  }
   auto sp = new ScriptableParser(p, m_scriptEngine);
   auto parserObject = m_scriptEngine->newQObject(sp);
 
-  QScriptValueList args;
+  QJSValueList args;
   args << tagContent;
   args << parserObject;
 
   auto factory = m_factoryMethod;
 
-  auto scriptNode = factory.call(factory, args);
-  if (m_scriptEngine->hasUncaughtException())
-    throw Grantlee::Exception(TagSyntaxError,
-                              m_scriptEngine->uncaughtExceptionBacktrace().join(
-                                  QChar::fromLatin1(' ')));
+  QJSValue scriptNode = factory.callWithInstance(factory, args);
+  if (scriptNode.isError())
+    throw Grantlee::Exception(TagSyntaxError, scriptNode.toString());
 
-  auto node = qscriptvalue_cast<Node *>(scriptNode);
+  auto node = qjsvalue_cast<Node *>(scriptNode);
   node->setParent(p);
   return node;
 }
 
-QScriptEngine *ScriptableNode::engine() { return m_scriptEngine; }
+QJSEngine *ScriptableNode::engine() { return m_scriptEngine; }
 
 void ScriptableNode::setNodeList(const QString &name,
-                                 const QObjectList &objectList)
+                                 const QList<QObject *> &objectList)
 {
   auto objectListArray = m_scriptEngine->newArray(objectList.size());
 

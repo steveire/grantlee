@@ -1,6 +1,6 @@
 
 find_package(Qt5Core 5.2.0 REQUIRED)
-find_package(Qt5Script 5.2.0)
+find_package(Qt5Qml 5.2.0)
 
 add_subdirectory(lib)
 
@@ -14,11 +14,6 @@ endif()
 
 if (BUILD_I18N_PLUGIN)
   add_subdirectory(i18n)
-endif()
-
-
-if (BUILD_SCRIPT_PLUGIN)
-#  add_subdirectory(scriptabletags)
 endif()
 
 if (BUILD_TESTS)

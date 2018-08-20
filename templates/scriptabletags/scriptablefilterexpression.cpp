@@ -20,7 +20,7 @@
 
 #include "scriptablefilterexpression.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
 #include "parser.h"
 #include "scriptablecontext.h"
@@ -29,27 +29,12 @@
 
 using namespace Grantlee;
 
-Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableFilterExpression, QObject *)
-
-QScriptValue ScriptableFilterExpressionConstructor(QScriptContext *context,
-                                                   QScriptEngine *engine)
-{
-  auto object = new ScriptableFilterExpression(engine);
-
-  auto parserObj = context->argument(1).toQObject();
-  auto p = qobject_cast<Parser *>(parserObj);
-
-  object->init(context->argument(0).toString(), p);
-
-  return engine->newQObject(object);
-}
-
 ScriptableFilterExpression::ScriptableFilterExpression(QObject *parent)
     : QObject(parent), m_engine(0)
 {
 }
 
-ScriptableFilterExpression::ScriptableFilterExpression(QScriptEngine *engine,
+ScriptableFilterExpression::ScriptableFilterExpression(QJSEngine *engine,
                                                        QObject *parent)
     : QObject(parent), m_engine(engine)
 {
@@ -61,8 +46,9 @@ void ScriptableFilterExpression::init(const QString &content,
   m_filterExpression = FilterExpression(content, parser);
 }
 
-QVariant ScriptableFilterExpression::resolve(ScriptableContext *c)
+QVariant ScriptableFilterExpression::resolve(QObject *o)
 {
+  ScriptableContext *c = qobject_cast<ScriptableContext *>(o);
   auto var = m_filterExpression.resolve(c->context());
 
   if (Grantlee::isSafeString(var)) {
@@ -73,14 +59,16 @@ QVariant ScriptableFilterExpression::resolve(ScriptableContext *c)
   return var;
 }
 
-bool ScriptableFilterExpression::isTrue(ScriptableContext *c)
+bool ScriptableFilterExpression::isTrue(QObject *o)
 {
+  ScriptableContext *c = qobject_cast<ScriptableContext *>(o);
   return m_filterExpression.isTrue(c->context());
 }
 
 bool ScriptableFilterExpression::equals(ScriptableFilterExpression *other,
-                                        ScriptableContext *scriptableC)
+                                        QObject *scriptableO)
 {
+  ScriptableContext *scriptableC = qobject_cast<ScriptableContext *>(scriptableO);
   auto c = scriptableC->context();
   return Grantlee::equals(m_filterExpression.resolve(c),
                           other->m_filterExpression.resolve(c));
