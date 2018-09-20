@@ -118,10 +118,6 @@ endif()
 
 configure_file(grantlee_test_export.h.in "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h")
 
-file(READ "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h" _content)
-
-file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h" "${_content}")
-
 target_link_libraries(Grantlee_Templates
   LINK_PUBLIC Qt5::Core
 )

@@ -21,6 +21,8 @@
 #ifndef GRANTLEE_NULLLOCALIZER_P_H
 #define GRANTLEE_NULLLOCALIZER_P_H
 
+#include "grantlee_test_export.h"
+
 #include "abstractlocalizer.h"
 
 namespace Grantlee

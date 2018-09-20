@@ -1,2 +1,8 @@
+#ifndef GRANTLEE_TEST_EXPORT_H
+#define GRANTLEE_TEST_EXPORT_H
+
+#include "grantlee_templates_export.h"
 
 #define GRANTLEE_TESTS_EXPORT @GRANTLEE_TESTS_EXPORT@
+
+#endif
