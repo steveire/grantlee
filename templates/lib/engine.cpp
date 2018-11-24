@@ -24,7 +24,7 @@
 #include "exception.h"
 #include "grantlee_config_p.h"
 #include "grantlee_version.h"
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
 #include "scriptabletags.h"
 #endif
 #include "template_p.h"
@@ -52,7 +52,7 @@ Engine::Engine(QObject *parent)
 
 Engine::~Engine()
 {
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
   qDeleteAll(d_ptr->m_scriptableLibraries);
 #endif
   d_ptr->m_libraries.clear();
@@ -142,7 +142,7 @@ void Engine::loadDefaultLibraries()
 {
   Q_D(Engine);
 
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
   // Make sure we can load default scriptable libraries if we're supposed to.
   if (d->m_defaultLibraries.contains(QLatin1String(__scriptableLibName))
       && !d->m_scriptableTagLibrary) {
@@ -196,7 +196,7 @@ void Engine::loadDefaultLibraries()
     // that.
     uint minorVersion = GRANTLEE_VERSION_MINOR;
     while (acceptableVersion<GRANTLEE_MIN_PLUGIN_VERSION>(minorVersion)) {
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
       // Although we don't use scripted libaries here, we need to
       // recognize them
       // being first
@@ -224,7 +224,7 @@ TagLibraryInterface *Engine::loadLibrary(const QString &name)
 {
   Q_D(Engine);
 
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
   if (name == QLatin1String(__scriptableLibName))
     return 0;
 #endif
@@ -251,7 +251,7 @@ TagLibraryInterface *Engine::loadLibrary(const QString &name)
 TagLibraryInterface *EnginePrivate::loadLibrary(const QString &name,
                                                 uint minorVersion)
 {
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
   auto scriptableLibrary = loadScriptableLibrary(name, minorVersion);
   if (scriptableLibrary)
     return scriptableLibrary;
@@ -264,7 +264,7 @@ TagLibraryInterface *EnginePrivate::loadLibrary(const QString &name,
 
 EnginePrivate::EnginePrivate(Engine *engine)
     : q_ptr(engine)
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
       ,
       m_scriptableTagLibrary(0)
 #endif
@@ -301,7 +301,7 @@ QString EnginePrivate::getScriptLibraryName(const QString &name,
   return QString();
 }
 
-#ifdef QT_SCRIPT_LIB
+#ifdef QT_QML_LIB
 ScriptableLibraryContainer *
 EnginePrivate::loadScriptableLibrary(const QString &name, uint minorVersion)
 {

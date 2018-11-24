@@ -100,7 +100,7 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
     target_link_libraries(${_testname}_exec Grantlee5::Templates template_test_builtins)
 
     if (Qt5Qml_FOUND)
-      target_compile_definitions(${_testname}_exec PRIVATE HAVE_QTSCRIPT_LIB)
+      target_compile_definitions(${_testname}_exec PRIVATE HAVE_QTQML_LIB)
     endif()
 
     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
