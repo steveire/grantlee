@@ -23,8 +23,6 @@
 
 #include <QtScript/QScriptValue>
 
-#include <QtCore/QSharedPointer>
-
 #include "node.h"
 
 class QScriptEngine;
@@ -35,8 +33,6 @@ namespace Grantlee
 class Context;
 class Engine;
 }
-
-typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
 
 using namespace Grantlee;
 
