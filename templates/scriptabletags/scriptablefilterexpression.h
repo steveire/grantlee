@@ -51,8 +51,6 @@ public Q_SLOTS:
   bool equals(ScriptableFilterExpression *other,
               ScriptableContext *scriptableC);
 
-  // list? QScriptValueList? Make this a ScriptClass?
-
 private:
   Grantlee::FilterExpression m_filterExpression;
   QScriptEngine *m_engine;

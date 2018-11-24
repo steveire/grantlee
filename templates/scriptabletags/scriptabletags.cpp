@@ -64,10 +64,6 @@ ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
                           tokenFromScriptValue);
   qScriptRegisterMetaType(m_scriptEngine, nodeToScriptValue,
                           nodeFromScriptValue);
-  //   qScriptRegisterMetaType(m_scriptEngine.data(), tokenToScriptValue,
-  //   tokenFromScriptValue);
-  //   qScriptRegisterMetaType(m_scriptEngine.data(), nodeToScriptValue,
-  //   nodeFromScriptValue);
 
   // Make Node new-able
   auto nodeCtor = m_scriptEngine->newFunction(ScriptableNodeConstructor);

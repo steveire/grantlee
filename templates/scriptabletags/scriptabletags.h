@@ -24,11 +24,6 @@
 #include "node.h"
 #include "taglibraryinterface.h"
 
-// #include <QtScript/QScriptEngine>
-
-// #include <QtScript/QSharedPointer>
-// typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
-
 class QScriptEngine;
 
 namespace Grantlee
@@ -59,7 +54,6 @@ protected:
   QHash<QString, Filter *> getFilters();
 
 private:
-  //   ScriptEnginePointer m_scriptEngine;
   QScriptEngine *m_scriptEngine;
   QHash<QString, AbstractNodeFactory *> m_nodeFactories;
   QHash<QString, QString> m_factoryNames;
