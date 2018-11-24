@@ -41,27 +41,11 @@ Q_DECLARE_METATYPE(Token)
 
 using namespace Grantlee;
 
-QScriptValue tokenToScriptValue(QScriptEngine *engine, const Token &t)
-{
-  auto obj = engine->newObject();
-  obj.setProperty(QStringLiteral("tokenType"), t.tokenType);
-  obj.setProperty(QStringLiteral("content"), t.content);
-  return obj;
-}
-
-void tokenFromScriptValue(const QScriptValue &obj, Token &t)
-{
-  t.tokenType = obj.property(QStringLiteral("tokenType")).toInt32();
-  t.content = obj.property(QStringLiteral("content")).toString();
-}
-
 ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
     : QObject(parent), m_scriptEngine(0)
 {
   m_scriptEngine = new QScriptEngine(this);
 
-  qScriptRegisterMetaType(m_scriptEngine, tokenToScriptValue,
-                          tokenFromScriptValue);
   qScriptRegisterMetaType(m_scriptEngine, nodeToScriptValue,
                           nodeFromScriptValue);
 

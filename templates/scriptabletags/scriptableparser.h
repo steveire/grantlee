@@ -23,8 +23,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-
-#include "token.h"
+#include <QtScript/QScriptValue>
 
 namespace Grantlee
 {
@@ -37,7 +36,7 @@ class ScriptableParser : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableParser(Parser *p, QObject *parent = 0);
+  explicit ScriptableParser(Parser *p, QScriptEngine *engine);
 
   Parser *parser() { return m_p; }
 
@@ -47,7 +46,7 @@ public Q_SLOTS:
 
   void skipPast(const QString &tag);
 
-  Token takeNextToken();
+  QScriptValue takeNextToken();
   bool hasNextToken() const;
   void removeNextToken();
 
@@ -55,6 +54,7 @@ public Q_SLOTS:
 
 private:
   Parser *m_p;
+  QScriptEngine *m_engine;
 };
 
 #endif
