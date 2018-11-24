@@ -5,3 +5,4 @@ ColumnLimit: 80
 Standard: Cpp11
 IndentWidth: 2
 BreakBeforeBraces: Linux
+FixNamespaceComments: false
