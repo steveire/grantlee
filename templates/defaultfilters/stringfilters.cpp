@@ -53,7 +53,7 @@ QVariant CapFirstFilter::doFilter(const QVariant &input,
 
   return QVariant(safeString.get().at(0).toUpper()
                   + static_cast<QString>(
-                        safeString.get().right(safeString.get().size() - 1)));
+                      safeString.get().right(safeString.get().size() - 1)));
 }
 
 EscapeJsFilter::EscapeJsFilter() {}

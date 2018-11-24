@@ -301,7 +301,8 @@ void testAssociativeValues(Grantlee::Context &c, bool unordered = false)
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-        QStringLiteral("{% for person in people.values %}({{ person.name }}:{{ person.age }}),{% endfor %}"),
+        QStringLiteral("{% for person in people.values %}({{ person.name }}:{{ "
+                       "person.age }}),{% endfor %}"),
         QStringLiteral("people_template"));
 
     auto result = t1->render(&c);
@@ -325,7 +326,8 @@ void testAssociativeItems(Grantlee::Context &c, bool unordered)
 
   {
     Grantlee::Template t1 = engine.newTemplate(
-        QStringLiteral("{% for item in people.items %}({{ item.1.name }}:{{ item.1.age }}),{% endfor %}"),
+        QStringLiteral("{% for item in people.items %}({{ item.1.name }}:{{ "
+                       "item.1.age }}),{% endfor %}"),
         QStringLiteral("people_template"));
     auto result = t1->render(&c);
     if (!unordered)
@@ -636,7 +638,9 @@ void TestGenericTypes::testNestedContainers()
 
   auto result = t1->render(&c);
 
-  auto expectedResult = QStringLiteral("(M (0 : (L (V 1,2,),(V 3,4,),),(1 : (L (V 5,6,),(V 7,8,),),),(M (0 : (L (V 9,10,),(V 11,12,),),(1 : (L (V 13,14,),(V 15,16,),),),");
+  auto expectedResult = QStringLiteral(
+      "(M (0 : (L (V 1,2,),(V 3,4,),),(1 : (L (V 5,6,),(V 7,8,),),),(M (0 : (L "
+      "(V 9,10,),(V 11,12,),),(1 : (L (V 13,14,),(V 15,16,),),),");
 
   QCOMPARE(result, expectedResult);
 }

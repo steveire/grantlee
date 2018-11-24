@@ -90,7 +90,9 @@ void TestHtmlOutput::testDoubleFormat()
   md->processDocument(doc);
   auto result = hb->getResult();
   QRegularExpression regex(
-      QStringLiteral("^<p>Some (<strong><em>|<em><strong>)formatted(</em></strong>|</strong></em>) text.</p>\\n$"));
+      QStringLiteral("^<p>Some "
+                     "(<strong><em>|<em><strong>)formatted(</em></strong>|</"
+                     "strong></em>) text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -123,7 +125,9 @@ void TestHtmlOutput::testAnchorWithFormattedContent()
   md->processDocument(doc);
   auto result = hb->getResult();
 
-  QRegularExpression regex(QStringLiteral("^<p>A <a href=\"http://www.kde.org\"><strong>formatted</strong> link</a> to KDE.</p>\\n$"));
+  QRegularExpression regex(QStringLiteral(
+      "^<p>A <a href=\"http://www.kde.org\"><strong>formatted</strong> "
+      "link</a> to KDE.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -132,14 +136,17 @@ void TestHtmlOutput::testAdjacentAnchors()
 {
   auto doc = new QTextDocument();
   doc->setHtml(
-      QStringLiteral("Two <a href=\"http://www.kde.org\">links</a><a href=\"http://www.google.com\">next</a> to eachother."));
+      QStringLiteral("Two <a href=\"http://www.kde.org\">links</a><a "
+                     "href=\"http://www.google.com\">next</a> to eachother."));
 
   auto hb = new TextHTMLBuilder();
   auto md = new MarkupDirector(hb);
   md->processDocument(doc);
   auto result = hb->getResult();
 
-  QRegularExpression regex(QStringLiteral("^<p>Two <a href=\"http://www.kde.org\">links</a><a href=\"http://www.google.com\">next</a> to eachother.</p>\\n$"));
+  QRegularExpression regex(QStringLiteral(
+      "^<p>Two <a href=\"http://www.kde.org\">links</a><a "
+      "href=\"http://www.google.com\">next</a> to eachother.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -172,7 +179,8 @@ void TestHtmlOutput::testSpan()
   auto result = hb->getResult();
 
   auto regex = QRegularExpression(
-      QStringLiteral("^<p>Some <span style=\"color:#ff0000;\">formatted</span> text.</p>\\n$"));
+      QStringLiteral("^<p>Some <span style=\"color:#ff0000;\">formatted</span> "
+                     "text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -180,14 +188,20 @@ void TestHtmlOutput::testSpan()
 void TestHtmlOutput::testDoubleSpan()
 {
   auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("Some <span style=\"color:#ff0000;background-color:#00ff00;\">formatted</span> text."));
+  doc->setHtml(QStringLiteral("Some <span "
+                              "style=\"color:#ff0000;background-color:#00ff00;"
+                              "\">formatted</span> text."));
 
   auto hb = new TextHTMLBuilder();
   auto md = new MarkupDirector(hb);
   md->processDocument(doc);
   auto result = hb->getResult();
 
-  auto regex = QRegularExpression(QStringLiteral("^<p>Some <span style=\"(color:#ff0000|background-color:#00ff00);\"><span style=\"(color:#ff0000|background-color:#00ff00);\">formatted</span></span> text.</p>\\n$"));
+  auto regex = QRegularExpression(QStringLiteral(
+      "^<p>Some <span "
+      "style=\"(color:#ff0000|background-color:#00ff00);\"><span "
+      "style=\"(color:#ff0000|background-color:#00ff00);\">formatted</span></"
+      "span> text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -195,14 +209,18 @@ void TestHtmlOutput::testDoubleSpan()
 void TestHtmlOutput::testSpanNesting()
 {
   auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("Paragraph <span style=\"background-color:#00ff00;\">with some <span style=\"color:#ff0000;\">formatted</span> nested</span> text."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph <span style=\"background-color:#00ff00;\">with some <span "
+      "style=\"color:#ff0000;\">formatted</span> nested</span> text."));
 
   auto hb = new TextHTMLBuilder();
   auto md = new MarkupDirector(hb);
   md->processDocument(doc);
   auto result = hb->getResult();
 
-  auto regex = QRegularExpression(QStringLiteral("^<p>Paragraph <span style=\"background-color:#00ff00;\">with some <span style=\"color:#ff0000;\">formatted</span> nested</span> text.</p>\\n$"));
+  auto regex = QRegularExpression(QStringLiteral(
+      "^<p>Paragraph <span style=\"background-color:#00ff00;\">with some <span "
+      "style=\"color:#ff0000;\">formatted</span> nested</span> text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -219,7 +237,8 @@ void TestHtmlOutput::testDoubleStartDifferentFinish()
   auto result = hb->getResult();
 
   auto regex = QRegularExpression(
-      QStringLiteral("^<p>Paragraph <em><strong>with</strong> some formatted</em> text.</p>\\n$"));
+      QStringLiteral("^<p>Paragraph <em><strong>with</strong> some "
+                     "formatted</em> text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -236,7 +255,8 @@ void TestHtmlOutput::testDoubleStartDifferentFinishReverseOrder()
   auto result = hb->getResult();
 
   auto regex = QRegularExpression(
-      QStringLiteral("^<p>Paragraph <strong><em>with</em> some formatted</strong> text.</p>\\n$"));
+      QStringLiteral("^<p>Paragraph <strong><em>with</em> some "
+                     "formatted</strong> text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -253,7 +273,8 @@ void TestHtmlOutput::testDifferentStartDoubleFinish()
   auto result = hb->getResult();
 
   auto regex = QRegularExpression(
-      QStringLiteral("^<p>Paragraph <em>with some <strong>formatted</strong></em> text.</p>\\n$"));
+      QStringLiteral("^<p>Paragraph <em>with some "
+                     "<strong>formatted</strong></em> text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -270,7 +291,8 @@ void TestHtmlOutput::testDifferentStartDoubleFinishReverseOrder()
   auto result = hb->getResult();
 
   auto regex = QRegularExpression(
-      QStringLiteral("^<p>Paragraph <strong>with some <em>formatted</em></strong> text.</p>\\n$"));
+      QStringLiteral("^<p>Paragraph <strong>with some "
+                     "<em>formatted</em></strong> text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -287,7 +309,8 @@ void TestHtmlOutput::testOverlap()
   auto result = hb->getResult();
 
   auto regex = QRegularExpression(
-      QStringLiteral("^<p>Paragraph <strong>with <em>some</em></strong><em> formatted</em> text.</p>\\n$"));
+      QStringLiteral("^<p>Paragraph <strong>with <em>some</em></strong><em> "
+                     "formatted</em> text.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -328,7 +351,8 @@ void TestHtmlOutput::testImage()
 {
   auto doc = new QTextDocument();
   doc->setHtml(
-      QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" /> image."));
+      QStringLiteral("Paragraph with an inline <img "
+                     "src=\"http://kde.org/img/kde41.png\" /> image."));
 
   auto hb = new TextHTMLBuilder();
   auto md = new MarkupDirector(hb);
@@ -336,7 +360,8 @@ void TestHtmlOutput::testImage()
   auto result = hb->getResult();
 
   auto regex = QRegularExpression(
-      QStringLiteral("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" /> image.</p>\\n$"));
+      QStringLiteral("^<p>Paragraph with an inline <img "
+                     "src=\"http://kde.org/img/kde41.png\" /> image.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -350,36 +375,48 @@ void TestHtmlOutput::testImageResized()
   auto doc = new QTextDocument();
 
   // width
-  doc->setHtml(QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" /> image."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "width=\"10\" /> image."));
 
   hb = new TextHTMLBuilder();
   md = new MarkupDirector(hb);
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" /> image.</p>\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "width=\"10\" /> image.</p>\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // height
-  doc->setHtml(QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" /> image."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "height=\"10\" /> image."));
 
   hb = new TextHTMLBuilder();
   md = new MarkupDirector(hb);
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" /> image.</p>\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "height=\"10\" /> image.</p>\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // height and width
-  doc->setHtml(QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" width=\"10\" /> image."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "height=\"10\" width=\"10\" /> image."));
 
   hb = new TextHTMLBuilder();
   md = new MarkupDirector(hb);
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" height=\"10\" /> image.</p>\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^<p>Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "width=\"10\" height=\"10\" /> image.</p>\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -467,7 +504,8 @@ void TestHtmlOutput::testEachFormatTagSingly()
   result = hb->getResult();
 
   regex = QRegularExpression(
-      QStringLiteral("^<p>Some <span style=\"color:#ff0000;\">formatted</span> text.</p>\\n$"));
+      QStringLiteral("^<p>Some <span style=\"color:#ff0000;\">formatted</span> "
+                     "text.</p>\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Background
@@ -478,7 +516,9 @@ void TestHtmlOutput::testEachFormatTagSingly()
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^<p>Some <span style=\"background-color:#ff0000;\">formatted</span> text.</p>\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^<p>Some <span style=\"background-color:#ff0000;\">formatted</span> "
+      "text.</p>\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Font Family
@@ -489,7 +529,9 @@ void TestHtmlOutput::testEachFormatTagSingly()
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^<p>Some <span style=\"font-family:courier;\">formatted</span> text.</p>\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^<p>Some <span style=\"font-family:courier;\">formatted</span> "
+      "text.</p>\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Font Size
@@ -500,7 +542,9 @@ void TestHtmlOutput::testEachFormatTagSingly()
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^<p>Some <span style=\"font-size:20pt;\">formatted</span> text.</p>\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^<p>Some <span style=\"font-size:20pt;\">formatted</span> "
+      "text.</p>\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 }
 
@@ -508,7 +552,8 @@ void TestHtmlOutput::testHorizontalRule()
 {
   auto doc = new QTextDocument();
   doc->setHtml(
-      QStringLiteral("<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr /><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>"));
+      QStringLiteral("<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr "
+                     "/><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>"));
 
   auto hb = new TextHTMLBuilder();
   auto md = new MarkupDirector(hb);

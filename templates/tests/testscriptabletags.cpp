@@ -70,7 +70,7 @@ void TestScriptableTagsSyntax::initTestCase()
   m_engine->setPluginPaths(
       QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH)
                     << QStringLiteral(":/plugins/") // For scripteddefaults.qs
-      );
+  );
   m_engine->addDefaultLibrary(QStringLiteral("grantlee_scriptabletags"));
 }
 
@@ -127,11 +127,11 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
               QVariantList() << QStringLiteral("Tom") << QStringLiteral("Dick")
                              << QStringLiteral("Harry"));
 
-  QTest::newRow("scriptable-tags01") << "{% load scripteddefaults %}{% if2 "
-                                        "\"something\\\" stupid\" %}{{ boo "
-                                        "}}{% endif2 %}"
-                                     << dict << QStringLiteral("Far")
-                                     << NoError;
+  QTest::newRow("scriptable-tags01")
+      << "{% load scripteddefaults %}{% if2 "
+         "\"something\\\" stupid\" %}{{ boo "
+         "}}{% endif2 %}"
+      << dict << QStringLiteral("Far") << NoError;
 
   // Nest c++ tags inside scripted tags.
   QTest::newRow("scriptable-tags02")
@@ -141,12 +141,13 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
       << dict << QStringLiteral(":Tom;:Dick;:Harry;") << NoError;
 
   // Nest c++ tags inside scripted tags.
-  QTest::newRow("scriptable-tags03")
-      << QStringLiteral("{% load scripteddefaults %}{% if2 boo %}yes{% else %}no{% endif2 %}")
-      << dict << QStringLiteral("yes") << NoError;
-  QTest::newRow("scriptable-tags04")
-      << QStringLiteral("{% load scripteddefaults %}{% if2 foo %}yes{% else %}no{% endif2 %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("scriptable-tags03") << QStringLiteral(
+      "{% load scripteddefaults %}{% if2 boo %}yes{% else %}no{% endif2 %}")
+                                     << dict << QStringLiteral("yes")
+                                     << NoError;
+  QTest::newRow("scriptable-tags04") << QStringLiteral(
+      "{% load scripteddefaults %}{% if2 foo %}yes{% else %}no{% endif2 %}")
+                                     << dict << QStringLiteral("no") << NoError;
 
   QTest::newRow("scriptable-tags05")
       << QStringLiteral("{% load scripteddefaults %}{{ boo|upper }}") << dict

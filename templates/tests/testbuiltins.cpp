@@ -354,9 +354,9 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   QTest::newRow("basic-syntax00") << QString() << dict << QString() << NoError;
 
   // Plain text should go through the template parser untouched
-  QTest::newRow("basic-syntax01") << QStringLiteral("something cool") << dict
-                                  << QStringLiteral("something cool")
-                                  << NoError;
+  QTest::newRow("basic-syntax01")
+      << QStringLiteral("something cool") << dict
+      << QStringLiteral("something cool") << NoError;
 
   // Variables should be replaced with their value in the current
   // context
@@ -382,8 +382,8 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   QTest::newRow("basic-syntax06") << QStringLiteral("{{ multi word variable }}")
                                   << dict << QString() << TagSyntaxError;
   // Raise TemplateSyntaxError for empty variable tags
-  QTest::newRow("basic-syntax07") << QStringLiteral("{{ }}") << dict
-                                  << QString() << EmptyVariableError;
+  QTest::newRow("basic-syntax07")
+      << QStringLiteral("{{ }}") << dict << QString() << EmptyVariableError;
   QTest::newRow("basic-syntax08") << QStringLiteral("{{        }}") << dict
                                   << QString() << EmptyVariableError;
 
@@ -392,9 +392,9 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   auto someClass = new SomeClass(this);
   dict.insert(QStringLiteral("var"), QVariant::fromValue(someClass));
 
-  QTest::newRow("basic-syntax09") << QStringLiteral("{{ var.method }}") << dict
-                                  << QStringLiteral("SomeClass::method")
-                                  << NoError;
+  QTest::newRow("basic-syntax09")
+      << QStringLiteral("{{ var.method }}") << dict
+      << QStringLiteral("SomeClass::method") << NoError;
 
   // Multiple levels of attribute access are allowed
   QTest::newRow("basic-syntax10")
@@ -402,8 +402,8 @@ void TestBuiltinSyntax::testBasicSyntax_data()
       << QStringLiteral("OtherClass::method") << NoError;
 
   // Fail silently when a variable's attribute isn't found
-  QTest::newRow("basic-syntax11") << QStringLiteral("{{ var.blech }}") << dict
-                                  << QString() << NoError;
+  QTest::newRow("basic-syntax11")
+      << QStringLiteral("{{ var.blech }}") << dict << QString() << NoError;
 
   // TODO: Needed?
   // Raise TemplateSyntaxError when trying to access a variable beginning with
@@ -419,18 +419,18 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.clear();
   // Raise TemplateSyntaxError when trying to access a variable containing an
   // illegal character
-  QTest::newRow("basic-syntax13") << QStringLiteral("{{ va>r }}") << dict
-                                  << QString() << TagSyntaxError;
-  QTest::newRow("basic-syntax14") << QStringLiteral("{{ (var.r) }}") << dict
-                                  << QString() << TagSyntaxError;
-  QTest::newRow("basic-syntax15") << QStringLiteral("{{ sp%am }}") << dict
-                                  << QString() << TagSyntaxError;
-  QTest::newRow("basic-syntax16") << QStringLiteral("{{ eggs! }}") << dict
-                                  << QString() << TagSyntaxError;
-  QTest::newRow("basic-syntax17") << QStringLiteral("{{ moo? }}") << dict
-                                  << QString() << TagSyntaxError;
-  QTest::newRow("basic-syntax-error01") << QStringLiteral("{{ moo:arg }}")
-                                        << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax13")
+      << QStringLiteral("{{ va>r }}") << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax14")
+      << QStringLiteral("{{ (var.r) }}") << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax15")
+      << QStringLiteral("{{ sp%am }}") << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax16")
+      << QStringLiteral("{{ eggs! }}") << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax17")
+      << QStringLiteral("{{ moo? }}") << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax-error01")
+      << QStringLiteral("{{ moo:arg }}") << dict << QString() << TagSyntaxError;
   QTest::newRow("basic-syntax-error02")
       << QStringLiteral("{{ moo|cut:'foo':'bar' }}") << dict << QString()
       << TagSyntaxError;
@@ -444,8 +444,8 @@ void TestBuiltinSyntax::testBasicSyntax_data()
                                   << QStringLiteral("baz") << NoError;
 
   // Fail silently when a variable's dictionary key isn't found
-  QTest::newRow("basic-syntax19") << QStringLiteral("{{ foo.spam }}") << dict
-                                  << QString() << NoError;
+  QTest::newRow("basic-syntax19")
+      << QStringLiteral("{{ foo.spam }}") << dict << QString() << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("var"), QVariant::fromValue(someClass));
@@ -470,16 +470,16 @@ void TestBuiltinSyntax::testBasicSyntax_data()
 
   dict.clear();
   // Embedded newlines make it not-a-tag.
-  QTest::newRow("basic-syntax24") << "{{ moo\n }}" << dict << "{{ moo\n }}"
-                                  << NoError;
+  QTest::newRow("basic-syntax24")
+      << "{{ moo\n }}" << dict << "{{ moo\n }}" << NoError;
   // Literal strings are permitted inside variables, mostly for i18n
   // purposes.
-  QTest::newRow("basic-syntax25") << "{{ \"fred\" }}" << dict
-                                  << QStringLiteral("fred") << NoError;
-  QTest::newRow("basic-syntax26") << "{{ \"\\\"fred\\\"\" }}" << dict
-                                  << "\"fred\"" << NoError;
-  QTest::newRow("basic-syntax27") << "{{ _(\"\\\"fred\\\"\") }}" << dict
-                                  << "\"fred\"" << NoError;
+  QTest::newRow("basic-syntax25")
+      << "{{ \"fred\" }}" << dict << QStringLiteral("fred") << NoError;
+  QTest::newRow("basic-syntax26")
+      << "{{ \"\\\"fred\\\"\" }}" << dict << "\"fred\"" << NoError;
+  QTest::newRow("basic-syntax27")
+      << "{{ _(\"\\\"fred\\\"\") }}" << dict << "\"fred\"" << NoError;
 
   dict.clear();
   hash.clear();
@@ -559,8 +559,8 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   dict.clear();
 
   dict.insert(QStringLiteral("1"), QStringLiteral("abc"));
-  QTest::newRow("basic-syntax33") << QStringLiteral("{{ 1 }}") << dict
-                                  << QStringLiteral("1") << NoError;
+  QTest::newRow("basic-syntax33")
+      << QStringLiteral("{{ 1 }}") << dict << QStringLiteral("1") << NoError;
   QTest::newRow("basic-syntax34") << QStringLiteral("{{ 1.2 }}") << dict
                                   << QStringLiteral("1.2") << NoError;
 
@@ -572,18 +572,18 @@ void TestBuiltinSyntax::testBasicSyntax_data()
       << QStringLiteral("{{ abc._something }} {{ abc._something|upper }}")
       << dict << QString() << TagSyntaxError;
 
-  QTest::newRow("basic-syntax36") << "{{ \"fred }}" << dict << QString()
-                                  << TagSyntaxError;
-  QTest::newRow("basic-syntax37") << "{{ \'fred }}" << dict << QString()
-                                  << TagSyntaxError;
-  QTest::newRow("basic-syntax38") << "{{ \"fred\' }}" << dict << QString()
-                                  << TagSyntaxError;
-  QTest::newRow("basic-syntax39") << "{{ \'fred\" }}" << dict << QString()
-                                  << TagSyntaxError;
-  QTest::newRow("basic-syntax40") << "{{ _(\'fred }}" << dict << QString()
-                                  << TagSyntaxError;
-  QTest::newRow("basic-syntax41") << "{{ abc|removetags:_(\'fred }}" << dict
-                                  << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax36")
+      << "{{ \"fred }}" << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax37")
+      << "{{ \'fred }}" << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax38")
+      << "{{ \"fred\' }}" << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax39")
+      << "{{ \'fred\" }}" << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax40")
+      << "{{ _(\'fred }}" << dict << QString() << TagSyntaxError;
+  QTest::newRow("basic-syntax41")
+      << "{{ abc|removetags:_(\'fred }}" << dict << QString() << TagSyntaxError;
 }
 
 void TestBuiltinSyntax::testEnums_data()
@@ -604,26 +604,26 @@ void TestBuiltinSyntax::testEnums_data()
                                  << QStringLiteral("1") << NoError;
   QTest::newRow("class-enums03") << QStringLiteral("{{ var.Bears }}") << dict
                                  << QStringLiteral("2") << NoError;
-  QTest::newRow("class-enums04") << QStringLiteral("{{ var.Hamsters }}") << dict
-                                 << QString() << NoError;
-  QTest::newRow("class-enums05") << QStringLiteral("{{ var.Tigers.name }}")
-                                 << dict << QStringLiteral("Animals")
-                                 << NoError;
-  QTest::newRow("class-enums06") << QStringLiteral("{{ var.Tigers.scope }}")
-                                 << dict << QStringLiteral("OtherClass")
-                                 << NoError;
+  QTest::newRow("class-enums04")
+      << QStringLiteral("{{ var.Hamsters }}") << dict << QString() << NoError;
+  QTest::newRow("class-enums05")
+      << QStringLiteral("{{ var.Tigers.name }}") << dict
+      << QStringLiteral("Animals") << NoError;
+  QTest::newRow("class-enums06")
+      << QStringLiteral("{{ var.Tigers.scope }}") << dict
+      << QStringLiteral("OtherClass") << NoError;
   QTest::newRow("class-enums07") << QStringLiteral("{{ var.Tigers.value }}")
                                  << dict << QStringLiteral("1") << NoError;
   QTest::newRow("class-enums08") << QStringLiteral("{{ var.Tigers.key }}")
                                  << dict << QStringLiteral("Tigers") << NoError;
   QTest::newRow("class-enums09") << QStringLiteral("{{ var.animals }}") << dict
                                  << QStringLiteral("1") << NoError;
-  QTest::newRow("class-enums10") << QStringLiteral("{{ var.animals.name }}")
-                                 << dict << QStringLiteral("Animals")
-                                 << NoError;
-  QTest::newRow("class-enums11") << QStringLiteral("{{ var.animals.scope }}")
-                                 << dict << QStringLiteral("OtherClass")
-                                 << NoError;
+  QTest::newRow("class-enums10")
+      << QStringLiteral("{{ var.animals.name }}") << dict
+      << QStringLiteral("Animals") << NoError;
+  QTest::newRow("class-enums11")
+      << QStringLiteral("{{ var.animals.scope }}") << dict
+      << QStringLiteral("OtherClass") << NoError;
   QTest::newRow("class-enums12") << QStringLiteral("{{ var.animals.value }}")
                                  << dict << QStringLiteral("1") << NoError;
   QTest::newRow("class-enums13") << QStringLiteral("{{ var.animals.key }}")
@@ -632,14 +632,14 @@ void TestBuiltinSyntax::testEnums_data()
                                  << dict << QStringLiteral("0") << NoError;
   QTest::newRow("class-enums15") << QStringLiteral("{{ var.Animals.2 }}")
                                  << dict << QStringLiteral("2") << NoError;
-  QTest::newRow("class-enums16") << QStringLiteral("{{ var.Animals.3 }}")
-                                 << dict << QString() << NoError;
-  QTest::newRow("class-enums17") << QStringLiteral("{{ var.Animals.0.name }}")
-                                 << dict << QStringLiteral("Animals")
-                                 << NoError;
-  QTest::newRow("class-enums18") << QStringLiteral("{{ var.Animals.0.scope }}")
-                                 << dict << QStringLiteral("OtherClass")
-                                 << NoError;
+  QTest::newRow("class-enums16")
+      << QStringLiteral("{{ var.Animals.3 }}") << dict << QString() << NoError;
+  QTest::newRow("class-enums17")
+      << QStringLiteral("{{ var.Animals.0.name }}") << dict
+      << QStringLiteral("Animals") << NoError;
+  QTest::newRow("class-enums18")
+      << QStringLiteral("{{ var.Animals.0.scope }}") << dict
+      << QStringLiteral("OtherClass") << NoError;
   QTest::newRow("class-enums19") << QStringLiteral("{{ var.Animals.0.value }}")
                                  << dict << QStringLiteral("0") << NoError;
   QTest::newRow("class-enums20") << QStringLiteral("{{ var.Animals.0.key }}")
@@ -649,16 +649,20 @@ void TestBuiltinSyntax::testEnums_data()
   QTest::newRow("class-enums22") << QStringLiteral("{{ var.Tigers.samba }}")
                                  << dict << QString() << NoError;
   QTest::newRow("class-enums23")
-      << QStringLiteral("{% with var.animals as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}")
+      << QStringLiteral("{% with var.animals as result %}{{ result.key }},{{ "
+                        "result }},{{ result.scope }}{% endwith %}")
       << dict << QStringLiteral("Tigers,1,OtherClass") << NoError;
   QTest::newRow("class-enums24")
-      << QStringLiteral("{% with var.Animals.2 as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}")
+      << QStringLiteral("{% with var.Animals.2 as result %}{{ result.key }},{{ "
+                        "result }},{{ result.scope }}{% endwith %}")
       << dict << QStringLiteral("Bears,2,OtherClass") << NoError;
   QTest::newRow("class-enums25")
-      << QStringLiteral("{% with var.Bears as result %}{{ result.key }},{{ result }},{{ result.scope }}{% endwith %}")
+      << QStringLiteral("{% with var.Bears as result %}{{ result.key }},{{ "
+                        "result }},{{ result.scope }}{% endwith %}")
       << dict << QStringLiteral("Bears,2,OtherClass") << NoError;
   QTest::newRow("class-enums26")
-      << QStringLiteral("{% with var.Animals as result %}{{ result.0.key }},{{ result.1.key }},{{ result.2.key }}{% endwith %}")
+      << QStringLiteral("{% with var.Animals as result %}{{ result.0.key }},{{ "
+                        "result.1.key }},{{ result.2.key }}{% endwith %}")
       << dict << QStringLiteral("Lions,Tigers,Bears") << NoError;
 
   dict.clear();
@@ -678,10 +682,10 @@ void TestBuiltinSyntax::testEnums_data()
                                  << QStringLiteral("4") << NoError;
   QTest::newRow("class-enums32") << QStringLiteral("{{ var.Citizen }}") << dict
                                  << QStringLiteral("8") << NoError;
-  QTest::newRow("class-enums33") << QStringLiteral("{{ var.FirstEnum }}")
-                                 << dict << QString() << NoError;
-  QTest::newRow("class-enums34") << QStringLiteral("{{ var.SecondEnum }}")
-                                 << dict << QString() << NoError;
+  QTest::newRow("class-enums33")
+      << QStringLiteral("{{ var.FirstEnum }}") << dict << QString() << NoError;
+  QTest::newRow("class-enums34")
+      << QStringLiteral("{{ var.SecondEnum }}") << dict << QString() << NoError;
 
   QTest::newRow("class-enums35")
       << QString::fromLatin1(
@@ -742,16 +746,16 @@ void TestBuiltinSyntax::testEnums_data()
                               << dict << QStringLiteral("Alignment") << NoError;
   QTest::newRow("qt-enums04") << QStringLiteral("{{ Qt.AlignRight.value }}")
                               << dict << QStringLiteral("2") << NoError;
-  QTest::newRow("qt-enums05") << QStringLiteral("{{ Qt.AlignRight.key }}")
-                              << dict << QStringLiteral("AlignRight")
-                              << NoError;
-  QTest::newRow("qt-enums06") << QStringLiteral("{{ Qt.Alignment.2.key }}")
-                              << dict << QStringLiteral("AlignRight")
-                              << NoError;
+  QTest::newRow("qt-enums05")
+      << QStringLiteral("{{ Qt.AlignRight.key }}") << dict
+      << QStringLiteral("AlignRight") << NoError;
+  QTest::newRow("qt-enums06")
+      << QStringLiteral("{{ Qt.Alignment.2.key }}") << dict
+      << QStringLiteral("AlignRight") << NoError;
   QTest::newRow("qt-enums07") << QStringLiteral("{{ Qt.DoesNotExist }}") << dict
                               << QString() << NoError;
-  QTest::newRow("qt-enums08") << QStringLiteral("{{ Qt }}") << dict << QString()
-                              << NoError;
+  QTest::newRow("qt-enums08")
+      << QStringLiteral("{{ Qt }}") << dict << QString() << NoError;
 }
 
 void TestBuiltinSyntax::testListIndex_data()
@@ -774,21 +778,21 @@ void TestBuiltinSyntax::testListIndex_data()
   QTest::newRow("list-index01") << QStringLiteral("{{ var.1 }}") << dict
                                 << QStringLiteral("second item") << NoError;
   // Fail silently when the list index is out of range.
-  QTest::newRow("list-index02") << QStringLiteral("{{ var.5 }}") << dict
-                                << QString() << NoError;
+  QTest::newRow("list-index02")
+      << QStringLiteral("{{ var.5 }}") << dict << QString() << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("var"), QVariant());
 
   // Fail silently when the variable is not a subscriptable object.
-  QTest::newRow("list-index03") << QStringLiteral("{{ var.1 }}") << dict
-                                << QString() << NoError;
+  QTest::newRow("list-index03")
+      << QStringLiteral("{{ var.1 }}") << dict << QString() << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("var"), QVariantHash());
   // Fail silently when variable is a dict without the specified key.
-  QTest::newRow("list-index04") << QStringLiteral("{{ var.1 }}") << dict
-                                << QString() << NoError;
+  QTest::newRow("list-index04")
+      << QStringLiteral("{{ var.1 }}") << dict << QString() << NoError;
 
   dict.clear();
 
@@ -810,9 +814,9 @@ void TestBuiltinSyntax::testListIndex_data()
   sl.append(QStringLiteral("world"));
   dict.insert(QStringLiteral("var"), sl);
   // QStringList lookup
-  QTest::newRow("list-index08") << QStringLiteral("{{ var.0 }}, {{ var.1 }}!")
-                                << dict << QStringLiteral("hello, world!")
-                                << NoError;
+  QTest::newRow("list-index08")
+      << QStringLiteral("{{ var.0 }}, {{ var.1 }}!") << dict
+      << QStringLiteral("hello, world!") << NoError;
 }
 
 void TestBuiltinSyntax::testFilterSyntax_data()
@@ -826,9 +830,9 @@ void TestBuiltinSyntax::testFilterSyntax_data()
 
   // Basic filter usage
   dict.insert(QStringLiteral("var"), QStringLiteral("Django is the greatest!"));
-  QTest::newRow("filter-syntax01") << QStringLiteral("{{ var|upper }}") << dict
-                                   << QStringLiteral("DJANGO IS THE GREATEST!")
-                                   << NoError;
+  QTest::newRow("filter-syntax01")
+      << QStringLiteral("{{ var|upper }}") << dict
+      << QStringLiteral("DJANGO IS THE GREATEST!") << NoError;
 
   // Chained filters
   QTest::newRow("filter-syntax02")
@@ -858,8 +862,8 @@ void TestBuiltinSyntax::testFilterSyntax_data()
       << QStringLiteral("{% nothing_to_see_here %}") << dict << QString()
       << InvalidBlockTagError;
   // Raise TemplateSyntaxError for empty block tags
-  QTest::newRow("filter-syntax08") << QStringLiteral("{% %}") << dict
-                                   << QString() << EmptyBlockTagError;
+  QTest::newRow("filter-syntax08")
+      << QStringLiteral("{% %}") << dict << QString() << EmptyBlockTagError;
 
   // Chained filters, with an argument to the first one
   dict.insert(QStringLiteral("var"), QStringLiteral("<b><i>Yes</i></b>"));
@@ -911,8 +915,8 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   dict.insert(QStringLiteral("var"), QVariantList() << QStringLiteral("a")
                                                     << QStringLiteral("b")
                                                     << QStringLiteral("c"));
-  QTest::newRow("filter-syntax17") << "{{ var|join:\"\" }}" << dict
-                                   << QStringLiteral("abc") << NoError;
+  QTest::newRow("filter-syntax17")
+      << "{{ var|join:\"\" }}" << dict << QStringLiteral("abc") << NoError;
 
   // Make sure that any unicode strings are converted to bytestrings
   // in the final output.
@@ -1025,9 +1029,9 @@ void TestBuiltinSyntax::testEscaping_data()
 
   // Unlike variable args.
   dict.insert(QStringLiteral("amp"), QStringLiteral(" & "));
-  QTest::newRow("escape06") << QStringLiteral("{{ varList|join:amp }}") << dict
-                            << QStringLiteral("Tom &amp; Dick &amp; Harry")
-                            << NoError;
+  QTest::newRow("escape06")
+      << QStringLiteral("{{ varList|join:amp }}") << dict
+      << QStringLiteral("Tom &amp; Dick &amp; Harry") << NoError;
 
   // Literal strings are safe.
   QTest::newRow("escape07") << "{{ \"this & that\" }}" << dict
@@ -1147,10 +1151,10 @@ void TestBuiltinSyntax::testTemplatePathSafety_data()
   QTest::addColumn<QString>("inputPath");
   QTest::addColumn<QString>("output");
 
-  QTest::newRow("template-path-safety01") << QStringLiteral("visible_file")
-                                          << QStringLiteral("visible_file");
-  QTest::newRow("template-path-safety02") << QStringLiteral("../invisible_file")
-                                          << QString();
+  QTest::newRow("template-path-safety01")
+      << QStringLiteral("visible_file") << QStringLiteral("visible_file");
+  QTest::newRow("template-path-safety02")
+      << QStringLiteral("../invisible_file") << QString();
 }
 
 void TestBuiltinSyntax::testTemplatePathSafety()
@@ -1184,10 +1188,10 @@ void TestBuiltinSyntax::testMediaPathSafety_data()
   QTest::addColumn<QString>("inputPath");
   QTest::addColumn<QString>("output");
 
-  QTest::newRow("media-path-safety01") << QStringLiteral("visible_file")
-                                       << QStringLiteral("./visible_file");
-  QTest::newRow("media-path-safety02") << QStringLiteral("../invisible_file")
-                                       << QString();
+  QTest::newRow("media-path-safety01")
+      << QStringLiteral("visible_file") << QStringLiteral("./visible_file");
+  QTest::newRow("media-path-safety02")
+      << QStringLiteral("../invisible_file") << QString();
 }
 
 void TestBuiltinSyntax::testMediaPathSafety()
@@ -1263,12 +1267,17 @@ void TestBuiltinSyntax::testTypeAccessorsUnordered_data()
 
   dict.insert(QStringLiteral("hash"), itemsHash);
 
-  QTest::newRow("type-accessors-hash-unordered01")
-      << QStringLiteral("{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}")
-      << dict
-      << (QStringList() << QStringLiteral("one:1;") << QStringLiteral("two:2;")
-                        << QStringLiteral("three:3;"))
-      << NoError;
+  QTest::newRow("type-accessors-hash-unordered01") << QStringLiteral(
+      "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}")
+                                                   << dict
+                                                   << (QStringList()
+                                                       << QStringLiteral(
+                                                              "one:1;")
+                                                       << QStringLiteral(
+                                                              "two:2;")
+                                                       << QStringLiteral(
+                                                              "three:3;"))
+                                                   << NoError;
   QTest::newRow("type-accessors-hash-unordered02")
       << QStringLiteral("{% for key in hash.keys %}{{ key }};{% endfor %}")
       << dict
@@ -1278,8 +1287,9 @@ void TestBuiltinSyntax::testTypeAccessorsUnordered_data()
   QTest::newRow("type-accessors-hash-unordered03")
       << QStringLiteral(
              "{% for value in hash.values %}{{ value }};{% endfor %}")
-      << dict << (QStringList() << QStringLiteral("1;") << QStringLiteral("2;")
-                                << QStringLiteral("3;"))
+      << dict
+      << (QStringList() << QStringLiteral("1;") << QStringLiteral("2;")
+                        << QStringLiteral("3;"))
       << NoError;
 }
 
@@ -1414,9 +1424,9 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   QTest::newRow("type-accessors-string20")
       << QStringLiteral("{{ str1.lower }}") << dict
       << QStringLiteral("my string") << NoError;
-  QTest::newRow("type-accessors-string21") << QStringLiteral("{{ str2.lower }}")
-                                           << dict << QStringLiteral("mystring")
-                                           << NoError;
+  QTest::newRow("type-accessors-string21")
+      << QStringLiteral("{{ str2.lower }}") << dict
+      << QStringLiteral("mystring") << NoError;
   QTest::newRow("type-accessors-string22")
       << QStringLiteral("{{ str3.lower }}") << dict
       << QStringLiteral("my string") << NoError;
@@ -1436,19 +1446,19 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   dict.insert(QStringLiteral("str4"), QStringLiteral("             "));
   dict.insert(QStringLiteral("str5"), QStringLiteral(""));
 
-  QTest::newRow("type-accessors-string24") << QStringLiteral("{{ str1.strip }}")
-                                           << dict << QStringLiteral("one")
-                                           << NoError;
-  QTest::newRow("type-accessors-string25") << QStringLiteral("{{ str2.strip }}")
-                                           << dict << QStringLiteral("one")
-                                           << NoError;
-  QTest::newRow("type-accessors-string26") << QStringLiteral("{{ str3.strip }}")
-                                           << dict << QStringLiteral("one")
-                                           << NoError;
-  QTest::newRow("type-accessors-string27") << QStringLiteral("{{ str4.strip }}")
-                                           << dict << QString() << NoError;
-  QTest::newRow("type-accessors-string28") << QStringLiteral("{{ str5.strip }}")
-                                           << dict << QString() << NoError;
+  QTest::newRow("type-accessors-string24")
+      << QStringLiteral("{{ str1.strip }}") << dict << QStringLiteral("one")
+      << NoError;
+  QTest::newRow("type-accessors-string25")
+      << QStringLiteral("{{ str2.strip }}") << dict << QStringLiteral("one")
+      << NoError;
+  QTest::newRow("type-accessors-string26")
+      << QStringLiteral("{{ str3.strip }}") << dict << QStringLiteral("one")
+      << NoError;
+  QTest::newRow("type-accessors-string27")
+      << QStringLiteral("{{ str4.strip }}") << dict << QString() << NoError;
+  QTest::newRow("type-accessors-string28")
+      << QStringLiteral("{{ str5.strip }}") << dict << QString() << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("str1"), QStringLiteral("My String"));
@@ -1486,9 +1496,9 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   QTest::newRow("type-accessors-string34")
       << QStringLiteral("{{ str1.title }}") << dict
       << QStringLiteral("My String") << NoError;
-  QTest::newRow("type-accessors-string35") << QStringLiteral("{{ str2.title }}")
-                                           << dict << QStringLiteral("Mystring")
-                                           << NoError;
+  QTest::newRow("type-accessors-string35")
+      << QStringLiteral("{{ str2.title }}") << dict
+      << QStringLiteral("Mystring") << NoError;
   QTest::newRow("type-accessors-string36")
       << QStringLiteral("{{ str3.title }}") << dict
       << QStringLiteral("My String") << NoError;
@@ -1502,14 +1512,14 @@ void TestBuiltinSyntax::testTypeAccessors_data()
   QTest::newRow("type-accessors-string39")
       << QStringLiteral("{{ str1.upper }}") << dict
       << QStringLiteral("MY STRING") << NoError;
-  QTest::newRow("type-accessors-string40") << QStringLiteral("{{ str2.upper }}")
-                                           << dict << QStringLiteral("MYSTRING")
-                                           << NoError;
+  QTest::newRow("type-accessors-string40")
+      << QStringLiteral("{{ str2.upper }}") << dict
+      << QStringLiteral("MYSTRING") << NoError;
   QTest::newRow("type-accessors-string41")
       << QStringLiteral("{{ str3.upper }}") << dict
       << QStringLiteral("MY STRING") << NoError;
-  QTest::newRow("type-accessors-string42") << QStringLiteral("{{ str3.dne }}")
-                                           << dict << QString() << NoError;
+  QTest::newRow("type-accessors-string42")
+      << QStringLiteral("{{ str3.dne }}") << dict << QString() << NoError;
   QTest::newRow("type-accessors-string43")
       << QStringLiteral("{{ str2.isalpha }}") << dict << QStringLiteral("True")
       << NoError;
@@ -1585,9 +1595,9 @@ void TestBuiltinSyntax::testDynamicProperties_data()
   dict.insert(QStringLiteral("var"),
               QVariant::fromValue(static_cast<QObject *>(obj)));
 
-  QTest::newRow("dynamic-properties01") << QStringLiteral("{{ var.prop }}")
-                                        << dict << QStringLiteral("7")
-                                        << NoError;
+  QTest::newRow("dynamic-properties01")
+      << QStringLiteral("{{ var.prop }}") << dict << QStringLiteral("7")
+      << NoError;
 }
 
 void TestBuiltinSyntax::testGarbageInput()
@@ -1851,28 +1861,36 @@ void TestBuiltinSyntax::testInsignificantWhitespace_data()
 
   // Consecutive trimmed lines with tags strips one newline each
   QTest::newRow("insignificant-whitespace20")
-      << QStringLiteral("\n{% templatetag openblock %}\n{% templatetag openblock %}\n{% templatetag openblock %}\n some text\n")
+      << QStringLiteral(
+             "\n{% templatetag openblock %}\n{% templatetag openblock %}\n{% "
+             "templatetag openblock %}\n some text\n")
       << dict << QStringLiteral("{%{%{%\n some text\n")
       << QStringLiteral("\n{%\n{%\n{%\n some text\n");
 
   // Consecutive trimmed lines with tags strips one newline each. Intermediate
   // newlines are preserved
   QTest::newRow("insignificant-whitespace21")
-      << QStringLiteral("\n\n{% templatetag openblock %}\n\n{% templatetag openblock %}\n\n{% templatetag openblock %}\n\n some text\n")
+      << QStringLiteral(
+             "\n\n{% templatetag openblock %}\n\n{% templatetag openblock "
+             "%}\n\n{% templatetag openblock %}\n\n some text\n")
       << dict << QStringLiteral("\n{%\n{%\n{%\n\n some text\n")
       << QStringLiteral("\n\n{%\n\n{%\n\n{%\n\n some text\n");
 
   // Consecutive trimmed lines with tags strips one newline each. Leading
   // whitespace is stripped but trailing is not
   QTest::newRow("insignificant-whitespace22")
-      << QStringLiteral("\n\n\t {% templatetag openblock %}\t \n\n\t {% templatetag openblock %}\t \n\n\t {% templatetag openblock %}\t \n some text\n")
+      << QStringLiteral("\n\n\t {% templatetag openblock %}\t \n\n\t {% "
+                        "templatetag openblock %}\t \n\n\t {% templatetag "
+                        "openblock %}\t \n some text\n")
       << dict << QStringLiteral("\n{%\t \n{%\t \n{%\t \n some text\n")
       << QStringLiteral("\n\n\t {%\t \n\n\t {%\t \n\n\t {%\t \n some text\n");
 
   // Consecutive trimmed lines with tags strips one newline each. Intermediate
   // whitespace is stripped
   QTest::newRow("insignificant-whitespace23")
-      << QStringLiteral("\n\t {% templatetag openblock %}\t \n\t {% templatetag openblock %}\t \n\t {% templatetag openblock %}\t \n some text\n")
+      << QStringLiteral(
+             "\n\t {% templatetag openblock %}\t \n\t {% templatetag openblock "
+             "%}\t \n\t {% templatetag openblock %}\t \n some text\n")
       << dict << QStringLiteral("{%\t {%\t {%\t \n some text\n")
       << QStringLiteral("\n\t {%\t \n\t {%\t \n\t {%\t \n some text\n");
 
@@ -1881,19 +1899,24 @@ void TestBuiltinSyntax::testInsignificantWhitespace_data()
   // leading
   // whitespace stripped
   QTest::newRow("insignificant-whitespace24")
-      << QStringLiteral("\n\t {% templatetag openblock %}\t \t {% templatetag openblock %}\t \t {% templatetag openblock %}\t \n some text\n")
+      << QStringLiteral(
+             "\n\t {% templatetag openblock %}\t \t {% templatetag openblock "
+             "%}\t \t {% templatetag openblock %}\t \n some text\n")
       << dict << QStringLiteral("\n\t {%\t \t {%\t \t {%\t \n some text\n")
       << QStringLiteral("\n\t {%\t \t {%\t \t {%\t \n some text\n");
 
   // Still, only one leading newline is removed.
   QTest::newRow("insignificant-whitespace25")
-      << QStringLiteral("\n\n {% templatetag openblock %}\n \t {% templatetag openblock %}\n \t {% templatetag openblock %}\n some text\n")
+      << QStringLiteral(
+             "\n\n {% templatetag openblock %}\n \t {% templatetag openblock "
+             "%}\n \t {% templatetag openblock %}\n some text\n")
       << dict << QStringLiteral("\n{%{%{%\n some text\n")
       << QStringLiteral("\n\n {%\n \t {%\n \t {%\n some text\n");
 
   // Lines with {# comments #} have the same stripping behavior
   QTest::newRow("insignificant-whitespace26")
-      << QStringLiteral("\n\n {% templatetag openblock %}\n \t {# some comment #}\n some text\n")
+      << QStringLiteral("\n\n {% templatetag openblock %}\n \t {# some comment "
+                        "#}\n some text\n")
       << dict << QStringLiteral("\n{%\n some text\n")
       << QStringLiteral("\n\n {%\n \t \n some text\n");
 
@@ -1906,31 +1929,38 @@ void TestBuiltinSyntax::testInsignificantWhitespace_data()
 
   // Consecutive newlines with tags and comments
   QTest::newRow("insignificant-whitespace28")
-      << QStringLiteral("\n\t {% templatetag openblock %}\t \n\t {# some comment #}\t \n\t {% templatetag openblock %}\t \n some text\n")
+      << QStringLiteral(
+             "\n\t {% templatetag openblock %}\t \n\t {# some comment #}\t "
+             "\n\t {% templatetag openblock %}\t \n some text\n")
       << dict << QStringLiteral("{%\t \t {%\t \n some text\n")
       << QStringLiteral("\n\t {%\t \n\t \t \n\t {%\t \n some text\n");
 
   dict.insert(QStringLiteral("spam"), QStringLiteral("ham"));
   // Lines with only {{ values }} have the same stripping behavior
   QTest::newRow("insignificant-whitespace29")
-      << QStringLiteral("\n {% templatetag openblock %}\t\n \t {{ spam }}\t \n \t {% templatetag openblock %}\t \n some text\n")
+      << QStringLiteral("\n {% templatetag openblock %}\t\n \t {{ spam }}\t \n "
+                        "\t {% templatetag openblock %}\t \n some text\n")
       << dict << QStringLiteral("{%\tham\t {%\t \n some text\n")
       << QStringLiteral("\n {%\t\n \t ham\t \n \t {%\t \n some text\n");
   QTest::newRow("insignificant-whitespace30")
-      << QStringLiteral("\n\n {% templatetag openblock %}\t\n\n \t {{ spam }}\t \n\n \t {% templatetag openblock %}\t \n some text\n")
+      << QStringLiteral(
+             "\n\n {% templatetag openblock %}\t\n\n \t {{ spam }}\t \n\n \t "
+             "{% templatetag openblock %}\t \n some text\n")
       << dict << QStringLiteral("\n{%\t\nham\t \n{%\t \n some text\n")
       << QStringLiteral("\n\n {%\t\n\n \t ham\t \n\n \t {%\t \n some text\n");
 
   // Leading whitespace not stripped when followed by anything. See
   // templatetag-whitespace24
   QTest::newRow("insignificant-whitespace31")
-      << QStringLiteral("\n {% templatetag openblock %}\t \t {{ spam }}\t \t {% templatetag openblock %}\t \n some text\n")
+      << QStringLiteral("\n {% templatetag openblock %}\t \t {{ spam }}\t \t "
+                        "{% templatetag openblock %}\t \n some text\n")
       << dict << QStringLiteral("\n {%\t \t ham\t \t {%\t \n some text\n")
       << QStringLiteral("\n {%\t \t ham\t \t {%\t \n some text\n");
 
   // {{ value }} {% tag %} {{ value }} this time
   QTest::newRow("insignificant-whitespace32")
-      << QStringLiteral("\n {{ spam }}\t\n \t {% templatetag openblock %}\t \n \t {{ spam }}\t \n some text\n")
+      << QStringLiteral("\n {{ spam }}\t\n \t {% templatetag openblock %}\t \n "
+                        "\t {{ spam }}\t \n some text\n")
       << dict << QStringLiteral("ham\t{%\t ham\t \n some text\n")
       << QStringLiteral("\n ham\t\n \t {%\t \n \t ham\t \n some text\n");
 
@@ -1940,8 +1970,9 @@ void TestBuiltinSyntax::testInsignificantWhitespace_data()
   QTest::newRow("insignificant-whitespace33")
       << QStringLiteral(
              "\n\n {# \n{% templatetag openblock #}\t \n some text\n")
-      << dict << QStringLiteral(
-                     "\n\n {# \n{% templatetag openblock #}\t \n some text\n")
+      << dict
+      << QStringLiteral(
+             "\n\n {# \n{% templatetag openblock #}\t \n some text\n")
       << QStringLiteral(
              "\n\n {# \n{% templatetag openblock #}\t \n some text\n");
 
@@ -1954,8 +1985,9 @@ void TestBuiltinSyntax::testInsignificantWhitespace_data()
   QTest::newRow("insignificant-whitespace35")
       << QStringLiteral(
              "\n\n {# \n{# templatetag openblock\n #}\t \n some text\n")
-      << dict << QStringLiteral(
-                     "\n\n {# \n{# templatetag openblock\n #}\t \n some text\n")
+      << dict
+      << QStringLiteral(
+             "\n\n {# \n{# templatetag openblock\n #}\t \n some text\n")
       << QStringLiteral(
              "\n\n {# \n{# templatetag openblock\n #}\t \n some text\n");
   QTest::newRow("insignificant-whitespace36")
@@ -1998,9 +2030,9 @@ void TestBuiltinSyntax::testInsignificantWhitespace_data()
       << QStringLiteral("\n{{# foo #};{# bar #}\n") << dict
       << QStringLiteral("\n{;\n") << QStringLiteral("\n{;\n");
 
-  QTest::newRow("insignificant-whitespace44") << QStringLiteral("\n{{ foo }} ")
-                                              << dict << QString()
-                                              << QStringLiteral("\n ");
+  QTest::newRow("insignificant-whitespace44")
+      << QStringLiteral("\n{{ foo }} ") << dict << QString()
+      << QStringLiteral("\n ");
 }
 
 QTEST_MAIN(TestBuiltinSyntax)

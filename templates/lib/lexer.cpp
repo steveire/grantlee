@@ -46,23 +46,23 @@ typedef CharacterTransition<'\n', MarkNewline> NewlineHandler;
 typedef CharacterTransition<'}', MarkEndSyntax> EndTemplateSyntaxHandler;
 typedef NegateCharacterTransition<'}'> NotEndTemplateSyntaxHandler;
 
-typedef LexerObject<TextProcessingTransition,
-                    Negate<OrTest<CharacterTest<'{'>,
-                                  OrTest<CharacterTest<'#'>,
-                                         CharacterTest<'%'>>>>>
+typedef LexerObject<
+    TextProcessingTransition,
+    Negate<OrTest<CharacterTest<'{'>,
+                  OrTest<CharacterTest<'#'>, CharacterTest<'%'>>>>>
     NotBeginTemplateSyntaxHandler;
 
-typedef LexerObject<TextProcessingTransition,
-                    Negate<OrTest<CharacterTest<'{'>,
-                                  OrTest<CharacterTest<'#'>,
-                                         OrTest<CharacterTest<'%'>,
-                                                CharacterTest<'\n'>>>>>>
+typedef LexerObject<
+    TextProcessingTransition,
+    Negate<OrTest<CharacterTest<'{'>,
+                  OrTest<CharacterTest<'#'>,
+                         OrTest<CharacterTest<'%'>, CharacterTest<'\n'>>>>>>
     NotBeginTemplateSyntaxOrNewlineHandler;
 
-typedef LexerObject<TextProcessingTransition,
-                    Negate<OrTest<CharacterTest<'#'>,
-                                  OrTest<CharacterTest<'%'>,
-                                         CharacterTest<'\n'>>>>>
+typedef LexerObject<
+    TextProcessingTransition,
+    Negate<OrTest<CharacterTest<'#'>,
+                  OrTest<CharacterTest<'%'>, CharacterTest<'\n'>>>>>
     NotTagCommentOrNewlineHandler;
 
 typedef LexerObject<TextProcessingTransition,

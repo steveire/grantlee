@@ -75,7 +75,12 @@ void Benchmarking::initTestCase()
 
   m_engine->setPluginPaths(QStringList(QStringLiteral(GRANTLEE_PLUGIN_PATH)));
 
-  m_templateGeneratorString = QStringLiteral("Lorem {% for i in items %} Ipsum {% templatetag openblock %} if boo {% templatetag closeblock %} bar {% templatetag openvariable %} bat|upper {% templatetag closevariable %} baz {{ i }} dolor {% templatetag openblock %} endif {% templatetag closeblock %} sit.{% endfor %} amet.\n");
+  m_templateGeneratorString = QStringLiteral(
+      "Lorem {% for i in items %} Ipsum {% templatetag openblock %} if boo {% "
+      "templatetag closeblock %} bar {% templatetag openvariable %} bat|upper "
+      "{% templatetag closevariable %} baz {{ i }} dolor {% templatetag "
+      "openblock %} endif {% templatetag closeblock %} sit.{% endfor %} "
+      "amet.\n");
 
   m_templateGenerator = m_engine->newTemplate(m_templateGeneratorString,
                                               QStringLiteral("generator"));

@@ -399,7 +399,8 @@ void TextHTMLBuilder::beginTable(qreal cellpadding, qreal cellspacing,
 {
   Q_D(TextHTMLBuilder);
   d->m_text.append(
-      QStringLiteral("<table cellpadding=\"%1\" cellspacing=\"%2\" width=\"%3\" border=\"1\">")
+      QStringLiteral("<table cellpadding=\"%1\" cellspacing=\"%2\" "
+                     "width=\"%3\" border=\"1\">")
           .arg(cellpadding)
           .arg(cellspacing)
           .arg(width));

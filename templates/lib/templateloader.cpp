@@ -39,8 +39,9 @@ class FileSystemTemplateLoaderPrivate
   FileSystemTemplateLoaderPrivate(FileSystemTemplateLoader *loader,
                                   QSharedPointer<AbstractLocalizer> localizer)
       : q_ptr(loader),
-        m_localizer(localizer ? localizer : QSharedPointer<AbstractLocalizer>(
-                                                new NullLocalizer))
+        m_localizer(localizer
+                        ? localizer
+                        : QSharedPointer<AbstractLocalizer>(new NullLocalizer))
   {
   }
   Q_DECLARE_PUBLIC(FileSystemTemplateLoader)
@@ -143,7 +144,7 @@ Template FileSystemTemplateLoader::loadByName(const QString &fileName,
 
     if (file.exists()
         && !fi.canonicalFilePath().contains(
-               QDir(d->m_templateDirs.at(i)).canonicalPath()))
+            QDir(d->m_templateDirs.at(i)).canonicalPath()))
       return Template();
     ++i;
   }

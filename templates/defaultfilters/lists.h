@@ -111,6 +111,7 @@ public:
                     bool autoescape = false) const override;
 
   bool isSafe() const override { return true; }
+
 protected:
   SafeString processList(const QVariantList &list, int tabs,
                          bool autoescape) const;

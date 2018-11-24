@@ -181,39 +181,39 @@ void TestInternationalization::testStrings_data()
   // Translations here are not meant to be accurate, but are meant
   // only to test for example that disambiguation and arg reordering works.
 
-  QTest::newRow("string-01") << "Birthday"
-                             << "Birthday"
-                             << "Geburtstag"
-                             << "Anniversaire" << QString() << QString()
-                             << QVariantList();
+  QTest::newRow("string-01")
+      << "Birthday"
+      << "Birthday"
+      << "Geburtstag"
+      << "Anniversaire" << QString() << QString() << QVariantList();
 
-  QTest::newRow("string-02") << "%n People"
-                             << "1 People"
-                             << "1 Person"
-                             << "1 Personne" << QString()
-                             << QStringLiteral("%n People")
-                             << (QVariantList() << 1);
+  QTest::newRow("string-02")
+      << "%n People"
+      << "1 People"
+      << "1 Person"
+      << "1 Personne" << QString() << QStringLiteral("%n People")
+      << (QVariantList() << 1);
 
-  QTest::newRow("string-03") << "%n People"
-                             << "2 People"
-                             << "2 Personen"
-                             << "2 Personnes" << QString()
-                             << QStringLiteral("%n People")
-                             << (QVariantList() << 2);
+  QTest::newRow("string-03")
+      << "%n People"
+      << "2 People"
+      << "2 Personen"
+      << "2 Personnes" << QString() << QStringLiteral("%n People")
+      << (QVariantList() << 2);
 
-  QTest::newRow("string-04") << "Name"
-                             << "Name"
-                             << "Name eines Buches"
-                             << "Nom d'un livre"
-                             << QStringLiteral("Name of a Book") << QString()
-                             << QVariantList();
+  QTest::newRow("string-04")
+      << "Name"
+      << "Name"
+      << "Name eines Buches"
+      << "Nom d'un livre" << QStringLiteral("Name of a Book") << QString()
+      << QVariantList();
 
-  QTest::newRow("string-05") << "Name"
-                             << "Name"
-                             << "Namen einer Person"
-                             << "Nom d'une personne"
-                             << QStringLiteral("Name of a Person") << QString()
-                             << QVariantList();
+  QTest::newRow("string-05")
+      << "Name"
+      << "Name"
+      << "Namen einer Person"
+      << "Nom d'une personne" << QStringLiteral("Name of a Person") << QString()
+      << QVariantList();
 
   QTest::newRow("string-06")
       << "%n People"
@@ -294,7 +294,8 @@ void TestInternationalization::testStrings_data()
       << "%1 messages at %2, fraction of total: %3. Rating : %4"
       << "1000 messages at 2005-05-07, fraction of total: 0.6. Rating : 4.8"
       << "1000 Nachrichten am 2005-05-07, ratio: 0.6. Bemessungen : 4.8"
-      << QStringLiteral("1000 messages au 2005-05-07, la fraction du total: 0.6. Note: 4.8")
+      << QStringLiteral("1000 messages au 2005-05-07, la fraction du total: "
+                        "0.6. Note: 4.8")
       << QString() << QString()
       << (QVariantList() << 1000 << QDate(2005, 5, 7) << 0.6 << 4.8);
 
@@ -346,14 +347,18 @@ void TestInternationalization::testLocalizedTemplate_data()
   Dict dict;
   dict.insert(QStringLiteral("date"), QDate(2005, 5, 7));
   QTest::newRow("fragment-01")
-      << QStringLiteral("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(1000) _(date) _(0.6) _(4.8) %}")
-      << QStringLiteral("1000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
+      << QStringLiteral("{% i18n '%1 messages at %2, fraction of total: %3. "
+                        "Rating : %4' _(1000) _(date) _(0.6) _(4.8) %}")
+      << QStringLiteral("1000 messages at 7 May 2005, fraction of total: 0.60. "
+                        "Rating : 4.80")
       << QStringLiteral(
              "1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
-      << QStringLiteral("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
+      << QStringLiteral("1,000 messages at 07/05/2005, fraction of total: "
+                        "0.60. Rating : 4.80")
       << QStringLiteral(
              "1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
-      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
+      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du "
+                        "total: 0,60. Note: 4,80")
       << dict;
 
   dict.insert(QStringLiteral("integer"), 1000);
@@ -361,14 +366,19 @@ void TestInternationalization::testLocalizedTemplate_data()
   dict.insert(QStringLiteral("largeFloat"), 4.8);
 
   QTest::newRow("fragment-02")
-      << QStringLiteral("{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' _(integer) _(date) _(smallFloat) _(largeFloat) %}")
-      << QStringLiteral("1000 messages at 7 May 2005, fraction of total: 0.60. Rating : 4.80")
+      << QStringLiteral(
+             "{% i18n '%1 messages at %2, fraction of total: %3. Rating : %4' "
+             "_(integer) _(date) _(smallFloat) _(largeFloat) %}")
+      << QStringLiteral("1000 messages at 7 May 2005, fraction of total: 0.60. "
+                        "Rating : 4.80")
       << QStringLiteral(
              "1,000 messages at 5/7/05, fraction of total: 0.60. Rating : 4.80")
-      << QStringLiteral("1,000 messages at 07/05/2005, fraction of total: 0.60. Rating : 4.80")
+      << QStringLiteral("1,000 messages at 07/05/2005, fraction of total: "
+                        "0.60. Rating : 4.80")
       << QStringLiteral(
              "1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
-      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du total: 0,60. Note: 4,80")
+      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du "
+                        "total: 0,60. Note: 4,80")
       << dict;
 
   dict.insert(QStringLiteral("time"), QTime(4, 5, 6));
@@ -376,15 +386,19 @@ void TestInternationalization::testLocalizedTemplate_data()
               QDateTime(QDate(2005, 5, 7), QTime(4, 5, 6)));
 
   QTest::newRow("fragment-03")
-      << QStringLiteral("{{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ _(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}")
-      << QStringLiteral("1000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 May 2005 04:05:06")
+      << QStringLiteral(
+             "{{ _(integer) }} -- {{ _(date) }} -- {{ _(smallFloat) }} -- {{ "
+             "_(largeFloat) }} -- {{ _(time) }} -- {{ _(dateTime) }}")
+      << QStringLiteral("1000 -- 7 May 2005 -- 0.60 -- 4.80 -- 04:05:06 -- 7 "
+                        "May 2005 04:05:06")
       << QStringLiteral(
              "1,000 -- 5/7/05 -- 0.60 -- 4.80 -- 4:05 AM -- 5/7/05 4:05 AM")
       << QStringLiteral(
              "1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05")
       << QStringLiteral(
              "1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
-      << QStringLiteral("1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- 07/05/2005 04:05")
+      << QStringLiteral("1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+                        "07/05/2005 04:05")
       << dict;
 
 #ifndef Q_CC_MSVC
@@ -574,10 +588,10 @@ void TestInternationalization::testLocalizedTemplate_data()
       << QStringLiteral("1,000 0.60 4.80") << QStringLiteral("1.000 0,60 4,80")
       << QStringLiteral("1\u00A0000 0,60 4,80") << dict;
 
-  QTest::newRow("fragment-08") << QStringLiteral("{{ 'this'|cut:_(\"i\") }}")
-                               << QStringLiteral("ths") << QStringLiteral("ths")
-                               << QStringLiteral("ths") << QStringLiteral("ths")
-                               << QStringLiteral("ths") << dict;
+  QTest::newRow("fragment-08")
+      << QStringLiteral("{{ 'this'|cut:_(\"i\") }}") << QStringLiteral("ths")
+      << QStringLiteral("ths") << QStringLiteral("ths") << QStringLiteral("ths")
+      << QStringLiteral("ths") << dict;
 }
 
 void TestInternationalization::testSafeContent()
@@ -610,28 +624,33 @@ void TestInternationalization::testSafeContent_data()
                            << QStringLiteral("Aujourd&#39;hui est 07/05/2005")
                            << dict;
 
-  QTest::newRow("safe-02") << QStringLiteral("{% autoescape off %}{% i18n 'Today is %1' _(date) %}{% endautoescape %}")
+  QTest::newRow("safe-02") << QStringLiteral(
+      "{% autoescape off %}{% i18n 'Today is %1' _(date) %}{% endautoescape %}")
                            << QStringLiteral("Today is 7 May 2005")
                            << QStringLiteral("Aujourd'hui est 07/05/2005")
                            << dict;
 
-  QTest::newRow("safe-03") << QStringLiteral("{% i18n_var 'Today is %1' _(date) as today_greeting %}-{{ today_greeting }}-")
-                           << QStringLiteral("-Today is 7 May 2005-")
+  QTest::newRow("safe-03") << QStringLiteral(
+      "{% i18n_var 'Today is %1' _(date) as today_greeting %}-{{ "
+      "today_greeting }}-") << QStringLiteral("-Today is 7 May 2005-")
                            << QStringLiteral("-Aujourd&#39;hui est 07/05/2005-")
                            << dict;
 
-  QTest::newRow("safe-04") << QStringLiteral("{% autoescape off %}{% i18n_var 'Today is %1' _(date) as today_greeting %}-{{ today_greeting }}-{% endautoescape %}")
+  QTest::newRow("safe-04") << QStringLiteral(
+      "{% autoescape off %}{% i18n_var 'Today is %1' _(date) as today_greeting "
+      "%}-{{ today_greeting }}-{% endautoescape %}")
                            << QStringLiteral("-Today is 7 May 2005-")
                            << QStringLiteral("-Aujourd'hui est 07/05/2005-")
                            << dict;
 
-  QTest::newRow("safe-05")
-      << QStringLiteral(
-             "{% with 'Today' as rawText %}-{{ _(rawText) }}-{% endwith %}")
-      << QStringLiteral("-Today-") << QStringLiteral("-Aujourd&#39;hui-")
-      << dict;
+  QTest::newRow("safe-05") << QStringLiteral(
+      "{% with 'Today' as rawText %}-{{ _(rawText) }}-{% endwith %}")
+                           << QStringLiteral("-Today-")
+                           << QStringLiteral("-Aujourd&#39;hui-") << dict;
 
-  QTest::newRow("safe-06") << QStringLiteral("{% autoescape off %}{% with 'Today' as rawText %}-{{ _(rawText) }}-{% endwith %}{% endautoescape %}")
+  QTest::newRow("safe-06") << QStringLiteral(
+      "{% autoescape off %}{% with 'Today' as rawText %}-{{ _(rawText) }}-{% "
+      "endwith %}{% endautoescape %}")
                            << QStringLiteral("-Today-")
                            << QStringLiteral("-Aujourd'hui-") << dict;
 
@@ -641,10 +660,10 @@ void TestInternationalization::testSafeContent_data()
                            << QStringLiteral("-Today-")
                            << QStringLiteral("-Aujourd&#39;hui-") << dict;
 
-  QTest::newRow("safe-08")
-      << QStringLiteral(
-             "{% autoescape off %}-{{ _(today_text) }}-{% endautoescape %}")
-      << QStringLiteral("-Today-") << QStringLiteral("-Aujourd'hui-") << dict;
+  QTest::newRow("safe-08") << QStringLiteral(
+      "{% autoescape off %}-{{ _(today_text) }}-{% endautoescape %}")
+                           << QStringLiteral("-Today-")
+                           << QStringLiteral("-Aujourd'hui-") << dict;
 
   dict.insert(QStringLiteral("today_and_tomorrow_text"),
               markSafe(QStringLiteral("Today &amp; tomorrow")));
@@ -654,25 +673,30 @@ void TestInternationalization::testSafeContent_data()
       << QStringLiteral("-Today &amp;amp; tomorrow-")
       << QStringLiteral("-Aujourd&#39;hui &amp;amp; demain-") << dict;
 
-  QTest::newRow("safe-10") << QStringLiteral("{% autoescape off %}-{{ _(today_and_tomorrow_text) }}-{% endautoescape %}")
-                           << QStringLiteral("-Today &amp; tomorrow-")
+  QTest::newRow("safe-10") << QStringLiteral(
+      "{% autoescape off %}-{{ _(today_and_tomorrow_text) }}-{% endautoescape "
+      "%}") << QStringLiteral("-Today &amp; tomorrow-")
                            << QStringLiteral("-Aujourd'hui &amp; demain-")
                            << dict;
 
   QTest::newRow("safe-11") << QStringLiteral(
-                                  "{% i18nc 'The current day is' 'Today is' %}")
+      "{% i18nc 'The current day is' 'Today is' %}")
                            << QStringLiteral("Today is")
                            << QStringLiteral("Aujourd&#39;hui est") << dict;
 
-  QTest::newRow("safe-12") << QStringLiteral("{% autoescape off %}{% i18nc 'The current day is' 'Today is' %}{% endautoescape %}")
-                           << QStringLiteral("Today is")
+  QTest::newRow("safe-12") << QStringLiteral(
+      "{% autoescape off %}{% i18nc 'The current day is' 'Today is' %}{% "
+      "endautoescape %}") << QStringLiteral("Today is")
                            << QStringLiteral("Aujourd'hui est") << dict;
 
-  QTest::newRow("safe-13") << QStringLiteral("{% i18nc_var 'The current day is' 'Today is' as today_greeting %}-{{ today_greeting }}-")
-                           << QStringLiteral("-Today is-")
+  QTest::newRow("safe-13") << QStringLiteral(
+      "{% i18nc_var 'The current day is' 'Today is' as today_greeting %}-{{ "
+      "today_greeting }}-") << QStringLiteral("-Today is-")
                            << QStringLiteral("-Aujourd&#39;hui est-") << dict;
 
-  QTest::newRow("safe-14") << QStringLiteral("{% autoescape off %}{% i18nc_var 'The current day is' 'Today is' as today_greeting %}-{{ today_greeting }}-{% endautoescape %}")
+  QTest::newRow("safe-14") << QStringLiteral(
+      "{% autoescape off %}{% i18nc_var 'The current day is' 'Today is' as "
+      "today_greeting %}-{{ today_greeting }}-{% endautoescape %}")
                            << QStringLiteral("-Today is-")
                            << QStringLiteral("-Aujourd'hui est-") << dict;
 
@@ -686,78 +710,106 @@ void TestInternationalization::testSafeContent_data()
                            << QStringLiteral("2 personnes aujourd&#39;hui")
                            << dict;
 
-  QTest::newRow("safe-17")
-      << QStringLiteral("{% autoescape off %}{% i18np '%n people today' 1 %}{% endautoescape %}")
-      << QStringLiteral("1 people today") // Not really testing English here.
-      << QStringLiteral("1 personne aujourd'hui") << dict;
+  QTest::newRow("safe-17") << QStringLiteral(
+      "{% autoescape off %}{% i18np '%n people today' 1 %}{% endautoescape %}")
+                           << QStringLiteral(
+                                  "1 people today") // Not really testing
+                                                    // English here.
+                           << QStringLiteral("1 personne aujourd'hui") << dict;
 
-  QTest::newRow("safe-18") << QStringLiteral("{% autoescape off %}{% i18np '%n people today' 2 %}{% endautoescape %}")
+  QTest::newRow("safe-18") << QStringLiteral(
+      "{% autoescape off %}{% i18np '%n people today' 2 %}{% endautoescape %}")
                            << QStringLiteral("2 people today")
                            << QStringLiteral("2 personnes aujourd'hui") << dict;
 
-  QTest::newRow("safe-19")
-      << QStringLiteral("{% i18np_var '%n people today' 1 as num_people %}-{{ num_people }}-")
-      << QStringLiteral("-1 people today-") // Not really testing English here.
-      << QStringLiteral("-1 personne aujourd&#39;hui-") << dict;
+  QTest::newRow("safe-19") << QStringLiteral(
+      "{% i18np_var '%n people today' 1 as num_people %}-{{ num_people }}-")
+                           << QStringLiteral(
+                                  "-1 people today-") // Not really testing
+                                                      // English here.
+                           << QStringLiteral("-1 personne aujourd&#39;hui-")
+                           << dict;
 
-  QTest::newRow("safe-20") << QStringLiteral("{% i18np_var '%n people today' 2 as num_people %}-{{ num_people }}-")
+  QTest::newRow("safe-20") << QStringLiteral(
+      "{% i18np_var '%n people today' 2 as num_people %}-{{ num_people }}-")
                            << QStringLiteral("-2 people today-")
                            << QStringLiteral("-2 personnes aujourd&#39;hui-")
                            << dict;
 
   QTest::newRow("safe-21")
-      << QStringLiteral("{% autoescape off %}{% i18np_var '%n people today' 1 as num_people %}-{{ num_people }}-{% endautoescape %}")
+      << QStringLiteral("{% autoescape off %}{% i18np_var '%n people today' 1 "
+                        "as num_people %}-{{ num_people }}-{% endautoescape %}")
       << QStringLiteral("-1 people today-") // Not really testing English here.
       << QStringLiteral("-1 personne aujourd'hui-") << dict;
 
-  QTest::newRow("safe-22") << QStringLiteral("{% autoescape off %}{% i18np_var '%n people today' 2 as num_people %}-{{ num_people }}-{% endautoescape %}")
+  QTest::newRow("safe-22") << QStringLiteral(
+      "{% autoescape off %}{% i18np_var '%n people today' 2 as num_people "
+      "%}-{{ num_people }}-{% endautoescape %}")
                            << QStringLiteral("-2 people today-")
                            << QStringLiteral("-2 personnes aujourd'hui-")
                            << dict;
 
   QTest::newRow("safe-23")
-      << QStringLiteral("{% i18ncp 'The number of people who have visited today' '%n people visited today' 1 %}")
+      << QStringLiteral("{% i18ncp 'The number of people who have visited "
+                        "today' '%n people visited today' 1 %}")
       << QStringLiteral(
              "1 people visited today") // Not really testing English here.
       << QStringLiteral("1 personne a visité aujourd&#39;hui") << dict;
 
   QTest::newRow("safe-24")
-      << QStringLiteral("{% i18ncp 'The number of people who have visited today' '%n people visited today' 2 %}")
+      << QStringLiteral("{% i18ncp 'The number of people who have visited "
+                        "today' '%n people visited today' 2 %}")
       << QStringLiteral("2 people visited today")
       << QStringLiteral("2 personnes a visité aujourd&#39;hui") << dict;
 
   QTest::newRow("safe-25")
-      << QStringLiteral("{% autoescape off %}{% i18ncp 'The number of people who have visited today' '%n people visited today' 1 %}{% endautoescape %}")
+      << QStringLiteral(
+             "{% autoescape off %}{% i18ncp 'The number of people who have "
+             "visited today' '%n people visited today' 1 %}{% endautoescape %}")
       << QStringLiteral(
              "1 people visited today") // Not really testing English here.
       << QStringLiteral("1 personne a visité aujourd'hui") << dict;
 
-  QTest::newRow("safe-26") << QStringLiteral("{% autoescape off %}{% i18ncp 'The number of people who have visited today' '%n people visited today' 2 %}{% endautoescape %}")
+  QTest::newRow("safe-26") << QStringLiteral(
+      "{% autoescape off %}{% i18ncp 'The number of people who have visited "
+      "today' '%n people visited today' 2 %}{% endautoescape %}")
                            << QStringLiteral("2 people visited today")
                            << QStringLiteral("2 personnes a visité aujourd'hui")
                            << dict;
 
   QTest::newRow("safe-27")
-      << QStringLiteral("{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 1 as num_people %}-{{ num_people }}-")
+      << QStringLiteral(
+             "{% i18ncp_var 'The number of people who have visited today' '%n "
+             "people visited today' 1 as num_people %}-{{ num_people }}-")
       << QStringLiteral(
              "-1 people visited today-") // Not really testing English here.
       << QStringLiteral("-1 personne a visité aujourd&#39;hui-") << dict;
 
-  QTest::newRow("safe-28")
-      << QStringLiteral("{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 2 as num_people %}-{{ num_people }}-")
-      << QStringLiteral("-2 people visited today-")
-      << QStringLiteral("-2 personnes a visité aujourd&#39;hui-") << dict;
+  QTest::newRow("safe-28") << QStringLiteral(
+      "{% i18ncp_var 'The number of people who have visited today' '%n people "
+      "visited today' 2 as num_people %}-{{ num_people }}-")
+                           << QStringLiteral("-2 people visited today-")
+                           << QStringLiteral(
+                                  "-2 personnes a visité aujourd&#39;hui-")
+                           << dict;
 
   QTest::newRow("safe-29")
-      << QStringLiteral("{% autoescape off %}{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 1 as num_people %}-{{ num_people }}-{% endautoescape %}")
+      << QStringLiteral(
+             "{% autoescape off %}{% i18ncp_var 'The number of people who have "
+             "visited today' '%n people visited today' 1 as num_people %}-{{ "
+             "num_people }}-{% endautoescape %}")
       << QStringLiteral(
              "-1 people visited today-") // Not really testing English here.
       << QStringLiteral("-1 personne a visité aujourd'hui-") << dict;
 
-  QTest::newRow("safe-30")
-      << QStringLiteral("{% autoescape off %}{% i18ncp_var 'The number of people who have visited today' '%n people visited today' 2 as num_people %}-{{ num_people }}-{% endautoescape %}")
-      << QStringLiteral("-2 people visited today-")
-      << QStringLiteral("-2 personnes a visité aujourd'hui-") << dict;
+  QTest::newRow("safe-30") << QStringLiteral(
+      "{% autoescape off %}{% i18ncp_var 'The number of people who have "
+      "visited today' '%n people visited today' 2 as num_people %}-{{ "
+      "num_people }}-{% endautoescape %}")
+                           << QStringLiteral("-2 people visited today-")
+                           << QStringLiteral(
+                                  "-2 personnes a visité aujourd'hui-")
+                           << dict;
 }
 
 void TestInternationalization::testFailure()
@@ -774,10 +826,14 @@ void TestInternationalization::testFailure_data()
 
   QTest::newRow("fail-01") << QStringLiteral(
       "{% i18np_var '%n people visited today' as num_people %}");
-  QTest::newRow("fail-02") << QStringLiteral("{% i18ncp_var 'The number of people who have visited today' '%n people visited today' as num_people %}");
+  QTest::newRow("fail-02") << QStringLiteral(
+      "{% i18ncp_var 'The number of people who have visited today' '%n people "
+      "visited today' as num_people %}");
   QTest::newRow("fail-03") << QStringLiteral(
       "{% i18np '%n people visited today' %}");
-  QTest::newRow("fail-04") << QStringLiteral("{% i18ncp 'The number of people who have visited today' '%n people visited today' %}");
+  QTest::newRow("fail-04") << QStringLiteral(
+      "{% i18ncp 'The number of people who have visited today' '%n people "
+      "visited today' %}");
 }
 
 void TestInternationalization::testDates()
@@ -848,9 +904,9 @@ void TestInternationalization::testIntegers_data()
   QTest::addColumn<QString>("deInteger");
   QTest::addColumn<QString>("frInteger");
 
-  QTest::newRow("integer-01") << 7 << QStringLiteral("7") << QStringLiteral("7")
-                              << QStringLiteral("7") << QStringLiteral("7")
-                              << QStringLiteral("7") << QStringLiteral("7");
+  QTest::newRow("integer-01")
+      << 7 << QStringLiteral("7") << QStringLiteral("7") << QStringLiteral("7")
+      << QStringLiteral("7") << QStringLiteral("7") << QStringLiteral("7");
 
   QTest::newRow("integer-02")
       << 7000 << QStringLiteral("7000") << QStringLiteral("7000")
@@ -886,10 +942,10 @@ void TestInternationalization::testFloats_data()
   QTest::addColumn<QString>("deFloatingPoint");
   QTest::addColumn<QString>("frFloatingPoint");
 
-  QTest::newRow("float-01") << qreal(7.4) << QStringLiteral("7.4")
-                            << QStringLiteral("7.40") << QStringLiteral("7.40")
-                            << QStringLiteral("7.40") << QStringLiteral("7,40")
-                            << QStringLiteral("7,40");
+  QTest::newRow("float-01")
+      << qreal(7.4) << QStringLiteral("7.4") << QStringLiteral("7.40")
+      << QStringLiteral("7.40") << QStringLiteral("7.40")
+      << QStringLiteral("7,40") << QStringLiteral("7,40");
 }
 
 void TestInternationalization::testTimes()
@@ -983,12 +1039,12 @@ void TestInternationalization::testDateTimes_data()
       << QStringLiteral("6/7/05 3:12 PM") << QStringLiteral("07/06/2005 15:12")
       << QStringLiteral("07.06.05 15:12") << QStringLiteral("07/06/2005 15:12");
 
-  QTest::newRow("datetime-04") << QDateTime(QDate(2005, 10, 11), QTime(5, 6, 7))
-                               << QStringLiteral("11 Oct 2005 05:06:07")
-                               << QStringLiteral("10/11/05 5:06 AM")
-                               << QStringLiteral("11/10/2005 05:06")
-                               << QStringLiteral("11.10.05 05:06")
-                               << QStringLiteral("11/10/2005 05:06");
+  QTest::newRow("datetime-04")
+      << QDateTime(QDate(2005, 10, 11), QTime(5, 6, 7))
+      << QStringLiteral("11 Oct 2005 05:06:07")
+      << QStringLiteral("10/11/05 5:06 AM")
+      << QStringLiteral("11/10/2005 05:06") << QStringLiteral("11.10.05 05:06")
+      << QStringLiteral("11/10/2005 05:06");
 
   QTest::newRow("datetime-05")
       << QDateTime(QDate(2005, 10, 11), QTime(11, 12, 13))

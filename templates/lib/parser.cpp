@@ -310,7 +310,8 @@ void Parser::invalidBlockTag(const Token &token, const QString &command,
   } else {
     throw Grantlee::Exception(
         InvalidBlockTagError,
-        QStringLiteral("Invalid block tag on line %1: '%2\''. Did you forget to register or load this tag?")
+        QStringLiteral("Invalid block tag on line %1: '%2\''. Did you forget "
+                       "to register or load this tag?")
             .arg(token.linenumber)
             .arg(command));
   }

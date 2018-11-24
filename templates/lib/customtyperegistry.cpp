@@ -57,16 +57,16 @@ QVariant CustomTypeRegistry::lookup(const QVariant &object,
 
   {
     if (!types.contains(id)) {
-      qCWarning(GRANTLEE_CUSTOMTYPE) << "Don't know how to handle metatype"
-                                     << QMetaType::typeName(id);
+      qCWarning(GRANTLEE_CUSTOMTYPE)
+          << "Don't know how to handle metatype" << QMetaType::typeName(id);
       // :TODO: Print out error message
       return QVariant();
     }
 
     const CustomTypeInfo &info = types[id];
     if (!info.lookupFunction) {
-      qCWarning(GRANTLEE_CUSTOMTYPE) << "No lookup function for metatype"
-                                     << QMetaType::typeName(id);
+      qCWarning(GRANTLEE_CUSTOMTYPE)
+          << "No lookup function for metatype" << QMetaType::typeName(id);
       lf = 0;
       // :TODO: Print out error message
       return QVariant();

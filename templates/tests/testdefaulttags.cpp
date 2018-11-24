@@ -221,7 +221,8 @@ void TestDefaultTags::testCommentTag_data()
       << dict << QStringLiteral("hello") << NoError;
 
   QTest::newRow("comment-tag02")
-      << QStringLiteral("{% comment %}this is hidden{% endcomment %}hello{% comment %}foo{% endcomment %}")
+      << QStringLiteral("{% comment %}this is hidden{% endcomment %}hello{% "
+                        "comment %}foo{% endcomment %}")
       << dict << QStringLiteral("hello") << NoError;
   // Comment tag can contain invalid stuff.
   QTest::newRow("comment-tag03")
@@ -248,8 +249,8 @@ void TestDefaultTags::testFirstOfTag_data()
   dict.insert(QStringLiteral("a"), 0);
   dict.insert(QStringLiteral("b"), 0);
   dict.insert(QStringLiteral("c"), 0);
-  QTest::newRow("firstof01") << QStringLiteral("{% firstof a b c %}") << dict
-                             << QString() << NoError;
+  QTest::newRow("firstof01")
+      << QStringLiteral("{% firstof a b c %}") << dict << QString() << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("a"), 1);
@@ -287,8 +288,8 @@ void TestDefaultTags::testFirstOfTag_data()
 
   dict.clear();
   dict.insert(QStringLiteral("a"), 0);
-  QTest::newRow("firstof07") << "{% firstof a b \"c\" %}" << dict
-                             << QStringLiteral("c") << NoError;
+  QTest::newRow("firstof07")
+      << "{% firstof a b \"c\" %}" << dict << QStringLiteral("c") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("a"), 0);
@@ -319,6 +320,7 @@ public:
   }
 
   bool isBadCalled() { return mIsBadCalled; }
+
 private:
   mutable bool mIsBadCalled;
 };
@@ -368,45 +370,46 @@ void TestDefaultTags::testIfTag_data()
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), true);
-  QTest::newRow("if-tag07")
-      << QStringLiteral(
-             "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}")
-      << dict << QStringLiteral("foo") << NoError;
+  QTest::newRow("if-tag07") << QStringLiteral(
+      "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}")
+                            << dict << QStringLiteral("foo") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("bar"), true);
-  QTest::newRow("if-tag08")
-      << QStringLiteral(
-             "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}")
-      << dict << QStringLiteral("bar") << NoError;
+  QTest::newRow("if-tag08") << QStringLiteral(
+      "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}")
+                            << dict << QStringLiteral("bar") << NoError;
 
   dict.clear();
-  QTest::newRow("if-tag09")
-      << QStringLiteral(
-             "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}")
-      << dict << QStringLiteral("nothing") << NoError;
+  QTest::newRow("if-tag09") << QStringLiteral(
+      "{% if foo %}foo{% elif bar %}bar{% else %}nothing{% endif %}")
+                            << dict << QStringLiteral("nothing") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), true);
   QTest::newRow("if-tag10")
-      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}")
+      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% "
+                        "else %}nothing{% endif %}")
       << dict << QStringLiteral("foo") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("bar"), true);
   QTest::newRow("if-tag11")
-      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}")
+      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% "
+                        "else %}nothing{% endif %}")
       << dict << QStringLiteral("bar") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("baz"), true);
   QTest::newRow("if-tag12")
-      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}")
+      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% "
+                        "else %}nothing{% endif %}")
       << dict << QStringLiteral("baz") << NoError;
 
   dict.clear();
   QTest::newRow("if-tag13")
-      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% else %}nothing{% endif %}")
+      << QStringLiteral("{% if foo %}foo{% elif bar %}bar{% elif baz %}baz{% "
+                        "else %}nothing{% endif %}")
       << dict << QStringLiteral("nothing") << NoError;
 
   // Filters
@@ -418,10 +421,9 @@ void TestDefaultTags::testIfTag_data()
       << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
-  QTest::newRow("if-tag-filter02")
-      << QStringLiteral(
-             "{% if foo|upper == \'ABC\' %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("if-tag-filter02") << QStringLiteral(
+      "{% if foo|upper == \'ABC\' %}yes{% else %}no{% endif %}")
+                                   << dict << QStringLiteral("no") << NoError;
 
   // Equality
 
@@ -457,26 +459,23 @@ void TestDefaultTags::testIfTag_data()
 
   dict.clear();
   dict.insert(QStringLiteral("foostring"), QStringLiteral("foo"));
-  QTest::newRow("if-tag-eq06")
-      << QStringLiteral(
-             "{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("if-tag-eq06") << QStringLiteral(
+      "{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
+                               << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foostring"), QStringLiteral("foo"));
-  QTest::newRow("if-tag-eq06")
-      << QStringLiteral(
-             "{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("if-tag-eq06") << QStringLiteral(
+      "{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
+                               << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("zoo"), QVariant::fromValue(new Zoo(this)));
   dict.insert(QStringLiteral("tigersEnum"),
               QVariant::fromValue<int>(Zoo::Tigers));
-  QTest::newRow("if-tag-eq07")
-      << QStringLiteral(
-             "{% if tigersEnum == zoo.Tigers %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("if-tag-eq07") << QStringLiteral(
+      "{% if tigersEnum == zoo.Tigers %}yes{% else %}no{% endif %}")
+                               << dict << QStringLiteral("yes") << NoError;
 
   // Comparison
 
@@ -849,42 +848,37 @@ void TestDefaultTags::testIfTag_data()
       << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
-  QTest::newRow("if-tag-not26")
-      << QStringLiteral(
-             "{% if not foo and not bar %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("if-tag-not26") << QStringLiteral(
+      "{% if not foo and not bar %}yes{% else %}no{% endif %}")
+                                << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), true);
   dict.insert(QStringLiteral("bar"), true);
-  QTest::newRow("if-tag-not27")
-      << QStringLiteral(
-             "{% if not foo and not bar %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("if-tag-not27") << QStringLiteral(
+      "{% if not foo and not bar %}yes{% else %}no{% endif %}")
+                                << dict << QStringLiteral("no") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), true);
   dict.insert(QStringLiteral("bar"), false);
-  QTest::newRow("if-tag-not28")
-      << QStringLiteral(
-             "{% if not foo and not bar %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("if-tag-not28") << QStringLiteral(
+      "{% if not foo and not bar %}yes{% else %}no{% endif %}")
+                                << dict << QStringLiteral("no") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), false);
   dict.insert(QStringLiteral("bar"), true);
-  QTest::newRow("if-tag-not29")
-      << QStringLiteral(
-             "{% if not foo and not bar %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("if-tag-not29") << QStringLiteral(
+      "{% if not foo and not bar %}yes{% else %}no{% endif %}")
+                                << dict << QStringLiteral("no") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), false);
   dict.insert(QStringLiteral("bar"), false);
-  QTest::newRow("if-tag-not30")
-      << QStringLiteral(
-             "{% if not foo and not bar %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("if-tag-not30") << QStringLiteral(
+      "{% if not foo and not bar %}yes{% else %}no{% endif %}")
+                                << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   QTest::newRow("if-tag-not31")
@@ -990,10 +984,9 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("yes") << NoError;
 
   dict.clear();
-  QTest::newRow("if-tag-badarg04")
-      << QStringLiteral(
-             "{% if x|default_if_none:y %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("if-tag-badarg04") << QStringLiteral(
+      "{% if x|default_if_none:y %}yes{% else %}no{% endif %}")
+                                   << dict << QStringLiteral("no") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("foo"), 1);
@@ -1087,10 +1080,9 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("yes") << NoError;
 
   dict.clear();
-  QTest::newRow("if-tag-badarg04")
-      << QStringLiteral(
-             "{% if x|default_if_none:y %}yes{% else %}no{% endif %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("if-tag-badarg04") << QStringLiteral(
+      "{% if x|default_if_none:y %}yes{% else %}no{% endif %}")
+                                   << dict << QStringLiteral("no") << NoError;
 }
 
 void TestDefaultTags::testForTag_data()
@@ -1113,10 +1105,9 @@ void TestDefaultTags::testForTag_data()
       << dict << QStringLiteral("321") << NoError;
   list.clear();
   dict.insert(QStringLiteral("values"), list);
-  QTest::newRow("for-tag03")
-      << QStringLiteral(
-             "{% for val in values %}({{ val }} sdfsdf,){% endfor %}")
-      << dict << QString() << NoError;
+  QTest::newRow("for-tag03") << QStringLiteral(
+      "{% for val in values %}({{ val }} sdfsdf,){% endfor %}")
+                             << dict << QString() << NoError;
   QStringList emails;
   emails << QStringLiteral("one") << QStringLiteral("two");
   QVariantHash obj;
@@ -1129,10 +1120,9 @@ void TestDefaultTags::testForTag_data()
   emails.clear();
   obj.insert(QStringLiteral("emails"), emails);
   dict.insert(QStringLiteral("contact"), obj);
-  QTest::newRow("for-tag05")
-      << QStringLiteral(
-             "{% for val in contact.emails %}({{ val }},){% endfor %}")
-      << dict << QString() << NoError;
+  QTest::newRow("for-tag05") << QStringLiteral(
+      "{% for val in contact.emails %}({{ val }},){% endfor %}")
+                             << dict << QString() << NoError;
   list.clear();
   dict.clear();
   emails << QStringLiteral("one");
@@ -1154,27 +1144,25 @@ void TestDefaultTags::testForTag_data()
 
   list << 1 << 2 << 3;
   dict.insert(QStringLiteral("values"), list);
-  QTest::newRow("for-tag-vars01")
-      << QStringLiteral(
-             "{% for val in values %}{{ forloop.counter }}{% endfor %}")
-      << dict << QStringLiteral("123") << NoError;
-  QTest::newRow("for-tag-vars02")
-      << QStringLiteral(
-             "{% for val in values %}{{ forloop.counter0 }}{% endfor %}")
-      << dict << QStringLiteral("012") << NoError;
-  QTest::newRow("for-tag-vars03")
-      << QStringLiteral(
-             "{% for val in values %}{{ forloop.revcounter }}{% endfor %}")
-      << dict << QStringLiteral("321") << NoError;
-  QTest::newRow("for-tag-vars04")
-      << QStringLiteral(
-             "{% for val in values %}{{ forloop.revcounter0 }}{% endfor %}")
-      << dict << QStringLiteral("210") << NoError;
+  QTest::newRow("for-tag-vars01") << QStringLiteral(
+      "{% for val in values %}{{ forloop.counter }}{% endfor %}")
+                                  << dict << QStringLiteral("123") << NoError;
+  QTest::newRow("for-tag-vars02") << QStringLiteral(
+      "{% for val in values %}{{ forloop.counter0 }}{% endfor %}")
+                                  << dict << QStringLiteral("012") << NoError;
+  QTest::newRow("for-tag-vars03") << QStringLiteral(
+      "{% for val in values %}{{ forloop.revcounter }}{% endfor %}")
+                                  << dict << QStringLiteral("321") << NoError;
+  QTest::newRow("for-tag-vars04") << QStringLiteral(
+      "{% for val in values %}{{ forloop.revcounter0 }}{% endfor %}")
+                                  << dict << QStringLiteral("210") << NoError;
   QTest::newRow("for-tag-vars05")
-      << QStringLiteral("{% for val in values %}{% if forloop.first %}f{% else %}x{% endif %}{% endfor %}")
+      << QStringLiteral("{% for val in values %}{% if forloop.first %}f{% else "
+                        "%}x{% endif %}{% endfor %}")
       << dict << QStringLiteral("fxx") << NoError;
   QTest::newRow("for-tag-vars06")
-      << QStringLiteral("{% for val in values %}{% if forloop.last %}l{% else %}x{% endif %}{% endfor %}")
+      << QStringLiteral("{% for val in values %}{% if forloop.last %}l{% else "
+                        "%}x{% endif %}{% endfor %}")
       << dict << QStringLiteral("xxl") << NoError;
 
   dict.clear();
@@ -1289,19 +1277,21 @@ void TestDefaultTags::testForTag_data()
 
   dict.clear();
   dict.insert(QStringLiteral("values"), QVariantList() << 1 << 2 << 3);
-  QTest::newRow("for-tag-empty01")
-      << QStringLiteral("{% for val in values %}{{ val }}{% empty %}empty text{% endfor %}")
-      << dict << QStringLiteral("123") << NoError;
+  QTest::newRow("for-tag-empty01") << QStringLiteral(
+      "{% for val in values %}{{ val }}{% empty %}empty text{% endfor %}")
+                                   << dict << QStringLiteral("123") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("values"), QVariantList());
   QTest::newRow("for-tag-empty02")
-      << QStringLiteral("{% for val in values %}{{ val }}{% empty %}values array empty{% endfor %}")
+      << QStringLiteral("{% for val in values %}{{ val }}{% empty %}values "
+                        "array empty{% endfor %}")
       << dict << QStringLiteral("values array empty") << NoError;
 
   dict.clear();
   QTest::newRow("for-tag-empty03")
-      << QStringLiteral("{% for val in values %}{{ val }}{% empty %}values array not found{% endfor %}")
+      << QStringLiteral("{% for val in values %}{{ val }}{% empty %}values "
+                        "array not found{% endfor %}")
       << dict << QStringLiteral("values array not found") << NoError;
 }
 
@@ -1387,10 +1377,9 @@ void TestDefaultTags::testIfEqualTag_data()
   QTest::newRow("ifequal-split03")
       << "{% ifequal a \"test man\" %}yes{% else %}no{% endifequal %}" << dict
       << QStringLiteral("yes") << NoError;
-  QTest::newRow("ifequal-split04")
-      << QStringLiteral(
-             "{% ifequal a 'test man' %}yes{% else %}no{% endifequal %}")
-      << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("ifequal-split04") << QStringLiteral(
+      "{% ifequal a 'test man' %}yes{% else %}no{% endifequal %}")
+                                   << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral(""));
@@ -1552,10 +1541,9 @@ void TestDefaultTags::testIfNotEqualTag_data()
   QTest::newRow("ifnotequal01")
       << QStringLiteral("{% ifnotequal a b %}yes{% endifnotequal %}") << dict
       << QStringLiteral("yes") << NoError;
-  QTest::newRow("ifnotequal03")
-      << QStringLiteral(
-             "{% ifnotequal a b %}yes{% else %}no{% endifnotequal %}")
-      << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("ifnotequal03") << QStringLiteral(
+      "{% ifnotequal a b %}yes{% else %}no{% endifnotequal %}")
+                                << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("a"), 1);
@@ -1564,10 +1552,9 @@ void TestDefaultTags::testIfNotEqualTag_data()
   QTest::newRow("ifnotequal02")
       << QStringLiteral("{% ifnotequal a b %}yes{% endifnotequal %}") << dict
       << QString() << NoError;
-  QTest::newRow("ifnotequal04")
-      << QStringLiteral(
-             "{% ifnotequal a b %}yes{% else %}no{% endifnotequal %}")
-      << dict << QStringLiteral("no") << NoError;
+  QTest::newRow("ifnotequal04") << QStringLiteral(
+      "{% ifnotequal a b %}yes{% else %}no{% endifnotequal %}")
+                                << dict << QStringLiteral("no") << NoError;
 }
 
 void TestDefaultTags::testTemplateTagTag_data()
@@ -1601,14 +1588,12 @@ void TestDefaultTags::testTemplateTagTag_data()
   QTest::newRow("templatetag08")
       << QStringLiteral("{% templatetag closebrace %}") << dict
       << QStringLiteral("}") << NoError;
-  QTest::newRow("templatetag09")
-      << QStringLiteral(
-             "{% templatetag openbrace %}{% templatetag openbrace %}")
-      << dict << QStringLiteral("{{") << NoError;
-  QTest::newRow("templatetag10")
-      << QStringLiteral(
-             "{% templatetag closebrace %}{% templatetag closebrace %}")
-      << dict << QStringLiteral("}}") << NoError;
+  QTest::newRow("templatetag09") << QStringLiteral(
+      "{% templatetag openbrace %}{% templatetag openbrace %}")
+                                 << dict << QStringLiteral("{{") << NoError;
+  QTest::newRow("templatetag10") << QStringLiteral(
+      "{% templatetag closebrace %}{% templatetag closebrace %}")
+                                 << dict << QStringLiteral("}}") << NoError;
   QTest::newRow("templatetag11")
       << QStringLiteral("{% templatetag opencomment %}") << dict
       << QStringLiteral("{#") << NoError;
@@ -1629,10 +1614,12 @@ void TestDefaultTags::testWithTag_data()
   QVariantHash hash;
   hash.insert(QStringLiteral("key"), 50);
   dict.insert(QStringLiteral("dict"), hash);
-  QTest::newRow("with01")
-      << QStringLiteral("{% with dict.key as key %}{{ key }}{% endwith %}")
-      << dict << QStringLiteral("50") << NoError;
-  QTest::newRow("with02") << QStringLiteral("{{ key }}{% with dict.key as key %}{{ key }}-{{ dict.key }}-{{ key }}{% endwith %}{{ key }}")
+  QTest::newRow("with01") << QStringLiteral(
+      "{% with dict.key as key %}{{ key }}{% endwith %}")
+                          << dict << QStringLiteral("50") << NoError;
+  QTest::newRow("with02") << QStringLiteral(
+      "{{ key }}{% with dict.key as key %}{{ key }}-{{ dict.key }}-{{ key }}{% "
+      "endwith %}{{ key }}")
                           << dict << QStringLiteral("50-50-50") << NoError;
   QTest::newRow("with-error01")
       << QStringLiteral("{% with dict.key xx key %}{{ key }}{% endwith %}")
@@ -1654,13 +1641,13 @@ void TestDefaultTags::testCycleTag_data()
   QTest::newRow("cycle01") << QStringLiteral("{% cycle a %}") << dict
                            << QString() << TagSyntaxError;
   QTest::newRow("cycle02") << QStringLiteral(
-                                  "{% cycle a,b,c as abc %}{% cycle abc %}")
+      "{% cycle a,b,c as abc %}{% cycle abc %}")
                            << dict << QStringLiteral("ab") << NoError;
-  QTest::newRow("cycle03")
-      << QStringLiteral(
-             "{% cycle a,b,c as abc %}{% cycle abc %}{% cycle abc %}")
-      << dict << QStringLiteral("abc") << NoError;
-  QTest::newRow("cycle04") << QStringLiteral("{% cycle a,b,c as abc %}{% cycle abc %}{% cycle abc %}{% cycle abc %}")
+  QTest::newRow("cycle03") << QStringLiteral(
+      "{% cycle a,b,c as abc %}{% cycle abc %}{% cycle abc %}")
+                           << dict << QStringLiteral("abc") << NoError;
+  QTest::newRow("cycle04") << QStringLiteral(
+      "{% cycle a,b,c as abc %}{% cycle abc %}{% cycle abc %}{% cycle abc %}")
                            << dict << QStringLiteral("abca") << NoError;
   QTest::newRow("cycle05") << QStringLiteral("{% cycle a %}") << dict
                            << QString() << TagSyntaxError;
@@ -1668,56 +1655,59 @@ void TestDefaultTags::testCycleTag_data()
   QTest::newRow("cycle06") << QStringLiteral("{% cycle a %}") << dict
                            << QString() << TagSyntaxError;
   QTest::newRow("cycle07") << QStringLiteral(
-                                  "{% cycle a,b,c as foo %}{% cycle bar %}")
+      "{% cycle a,b,c as foo %}{% cycle bar %}")
                            << dict << QString() << TagSyntaxError;
-  QTest::newRow("cycle08") << QStringLiteral("{% cycle a,b,c as foo %}{% cycle foo %}{{ foo }}{{ foo }}{% cycle foo %}{{ foo }}")
-                           << dict << QStringLiteral("abbbcc") << NoError;
+  QTest::newRow("cycle08") << QStringLiteral(
+      "{% cycle a,b,c as foo %}{% cycle foo %}{{ foo }}{{ foo }}{% cycle foo "
+      "%}{{ foo }}") << dict
+                           << QStringLiteral("abbbcc") << NoError;
 
   dict.insert(QStringLiteral("test"), QVariantList() << 0 << 1 << 2 << 3 << 4);
-  QTest::newRow("cycle09")
-      << QStringLiteral(
-             "{% for i in test %}{% cycle a,b %}{{ i }},{% endfor %}")
-      << dict << QStringLiteral("a0,b1,a2,b3,a4,") << NoError;
+  QTest::newRow("cycle09") << QStringLiteral(
+      "{% for i in test %}{% cycle a,b %}{{ i }},{% endfor %}")
+                           << dict << QStringLiteral("a0,b1,a2,b3,a4,")
+                           << NoError;
 
   dict.clear();
-  QTest::newRow("cycle10")
-      << QStringLiteral("{% cycle 'a' 'b' 'c' as abc %}{% cycle abc %}") << dict
-      << QStringLiteral("ab") << NoError;
-  QTest::newRow("cycle11")
-      << QStringLiteral(
-             "{% cycle 'a' 'b' 'c' as abc %}{% cycle abc %}{% cycle abc %}")
-      << dict << QStringLiteral("abc") << NoError;
-  QTest::newRow("cycle12") << QStringLiteral("{% cycle 'a' 'b' 'c' as abc %}{% cycle abc %}{% cycle abc %}{% cycle abc %}")
-                           << dict << QStringLiteral("abca") << NoError;
+  QTest::newRow("cycle10") << QStringLiteral(
+      "{% cycle 'a' 'b' 'c' as abc %}{% cycle abc %}")
+                           << dict << QStringLiteral("ab") << NoError;
+  QTest::newRow("cycle11") << QStringLiteral(
+      "{% cycle 'a' 'b' 'c' as abc %}{% cycle abc %}{% cycle abc %}")
+                           << dict << QStringLiteral("abc") << NoError;
+  QTest::newRow("cycle12") << QStringLiteral(
+      "{% cycle 'a' 'b' 'c' as abc %}{% cycle abc %}{% cycle abc %}{% cycle "
+      "abc %}") << dict << QStringLiteral("abca")
+                           << NoError;
 
   dict.insert(QStringLiteral("test"), QVariantList() << 0 << 1 << 2 << 3 << 4);
-  QTest::newRow("cycle13")
-      << QStringLiteral(
-             "{% for i in test %}{% cycle 'a' 'b' %}{{ i }},{% endfor %}")
-      << dict << QStringLiteral("a0,b1,a2,b3,a4,") << NoError;
+  QTest::newRow("cycle13") << QStringLiteral(
+      "{% for i in test %}{% cycle 'a' 'b' %}{{ i }},{% endfor %}")
+                           << dict << QStringLiteral("a0,b1,a2,b3,a4,")
+                           << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("one"), QStringLiteral("1"));
   dict.insert(QStringLiteral("two"), QStringLiteral("2"));
   QTest::newRow("cycle14") << QStringLiteral(
-                                  "{% cycle one two as foo %}{% cycle foo %}")
+      "{% cycle one two as foo %}{% cycle foo %}")
                            << dict << QStringLiteral("12") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("test"), QVariantList() << 0 << 1 << 2 << 3 << 4);
   dict.insert(QStringLiteral("aye"), QStringLiteral("a"));
   dict.insert(QStringLiteral("bee"), QStringLiteral("b"));
-  QTest::newRow("cycle15")
-      << QStringLiteral(
-             "{% for i in test %}{% cycle aye bee %}{{ i }},{% endfor %}")
-      << dict << QStringLiteral("a0,b1,a2,b3,a4,") << NoError;
+  QTest::newRow("cycle15") << QStringLiteral(
+      "{% for i in test %}{% cycle aye bee %}{{ i }},{% endfor %}")
+                           << dict << QStringLiteral("a0,b1,a2,b3,a4,")
+                           << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("one"), QStringLiteral("A"));
   dict.insert(QStringLiteral("two"), QStringLiteral("2"));
-  QTest::newRow("cycle16")
-      << QStringLiteral("{% cycle one|lower two as foo %}{% cycle foo %}")
-      << dict << QStringLiteral("a2") << NoError;
+  QTest::newRow("cycle16") << QStringLiteral(
+      "{% cycle one|lower two as foo %}{% cycle foo %}")
+                           << dict << QStringLiteral("a2") << NoError;
 
   QTest::newRow("cycle17") << QStringLiteral("{% cycle %}") << dict << QString()
                            << TagSyntaxError;
@@ -1729,10 +1719,9 @@ void TestDefaultTags::testCycleTag_data()
 
   QTest::newRow("cycle19") << QStringLiteral("{% cycle one two three foo %}")
                            << dict << QStringLiteral("A") << NoError;
-  QTest::newRow("cycle20")
-      << QStringLiteral(
-             "{% cycle one two as foo %}{% cycle three four as bar %}")
-      << dict << QStringLiteral("AB") << NoError;
+  QTest::newRow("cycle20") << QStringLiteral(
+      "{% cycle one two as foo %}{% cycle three four as bar %}")
+                           << dict << QStringLiteral("AB") << NoError;
 }
 
 void TestDefaultTags::testWidthRatioTag_data()
@@ -1880,11 +1869,14 @@ void TestDefaultTags::testSpacelessTag_data()
              "{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}")
       << dict << QStringLiteral("<b><i>This &amp; that</i></b>") << NoError;
   QTest::newRow("spaceless05")
-      << QStringLiteral("{% autoescape off %}{% spaceless %}<b>  <i>{{ text }}</i>  </b>{% endspaceless %}{% endautoescape %}")
+      << QStringLiteral("{% autoescape off %}{% spaceless %}<b>  <i>{{ text "
+                        "}}</i>  </b>{% endspaceless %}{% endautoescape %}")
       << dict << QStringLiteral("<b><i>This & that</i></b>") << NoError;
-  QTest::newRow("spaceless06")
-      << QStringLiteral("{% spaceless %}<b>  <i>{{ text|safe }}</i>  </b>{% endspaceless %}")
-      << dict << QStringLiteral("<b><i>This & that</i></b>") << NoError;
+  QTest::newRow("spaceless06") << QStringLiteral(
+      "{% spaceless %}<b>  <i>{{ text|safe }}</i>  </b>{% endspaceless %}")
+                               << dict
+                               << QStringLiteral("<b><i>This & that</i></b>")
+                               << NoError;
 }
 
 void TestDefaultTags::testRegroupTag_data()
@@ -2031,50 +2023,57 @@ void TestDefaultTags::testIfChangedTag_data()
   Dict dict;
 
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
-  QTest::newRow("ifchanged01")
-      << QStringLiteral("{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
-      << dict << QStringLiteral("123") << NoError;
+  QTest::newRow("ifchanged01") << QStringLiteral(
+      "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
+                               << dict << QStringLiteral("123") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 3);
-  QTest::newRow("ifchanged02")
-      << QStringLiteral("{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
-      << dict << QStringLiteral("13") << NoError;
+  QTest::newRow("ifchanged02") << QStringLiteral(
+      "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
+                               << dict << QStringLiteral("13") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
-  QTest::newRow("ifchanged03")
-      << QStringLiteral("{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
-      << dict << QStringLiteral("1") << NoError;
+  QTest::newRow("ifchanged03") << QStringLiteral(
+      "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
+                               << dict << QStringLiteral("1") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
   dict.insert(QStringLiteral("numx"), QVariantList() << 2 << 2 << 2);
-  QTest::newRow("ifchanged04")
-      << QStringLiteral("{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
-      << dict << QStringLiteral("122232") << NoError;
+  QTest::newRow("ifchanged04") << QStringLiteral(
+      "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
+      "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
+                               << dict << QStringLiteral("122232") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
   dict.insert(QStringLiteral("numx"), QVariantList() << 1 << 2 << 3);
-  QTest::newRow("ifchanged05")
-      << QStringLiteral("{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
-      << dict << QStringLiteral("1123123123") << NoError;
+  QTest::newRow("ifchanged05") << QStringLiteral(
+      "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
+      "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
+                               << dict << QStringLiteral("1123123123")
+                               << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
   dict.insert(QStringLiteral("numx"), QVariantList() << 2 << 2 << 2);
-  QTest::newRow("ifchanged06")
-      << QStringLiteral("{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
-      << dict << QStringLiteral("1222") << NoError;
+  QTest::newRow("ifchanged06") << QStringLiteral(
+      "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
+      "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
+                               << dict << QStringLiteral("1222") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
   dict.insert(QStringLiteral("numx"), QVariantList() << 2 << 2 << 2);
   dict.insert(QStringLiteral("numy"), QVariantList() << 3 << 3 << 3);
-  QTest::newRow("ifchanged07")
-      << QStringLiteral("{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% for y in numy %}{% ifchanged %}{{ y }}{% endifchanged %}{% endfor %}{% endfor %}{% endfor %}")
-      << dict << QStringLiteral("1233323332333") << NoError;
+  QTest::newRow("ifchanged07") << QStringLiteral(
+      "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
+      "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% for y in numy %}{% "
+      "ifchanged %}{{ y }}{% endifchanged %}{% endfor %}{% endfor %}{% endfor "
+      "%}") << dict << QStringLiteral("1233323332333")
+                               << NoError;
   QTest::newRow("ifchanged08")
       << QStringLiteral("{% ifchanged %}{{ num.0 }}{% endifchanged %}") << dict
       << QStringLiteral("1") << NoError;
@@ -2120,22 +2119,25 @@ void TestDefaultTags::testIfChangedTag_data()
   innerList.clear();
 
   dict.insert(QStringLiteral("datalist"), list);
-  QTest::newRow("ifchanged08")
-      << QStringLiteral("{% for data in datalist %}{% for c,d in data %}{% if c %}{% ifchanged %}{{ d }}{% endifchanged %}{% endif %}{% endfor %}{% endfor %}")
-      << dict << QStringLiteral("accd") << NoError;
+  QTest::newRow("ifchanged08") << QStringLiteral(
+      "{% for data in datalist %}{% for c,d in data %}{% if c %}{% ifchanged "
+      "%}{{ d }}{% endifchanged %}{% endif %}{% endfor %}{% endfor %}")
+                               << dict << QStringLiteral("accd") << NoError;
 
   // Test one parameter given to ifchanged.
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
   QTest::newRow("ifchanged-param01")
-      << QStringLiteral("{% for n in num %}{% ifchanged n %}..{% endifchanged %}{{ n }}{% endfor %}")
+      << QStringLiteral("{% for n in num %}{% ifchanged n %}..{% endifchanged "
+                        "%}{{ n }}{% endfor %}")
       << dict << QStringLiteral("..1..2..3") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
   dict.insert(QStringLiteral("numx"), QVariantList() << 5 << 6 << 7);
   QTest::newRow("ifchanged-param02")
-      << QStringLiteral("{% for n in num %}{% for x in numx %}{% ifchanged n %}..{% endifchanged %}{{ x }}{% endfor %}{% endfor %}")
+      << QStringLiteral("{% for n in num %}{% for x in numx %}{% ifchanged n "
+                        "%}..{% endifchanged %}{{ x }}{% endfor %}{% endfor %}")
       << dict << QStringLiteral("..567..567..567") << NoError;
 
   // Test multiple parameters to ifchanged.
@@ -2144,7 +2146,9 @@ void TestDefaultTags::testIfChangedTag_data()
   dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 2);
   dict.insert(QStringLiteral("numx"), QVariantList() << 5 << 6 << 6);
   QTest::newRow("ifchanged-param03")
-      << QStringLiteral("{% for n in num %}{{ n }}{% for x in numx %}{% ifchanged x n %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
+      << QStringLiteral(
+             "{% for n in num %}{{ n }}{% for x in numx %}{% ifchanged x n "
+             "%}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
       << dict << QStringLiteral("156156256") << NoError;
 
   // Test a date+hour like construct, where the hour of the last day
@@ -2162,38 +2166,49 @@ void TestDefaultTags::testIfChangedTag_data()
   days << hash;
   dict.insert(QStringLiteral("days"), days);
   QTest::newRow("ifchanged-param04")
-      << QStringLiteral("{% for d in days %}{% ifchanged %}{{ d.day }}{% endifchanged %}{% for h in d.hours %}{% ifchanged d h %}{{ h }}{% endifchanged %}{% endfor %}{% endfor %}")
+      << QStringLiteral("{% for d in days %}{% ifchanged %}{{ d.day }}{% "
+                        "endifchanged %}{% for h in d.hours %}{% ifchanged d h "
+                        "%}{{ h }}{% endifchanged %}{% endfor %}{% endfor %}")
       << dict << QStringLiteral("112323") << NoError;
 
   // Logically the same as above, just written with explicit
   // ifchanged for the day.
 
-  QTest::newRow("ifchanged-param05")
-      << QStringLiteral("{% for d in days %}{% ifchanged d.day %}{{ d.day }}{% endifchanged %}{% for h in d.hours %}{% ifchanged d.day h %}{{ h }}{% endifchanged %}{% endfor %}{% endfor %}")
-      << dict << QStringLiteral("112323") << NoError;
+  QTest::newRow("ifchanged-param05") << QStringLiteral(
+      "{% for d in days %}{% ifchanged d.day %}{{ d.day }}{% endifchanged %}{% "
+      "for h in d.hours %}{% ifchanged d.day h %}{{ h }}{% endifchanged %}{% "
+      "endfor %}{% endfor %}") << dict
+                                     << QStringLiteral("112323") << NoError;
 
   // Test the else clause of ifchanged.
   dict.clear();
-  dict.insert(QStringLiteral("ids"), QVariantList() << 1 << 1 << 2 << 2 << 2
-                                                    << 3);
+  dict.insert(QStringLiteral("ids"), QVariantList()
+                                         << 1 << 1 << 2 << 2 << 2 << 3);
   QTest::newRow("ifchanged-else01")
-      << QStringLiteral("{% for id in ids %}{{ id }}{% ifchanged id %}-first{% else %}-other{% endifchanged %},{% endfor %}")
+      << QStringLiteral("{% for id in ids %}{{ id }}{% ifchanged id %}-first{% "
+                        "else %}-other{% endifchanged %},{% endfor %}")
       << dict
       << QStringLiteral("1-first,1-other,2-first,2-other,2-other,3-first,")
       << NoError;
   QTest::newRow("ifchanged-else02")
-      << QStringLiteral("{% for id in ids %}{{ id }}-{% ifchanged id %}{% cycle red,blue %}{% else %}grey{% endifchanged %},{% endfor %}")
+      << QStringLiteral(
+             "{% for id in ids %}{{ id }}-{% ifchanged id %}{% cycle red,blue "
+             "%}{% else %}grey{% endifchanged %},{% endfor %}")
       << dict << QStringLiteral("1-red,1-grey,2-blue,2-grey,2-grey,3-red,")
       << NoError;
   QTest::newRow("ifchanged-else03")
-      << QStringLiteral("{% for id in ids %}{{ id }}{% ifchanged id %}-{% cycle red,blue %}{% else %}{% endifchanged %},{% endfor %}")
+      << QStringLiteral(
+             "{% for id in ids %}{{ id }}{% ifchanged id %}-{% cycle red,blue "
+             "%}{% else %}{% endifchanged %},{% endfor %}")
       << dict << QStringLiteral("1-red,1,2-blue,2,2,3-red,") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("ids"), QVariantList() << 1 << 1 << 2 << 2 << 2
-                                                    << 3 << 4);
+  dict.insert(QStringLiteral("ids"), QVariantList()
+                                         << 1 << 1 << 2 << 2 << 2 << 3 << 4);
   QTest::newRow("ifchanged-else04")
-      << QStringLiteral("{% for id in ids %}{% ifchanged %}***{{ id }}*{% else %}...{% endifchanged %}{{ forloop.counter }}{% endfor %}")
+      << QStringLiteral(
+             "{% for id in ids %}{% ifchanged %}***{{ id }}*{% else %}...{% "
+             "endifchanged %}{{ forloop.counter }}{% endfor %}")
       << dict << QStringLiteral("***1*1...2***2*3...4...5***3*6***4*7")
       << NoError;
 }
@@ -2221,7 +2236,8 @@ void TestDefaultTags::testAutoescapeTag_data()
   // Autoescape disabling and enabling nest in a predictable way.
   dict.insert(QStringLiteral("first"), QStringLiteral("<a>"));
   QTest::newRow("autoescape-tag04")
-      << QStringLiteral("{% autoescape off %}{{ first }} {% autoescape  on%}{{ first }}{% endautoescape %}{% endautoescape %}")
+      << QStringLiteral("{% autoescape off %}{{ first }} {% autoescape  on%}{{ "
+                        "first }}{% endautoescape %}{% endautoescape %}")
       << dict << QStringLiteral("<a> &lt;a&gt;") << NoError;
 
   dict.insert(QStringLiteral("first"), QStringLiteral("<b>first</b>"));
@@ -2234,9 +2250,9 @@ void TestDefaultTags::testAutoescapeTag_data()
   auto safeStringVar = QVariant::fromValue<SafeString>(markSafe(safeString));
   dict.insert(QStringLiteral("first"), safeStringVar);
 
-  QTest::newRow("autoescape-tag06") << QStringLiteral("{{ first }}") << dict
-                                    << QStringLiteral("<b>first</b>")
-                                    << NoError;
+  QTest::newRow("autoescape-tag06")
+      << QStringLiteral("{{ first }}") << dict << QStringLiteral("<b>first</b>")
+      << NoError;
   QTest::newRow("autoescape-tag07")
       << QStringLiteral("{% autoescape on %}{{ first }}{% endautoescape %}")
       << dict << QStringLiteral("<b>first</b>") << NoError;
@@ -2376,9 +2392,10 @@ void TestDefaultTags::testRangeTag_data()
   list << 10 << 15 << 2;
   dict.insert(QStringLiteral("values"), list);
 
-  QTest::newRow("range-tag04")
-      << QStringLiteral("{% range values.0 values.1 values.2 as i %}{{ i }};{% endrange %}")
-      << dict << QStringLiteral("10;12;14;") << NoError;
+  QTest::newRow("range-tag04") << QStringLiteral(
+      "{% range values.0 values.1 values.2 as i %}{{ i }};{% endrange %}")
+                               << dict << QStringLiteral("10;12;14;")
+                               << NoError;
 
   QTest::newRow("range-tag05")
       << QStringLiteral("{% range 5 %}Foo;{% endrange %}") << dict

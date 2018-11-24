@@ -261,7 +261,7 @@ MarkupDirector::processBlockContents(QTextFrame::iterator frameIt,
         //                                blockFormat.bottomMargin(),
         //                                blockFormat.leftMargin(),
         //                                blockFormat.rightMargin()
-        );
+    );
   }
 
   while (!it.atEnd()) {
@@ -671,25 +671,29 @@ QSet<int> MarkupDirector::getElementsToClose(QTextBlock::iterator it) const
   auto superscript = (vAlign == QTextCharFormat::AlignSuperScript);
   auto subscript = (vAlign == QTextCharFormat::AlignSubScript);
 
-  if (!fontStrikeout && (d->m_openElements.contains(StrikeOut)
-                         || d->m_elementsToOpen.contains(StrikeOut))) {
+  if (!fontStrikeout
+      && (d->m_openElements.contains(StrikeOut)
+          || d->m_elementsToOpen.contains(StrikeOut))) {
     closedElements.insert(StrikeOut);
   }
 
-  if (!fontUnderline && (d->m_openElements.contains(Underline)
-                         || d->m_elementsToOpen.contains(Underline))
+  if (!fontUnderline
+      && (d->m_openElements.contains(Underline)
+          || d->m_elementsToOpen.contains(Underline))
       && !(d->m_openElements.contains(Anchor)
            || d->m_elementsToOpen.contains(Anchor))) {
     closedElements.insert(Underline);
   }
 
-  if (!fontItalic && (d->m_openElements.contains(Emph)
-                      || d->m_elementsToOpen.contains(Emph))) {
+  if (!fontItalic
+      && (d->m_openElements.contains(Emph)
+          || d->m_elementsToOpen.contains(Emph))) {
     closedElements.insert(Emph);
   }
 
-  if (fontWeight != QFont::Bold && (d->m_openElements.contains(Strong)
-                                    || d->m_elementsToOpen.contains(Strong))) {
+  if (fontWeight != QFont::Bold
+      && (d->m_openElements.contains(Strong)
+          || d->m_elementsToOpen.contains(Strong))) {
     closedElements.insert(Strong);
   }
 
@@ -726,13 +730,15 @@ QSet<int> MarkupDirector::getElementsToClose(QTextBlock::iterator it) const
     closedElements.insert(Anchor);
   }
 
-  if (!subscript && (d->m_openElements.contains(SubScript)
-                     || d->m_elementsToOpen.contains(SubScript))) {
+  if (!subscript
+      && (d->m_openElements.contains(SubScript)
+          || d->m_elementsToOpen.contains(SubScript))) {
     closedElements.insert(SubScript);
   }
 
-  if (!superscript && (d->m_openElements.contains(SuperScript)
-                       || d->m_elementsToOpen.contains(SuperScript))) {
+  if (!superscript
+      && (d->m_openElements.contains(SuperScript)
+          || d->m_elementsToOpen.contains(SuperScript))) {
     closedElements.insert(SuperScript);
   }
   return closedElements;
@@ -825,8 +831,8 @@ QList<int> MarkupDirector::getElementsToOpen(QTextBlock::iterator it)
   if (fontUnderline && !(d->m_openElements.contains(Underline))
       && !(d->m_openElements.contains(Anchor)
            || d->m_elementsToOpen.contains(
-                  Anchor)) // Can't change the underline state of a link.
-      ) {
+               Anchor)) // Can't change the underline state of a link.
+  ) {
     d->m_elementsToOpen.insert(Underline);
   }
 

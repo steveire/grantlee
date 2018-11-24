@@ -86,6 +86,7 @@ public:
   void onEntry() { return Action1::doAction(m_lexer); }
 
   void onExit() { return Action2::doAction(m_lexer); }
+
 private:
   Lexer *const m_lexer;
 };

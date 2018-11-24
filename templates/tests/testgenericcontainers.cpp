@@ -151,32 +151,41 @@ template <typename T> struct ContainerPopulator<std::map<QString, T>> {
 
 template <typename T> QString getTemplate()
 {
-  return QStringLiteral("{{ container.size }};{{ container.count }};{% for item in container %}{{ item }},{% endfor %}");
+  return QStringLiteral("{{ container.size }};{{ container.count }};{% for "
+                        "item in container %}{{ item }},{% endfor %}");
 }
 
 template <> QString getTemplate<QDateTime>()
 {
-  return QStringLiteral("{{ container.size }};{{ container.count }};{% for item in container %}{{ item|date }},{% endfor %}");
+  return QStringLiteral("{{ container.size }};{{ container.count }};{% for "
+                        "item in container %}{{ item|date }},{% endfor %}");
 }
 
 template <> QString getTemplate<QObject *>()
 {
-  return QStringLiteral("{{ container.size }};{{ container.count }};{% for item in container %}{{ item.objectName }},{% endfor %}");
+  return QStringLiteral(
+      "{{ container.size }};{{ container.count }};{% for item in container "
+      "%}{{ item.objectName }},{% endfor %}");
 }
 
 template <typename T> QString getAssociativeTemplate()
 {
-  return QStringLiteral("{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item }},{% endfor %}");
+  return QStringLiteral("{{ container.size }};{{ container.count }};{% for "
+                        "item in container.values %}{{ item }},{% endfor %}");
 }
 
 template <> QString getAssociativeTemplate<QDateTime>()
 {
-  return QStringLiteral("{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item|date }},{% endfor %}");
+  return QStringLiteral(
+      "{{ container.size }};{{ container.count }};{% for item in "
+      "container.values %}{{ item|date }},{% endfor %}");
 }
 
 template <> QString getAssociativeTemplate<QObject *>()
 {
-  return QStringLiteral("{{ container.size }};{{ container.count }};{% for item in container.values %}{{ item.objectName }},{% endfor %}");
+  return QStringLiteral(
+      "{{ container.size }};{{ container.count }};{% for item in "
+      "container.values %}{{ item.objectName }},{% endfor %}");
 }
 
 template <typename T> QStringList getResults()

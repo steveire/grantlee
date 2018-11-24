@@ -130,7 +130,8 @@ void TestPlainMarkupOutput::testAnchorWithFormattedContent()
   auto result = hb->getResult();
 
   QRegularExpression regex(
-      QStringLiteral("^A \\*formatted\\* link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
+      QStringLiteral("^A \\*formatted\\* link\\[1\\] to "
+                     "KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -139,14 +140,17 @@ void TestPlainMarkupOutput::testAdjacentAnchors()
 {
   auto doc = new QTextDocument();
   doc->setHtml(
-      QStringLiteral("Two <a href=\"http://www.kde.org\">links</a><a href=\"http://www.google.com\">next</a> to eachother."));
+      QStringLiteral("Two <a href=\"http://www.kde.org\">links</a><a "
+                     "href=\"http://www.google.com\">next</a> to eachother."));
 
   auto hb = new PlainTextMarkupBuilder();
   auto md = new MarkupDirector(hb);
   md->processDocument(doc);
   auto result = hb->getResult();
 
-  QRegularExpression regex(QStringLiteral("^Two links\\[1\\]next\\[2\\] to eachother.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n\\[2\\] http://www.google.com\\n$"));
+  QRegularExpression regex(QStringLiteral(
+      "^Two links\\[1\\]next\\[2\\] to eachother.\\n\\n--------\\n\\[1\\] "
+      "http://www.kde.org\\n\\[2\\] http://www.google.com\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -186,7 +190,9 @@ void TestPlainMarkupOutput::testSpan()
 void TestPlainMarkupOutput::testDoubleSpan()
 {
   auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("Some <span style=\"color:#ff0000;background-color:#00ff00;\">formatted</span> text."));
+  doc->setHtml(QStringLiteral("Some <span "
+                              "style=\"color:#ff0000;background-color:#00ff00;"
+                              "\">formatted</span> text."));
 
   auto hb = new PlainTextMarkupBuilder();
   auto md = new MarkupDirector(hb);
@@ -201,7 +207,9 @@ void TestPlainMarkupOutput::testDoubleSpan()
 void TestPlainMarkupOutput::testSpanNesting()
 {
   auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("Paragraph <span style=\"background-color:#00ff00;\">with some <span style=\"color:#ff0000;\">formatted</span> nested</span> text."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph <span style=\"background-color:#00ff00;\">with some <span "
+      "style=\"color:#ff0000;\">formatted</span> nested</span> text."));
 
   auto hb = new PlainTextMarkupBuilder();
   auto md = new MarkupDirector(hb);
@@ -335,14 +343,17 @@ void TestPlainMarkupOutput::testImage()
 {
   auto doc = new QTextDocument();
   doc->setHtml(
-      QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" /> image."));
+      QStringLiteral("Paragraph with an inline <img "
+                     "src=\"http://kde.org/img/kde41.png\" /> image."));
 
   auto hb = new PlainTextMarkupBuilder();
   auto md = new MarkupDirector(hb);
   md->processDocument(doc);
   auto result = hb->getResult();
 
-  auto regex = QRegularExpression(QStringLiteral("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$"));
+  auto regex = QRegularExpression(QStringLiteral(
+      "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] "
+      "http://kde.org/img/kde41.png\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -356,36 +367,48 @@ void TestPlainMarkupOutput::testImageResized()
   auto doc = new QTextDocument();
 
   // width
-  doc->setHtml(QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" width=\"10\" /> image."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "width=\"10\" /> image."));
 
   hb = new PlainTextMarkupBuilder();
   md = new MarkupDirector(hb);
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] "
+      "http://kde.org/img/kde41.png\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // height
-  doc->setHtml(QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" /> image."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "height=\"10\" /> image."));
 
   hb = new PlainTextMarkupBuilder();
   md = new MarkupDirector(hb);
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] "
+      "http://kde.org/img/kde41.png\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // height and width
-  doc->setHtml(QStringLiteral("Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" height=\"10\" width=\"10\" /> image."));
+  doc->setHtml(QStringLiteral(
+      "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
+      "height=\"10\" width=\"10\" /> image."));
 
   hb = new PlainTextMarkupBuilder();
   md = new MarkupDirector(hb);
   md->processDocument(doc);
   result = hb->getResult();
 
-  regex = QRegularExpression(QStringLiteral("^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] http://kde.org/img/kde41.png\\n$"));
+  regex = QRegularExpression(QStringLiteral(
+      "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] "
+      "http://kde.org/img/kde41.png\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
 }
@@ -509,7 +532,8 @@ void TestPlainMarkupOutput::testHorizontalRule()
 {
   auto doc = new QTextDocument();
   doc->setHtml(
-      QStringLiteral("<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr /><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>"));
+      QStringLiteral("<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr "
+                     "/><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>"));
 
   auto hb = new PlainTextMarkupBuilder();
   auto md = new MarkupDirector(hb);
