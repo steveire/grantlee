@@ -34,10 +34,10 @@ QString ScriptableTemplate::render(ScriptableContext *c) const
   return m_template->render(c->context());
 }
 
-QObjectList ScriptableTemplate::nodeList() const
+QList<QObject *> ScriptableTemplate::nodeList() const
 {
   auto nodeList = m_template->nodeList();
-  QObjectList objList;
+  QList<QObject *> objList;
 
   QListIterator<Node *> it(nodeList);
   while (it.hasNext()) {
@@ -46,7 +46,7 @@ QObjectList ScriptableTemplate::nodeList() const
   return objList;
 }
 
-void ScriptableTemplate::setNodeList(const QObjectList &list)
+void ScriptableTemplate::setNodeList(const QList<QObject *> &list)
 {
   NodeList nodeList;
 

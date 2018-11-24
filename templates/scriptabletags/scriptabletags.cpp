@@ -134,8 +134,6 @@ ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
       m_functions(m_scriptEngine->newQObject(
           new ScriptableHelperFunctions(m_scriptEngine)))
 {
-  qRegisterMetaType<QObjectList>("QObjectList");
-
   m_scriptEngine->globalObject().setProperty(
       QStringLiteral("internalGrantleeFunctions"), m_functions);
 

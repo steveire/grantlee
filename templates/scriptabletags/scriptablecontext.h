@@ -45,7 +45,7 @@ public Q_SLOTS:
   void push();
   void pop();
 
-  QString render(const QObjectList &list) const;
+  QString render(const QList<QObject *> &list) const;
 
 private:
   Context *m_c;

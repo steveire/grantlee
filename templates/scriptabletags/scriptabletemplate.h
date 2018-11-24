@@ -42,9 +42,9 @@ public:
 public Q_SLOTS:
   QString render(ScriptableContext *c) const;
 
-  QObjectList nodeList() const;
+  QList<QObject *> nodeList() const;
 
-  void setNodeList(const QObjectList &list);
+  void setNodeList(const QList<QObject *> &list);
 
 private:
   Template m_template;

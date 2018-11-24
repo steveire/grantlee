@@ -41,8 +41,9 @@ public:
   Parser *parser() { return m_p; }
 
 public Q_SLOTS:
-  QObjectList parse(QObject *parent, const QString &stopAt);
-  QObjectList parse(QObject *parent, const QStringList &stopAt = QStringList());
+  QList<QObject *> parse(QObject *parent, const QString &stopAt);
+  QList<QObject *> parse(QObject *parent,
+                         const QStringList &stopAt = QStringList());
 
   void skipPast(const QString &tag);
 

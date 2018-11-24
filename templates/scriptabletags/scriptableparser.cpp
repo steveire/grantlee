@@ -46,18 +46,19 @@ QJSValue ScriptableParser::takeNextToken()
 
 void ScriptableParser::skipPast(const QString &tag) { m_p->skipPast(tag); }
 
-QObjectList ScriptableParser::parse(QObject *parent, const QString &stopAt)
+QList<QObject *> ScriptableParser::parse(QObject *parent, const QString &stopAt)
 {
   return parse(parent, QStringList() << stopAt);
 }
 
-QObjectList ScriptableParser::parse(QObject *parent, const QStringList &stopAt)
+QList<QObject *> ScriptableParser::parse(QObject *parent,
+                                         const QStringList &stopAt)
 {
   auto node = qobject_cast<Node *>(parent);
   Q_ASSERT(node);
 
   auto nodeList = m_p->parse(node, stopAt);
-  QObjectList objList;
+  QList<QObject *> objList;
   QListIterator<Node *> it(nodeList);
   while (it.hasNext()) {
     objList << it.next();

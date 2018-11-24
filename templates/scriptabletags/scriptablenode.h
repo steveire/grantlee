@@ -53,7 +53,7 @@ private:
   QJSValue m_renderMethod;
 
 public Q_SLOTS:
-  void setNodeList(const QString &name, const QObjectList &);
+  void setNodeList(const QString &name, const QList<QObject *> &);
 };
 
 class ScriptableNodeFactory : public AbstractNodeFactory

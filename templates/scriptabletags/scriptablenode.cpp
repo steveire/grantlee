@@ -105,7 +105,7 @@ Node *ScriptableNodeFactory::getNode(const QString &tagContent, Parser *p) const
 QJSEngine *ScriptableNode::engine() { return m_scriptEngine; }
 
 void ScriptableNode::setNodeList(const QString &name,
-                                 const QObjectList &objectList)
+                                 const QList<QObject *> &objectList)
 {
   auto objectListArray = m_scriptEngine->newArray(objectList.size());
 
