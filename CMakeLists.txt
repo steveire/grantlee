@@ -20,7 +20,6 @@ option( BUILD_TEMPLATES "Build the Grantlee template library" TRUE )
 option( BUILD_TEXTDOCUMENT "Build the Grantlee textdocument library" TRUE )
 option( BUILD_MAIN_PLUGINS "Build the Grantlee Templates plugins" TRUE )
 option( BUILD_I18N_PLUGIN "Build the Grantlee Templates i18n plugin" TRUE )
-option( BUILD_SCRIPT_PLUGIN "Build the Grantlee Templates scriptable tags plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 
 if (BUILD_TESTS)
