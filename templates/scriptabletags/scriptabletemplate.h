@@ -22,7 +22,6 @@
 #define SCRIPTABLE_TEMPLATE_H
 
 #include <QtCore/QObject>
-#include <QtCore/QVariant>
 
 #include <QtScript/QScriptValue>
 

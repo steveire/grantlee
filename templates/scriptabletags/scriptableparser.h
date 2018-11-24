@@ -23,8 +23,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtScript/QScriptValue>
 
 #include "token.h"
 

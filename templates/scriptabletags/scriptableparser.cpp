@@ -19,7 +19,6 @@
 */
 
 #include "scriptableparser.h"
-#include "scriptablenode.h"
 
 #include "parser.h"
 
