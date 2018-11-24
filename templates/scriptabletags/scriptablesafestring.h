@@ -22,15 +22,10 @@
 #define SCRIPTABLE_SAFESTRING
 
 #include <QtCore/QObject>
-#include <QtScript/QScriptValue>
 
 #include "safestring.h"
 
-class QScriptContext;
-
 using namespace Grantlee;
-
-QScriptValue markSafeFunction(QScriptContext *context, QScriptEngine *engine);
 
 class ScriptableSafeString : public QObject
 {

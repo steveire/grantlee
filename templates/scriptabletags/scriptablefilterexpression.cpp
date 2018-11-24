@@ -23,26 +23,10 @@
 #include <QtScript/QScriptEngine>
 
 #include "parser.h"
-#include "scriptablecontext.h"
 #include "scriptablesafestring.h"
 #include "util.h"
 
 using namespace Grantlee;
-
-Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableFilterExpression, QObject *)
-
-QScriptValue ScriptableFilterExpressionConstructor(QScriptContext *context,
-                                                   QScriptEngine *engine)
-{
-  auto object = new ScriptableFilterExpression(engine);
-
-  auto parserObj = context->argument(1).toQObject();
-  auto p = qobject_cast<Parser *>(parserObj);
-
-  object->init(context->argument(0).toString(), p);
-
-  return engine->newQObject(object);
-}
 
 ScriptableFilterExpression::ScriptableFilterExpression(QObject *parent)
     : QObject(parent), m_engine(0)

@@ -26,13 +26,7 @@
 #include <QtScript/QScriptValue>
 
 #include "filterexpression.h"
-
-class QScriptContext;
-
-class ScriptableContext;
-
-QScriptValue ScriptableFilterExpressionConstructor(QScriptContext *context,
-                                                   QScriptEngine *engine);
+#include "scriptablecontext.h"
 
 class ScriptableFilterExpression : public QObject
 {

@@ -20,30 +20,9 @@
 
 #include "scriptabletemplate.h"
 
-#include <QtScript/QScriptContext>
-#include <QtScript/QScriptEngine>
-
 #include "context.h"
 #include "engine.h"
 #include "node.h"
-#include "scriptablecontext.h"
-
-QScriptValue ScriptableTemplateConstructor(QScriptContext *context,
-                                           QScriptEngine *engine)
-{
-  auto content = context->argument(0).toString();
-  auto name = context->argument(1).toString();
-  auto parent = context->argument(2).toQObject();
-  auto templateEngine = engine->property("templateEngine").value<Engine *>();
-
-  if (!templateEngine)
-    return QScriptValue();
-
-  auto t = templateEngine->newTemplate(content, name);
-
-  auto object = new ScriptableTemplate(t, parent);
-  return engine->newQObject(object);
-}
 
 ScriptableTemplate::ScriptableTemplate(Grantlee::Template t, QObject *parent)
     : QObject(parent), m_template(t)

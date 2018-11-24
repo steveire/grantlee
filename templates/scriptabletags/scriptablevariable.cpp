@@ -20,28 +20,10 @@
 
 #include "scriptablevariable.h"
 
-#include <QDebug>
 #include <QtScript/QScriptEngine>
 
-#include "scriptablecontext.h"
 #include "scriptablesafestring.h"
 #include "util.h"
-
-Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableVariable, QObject *)
-
-QScriptValue ScriptableVariableConstructor(QScriptContext *context,
-                                           QScriptEngine *engine)
-{
-  // TODO: Decide what the parent should be;
-  // It should be the owning scriptableNode. I think I can get that from the
-  // scriptContext.
-
-  QObject *parent = 0;
-  auto object = new ScriptableVariable(engine, parent);
-  object->setContent(context->argument(0).toString());
-
-  return engine->newQObject(object);
-}
 
 ScriptableVariable::ScriptableVariable(QObject *parent)
     : QObject(parent), m_engine(0)

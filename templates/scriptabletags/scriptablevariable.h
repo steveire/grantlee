@@ -22,18 +22,13 @@
 #define SCRIPTABLE_VARIABLE_H
 
 #include <QtCore/QObject>
-#include <QtScript/QScriptValue>
 
+#include "scriptablecontext.h"
 #include "variable.h"
 
-class QScriptContext;
-
-class ScriptableContext;
+class QScriptEngine;
 
 using namespace Grantlee;
-
-QScriptValue ScriptableVariableConstructor(QScriptContext *context,
-                                           QScriptEngine *engine);
 
 class ScriptableVariable : public QObject
 {

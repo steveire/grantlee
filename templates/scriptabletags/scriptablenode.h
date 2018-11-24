@@ -26,7 +26,6 @@
 #include "node.h"
 
 class QScriptEngine;
-class QScriptContext;
 
 namespace Grantlee
 {
@@ -35,13 +34,6 @@ class Engine;
 }
 
 using namespace Grantlee;
-
-QScriptValue ScriptableNodeConstructor(QScriptContext *context,
-                                       QScriptEngine *engine);
-
-QScriptValue nodeToScriptValue(QScriptEngine *engine, Node *const &node);
-
-void nodeFromScriptValue(const QScriptValue &object, Node *&out);
 
 class ScriptableNode : public Node
 {

@@ -23,8 +23,7 @@
 
 #include <QtCore/QObject>
 
-#include <QtScript/QScriptValue>
-
+#include "scriptablecontext.h"
 #include "template.h"
 
 namespace Grantlee
@@ -32,14 +31,7 @@ namespace Grantlee
 class Node;
 }
 
-class QScriptContext;
-
-class ScriptableContext;
-
 using namespace Grantlee;
-
-QScriptValue ScriptableTemplateConstructor(QScriptContext *context,
-                                           QScriptEngine *engine);
 
 class ScriptableTemplate : public QObject
 {

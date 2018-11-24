@@ -29,41 +29,6 @@
 #include "scriptablecontext.h"
 #include "scriptableparser.h"
 
-QScriptValue nodeToScriptValue(QScriptEngine *engine, Node *const &node)
-{
-  return engine->newQObject(node);
-}
-
-void nodeFromScriptValue(const QScriptValue &object, Node *&out)
-{
-  out = qobject_cast<Node *>(object.toQObject());
-}
-
-Q_SCRIPT_DECLARE_QMETAOBJECT(ScriptableNode, Node *)
-
-QScriptValue ScriptableNodeConstructor(QScriptContext *context,
-                                       QScriptEngine *engine)
-{
-  auto scriptableNodeName = context->argument(0).toString();
-  auto concreteNode = engine->globalObject().property(scriptableNodeName);
-
-  QScriptValueList args;
-  // First is the node type
-  for (auto i = 1; i < context->argumentCount(); ++i) {
-    args << context->argument(i);
-  }
-
-  concreteNode.call(concreteNode, args);
-
-  auto renderMethod = concreteNode.property(QStringLiteral("render"));
-
-  auto object = new ScriptableNode(engine);
-  object->setObjectName(scriptableNodeName);
-  object->setScriptEngine(engine);
-  object->init(concreteNode, renderMethod);
-  return engine->newQObject(object);
-}
-
 ScriptableNode::ScriptableNode(QObject *parent)
     : Node(parent), m_scriptEngine(0)
 {
