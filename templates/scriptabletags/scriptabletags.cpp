@@ -42,10 +42,8 @@ Q_DECLARE_METATYPE(Token)
 using namespace Grantlee;
 
 ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
-    : QObject(parent), m_scriptEngine(0)
+    : QObject(parent), m_scriptEngine(new QScriptEngine(this))
 {
-  m_scriptEngine = new QScriptEngine(this);
-
   qScriptRegisterMetaType(m_scriptEngine, nodeToScriptValue,
                           nodeFromScriptValue);
 
