@@ -24,7 +24,7 @@
 #include "textprocessingmachine_p.h"
 #include "token.h"
 
-template <typename T> class QList;
+#include <QList>
 
 namespace Grantlee
 {
