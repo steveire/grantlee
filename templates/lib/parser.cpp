@@ -205,7 +205,7 @@ NodeList ParserPrivate::parse(QObject *parent, const QStringList &stopAt)
       FilterExpression filterExpression;
       try {
         filterExpression = FilterExpression(token.content, q);
-      } catch (Grantlee::Exception e) {
+      } catch (const Grantlee::Exception &e) {
         throw Grantlee::Exception(e.errorCode(),
                                   QStringLiteral("%1, line %2, %3")
                                       .arg(e.what())
@@ -247,7 +247,7 @@ NodeList ParserPrivate::parse(QObject *parent, const QStringList &stopAt)
       Node *n;
       try {
         n = nodeFactory->getNode(token.content, q);
-      } catch (Grantlee::Exception e) {
+      } catch (const Grantlee::Exception &e) {
         throw Grantlee::Exception(e.errorCode(),
                                   QStringLiteral("%1, line %2, %3")
                                       .arg(e.what())

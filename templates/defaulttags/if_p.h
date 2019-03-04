@@ -321,7 +321,7 @@ QVariant IfToken::evaluate(Context *c) const
       Q_ASSERT(!"Invalid OpCode");
       return QVariant();
     }
-  } catch (Grantlee::Exception) {
+  } catch (const Grantlee::Exception &) {
     return false;
   }
 }

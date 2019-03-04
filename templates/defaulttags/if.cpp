@@ -92,7 +92,7 @@ void IfNode::render(OutputStream *stream, Context *c) const
     if (pair.first) {
       try {
         match = Grantlee::variantIsTrue(pair.first->evaluate(c));
-      } catch (Grantlee::Exception) {
+      } catch (const Grantlee::Exception &) {
       }
     } else {
       match = true;
