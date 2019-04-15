@@ -89,7 +89,7 @@ QVariant DateFilter::doFilter(const QVariant &input, const QVariant &argument,
 {
   Q_UNUSED(autoescape)
   auto d = QDateTime::fromString(getSafeString(input),
-                                 QStringLiteral("yyyy-MM-ddThh:mm:ss"));
+                                 QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz"));
 
   auto argString = getSafeString(argument);
 
