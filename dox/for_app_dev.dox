@@ -246,13 +246,6 @@ namespace Grantlee
     private:
       QList<QObject*> m_friends;
     };
-    Q_DECLARE_METATYPE(QList<QObject*>)
-  @endcode
-
-  It is also necessary to register QList<QObject*> with the Qt metatype system and with Grantlee
-
-  @code
-    Grantlee::registerSequentialContainer<QList<QObject*> >();
   @endcode
 
   @subsection generic_variables

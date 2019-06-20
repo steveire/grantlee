@@ -111,8 +111,4 @@ private:
   QList<QObject *> m_friends;
 };
 
-Q_DECLARE_METATYPE(Contact *)
-Q_DECLARE_METATYPE(QList<Contact *>)
-Q_DECLARE_METATYPE(QList<QObject *>)
-
 #endif
