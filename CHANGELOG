@@ -5,7 +5,21 @@ The Grantlee Template System
 Version History
 ---------------
 
--- Version 5.1 --
+-- Version 5.2   --
+-------------------
+* Increase CMake requirement to version 3.5
+* Port scriptable extensions to QJSEngine provided by QtQml
+* Support reading properties from Q_GADGETS
+* Remove TestCocoon integration
+* Clean up documentation to clarify introspection requirements
+* Fix mixing of {% include %} and {% extends %} tags
+* Fix various bugs discovered by fuzzing
+* Remove use of TR1 library features from unit tests
+* Remove obsolete build options
+* Document that loading templates from Qt Resources is possible
+
+
+-- Version 5.1   --
 -------------------
 * Implement advanced operators for the {% if %} tag
 * Use 'd' postfix for plugins built in debug mode
