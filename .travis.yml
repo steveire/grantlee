@@ -1,5 +1,7 @@
 sudo: required
-dist: trusty
+dist: xenial
+services:
+  - xvfb
 
 language: cpp
 branches:
@@ -14,38 +16,41 @@ matrix:
     - os: osx
       env: CONFIGS="Debug_And_Release" GENERATORS="Xcode" COMPILERS="Clang"
     - os: linux
-      env: CONFIGS="Debug Release" GENERATORS="Makefiles Ninja" COMPILERS="GNU Clang"
+      env: CONFIGS="Debug Release" GENERATORS="Makefiles Ninja" COMPILERS="GNU Clang" PPA_INFIX="-5.12.3" QT_VERSION_MM="512"
       addons:
         apt:
           packages: clang
     - os: linux
-      env: CONFIGS="RelWithDebInfo" GENERATORS="Ninja" COMPILERS="Clang" MEMCHECK=true
+      env: CONFIGS="RelWithDebInfo" GENERATORS="Ninja" COMPILERS="Clang" MEMCHECK=true PPA_INFIX="-5.12.3" QT_VERSION_MM="512"
       addons:
         apt:
           packages: valgrind clang
     - os: linux
-      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" QT_VERSION_MM=54 QT_VERSION_FULL=542
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="563" QT_VERSION_MM="56"
     - os: linux
-      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" QT_VERSION_MM=53 QT_VERSION_FULL=532 CMAKE_VERSION_MM=3.1 CMAKE_VERSION_FULL=3.1.3
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="571" QT_VERSION_MM="57"
     - os: linux
-      env: CONFIGS="Coverage" GENERATORS="Makefiles" COMPILERS="GNU"
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="58" QT_VERSION_MM="58"
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="596" QT_VERSION_MM="59"
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="-5.10.1" QT_VERSION_MM="510"
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="-5.11.3" QT_VERSION_MM="511"
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="-5.12.3" QT_VERSION_MM="512"
+    - os: linux
+      env: CONFIGS="Coverage" GENERATORS="Makefiles" COMPILERS="GNU" PPA_INFIX="-5.12.3" QT_VERSION_MM="512"
+
 
 before_install:
-  - if [ -z "$CMAKE_VERSION_MM" ]; then export CMAKE_VERSION_MM=3.4; fi
-  - if [ -z "$CMAKE_VERSION_FULL" ]; then export CMAKE_VERSION_FULL=3.4.0; fi
-  - if [ -z "$QT_VERSION_FULL" ]; then export QT_VERSION_FULL=551; fi
-  - if [ -z "$QT_VERSION_MM" ]; then export QT_VERSION_MM=55; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    sudo apt-add-repository --yes ppa:beineri/opt-qt${QT_VERSION_FULL}-trusty
+      export CMAKE_PREFIX_PATH=/opt/qt${QT_VERSION_MM} 
+      && sudo apt-add-repository --yes ppa:beineri/opt-qt${PPA_INFIX}-xenial
       && sudo apt-get update -qq
-      && sudo apt-get install -qq qt${QT_VERSION_MM}base qt${QT_VERSION_MM}script qt${QT_VERSION_MM}tools
-      && sudo apt-get install -qq ninja-build clang lcov
-      && export CMAKE_PREFIX_PATH=/opt/qt${QT_VERSION_MM}
-      && wget --no-check-certificate http://www.cmake.org/files/v${CMAKE_VERSION_MM}/cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.sh
-      && sudo sh cmake-${CMAKE_VERSION_FULL}-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
-      && export DISPLAY=:99.0
-      && sh -e /etc/init.d/xvfb start;
-    fi
+      && sudo apt-get install -qq qtbase5-dev qtdeclarative5-dev qttools5-dev qt${QT_VERSION_MM}base qt${QT_VERSION_MM}script qt${QT_VERSION_MM}tools ninja-build clang lcov cmake
+      ;
+      fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       brew update;
       brew outdated cmake || brew upgrade cmake;
