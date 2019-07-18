@@ -129,6 +129,9 @@ if (Qt5LinguistTools_FOUND)
   grantlee_templates_unit_tests(
     testinternationalization
   )
+  if ("x${CMAKE_CXX_COMPILER_ID}x" MATCHES "xMSVCx")
+    target_compile_options(testinternationalization_exec PRIVATE "/utf-8")
+  endif()
 endif()
 
 add_subdirectory(pluginpointertest)

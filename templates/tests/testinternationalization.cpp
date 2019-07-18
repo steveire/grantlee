@@ -31,6 +31,12 @@
 
 using namespace Grantlee;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+#define FR_THOUSAND_SEPARATOR "\u00A0"
+#else
+#define FR_THOUSAND_SEPARATOR "\u202F"
+#endif
+
 #define INIT_LOCALIZER(localizer)                                              \
   localizer->setAppTranslatorPrefix(QStringLiteral("test_"));                  \
   localizer->setAppTranslatorPath(QStringLiteral(":/"));
@@ -218,14 +224,14 @@ void TestInternationalization::testStrings_data()
   QTest::newRow("string-06")
       << "%n People"
       << "1 People"
-      << "1 Person angemeldet" << QStringLiteral("1 Personne connecté")
+      << "1 Person angemeldet" << QString::fromUtf8("1 Personne connecté")
       << QStringLiteral("%n people are logged in")
       << QStringLiteral("%n People") << (QVariantList() << 1);
 
   QTest::newRow("string-07")
       << "%n People"
       << "2 People"
-      << "2 Personen angemeldet" << QStringLiteral("2 Personnes connecté")
+      << "2 Personen angemeldet" << QString::fromUtf8("2 Personnes connecté")
       << QStringLiteral("%n people are logged in")
       << QStringLiteral("%n People") << (QVariantList() << 2);
 
@@ -233,23 +239,23 @@ void TestInternationalization::testStrings_data()
       << "%n file(s) copied to %1"
       << "1 files copied to destinationFolder"
       << "1 Datei in destinationFolder kopiert"
-      << QStringLiteral("1 fichier copié dans destinationFolder") << QString()
-      << QStringLiteral("%n files copied to %1")
+      << QString::fromUtf8("1 fichier copié dans destinationFolder")
+      << QString() << QStringLiteral("%n files copied to %1")
       << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
 
   QTest::newRow("string-09")
       << "%n file(s) copied to %1"
       << "2 files copied to destinationFolder"
       << "2 Datein in destinationFolder kopiert"
-      << QStringLiteral("2 fichiers copiés dans destinationFolder") << QString()
-      << QStringLiteral("%n files copied to %1")
+      << QString::fromUtf8("2 fichiers copiés dans destinationFolder")
+      << QString() << QStringLiteral("%n files copied to %1")
       << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
 
   QTest::newRow("string-10")
       << "%n to %1"
       << "1 copied to destinationFolder"
       << "1 Datei wird nach destinationFolder kopiert"
-      << QStringLiteral("1 fichier est copié sur destinationFolder")
+      << QString::fromUtf8("1 fichier est copié sur destinationFolder")
       << QStringLiteral("Files are being copied")
       << QStringLiteral("%n copied to %1")
       << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
@@ -258,7 +264,7 @@ void TestInternationalization::testStrings_data()
       << "%n to %1"
       << "1 copied to destinationFolder"
       << "1 Datei war nach destinationFolder kopiert"
-      << QStringLiteral("1 fichier a été copié à destinationFolder")
+      << QString::fromUtf8("1 fichier a été copié à destinationFolder")
       << QStringLiteral("Files have already been copied")
       << QStringLiteral("%n copied to %1")
       << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
@@ -267,7 +273,7 @@ void TestInternationalization::testStrings_data()
       << "%n to %1"
       << "2 copied to destinationFolder"
       << "2 Datein wird nach destinationFolder kopiert"
-      << QStringLiteral("2 fichiers sont copiés à destinationFolder")
+      << QString::fromUtf8("2 fichiers sont copiés à destinationFolder")
       << QStringLiteral("Files are being copied")
       << QStringLiteral("%n copied to %1")
       << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
@@ -276,7 +282,7 @@ void TestInternationalization::testStrings_data()
       << "%n to %1"
       << "2 copied to destinationFolder"
       << "2 Datein war nach destinationFolder kopiert"
-      << QStringLiteral("2 fichiers ont été copiés sur destinationFolder")
+      << QString::fromUtf8("2 fichiers ont été copiés sur destinationFolder")
       << QStringLiteral("Files have already been copied")
       << QStringLiteral("%n copied to %1")
       << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
@@ -285,7 +291,7 @@ void TestInternationalization::testStrings_data()
       << "from %1 to %2"
       << "from sourceFolder to destinationFolder"
       << "nach destinationFolder von sourceFolder"
-      << QStringLiteral("à partir de sourceFolder destinationFolder")
+      << QString::fromUtf8("à partir de sourceFolder destinationFolder")
       << QStringLiteral("Files are being copied from %1 to %2") << QString()
       << (QVariantList() << QStringLiteral("sourceFolder")
                          << QStringLiteral("destinationFolder"));
@@ -357,8 +363,9 @@ void TestInternationalization::testLocalizedTemplate_data()
                         "0.60. Rating : 4.80")
       << QStringLiteral(
              "1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
-      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du "
-                        "total: 0,60. Note: 4,80")
+      << QString::fromUtf8("1" FR_THOUSAND_SEPARATOR
+                           "000 messages au 07/05/2005, la fraction du "
+                           "total: 0,60. Note: 4,80")
       << dict;
 
   dict.insert(QStringLiteral("integer"), 1000);
@@ -377,8 +384,9 @@ void TestInternationalization::testLocalizedTemplate_data()
                         "0.60. Rating : 4.80")
       << QStringLiteral(
              "1.000 Nachrichten am 07.05.05, ratio: 0,60. Bemessungen : 4,80")
-      << QStringLiteral("1\u00A0000 messages au 07/05/2005, la fraction du "
-                        "total: 0,60. Note: 4,80")
+      << QString::fromUtf8("1" FR_THOUSAND_SEPARATOR
+                           "000 messages au 07/05/2005, la fraction du "
+                           "total: 0,60. Note: 4,80")
       << dict;
 
   dict.insert(QStringLiteral("time"), QTime(4, 5, 6));
@@ -397,11 +405,11 @@ void TestInternationalization::testLocalizedTemplate_data()
              "1,000 -- 07/05/2005 -- 0.60 -- 4.80 -- 04:05 -- 07/05/2005 04:05")
       << QStringLiteral(
              "1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 04:05")
-      << QStringLiteral("1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
-                        "07/05/2005 04:05")
+      << QString::fromUtf8("1" FR_THOUSAND_SEPARATOR
+                           "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+                           "07/05/2005 04:05")
       << dict;
 
-#ifndef Q_CC_MSVC
   QTest::newRow("fragment-04")
       << QString::fromLatin1(
              "{{ _('Today') }} -- {{ _(integer) }} -- {{ _(date) }} -- {{ "
@@ -426,7 +434,8 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05")
       << QString::fromUtf8(
@@ -437,7 +446,8 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05")
       << QString::fromUtf8(
@@ -448,7 +458,8 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05")
       << QString::fromUtf8(
@@ -459,19 +470,22 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05")
       << QString::fromUtf8(
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05")
       << dict;
@@ -503,7 +517,8 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05"
              "Heute"
@@ -517,7 +532,8 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05"
              "Heute"
@@ -531,7 +547,8 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05"
              "Heute"
@@ -545,7 +562,8 @@ void TestInternationalization::testLocalizedTemplate_data()
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05"
              "Heute"
@@ -553,27 +571,29 @@ void TestInternationalization::testLocalizedTemplate_data()
              "04:05")
       << QString::fromUtf8(
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05"
              "Aujourd&#39;hui"
-             " -- 1\u00A0000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
+             " -- 1" FR_THOUSAND_SEPARATOR
+             "000 -- 07/05/2005 -- 0,60 -- 4,80 -- 04:05 -- "
              "07/05/2005 "
              "04:05"
              "Heute"
              " -- 1.000 -- 07.05.05 -- 0,60 -- 4,80 -- 04:05 -- 07.05.05 "
              "04:05")
       << dict;
-#endif
 
   dict.insert(QStringLiteral("list"), QVariantList() << 1000);
   QTest::newRow("fragment-06")
       << QStringLiteral("{{ _(list.0) }}") << QStringLiteral("1000")
       << QStringLiteral("1,000") << QStringLiteral("1,000")
-      << QStringLiteral("1.000") << QStringLiteral("1\u00A0000") << dict;
+      << QStringLiteral("1.000")
+      << QString::fromUtf8("1" FR_THOUSAND_SEPARATOR "000") << dict;
 
   dict.clear();
   dict.insert(QStringLiteral("longlong"), (qlonglong)1000);
@@ -586,7 +606,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              "{{ _(longlong) }} {{ _(float) }} {{ _(double) }}{{ _(hash) }}")
       << QStringLiteral("1000 0.60 4.80") << QStringLiteral("1,000 0.60 4.80")
       << QStringLiteral("1,000 0.60 4.80") << QStringLiteral("1.000 0,60 4,80")
-      << QStringLiteral("1\u00A0000 0,60 4,80") << dict;
+      << QString::fromUtf8("1" FR_THOUSAND_SEPARATOR "000 0,60 4,80") << dict;
 
   QTest::newRow("fragment-08")
       << QStringLiteral("{{ 'this'|cut:_(\"i\") }}") << QStringLiteral("ths")
@@ -754,13 +774,13 @@ void TestInternationalization::testSafeContent_data()
                         "today' '%n people visited today' 1 %}")
       << QStringLiteral(
              "1 people visited today") // Not really testing English here.
-      << QStringLiteral("1 personne a visité aujourd&#39;hui") << dict;
+      << QString::fromUtf8("1 personne a visité aujourd&#39;hui") << dict;
 
   QTest::newRow("safe-24")
       << QStringLiteral("{% i18ncp 'The number of people who have visited "
                         "today' '%n people visited today' 2 %}")
       << QStringLiteral("2 people visited today")
-      << QStringLiteral("2 personnes a visité aujourd&#39;hui") << dict;
+      << QString::fromUtf8("2 personnes a visité aujourd&#39;hui") << dict;
 
   QTest::newRow("safe-25")
       << QStringLiteral(
@@ -768,13 +788,14 @@ void TestInternationalization::testSafeContent_data()
              "visited today' '%n people visited today' 1 %}{% endautoescape %}")
       << QStringLiteral(
              "1 people visited today") // Not really testing English here.
-      << QStringLiteral("1 personne a visité aujourd'hui") << dict;
+      << QString::fromUtf8("1 personne a visité aujourd'hui") << dict;
 
   QTest::newRow("safe-26") << QStringLiteral(
       "{% autoescape off %}{% i18ncp 'The number of people who have visited "
       "today' '%n people visited today' 2 %}{% endautoescape %}")
                            << QStringLiteral("2 people visited today")
-                           << QStringLiteral("2 personnes a visité aujourd'hui")
+                           << QString::fromUtf8(
+                                  "2 personnes a visité aujourd'hui")
                            << dict;
 
   QTest::newRow("safe-27")
@@ -783,13 +804,13 @@ void TestInternationalization::testSafeContent_data()
              "people visited today' 1 as num_people %}-{{ num_people }}-")
       << QStringLiteral(
              "-1 people visited today-") // Not really testing English here.
-      << QStringLiteral("-1 personne a visité aujourd&#39;hui-") << dict;
+      << QString::fromUtf8("-1 personne a visité aujourd&#39;hui-") << dict;
 
   QTest::newRow("safe-28") << QStringLiteral(
       "{% i18ncp_var 'The number of people who have visited today' '%n people "
       "visited today' 2 as num_people %}-{{ num_people }}-")
                            << QStringLiteral("-2 people visited today-")
-                           << QStringLiteral(
+                           << QString::fromUtf8(
                                   "-2 personnes a visité aujourd&#39;hui-")
                            << dict;
 
@@ -800,14 +821,14 @@ void TestInternationalization::testSafeContent_data()
              "num_people }}-{% endautoescape %}")
       << QStringLiteral(
              "-1 people visited today-") // Not really testing English here.
-      << QStringLiteral("-1 personne a visité aujourd'hui-") << dict;
+      << QString::fromUtf8("-1 personne a visité aujourd'hui-") << dict;
 
   QTest::newRow("safe-30") << QStringLiteral(
       "{% autoescape off %}{% i18ncp_var 'The number of people who have "
       "visited today' '%n people visited today' 2 as num_people %}-{{ "
       "num_people }}-{% endautoescape %}")
                            << QStringLiteral("-2 people visited today-")
-                           << QStringLiteral(
+                           << QString::fromUtf8(
                                   "-2 personnes a visité aujourd'hui-")
                            << dict;
 }
@@ -911,7 +932,8 @@ void TestInternationalization::testIntegers_data()
   QTest::newRow("integer-02")
       << 7000 << QStringLiteral("7000") << QStringLiteral("7000")
       << QStringLiteral("7,000") << QStringLiteral("7,000")
-      << QStringLiteral("7.000") << QStringLiteral("7\u00A0000");
+      << QStringLiteral("7.000")
+      << QString::fromUtf8("7" FR_THOUSAND_SEPARATOR "000");
 }
 
 void TestInternationalization::testFloats()
