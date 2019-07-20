@@ -11,6 +11,9 @@ endif()
 
 project(Grantlee)
 
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_EXTENSIONS OFF)
+
 # Workaround for http://public.kitware.com/Bug/view.php?id=12301
 if (MINGW)
   if(NOT CMAKE_BUILD_TYPE)
