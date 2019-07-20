@@ -369,7 +369,6 @@ void TestLoaderTags::testExtendsTag_data()
       << dict << QStringLiteral("1234") << NoError;
 
   dict.clear();
-  QVariantList list;
 
   auto t1 = m_engine->newTemplate(QStringLiteral("Wrong"),
                                   QStringLiteral("context_template_1"));
@@ -377,8 +376,7 @@ void TestLoaderTags::testExtendsTag_data()
       QStringLiteral("1{% block first %}_{% endblock %}3{% block second %}_{% "
                      "endblock %}"),
       QStringLiteral("context_template_2"));
-  list << QVariant::fromValue(t1);
-  list << QVariant::fromValue(t2);
+  QVariantList list{QVariant::fromValue(t1), QVariant::fromValue(t2)};
 
   dict.insert(QStringLiteral("context_template"), list);
 
