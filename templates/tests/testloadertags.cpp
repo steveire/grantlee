@@ -46,6 +46,8 @@ private Q_SLOTS:
   void initTestCase();
   void cleanupTestCase();
 
+  void testTemplateFromQrc();
+
   void testIncludeTag_data();
   void testIncludeTag() { doTest(); }
 
@@ -83,6 +85,38 @@ void TestLoaderTags::initTestCase()
 }
 
 void TestLoaderTags::cleanupTestCase() { delete m_engine; }
+
+void TestLoaderTags::testTemplateFromQrc()
+{
+  Engine engine;
+
+  auto loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>::create();
+  loader->setTemplateDirs({QStringLiteral(":/templates/")});
+  engine.addTemplateLoader(loader);
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
+
+  auto t = engine.loadByName(QStringLiteral("resourcetemplate1.html"));
+
+  if (t->error() != NoError) {
+    qDebug() << t->errorString();
+    QCOMPARE(t->error(), NoError);
+    return;
+  }
+
+  Context context;
+  context.insert(QStringLiteral("numbertwo"), QStringLiteral("two"));
+  context.insert(QStringLiteral("numberfour"), QStringLiteral("four"));
+
+  auto result = t->render(&context);
+
+  if (t->error() != NoError) {
+    qDebug() << t->errorString();
+    QCOMPARE(t->error(), NoError);
+    return;
+  }
+
+  QCOMPARE(result, QStringLiteral("one-two-three-four\n\n"));
+}
 
 void TestLoaderTags::doTest()
 {
