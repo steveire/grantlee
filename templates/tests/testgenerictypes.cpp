@@ -134,7 +134,7 @@ void TestGenericTypes::testGenericClassType()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   auto t1 = engine.newTemplate(
       QStringLiteral(
@@ -200,7 +200,7 @@ template <typename Container> void testSequentialIteration(Grantlee::Context &c)
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   {
     Grantlee::Template t1 = engine.newTemplate(
@@ -215,7 +215,7 @@ template <typename Container> void testSequentialIndexing(Grantlee::Context &c)
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   {
     Grantlee::Template t1 = engine.newTemplate(
@@ -243,17 +243,15 @@ template <typename T> struct SequentialContainerTester<QSet<T>> {
   {
     Grantlee::Engine engine;
 
-    engine.setPluginPaths(QStringList()
-                          << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+    engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
     Grantlee::Template t1 = engine.newTemplate(
         QStringLiteral(
             "{% for person in people %}{{ person.name }},{% endfor %}"),
         QStringLiteral("people_template"));
     auto result = t1->render(&c);
-    QStringList output;
-    output << QStringLiteral("Claire,") << QStringLiteral("Grant,")
-           << QStringLiteral("Alan,");
+    QStringList output{QStringLiteral("Claire,"), QStringLiteral("Grant,"),
+                       QStringLiteral("Alan,")};
     Q_FOREACH (const QString &s, output) {
       QVERIFY(result.contains(s));
     }
@@ -297,7 +295,7 @@ void testAssociativeValues(Grantlee::Context &c, bool unordered = false)
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   {
     Grantlee::Template t1 = engine.newTemplate(
@@ -322,7 +320,7 @@ void testAssociativeItems(Grantlee::Context &c, bool unordered)
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   {
     Grantlee::Template t1 = engine.newTemplate(
@@ -346,7 +344,7 @@ void doTestAssociativeContainer_Variant(bool unordered = false)
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   Grantlee::Context c;
 
@@ -445,7 +443,7 @@ void doTestAssociativeContainer_Type(bool unordered = false)
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   Grantlee::Context c;
 
@@ -459,7 +457,7 @@ void doTestAssociativeContainer_Type_Number(bool unordered = false)
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   Grantlee::Context c;
 
@@ -532,7 +530,7 @@ void TestGenericTypes::testSharedPointer()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   auto t1 = engine.newTemplate(QStringLiteral("{{ p.name }} {{ p.age }}"),
                                QStringLiteral("template1"));
@@ -551,7 +549,7 @@ void TestGenericTypes::testThirdPartySharedPointer()
 #ifndef GRANTLEE_NO_TR1
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   auto t1 = engine.newTemplate(QStringLiteral("{{ p.name }} {{ p.age }}"),
                                QStringLiteral("template1"));
@@ -610,7 +608,7 @@ void TestGenericTypes::testNestedContainers()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   Grantlee::Context c;
   c.insert(QStringLiteral("stack"), QVariant::fromValue(getMapStack()));
@@ -673,7 +671,7 @@ void TestGenericTypes::testCustomQObjectDerived()
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   auto customObject = new CustomObject(this);
   customObject->setProperty("someProp", QStringLiteral("propValue"));

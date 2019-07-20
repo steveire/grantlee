@@ -264,7 +264,7 @@ void TestBuiltinSyntax::testRenderAfterError()
 {
 
   Engine engine;
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   QSharedPointer<InMemoryTemplateLoader> loader(new InMemoryTemplateLoader);
   loader->setTemplate(QStringLiteral("template1"),
@@ -302,7 +302,7 @@ void TestBuiltinSyntax::initTestCase()
 Engine *TestBuiltinSyntax::getEngine()
 {
   auto engine = new Engine(this);
-  engine->setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine->setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
   return engine;
 }
 
@@ -1164,7 +1164,7 @@ void TestBuiltinSyntax::testTemplatePathSafety()
 
   auto loader = new FileSystemTemplateLoader();
 
-  loader->setTemplateDirs(QStringList() << QStringLiteral("."));
+  loader->setTemplateDirs({QStringLiteral(".")});
 
   QFile f(inputPath);
   auto opened = f.open(QFile::WriteOnly | QFile::Text);
@@ -1201,7 +1201,7 @@ void TestBuiltinSyntax::testMediaPathSafety()
 
   auto loader = new FileSystemTemplateLoader();
 
-  loader->setTemplateDirs(QStringList() << QStringLiteral("."));
+  loader->setTemplateDirs({QStringLiteral(".")});
 
   QFile f(inputPath);
   auto opened = f.open(QFile::WriteOnly | QFile::Text);
@@ -1267,29 +1267,25 @@ void TestBuiltinSyntax::testTypeAccessorsUnordered_data()
 
   dict.insert(QStringLiteral("hash"), itemsHash);
 
-  QTest::newRow("type-accessors-hash-unordered01") << QStringLiteral(
-      "{% for key,value in hash.items %}{{ key }}:{{ value }};{% endfor %}")
-                                                   << dict
-                                                   << (QStringList()
-                                                       << QStringLiteral(
-                                                              "one:1;")
-                                                       << QStringLiteral(
-                                                              "two:2;")
-                                                       << QStringLiteral(
-                                                              "three:3;"))
-                                                   << NoError;
+  QTest::newRow("type-accessors-hash-unordered01")
+      << QStringLiteral("{% for key,value in hash.items %}{{ key }}:{{ value "
+                        "}};{% endfor %}")
+      << dict
+      << QStringList{QStringLiteral("one:1;"), QStringLiteral("two:2;"),
+                     QStringLiteral("three:3;")}
+      << NoError;
   QTest::newRow("type-accessors-hash-unordered02")
       << QStringLiteral("{% for key in hash.keys %}{{ key }};{% endfor %}")
       << dict
-      << (QStringList() << QStringLiteral("one;") << QStringLiteral("two;")
-                        << QStringLiteral("three;"))
+      << QStringList{QStringLiteral("one;"), QStringLiteral("two;"),
+                     QStringLiteral("three;")}
       << NoError;
   QTest::newRow("type-accessors-hash-unordered03")
       << QStringLiteral(
              "{% for value in hash.values %}{{ value }};{% endfor %}")
       << dict
-      << (QStringList() << QStringLiteral("1;") << QStringLiteral("2;")
-                        << QStringLiteral("3;"))
+      << QStringList{QStringLiteral("1;"), QStringLiteral("2;"),
+                     QStringLiteral("3;")}
       << NoError;
 }
 

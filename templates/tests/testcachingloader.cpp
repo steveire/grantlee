@@ -48,7 +48,7 @@ private Q_SLOTS:
 void TestCachingLoader::testRenderAfterError()
 {
   Engine engine;
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   QSharedPointer<InMemoryTemplateLoader> loader(new InMemoryTemplateLoader);
   loader->setTemplate(QStringLiteral("template1"),

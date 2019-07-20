@@ -45,8 +45,7 @@ Node *IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p,
   auto n = new IfEqualNode(val1, val2, negate, p);
 
   const QString endTag(QStringLiteral("end") + expr.first());
-  auto trueList
-      = p->parse(n, QStringList() << QStringLiteral("else") << endTag);
+  auto trueList = p->parse(n, {QStringLiteral("else"), endTag});
   n->setTrueList(trueList);
   NodeList falseList;
   if (p->takeNextToken().content == QStringLiteral("else")) {

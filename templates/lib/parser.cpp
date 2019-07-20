@@ -166,7 +166,7 @@ QSharedPointer<Filter> Parser::getFilter(const QString &name) const
 NodeList Parser::parse(Node *parent, const QString &stopAt)
 {
   Q_D(Parser);
-  return d->parse(parent, QStringList() << stopAt);
+  return d->parse(parent, {stopAt});
 }
 
 NodeList Parser::parse(TemplateImpl *parent, const QStringList &stopAt)

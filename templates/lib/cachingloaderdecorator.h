@@ -41,7 +41,7 @@ class CachingLoaderDecoratorPrivate;
  * @code
  *   Grantlee::FileSystemTemplateLoader::Ptr loader( new
  * Grantlee::FileSystemTemplateLoader() );
- *   loader->setTemplateDirs( QStringList() << "/path/one" << "/path/two" );
+ *   loader->setTemplateDirs({"/path/one", "/path/two"});
  *
  *   Grantlee::CachingLoaderDecorator::Ptr cache( new
  * Grantlee::CachingLoaderDecorator( loader ) );

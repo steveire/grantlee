@@ -190,16 +190,14 @@ template <> QString getAssociativeTemplate<QObject *>()
 
 template <typename T> QStringList getResults()
 {
-  return QStringList() << QStringLiteral("3;3;") << QStringLiteral("9,")
-                       << QStringLiteral("7,") << QStringLiteral("5,");
+  return {QStringLiteral("3;3;"), QStringLiteral("9,"), QStringLiteral("7,"),
+          QStringLiteral("5,")};
 }
 
 template <> QStringList getResults<QDateTime>()
 {
-  return QStringList() << QStringLiteral("3;3;")
-                       << QStringLiteral("Jan. 1, 1970,")
-                       << QStringLiteral("Jan. 2, 1970,")
-                       << QStringLiteral("Jan. 3, 1970,");
+  return {QStringLiteral("3;3;"), QStringLiteral("Jan. 1, 1970,"),
+          QStringLiteral("Jan. 2, 1970,"), QStringLiteral("Jan. 3, 1970,")};
 }
 
 template <typename Container, typename T = typename Container::value_type>
@@ -251,7 +249,7 @@ void testContainer(const QString &stringTemplate,
 {
   Grantlee::Engine engine;
 
-  engine.setPluginPaths(QStringList() << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   Grantlee::Context c;
   c.insert(QStringLiteral("container"), containerVariant);

@@ -76,9 +76,8 @@ Node *BlockNodeFactory::getNode(const QString &tagContent, Parser *p) const
   const auto list = p->parse(n, QStringLiteral("endblock"));
 
   auto endBlock = p->takeNextToken();
-  const auto acceptableBlocks = QStringList()
-                                << QStringLiteral("endblock")
-                                << QStringLiteral("endblock ") + blockName;
+  const QStringList acceptableBlocks{QStringLiteral("endblock"),
+                                     QStringLiteral("endblock ") + blockName};
   if (!acceptableBlocks.contains(endBlock.content)) {
     p->invalidBlockTag(endBlock, QStringLiteral("endblock"), acceptableBlocks);
   }

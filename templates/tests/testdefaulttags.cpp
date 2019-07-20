@@ -156,8 +156,7 @@ private:
 void TestDefaultTags::initTestCase()
 {
   m_engine = new Engine(this);
-  m_engine->setPluginPaths(QStringList()
-                           << QStringLiteral(GRANTLEE_PLUGIN_PATH));
+  m_engine->setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
 
   auto loader1 = QSharedPointer<FakeTemplateLoader>(new FakeTemplateLoader());
 
@@ -1108,8 +1107,7 @@ void TestDefaultTags::testForTag_data()
   QTest::newRow("for-tag03") << QStringLiteral(
       "{% for val in values %}({{ val }} sdfsdf,){% endfor %}")
                              << dict << QString() << NoError;
-  QStringList emails;
-  emails << QStringLiteral("one") << QStringLiteral("two");
+  QStringList emails{QStringLiteral("one"), QStringLiteral("two")};
   QVariantHash obj;
   obj.insert(QStringLiteral("emails"), emails);
   dict.insert(QStringLiteral("contact"), obj);

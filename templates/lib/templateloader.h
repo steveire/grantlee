@@ -86,8 +86,10 @@ class FileSystemTemplateLoaderPrivate;
   are checked in order, and the first match hit is parsed and returned.
 
   @code
-    loader->setTemplateDirs(QStringList() << "/home/user/app/templates" <<
-  "/usr/local/share/app/templates" );
+    loader->setTemplateDirs({
+        "/home/user/app/templates",
+        "/usr/local/share/app/templates"
+    });
     engine->setTemplateLoader( loader );
 
     // This will try /home/user/app/templates/mytemplate.html
@@ -99,8 +101,10 @@ class FileSystemTemplateLoaderPrivate;
   appended to search paths before the template name.
 
   @code
-    loader->setTemplateDirs(QStringList() << "/home/user/app/templates" <<
-  "/usr/local/share/app/templates" );
+    loader->setTemplateDirs({
+      "/home/user/app/templates" <<
+      "/usr/local/share/app/templates"
+    });
     loader->setTheme( "simple_theme" );
     engine->setTemplateLoader( loader );
 
@@ -113,8 +117,10 @@ class FileSystemTemplateLoaderPrivate;
   queried for templates.
 
   @code
-    loader->setTemplateDirs(QStringList() << "/home/user/app/templates" <<
-  "/usr/local/share/app/templates" );
+    loader->setTemplateDirs({
+      "/home/user/app/templates",
+      "/usr/local/share/app/templates"
+    });
     loader->setTheme( "simple_theme" );
     engine->setTemplateLoader( loader );
 

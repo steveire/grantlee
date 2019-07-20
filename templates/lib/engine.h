@@ -46,7 +46,7 @@ class EnginePrivate;
     Engine *engine = new Engine();
 
     auto loader = QSharedPointer<FileSystemTemplateLoader>::create();
-    loader->setTemplateDirs( QStringList() << "/usr/share/myapp/templates" );
+    loader->setTemplateDirs( {"/usr/share/myapp/templates"} );
     engine->addTemplateLoader( loader );
 
     engine->addPluginPath( "/usr/lib/myapp" );

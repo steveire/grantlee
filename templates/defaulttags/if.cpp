@@ -36,9 +36,8 @@ Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 
   IfParser ip(p, expr);
   auto cond = ip.parse();
-  auto nodelist = p->parse(n, QStringList() << QStringLiteral("elif")
-                                            << QStringLiteral("else")
-                                            << QStringLiteral("endif"));
+  auto nodelist = p->parse(n, {QStringLiteral("elif"), QStringLiteral("else"),
+                               QStringLiteral("endif")});
   nodelistConditions.push_back(qMakePair(cond, nodelist));
 
   auto token = p->takeNextToken();
@@ -48,9 +47,8 @@ Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 
     IfParser ep(p, expr);
     cond = ep.parse();
-    nodelist = p->parse(n, QStringList() << QStringLiteral("elif")
-                                         << QStringLiteral("else")
-                                         << QStringLiteral("endif"));
+    nodelist = p->parse(n, {QStringLiteral("elif"), QStringLiteral("else"),
+                            QStringLiteral("endif")});
     nodelistConditions.push_back(qMakePair(cond, nodelist));
 
     token = p->takeNextToken();
