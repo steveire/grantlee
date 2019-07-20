@@ -2,13 +2,15 @@ digraph GG {
   node [
     fontsize = "12"
   ];
-  "node27" [ label="libQtCore.so" shape="ellipse"];
-  "node30" [ label="libQtGui.so" shape="ellipse"];
-  "node28" [ label="libQtScript.so" shape="ellipse"];
+  "node27" [ label="QtCore" shape="ellipse"];
+  "node30" [ label="QtGui" shape="ellipse"];
+  "node28" [ label="QtQml" shape="ellipse"];
+  "node29" [ label="QtNetwork" shape="ellipse"];
   "node2" [ label="grantlee_templates" shape="polygon"];
   "node19" [ label="grantlee_textdocument" shape="polygon"];
-  "node2" -> "node27"
   "node2" -> "node28"
-  "node19" -> "node27"
   "node19" -> "node30"
+  "node28" -> "node29"
+  "node29" -> "node27"
+  "node30" -> "node27"
 }
