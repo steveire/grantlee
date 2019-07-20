@@ -146,7 +146,7 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
       const auto end = iter.end();
       QVariantList list;
       for (; it != end; ++it) {
-        list.push_back(QVariantList() << it.key() << it.value());
+        list.push_back(QVariantList{it.key(), it.value()});
       }
       return list;
     }

@@ -192,19 +192,17 @@ void TestInternationalization::testStrings_data()
       << "Geburtstag"
       << "Anniversaire" << QString() << QString() << QVariantList();
 
-  QTest::newRow("string-02")
-      << "%n People"
-      << "1 People"
-      << "1 Person"
-      << "1 Personne" << QString() << QStringLiteral("%n People")
-      << (QVariantList() << 1);
+  QTest::newRow("string-02") << "%n People"
+                             << "1 People"
+                             << "1 Person"
+                             << "1 Personne" << QString()
+                             << QStringLiteral("%n People") << QVariantList{1};
 
-  QTest::newRow("string-03")
-      << "%n People"
-      << "2 People"
-      << "2 Personen"
-      << "2 Personnes" << QString() << QStringLiteral("%n People")
-      << (QVariantList() << 2);
+  QTest::newRow("string-03") << "%n People"
+                             << "2 People"
+                             << "2 Personen"
+                             << "2 Personnes" << QString()
+                             << QStringLiteral("%n People") << QVariantList{2};
 
   QTest::newRow("string-04")
       << "Name"
@@ -225,14 +223,14 @@ void TestInternationalization::testStrings_data()
       << "1 People"
       << "1 Person angemeldet" << QString::fromUtf8("1 Personne connecté")
       << QStringLiteral("%n people are logged in")
-      << QStringLiteral("%n People") << (QVariantList() << 1);
+      << QStringLiteral("%n People") << QVariantList{1};
 
   QTest::newRow("string-07")
       << "%n People"
       << "2 People"
       << "2 Personen angemeldet" << QString::fromUtf8("2 Personnes connecté")
       << QStringLiteral("%n people are logged in")
-      << QStringLiteral("%n People") << (QVariantList() << 2);
+      << QStringLiteral("%n People") << QVariantList{2};
 
   QTest::newRow("string-08")
       << "%n file(s) copied to %1"
@@ -240,7 +238,7 @@ void TestInternationalization::testStrings_data()
       << "1 Datei in destinationFolder kopiert"
       << QString::fromUtf8("1 fichier copié dans destinationFolder")
       << QString() << QStringLiteral("%n files copied to %1")
-      << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
+      << QVariantList{1, QStringLiteral("destinationFolder")};
 
   QTest::newRow("string-09")
       << "%n file(s) copied to %1"
@@ -248,7 +246,7 @@ void TestInternationalization::testStrings_data()
       << "2 Datein in destinationFolder kopiert"
       << QString::fromUtf8("2 fichiers copiés dans destinationFolder")
       << QString() << QStringLiteral("%n files copied to %1")
-      << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
+      << QVariantList{2, QStringLiteral("destinationFolder")};
 
   QTest::newRow("string-10")
       << "%n to %1"
@@ -257,7 +255,7 @@ void TestInternationalization::testStrings_data()
       << QString::fromUtf8("1 fichier est copié sur destinationFolder")
       << QStringLiteral("Files are being copied")
       << QStringLiteral("%n copied to %1")
-      << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
+      << QVariantList{1, QStringLiteral("destinationFolder")};
 
   QTest::newRow("string-11")
       << "%n to %1"
@@ -266,7 +264,7 @@ void TestInternationalization::testStrings_data()
       << QString::fromUtf8("1 fichier a été copié à destinationFolder")
       << QStringLiteral("Files have already been copied")
       << QStringLiteral("%n copied to %1")
-      << (QVariantList() << 1 << QStringLiteral("destinationFolder"));
+      << QVariantList{1, QStringLiteral("destinationFolder")};
 
   QTest::newRow("string-12")
       << "%n to %1"
@@ -275,7 +273,7 @@ void TestInternationalization::testStrings_data()
       << QString::fromUtf8("2 fichiers sont copiés à destinationFolder")
       << QStringLiteral("Files are being copied")
       << QStringLiteral("%n copied to %1")
-      << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
+      << QVariantList{2, QStringLiteral("destinationFolder")};
 
   QTest::newRow("string-13")
       << "%n to %1"
@@ -284,7 +282,7 @@ void TestInternationalization::testStrings_data()
       << QString::fromUtf8("2 fichiers ont été copiés sur destinationFolder")
       << QStringLiteral("Files have already been copied")
       << QStringLiteral("%n copied to %1")
-      << (QVariantList() << 2 << QStringLiteral("destinationFolder"));
+      << QVariantList{2, QStringLiteral("destinationFolder")};
 
   QTest::newRow("string-14")
       << "from %1 to %2"
@@ -292,8 +290,8 @@ void TestInternationalization::testStrings_data()
       << "nach destinationFolder von sourceFolder"
       << QString::fromUtf8("à partir de sourceFolder destinationFolder")
       << QStringLiteral("Files are being copied from %1 to %2") << QString()
-      << (QVariantList() << QStringLiteral("sourceFolder")
-                         << QStringLiteral("destinationFolder"));
+      << QVariantList{QStringLiteral("sourceFolder"),
+                      QStringLiteral("destinationFolder")};
 
   QTest::newRow("string-15")
       << "%1 messages at %2, fraction of total: %3. Rating : %4"
@@ -302,7 +300,7 @@ void TestInternationalization::testStrings_data()
       << QStringLiteral("1000 messages au 2005-05-07, la fraction du total: "
                         "0.6. Note: 4.8")
       << QString() << QString()
-      << (QVariantList() << 1000 << QDate(2005, 5, 7) << 0.6 << 4.8);
+      << QVariantList{1000, QDate(2005, 5, 7), 0.6, 4.8};
 
 #ifndef Q_CC_MSVC
   QTest::newRow("string-16")
@@ -587,7 +585,7 @@ void TestInternationalization::testLocalizedTemplate_data()
              "04:05")
       << dict;
 
-  dict.insert(QStringLiteral("list"), QVariantList() << 1000);
+  dict.insert(QStringLiteral("list"), QVariantList{1000});
   QTest::newRow("fragment-06")
       << QStringLiteral("{{ _(list.0) }}") << QStringLiteral("1000")
       << QStringLiteral("1,000") << QStringLiteral("1,000")

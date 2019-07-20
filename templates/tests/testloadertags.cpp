@@ -161,8 +161,7 @@ void TestLoaderTags::testIncludeTag_data()
       << QStringLiteral("template with a space") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("list"), QVariantList()
-                                          << QVariant() << QVariant());
+  dict.insert(QStringLiteral("list"), QVariantList{QVariant(), QVariant()});
   QTest::newRow("include07")
       << "{% for i in list %}{% include \"include 05\" %}{% endfor %}" << dict
       << QStringLiteral("template with a spacetemplate with a space")
@@ -441,7 +440,7 @@ void TestLoaderTags::testExtendsTag_data()
                                  << dict << QStringLiteral("13") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("numbers"), QVariantList() << 1 << 2 << 3);
+  dict.insert(QStringLiteral("numbers"), QVariantList{1, 2, 3});
 
   auto inh36 = QStringLiteral("{% for n in numbers %}_{% block opt %}{{ n }}{% "
                               "endblock %}{% endfor %}_");
@@ -473,7 +472,7 @@ void TestLoaderTags::testExtendsTag_data()
       << dict << QStringLiteral("1new23") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("numbers"), QVariantList() << 1 << 2 << 3);
+  dict.insert(QStringLiteral("numbers"), QVariantList{1, 2, 3});
 
   QTest::newRow("inheritance41")
       << QStringLiteral("{% extends 'inheritance36' %}{% block opt %}new{{ "

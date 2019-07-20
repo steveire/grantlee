@@ -521,25 +521,25 @@ void TestDefaultTags::testIfTag_data()
   // Contains
 
   dict.clear();
-  dict.insert(QStringLiteral("x"), QVariantList() << 1);
+  dict.insert(QStringLiteral("x"), QVariantList{1});
   QTest::newRow("if-tag-in-01")
       << QStringLiteral("{% if 1 in x %}yes{% else %}no{% endif %}") << dict
       << QStringLiteral("yes") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("x"), QVariantList() << 1);
+  dict.insert(QStringLiteral("x"), QVariantList{1});
   QTest::newRow("if-tag-in-02")
       << QStringLiteral("{% if 2 in x %}yes{% else %}no{% endif %}") << dict
       << QStringLiteral("no") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("x"), QVariantList() << 1);
+  dict.insert(QStringLiteral("x"), QVariantList{1});
   QTest::newRow("if-tag-not-in-01")
       << QStringLiteral("{% if 1 not in x %}yes{% else %}no{% endif %}") << dict
       << QStringLiteral("no") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("x"), QVariantList() << 1);
+  dict.insert(QStringLiteral("x"), QVariantList{1});
   QTest::newRow("if-tag-not-in-02")
       << QStringLiteral("{% if 2 not in x %}yes{% else %}no{% endif %}") << dict
       << QStringLiteral("yes") << NoError;
@@ -1093,8 +1093,7 @@ void TestDefaultTags::testForTag_data()
 
   Dict dict;
 
-  QVariantList list;
-  list << 1 << 2 << 3;
+  QVariantList list{1, 2, 3};
   dict.insert(QStringLiteral("values"), list);
   QTest::newRow("for-tag01")
       << QStringLiteral("{% for val in values %}{{ val }}{% endfor %}") << dict
@@ -1165,8 +1164,7 @@ void TestDefaultTags::testForTag_data()
 
   dict.clear();
   list.clear();
-  QVariantList innerList;
-  innerList << QStringLiteral("one") << 1;
+  QVariantList innerList{QStringLiteral("one"), 1};
   list.append(QVariant(innerList));
   innerList.clear();
   innerList << QStringLiteral("two") << 2;
@@ -1274,7 +1272,7 @@ void TestDefaultTags::testForTag_data()
   // Empty tag:
 
   dict.clear();
-  dict.insert(QStringLiteral("values"), QVariantList() << 1 << 2 << 3);
+  dict.insert(QStringLiteral("values"), QVariantList{1, 2, 3});
   QTest::newRow("for-tag-empty01") << QStringLiteral(
       "{% for val in values %}{{ val }}{% empty %}empty text{% endfor %}")
                                    << dict << QStringLiteral("123") << NoError;
@@ -1660,7 +1658,7 @@ void TestDefaultTags::testCycleTag_data()
       "%}{{ foo }}") << dict
                            << QStringLiteral("abbbcc") << NoError;
 
-  dict.insert(QStringLiteral("test"), QVariantList() << 0 << 1 << 2 << 3 << 4);
+  dict.insert(QStringLiteral("test"), QVariantList{0, 1, 2, 3, 4});
   QTest::newRow("cycle09") << QStringLiteral(
       "{% for i in test %}{% cycle a,b %}{{ i }},{% endfor %}")
                            << dict << QStringLiteral("a0,b1,a2,b3,a4,")
@@ -1678,7 +1676,7 @@ void TestDefaultTags::testCycleTag_data()
       "abc %}") << dict << QStringLiteral("abca")
                            << NoError;
 
-  dict.insert(QStringLiteral("test"), QVariantList() << 0 << 1 << 2 << 3 << 4);
+  dict.insert(QStringLiteral("test"), QVariantList{0, 1, 2, 3, 4});
   QTest::newRow("cycle13") << QStringLiteral(
       "{% for i in test %}{% cycle 'a' 'b' %}{{ i }},{% endfor %}")
                            << dict << QStringLiteral("a0,b1,a2,b3,a4,")
@@ -1692,7 +1690,7 @@ void TestDefaultTags::testCycleTag_data()
                            << dict << QStringLiteral("12") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("test"), QVariantList() << 0 << 1 << 2 << 3 << 4);
+  dict.insert(QStringLiteral("test"), QVariantList{0, 1, 2, 3, 4});
   dict.insert(QStringLiteral("aye"), QStringLiteral("a"));
   dict.insert(QStringLiteral("bee"), QStringLiteral("b"));
   QTest::newRow("cycle15") << QStringLiteral(
@@ -2020,34 +2018,34 @@ void TestDefaultTags::testIfChangedTag_data()
 
   Dict dict;
 
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 2, 3});
   QTest::newRow("ifchanged01") << QStringLiteral(
       "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
                                << dict << QStringLiteral("123") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 3);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 1, 3});
   QTest::newRow("ifchanged02") << QStringLiteral(
       "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
                                << dict << QStringLiteral("13") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 1, 1});
   QTest::newRow("ifchanged03") << QStringLiteral(
       "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% endfor %}")
                                << dict << QStringLiteral("1") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
-  dict.insert(QStringLiteral("numx"), QVariantList() << 2 << 2 << 2);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 2, 3});
+  dict.insert(QStringLiteral("numx"), QVariantList{2, 2, 2});
   QTest::newRow("ifchanged04") << QStringLiteral(
       "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
       "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
                                << dict << QStringLiteral("122232") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
-  dict.insert(QStringLiteral("numx"), QVariantList() << 1 << 2 << 3);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 1, 1});
+  dict.insert(QStringLiteral("numx"), QVariantList{1, 2, 3});
   QTest::newRow("ifchanged05") << QStringLiteral(
       "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
       "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
@@ -2055,17 +2053,17 @@ void TestDefaultTags::testIfChangedTag_data()
                                << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
-  dict.insert(QStringLiteral("numx"), QVariantList() << 2 << 2 << 2);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 1, 1});
+  dict.insert(QStringLiteral("numx"), QVariantList{2, 2, 2});
   QTest::newRow("ifchanged06") << QStringLiteral(
       "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
       "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% endfor %}{% endfor %}")
                                << dict << QStringLiteral("1222") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 1);
-  dict.insert(QStringLiteral("numx"), QVariantList() << 2 << 2 << 2);
-  dict.insert(QStringLiteral("numy"), QVariantList() << 3 << 3 << 3);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 1, 1});
+  dict.insert(QStringLiteral("numx"), QVariantList{2, 2, 2});
+  dict.insert(QStringLiteral("numy"), QVariantList{3, 3, 3});
   QTest::newRow("ifchanged07") << QStringLiteral(
       "{% for n in num %}{% ifchanged %}{{ n }}{% endifchanged %}{% for x in "
       "numx %}{% ifchanged %}{{ x }}{% endifchanged %}{% for y in numy %}{% "
@@ -2082,37 +2080,27 @@ void TestDefaultTags::testIfChangedTag_data()
   dict.clear();
   QVariantList list;
   QVariantList innerList;
-  QVariantList tuple;
-  tuple << 1 << QStringLiteral("a");
+  QVariantList tuple{1, QStringLiteral("a")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
-  tuple << 1 << QStringLiteral("a");
+  tuple = {1, QStringLiteral("a")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
-  tuple << 0 << QStringLiteral("b");
+  tuple = {0, QStringLiteral("b")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
-  tuple << 1 << QStringLiteral("c");
+  tuple = {1, QStringLiteral("c")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
   list.append(QVariant(innerList));
   innerList.clear();
 
-  tuple << 0 << QStringLiteral("a");
+  tuple = {0, QStringLiteral("a")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
-  tuple << 1 << QStringLiteral("c");
+  tuple = {1, QStringLiteral("c")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
-  tuple << 1 << QStringLiteral("d");
+  tuple = {1, QStringLiteral("d")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
-  tuple << 1 << QStringLiteral("d");
+  tuple = {1, QStringLiteral("d")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
-  tuple << 0 << QStringLiteral("e");
+  tuple = {0, QStringLiteral("e")};
   innerList.append(QVariant(tuple));
-  tuple.clear();
   list.append(QVariant(innerList));
   innerList.clear();
 
@@ -2124,15 +2112,15 @@ void TestDefaultTags::testIfChangedTag_data()
 
   // Test one parameter given to ifchanged.
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 2, 3});
   QTest::newRow("ifchanged-param01")
       << QStringLiteral("{% for n in num %}{% ifchanged n %}..{% endifchanged "
                         "%}{{ n }}{% endfor %}")
       << dict << QStringLiteral("..1..2..3") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 2 << 3);
-  dict.insert(QStringLiteral("numx"), QVariantList() << 5 << 6 << 7);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 2, 3});
+  dict.insert(QStringLiteral("numx"), QVariantList{5, 6, 7});
   QTest::newRow("ifchanged-param02")
       << QStringLiteral("{% for n in num %}{% for x in numx %}{% ifchanged n "
                         "%}..{% endifchanged %}{{ x }}{% endfor %}{% endfor %}")
@@ -2141,8 +2129,8 @@ void TestDefaultTags::testIfChangedTag_data()
   // Test multiple parameters to ifchanged.
 
   dict.clear();
-  dict.insert(QStringLiteral("num"), QVariantList() << 1 << 1 << 2);
-  dict.insert(QStringLiteral("numx"), QVariantList() << 5 << 6 << 6);
+  dict.insert(QStringLiteral("num"), QVariantList{1, 1, 2});
+  dict.insert(QStringLiteral("numx"), QVariantList{5, 6, 6});
   QTest::newRow("ifchanged-param03")
       << QStringLiteral(
              "{% for n in num %}{{ n }}{% for x in numx %}{% ifchanged x n "
@@ -2156,11 +2144,11 @@ void TestDefaultTags::testIfChangedTag_data()
   QVariantList days;
   QVariantHash hash;
   hash.insert(QStringLiteral("day"), 1);
-  hash.insert(QStringLiteral("hours"), QVariantList() << 1 << 2 << 3);
+  hash.insert(QStringLiteral("hours"), QVariantList{1, 2, 3});
   days << hash;
   hash.clear();
   hash.insert(QStringLiteral("day"), 2);
-  hash.insert(QStringLiteral("hours"), QVariantList() << 3);
+  hash.insert(QStringLiteral("hours"), QVariantList{3});
   days << hash;
   dict.insert(QStringLiteral("days"), days);
   QTest::newRow("ifchanged-param04")
@@ -2180,8 +2168,7 @@ void TestDefaultTags::testIfChangedTag_data()
 
   // Test the else clause of ifchanged.
   dict.clear();
-  dict.insert(QStringLiteral("ids"), QVariantList()
-                                         << 1 << 1 << 2 << 2 << 2 << 3);
+  dict.insert(QStringLiteral("ids"), QVariantList{1, 1, 2, 2, 2, 3});
   QTest::newRow("ifchanged-else01")
       << QStringLiteral("{% for id in ids %}{{ id }}{% ifchanged id %}-first{% "
                         "else %}-other{% endifchanged %},{% endfor %}")
@@ -2201,8 +2188,7 @@ void TestDefaultTags::testIfChangedTag_data()
       << dict << QStringLiteral("1-red,1,2-blue,2,2,3-red,") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("ids"), QVariantList()
-                                         << 1 << 1 << 2 << 2 << 2 << 3 << 4);
+  dict.insert(QStringLiteral("ids"), QVariantList{1, 1, 2, 2, 2, 3, 4});
   QTest::newRow("ifchanged-else04")
       << QStringLiteral(
              "{% for id in ids %}{% ifchanged %}***{{ id }}*{% else %}...{% "
@@ -2386,8 +2372,7 @@ void TestDefaultTags::testRangeTag_data()
       << QStringLiteral("{% range 5 26 5 as i %}{{ i }};{% endrange %}") << dict
       << QStringLiteral("5;10;15;20;25;") << NoError;
 
-  QVariantList list;
-  list << 10 << 15 << 2;
+  QVariantList list{10, 15, 2};
   dict.insert(QStringLiteral("values"), list);
 
   QTest::newRow("range-tag04") << QStringLiteral(

@@ -148,10 +148,9 @@ void Benchmarking::getData()
 
   dict.insert(QStringLiteral("boo"), QStringLiteral("Far"));
   dict.insert(QStringLiteral("bat"), QStringLiteral("Cat"));
-  dict.insert(QStringLiteral("booList"), QVariantList()
-                                             << QString::fromLatin1("Tom")
-                                             << QString::fromLatin1("Dick")
-                                             << QString::fromLatin1("Harry"));
+  dict.insert(QStringLiteral("booList"),
+              {QString::fromLatin1("Tom"), , QString::fromLatin1("Dick"),
+               QString::fromLatin1("Harry")});
 
   // Using Grantlee to create Grantlee templates. How recursive...
 

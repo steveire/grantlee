@@ -124,8 +124,8 @@ void TestScriptableTagsSyntax::testBasicSyntax_data()
 
   dict.insert(QStringLiteral("boo"), QStringLiteral("Far"));
   dict.insert(QStringLiteral("booList"),
-              QVariantList() << QStringLiteral("Tom") << QStringLiteral("Dick")
-                             << QStringLiteral("Harry"));
+              QVariantList{QStringLiteral("Tom"), QStringLiteral("Dick"),
+                           QStringLiteral("Harry")});
 
   QTest::newRow("scriptable-tags01")
       << "{% load scripteddefaults %}{% if2 "

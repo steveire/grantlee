@@ -721,10 +721,7 @@ if (property == QStringLiteral("property"))
   return 42;
 GRANTLEE_END_LOOKUP
 
-static QVariantList dummy(const UnregisteredType &)
-{
-  return QVariantList() << 42;
-}
+static QVariantList dummy(const UnregisteredType &) { return QVariantList{42}; }
 
 QVariant dummyLookup(const QVariant &, const QString &) { return 42; }
 
