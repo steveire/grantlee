@@ -73,7 +73,7 @@ Node *BlockNodeFactory::getNode(const QString &tagContent, Parser *p) const
   p->setProperty(__loadedBlocks, loadedBlocksVariant);
 
   auto n = new BlockNode(blockName, p);
-  const auto list = p->parse(n, QStringList() << QStringLiteral("endblock"));
+  const auto list = p->parse(n, QStringLiteral("endblock"));
 
   auto endBlock = p->takeNextToken();
   const auto acceptableBlocks = QStringList()

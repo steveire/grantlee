@@ -56,7 +56,7 @@ Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
     token = p->takeNextToken();
   }
   if (token.content == QLatin1String("else")) {
-    nodelist = p->parse(n, QStringList() << QStringLiteral("endif"));
+    nodelist = p->parse(n, QStringLiteral("endif"));
     nodelistConditions.push_back(qMakePair(nullptr, nodelist));
     p->takeNextToken();
   }
