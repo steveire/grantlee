@@ -48,7 +48,7 @@ public:
     Parses the template to create a Nodelist.
     The given @p parent is the parent of each node in the returned list.
   */
-  NodeList parse(QObject *parent, const QStringList &stopAt = QStringList());
+  NodeList parse(QObject *parent, const QStringList &stopAt);
 
   void openLibrary(TagLibraryInterface *library);
   Q_DECLARE_PUBLIC(Parser)
