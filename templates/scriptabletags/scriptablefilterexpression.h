@@ -32,8 +32,8 @@ class ScriptableFilterExpression : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableFilterExpression(QObject *parent = 0);
-  ScriptableFilterExpression(QJSEngine *engine, QObject *parent = 0);
+  ScriptableFilterExpression(QObject *parent = {});
+  ScriptableFilterExpression(QJSEngine *engine, QObject *parent = {});
 
   void init(const QString &content, Grantlee::Parser *parser);
 

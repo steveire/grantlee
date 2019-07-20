@@ -205,7 +205,7 @@ public:
 
     SafeString left(int n) const;
     SafeString leftJustified(int width, QChar fill = QLatin1Char(' '),
-                             bool truncate = false) const;
+                             bool truncate = {}) const;
     SafeString mid(int position, int n = -1) const;
 
     SafeString normalized(NormalizationForm mode) const;
@@ -280,7 +280,7 @@ public:
 
     SafeString right(int n) const;
     SafeString rightJustified(int width, QChar fill = QLatin1Char(' '),
-                              bool truncate = false) const;
+                              bool truncate = {}) const;
 
     SafeString section(QChar sep, int start, int end = -1,
                        SectionFlags flags = SectionDefault) const;

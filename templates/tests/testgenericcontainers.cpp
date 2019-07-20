@@ -36,7 +36,7 @@ class TestGenericContainers : public CoverageObject
 {
   Q_OBJECT
 public:
-  explicit TestGenericContainers(QObject *parent = 0);
+  explicit TestGenericContainers(QObject *parent = {});
 
 private Q_SLOTS:
   void testContainer_Builtins();
@@ -274,7 +274,7 @@ void testContainer(const QString &stringTemplate,
 }
 
 template <typename Container>
-void doTestSequentialContainer(bool unordered = false)
+void doTestSequentialContainer(bool unordered = {})
 {
   Container container;
   ContainerPopulator<Container>::populateSequential(container);
@@ -286,7 +286,7 @@ void doTestSequentialContainer(bool unordered = false)
 }
 
 template <typename Container>
-void doTestAssociativeContainer(bool unordered = false)
+void doTestAssociativeContainer(bool unordered = {})
 {
   Container container;
   ContainerPopulator<Container>::populateAssociative(container);

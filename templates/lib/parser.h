@@ -73,14 +73,13 @@ public:
     @see AbstractNodeFactory::getNode
 
   */
-  NodeList parse(Node *parent, const QStringList &stopAt = QStringList());
+  NodeList parse(Node *parent, const QStringList &stopAt = {});
 
   /**
     This is an overloaded method.
     @see parse.
   */
-  NodeList parse(TemplateImpl *parent,
-                 const QStringList &stopAt = QStringList());
+  NodeList parse(TemplateImpl *parent, const QStringList &stopAt = {});
 
   /**
     This is an overloaded method.
@@ -125,7 +124,7 @@ public:
   void removeNextToken();
 
   void invalidBlockTag(const Token &token, const QString &command,
-                       const QStringList &stopAt = QStringList());
+                       const QStringList &stopAt = {});
 
 #ifndef Q_QDOC
   /**

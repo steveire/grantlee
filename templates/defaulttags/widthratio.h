@@ -40,7 +40,7 @@ class WidthRatioNode : public Node
 public:
   WidthRatioNode(const FilterExpression &valExpr,
                  const FilterExpression &maxExpr,
-                 const FilterExpression &maxWidth, QObject *parent = 0);
+                 const FilterExpression &maxWidth, QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 

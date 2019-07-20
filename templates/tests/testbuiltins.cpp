@@ -48,7 +48,7 @@ class OtherClass : public QObject
   Q_PROPERTY(QString method READ method)
   Q_PROPERTY(Animals animals READ animals)
 public:
-  OtherClass(QObject *parent = 0) : QObject(parent) {}
+  OtherClass(QObject *parent = {}) : QObject(parent) {}
 
   enum Animals { Lions, Tigers, Bears };
 
@@ -74,7 +74,7 @@ public:
 
   Q_ENUMS(FirstEnum SecondEnum)
 
-  SomeClass(QObject *parent = 0)
+  SomeClass(QObject *parent = {})
       : QObject(parent), m_other(new OtherClass(this))
   {
   }

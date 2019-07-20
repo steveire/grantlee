@@ -144,7 +144,7 @@ public:
     Constructor
   */
   FileSystemTemplateLoader(const QSharedPointer<AbstractLocalizer> localizer
-                           = QSharedPointer<AbstractLocalizer>());
+                           = {});
 
   /**
     Destructor

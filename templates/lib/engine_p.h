@@ -63,13 +63,13 @@ public:
   }
 
   QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
-                                                      = QString()) override
+                                                      = {}) override
   {
     Q_UNUSED(name);
     return m_nodeFactories;
   }
 
-  QHash<QString, Filter *> filters(const QString &name = QString()) override
+  QHash<QString, Filter *> filters(const QString &name = {}) override
   {
     Q_UNUSED(name);
     return m_filters;

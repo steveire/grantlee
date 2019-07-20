@@ -40,7 +40,7 @@ class RegroupNode : public Node
 public:
   RegroupNode(const FilterExpression &target,
               const FilterExpression &expression, const QString &varName,
-              QObject *parent = 0);
+              QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 

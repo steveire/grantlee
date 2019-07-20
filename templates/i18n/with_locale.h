@@ -38,7 +38,7 @@ class WithLocaleNode : public Node
 {
   Q_OBJECT
 public:
-  WithLocaleNode(const FilterExpression &localeName, QObject *parent = 0);
+  WithLocaleNode(const FilterExpression &localeName, QObject *parent = {});
 
   void setNodeList(const NodeList &nodeList);
 

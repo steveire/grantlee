@@ -43,7 +43,7 @@ public:
   QString localizeNumber(int number) const override;
   QString localizeNumber(qreal number) const override;
   QString localizeMonetaryValue(qreal value, const QString &currencyCode
-                                             = QString()) const override;
+                                             = {}) const override;
   QString localizeDate(const QDate &date,
                        QLocale::FormatType formatType
                        = QLocale::ShortFormat) const override;
@@ -54,19 +54,18 @@ public:
                            QLocale::FormatType formatType
                            = QLocale::ShortFormat) const override;
   QString localizeString(const QString &string,
-                         const QVariantList &arguments
-                         = QVariantList()) const override;
+                         const QVariantList &arguments = {}) const override;
   QString localizeContextString(const QString &string, const QString &context,
                                 const QVariantList &arguments
-                                = QVariantList()) const override;
+                                = {}) const override;
   QString localizePluralContextString(const QString &string,
                                       const QString &pluralForm,
                                       const QString &context,
                                       const QVariantList &arguments
-                                      = QVariantList()) const override;
+                                      = {}) const override;
   QString localizePluralString(const QString &string, const QString &pluralForm,
                                const QVariantList &arguments
-                               = QVariantList()) const override;
+                               = {}) const override;
 
 private:
   Q_DISABLE_COPY(NullLocalizer)

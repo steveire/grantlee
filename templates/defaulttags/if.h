@@ -42,7 +42,7 @@ class IfNode : public Node
 {
   Q_OBJECT
 public:
-  IfNode(QObject *parent = 0);
+  IfNode(QObject *parent = {});
 
   void
   setNodelistConditions(const QVector<QPair<QSharedPointer<IfToken>, NodeList>>

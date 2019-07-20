@@ -40,7 +40,7 @@ class AutoescapeNode : public Node
 public:
   enum State { On, Off };
 
-  explicit AutoescapeNode(int state, QObject *parent = 0);
+  explicit AutoescapeNode(int state, QObject *parent = {});
 
   void setList(const NodeList &list);
 

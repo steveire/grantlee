@@ -53,7 +53,7 @@ class I18ncNode : public Node
   Q_OBJECT
 public:
   I18ncNode(const QString &sourceText, const QString &context,
-            const QList<FilterExpression> &feList, QObject *parent = 0);
+            const QList<FilterExpression> &feList, QObject *parent = {});
   void render(OutputStream *stream, Context *c) const override;
 
 private:
@@ -68,7 +68,7 @@ class I18ncVarNode : public Node
 public:
   I18ncVarNode(const QString &sourceText, const QString &context,
                const QList<FilterExpression> &feList, const QString &resultName,
-               QObject *parent = 0);
+               QObject *parent = {});
   void render(OutputStream *stream, Context *c) const override;
 
 private:

@@ -38,7 +38,7 @@ class SpacelessNode : public Node
 {
   Q_OBJECT
 public:
-  SpacelessNode(QObject *parent = 0);
+  SpacelessNode(QObject *parent = {});
 
   void setList(const NodeList &nodeList);
 

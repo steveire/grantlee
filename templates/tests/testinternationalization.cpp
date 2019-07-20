@@ -45,7 +45,7 @@ class TestInternationalization : public CoverageObject
 {
   Q_OBJECT
 public:
-  explicit TestInternationalization(QObject *parent = 0)
+  explicit TestInternationalization(QObject *parent = {})
       : CoverageObject(parent), nullLocalizer(new NullLocalizer()),
         deLocalizer(
             new QtLocalizer(QLocale(QLocale::German, QLocale::Germany))),

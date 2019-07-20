@@ -71,7 +71,7 @@ template <typename TType, typename Test, typename Action1 = NullLexerAction,
 class LexerObject : public TType
 {
 public:
-  LexerObject(Lexer *lexer, State<typename TType::Type> *sourceState = 0)
+  LexerObject(Lexer *lexer, State<typename TType::Type> *sourceState = {})
       : TType(sourceState), m_lexer(lexer)
   {
   }
@@ -141,7 +141,7 @@ class CharacterTransition
 {
 public:
   CharacterTransition(Lexer *lexer,
-                      State<CharTransitionInterface> *sourceState = 0)
+                      State<CharTransitionInterface> *sourceState = {})
       : LexerObject<State<CharTransitionInterface>::Transition,
                     CharacterTest<c>, Action>(lexer, sourceState)
   {
@@ -155,7 +155,7 @@ class NegateCharacterTransition
 {
 public:
   NegateCharacterTransition(Lexer *lexer,
-                            State<CharTransitionInterface> *sourceState = 0)
+                            State<CharTransitionInterface> *sourceState = {})
       : LexerObject<State<CharTransitionInterface>::Transition,
                     Negate<CharacterTest<c>>, Action>(lexer, sourceState)
   {

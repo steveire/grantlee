@@ -51,7 +51,7 @@ class IfEqualNode : public Node
   Q_OBJECT
 public:
   IfEqualNode(const FilterExpression &val11, const FilterExpression &val2,
-              bool negate, QObject *parent = 0);
+              bool negate, QObject *parent = {});
 
   void setTrueList(const NodeList &trueList);
   void setFalseList(const NodeList &falseList);

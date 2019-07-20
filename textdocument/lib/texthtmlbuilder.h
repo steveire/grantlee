@@ -122,8 +122,7 @@ public:
   void endForeground() override;
   void beginBackground(const QBrush &brush) override;
   void endBackground() override;
-  void beginAnchor(const QString &href = QString(),
-                   const QString &name = QString()) override;
+  void beginAnchor(const QString &href = {}, const QString &name = {}) override;
   void endAnchor() override;
 
   // Maybe this stuff should just be added to a list, and then when I add

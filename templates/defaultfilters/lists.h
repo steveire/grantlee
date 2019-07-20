@@ -30,9 +30,8 @@ using namespace Grantlee;
 class JoinFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return true; }
 };
@@ -40,9 +39,8 @@ public:
 class LengthFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return true; }
 };
@@ -50,9 +48,8 @@ public:
 class LengthIsFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return true; }
 };
@@ -60,25 +57,22 @@ public:
 class FirstFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 };
 
 class LastFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 };
 
 class RandomFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return true; }
 };
@@ -86,9 +80,8 @@ public:
 class SliceFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return true; }
 };
@@ -96,9 +89,8 @@ public:
 class MakeListFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return true; }
 };
@@ -106,9 +98,8 @@ public:
 class UnorderedListFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return true; }
 
@@ -120,9 +111,8 @@ protected:
 class DictSortFilter : public Filter
 {
 public:
-  QVariant doFilter(const QVariant &input,
-                    const QVariant &argument = QVariant(),
-                    bool autoescape = false) const override;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override { return false; }
 };

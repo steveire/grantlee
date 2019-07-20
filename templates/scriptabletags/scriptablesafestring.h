@@ -31,7 +31,7 @@ class ScriptableSafeString : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableSafeString(QObject *parent = 0);
+  ScriptableSafeString(QObject *parent = {});
 
   void setContent(const SafeString &content);
   SafeString wrappedString() const;

@@ -43,9 +43,9 @@ class DefaultFiltersLibrary : public QObject, public TagLibraryInterface
   Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  DefaultFiltersLibrary(QObject *parent = 0) : QObject(parent) {}
+  DefaultFiltersLibrary(QObject *parent = {}) : QObject(parent) {}
 
-  QHash<QString, Filter *> filters(const QString &name = QString()) override
+  QHash<QString, Filter *> filters(const QString &name = {}) override
   {
     Q_UNUSED(name);
 

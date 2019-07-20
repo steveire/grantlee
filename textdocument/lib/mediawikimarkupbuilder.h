@@ -50,8 +50,7 @@ public:
   void endParagraph() override;
   void addNewline() override;
 
-  void beginAnchor(const QString &href = QString(),
-                   const QString &name = QString()) override;
+  void beginAnchor(const QString &href = {}, const QString &name = {}) override;
   void endAnchor() override;
 
   void beginHeader(int level) override;

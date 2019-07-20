@@ -88,7 +88,7 @@ public:
 
     @param parent The parent QObject
   */
-  explicit Node(QObject *parent = 0);
+  explicit Node(QObject *parent = {});
 
   /**
     Destructor.
@@ -312,7 +312,7 @@ public:
 
     @param parent The parent QObject
   */
-  explicit AbstractNodeFactory(QObject *parent = 0);
+  explicit AbstractNodeFactory(QObject *parent = {});
 
   /**
     Destructor.

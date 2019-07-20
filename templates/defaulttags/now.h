@@ -38,7 +38,7 @@ class NowNode : public Node
 {
   Q_OBJECT
 public:
-  explicit NowNode(const QString &formatString, QObject *parent = 0);
+  explicit NowNode(const QString &formatString, QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 

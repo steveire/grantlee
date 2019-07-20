@@ -38,7 +38,7 @@ class MediaFinderNode : public Node
   Q_OBJECT
 public:
   explicit MediaFinderNode(const QList<FilterExpression> &mediaExpressionList,
-                           QObject *parent = 0);
+                           QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 

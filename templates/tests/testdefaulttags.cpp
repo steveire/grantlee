@@ -64,7 +64,7 @@ class Zoo : public QObject
 {
   Q_OBJECT
 public:
-  Zoo(QObject *parent = 0) : QObject(parent) {}
+  Zoo(QObject *parent = {}) : QObject(parent) {}
 
   enum Animals { Lions, Tigers, Bears };
 
@@ -306,7 +306,7 @@ class BadIfObject : public QObject
   Q_PROPERTY(bool isFalse READ isFalse)
   Q_PROPERTY(bool isBad READ isBad)
 public:
-  BadIfObject(QObject *parent = 0) : QObject(parent), mIsBadCalled(false) {}
+  BadIfObject(QObject *parent = {}) : QObject(parent), mIsBadCalled(false) {}
 
   bool isTrue() const { return true; }
 

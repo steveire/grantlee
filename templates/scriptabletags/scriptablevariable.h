@@ -33,8 +33,8 @@ class ScriptableVariable : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableVariable(QObject *parent = 0);
-  ScriptableVariable(QJSEngine *engine, QObject *parent = 0);
+  ScriptableVariable(QObject *parent = {});
+  ScriptableVariable(QJSEngine *engine, QObject *parent = {});
 
   void setContent(const QString &content);
 

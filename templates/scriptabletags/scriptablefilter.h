@@ -34,7 +34,7 @@ public:
   ~ScriptableFilter() override;
 
   QVariant doFilter(const QVariant &input, const QVariant &argument,
-                    bool autoescape = false) const override;
+                    bool autoescape = {}) const override;
 
   bool isSafe() const override;
 

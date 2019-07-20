@@ -39,7 +39,7 @@ class ScriptableNode : public Node
 {
   Q_OBJECT
 public:
-  ScriptableNode(QObject *parent = 0);
+  ScriptableNode(QObject *parent = {});
   void setScriptEngine(QJSEngine *engine);
   void init(const QJSValue &concreteNode, const QJSValue &renderMethod);
 
@@ -60,13 +60,13 @@ class ScriptableNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  ScriptableNodeFactory(QObject *parent = 0);
+  ScriptableNodeFactory(QObject *parent = {});
   void setScriptEngine(QJSEngine *engine);
 
   /* reimp */ void setEngine(Grantlee::Engine *engine) override;
   void setFactory(const QJSValue &factoryMethod);
 
-  Node *getNode(const QString &tagContent, Parser *p = 0) const override;
+  Node *getNode(const QString &tagContent, Parser *p = {}) const override;
 
 private:
   QJSEngine *m_scriptEngine;

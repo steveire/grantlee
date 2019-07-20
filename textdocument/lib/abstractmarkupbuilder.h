@@ -99,8 +99,7 @@ public:
     @param href The href of the anchor.
     @param name The name of the anchor.
   */
-  virtual void beginAnchor(const QString &href = QString(),
-                           const QString &name = QString())
+  virtual void beginAnchor(const QString &href = {}, const QString &name = {})
       = 0;
 
   /** Close the anchor element */

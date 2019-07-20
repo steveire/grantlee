@@ -47,7 +47,7 @@ class Filter;
       Q_OBJECT
       Q_INTERFACES( Grantlee::TagLibraryInterface )
     public:
-      MyTagLibrary( QObject *parent = 0 )
+      MyTagLibrary( QObject *parent = {} )
           : QObject( parent ) {
       }
 
@@ -84,7 +84,7 @@ public:
     Returns the AbstractNodeFactory implementations available in this library.
   */
   virtual QHash<QString, AbstractNodeFactory *>
-  nodeFactories(const QString &name = QString())
+  nodeFactories(const QString &name = {})
   {
     Q_UNUSED(name);
     static const QHash<QString, AbstractNodeFactory *> h;
@@ -94,7 +94,7 @@ public:
   /**
     Returns the Filter implementations available in this library.
   */
-  virtual QHash<QString, Filter *> filters(const QString &name = QString())
+  virtual QHash<QString, Filter *> filters(const QString &name = {})
   {
     Q_UNUSED(name);
     static const QHash<QString, Filter *> h;

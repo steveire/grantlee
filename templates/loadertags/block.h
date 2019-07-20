@@ -34,7 +34,7 @@ class BlockNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  explicit BlockNodeFactory(QObject *parent = 0);
+  explicit BlockNodeFactory(QObject *parent = {});
 
   Node *getNode(const QString &tagContent, Parser *p) const override;
 };
@@ -44,7 +44,7 @@ class BlockNode : public Node
   Q_OBJECT
   Q_PROPERTY(Grantlee::SafeString super READ getSuper)
 public:
-  BlockNode(const QString &blockName, QObject *parent = 0);
+  BlockNode(const QString &blockName, QObject *parent = {});
   ~BlockNode() override;
 
   void setNodeList(const NodeList &list) const;

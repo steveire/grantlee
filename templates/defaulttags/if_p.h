@@ -44,7 +44,7 @@ public:
 
   QSharedPointer<IfToken> parse();
 
-  QSharedPointer<IfToken> expression(int rbp = 0);
+  QSharedPointer<IfToken> expression(int rbp = {});
 
 private:
   QSharedPointer<IfToken> createNode(const QString &content) const;

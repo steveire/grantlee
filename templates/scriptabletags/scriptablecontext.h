@@ -35,7 +35,7 @@ class ScriptableContext : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableContext(Context *c, QObject *parent = 0);
+  explicit ScriptableContext(Context *c, QObject *parent = {});
 
   Context *context() { return m_c; }
 

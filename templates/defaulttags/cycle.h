@@ -78,7 +78,7 @@ class CycleNode : public Node
   Q_OBJECT
 public:
   CycleNode(const QList<FilterExpression> &list, const QString &name,
-            QObject *parent = 0);
+            QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 

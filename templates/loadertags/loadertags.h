@@ -44,7 +44,7 @@ public:
   LoaderTagLibrary() {}
 
   QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
-                                                      = QString()) override
+                                                      = {}) override
   {
     Q_UNUSED(name);
 

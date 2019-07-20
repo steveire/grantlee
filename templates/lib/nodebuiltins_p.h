@@ -36,7 +36,7 @@ class GRANTLEE_TEMPLATES_EXPORT TextNode : public Node
 {
   Q_OBJECT
 public:
-  explicit TextNode(const QString &content, QObject *parent = 0);
+  explicit TextNode(const QString &content, QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override
   { // krazy:exclude:inline
@@ -57,7 +57,7 @@ class GRANTLEE_TEMPLATES_EXPORT VariableNode : public Node
 {
   Q_OBJECT
 public:
-  explicit VariableNode(const FilterExpression &fe, QObject *parent = 0);
+  explicit VariableNode(const FilterExpression &fe, QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 

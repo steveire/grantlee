@@ -37,7 +37,7 @@ class LoadNode : public Node
 {
   Q_OBJECT
 public:
-  LoadNode(QObject *parent = 0);
+  LoadNode(QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 };

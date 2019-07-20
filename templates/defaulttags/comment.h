@@ -38,7 +38,7 @@ class CommentNode : public Node
 {
   Q_OBJECT
 public:
-  CommentNode(QObject *parent = 0);
+  CommentNode(QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 };

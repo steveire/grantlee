@@ -38,11 +38,10 @@ class RangeNode : public Node
   Q_OBJECT
 public:
   RangeNode(const QString &name, const FilterExpression &startExpression,
-            const FilterExpression &stopExpression, QObject *parent = 0);
+            const FilterExpression &stopExpression, QObject *parent = {});
   RangeNode(const QString &name, const FilterExpression &startExpression,
             const FilterExpression &stopExpression,
-            const FilterExpression &stepExpression = FilterExpression(),
-            QObject *parent = 0);
+            const FilterExpression &stepExpression = {}, QObject *parent = {});
 
   void setNodeList(const NodeList &list);
 

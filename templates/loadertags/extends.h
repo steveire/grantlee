@@ -37,7 +37,7 @@ class ExtendsNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  ExtendsNodeFactory(QObject *parent = 0);
+  ExtendsNodeFactory(QObject *parent = {});
 
   Node *getNode(const QString &tagContent, Parser *p) const override;
 };
@@ -46,7 +46,7 @@ class ExtendsNode : public Node
 {
   Q_OBJECT
 public:
-  ExtendsNode(const FilterExpression &fe, QObject *parent = 0);
+  ExtendsNode(const FilterExpression &fe, QObject *parent = {});
   ~ExtendsNode() override;
 
   void setNodeList(const NodeList &list);

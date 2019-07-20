@@ -111,7 +111,7 @@ class PersonObject : public QObject
   Q_PROPERTY(QString name READ name)
   Q_PROPERTY(int age READ age)
 public:
-  PersonObject(const QString &name, int age, QObject *parent = 0)
+  PersonObject(const QString &name, int age, QObject *parent = {})
       : QObject(parent), m_name(name), m_age(age)
   {
   }
@@ -291,7 +291,7 @@ template <typename Container> void doTestSequentialContainer_Variant()
 }
 
 template <typename Container>
-void testAssociativeValues(Grantlee::Context &c, bool unordered = false)
+void testAssociativeValues(Grantlee::Context &c, bool unordered = {})
 {
   Grantlee::Engine engine;
 
@@ -340,7 +340,7 @@ void testAssociativeItems(Grantlee::Context &c, bool unordered)
 }
 
 template <typename Container>
-void doTestAssociativeContainer_Variant(bool unordered = false)
+void doTestAssociativeContainer_Variant(bool unordered = {})
 {
   Grantlee::Engine engine;
 
@@ -439,7 +439,7 @@ template <typename Container> void doTestSequentialContainer_Type()
 }
 
 template <typename Container>
-void doTestAssociativeContainer_Type(bool unordered = false)
+void doTestAssociativeContainer_Type(bool unordered = {})
 {
   Grantlee::Engine engine;
 
@@ -453,7 +453,7 @@ void doTestAssociativeContainer_Type(bool unordered = false)
 }
 
 template <typename Container>
-void doTestAssociativeContainer_Type_Number(bool unordered = false)
+void doTestAssociativeContainer_Type_Number(bool unordered = {})
 {
   Grantlee::Engine engine;
 
@@ -647,7 +647,7 @@ class CustomObject : public QObject
 {
   Q_OBJECT
 public:
-  explicit CustomObject(QObject *parent = 0) : QObject(parent) {}
+  explicit CustomObject(QObject *parent = {}) : QObject(parent) {}
 };
 
 class OtherObject : public QObject
@@ -655,7 +655,7 @@ class OtherObject : public QObject
   Q_OBJECT
   Q_PROPERTY(CustomObject *custom READ custom)
 public:
-  explicit OtherObject(QObject *parent = 0)
+  explicit OtherObject(QObject *parent = {})
       : QObject(parent), m_custom(new CustomObject(this))
   {
     m_custom->setProperty("nestedProp", QStringLiteral("nestedValue"));

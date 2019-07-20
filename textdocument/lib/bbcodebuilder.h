@@ -52,8 +52,7 @@ public:
 
   // Background colour not supported by BBCode.
 
-  void beginAnchor(const QString &href = QString(),
-                   const QString &name = QString()) override;
+  void beginAnchor(const QString &href = {}, const QString &name = {}) override;
   void endAnchor() override;
 
   // Font family not supported by BBCode.

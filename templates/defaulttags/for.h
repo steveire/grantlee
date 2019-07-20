@@ -41,7 +41,7 @@ public:
   enum Reversed { IsNotReversed, IsReversed };
 
   ForNode(const QStringList &loopVars, const FilterExpression &fe, int reversed,
-          QObject *parent = 0);
+          QObject *parent = {});
 
   void setLoopList(const NodeList &loopNodeList);
   void setEmptyList(const NodeList &emptyList);

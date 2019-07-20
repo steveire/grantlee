@@ -35,7 +35,7 @@ public:
   {
   public:
     typedef TransitionInterface Type;
-    explicit Transition(State<TransitionInterface> *parent = 0)
+    explicit Transition(State<TransitionInterface> *parent = {})
     {
       if (parent)
         parent->addTransition(this);
@@ -50,7 +50,7 @@ public:
     State<TransitionInterface> *m_targetState;
   };
 
-  explicit State(State<TransitionInterface> *parent = 0)
+  explicit State(State<TransitionInterface> *parent = {})
       : m_initialState(0), m_parent(parent), m_endTransition(0),
         m_unconditionalTransition(0)
   {
@@ -120,7 +120,7 @@ class StateMachine : public State<TransitionInterface>
 public:
   typedef typename State<TransitionInterface>::Transition Transition;
 
-  explicit StateMachine(State<TransitionInterface> *parent = 0)
+  explicit StateMachine(State<TransitionInterface> *parent = {})
       : State<TransitionInterface>(parent), m_currentState(0)
   {
   }

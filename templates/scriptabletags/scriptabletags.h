@@ -47,7 +47,7 @@ public:
   Q_INVOKABLE QJSValue markSafeFunction(QJSValue inputValue);
   Q_INVOKABLE QJSValue ScriptableFilterExpressionConstructor(QString name,
                                                              QObject *parserObj
-                                                             = nullptr);
+                                                             = {});
   Q_INVOKABLE QJSValue ScriptableNodeConstructor(QJSValue callContext);
   Q_INVOKABLE QJSValue ScriptableVariableConstructor(QString name);
   Q_INVOKABLE QJSValue ScriptableTemplateConstructor(QString content,
@@ -61,12 +61,12 @@ class ScriptableTagLibrary : public QObject, public TagLibraryInterface
   Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  ScriptableTagLibrary(QObject *parent = 0);
+  ScriptableTagLibrary(QObject *parent = {});
 
   QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
-                                                      = QString()) override;
+                                                      = {}) override;
 
-  QHash<QString, Filter *> filters(const QString &name = QString()) override;
+  QHash<QString, Filter *> filters(const QString &name = {}) override;
 
 public Q_SLOTS:
   void addFactory(const QString &factoryName, const QString &tagname);

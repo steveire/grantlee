@@ -42,8 +42,7 @@ public:
 
 public Q_SLOTS:
   QList<QObject *> parse(QObject *parent, const QString &stopAt);
-  QList<QObject *> parse(QObject *parent,
-                         const QStringList &stopAt = QStringList());
+  QList<QObject *> parse(QObject *parent, const QStringList &stopAt = {});
 
   void skipPast(const QString &tag);
 

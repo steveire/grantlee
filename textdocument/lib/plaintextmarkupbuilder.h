@@ -119,8 +119,7 @@ public:
   void beginStrikeout() override;
   void endStrikeout() override;
 
-  void beginAnchor(const QString &href = QString(),
-                   const QString &name = QString()) override;
+  void beginAnchor(const QString &href = {}, const QString &name = {}) override;
 
   void endAnchor() override;
 

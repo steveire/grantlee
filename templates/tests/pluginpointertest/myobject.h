@@ -31,7 +31,7 @@ class MyObject : public QObject, public MyInterface
   Q_INTERFACES(MyInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.MyInterface")
 public:
-  MyObject(int stop = 4, QObject *parent = 0);
+  MyObject(int stop = 4, QObject *parent = {});
 
   int double_it(int input);
 

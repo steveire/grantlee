@@ -37,7 +37,7 @@ class FilterNode : public Node
 {
   Q_OBJECT
 public:
-  explicit FilterNode(const FilterExpression &fe, QObject *parent = 0);
+  explicit FilterNode(const FilterExpression &fe, QObject *parent = {});
 
   void setNodeList(const NodeList &filterList);
 

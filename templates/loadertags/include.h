@@ -43,7 +43,7 @@ class IncludeNode : public Node
 {
   Q_OBJECT
 public:
-  explicit IncludeNode(const FilterExpression &fe, QObject *parent = 0);
+  explicit IncludeNode(const FilterExpression &fe, QObject *parent = {});
   void render(OutputStream *stream, Context *c) const override;
 
 private:
@@ -54,7 +54,7 @@ class ConstantIncludeNode : public Node
 {
   Q_OBJECT
 public:
-  ConstantIncludeNode(const QString &filename, QObject *parent = 0);
+  ConstantIncludeNode(const QString &filename, QObject *parent = {});
   void render(OutputStream *stream, Context *c) const override;
 
 private:

@@ -99,7 +99,7 @@ public:
     currencyCode.
   */
   virtual QString localizeMonetaryValue(qreal value, const QString &currencyCode
-                                                     = QString()) const = 0;
+                                                     = {}) const = 0;
 
   /**
     Localizes @p date with the specified @p formatType
@@ -126,37 +126,33 @@ public:
     Localizes @p string with the specified @p arguments for substitution
   */
   virtual QString localizeString(const QString &string,
-                                 const QVariantList &arguments
-                                 = QVariantList()) const = 0;
+                                 const QVariantList &arguments = {}) const = 0;
 
   /**
     Localizes @p string, disambiguated by @p context with the specified @p
     arguments for substitution
   */
-  virtual QString localizeContextString(const QString &string,
-                                        const QString &context,
-                                        const QVariantList &arguments
-                                        = QVariantList()) const = 0;
+  virtual QString
+  localizeContextString(const QString &string, const QString &context,
+                        const QVariantList &arguments = {}) const = 0;
 
   /**
     Localizes @p string or its @p pluralForm with the specified @p arguments
     for
     substitution
   */
-  virtual QString localizePluralString(const QString &string,
-                                       const QString &pluralForm,
-                                       const QVariantList &arguments
-                                       = QVariantList()) const = 0;
+  virtual QString
+  localizePluralString(const QString &string, const QString &pluralForm,
+                       const QVariantList &arguments = {}) const = 0;
 
   /**
     Localizes @p string or its @p pluralForm, disambiguated by @p context with
     the specified @p arguments for substitution
   */
-  virtual QString localizePluralContextString(const QString &string,
-                                              const QString &pluralForm,
-                                              const QString &context,
-                                              const QVariantList &arguments
-                                              = QVariantList()) const = 0;
+  virtual QString
+  localizePluralContextString(const QString &string, const QString &pluralForm,
+                              const QString &context,
+                              const QVariantList &arguments = {}) const = 0;
 
 private:
   Q_DISABLE_COPY(AbstractLocalizer)

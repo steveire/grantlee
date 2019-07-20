@@ -43,7 +43,7 @@ public:
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  explicit TemplateTagNode(const QString &tagName, QObject *parent = 0);
+  explicit TemplateTagNode(const QString &tagName, QObject *parent = {});
 
   void render(OutputStream *stream, Context *c) const override;
 
