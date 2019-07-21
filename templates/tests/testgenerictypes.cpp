@@ -75,6 +75,8 @@ private Q_SLOTS:
 
   void testUnregistered();
   void testPointerNonQObject();
+  void testQGadget();
+
 }; // class TestGenericTypes
 
 class Person
@@ -782,6 +784,24 @@ void TestGenericTypes::testPointerNonQObject()
   QCOMPARE(result.value<QString>(), QStringLiteral("Adele"));
 
   delete p;
+}
+
+class CustomGadget
+{
+  Q_GADGET
+  Q_PROPERTY(int fortyTwo READ fortyTwo)
+public:
+  int fortyTwo() { return 42; }
+};
+
+void TestGenericTypes::testQGadget()
+{
+  CustomGadget g;
+  auto v = QVariant::fromValue(g);
+
+  auto result = Grantlee::MetaType::lookup(v, QStringLiteral("fortyTwo"));
+
+  QCOMPARE(result.value<int>(), 42);
 }
 
 QTEST_MAIN(TestGenericTypes)

@@ -173,6 +173,19 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
 
     return QVariant();
   }
+  auto mo = QMetaType::metaObjectForType(object.userType());
+  if (mo) {
+    QMetaType mt(object.userType());
+    if (mt.flags().testFlag(QMetaType::IsGadget)) {
+      const auto idx = mo->indexOfProperty(property.toUtf8().constData());
+      if (idx < 0) {
+        return QVariant();
+      }
+      const auto mp = mo->property(idx);
+      return mp.readOnGadget(&object);
+    }
+  }
+
   return customTypes()->lookup(object, property);
 }
 
