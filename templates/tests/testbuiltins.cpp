@@ -31,6 +31,7 @@
 #include "filterexpression.h"
 #include "grantlee_paths.h"
 #include "template.h"
+#include "util.h"
 #include <metaenumvariable_p.h>
 
 typedef QHash<QString, QVariant> Dict;
@@ -168,6 +169,9 @@ private Q_SLOTS:
 
   void testObjects();
 
+  void testTruthiness_data();
+  void testTruthiness();
+
   void testRenderAfterError();
 
   void testBasicSyntax_data();
@@ -258,6 +262,106 @@ void TestBuiltinSyntax::testObjects()
   Q_UNUSED(s3);
 
   QMetaType::construct(qMetaTypeId<MetaEnumVariable>(), 0, 0);
+}
+
+void TestBuiltinSyntax::testTruthiness_data()
+{
+  QTest::addColumn<QVariant>("input");
+  QTest::addColumn<bool>("expected");
+
+  QTest::newRow("truthtest-01") << QVariant() << false;
+  QTest::newRow("truthtest-02") << QVariant(false) << false;
+  QTest::newRow("truthtest-03") << QVariant(true) << true;
+
+  QTest::newRow("truthtest-04") << QVariant(0) << false;
+  QTest::newRow("truthtest-05") << QVariant(1) << true;
+
+  {
+    auto falseV = QVariant::fromValue<int>(0);
+    QTest::newRow("truthtest-06") << falseV << false;
+    auto trueV = QVariant::fromValue<int>(1);
+    QTest::newRow("truthtest-07") << trueV << true;
+  }
+  {
+    auto falseV = QVariant::fromValue<uint>(0);
+    QTest::newRow("truthtest-08") << falseV << false;
+    auto trueV = QVariant::fromValue<uint>(1);
+    QTest::newRow("truthtest-09") << trueV << true;
+  }
+  {
+    auto falseV = QVariant::fromValue<qlonglong>(0);
+    QTest::newRow("truthtest-10") << falseV << false;
+    auto trueV = QVariant::fromValue<qlonglong>(1);
+    QTest::newRow("truthtest-11") << trueV << true;
+  }
+  {
+    auto falseV = QVariant::fromValue<qulonglong>(0);
+    QTest::newRow("truthtest-12") << falseV << false;
+    auto trueV = QVariant::fromValue<qulonglong>(1);
+    QTest::newRow("truthtest-13") << trueV << true;
+  }
+  {
+    auto falseV = QVariant::fromValue<double>(0);
+    QTest::newRow("truthtest-14") << falseV << false;
+    auto trueV = QVariant::fromValue<double>(1);
+    QTest::newRow("truthtest-15") << trueV << true;
+  }
+  {
+    auto falseV = QVariant::fromValue<float>(0);
+    QTest::newRow("truthtest-16") << falseV << false;
+    auto trueV = QVariant::fromValue<float>(1);
+    QTest::newRow("truthtest-17") << trueV << true;
+  }
+  {
+    auto falseV = QVariant::fromValue<char>(0);
+    QTest::newRow("truthtest-18") << falseV << false;
+    auto trueV = QVariant::fromValue<char>(1);
+    QTest::newRow("truthtest-19") << trueV << true;
+  }
+
+  QTest::newRow("truthtest-20") << QVariant::fromValue(QString()) << false;
+  QTest::newRow("truthtest-21")
+      << QVariant::fromValue(QStringLiteral("")) << false;
+  QTest::newRow("truthtest-22")
+      << QVariant::fromValue(QStringLiteral("false")) << true;
+  QTest::newRow("truthtest-23")
+      << QVariant::fromValue(QStringLiteral("true")) << true;
+  QTest::newRow("truthtest-24")
+      << QVariant::fromValue(QStringLiteral("anystring")) << true;
+
+  {
+    QVariantList l;
+    QTest::newRow("truthtest-25") << QVariant::fromValue(l) << false;
+    l.append(1);
+    QTest::newRow("truthtest-26") << QVariant::fromValue(l) << true;
+  }
+  {
+    QVariantHash h;
+    QTest::newRow("truthtest-27") << QVariant::fromValue(h) << false;
+    h.insert(QStringLiteral("value"), 1);
+    QTest::newRow("truthtest-28") << QVariant::fromValue(h) << true;
+  }
+
+  {
+    QTest::newRow("truthtest-29")
+        << QVariant::fromValue<std::nullptr_t>(nullptr) << false;
+    auto plainO = new QObject(this);
+    QTest::newRow("truthtest-30") << QVariant::fromValue(plainO) << true;
+    auto trueO = new QObject(this);
+    trueO->setProperty("__true__", true);
+    QTest::newRow("truthtest-31") << QVariant::fromValue(trueO) << true;
+    auto falseO = new QObject(this);
+    falseO->setProperty("__true__", false);
+    QTest::newRow("truthtest-32") << QVariant::fromValue(falseO) << false;
+  }
+}
+
+void TestBuiltinSyntax::testTruthiness()
+{
+  QFETCH(QVariant, input);
+  QFETCH(bool, expected);
+
+  QVERIFY(variantIsTrue(input) == expected);
 }
 
 void TestBuiltinSyntax::testRenderAfterError()

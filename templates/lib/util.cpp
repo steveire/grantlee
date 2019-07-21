@@ -45,11 +45,23 @@ bool Grantlee::variantIsTrue(const QVariant &variant)
   case QVariant::Int: {
     return variant.value<int>() > 0;
   }
+  case QVariant::UInt: {
+    return variant.value<uint>() > 0;
+  }
+  case QVariant::LongLong: {
+    return variant.value<qlonglong>() > 0;
+  }
+  case QVariant::ULongLong: {
+    return variant.value<qulonglong>() > 0;
+  }
   case QVariant::Double: {
     return variant.value<double>() > 0;
   }
   case QMetaType::Float: {
     return variant.value<float>() > 0;
+  }
+  case QMetaType::Char: {
+    return variant.value<char>() > 0;
   }
   case QMetaType::QObjectStar: {
     auto obj = variant.value<QObject *>();
