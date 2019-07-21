@@ -133,5 +133,3 @@ if (Qt5LinguistTools_FOUND)
     target_compile_options(testinternationalization_exec PRIVATE "/utf-8")
   endif()
 endif()
-
-add_subdirectory(pluginpointertest)
