@@ -344,7 +344,7 @@ void TestBuiltinSyntax::testTruthiness_data()
 
   {
     QTest::newRow("truthtest-29")
-        << QVariant::fromValue<std::nullptr_t>(nullptr) << false;
+        << QVariant::fromValue<QObject*>(nullptr) << false;
     auto plainO = new QObject(this);
     QTest::newRow("truthtest-30") << QVariant::fromValue(plainO) << true;
     auto trueO = new QObject(this);
