@@ -40,39 +40,39 @@ environment:
     MINGW_PATH: C:\Qt\Tools\mingw492_32
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     CMAKE_GENERATOR: "Ninja"
-    QT5: C:\Qt\5.12.2\msvc2017
+    QT5: C:\Qt\5.12\msvc2017
     PLATFORM: X86
     VCVARSALL: "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat"
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     CMAKE_GENERATOR: "Ninja"
-    QT5: C:\Qt\5.12.2\msvc2017_64
+    QT5: C:\Qt\5.12\msvc2017_64
     PLATFORM: X64
     VCVARSALL: "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat"
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     CMAKE_GENERATOR: "Visual Studio 15"
-    QT5: C:\Qt\5.12.2\msvc2017
+    QT5: C:\Qt\5.12\msvc2017
     PLATFORM: X86
     VCVARSALL: "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat"
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     CMAKE_GENERATOR: "Visual Studio 15 Win64"
-    QT5: C:\Qt\5.12.2\msvc2017_64
+    QT5: C:\Qt\5.12\msvc2017_64
     PLATFORM: X64
     VCVARSALL: "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat"
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     CMAKE_GENERATOR: "NMake Makefiles JOM"
-    QT5: C:\Qt\5.12.2\msvc2017
+    QT5: C:\Qt\5.12\msvc2017
     PLATFORM: X86
     VCVARSALL: "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat"
   - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     CMAKE_GENERATOR: "NMake Makefiles JOM"
-    QT5: C:\Qt\5.12.2\msvc2017_64
+    QT5: C:\Qt\5.12\msvc2017_64
     PLATFORM: X64
     VCVARSALL: "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvarsall.bat"
   - CMAKE_GENERATOR: "MinGW Makefiles"
-    QT5: C:\Qt\5.12.2\mingw73_32
+    QT5: C:\Qt\5.12\mingw73_32
     MINGW_PATH: C:\Qt\Tools\mingw730_32
   - CMAKE_GENERATOR: "MinGW Makefiles"
-    QT5: C:\Qt\5.12.2\mingw73_64
+    QT5: C:\Qt\5.12\mingw73_64
     MINGW_PATH: C:\Qt\Tools\mingw730_64
 
 install:
