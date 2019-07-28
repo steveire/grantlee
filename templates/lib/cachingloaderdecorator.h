@@ -33,39 +33,39 @@ class CachingLoaderDecoratorPrivate;
 /// @headerfile cachingloaderdecorator.h grantlee/cachingloaderdecorator.h
 
 /**
- * @brief Implements a loader decorator which caches compiled Template objects.
- *
- * The CachingLoaderDecorator can be used with any implementation of
- * Grantlee::AbstractTemplateLoader.
- *
- * @code
- *   Grantlee::FileSystemTemplateLoader::Ptr loader( new
- * Grantlee::FileSystemTemplateLoader() );
- *   loader->setTemplateDirs({"/path/one", "/path/two"});
- *
- *   Grantlee::CachingLoaderDecorator::Ptr cache( new
- * Grantlee::CachingLoaderDecorator( loader ) );
- *   m_engine->addTemplateLoader( cache );
- * @endcode
- *
- * The effect is that templates do not need to be loaded from the filesystem and
- * compiled into Template
- * objects on each access, but may be returned from the cache instead.
- *
- * This can be significant if loading Templates in a loop, or loading the same
- * Template very often in an application.
- *
- * @code
- *   <ul>
- *   {% for item in list %}
- *     <li>{% include "itemtemplate.html" %}
- *   {% endfor %}
- *   </ul>
- * @endcode
- *
- * If the loading of Templates is a bottleneck in an application, it may make
- * sense to use the caching decorator.
- *
+  @brief Implements a loader decorator which caches compiled Template objects.
+
+  The **%CachingLoaderDecorator** can be used with any implementation of
+  Grantlee::AbstractTemplateLoader.
+
+  @code
+    auto loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>::create();
+    loader->setTemplateDirs({"/path/one", "/path/two"});
+
+    auto cache =
+        QSharedPointer<Grantlee::CachingLoaderDecorator>::create( loader );
+    m_engine->addTemplateLoader( cache );
+  @endcode
+
+  The effect is that templates do not need to be loaded from the filesystem and
+  compiled into Template objects on each access, but may be returned from the
+  cache instead.
+
+  This can be significant if loading Templates in a loop, or loading the same
+  Template very often in an application.
+
+  @code
+    <ul>
+    {% for item in list %}
+      <li>{% include "itemtemplate.html" %}</li>
+    {% endfor %}
+    </ul>
+  @endcode
+
+  If the loading of Templates is a bottleneck in an application, it may make
+  sense to use the caching decorator.
+
+  @author Stephen Kelly <steveire@gmail.com>
  */
 class GRANTLEE_TEMPLATES_EXPORT CachingLoaderDecorator
     : public AbstractTemplateLoader
@@ -89,17 +89,17 @@ public:
                       const Grantlee::Engine *engine) const override;
 
   /**
-   * Clears the Templates objects cached in the decorator.
+    Clears the Templates objects cached in the decorator.
    */
   void clear();
 
   /**
-   * Returns the number of Template objects cached in the decorator.
+    Returns the number of Template objects cached in the decorator.
    */
   int size() const;
 
   /**
-   * Returns whether the cache is empty.
+    Returns whether the cache is empty.
    */
   bool isEmpty() const;
 

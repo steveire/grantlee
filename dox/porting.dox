@@ -7,7 +7,7 @@ namespace Grantlee
   @page porting_from_qt4 Porting from Qt4-based Grantlee
 
   Several porting steps are necessary when porting code from %Grantlee 0.5 to
-  %Grantlee 5.0.
+  %Grantlee 5.0 and later.
 
   @section buildsystem_changes Buildsystem changes
 
@@ -31,9 +31,9 @@ namespace Grantlee
 
   @subsection use_imported_targets Use IMPORTED targets
 
-  The CMake <a href="http://www.cmake.org/cmake/help/v3.0/manual/cmake-packages.7.html">packages</a>
+  The CMake <a href="http://www.cmake.org/cmake/help/latest/manual/cmake-packages.7.html">packages</a>
   shipped with %Grantlee contain
-  <a href="http://www.cmake.org/cmake/help/v3.0/manual/cmake-buildsystem.7.html#imported-targets">IMPORTED targets</a>
+  <a href="http://www.cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#imported-targets">IMPORTED targets</a>
   which should be used with the <tt>target_link_libraries</tt> command. Variables such
   as <tt>Grantlee_TEMPLATES_LIBRARIES</tt> are no longer provided.
 
@@ -72,17 +72,17 @@ namespace Grantlee
 
   @subsection render_const Grantlee::Node::render method is now const
 
-  The virtual method render on Grantlee::Node is now const. User code which
+  The virtual method render on Grantlee::Node is now <tt>const</tt>. User code which
   creates custom plugins and overrides the render method must be updated to
-  add the const too.
+  add the <tt>const</tt> too.
 
   @subsection localized_template_loader LocalizedFileSystemTemplateLoader merged into FileSystemTemplateLoader
 
-  Users of LocalizedFileSystemTemplateLoader can now use FileSystemTemplateLoader instead.
+  Users of <tt>LocalizedFileSystemTemplateLoader</tt> can now use FileSystemTemplateLoader instead.
 
   @subsection ptr_typedefs QSharedPointer typedefs named "Ptr" have been removed.
 
-  Replace uses of FileSystemTemplateLoader::Ptr with QSharedPointer<FileSystemTemplateLoader> for example.
+  Replace uses of <tt>FileSystemTemplateLoader::Ptr</tt> with QSharedPointer<FileSystemTemplateLoader> for example.
 
 */
 

@@ -3,7 +3,7 @@ namespace Grantlee
 
 /**
 
-  @page for_app_dev Grantlee for application developers
+  @page for_app_dev %Grantlee for application developers
 
   Integrating %Grantlee into applications is very simple. This page describes
 
@@ -11,7 +11,6 @@ namespace Grantlee
   @li How to load Templates
   @li How to extend the syntax of %Grantlee
   @li Patterns of use of %Grantlee
-  @li Differences between Django and %Grantlee
 
   If you are not already familiar with Django template syntax and structure, start with @ref for_themers. If you are already familiar with Django, you might find @ref differences_django informative.
 
@@ -19,11 +18,11 @@ namespace Grantlee
 
   @subsection creating_templates Creating Templates
 
-  Rendering templates is also very easy in application code. A single Template may be rendered multiple times with different Context objects.
+  Rendering templates is very easy in application code. A single Template may be rendered multiple times with different Context objects.
 
   @code
-    Grantlee::Engine *engine = new Grantlee::Engine( this );
-    Grantlee::Template t = engine->newTemplate("My name is {{ name }}.", "my_template_name");
+    auto engine = new Grantlee::Engine( this );
+    auto t = engine->newTemplate("My name is {{ name }}.", "my_template_name");
     QVariantHash mapping;
     mapping.insert("name", "Grainne");
     Grantlee::Context c(mapping);
@@ -36,10 +35,10 @@ namespace Grantlee
     t->render(&c); // Returns "My name is Henry."
   @endcode
 
-  Ususally, applications will not create a Template directly, but instead use a Grantlee::Engine to load external files. This allows artists to define the template without needing to recompile.
+  Usually, applications do not create a Template directly, but instead use a Grantlee::Engine to load external files. This allows artists to define the template without needing to recompile.
 
   @code
-    Grantlee::Template t = engine->loadByName("template.html");
+    auto t = engine->loadByName("template.html");
 
     t->render(&c)
   @endcode
@@ -53,8 +52,7 @@ namespace Grantlee
     mapping.insert("mydouble", 6.5); // Can insert doubles
     mapping.insert("mybool", false); // Can insert bools
 
-    QVariantList mylist;
-    mylist << "Ingrid" << 3;
+    QVariantList mylist{"Ingrid", 3};
     mapping.insert("mylist", mylist); // Can insert QVariantList
 
     QVariantHash myhash;
@@ -62,8 +60,8 @@ namespace Grantlee
     myhash.insert("Kiera", "Dreamer");
     mapping.insert("myhash", myhash); // Can insert QVariantHash
 
-    QObject *obj;
-    QVariant objVar = QVariant::fromValue(obj);
+    QObject *obj = getObj();
+    auto objVar = QVariant::fromValue(obj);
     mapping.insert("myobject", objVar); // Can insert QObject*
   @endcode
 
@@ -82,7 +80,7 @@ namespace Grantlee
 
   @subsection custom_objects Custom objects
 
-  As already noted, <tt>QObject*</tt> can be inserted into templates. The recommended way to insert custom objects into templates is to create QObject wrappers for your objects. As QObject is introspectable, this will allow lookups to work in a way you define.
+  Instances of <tt>QObject*</tt> can be inserted into templates. The recommended way to insert custom objects into templates is to create QObject wrappers for your objects. As QObject is introspectable, this will allow lookups to work in a way you define.
 
   @note If you are already familiar with Django you will know that creating wrappers is not necessary in Django. That is because python objects are already fully introspectable.
 
@@ -106,7 +104,7 @@ namespace Grantlee
 
     ...
 
-    PersonWrapper *linda = new PersonWrapper("Linda", 21);
+    auto linda = new PersonWrapper("Linda", 21);
 
     mapping.insert("person", linda);
 
@@ -118,17 +116,17 @@ namespace Grantlee
     // The name is Linda and age is .
   @endcode
 
-  Note that the 'name' of person is accessible in the template, but the 'age' is not. Note also that rendering fails silently if the method can not be found. Only methods which have a corresponding Q_PROPERTY declaration are accessible from templates. To make age accessible in the template, we would need to add
+  Note that the <tt>'name'</tt> of <tt>PersonWrapper</tt> is accessible in the template, but the <tt>'age'</tt> is not. Note also that rendering fails silently if the method can not be found. Only methods which have a corresponding <tt>Q_PROPERTY</tt> declaration are accessible from templates. To make <tt>age</tt> accessible in the template, we would need to add
 
   @verbatim
     Q_PROPERTY(int age READ age)
   @endverbatim
 
-  to the class. Note also that those methods are const. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are const. It is also possible to lookup dynamic properties of QObjects. In the case of dynamic properties, the property name must be UTF-8 encoded.
+  to the class. Note also that those methods are <tt>const</tt>. Rendering a template should never change an object it is rendering. Always make sure the READ properties of your wrapper objects are <tt>const</tt>. It is also possible to lookup dynamic properties of <tt>QObject</tt>s. In the case of dynamic properties, the property name must be UTF-8 encoded.
 
-  If you already have QObjects in your application which would be suitable for use in templates, you only need to add some Q_PROPERTY entries to the classes to make them accessible to %Grantlee.
+  If you already have <tt>QObject</tt>s in your application which would be suitable for use in templates, you only need to add some <tt>Q_PROPERTY</tt> entries to the classes to make them accessible to %Grantlee.
 
-  @note If you are familiar with Django you may be aware of the alters_data attribute for methods. This method of using wrappers and const is the equivalent to the alters_data attribute. You the wrapper writer choose the properties which will be accessible from the templates and makes them const, so there's no need to mark other methods as alters_data.
+  @note If you are familiar with Django you may be aware of the <tt>alters_data</tt> attribute for methods. This method of using wrappers and <tt>const</tt> is the equivalent to the <tt>alters_data</tt> attribute. You the wrapper writer choose the properties which will be accessible from the templates and makes them <tt>const</tt>, so there's no need to mark other methods as <tt>alters_data</tt>.
 
   For most uses of %Grantlee, this is enough to get make an application themable easily and quickly. For more advanced usage, see @ref extension. For some example uses of %Grantlee, see @ref examples.
 
@@ -136,7 +134,7 @@ namespace Grantlee
 
   The broad introspection features of Qt5 are relied upon by %Grantlee via the <tt>Q_PROPERTY</tt> macro.  Most types used with that macro may be accessed in %Grantlee templates without further code. 
 
-  We can define a Home object like this:
+  We can define a <tt>Home</tt> type like this:
 
   @code
     class Home : public QObject
@@ -148,10 +146,9 @@ namespace Grantlee
     public:
         // ...
     };
-    Q_DECLARE_METATYPE(Home*)
   @endcode
 
-  And we can use it in a <tt>Q_PROPERTY</tt> macro in our PersonWrapper type:
+  And we can use it in a <tt>Q_PROPERTY</tt> macro in our <tt>PersonWrapper</tt> type:
 
   @code
     class PersonWrapper : public QObject
@@ -201,12 +198,12 @@ namespace Grantlee
 
   @subsection generic_variables
 
-  An alternative to writing wrapper QObject classes with Q_PROPERTY macros is to use the Grantlee::MetaType system to provide introspection
+  An alternative to writing wrapper QObject classes with <tt>Q_PROPERTY</tt> macros is to use the Grantlee::MetaType system to provide introspection
   for any type or any container. This subject is treated in detail in @ref generic_types_and_templates
 
   @subsection enumerator_variables Enumerators
 
-  %Grantlee has built-in support for enumerators which use the Q_ENUMS macro.
+  %Grantlee has built-in support for enumerators which use the <tt>Q_ENUMS</tt> macro.
 
   @code
   class MyClass : public QObject

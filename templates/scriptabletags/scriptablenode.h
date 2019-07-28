@@ -63,7 +63,7 @@ public:
   ScriptableNodeFactory(QObject *parent = {});
   void setScriptEngine(QJSEngine *engine);
 
-  /* reimp */ void setEngine(Grantlee::Engine *engine) override;
+  void setEngine(Grantlee::Engine *engine) override;
   void setFactory(const QJSValue &factoryMethod);
 
   Node *getNode(const QString &tagContent, Parser *p = {}) const override;

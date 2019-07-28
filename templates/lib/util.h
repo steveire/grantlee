@@ -73,7 +73,8 @@ GRANTLEE_TEMPLATES_EXPORT bool isSafeString(const QVariant &input);
 /**
   Returns true if the type of @p input can be inserted into a rendered template
   directly.
-  Not that lists, hashes and QObject*s can not be.
+
+  Note that lists, hashes and QObject*s can not be.
 */
 GRANTLEE_TEMPLATES_EXPORT bool supportedOutputType(const QVariant &input);
 

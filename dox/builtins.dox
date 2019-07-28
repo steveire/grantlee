@@ -6,11 +6,11 @@ namespace Grantlee
 
   @section django_builtins Tags and filters ported from Django
 
-  See the <a href="https://docs.djangoproject.com/en/1.9/ref/templates/builtins/">Builtins documentation for Django 1.1</a> for an overview of the builtin tags and filters available in %Grantlee. Almost all tags and filter in django are available in %Grantlee. Exceptions are <a href="https://docs.djangoproject.com/en/1.9/ref/templates/builtins/#url">the url tag</a>, because %Grantlee does not have a views system. Additionally the ssi tag is disabled because of potential security risks. The dictdort, dictsortreversed, filesizeformat, iriencode, phone2numeric, pluralize, pprint, title, truncatewords_html, urlencode, urlize and urlizetrunc filters have not yet been ported due to time constraints.
+  See the <a href="https://docs.djangoproject.com/en/1.9/ref/templates/builtins/">Builtins documentation for Django 1.9</a> for an overview of the builtin tags and filters available in %Grantlee. Almost all tags and filter in django are available in %Grantlee. Exceptions are <a href="https://docs.djangoproject.com/en/1.9/ref/templates/builtins/#url">the <tt>url tag</tt></a>, because %Grantlee does not have a views system. Additionally the <tt>ssi</tt> tag is disabled because of potential security risks. The <tt>dictdort</tt>, <tt>dictsortreversed</tt>, <tt>filesizeformat</tt>, <tt>iriencode</tt>, <tt>phone2numeric</tt>, <tt>pluralize</tt>, <tt>pprint</tt>, <tt>title</tt>, <tt>truncatewords_html</tt>, <tt>urlencode</tt>, <tt>urlize</tt> and <tt>urlizetrunc</tt> filters have not yet been ported due to time constraints.
 
   @section grantlee_extras Additional tags available in Grantlee
 
-  %Grantlee also provides some extra tags not available in DJango.
+  %Grantlee also provides some extra tags not available in Django.
 
   @subsection media_finder_tag media_finder
 
@@ -22,9 +22,9 @@ namespace Grantlee
     <img src="{% media_finder "someimage.png" %}" />
   @endcode
 
-  The media_finder tag retrieves the result through Engine::mediaUri, which in turn queries the TemplateLoaders for the URL to return via the TemplateLoader::getMediaUri interface.
+  The <tt>media_finder</tt> tag retrieves the result through Engine::mediaUri, which in turn queries the TemplateLoaders for the URL to return via the AbstractTemplateLoader::getMediaUri interface.
 
-  It is possible to configure whether absolute or relative urls are created by using the Context::setUrlType method. If the path to external media is not the same as the path to the template, the Context::setRelativeMediaPath method can be used to specify a relative base path. For example, if creating a template <tt>/home/user/myoutput.html</tt> which references someimage.png, the path "myoutput_media/" can be set so that the @gr_tag{media_finder} puts the path <tt>myoutput_media/someimage.png</tt> into the template. This way the output and the media it references are portable together.
+  It is possible to configure whether absolute or relative urls are created by using the Context::setUrlType method. If the path to external media is not the same as the path to the template, the Context::setRelativeMediaPath method can be used to specify a relative base path. For example, if creating a template <tt>/home/user/myoutput.html</tt> which references <tt>someimage.png</tt>, the path <tt>"myoutput_media/"</tt> can be set so that the @gr_tag{media_finder} puts the path <tt>myoutput_media/someimage.png</tt> into the template. This way the output and the media it references are portable together.
 
   It is the responsibility of the caller to copy the media to the <tt>/home/user/myoutput_media/</tt> directory.
 

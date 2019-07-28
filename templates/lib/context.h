@@ -36,15 +36,15 @@ class ContextPrivate;
 /// @headerfile context.h grantlee/context.h
 
 /**
-  @brief The Context class holds the context to render a template with.
+  @brief The **%Context** class holds the context to render a Template with.
 
-  For application developers, using the Context class is a matter of inserting
-  keys and
-  values as appropriate for rendering a template using the insert method.
+  For application developers, using the **%Context** class is a matter of
+  inserting keys and values as appropriate for rendering a Template using the
+  @ref insert method.
 
   @code
-    Template t = engine->newTemplate( "Name is {% name %} and age is {% age
-  %}.", "some_template" );
+    auto t = engine->newTemplate(
+        "Name is {% name %} and age is {% age %}.", "some_template" );
 
     Context c1;
     c1.insert( "name", "Tom" );
@@ -59,22 +59,22 @@ class ContextPrivate;
   @endcode
 
   Note that one Template may be rendered multiple times with different contexts.
-  Note also that any QVariant may be inserted
-  into a Context object. Most commonly, QObjects will be used here.
+  Note also that any QVariant may be inserted into a **%Context** object. Most
+  commonly, QObjects will be used here.
   @see @ref custom_objects
 
   @section context_stack Context Stack.
 
-  For template tag developers, some other Context API is relevant.
+  For template tag developers, some other **%Context** API is relevant.
 
-  It is possible to push and pop layers of context while a template is being
-  rendered. This is useful if your template
-  tag makes additional variables temporarily available in a part of a template.
-  Template tags should only modify layers of context
-  that they push themselves, and should pop any layers created before finishing
-  its rendering step.
+  It is possible to @ref push and @ref pop layers of context while a template
+  is being rendered.  This is useful if your template tag makes additional
+  variables temporarily available in a part of a template.  %Template tags
+  should only modify layers of context that they @ref push themselves, and
+  should @ref pop any layers created before finishing its rendering step.
 
   See for example the @gr_tag{with} tag. In a template such as
+
   @code
     Some content
     {% with person.name|toUpper as lowerName %}
@@ -97,9 +97,9 @@ class ContextPrivate;
     }
   @endcode
 
-  Note that a context may temporarily override a variable in a parent context.
-  This is why it is important to push a new context when
-  adding items to context and pop it when finished.
+  Note that a **%Context** may temporarily override a variable in a parent
+  context. This is why it is important to @ref push a new context when adding
+  items to context and @ref pop it when finished.
 
   @code
     Some content
@@ -165,14 +165,14 @@ public:
   QVariant lookup(const QString &str) const;
 
   /**
-    Insert the context object @p object identified by @p name into the
-    Context.
+    Insert the context object @p object identified by @p name into
+    the **%Context**.
   */
   void insert(const QString &name, QObject *object);
 
   /**
-    Insert the context object @p variant identified by @p name into the
-    Context.
+    Insert the context object @p variant identified by @p name into
+    the **%Context**.
   */
   void insert(const QString &name, const QVariant &variant);
 
@@ -219,9 +219,9 @@ public:
 #endif
 
   /**
-    Sets the localizer to be used.
+    Sets the @p localizer to be used.
 
-    The Context takes ownerwhip of the localizer.
+    The **%Context** takes ownerwhip of the localizer.
   */
   void setLocalizer(QSharedPointer<AbstractLocalizer> localizer);
 
@@ -257,6 +257,7 @@ public:
   /**
     Sets the relative path to external media to be used in templates to @p
     relativePath
+
     @see @ref media_finder_tag
   */
   void setRelativeMediaPath(const QString &relativePath);
@@ -267,11 +268,9 @@ public:
   QString relativeMediaPath() const;
 
   /**
-   * Returns a modifiable RenderContext for the Node @p scopeNode. This may be
-   * used to make
-   * Template rendering threadsafe so that render state does not need to be
-   * stored in the
-   * Node implementation itself.
+    Returns a modifiable RenderContext. This may be used to make
+    Template rendering threadsafe so that render state does not need to be
+    stored in the Node implementation itself.
    */
   RenderContext *renderContext() const;
 

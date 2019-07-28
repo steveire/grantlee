@@ -37,12 +37,11 @@ class Node;
 class RenderContextPrivate;
 
 /**
- * @brief Provides storage facility for state while rendering a template.
- *
- * This class can not be instatiated by users of it. An instance of
- * RenderContext is available
- * through Context::renderContext() for use with implementations of re-entrant
- * template tags.
+   @brief Provides storage facility for state while rendering a template.
+
+   This class can not be instatiated by users of it. An instance
+   of **%RenderContext** is available through Context::renderContext() for use
+   with implementations of re-entrant template tags.
  */
 class GRANTLEE_TEMPLATES_EXPORT RenderContext
 {
@@ -53,7 +52,7 @@ public:
   QVariant &data(const Node *const scopeNode);
 
   /**
-    Returns whether the RenderContext contains data for @p scopeNode.
+    Returns whether the **%RenderContext** contains data for @p scopeNode.
    */
   bool contains(Node *const scopeNode) const;
 

@@ -36,13 +36,12 @@ class ParserPrivate;
 /// @headerfile parser.h grantlee/parser.h
 
 /**
-  @brief The Parser class processes a string template into a tree of nodes.
+  @brief The **%Parser** class processes a string template into a tree of nodes.
 
   For application developers, this class is internal.
 
   For template tag authors it may be necessary to advance the parser and process
-  contained tags if
-  the tag works in a tag -- endtag fashion.
+  contained tags if the tag works in a tag -- endtag fashion.
 
   @author Stephen Kelly <steveire@gmail.com>
 */
@@ -53,7 +52,7 @@ public:
   /**
     Constructor.
 
-    Initialises the Parser with the @p tokenList.
+    Initialises the **%Parser** with the @p tokenList.
   */
   Parser(const QList<Token> &tokenList, QObject *parent);
 
@@ -64,14 +63,12 @@ public:
 
   /**
     Advance the parser, using @p parent as the parent of new Nodes. The parser
-    will stop
-    if it encounters a tag which is contained in the list @p stopAt.
+    will stop if it encounters a tag which is contained in the list @p stopAt.
 
     For example, the @gr_tag{if} tag would stopAt both @gr_tag{endif} and
     @gr_tag{else} tags.
 
     @see AbstractNodeFactory::getNode
-
   */
   NodeList parse(Node *parent, const QStringList &stopAt = {});
 
@@ -94,22 +91,18 @@ public:
   QSharedPointer<Filter> getFilter(const QString &name) const;
 
   /**
-    Advances the parser to the tag @p tag. This method is similar to parse,
-    but
-    it does not create
-    nodes for tags encountered.
+    Advances the parser to the tag @p tag. This method is similar to @ref parse,
+    but it does not create nodes for tags encountered.
   */
   void skipPast(const QString &tag);
 
   /**
     Returns the next token to be processed by the parser. This can be examined
-    in template tag implementations to
-    determine why parsing stopped.
+    in template tag implementations to determine why parsing stopped.
 
     For example, if the @gr_tag{if} tag, parsing may stop at an @gr_tag{else}
-    tag, in which case parsing
-    should be restarted, or it could stop at an @gr_tag{endif} tag, in which
-    case parsing is finished for that node.
+    tag, in which case parsing should be restarted, or it could stop at an
+    @gr_tag{endif} tag, in which case parsing is finished for that node.
   */
   Token takeNextToken();
 

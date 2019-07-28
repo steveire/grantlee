@@ -34,7 +34,7 @@ class Filter;
 /// @headerfile taglibraryinterface.h grantlee/taglibraryinterface.h
 
 /**
-  @brief The TagLibraryInterface returns available tags and filters from
+  @brief The **%TagLibraryInterface** returns available tags and filters from
   libraries.
 
   This interface must be implemented in tag and filter libraries.
@@ -51,8 +51,8 @@ class Filter;
           : QObject( parent ) {
       }
 
-      QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name =
-  QString() ) {
+      QHash<QString, AbstractNodeFactory*>
+      nodeFactories(const QString &name = {}) {
         Q_UNUSED( name );
         QHash<QString, AbstractNodeFactory*> nodeFactories;
         nodeFactories.insert( "mytag1", new MyTag1() );
@@ -60,7 +60,7 @@ class Filter;
         return nodeFactories;
       }
 
-      QHash<QString, Filter*> filters( const QString &name = QString() ) {
+      QHash<QString, Filter*> filters( const QString &name = {} ) {
         Q_UNUSED( name );
 
         QHash<QString, Filter*> filters;

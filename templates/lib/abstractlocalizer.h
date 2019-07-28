@@ -37,6 +37,8 @@ namespace Grantlee
 
   This class defines an interface for accessing an internationalization, such as
   QLocale/QTranslator or gettext/KLocale.
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_TEMPLATES_EXPORT AbstractLocalizer
 {
@@ -138,8 +140,7 @@ public:
 
   /**
     Localizes @p string or its @p pluralForm with the specified @p arguments
-    for
-    substitution
+    for substitution
   */
   virtual QString
   localizePluralString(const QString &string, const QString &pluralForm,

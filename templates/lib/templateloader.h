@@ -40,9 +40,8 @@ class AbstractLocalizer;
   of Templates.
 
   The interface of this class should not be called directly from applications.
-  TemplateLoaders will typically
-  be created, configured and added to the Grantlee::Engine which will call the
-  appropriate API.
+  TemplateLoaders will typically be created, configured and added to the
+  Grantlee::Engine which will call the appropriate API.
 
   @author Stephen Kelly <steveire@gmail.com>
 */
@@ -56,8 +55,7 @@ public:
 
   /**
     Load a Template called @p name. Return an invalid Template if no content
-    by
-    that name exists.
+    by that name exists.
   */
   virtual Template loadByName(const QString &name,
                               Engine const *engine) const = 0;
@@ -79,11 +77,11 @@ public:
 class FileSystemTemplateLoaderPrivate;
 
 /**
-  @brief The FileSystemTemplateLoader loads Templates from the file system.
+  @brief The **%FileSystemTemplateLoader** loads Templates from the file system.
 
   This template loader works by traversing a list of directories to find
-  templates. Directories
-  are checked in order, and the first match hit is parsed and returned.
+  templates. Directories are checked in order, and the first match hit is parsed
+  and returned.
 
   @code
     loader->setTemplateDirs({
@@ -130,7 +128,7 @@ class FileSystemTemplateLoaderPrivate;
     engine->mediaUri( "logo.png" );
   @endcode
 
-  The template files loaded by a %FileSystemTemplateLoader must be UTF-8
+  The template files loaded by a %**FileSystemTemplateLoader** must be UTF-8
   encoded.
 
   @see @ref deploying_templates
@@ -185,13 +183,14 @@ private:
 /// @headerfile templateloader.h grantlee/templateloader.h
 
 /**
-  @brief The InMemoryTemplateLoader loads Templates set dynamically in memory
+  @brief The **%InMemoryTemplateLoader** loads Templates set dynamically in
+  memory
 
   This class is mostly used for testing purposes, but can also be used for
   simple uses of %Grantlee.
 
-  Templates can be made available using the setTemplate method, and will then be
-  retrieved by the Grantlee::Engine as appropriate.
+  Templates can be made available using the @ref setTemplate method, and will
+  then be retrieved by the Grantlee::Engine as appropriate.
 */
 class GRANTLEE_TEMPLATES_EXPORT InMemoryTemplateLoader
     : public AbstractTemplateLoader

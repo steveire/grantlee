@@ -25,6 +25,7 @@
 #include <QtCore/QFileInfo>
 #include <QtTest/QTest>
 
+#include "cachingloaderdecorator.h"
 #include "context.h"
 #include "coverageobject.h"
 #include "engine.h"
@@ -99,7 +100,7 @@ public:
 
   QSharedPointer<OutputStream> clone(QTextStream *stream) const override
   {
-    return QSharedPointer<OutputStream>(new NoEscapeOutputStream(stream));
+    return QSharedPointer<NoEscapeOutputStream>::create(stream);
   }
 
   QString escape(const QString &input) const override { return input; }
@@ -114,7 +115,7 @@ public:
 
   QSharedPointer<OutputStream> clone(QTextStream *stream) const override
   {
-    return QSharedPointer<OutputStream>(new JSOutputStream(stream));
+    return QSharedPointer<JSOutputStream>::create(stream);
   }
 
   QString escape(const QString &input) const override
@@ -232,6 +233,15 @@ private:
 
 void TestBuiltinSyntax::testObjects()
 {
+  {
+    auto loader = QSharedPointer<Grantlee::FileSystemTemplateLoader>::create();
+    loader->setTemplateDirs(
+        {QStringLiteral("/path/one"), QStringLiteral("/path/two")});
+
+    auto cache
+        = QSharedPointer<Grantlee::CachingLoaderDecorator>::create(loader);
+  }
+
   Context c1, c2;
   c1 = c1;
   c1 = c2;

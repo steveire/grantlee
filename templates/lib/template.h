@@ -46,23 +46,24 @@ class TemplatePrivate;
 /// @headerfile template.h grantlee/template.h
 
 /**
-  @brief The Template class is a tree of nodes which may be rendered.
+  @brief The **%Template** class is a tree of nodes which may be rendered.
 
   All Templates are created through the Grantlee::Engine class.
-  A template is created by parsing some text markup passed into the Engine, or
-  by
-  reading it from a file.
+  A **%Template** is created by parsing some text markup passed into the Engine,
+  or by reading it from a file.
 
-  Note that Template is actually a typedef for a QSharedPointer<TemplateImpl>,
-  so all of its members should be accessed with operator->().
+  Note that **%Template** is actually a typedef for a
+  <tt>QSharedPointer&lt;TemplateImpl&gt;</tt>, so all of its members should be
+  accessed with <tt>operator-&gt;()</tt>.
 
-  The result of parsing is a Template object which can be rendered multiple
+  The result of parsing is a **%Template** object which can be rendered multiple
   times with multiple different Contexts.
 
   @code
-    Engine *engine = getEngine();
-    Template t = engine->newTemplate( "{{ name }} is aged {{ age }}", "simple
-  template" );
+    auto engine = getEngine();
+    auto t = engine->newTemplate(
+        "{{ name }} is aged {{ age }}",
+        "simple template" );
     if ( t->error() )
     {
       // Tokenizing or parsing error, or couldn't find custom tags or filters.
@@ -86,8 +87,8 @@ class TemplatePrivate;
     }
   @endcode
 
-  If there is an error in parsing or rendering, the error and errorString
-  methods can be used to check the source of the error.
+  If there is an error in parsing or rendering, the @ref error and @ref
+  errorString methods can be used to check the source of the error.
 
   @author Stephen Kelly <steveire@gmail.com>
 */
@@ -98,12 +99,12 @@ public:
   ~TemplateImpl() override;
 
   /**
-    Renders the template to a string given the Context @p c.
+    Renders the **%Template** to a string given the Context @p c.
   */
   QString render(Context *c) const;
 
   /**
-    Renders the Template to the OutputStream @p stream given the Context c.
+    Renders the **%Template** to the OutputStream @p stream given the Context c.
   */
   OutputStream *render(OutputStream *stream, Context *c) const;
 
@@ -130,7 +131,7 @@ public:
   QString errorString() const;
 
   /**
-    Returns the Engine that created this Template.
+    Returns the Engine that created this **%Template**.
   */
   Engine const *engine() const;
 
@@ -144,8 +145,7 @@ protected:
 
 private:
   // Don't allow setting the parent on a Template, which is memory managed as
-  // a
-  // QSharedPointer.
+  // a QSharedPointer.
   using QObject::setParent;
 
 private:

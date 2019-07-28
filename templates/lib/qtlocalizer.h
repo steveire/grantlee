@@ -33,22 +33,21 @@ class QtLocalizerPrivate;
 /**
   @brief Provides internationalization based on QLocale and QTranslator.
 
-  This class implements access to the Qt Localization system. Localizaable types
-  such
-  as strings, numbers, dates and times can be processed.
+  This class implements access to the %Qt Localization system. Localizable
+  types such as strings, numbers, dates and times can be processed.
 
   @code
-    Template t = m_engine->loadTemplate(someTemplate);
-    Context c = getContext();
+    auto t = m_engine->loadTemplate(someTemplate);
+    auto c = getContext();
 
     // Render with the German locale
     c.setLocalizer(m_de_Localizer);
-    QString deText = t->render(&c);
+    auto deText = t->render(&c);
     de_display->setText(deText);
 
     // Render with the French locale
     c.setLocalizer(m_fr_Localizer);
-    QString frText = t->render(&c);
+    auto frText = t->render(&c);
     fr_display->setText(frText);
   @endcode
 
@@ -57,7 +56,7 @@ class GRANTLEE_TEMPLATES_EXPORT QtLocalizer : public AbstractLocalizer
 {
 public:
   /**
-    Constructs a new QtLocalizer using the @p locale
+    Constructs a new **%QtLocalizer** using the @p locale
   */
   QtLocalizer(const QLocale &locale = QLocale::system());
 
@@ -72,10 +71,9 @@ public:
   void setAppTranslatorPath(const QString &path);
 
   /**
-    Set the prefix of translation files. For example, if the German
-    translation
-    file is called <tt>myapp_de_DE.qm</tt>,
-    the prefix should be set to <tt>myapp_</tt>.
+    Set the prefix of translation files. For example, if the German translation
+    file is called <tt>myapp_de_DE.qm</tt>, the prefix should be set to
+    <tt>myapp_</tt>.
    */
   void setAppTranslatorPrefix(const QString &prefix);
 
@@ -83,8 +81,8 @@ public:
     Install a @p translator to use for a particular @p localeName.
 
     @code
-      QTranslator *deTranslator = new QTranslator(this);
-      bool loaded = deTranslator->load("myapp_de_DE");
+      auto deTranslator = new QTranslator(this);
+      auto loaded = deTranslator->load("myapp_de_DE");
       if (!loaded)
         return;
 

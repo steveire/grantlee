@@ -34,11 +34,11 @@ class SafeString;
 /// @headerfile outputstream.h grantlee/outputstream.h
 
 /**
-  @brief The OutputStream class is used to render templates to a QTextStream
+  @brief The **%OutputStream** class is used to render templates to a
+  QTextStream
 
-  A OutputStream instance may be passed to the render method of a Template to
-  render
-  the template to a stream.
+  A **%OutputStream** instance may be passed to the render method of a Template
+  to render the template to a stream.
 
   @code
     QFile outputFile("./output");
@@ -49,13 +49,13 @@ class SafeString;
     t->render( &os, &context );
   @endcode
 
-  The OutputStream is used to escape the content streamed to it. By default, the
-  escaping is html escaping, converting "&" to "&amp;" for example. If
-  generating non-html output, the escape method may be overriden to perform a
-  different escaping, or non at all.
+  The **%OutputStream** is used to escape the content streamed to it. By
+  default, the escaping is html escaping, converting "&" to "&amp;" for example.
+  If generating non-html output, the @ref escape method may be overriden to
+  perform a different escaping, or non at all.
 
-  If overriding the escape method, the clone method must also be overriden to
-  return an OutputStream with the same escaping behaviour.
+  If overriding the @ref escape method, the @ref clone method must also be
+  overriden to return an **%OutputStream** with the same escaping behaviour.
 
   @code
     class NoEscapeStream : public Grantlee::OutputStream
@@ -70,9 +70,7 @@ class SafeString;
 
       QSharedPointer<OutputStream> clone( QTextStream *stream ) const
       {
-        QSharedPointer<OutputStream> clonedStream =
-  QSharedPointer<OutputStream>( new NoEscapeStream( stream ) );
-        return clonedStream;
+        return QSharedPointer<NoEscapeStream>::create( stream );
       }
     };
   @endcode
@@ -83,14 +81,14 @@ class GRANTLEE_TEMPLATES_EXPORT OutputStream
 {
 public:
   /**
-    Creates a null OutputStream. Content streamed to this OutputStream is sent
-    to /dev/null
+    Creates a null **%OutputStream**. Content streamed to
+    this **%OutputStream** is sent to <tt>/dev/null</tt>
   */
   OutputStream();
 
   /**
-    Creates an OutputStream which will stream content to @p stream with
-    appropriate escaping.
+    Creates an **%OutputStream** which will stream content to @p stream
+    with appropriate escaping.
   */
   explicit OutputStream(QTextStream *stream);
 
@@ -112,13 +110,13 @@ public:
   QString escape(const SafeString &input) const;
 
   /**
-    Returns an cloned OutputStream with the same filtering behaviour.
+    Returns a cloned **%OutputStream** with the same filtering behaviour.
   */
   virtual QSharedPointer<OutputStream> clone(QTextStream *stream) const;
 
   /**
-    Returns @p after escaping it, unless @p input is "safe", in which case, @p
-    input is returned unmodified.
+    Returns @p after escaping it, unless @p input is "safe", in which case,
+    @p input is returned unmodified.
   */
   QString conditionalEscape(const Grantlee::SafeString &input) const;
 

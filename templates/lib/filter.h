@@ -37,22 +37,24 @@ namespace Grantlee
 /// @headerfile filter.h grantlee/filter.h
 
 /**
-  @brief Base class for all filters
+  @brief Base class for all filters.
 
-  The Filter class can be implemented in plugin libraries to make additional
-  functionality available to templates.
+  The **%Filter** class can be implemented in plugin libraries to make
+  additional functionality available to templates.
 
-  Developers are required only to implement the doFilter method and integrate
-  the filter as part of a custom plugin, but will never create or access filters
-  directly in application code.
+  Developers are required only to implement the @ref doFilter method and
+  integrate the filter as part of a custom plugin, but will never create or
+  access filters directly in application code.
 
-  The FilterExpression class is the access interface to a chain of Filter
+  The FilterExpression class is the access interface to a chain of **%Filter**
   objects.
 
-  The escape and conditionalEscape methods are available for escaping data where
-  needed.
+  The @ref escape and @ref conditionalEscape methods are available for escaping
+  data where needed.
 
   @see @ref filters
+
+  @author Stephen Kelly <steveire@gmail.com>
 */
 class GRANTLEE_TEMPLATES_EXPORT Filter
 {
@@ -90,6 +92,7 @@ public:
 
   /**
     Reimplement to filter @p input given @p argument.
+
     @p autoescape determines whether the autoescape feature is currently on or
     off. Most filters will not use this.
 

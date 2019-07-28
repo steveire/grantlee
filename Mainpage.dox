@@ -29,14 +29,16 @@ namespace Grantlee
     <tr><th class="library" colspan="3">%Grantlee Templates</th></tr>
     <tr><th class="section" >Application API</th><th class="section">%Plugin API</th><th class="section">Guides</th></tr>
     <tr><td>
+      - AbstractLocalizer
+      - AbstractTemplateLoader
+      - CachingLoaderDecorator
       - Context
       - Engine
-      - OutputStream
-      - Template
-      - AbstractTemplateLoader
       - FileSystemTemplateLoader
-      - AbstractLocalizer
+      - InMemoryTemplateLoader
+      - OutputStream
       - QtLocalizer
+      - Template
     </td><td>
       - AbstractNodeFactory
       - Exception
@@ -45,6 +47,7 @@ namespace Grantlee
       - Node
       - NodeList
       - Parser
+      - RenderContext
       - SafeString
       - TagLibraryInterface
       - Variable
