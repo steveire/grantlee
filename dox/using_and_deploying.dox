@@ -58,7 +58,7 @@ namespace Grantlee
     }
   @endcode
 
-  It is also possible to compile the templates into a <a href="http://qt.nokia.com/doc/4.5/resources.html">Qt Resource</a> file and set the resource URL on the TemplateLoader.
+  It is also possible to compile the templates into a <a href="https://doc.qt.io/qt-5/resources.html">Qt Resource</a> file and set the resource URL on the TemplateLoader.
 
   @code
     # my_app_templates.qrc:
@@ -101,7 +101,7 @@ namespace Grantlee
     engine->addTemplateLoader( override_loader );
   @endcode
 
-  Additionally, the <a href="http://qt.nokia.com/doc/4.5/resources.html#external-binary-resources">External binary resources</a> feature could be used to allow savvy users to share themes/templates in a package, or to deploy updated templates easily to existing deployed applications.
+  Additionally, the <a href="https://doc.qt.io/qt-5/resources.html#external-binary-resources">External binary resources</a> feature could be used to allow savvy users to share themes/templates in a package, or to deploy updated templates easily to existing deployed applications.
 
   @section finding_plugins Finding tags and filters
 

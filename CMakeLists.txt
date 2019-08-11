@@ -171,7 +171,7 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
 
   # Available from http://gcc.gnu.org/onlinedocs/libstdc++/latest-doxygen/libstdc++.tag
   set(STLTAGFILE "${CMAKE_SOURCE_DIR}/scripts/libstdc++.tag=http://gcc.gnu.org/onlinedocs/libstdc++/latest-doxygen")
-  set(QTTAGFILE "${CMAKE_SOURCE_DIR}/scripts/qttags.tag=http://qt.nokia.com/doc/${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}")
+  set(QTTAGFILE "${CMAKE_SOURCE_DIR}/scripts/qttags.tag=https://doc.qt.io/qt-5/")
 
   set(TAGFILES "${QTTAGFILE} ${STLTAGFILE}")
   set(DOCS_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
