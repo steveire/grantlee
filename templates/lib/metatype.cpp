@@ -182,7 +182,7 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
         return QVariant();
       }
       const auto mp = mo->property(idx);
-      return mp.readOnGadget(&object);
+      return mp.readOnGadget(object.constData());
     }
   }
 
