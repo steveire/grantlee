@@ -200,18 +200,18 @@ namespace Grantlee
   </b>
   </center>
 
-  The appropriate options may be specified in the cmake gui, or on the command line.
+  The appropriate options may be specified in the cmake gui, or on the command line using the <tt>BUILD_TEXTDOCUMENT</tt> or <tt>BUILD_TEMPLATES</tt> CMake options.
 
   @code
     mkdir build && cd build
-    cmake .. -DBUILD_GUI:BOOL=OFF -DBUILD_TESTS:BOOL=OFF
+    cmake .. -DBUILD_TEXTDOCUMENT:BOOL=OFF -DBUILD_TESTS:BOOL=OFF
   @endcode
 
-  Similarly, it is possible to build only grantlee_gui standalone
+  Similarly, it is possible to build only the core of the %Grantlee Template library without the plugins. This may be useful for specialized applications, but as the unit tests depend on the plugins, the tests would need to be deactivated in this case too:
 
   @code
     mkdir build && cd build
-    cmake .. -DBUILD_CORE:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_MAIN_PLUGINS:BOOL=OFF
+    cmake .. -DBUILD_TEXTDOCUMENT:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_MAIN_PLUGINS:BOOL=OFF
   @endcode
 
 */
