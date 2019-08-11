@@ -125,7 +125,7 @@ namespace Grantlee
 
   @section deploying_custom_plugins Deploying custom tags and filters
 
-  Custom tags and filters can be defined in C++ code or in QtScript.
+  Custom tags and filters can be defined in C++ code or in Javascript.
 
   To create a custom C++ plugin it must be built as part of a library and installed in a location known to the application.
 
@@ -171,11 +171,11 @@ namespace Grantlee
 
   Note that neither the path to the custom libarary nor the path to the %Grantlee default library should contain the version number when specified in C++ code with the Engine. The version is only specified when installing the plugin in CMake.
 
-  Custom tags and filters implemented in QtScript can also be deployed on the file system, or, like template files, can also be deployed in Qt Resource files. In that case, the version should be specified in the -root argument in CMake.
+  Custom tags and filters implemented in Javascript can also be deployed on the file system, or, like template files, can also be deployed in Qt Resource files. In that case, the version should be specified in the -root argument in CMake.
 
   @code
     # CMake code:
-    set (_rcc_file "my_qtscript_library.qrc")
+    set (_rcc_file "my_javascript_library.qrc")
     qt5_add_resources(_scripted_rcc_src ${_rcc_file} OPTIONS -root "/plugins/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}" )
 
     add_executable(my_app, ${my_app_srcs} ${_scripted_rcc_src})
@@ -184,21 +184,11 @@ namespace Grantlee
     engine->setPluginPaths( QStringList() << ":/plugins/" );
   @endcode
 
-  Note again that when specifying the path in the virtual filesystem, the version is omitted. User defined filter written in QtScript can also be located similiarly to templates from either the filesystem or the Qt Resource virtual filesystem.
+  Note again that when specifying the path in the virtual filesystem, the version is omitted. User defined filter written in Javascript can also be located similiarly to templates from either the filesystem or the Qt Resource virtual filesystem.
 
   @section building_grantlee Building Grantlee
 
   It is possible to build only parts of %Grantlee if your application is a QCoreApplication that depends only on QtCore
-
-  <center>
-  <b>
-  @dotfile "moduledeps.dot" "Dependency Graph for Grantlee"
-  </b>
-
-  <b>
-  @dotfile "plugindeps.dot" "Dependency Graph for Grantlee plugins"
-  </b>
-  </center>
 
   The appropriate options may be specified in the cmake gui, or on the command line using the <tt>BUILD_TEXTDOCUMENT</tt> or <tt>BUILD_TEMPLATES</tt> CMake options.
 
@@ -213,6 +203,23 @@ namespace Grantlee
     mkdir build && cd build
     cmake .. -DBUILD_TEXTDOCUMENT:BOOL=OFF -DBUILD_TESTS:BOOL=OFF -DBUILD_MAIN_PLUGINS:BOOL=OFF
   @endcode
+
+  By default, %Grantlee depends on the QtQml library in order to implement Javascript support. This support is only enabled if the QtQml library is found.
+
+  <center>
+  <b>
+  @dotfile "moduledeps.dot" "Dependency Graph for Grantlee"
+  </b>
+  </center>
+
+  To prevent CMake searching for that library, use the <tt>-DCMAKE_DISABLE_FIND_PACKAGE_Qt5Qml=ON</tt> argument to CMake.
+
+  <center>
+  <b>
+  @dotfile "moduledeps_no_qml.dot" "Dependency Graph for Grantlee without QtQml"
+  </b>
+  </center>
+
 
 */
 }

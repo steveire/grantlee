@@ -170,8 +170,7 @@ void Engine::loadDefaultLibraries()
       continue;
 
     // Warning. We load C++ plugins in this method, but not plugins written
-    // in
-    // QtScript.
+    // in Javascript.
     // This should be a better situation in Grantlee 0.2 when the
     // TagLibraryInterface
     // can have shared pointers instead of raw pointers in its API. The

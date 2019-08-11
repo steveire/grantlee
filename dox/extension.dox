@@ -238,13 +238,13 @@ namespace Grantlee
     };
   @endcode
 
-  @section qtscript_libraries QtScript Libraries
+  @section javascript_libraries Javascript Libraries
 
-  If you configure your application to use the grantlee_scriptabletags_library, it will be possible for you and theme writers to write tags and filters in QtScript instead of C++. Themers would have as much control as a C++ plugin writer over those steps of processing and rendering the template.
+  By default, it will be possible for you and theme writers to write tags and filters in Javascript instead of C++, using the QJSEngine from QtQml. Themers have as much control as a C++ plugin writer over those steps of processing and rendering the template.
 
-  Writing QtScript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally QtScript plugins are just text files, so they can easily be dynamically loaded at runtime. QtScript files must be UTF-8 encoded.
+  Writing javascript plugins is slightly different from writing C++ plugins, and is a bit more like writing Django plugins. Namely, in Javascript like python, functions are first-class objects, and javascript is dynamically typed. Additionally Javascript plugins are just text files, so they can easily be dynamically loaded at runtime. Javascript files must be UTF-8 encoded.
 
-  Here is a complete QtScript library defining an @gr_tag{echo} tag which outputs its arguments:
+  Here is a complete Javascript library defining an @gr_tag{echo} tag which outputs its arguments:
 
   @code
     var EchoNode = function(content)
@@ -269,10 +269,10 @@ namespace Grantlee
   Some things to note:
   - Library is a globally accessible object used to register Factories.
   - The addFactory method takes a string which is the name of an object, not the object itself.
-  - The script factory function returns a %Node. The first argument to %Node is the name of the QtScript object in the library which defines the node. All additional arguments will be passed to the constructor of that node.
+  - The script factory function returns a %Node. The first argument to %Node is the name of the Javascript object in the library which defines the node. All additional arguments will be passed to the constructor of that node.
   - The %Node function must have a callable render property which takes a context argument.
 
-  @todo \@section qtscript_diff Differences between C++ and QtScript library plugins.
+  @todo \@section javascript_diff Differences between C++ and Javascript library plugins.
 
   @subsection loaders Loaders
 

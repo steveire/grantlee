@@ -1,0 +1,12 @@
+digraph GG {
+  node [
+    fontsize = "12"
+  ];
+  "node27" [ label="QtCore" shape="ellipse"];
+  "node30" [ label="QtGui" shape="ellipse"];
+  "node2" [ label="grantlee_templates" shape="polygon"];
+  "node19" [ label="grantlee_textdocument" shape="polygon"];
+  "node2" -> "node27"
+  "node19" -> "node30"
+  "node30" -> "node27"
+}
