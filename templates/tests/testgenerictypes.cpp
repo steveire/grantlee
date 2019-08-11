@@ -73,6 +73,8 @@ private Q_SLOTS:
 
   void testCustomQObjectDerived();
 
+  void propertyMacroTypes();
+
   void testUnregistered();
   void testPointerNonQObject();
   void testQGadget();
@@ -802,6 +804,108 @@ void TestGenericTypes::testQGadget()
   auto result = Grantlee::MetaType::lookup(v, QStringLiteral("fortyTwo"));
 
   QCOMPARE(result.value<int>(), 42);
+}
+
+class ObjectWithProperties : public QObject
+{
+  Q_OBJECT
+  Q_PROPERTY(QList<int> numberList READ numberList)
+  Q_PROPERTY(QList<CustomGadget> gadgetList READ gadgetList)
+  Q_PROPERTY(QVector<PersonObject *> personList READ personList)
+  Q_PROPERTY(
+      QVector<QSharedPointer<PersonObject>> personPtrList READ personPtrList)
+
+public:
+  ObjectWithProperties(QObject *parent = {}) : QObject(parent)
+  {
+    m_numberList.push_back(42);
+    m_numberList.push_back(7);
+    m_gadgetList.push_back(CustomGadget{});
+    m_gadgetList.push_back(CustomGadget{});
+    m_personList.push_back(new PersonObject{QStringLiteral("Joe"), 20});
+    m_personList.push_back(new PersonObject{QStringLiteral("Mike"), 22});
+    m_personPtrList.push_back(
+        QSharedPointer<PersonObject>::create(QStringLiteral("Niall"), 23));
+    m_personPtrList.push_back(
+        QSharedPointer<PersonObject>::create(QStringLiteral("Dave"), 24));
+  }
+
+  QList<int> numberList() { return m_numberList; }
+  QList<CustomGadget> gadgetList() { return m_gadgetList; }
+  QVector<PersonObject *> personList() { return m_personList; }
+  QVector<QSharedPointer<PersonObject>> personPtrList()
+  {
+    return m_personPtrList;
+  }
+
+private:
+  QList<int> m_numberList;
+  QList<CustomGadget> m_gadgetList;
+  QVector<PersonObject *> m_personList;
+  QVector<QSharedPointer<PersonObject>> m_personPtrList;
+};
+
+void TestGenericTypes::propertyMacroTypes()
+{
+  Grantlee::Engine engine;
+
+  qRegisterMetaType<QList<CustomGadget>>();
+
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
+
+  auto objectWithProperties = new ObjectWithProperties(this);
+
+  Grantlee::Context c;
+  c.insert(QStringLiteral("obj"), objectWithProperties);
+
+  {
+    auto t1 = engine.newTemplate(
+        QStringLiteral("{{ obj.numberList.0 }}--{{ obj.numberList.1 }}"),
+        QStringLiteral("template1"));
+
+    auto result = t1->render(&c);
+    auto expectedResult = QStringLiteral("42--7");
+
+    QCOMPARE(result, expectedResult);
+  }
+
+  {
+    auto t1 = engine.newTemplate(
+        QStringLiteral(
+            "{{ obj.gadgetList.0.fortyTwo }}--{{ obj.gadgetList.1.fortyTwo }}"),
+        QStringLiteral("template1"));
+
+    auto result = t1->render(&c);
+    auto expectedResult = QStringLiteral("42--42");
+
+    QCOMPARE(result, expectedResult);
+  }
+
+  {
+    auto t1 = engine.newTemplate(
+        QStringLiteral(
+            "{{ obj.personList.0.name }}({{ obj.personList.0.age }})"
+            "--{{ obj.personList.1.name }}({{ obj.personList.1.age }})"),
+        QStringLiteral("template1"));
+
+    auto result = t1->render(&c);
+    auto expectedResult = QStringLiteral("Joe(20)--Mike(22)");
+
+    QCOMPARE(result, expectedResult);
+  }
+
+  {
+    auto t1 = engine.newTemplate(
+        QStringLiteral(
+            "{{ obj.personPtrList.0.name }}({{ obj.personPtrList.0.age }})"
+            "--{{ obj.personPtrList.1.name }}({{ obj.personPtrList.1.age }})"),
+        QStringLiteral("template1"));
+
+    auto result = t1->render(&c);
+    auto expectedResult = QStringLiteral("Niall(23)--Dave(24)");
+
+    QCOMPARE(result, expectedResult);
+  }
 }
 
 QTEST_MAIN(TestGenericTypes)

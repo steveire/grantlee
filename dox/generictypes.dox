@@ -7,10 +7,10 @@ namespace Grantlee
 
   @section generic_types Generic type support
 
-  %Grantlee offers powerful support for using any type or container in a QVariant as part of the Context. Although
-  QObject based introspection based on Q_PROPERTY is the most convenient way to access properties on objects in the
-  context, sometimes it is necessary to use classes which do not derive from QObject (and therefore can't have Q_PROPERTY macros)
-  and where it would not be practical to create QObject wrappers around all related classes.
+  %Grantlee offers powerful support for using any type or container in a QVariant as part of the Context.
+  Qt introspection based on Q_PROPERTY is the most convenient way to access properties on QObject derived type or types decorated with the <tt>Q_GADGET</tt> macro.
+  However, sometimes it is necessary to use classes which do can't have Q_PROPERTY macros (perhaps because they are defined in third-party headers)
+  and where it would not be practical to create QObject/<tt>Q_GADGET</tt> wrappers around all related classes.
 
   In such cases the metatype can be registered with %Grantlee and an introspection method can be written.
 
