@@ -11,7 +11,17 @@ namespace Grantlee
 
   @section overview Overview
 
-  %Grantlee is a Free Software, Open Source set of Qt based libraries.
+  %Grantlee is a Free Software, Open Source set of Qt based libraries used for text processing.
+
+  The text template is modelled after the [Django template system](https://docs.djangoproject.com/en/1.9/ref/templates/language/):
+
+  @code
+    <ul>
+    {% for athlete in athlete_list %}
+    <li>{{ athlete.name }}{% if athlete.isCaptain %} (C){% endif %}</li>
+    {% endfor %}
+    </ul>
+  @endcode
 
   %Grantlee is covered by the GNU Lesser General Public Licence version 2.1 or, at your option, any later version.
 
