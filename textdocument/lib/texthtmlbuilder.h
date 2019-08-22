@@ -40,8 +40,8 @@ class TextHTMLBuilderPrivate;
   @brief The TextHTMLBuilder creates a clean html markup output.
 
   This class creates html output which is as minimal as possible and restricted
-  to the rich text features supported in Qt.
-  (http://doc.trolltech.com/4.4/richtext-html-subset.htm)
+  to the rich text features supported in %Qt.
+  (https://doc.qt.io/qt-5/richtext-html-subset.html)
 
   The output contains only the body content, not the head element or other
   metadata.
@@ -54,7 +54,7 @@ class TextHTMLBuilderPrivate;
     </p>
   @endcode
 
-  instead of the content produced by qt:
+  instead of the content produced by %Qt:
 
   @code
     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"
@@ -74,28 +74,36 @@ class TextHTMLBuilderPrivate;
   Such tags should be created separately. For example:
 
   @code
-    AbstractMarkupBuilder *b = new TextHTMLBuilder();
-    MarkupDirector *md = new MarkupDirector(b);
+    auto b = new TextHTMLBuilder();
+    auto md = new MarkupDirector(b);
     md->constructContent();
-    QString
-  cleanHtml("<head>\n<title>%1</title>\n</head>\n<body>%2</body>\n</html>")
+    QString cleanHtml(
+      "<head>\n<title>%1</title>\n</head>\n<body>%2</body>\n</html>")
                       .arg(document.metaInformation(QTextDocument::DocumentTitle))
                       .arg(b->getOutput());
-    QFile.write(cleanHtml);
+    file.write(cleanHtml);
   @endcode
 
   Font formatting information on elements is represented by individual span
   elements.
+
   eg:
   @code
-    <span style"color:blue;"><span style="background-color:red;">Blue text on
-  red background</span></span>
+    <span style"color:blue;">
+      <span style="background-color:red;">
+        Blue text on red background
+      </span>
+    </span>
   @endcode
+
   instead of
+
   @code
-    <span style="color:blue;background-color:red;">Blue text on red
-  background</span>
+    <span style="color:blue;background-color:red;">
+      Blue text on red background
+    </span>
   @endcode
+
   It my be possible to change this if necessary.
 
   @author Stephen Kelly <steveire@gmail.com>
@@ -104,9 +112,6 @@ class GRANTLEE_TEXTDOCUMENT_EXPORT TextHTMLBuilder
     : virtual public AbstractMarkupBuilder
 {
 public:
-  /**
-    Creates a new TextHTMLBuilder.
-  */
   TextHTMLBuilder();
   ~TextHTMLBuilder() override;
 

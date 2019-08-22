@@ -36,10 +36,9 @@ class AbstractMarkupBuilderPrivate;
 /// @headerfile abstractmarkupbuilder.h grantlee/abstractmarkupbuilder.h
 
 /**
-  @brief The AbstractMarkupBuilder class serves as a base class for creating
-  marked up plain text output.
+  @brief Interface for creating marked-up text output.
 
-  The AbstractMarkupBuilder is used by a MarkupDirector to create marked up
+  The **%AbstractMarkupBuilder** is used by a MarkupDirector to create marked-up
   output such as html or markdown.
 
   See PlainTextMarkupBuilder and TextHTMLBuilder for example implementations.
@@ -79,16 +78,19 @@ public:
   /** Close the struck out element in the markup */
   virtual void endStrikeout() = 0;
 
-  /** Begin a decorarated foreground element in the markup (A text color)
-   * using
-   * @p brush */
+  /**
+    Begin a decorarated foreground element in the markup (A text color)
+    using @p brush
+  */
   virtual void beginForeground(const QBrush &brush) = 0;
 
   /** Close the decorarated foreground element in the markup */
   virtual void endForeground() = 0;
 
-  /** Begin a decorarated background element in the markup (A text background
-   * color) using @p brush */
+  /**
+    Begin a decorarated background element in the markup (A text background
+    color) using @p brush
+   */
   virtual void beginBackground(const QBrush &brush) = 0;
 
   /** Close the decorarated background element in the markup */
@@ -198,7 +200,7 @@ public:
       = 0;
 
   /**
-    Begins a new table row.
+    Begin a new table row
   */
   virtual void beginTableRow() = 0;
 
@@ -234,33 +236,33 @@ public:
   virtual void endTableCell() = 0;
 
   /**
-    Begin a level @p level header.
+    Begin a level @p level header
     @param level An integer between 1 and 6
   */
   virtual void beginHeader(int level) = 0;
 
   /**
-    End a level @p level header.
+    End a level @p level header
     @param level An integer between 1 and 6
   */
   virtual void endHeader(int level) = 0;
 
   /**
-    Append the plain text @p text to the markup.
+    Append the plain text @p text to the markup
 
     @param text The text to append.
   */
   virtual void appendLiteralText(const QString &text) = 0;
 
   /**
-    Appends the raw text @p text to the markup. @p text is added unescaped.
+    Append the raw text @p text to the markup. @p text is added unescaped
   */
   virtual void appendRawText(const QString &text) = 0;
 
   /**
-    Return the fully marked up result of the building process. This may
-    contain
-    metadata etc, such as a head element in html.
+    Return the fully marked up result of the building process.
+
+    This may contain metadata etc, such as a head element in html.
 
     @return The fully marked up text.
   */

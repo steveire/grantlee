@@ -32,9 +32,6 @@ namespace Grantlee
 class MediaWikiMarkupBuilder : public AbstractMarkupBuilder
 {
 public:
-  /**
-    Creates a new MediaWikiMarkupBuilder
-  */
   MediaWikiMarkupBuilder();
   ~MediaWikiMarkupBuilder() override;
 

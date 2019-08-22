@@ -42,22 +42,22 @@ class PlainTextMarkupBuilderPrivate;
 /// @headerfile plaintextmarkupbuilder.h grantlee/plaintextmarkupbuilder.h
 
 /**
-  @brief The PlainTextHTMLMarkupBuilder creates a simple marked up plain text
-  document.
+  @brief Creates a simple marked up plain text document
 
   This class creates a simple plain text markup.
 
   Text that may be represented as
 
   @code
-    A paragraph with <b>bold</b> text, <i>italic</i> text, and <u>underlined</u>
-  text.
+    A paragraph with <b>bold</b> text, <i>italic</i> text,
+    and <u>underlined</u> text.
   @endcode
 
   would be output as
 
   @code
-    A paragraph with *bold* text /italic/ text, and _underlined_ text.
+    A paragraph with *bold* text /italic/ text,
+    and _underlined_ text.
   @endcode
 
   The markup is intended to be simple, plain and easily human readable. No
@@ -66,8 +66,7 @@ class PlainTextMarkupBuilderPrivate;
 
   Lists are marked up by preceding the list element with '*' for disc, 'o' for
   circle, 'X' for square, or a letter or number. Lists are also indented if
-  nested.
-  eg:
+  nested. eg:
 
   @code
     A. One
@@ -85,14 +84,15 @@ class PlainTextMarkupBuilderPrivate;
 
   Eg,
   @code
-    Here is a link to <a href="http://www.kde.org">KDE</a> and the <a
-  href="http://pim.kde.org">KDEPIM project</a>.
+    Here is a link to <a href="http://www.kde.org">KDE</a> and
+    the <a href="http://pim.kde.org">KDEPIM project</a>.
   @endcode
 
   becomes:
 
   @code
-    Here is a link to KDE[1], and the KDEPIM project[2].
+    Here is a link to KDE[1], and
+    the KDEPIM project[2].
 
     ---- References ----
     [1] http://www.kde.org
@@ -105,7 +105,6 @@ class GRANTLEE_TEXTDOCUMENT_EXPORT PlainTextMarkupBuilder
     : virtual public AbstractMarkupBuilder
 {
 public:
-  /** Construct a new PlainTextHTMLMarkupBuilder. */
   PlainTextMarkupBuilder();
 
   ~PlainTextMarkupBuilder() override;

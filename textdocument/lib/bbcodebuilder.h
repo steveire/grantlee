@@ -59,9 +59,7 @@ public:
 
   /**
     Begin an element of font size @p size. Note that this size is in pixels,
-    and
-    must be converted before
-    it is suitable for use in BBCode.
+    and must be converted before it is suitable for use in BBCode.
     @param size The size of font to begin.
   */
   void beginFontPointSize(int size) override;

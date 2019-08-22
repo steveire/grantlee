@@ -5,7 +5,7 @@ namespace Grantlee
 /**
   @page custom_qtextobject Handling custom QTextObjects
 
-  It is possible using the QTextObjectInterface API to construct QTextDocuments containing custom text objects. If processing a QTextDocument
+  It is possible using the QTextObjectInterface API to construct QTextDocument instances containing custom text objects. If processing a QTextDocument
   containing custom objects through the MarkupDirector and AbstractMarkupBuilder classes, it is necessary to implement support for the custom types
   in %Grantlee.
 
@@ -20,8 +20,8 @@ namespace Grantlee
     };
   @endcode
 
-  We create a small interface for supporting the addition of audio markup. The interface should inherit virtually from the
-  AbstractMarkupBuilder interface, so that functionality from through that interface is also available.
+  We create a small interface for supporting the addition of audio markup. The interface should inherit from the
+  AbstractMarkupBuilder interface, so that functionality from that interface is also available.
 
   Customized builders inheriting from an existing builder and the new interface can then be created.
 

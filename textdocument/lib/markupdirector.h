@@ -40,53 +40,50 @@ class MarkupDirectorPrivate;
 /// @headerfile markupdirector.h grantlee/markupdirector.h
 
 /**
-  @brief The MarkupDirector class controls and instructs a builder object to
-  create markup output.
+  @brief Instructs a builder object to create markup output
 
-  The MarkupDirector is used with a subclass of AbstractMarkupBuilder to create
-  a marked up document output.
+  The **%MarkupDirector** is used with an implementation of
+  AbstractMarkupBuilder to create a marked up document output.
 
   Usage can be quite simple.
 
   @code
+    auto doc = editor->document(); // editor is a QTextEdit
 
-    QTextDocument *doc = editor->document(); // editor is a QTextEdit
-
-    AbstractMarkupBuilder *builder = new HTMLBuilder();
-    MarkupDirector *md = new MarkupDirector(builder);
+    auto builder = new HTMLBuilder();
+    auto md = new MarkupDirector(builder);
     md->processDocument(doc);
     browser->setHtml(builder->getResult()); // browser is a QTextBrowser.
-
   @endcode
 
   Or with a different builder:
 
   @code
-    AbstractMarkupBuilder *builder = new PlainTextMarkupBuilder();
-    MarkupDirector *md = new MarkupDirector(builder);
+    auto builder = new PlainTextMarkupBuilder();
+    auto md = new MarkupDirector(builder);
     md->processDocument(doc);
     browser->setPlainText(builder->getResult());
   @endcode
 
-  The MarkupDirector also provides API for processing just part of a
+  The **%MarkupDirector** also provides API for processing just part of a
   QTextDocument, such as a QTextFrame or a QTextBlock. The appropriate method
   may then be called with an invalid iterator as appropriate.
 
   @code
     // ... Do some processing to get a QTextFrame.
-    QTextFrame *frame = getFrame();
+    auto frame = getFrame();
 
-    AbstractMarkupBuilder *builder = new PlainTextMarkupBuilder();
-    MarkupDirector *md = new MarkupDirector(builder);
+    auto builder = new PlainTextMarkupBuilder();
+    auto md = new MarkupDirector(builder);
 
     // Create output from only the frame.
     md->processFrame(QTextFrame::iterator(), frame);
     browser->setPlainText(builder->getResult());
   @endcode
 
-  The behaviour of the MarkupDirector can be customized by subclassing. Support
-  for custom types can also be added by implementing the processCustomFragment
-  method.
+  The behaviour of the **%MarkupDirector** can be customized by subclassing.
+  Support for custom types can also be added by implementing the @ref
+  processCustomFragment method.
 
   @see @ref custom_qtextobject
 
@@ -96,7 +93,7 @@ class GRANTLEE_TEXTDOCUMENT_EXPORT MarkupDirector
 {
 public:
   /**
-    Construct a new MarkupDirector
+    Constructor
   */
   MarkupDirector(AbstractMarkupBuilder *builder);
 
@@ -122,7 +119,7 @@ public:
     this method directly, an invalid QTextFrame::iterator may be used.
 
     This method does not process the contents of the @p block, but uses the
-    processBlockContents method to do so.
+    @ref processBlockContents method to do so.
   */
   virtual QTextFrame::iterator processBlock(QTextFrame::iterator it,
                                             const QTextBlock &block);
@@ -149,8 +146,7 @@ public:
 
   /**
     Directs the builder to create output for the single @p textList. If
-    calling
-    this method directly, an invalid QTextFrame::iterator may be used.
+    calling this method directly, an invalid QTextFrame::iterator may be used.
 
     The block @p block is the first block in the @p textList.
   */
@@ -161,16 +157,14 @@ public:
   /**
     Directs the builder to create output for the contents of the single @p
     block. If calling this method directly, an invalid QTextFrame::iterator
-    may
-    be used.
+    may be used.
   */
   virtual QTextFrame::iterator processBlockContents(QTextFrame::iterator it,
                                                     const QTextBlock &block);
 
   /**
     Hook for instructing the builder to create output for the @p fragemnt with
-    a
-    custom type. @p doc is the document the fragment is in.
+    a custom type. @p doc is the document the fragment is in.
   */
   virtual void processCustomFragment(const QTextFragment &fragment,
                                      QTextDocument const *doc);
@@ -236,8 +230,7 @@ protected:
     _block is any block in the @p blockGroup.
 
     The return pair is the iterator pointing after the end of @p blockGroup
-    and
-    the first block after @p blockGroup.
+    and the first block after @p blockGroup.
   */
   QPair<QTextFrame::iterator, QTextBlock>
   skipBlockGroup(QTextFrame::iterator it, const QTextBlock &_block,
@@ -248,8 +241,7 @@ protected:
     opened in order and will be closed in the correct order.
 
     @p openingTags should be a set of tags opened at the fragment pointed to
-    by
-    @p it.
+    by @p it.
   */
   QList<int> sortOpeningOrder(QSet<int> openingTags,
                               QTextBlock::iterator it) const;
