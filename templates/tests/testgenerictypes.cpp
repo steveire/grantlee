@@ -78,6 +78,7 @@ private Q_SLOTS:
   void testUnregistered();
   void testPointerNonQObject();
   void testQGadget();
+  void testGadgetMetaType();
 
 }; // class TestGenericTypes
 
@@ -98,15 +99,30 @@ public:
   int uid;
 };
 
+class PersonGadget
+{
+    Q_GADGET
+    Q_PROPERTY(QString name MEMBER m_name)
+public:
+    QString m_name;
+    int m_age = 42;
+};
+
 int qHash(const Person &p) { return p.uid; }
 
 Q_DECLARE_METATYPE(Person)
+Q_DECLARE_METATYPE(PersonGadget)
 
 GRANTLEE_BEGIN_LOOKUP(Person)
 if (property == QStringLiteral("name"))
   return QString::fromStdString(object.name);
 else if (property == QStringLiteral("age"))
   return object.age;
+GRANTLEE_END_LOOKUP
+
+GRANTLEE_BEGIN_LOOKUP(PersonGadget)
+if (property == QStringLiteral("age"))
+  return object.m_age;
 GRANTLEE_END_LOOKUP
 
 class PersonObject : public QObject
@@ -132,6 +148,7 @@ void TestGenericTypes::initTestCase()
 {
   // Register the handler for our custom type
   Grantlee::registerMetaType<Person>();
+  Grantlee::registerMetaType<PersonGadget>();
 }
 
 void TestGenericTypes::testGenericClassType()
@@ -804,6 +821,22 @@ void TestGenericTypes::testQGadget()
   auto result = Grantlee::MetaType::lookup(v, QStringLiteral("fortyTwo"));
 
   QCOMPARE(result.value<int>(), 42);
+}
+
+void TestGenericTypes::testGadgetMetaType()
+{
+  Grantlee::Engine engine;
+  engine.setPluginPaths({QStringLiteral(GRANTLEE_PLUGIN_PATH)});
+
+  auto t1 = engine.newTemplate(
+      QStringLiteral("Person: \nName: {{p.name}}\nAge: {{p.age}}"),
+      QStringLiteral("template1"));
+
+  PersonGadget p;
+  p.m_name = QStringLiteral("Some Name");
+  Grantlee::Context c;
+  c.insert(QStringLiteral("p"), QVariant::fromValue(p));
+  QCOMPARE(t1->render(&c), QStringLiteral("Person: \nName: Some Name\nAge: 42"));
 }
 
 class ObjectWithProperties : public QObject
