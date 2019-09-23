@@ -78,7 +78,7 @@ template <> QVector<QDateTime> getItems<QDateTime>()
   items.reserve(3);
   for (auto i = 0; i < 3; ++i) {
     QDateTime d;
-    d.setTime_t(0);
+    d.setSecsSinceEpoch(0);
     d = d.addDays(i);
     items.push_back(d);
   }
