@@ -101,11 +101,11 @@ public:
 
 class PersonGadget
 {
-    Q_GADGET
-    Q_PROPERTY(QString name MEMBER m_name)
+  Q_GADGET
+  Q_PROPERTY(QString name MEMBER m_name)
 public:
-    QString m_name;
-    int m_age = 42;
+  QString m_name;
+  int m_age = 42;
 };
 
 int qHash(const Person &p) { return p.uid; }
@@ -836,7 +836,8 @@ void TestGenericTypes::testGadgetMetaType()
   p.m_name = QStringLiteral("Some Name");
   Grantlee::Context c;
   c.insert(QStringLiteral("p"), QVariant::fromValue(p));
-  QCOMPARE(t1->render(&c), QStringLiteral("Person: \nName: Some Name\nAge: 42"));
+  QCOMPARE(t1->render(&c),
+           QStringLiteral("Person: \nName: Some Name\nAge: 42"));
 }
 
 class ObjectWithProperties : public QObject
