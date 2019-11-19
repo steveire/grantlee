@@ -179,8 +179,6 @@ void NodeList::render(OutputStream *stream, Context *c) const
   for (auto i = 0; i < this->size(); ++i) {
     this->at(i)->render(stream, c);
   }
-
-  return;
 }
 
 AbstractNodeFactory::AbstractNodeFactory(QObject *parent)
