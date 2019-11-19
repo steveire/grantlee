@@ -54,6 +54,9 @@ private Q_SLOTS:
   void testExtendsTag_data();
   void testExtendsTag() { doTest(); }
 
+  void testIncludeAndExtendsTag_data();
+  void testIncludeAndExtendsTag() { doTest(); }
+
   void testBlockTagErrors_data();
   void testBlockTagErrors() { doTest(); }
 
@@ -554,6 +557,41 @@ void TestLoaderTags::testBlockTagErrors_data()
   QTest::newRow("block-error-03")
       << QStringLiteral("{% block foo bar %}{% endblock %}") << dict
       << QString() << TagSyntaxError;
+}
+
+void TestLoaderTags::testIncludeAndExtendsTag_data()
+{
+  QTest::addColumn<QString>("input");
+  QTest::addColumn<Dict>("dict");
+  QTest::addColumn<QString>("output");
+  QTest::addColumn<Grantlee::Error>("error");
+
+  Dict dict;
+
+  loader->setTemplate(QStringLiteral("ext_base"),
+                      QStringLiteral("{% block block1 %}block1{% endblock %}"));
+
+  loader->setTemplate(QStringLiteral("extender"),
+                      QStringLiteral("{% extends 'ext_base' %}{% block block1 "
+                                     "%}block1override{% endblock %}"));
+
+  QTest::newRow("include-extender-twice") << QStringLiteral(R"django(
+{% include "extender" %}
+{% include "extender" %}
+)django") << dict << QStringLiteral("\nblock1override\nblock1override\n")
+                                          << NoError;
+
+  loader->setTemplate(QStringLiteral("anotherextender"),
+                      QStringLiteral("{% extends 'extender' %}{% block block1 "
+                                     "%}block1overrideagain{% endblock %}"));
+
+  QTest::newRow("include-deeper-extender-twice")
+      << QStringLiteral(R"django(
+{% include "anotherextender" %}
+{% include "anotherextender" %}
+)django")
+      << dict << QStringLiteral("\nblock1overrideagain\nblock1overrideagain\n")
+      << NoError;
 }
 
 QTEST_MAIN(TestLoaderTags)

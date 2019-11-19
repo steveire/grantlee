@@ -157,6 +157,10 @@ void ExtendsNode::render(OutputStream *stream, Context *c) const
   }
   variant.setValue(blockContext);
   parentTemplate->nodeList().render(stream, c);
+
+  auto nodes = parentTemplate->findChildren<BlockNode *>();
+  blockContext.remove(nodes);
+  variant.setValue(blockContext);
 }
 
 void ExtendsNode::appendNode(Node *node)

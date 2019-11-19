@@ -55,3 +55,13 @@ void BlockContext::push(const QString &name, BlockNode const *blockNode)
 }
 
 bool BlockContext::isEmpty() { return m_blocks.isEmpty(); }
+
+void BlockContext::remove(QList<BlockNode *> const &nodes)
+{
+  for (auto node : nodes) {
+    m_blocks[node->name()].removeOne(node);
+    if (m_blocks[node->name()].isEmpty()) {
+      m_blocks.remove(node->name());
+    }
+  }
+}

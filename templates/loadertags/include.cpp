@@ -20,9 +20,12 @@
 
 #include "include.h"
 
+#include "block.h"
+#include "blockcontext.h"
 #include "engine.h"
 #include "exception.h"
 #include "parser.h"
+#include "rendercontext.h"
 #include "template.h"
 #include "util.h"
 
@@ -97,4 +100,10 @@ void ConstantIncludeNode::render(OutputStream *stream, Context *c) const
 
   if (t->error())
     throw Grantlee::Exception(t->error(), t->errorString());
+
+  QVariant &variant = c->renderContext()->data(0);
+  auto blockContext = variant.value<BlockContext>();
+  auto nodes = t->findChildren<BlockNode *>();
+  blockContext.remove(nodes);
+  variant.setValue(blockContext);
 }

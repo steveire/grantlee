@@ -39,6 +39,8 @@ public:
 
   bool isEmpty();
 
+  void remove(QList<BlockNode *> const &nodes);
+
 private:
   QHash<QString, QList<BlockNode *>> m_blocks;
 };
