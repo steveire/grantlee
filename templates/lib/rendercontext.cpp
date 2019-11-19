@@ -45,8 +45,7 @@ RenderContext::~RenderContext() { delete d_ptr; }
 void RenderContext::push()
 {
   Q_D(RenderContext);
-  const QHash<const Node *, QVariant> hash;
-  d->m_variantHashStack.prepend(hash);
+  d->m_variantHashStack.prepend({});
 }
 
 bool RenderContext::contains(Node *const scopeNode) const
