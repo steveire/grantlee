@@ -173,11 +173,8 @@ void Engine::loadDefaultLibraries()
     while (acceptableVersion<GRANTLEE_MIN_PLUGIN_VERSION>(minorVersion)) {
 #ifdef QT_QML_LIB
       // Although we don't use scripted libaries here, we need to
-      // recognize them
-      // being first
-      // in the search path and not load a c++ plugin of the same name in
-      // that
-      // case.
+      // recognize them being first in the search path and not load a
+      // c++ plugin of the same name in that case.
       auto scriptableLibrary = d->loadScriptableLibrary(libName, minorVersion);
       if (scriptableLibrary) {
         scriptableLibrary->clear();

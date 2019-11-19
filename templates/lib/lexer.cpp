@@ -212,12 +212,9 @@ TextProcessingMachine *createMachine(Lexer *lexer, Lexer::TrimType type)
                                          processingBeginTemplateSyntax);
 
     // NOTE: We only have to transition to this if there was whitespace
-    // before
-    // the opening tag.
-    // Maybe store that in an external state property?
+    // before the opening tag. Maybe store that in an external state property?
     // Actually, this may be a bug if we try to finalize with trimming and
-    // there
-    // is no leading whitespace.
+    // there is no leading whitespace.
     addTransition<SyntaxBoundaryNewlineHandler>(
         processingPostTemplateSyntaxWhitespace, lexer, processingPostNewline);
     addTransition<FinalizingLineTextHandler>(
