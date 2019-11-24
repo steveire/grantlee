@@ -25,16 +25,11 @@
 
 #include <map>
 
-#ifndef GRANTLEE_NO_TR1
 #include "qtunorderedmap.h"
 
-#ifdef Q_CC_MSVC
 #include <array>
-#else
-#include <tr1/array>
-#endif
 
-template <typename T> struct ThreeArray : public std::tr1::array<T, 3> {
+template <typename T> struct ThreeArray : public std::array<T, 3> {
 };
 
 #define DECLARE_ASSOCIATIVE_CONTAINER(ContainerType, KeyType, ValueType)       \
@@ -59,8 +54,6 @@ template <typename T> struct ThreeArray : public std::tr1::array<T, 3> {
 #else
 #define DECLARE_ASSOCIATIVE_CONTAINER_TYPES                                    \
   DECLARE_ASSOCIATIVE_CONTAINER_TYPES_MINIMAL
-#endif
-
 #endif
 
 #endif

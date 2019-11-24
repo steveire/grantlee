@@ -2,40 +2,6 @@ project(grantlee_templates_tests)
 
 find_package(Qt5Test 5.2.0 REQUIRED)
 
-#building on Solaris with Sun Studio uses stdcxx which does not have TR1 fully implemented
-#take it from boost
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
-  find_package(Boost REQUIRED)
-  include_directories(${Boost_INCLUDE_DIR} ${Boost_INCLUDE_DIR}/boost/tr1)
-endif("${CMAKE_CXX_COMPILER_ID}" MATCHES "SunPro")
-
-include(CheckIncludeFileCXX)
-check_include_file_cxx("tr1/unordered_map" HAVE_TR1_UNORDERED_MAP)
-check_include_file_cxx("tr1/array" HAVE_TR1_ARRAY)
-check_include_file_cxx("tr1/memory" HAVE_TR1_MEMORY)
-
-check_cxx_source_compiles("
-
-#include <tr1/unordered_map>
-
-typedef std::tr1::unordered_map<int, int> std_unordered_mapintint;
-
-int main(int, char **)
-{
-  std_unordered_mapintint m1;
-  std_unordered_mapintint m2(m1);
-  return 0;
-}
-
-" HAVE_WORKING_TR1_UNORDERED_MAP)
-
-if(NOT HAVE_TR1_UNORDERED_MAP OR NOT HAVE_TR1_ARRAY OR NOT HAVE_TR1_MEMORY OR NOT HAVE_WORKING_TR1_UNORDERED_MAP)
-  message(STATUS "Not enabling TR1 container tests")
-  set(GRANTLEE_NO_TR1 True)
-else()
-  message(STATUS "Enabling TR1 container tests")
-endif()
-
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/" )
