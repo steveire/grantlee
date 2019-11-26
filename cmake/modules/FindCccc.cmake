@@ -3,10 +3,10 @@
 # CCCC_EXECUTABLE - the cccc binary
 
 
-INCLUDE(FindPackageHandleStandardArgs)
+include(FindPackageHandleStandardArgs)
 
-FIND_PROGRAM(CCCC_EXECUTABLE cccc)
+find_program(CCCC_EXECUTABLE cccc)
 
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Cccc DEFAULT_MSG CCCC_EXECUTABLE)
+find_package_handle_standard_args(Cccc DEFAULT_MSG CCCC_EXECUTABLE)
 
-MARK_AS_ADVANCED(CCCC_EXECUTABLE)
+mark_as_advanced(CCCC_EXECUTABLE)
