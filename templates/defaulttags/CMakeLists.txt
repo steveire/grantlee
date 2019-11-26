@@ -1,5 +1,3 @@
-project(grantlee_defaulttags)
-
 add_library(grantlee_defaulttags MODULE
   defaulttags.cpp
   autoescape.cpp

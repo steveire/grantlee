@@ -1,5 +1,3 @@
-project(grantlee_defaultfilters)
-
 add_library(grantlee_defaultfilters MODULE
   defaultfilters.cpp
   datetime.cpp

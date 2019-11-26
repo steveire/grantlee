@@ -1,5 +1,3 @@
-project(grantlee_loadertags)
-
 set_source_files_properties(blockcontext.h PROPERTIES SKIP_AUTOMOC TRUE)
 
 add_library(grantlee_loadertags MODULE

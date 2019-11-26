@@ -1,4 +1,3 @@
-project(grantlee_templates)
 
 configure_file(grantlee_version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/grantlee_version.h)
 

@@ -1,5 +1,3 @@
-project(grantlee_i18ntags)
-
 add_library(grantlee_i18ntags MODULE
   i18ntags.cpp
   i18n.cpp

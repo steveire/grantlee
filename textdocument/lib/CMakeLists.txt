@@ -1,5 +1,3 @@
-project(grantlee_textdocument)
-
 set (grantlee_textdocument_SRCS
   bbcodebuilder.cpp
   markupdirector.cpp
