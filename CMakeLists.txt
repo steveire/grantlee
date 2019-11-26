@@ -5,7 +5,7 @@ if (POLICY CMP0071)
   cmake_policy(SET CMP0071 NEW)
 endif()
 
-project(Grantlee5)
+project(Grantlee5 VERSION 5.1.0)
 
 # Workaround for http://public.kitware.com/Bug/view.php?id=12301
 if (MINGW)
@@ -72,9 +72,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 set(CMAKE_AUTOMOC ON)
 
-set(Grantlee5_VERSION_MAJOR 5)
-set(Grantlee5_VERSION_MINOR 1)
-set(Grantlee5_VERSION_PATCH 0)
 set(Grantlee5_MIN_PLUGIN_VERSION 0)
 
 set(Grantlee5_MAJOR_MINOR_VERSION_STRING "${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}" )
