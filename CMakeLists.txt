@@ -26,7 +26,7 @@ if (BUILD_TESTS)
   enable_testing()
 endif()
 
-set(Grantlee_MODULE_DIR ${Grantlee_SOURCE_DIR}/cmake/modules)
+set(Grantlee_MODULE_DIR ${CMAKE_SOURCE_DIR}/cmake/modules)
 set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
 include(GenerateExportHeader)
@@ -120,19 +120,19 @@ set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/Grantlee${Grantlee5_VERSIO
 
 configure_file(
   "${Grantlee_MODULE_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake.in"
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
+  "${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
   @ONLY
 )
 
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file("${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
+write_basic_package_version_file("${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
   VERSION ${Grantlee5_VERSION_STRING}
   COMPATIBILITY AnyNewerVersion
 )
 
 install(FILES
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
+  "${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
+  "${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Common
 )
