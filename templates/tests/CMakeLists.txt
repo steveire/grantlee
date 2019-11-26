@@ -80,7 +80,6 @@ grantlee_templates_unit_tests(
   testfilters
   testgenerictypes
   testgenericcontainers
-#   benchmarks
 )
 
 if (Qt5Qml_FOUND)
