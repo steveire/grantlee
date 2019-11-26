@@ -37,32 +37,18 @@ if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
   # create coverage build type
   set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage" "TestCocoon")
+                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
 endif()
 
 if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
   set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
   set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
   set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
-
-  set(TESTCOCOON_ARGS "--cs-on --cs-count --cs-include-file-abs-regex=${CMAKE_SOURCE_DIR}/.* --cs-include-file-regex=qrc_* --cs-qt4 --cs-exclude-file-abs-regex=${CMAKE_BINARY_DIR}/.*")
-  set(CMAKE_CXX_FLAGS_TESTCOCOON "${CMAKE_CXX_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-  set(CMAKE_C_FLAGS_TESTCOCOON "${CMAKE_C_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-  set(CMAKE_EXE_LINKER_FLAGS_TESTCOCOON "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-  set(CMAKE_SHARED_LINKER_FLAGS_TESTCOCOON "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-  set(CMAKE_STATIC_LINKER_FLAGS_TESTCOCOON "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
-
-  if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
-    # Needed on 64 bit
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --cs-libgen=-fPIC")
-  else()
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic-errors")
-  endif()
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic-errors")
 
   if (NOT APPLE)
     set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
@@ -256,67 +242,6 @@ if(LCOV_FOUND)
 
   add_custom_target(coverage
     ${coverage_ARGS}
-  )
-endif()
-
-if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
-
-  get_property(UNITTESTS GLOBAL PROPERTY TEST_COVERAGE)
-
-  set(coverageDir ${CMAKE_BINARY_DIR})
-
-  set(testcocoon_ARGS)
-
-  foreach(_testpath ${UNITTESTS})
-    list(APPEND testcocoon_ARGS COMMAND "${_testpath}")
-  endforeach()
-
-  find_program(TESTCOCOON_CMMERGE_EXECUTABLE cmmerge)
-  find_program(TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE cmcsexeimport)
-
-  list(APPEND testcocoon_ARGS COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o unittests.csmes)
-  foreach(_testpath ${UNITTESTS})
-    list(APPEND testcocoon_ARGS ${_testpath}.csmes)
-  endforeach()
-  set(_plugins "grantlee_defaultfilters" "grantlee_defaulttags" "grantlee_i18ntags" "grantlee_loadertags")
-  foreach(_plugin ${_plugins})
-    list(APPEND testcocoon_ARGS "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes")
-  endforeach()
-  list(APPEND testcocoon_ARGS "${coverageDir}/templates/lib/libgrantlee_core.so.csmes")
-
-  list(APPEND testcocoon_ARGS
-    COMMAND ${TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE}
-    -m unittests.csmes -t "\"--unnamed--\"" -p
-    merge -e "${coverageDir}/coverage.csexe"
-  )
-
-  list(APPEND testcocoon_ARGS
-    COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_core.so.csmes"
-    -i "${coverageDir}/templates/lib/libgrantlee_core.so.csmes" "${coverageDir}/unittests.csmes"
-  )
-
-  list(APPEND testcocoon_ARGS
-    COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_gui.so.csmes"
-    -i "${coverageDir}/textdocument/lib/libgrantlee_gui.so.csmes" "${coverageDir}/unittests.csmes"
-  )
-
-  foreach(_plugin ${_plugins})
-    list(APPEND testcocoon_ARGS
-      COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/${_plugin}.so.csmes"
-      -i "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes" "${coverageDir}/unittests.csmes"
-    )
-  endforeach()
-
-  find_program(TESTCOCOON_CMREPORT_EXECUTABLE cmreport)
-  set(_csmes_files ${_plugins} "libgrantlee_gui" "libgrantlee_core")
-  foreach(_csmes_file ${_csmes_files})
-    list(APPEND testcocoon_ARGS
-      COMMAND echo -n \"${_csmes_file}\" COMMAND ${TESTCOCOON_CMREPORT_EXECUTABLE} -s '.*' -m "${_csmes_file}.so.csmes"
-    )
-  endforeach()
-
-  add_custom_target(testcocoon
-    ${testcocoon_ARGS}
   )
 endif()
 

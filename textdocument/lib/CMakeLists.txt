@@ -45,12 +45,10 @@ target_link_libraries(Grantlee_TextDocument
   LINK_PUBLIC Qt5::Gui
 )
 
-if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
-  set_target_properties(Grantlee_TextDocument PROPERTIES
-    VERSION    ${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}
-    SOVERSION  ${Grantlee5_TEXTDOCUMENT_LIB_SOVERSION}
-  )
-endif()
+set_target_properties(Grantlee_TextDocument PROPERTIES
+  VERSION    ${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}
+  SOVERSION  ${Grantlee5_TEXTDOCUMENT_LIB_SOVERSION}
+)
 
 install(TARGETS Grantlee_TextDocument EXPORT grantlee_targets
          RUNTIME DESTINATION bin COMPONENT TextDocument
