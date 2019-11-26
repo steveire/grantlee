@@ -53,7 +53,7 @@ if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
 endif()
 
 install(TARGETS Grantlee_TextDocument EXPORT grantlee_targets
-         RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT TextDocument
+         RUNTIME DESTINATION bin COMPONENT TextDocument
          LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
          ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
          INCLUDES DESTINATION include
