@@ -5,8 +5,6 @@ set(Grantlee_PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} )
 
 configure_file(grantlee_config_p.h.cmake  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_config_p.h)
 
-set(Grantlee5_TEMPLATES_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
-
 set_source_files_properties(taglibraryinterface.h PROPERTIES
   SKIP_AUTOMOC TRUE
 )
@@ -120,7 +118,7 @@ target_link_libraries(Grantlee_Templates
 
 set_target_properties(Grantlee_Templates PROPERTIES
   VERSION    ${Grantlee5_VERSION}
-  SOVERSION  ${Grantlee5_TEMPLATES_LIB_SOVERSION}
+  SOVERSION  ${Grantlee5_VERSION_MAJOR}
 )
 
 install(TARGETS Grantlee_Templates EXPORT grantlee_targets

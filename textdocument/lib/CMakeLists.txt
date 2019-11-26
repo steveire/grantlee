@@ -1,6 +1,4 @@
 
-set(Grantlee5_TEXTDOCUMENT_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
-
 add_library(Grantlee_TextDocument SHARED
   bbcodebuilder.cpp
   markupdirector.cpp
@@ -43,7 +41,7 @@ target_link_libraries(Grantlee_TextDocument
 
 set_target_properties(Grantlee_TextDocument PROPERTIES
   VERSION    ${Grantlee5_VERSION}
-  SOVERSION  ${Grantlee5_TEXTDOCUMENT_LIB_SOVERSION}
+  SOVERSION  ${Grantlee5_VERSION_MAJOR}
 )
 
 install(TARGETS Grantlee_TextDocument EXPORT grantlee_targets
