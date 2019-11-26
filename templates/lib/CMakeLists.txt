@@ -1,10 +1,10 @@
 project(grantlee_templates)
 
-configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
+configure_file(grantlee_version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/grantlee_version.h)
 
 set(Grantlee_PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} )
 
-configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_p.h)
+configure_file(grantlee_config_p.h.cmake  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_config_p.h)
 
 set (grantlee_templates_SRCS
   abstractlocalizer.cpp
@@ -144,8 +144,8 @@ install(FILES
   exception.h
   filter.h
   filterexpression.h
-  ${PROJECT_BINARY_DIR}/grantlee_templates_export.h
-  ${PROJECT_BINARY_DIR}/grantlee_version.h
+  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h
+  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_version.h
   metatype.h
   node.h
   outputstream.h

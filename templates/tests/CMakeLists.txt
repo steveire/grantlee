@@ -6,7 +6,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 set( GRANTLEE_PLUGIN_PATH "${CMAKE_BINARY_DIR}/" )
 
-configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
+configure_file(grantlee_paths.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/grantlee_paths.h)
 
 find_package(Qt5LinguistTools QUIET)
 if (Qt5LinguistTools_FOUND)
@@ -39,14 +39,14 @@ if (Qt5LinguistTools_FOUND)
 
   set(QM_FILES "
 <qresource>
-    <file alias=\"test_de_DE.qm\">${PROJECT_BINARY_DIR}/test_de_DE.qm</file>
-    <file alias=\"test_fr_FR.qm\">${PROJECT_BINARY_DIR}/test_fr_FR.qm</file>
+    <file alias=\"test_de_DE.qm\">${CMAKE_CURRENT_BINARY_DIR}/test_de_DE.qm</file>
+    <file alias=\"test_fr_FR.qm\">${CMAKE_CURRENT_BINARY_DIR}/test_fr_FR.qm</file>
 </qresource>")
 endif()
 
-configure_file(testresource.qrc.cmake "${PROJECT_BINARY_DIR}/testresource.qrc")
+configure_file(testresource.qrc.cmake "${CMAKE_CURRENT_BINARY_DIR}/testresource.qrc")
 
-set (_rcc_file "${PROJECT_BINARY_DIR}/testresource.qrc")
+set (_rcc_file "${CMAKE_CURRENT_BINARY_DIR}/testresource.qrc")
 
 qt5_add_resources(_testresource_rcc_src ${_rcc_file} OPTIONS -root "/" )
 

@@ -68,7 +68,7 @@ install(FILES
   plaintextmarkupbuilder.h
   texthtmlbuilder.h
   mediawikimarkupbuilder.h
-  ${PROJECT_BINARY_DIR}/grantlee_textdocument_export.h
+  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_textdocument_export.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT TextDocument
 )
 
