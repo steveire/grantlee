@@ -5,7 +5,13 @@ set(Grantlee_PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} )
 
 configure_file(grantlee_config_p.h.cmake  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_config_p.h)
 
-set (grantlee_templates_SRCS
+set(Grantlee5_TEMPLATES_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
+
+set_source_files_properties(taglibraryinterface.h PROPERTIES
+  SKIP_AUTOMOC TRUE
+)
+
+add_library(Grantlee_Templates SHARED
   abstractlocalizer.cpp
   cachingloaderdecorator.cpp
   customtyperegistry.cpp
@@ -29,12 +35,8 @@ set (grantlee_templates_SRCS
   typeaccessors.cpp
   util.cpp
   variable.cpp
-)
 
-set(Grantlee5_TEMPLATES_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
-
-# Help IDEs find some non-compiled files.
-set(header_only_sources
+  # Help IDEs find some non-compiled files.
   customtyperegistry_p.h
   engine_p.h
   exception.h
@@ -51,15 +53,6 @@ set(header_only_sources
   textprocessingmachine_p.h
   token.h
   typeaccessor.h
-)
-list(APPEND grantlee_templates_SRCS ${header_only_sources})
-
-set_source_files_properties(taglibraryinterface.h PROPERTIES
-  SKIP_AUTOMOC TRUE
-)
-
-add_library(Grantlee_Templates SHARED
-  ${grantlee_templates_SRCS}
 )
 add_library(Grantlee5::Templates ALIAS Grantlee_Templates)
 generate_export_header(Grantlee_Templates)

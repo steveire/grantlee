@@ -1,23 +1,17 @@
-set (grantlee_textdocument_SRCS
+
+set(Grantlee5_TEXTDOCUMENT_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
+
+add_library(Grantlee_TextDocument SHARED
   bbcodebuilder.cpp
   markupdirector.cpp
   plaintextmarkupbuilder.cpp
   texthtmlbuilder.cpp
   mediawikimarkupbuilder.cpp
-)
 
-set(Grantlee5_TEXTDOCUMENT_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
-
-# Help IDEs find some non-compiled files.
-set(header_only_sources
+  # Help IDEs find some non-compiled files.
   abstractmarkupbuilder.h
   grantlee_textdocument.h
   markupdirector_p.h
-)
-list(APPEND grantlee_textdocument_SRCS ${header_only_sources})
-
-add_library(Grantlee_TextDocument SHARED
-  ${grantlee_textdocument_SRCS}
 )
 generate_export_header(Grantlee_TextDocument)
 add_library(Grantlee::TextDocument ALIAS Grantlee_TextDocument)
