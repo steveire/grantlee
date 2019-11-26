@@ -67,10 +67,10 @@ install(FILES
   texthtmlbuilder.h
   mediawikimarkupbuilder.h
   ${CMAKE_CURRENT_BINARY_DIR}/grantlee_textdocument_export.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT TextDocument
+  DESTINATION include/grantlee COMPONENT TextDocument
 )
 
 install(FILES
   grantlee_textdocument.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT TextDocument
+  DESTINATION include COMPONENT TextDocument
 )

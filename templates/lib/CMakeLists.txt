@@ -159,10 +159,10 @@ install(FILES
   token.h
   util.h
   variable.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Templates
+  DESTINATION include/grantlee COMPONENT Templates
 )
 
 install(FILES
   grantlee_templates.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Templates
+  DESTINATION include COMPONENT Templates
 )
