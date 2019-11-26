@@ -55,7 +55,7 @@ add_library(template_test_builtins STATIC coverageobject.cpp
 target_link_libraries(template_test_builtins Qt5::Test)
 target_compile_definitions(template_test_builtins PUBLIC cxx_auto_type)
 
-macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
+macro(grantlee_templates_unit_tests)
   foreach(_testname ${ARGN})
     add_executable(${_testname}_exec
                   ${_testname}.cpp
@@ -69,7 +69,7 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
 
     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
   endforeach(_testname)
-endmacro(GRANTLEE_TEMPLATES_UNIT_TESTS)
+endmacro()
 
 grantlee_templates_unit_tests(
   testsafestring

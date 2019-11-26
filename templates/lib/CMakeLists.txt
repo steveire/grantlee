@@ -54,14 +54,18 @@ set(header_only_sources
 )
 list(APPEND grantlee_templates_SRCS ${header_only_sources})
 
-set_source_files_properties(taglibraryinterface.h PROPERTIES SKIP_AUTOMOC TRUE)
+set_source_files_properties(taglibraryinterface.h PROPERTIES
+  SKIP_AUTOMOC TRUE
+)
 
 add_library(Grantlee_Templates SHARED
   ${grantlee_templates_SRCS}
 )
 add_library(Grantlee5::Templates ALIAS Grantlee_Templates)
 generate_export_header(Grantlee_Templates)
-set_property(TARGET Grantlee_Templates PROPERTY EXPORT_NAME Templates)
+set_property(TARGET Grantlee_Templates PROPERTY
+  EXPORT_NAME Templates
+)
 target_compile_features(Grantlee_Templates
   PRIVATE
     cxx_auto_type
@@ -127,10 +131,10 @@ set_target_properties(Grantlee_Templates PROPERTIES
 )
 
 install(TARGETS Grantlee_Templates EXPORT grantlee_targets
-         RUNTIME DESTINATION bin COMPONENT Templates
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
-         INCLUDES DESTINATION include
+  RUNTIME DESTINATION bin COMPONENT Templates
+  LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
+  ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
+  INCLUDES DESTINATION include
 )
 
 install(FILES

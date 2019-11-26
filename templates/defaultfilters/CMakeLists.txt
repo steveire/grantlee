@@ -7,11 +7,19 @@ add_library(grantlee_defaultfilters MODULE
   misc.cpp
   stringfilters.cpp
 )
-set_property(TARGET grantlee_defaultfilters PROPERTY EXPORT_NAME defaultfilters)
-target_link_libraries(grantlee_defaultfilters Grantlee5::Templates)
-target_compile_features(grantlee_defaultfilters PRIVATE cxx_auto_type)
+set_property(TARGET grantlee_defaultfilters PROPERTY
+    EXPORT_NAME defaultfilters
+)
+target_link_libraries(grantlee_defaultfilters PRIVATE
+  Grantlee5::Templates
+)
+target_compile_features(grantlee_defaultfilters PRIVATE
+  cxx_auto_type
+)
 grantlee_adjust_plugin_name(grantlee_defaultfilters)
 
-install(TARGETS grantlee_defaultfilters EXPORT grantlee_targets
-         LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR} COMPONENT Templates
+install(TARGETS grantlee_defaultfilters
+  EXPORT grantlee_targets
+  LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}
+  COMPONENT Templates
 )

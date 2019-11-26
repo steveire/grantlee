@@ -21,7 +21,9 @@ add_library(Grantlee_TextDocument SHARED
 )
 generate_export_header(Grantlee_TextDocument)
 add_library(Grantlee::TextDocument ALIAS Grantlee_TextDocument)
-set_property(TARGET Grantlee_TextDocument PROPERTY EXPORT_NAME TextDocument)
+set_property(TARGET Grantlee_TextDocument PROPERTY
+  EXPORT_NAME TextDocument
+)
 target_compile_features(Grantlee_TextDocument
   PRIVATE
     cxx_auto_type
@@ -51,10 +53,10 @@ set_target_properties(Grantlee_TextDocument PROPERTIES
 )
 
 install(TARGETS Grantlee_TextDocument EXPORT grantlee_targets
-         RUNTIME DESTINATION bin COMPONENT TextDocument
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
-         INCLUDES DESTINATION include
+  RUNTIME DESTINATION bin COMPONENT TextDocument
+  LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
+  ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT TextDocument
+  INCLUDES DESTINATION include
 )
 
 install(FILES
