@@ -122,7 +122,7 @@ target_link_libraries(Grantlee_Templates
 )
 
 set_target_properties(Grantlee_Templates PROPERTIES
-  VERSION    ${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}
+  VERSION    ${Grantlee5_VERSION}
   SOVERSION  ${Grantlee5_TEMPLATES_LIB_SOVERSION}
 )
 

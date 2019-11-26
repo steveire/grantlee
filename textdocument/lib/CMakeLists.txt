@@ -46,7 +46,7 @@ target_link_libraries(Grantlee_TextDocument
 )
 
 set_target_properties(Grantlee_TextDocument PROPERTIES
-  VERSION    ${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}
+  VERSION    ${Grantlee5_VERSION}
   SOVERSION  ${Grantlee5_TEXTDOCUMENT_LIB_SOVERSION}
 )
 
