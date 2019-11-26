@@ -27,7 +27,7 @@ if (BUILD_TESTS)
 endif()
 
 set(Grantlee_MODULE_DIR ${CMAKE_SOURCE_DIR}/cmake/modules)
-set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
+list(APPEND CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
 include(GenerateExportHeader)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
