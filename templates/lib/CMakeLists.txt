@@ -111,7 +111,7 @@ if (Qt5Qml_FOUND)
   target_sources(Grantlee_Templates PRIVATE ${scriptabletags_SRCS})
   target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
   target_link_libraries(Grantlee_Templates
-    LINK_PRIVATE Qt5::Qml
+    PRIVATE Qt5::Qml
   )
 endif()
 

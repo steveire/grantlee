@@ -44,7 +44,7 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
 endif()
 
 target_link_libraries(Grantlee_TextDocument
-  LINK_PUBLIC Qt5::Gui
+  PUBLIC Qt5::Gui
 )
 
 set_target_properties(Grantlee_TextDocument PROPERTIES
