@@ -89,6 +89,8 @@ TextEdit::TextEdit(QWidget *parent) : QMainWindow(parent)
 
   abstractTextEdit = new QTextEdit(this);
 
+  abstractTextEdit->append("This is the abstract");
+
   textEdit = new QTextEdit(this);
   connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)), this,
           SLOT(currentCharFormatChanged(QTextCharFormat)));
