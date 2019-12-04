@@ -73,7 +73,6 @@
 #include <grantlee/engine.h>
 
 #include "audioobject.h"
-#include "audiotextedit.h"
 
 #ifdef Q_WS_MAC
 const QString rsrcPath = ":/images/mac";
@@ -97,7 +96,7 @@ TextEdit::TextEdit(QWidget *parent) : QMainWindow(parent)
 
   abstractTextEdit = new QTextEdit(this);
 
-  textEdit = new AudioTextEdit(this);
+  textEdit = new QTextEdit(this);
   connect(textEdit, SIGNAL(currentCharFormatChanged(QTextCharFormat)), this,
           SLOT(currentCharFormatChanged(QTextCharFormat)));
   connect(textEdit, SIGNAL(cursorPositionChanged()), this,

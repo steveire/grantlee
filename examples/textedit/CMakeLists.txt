@@ -36,7 +36,6 @@ configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 add_executable(textedit
   main.cpp
-  audiotextedit.cpp
   audioobject.cpp
   textedit.cpp
   textedit.qrc
@@ -45,7 +44,6 @@ add_executable(textedit
 target_link_libraries(
   textedit
   Qt4::QtWebKit
-  Qt4::phonon
   Grantlee5::Templates
   Qt5::Widgets
 )
