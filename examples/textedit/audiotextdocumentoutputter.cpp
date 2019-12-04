@@ -24,8 +24,7 @@ AudioTextHtmlBuilder::AudioTextHtmlBuilder() {}
 
 void AudioTextHtmlBuilder::addAudioTag(const QString &source)
 {
-  appendLiteralText(QString("<audio src=\"%1\" />").arg(source));
-  //   appendRawText( QString( "<audio src=\"%1\" />").arg( source ) );
+  appendRawText(QString("<audio src=\"%1\" />").arg(source));
 }
 
 AudioPlainTextBuilder::AudioPlainTextBuilder() {}
