@@ -183,7 +183,6 @@ void TextEdit::setupFileActions()
   a->setPriority(QAction::LowPriority);
   a->setShortcut(QKeySequence::New);
   connect(a, SIGNAL(triggered()), this, SLOT(fileNew()));
-  tb->addAction(a);
   menu->addAction(a);
 
   a = new QAction(
@@ -191,7 +190,6 @@ void TextEdit::setupFileActions()
       tr("&Open..."), this);
   a->setShortcut(QKeySequence::Open);
   connect(a, SIGNAL(triggered()), this, SLOT(fileOpen()));
-  tb->addAction(a);
   menu->addAction(a);
 
   menu->addSeparator();
@@ -202,7 +200,6 @@ void TextEdit::setupFileActions()
   a->setShortcut(QKeySequence::Save);
   connect(a, SIGNAL(triggered()), this, SLOT(fileSave()));
   a->setEnabled(false);
-  tb->addAction(a);
   menu->addAction(a);
 
   a = new QAction(tr("Save &As..."), this);
@@ -243,9 +240,6 @@ void TextEdit::setupFileActions()
 
 void TextEdit::setupEditActions()
 {
-  QToolBar *tb = new QToolBar(this);
-  tb->setWindowTitle(tr("Edit Actions"));
-  addToolBar(tb);
   QMenu *menu = new QMenu(tr("&Edit"), this);
   menuBar()->addMenu(menu);
 
@@ -254,14 +248,12 @@ void TextEdit::setupEditActions()
       QIcon::fromTheme("edit-undo", QIcon(rsrcPath + "/editundo.png")),
       tr("&Undo"), this);
   a->setShortcut(QKeySequence::Undo);
-  tb->addAction(a);
   menu->addAction(a);
   a = actionRedo = new QAction(
       QIcon::fromTheme("edit-redo", QIcon(rsrcPath + "/editredo.png")),
       tr("&Redo"), this);
   a->setPriority(QAction::LowPriority);
   a->setShortcut(QKeySequence::Redo);
-  tb->addAction(a);
   menu->addAction(a);
   menu->addSeparator();
   a = actionCut = new QAction(
@@ -269,21 +261,18 @@ void TextEdit::setupEditActions()
       tr("Cu&t"), this);
   a->setPriority(QAction::LowPriority);
   a->setShortcut(QKeySequence::Cut);
-  tb->addAction(a);
   menu->addAction(a);
   a = actionCopy = new QAction(
       QIcon::fromTheme("edit-copy", QIcon(rsrcPath + "/editcopy.png")),
       tr("&Copy"), this);
   a->setPriority(QAction::LowPriority);
   a->setShortcut(QKeySequence::Copy);
-  tb->addAction(a);
   menu->addAction(a);
   a = actionPaste = new QAction(
       QIcon::fromTheme("edit-paste", QIcon(rsrcPath + "/editpaste.png")),
       tr("&Paste"), this);
   a->setPriority(QAction::LowPriority);
   a->setShortcut(QKeySequence::Paste);
-  tb->addAction(a);
   menu->addAction(a);
 #ifndef QT_NO_CLIPBOARD
   actionPaste->setEnabled(!QApplication::clipboard()->text().isEmpty());
@@ -292,10 +281,6 @@ void TextEdit::setupEditActions()
 
 void TextEdit::setupTextActions()
 {
-  QToolBar *tb = new QToolBar(this);
-  tb->setWindowTitle(tr("Format Actions"));
-  addToolBar(tb);
-
   QMenu *menu = new QMenu(tr("F&ormat"), this);
   menuBar()->addMenu(menu);
 
@@ -308,7 +293,6 @@ void TextEdit::setupTextActions()
   bold.setBold(true);
   actionTextBold->setFont(bold);
   connect(actionTextBold, SIGNAL(triggered()), this, SLOT(textBold()));
-  tb->addAction(actionTextBold);
   menu->addAction(actionTextBold);
   actionTextBold->setCheckable(true);
 
@@ -322,7 +306,6 @@ void TextEdit::setupTextActions()
   italic.setItalic(true);
   actionTextItalic->setFont(italic);
   connect(actionTextItalic, SIGNAL(triggered()), this, SLOT(textItalic()));
-  tb->addAction(actionTextItalic);
   menu->addAction(actionTextItalic);
   actionTextItalic->setCheckable(true);
 
@@ -337,7 +320,6 @@ void TextEdit::setupTextActions()
   actionTextUnderline->setFont(underline);
   connect(actionTextUnderline, SIGNAL(triggered()), this,
           SLOT(textUnderline()));
-  tb->addAction(actionTextUnderline);
   menu->addAction(actionTextUnderline);
   actionTextUnderline->setCheckable(true);
 
@@ -392,7 +374,6 @@ void TextEdit::setupTextActions()
   actionAlignJustify->setCheckable(true);
   actionAlignJustify->setPriority(QAction::LowPriority);
 
-  tb->addActions(grp->actions());
   menu->addActions(grp->actions());
 
   menu->addSeparator();
@@ -401,14 +382,7 @@ void TextEdit::setupTextActions()
   pix.fill(Qt::black);
   actionTextColor = new QAction(pix, tr("&Color..."), this);
   connect(actionTextColor, SIGNAL(triggered()), this, SLOT(textColor()));
-  tb->addAction(actionTextColor);
   menu->addAction(actionTextColor);
-
-  tb = new QToolBar(this);
-  tb->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
-  tb->setWindowTitle(tr("Format Actions"));
-  addToolBarBreak(Qt::TopToolBarArea);
-  addToolBar(tb);
 }
 
 bool TextEdit::load(const QString &f)
