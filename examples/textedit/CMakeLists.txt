@@ -1,6 +1,6 @@
-project(textedit_grantlee)
+cmake_minimum_required(VERSION 3.5)
 
-cmake_minimum_required(VERSION 3.0)
+project(textedit_grantlee)
 
 find_package(Grantlee5 REQUIRED)
 find_package(Qt5Widgets REQUIRED)
