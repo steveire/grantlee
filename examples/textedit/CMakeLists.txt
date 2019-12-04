@@ -18,8 +18,8 @@ add_library(customtags MODULE
 grantlee_adjust_plugin_name(customtags)
 
 target_link_libraries(customtags
-  ${Grantlee_TEMPLATES_LIBRARIES}
-  ${Grantlee_TEXTDOCUMENT_LIBRARIES}
+  Grantlee5::Templates
+  Grantlee5::TextDocument
 )
 
 
@@ -45,5 +45,5 @@ target_link_libraries(
   textedit
   Qt4::QtWebKit
   Qt4::phonon
-  ${Grantlee_TEMPLATES_LIBRARIES}
+  Grantlee5::Templates
 )
