@@ -3,6 +3,7 @@ project(textedit_grantlee)
 cmake_minimum_required(VERSION 3.0)
 
 find_package(Grantlee5 REQUIRED)
+find_package(Qt5Widgets REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -46,4 +47,5 @@ target_link_libraries(
   Qt4::QtWebKit
   Qt4::phonon
   Grantlee5::Templates
+  Qt5::Widgets
 )
