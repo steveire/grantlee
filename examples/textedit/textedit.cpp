@@ -403,6 +403,12 @@ bool TextEdit::load(const QString &f)
     textEdit->setPlainText(str);
   }
 
+  auto tc = textEdit->document()->find("[audio]");
+  textEdit->setTextCursor(tc);
+  addAudio();
+  tc.movePosition(QTextCursor::Start);
+  textEdit->setTextCursor(tc);
+
   setCurrentFileName(f);
   return true;
 }
