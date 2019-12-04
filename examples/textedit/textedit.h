@@ -76,9 +76,6 @@ private Q_SLOTS:
   void fileOpen();
   bool fileSave();
   bool fileSaveAs();
-  void filePrint();
-  void filePrintPreview();
-  void filePrintPdf();
 
   void exportThemedHtml();
   void exportPlainText();
@@ -98,7 +95,6 @@ private Q_SLOTS:
 
   void clipboardDataChanged();
   void about();
-  void printPreview(QPrinter *);
 
 private:
   void mergeFormatOnWordOrSelection(const QTextCharFormat &format);

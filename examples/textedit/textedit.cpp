@@ -55,9 +55,6 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QPrintDialog>
-#include <QPrintPreviewDialog>
-#include <QPrinter>
 #include <QSplitter>
 #include <QTextCodec>
 #include <QTextCursor>
@@ -217,34 +214,6 @@ void TextEdit::setupFileActions()
   connect(a, SIGNAL(triggered()), this, SLOT(fileSaveAs()));
   menu->addAction(a);
   menu->addSeparator();
-
-#ifndef QT_NO_PRINTER
-  a = new QAction(
-      QIcon::fromTheme("document-print", QIcon(rsrcPath + "/fileprint.png")),
-      tr("&Print..."), this);
-  a->setPriority(QAction::LowPriority);
-  a->setShortcut(QKeySequence::Print);
-  connect(a, SIGNAL(triggered()), this, SLOT(filePrint()));
-  tb->addAction(a);
-  menu->addAction(a);
-
-  a = new QAction(
-      QIcon::fromTheme("fileprint", QIcon(rsrcPath + "/fileprint.png")),
-      tr("Print Preview..."), this);
-  connect(a, SIGNAL(triggered()), this, SLOT(filePrintPreview()));
-  menu->addAction(a);
-
-  a = new QAction(
-      QIcon::fromTheme("exportpdf", QIcon(rsrcPath + "/exportpdf.png")),
-      tr("&Export PDF..."), this);
-  a->setPriority(QAction::LowPriority);
-  a->setShortcut(Qt::CTRL + Qt::Key_D);
-  connect(a, SIGNAL(triggered()), this, SLOT(filePrintPdf()));
-  tb->addAction(a);
-  menu->addAction(a);
-
-  menu->addSeparator();
-#endif
 
   a = new QAction(QIcon::fromTheme("export_themed_html"),
                   tr("&Export Themed HTML"), this);
@@ -574,59 +543,6 @@ bool TextEdit::fileSaveAs()
     fn += ".odt"; // default
   setCurrentFileName(fn);
   return fileSave();
-}
-
-void TextEdit::filePrint()
-{
-#ifndef QT_NO_PRINTER
-  QPrinter printer(QPrinter::HighResolution);
-  QPrintDialog *dlg = new QPrintDialog(&printer, this);
-  if (textEdit->textCursor().hasSelection())
-    dlg->addEnabledOption(QAbstractPrintDialog::PrintSelection);
-  dlg->setWindowTitle(tr("Print Document"));
-  if (dlg->exec() == QDialog::Accepted) {
-    textEdit->print(&printer);
-  }
-  delete dlg;
-#endif
-}
-
-void TextEdit::filePrintPreview()
-{
-#ifndef QT_NO_PRINTER
-  QPrinter printer(QPrinter::HighResolution);
-  QPrintPreviewDialog preview(&printer, this);
-  connect(&preview, SIGNAL(paintRequested(QPrinter *)),
-          SLOT(printPreview(QPrinter *)));
-  preview.exec();
-#endif
-}
-
-void TextEdit::printPreview(QPrinter *printer)
-{
-#ifdef QT_NO_PRINTER
-  Q_UNUSED(printer);
-#else
-  textEdit->print(printer);
-#endif
-}
-
-void TextEdit::filePrintPdf()
-{
-#ifndef QT_NO_PRINTER
-  //! [0]
-  QString fileName
-      = QFileDialog::getSaveFileName(this, "Export PDF", QString(), "*.pdf");
-  if (!fileName.isEmpty()) {
-    if (QFileInfo(fileName).suffix().isEmpty())
-      fileName.append(".pdf");
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setOutputFileName(fileName);
-    textEdit->document()->print(&printer);
-  }
-//! [0]
-#endif
 }
 
 void TextEdit::exportThemedHtml()
