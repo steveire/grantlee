@@ -32,8 +32,7 @@ public:
     Get a letter string to represent a number.
 
     The numbers 1-26 are represented by a-z, and 27-52 by aa-az, 53-79 by
-    ba-bz
-    etc.
+    ba-bz etc.
 
     @param The number to convert
     @return The letter string representation of the number.
@@ -83,9 +82,8 @@ QString PlainTextMarkupBuilderPrivate::getRomanString(int item)
         if (i % 4) {
           // c[i] == 4|5|9|40|50|90|400|500|900
           if ((i - 2) % 4) {
-            // c[i] == 4|9|40|90|400|900 => with subtraction (IV,
-            // IX, XL, XC,
-            // ...)
+            // c[i] == 4|9|40|90|400|900
+            //   => with subtraction (IV, IX, XL, XC, ...)
             numDigits = 2;
           } else {
             // c[i] == 5|50|500 (V, L, D)
@@ -112,11 +110,8 @@ QString PlainTextMarkupBuilderPrivate::getLetterString(int itemNumber)
   while (true) {
     // Create the letter string by prepending one char at a time.
     // The itemNumber is converted to a number in the base 36 (number of
-    // letters
-    // in the
-    // alphabet plus 10) after being increased by 10 (to pass out the digits
-    // 0
-    // to 9).
+    // letters in the alphabet plus 10) after being increased by 10
+    // (to pass out the digits 0 to 9).
     letterString.prepend(QStringLiteral("%1").arg(
         (itemNumber % LETTERSINALPHABET) + DIGITSOFFSET,
         0, // no padding while building this string.

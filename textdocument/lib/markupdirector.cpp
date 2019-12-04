@@ -347,8 +347,8 @@ MarkupDirector::processFragment(QTextBlock::iterator it,
   processOpeningElements(it);
 
   // If a sequence such as '<br /><br />' is imported into a document with
-  // setHtml, LineSeparator
-  // characters are inserted. Here I make sure to put them back.
+  // setHtml, LineSeparator characters are inserted. Here I make sure to
+  // put them back.
   auto sl = fragment.text().split(QChar(QChar::LineSeparator));
   QStringListIterator i(sl);
   auto paraClosed = false;

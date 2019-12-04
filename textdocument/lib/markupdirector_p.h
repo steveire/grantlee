@@ -58,8 +58,7 @@ class MarkupDirectorPrivate
   QList<int> m_openElements;
 
   // Elements that have yet to be opened. Used while determine the order to
-  // open
-  // them.
+  // open them.
   QSet<int> m_elementsToOpen;
 };
 }
