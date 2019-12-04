@@ -98,7 +98,6 @@ private Q_SLOTS:
 
 private:
   void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
-  void fontChanged(const QFont &f);
   void colorChanged(const QColor &c);
   void alignmentChanged(Qt::Alignment a);
 
@@ -106,10 +105,6 @@ private:
       *actionTextColor, *actionAlignLeft, *actionAlignCenter, *actionAlignRight,
       *actionAlignJustify, *actionUndo, *actionRedo, *actionCut, *actionCopy,
       *actionPaste;
-
-  QComboBox *comboStyle;
-  QFontComboBox *comboFont;
-  QComboBox *comboSize;
 
   QToolBar *tb;
   QString fileName;

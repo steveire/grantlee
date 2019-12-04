@@ -46,12 +46,9 @@
 #include <QClipboard>
 #include <QCloseEvent>
 #include <QColorDialog>
-#include <QComboBox>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QFontComboBox>
-#include <QFontDatabase>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -115,7 +112,6 @@ TextEdit::TextEdit(QWidget *parent) : QMainWindow(parent)
   textEdit->setFocus();
   setCurrentFileName(QString());
 
-  fontChanged(textEdit->font());
   colorChanged(textEdit->textColor());
   alignmentChanged(textEdit->alignment());
 
@@ -413,37 +409,6 @@ void TextEdit::setupTextActions()
   tb->setWindowTitle(tr("Format Actions"));
   addToolBarBreak(Qt::TopToolBarArea);
   addToolBar(tb);
-
-  comboStyle = new QComboBox(tb);
-  tb->addWidget(comboStyle);
-  comboStyle->addItem("Standard");
-  comboStyle->addItem("Bullet List (Disc)");
-  comboStyle->addItem("Bullet List (Circle)");
-  comboStyle->addItem("Bullet List (Square)");
-  comboStyle->addItem("Ordered List (Decimal)");
-  comboStyle->addItem("Ordered List (Alpha lower)");
-  comboStyle->addItem("Ordered List (Alpha upper)");
-  comboStyle->addItem("Ordered List (Roman lower)");
-  comboStyle->addItem("Ordered List (Roman upper)");
-  connect(comboStyle, SIGNAL(activated(int)), this, SLOT(textStyle(int)));
-
-  comboFont = new QFontComboBox(tb);
-  tb->addWidget(comboFont);
-  connect(comboFont, SIGNAL(activated(QString)), this,
-          SLOT(textFamily(QString)));
-
-  comboSize = new QComboBox(tb);
-  comboSize->setObjectName("comboSize");
-  tb->addWidget(comboSize);
-  comboSize->setEditable(true);
-
-  QFontDatabase db;
-  Q_FOREACH (int size, db.standardSizes())
-    comboSize->addItem(QString::number(size));
-
-  connect(comboSize, SIGNAL(activated(QString)), this, SLOT(textSize(QString)));
-  comboSize->setCurrentIndex(
-      comboSize->findText(QString::number(QApplication::font().pointSize())));
 }
 
 bool TextEdit::load(const QString &f)
@@ -724,7 +689,6 @@ void TextEdit::textAlign(QAction *a)
 
 void TextEdit::currentCharFormatChanged(const QTextCharFormat &format)
 {
-  fontChanged(format.font());
   colorChanged(format.foreground().color());
 }
 
@@ -756,16 +720,6 @@ void TextEdit::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
     cursor.select(QTextCursor::WordUnderCursor);
   cursor.mergeCharFormat(format);
   textEdit->mergeCurrentCharFormat(format);
-}
-
-void TextEdit::fontChanged(const QFont &f)
-{
-  comboFont->setCurrentIndex(comboFont->findText(QFontInfo(f).family()));
-  comboSize->setCurrentIndex(
-      comboSize->findText(QString::number(f.pointSize())));
-  actionTextBold->setChecked(f.bold());
-  actionTextItalic->setChecked(f.italic());
-  actionTextUnderline->setChecked(f.underline());
 }
 
 void TextEdit::colorChanged(const QColor &c)
