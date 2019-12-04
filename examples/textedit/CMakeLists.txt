@@ -43,7 +43,6 @@ add_executable(textedit
 
 target_link_libraries(
   textedit
-  Qt4::QtWebKit
   Grantlee5::Templates
   Qt5::Widgets
 )

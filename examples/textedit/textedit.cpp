@@ -65,7 +65,6 @@
 #include <QTextEdit>
 #include <QTextList>
 #include <QToolBar>
-#include <QWebView>
 #include <QtDebug>
 
 #include "grantlee_paths.h"
@@ -112,7 +111,7 @@ TextEdit::TextEdit(QWidget *parent) : QMainWindow(parent)
   splitter->addWidget(abstractTextEdit);
   splitter->addWidget(textEdit);
 
-  webView = new QWebView(this);
+  webView = new QTextEdit(this);
   hSplitter->addWidget(webView);
 
   setCentralWidget(hSplitter);
@@ -655,7 +654,7 @@ void TextEdit::exportThemedHtml()
 
   QString result = t->render(&c);
 
-  webView->setHtml(result);
+  webView->setPlainText(result);
 }
 
 void TextEdit::exportPlainText()
@@ -681,7 +680,7 @@ void TextEdit::exportPlainText()
 
   QString result = t->render(&c);
 
-  webView->setContent(result.toUtf8(), "text/plain");
+  webView->setPlainText(result);
 }
 
 void TextEdit::textBold()

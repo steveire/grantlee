@@ -52,7 +52,6 @@ QT_FORWARD_DECLARE_CLASS(QFontComboBox)
 QT_FORWARD_DECLARE_CLASS(QTextEdit)
 QT_FORWARD_DECLARE_CLASS(QTextCharFormat)
 QT_FORWARD_DECLARE_CLASS(QMenu)
-QT_FORWARD_DECLARE_CLASS(QWebView)
 
 class TextEdit : public QMainWindow
 {
@@ -120,7 +119,7 @@ private:
   QString fileName;
   QTextEdit *abstractTextEdit;
   QTextEdit *textEdit;
-  QWebView *webView;
+  QTextEdit *webView;
 };
 
 #endif
