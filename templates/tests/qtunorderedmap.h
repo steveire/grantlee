@@ -30,8 +30,7 @@ template <typename Key> struct QtHasher {
 };
 
 template <typename Key, typename Value>
-struct QtUnorderedMap
-    : public std::unordered_map<Key, Value, QtHasher<Key>> {
+struct QtUnorderedMap : public std::unordered_map<Key, Value, QtHasher<Key>> {
 };
 
 #endif
