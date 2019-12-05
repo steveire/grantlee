@@ -90,9 +90,7 @@ void RegroupNode::render(OutputStream *stream, Context *c) const
 
   QVariantList contextList;
   const QString keyName = getSafeString(m_expression.resolve(c));
-  QListIterator<QVariant> i(objList);
-  while (i.hasNext()) {
-    const auto var = i.next();
+  for (auto &var : objList) {
     c->push();
     c->insert(QStringLiteral("var"), var);
     const QString key = getSafeString(

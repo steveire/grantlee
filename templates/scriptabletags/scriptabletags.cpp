@@ -232,9 +232,8 @@ QHash<QString, Filter *> ScriptableTagLibrary::filters(const QString &name)
 QHash<QString, AbstractNodeFactory *> ScriptableTagLibrary::getFactories()
 {
   QHash<QString, AbstractNodeFactory *> factories;
-  QHashIterator<QString, QString> it(m_factoryNames);
-  while (it.hasNext()) {
-    it.next();
+  for (auto it = m_factoryNames.begin(), end = m_factoryNames.end(); it != end;
+       ++it) {
     auto factoryName = it.value();
     auto tagName = it.key();
 
@@ -254,9 +253,9 @@ QHash<QString, Filter *> ScriptableTagLibrary::getFilters()
 {
   QHash<QString, Filter *> filters;
 
-  QListIterator<QString> it(m_filterNames);
-  while (it.hasNext()) {
-    auto filterObject = m_scriptEngine->globalObject().property(it.next());
+  for (auto &filterNameString : m_filterNames) {
+    auto filterObject
+        = m_scriptEngine->globalObject().property(filterNameString);
     auto filterName
         = filterObject.property(QStringLiteral("filterName")).toString();
     auto filter = new ScriptableFilter(filterObject, m_scriptEngine);

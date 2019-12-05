@@ -45,9 +45,8 @@ void ScriptableContext::pop() { m_c->pop(); }
 QString ScriptableContext::render(const QList<QObject *> &list) const
 {
   NodeList nodeList;
-  QListIterator<QObject *> it(list);
-  while (it.hasNext()) {
-    auto node = qobject_cast<Node *>(it.next());
+  for (auto n : list) {
+    auto node = qobject_cast<Node *>(n);
     if (node)
       nodeList << node;
   }

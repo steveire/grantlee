@@ -193,9 +193,7 @@ AbstractNodeFactory::getFilterExpressionList(const QStringList &list,
                                              Parser *p) const
 {
   QList<FilterExpression> fes;
-  QListIterator<QString> it(list);
-  while (it.hasNext()) {
-    const auto varString = it.next();
+  for (auto &varString : list) {
     fes << FilterExpression(varString, p);
   }
   return fes;

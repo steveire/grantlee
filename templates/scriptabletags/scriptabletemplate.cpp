@@ -39,9 +39,8 @@ QList<QObject *> ScriptableTemplate::nodeList() const
   auto nodeList = m_template->nodeList();
   QList<QObject *> objList;
 
-  QListIterator<Node *> it(nodeList);
-  while (it.hasNext()) {
-    objList << it.next();
+  for (auto n : nodeList) {
+    objList << n;
   }
   return objList;
 }
@@ -50,10 +49,8 @@ void ScriptableTemplate::setNodeList(const QList<QObject *> &list)
 {
   NodeList nodeList;
 
-  QListIterator<QObject *> it(list);
-
-  while (it.hasNext()) {
-    auto n = qobject_cast<Node *>(it.next());
+  for (auto obj : list) {
+    auto n = qobject_cast<Node *>(obj);
     if (n) {
       nodeList << n;
     }

@@ -102,10 +102,7 @@ QVariant EscapeJsFilter::doFilter(const QVariant &input,
 
   static const auto jsEscapes = getJsEscapes();
 
-  QListIterator<QPair<QString, QString>> it(jsEscapes);
-
-  while (it.hasNext()) {
-    auto escape = it.next();
+  for (auto &escape : jsEscapes) {
     retString = retString.replace(escape.first, escape.second);
   }
   return retString;

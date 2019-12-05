@@ -83,10 +83,9 @@ void IfChangedNode::render(OutputStream *stream, Context *c) const
   if (m_filterExpressions.isEmpty()) {
     m_trueList.render(watchedStream.data(), c);
   }
-  QListIterator<FilterExpression> i(m_filterExpressions);
   QVariantList watchedVars;
-  while (i.hasNext()) {
-    auto var = i.next().resolve(c);
+  for (auto &i : m_filterExpressions) {
+    auto var = i.resolve(c);
     if (!var.isValid()) {
       // silent error
       return;

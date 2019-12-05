@@ -74,11 +74,9 @@ void Engine::addTemplateLoader(QSharedPointer<AbstractTemplateLoader> loader)
 QPair<QString, QString> Engine::mediaUri(const QString &fileName) const
 {
   Q_D(const Engine);
-  QListIterator<QSharedPointer<AbstractTemplateLoader>> it(d->m_loaders);
 
   QPair<QString, QString> uri;
-  while (it.hasNext()) {
-    const auto loader = it.next();
+  for (auto &loader : d->m_loaders) {
     uri = loader->getMediaUri(fileName);
     if (!uri.second.isEmpty())
       break;
@@ -361,10 +359,7 @@ Template Engine::loadByName(const QString &name) const
 {
   Q_D(const Engine);
 
-  QListIterator<QSharedPointer<AbstractTemplateLoader>> it(d->m_loaders);
-  while (it.hasNext()) {
-    const auto loader = it.next();
-
+  for (auto &loader : d->m_loaders) {
     if (!loader->canLoadTemplate(name))
       continue;
 

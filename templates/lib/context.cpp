@@ -101,9 +101,7 @@ QVariant Context::lookup(const QString &str) const
   Q_D(const Context);
 
   // return a variant from the stack.
-  QListIterator<QVariantHash> i(d->m_variantHashStack);
-  while (i.hasNext()) {
-    const auto h = i.next();
+  for (auto &h : d->m_variantHashStack) {
     if (h.contains(str)) {
       auto var = h.value(str);
       // If the user passed a string into the context, turn it into a

@@ -151,10 +151,8 @@ public:
               + QStringLiteral("%1").arg(i, 2, 16, QLatin1Char('0')).toUpper());
     }
 
-    QListIterator<QPair<QString, QString>> it(jsEscapes);
     auto retString = input;
-    while (it.hasNext()) {
-      auto escape = it.next();
+    for (auto escape : jsEscapes) {
       retString = retString.replace(escape.first, escape.second);
     }
     return retString;

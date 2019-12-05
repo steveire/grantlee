@@ -350,12 +350,14 @@ MarkupDirector::processFragment(QTextBlock::iterator it,
   // setHtml, LineSeparator characters are inserted. Here I make sure to
   // put them back.
   auto sl = fragment.text().split(QChar(QChar::LineSeparator));
-  QStringListIterator i(sl);
+  auto i = sl.begin();
+  auto end = sl.end();
   auto paraClosed = false;
-  while (i.hasNext()) {
-    m_builder->appendLiteralText(i.next());
-    if (i.hasNext()) {
-      if (i.peekNext().isEmpty()) {
+  while (i != end) {
+    m_builder->appendLiteralText(*i);
+    ++i;
+    if (i != end) {
+      if (i->isEmpty()) {
         if (!paraClosed) {
           m_builder->endParagraph();
           paraClosed = true;

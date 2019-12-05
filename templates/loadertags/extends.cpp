@@ -30,8 +30,6 @@
 #include "template.h"
 #include "util.h"
 
-#include <QtCore/QListIterator>
-
 using namespace Grantlee;
 
 ExtendsNodeFactory::ExtendsNodeFactory(QObject *parent)
@@ -141,10 +139,8 @@ void ExtendsNode::render(OutputStream *stream, Context *c) const
 
   const auto parentBlocks
       = createNodeMap(parentTemplate->findChildren<BlockNode *>());
-  QListIterator<Node *> i(nodeList);
 
-  while (i.hasNext()) {
-    auto n = i.next();
+  for (auto n : nodeList) {
     auto tn = qobject_cast<TextNode *>(n);
     if (!tn) {
       auto en = qobject_cast<ExtendsNode *>(n);

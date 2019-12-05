@@ -37,10 +37,8 @@ Node *LoadNodeFactory::getNode(const QString &tagContent, Parser *p) const
 
   expr.takeAt(0);
 
-  QListIterator<QString> i(expr);
-  while (i.hasNext()) {
-    auto libName = i.next();
-    p->loadLib(libName);
+  for (auto &i : expr) {
+    p->loadLib(i);
   }
 
   return new LoadNode(p);

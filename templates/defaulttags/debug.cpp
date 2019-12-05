@@ -40,9 +40,7 @@ void DebugNode::render(OutputStream *stream, Context *c) const
 
   ret += QStringLiteral("\n\nContext:\n");
   while (!h.isEmpty()) {
-    QHashIterator<QString, QVariant> it(h);
-    while (it.hasNext()) {
-      it.next();
+    for (auto it = h.begin(), end = h.end(); it != end; ++it) {
       ret += QStringLiteral("key ") + it.key() + QStringLiteral(", ")
              + QStringLiteral("type ") + QLatin1String(it.value().typeName())
              + QLatin1Char('\n');

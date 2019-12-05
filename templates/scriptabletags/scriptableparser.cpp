@@ -59,9 +59,8 @@ QList<QObject *> ScriptableParser::parse(QObject *parent,
 
   auto nodeList = m_p->parse(node, stopAt);
   QList<QObject *> objList;
-  QListIterator<Node *> it(nodeList);
-  while (it.hasNext()) {
-    objList << it.next();
+  for (auto n : nodeList) {
+    objList << n;
   }
   return objList;
 }

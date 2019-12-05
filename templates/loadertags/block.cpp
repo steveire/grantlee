@@ -54,9 +54,8 @@ Node *BlockNodeFactory::getNode(const QString &tagContent, Parser *p) const
   if (loadedBlocksVariant.isValid()
       && loadedBlocksVariant.userType() == qMetaTypeId<QVariantList>()) {
     blockVariantList = loadedBlocksVariant.value<QVariantList>();
-    QListIterator<QVariant> it(blockVariantList);
-    while (it.hasNext()) {
-      const auto blockNodeName = it.next().value<QString>();
+    for (auto &item : blockVariantList) {
+      const auto blockNodeName = item.value<QString>();
 
       if (blockNodeName == blockName) {
         throw Grantlee::Exception(

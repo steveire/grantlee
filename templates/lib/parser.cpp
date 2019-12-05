@@ -66,8 +66,6 @@ public:
 void ParserPrivate::openLibrary(TagLibraryInterface *library)
 {
   Q_Q(Parser);
-  QHashIterator<QString, AbstractNodeFactory *> nodeIt(
-      library->nodeFactories());
 
   auto ti = qobject_cast<TemplateImpl *>(q->parent());
 
@@ -75,14 +73,15 @@ void ParserPrivate::openLibrary(TagLibraryInterface *library)
   Q_ASSERT(cengine);
   auto engine = const_cast<Engine *>(cengine);
 
-  while (nodeIt.hasNext()) {
-    nodeIt.next();
+  auto factories = library->nodeFactories();
+  for (auto nodeIt = factories.begin(), nodeEnd = factories.end();
+       nodeIt != nodeEnd; ++nodeIt) {
     nodeIt.value()->setEngine(engine);
     m_nodeFactories.insert(nodeIt.key(), nodeIt.value());
   }
-  QHashIterator<QString, Filter *> filterIt(library->filters());
-  while (filterIt.hasNext()) {
-    filterIt.next();
+  auto filters = library->filters();
+  for (auto filterIt = filters.begin(), filterEnd = filters.end();
+       filterIt != filterEnd; ++filterIt) {
     auto f = QSharedPointer<Filter>(filterIt.value());
     m_filters.insert(filterIt.key(), f);
   }
