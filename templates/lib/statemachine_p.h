@@ -51,8 +51,10 @@ public:
   };
 
   explicit State(State<TransitionInterface> *parent = {})
-      : m_initialState(0), m_parent(parent), m_endTransition(0),
-        m_unconditionalTransition(0)
+      : m_initialState(nullptr),
+        m_parent(parent),
+        m_endTransition(nullptr),
+        m_unconditionalTransition(nullptr)
   {
     if (parent)
       parent->addChild(this);
@@ -121,7 +123,8 @@ public:
   typedef typename State<TransitionInterface>::Transition Transition;
 
   explicit StateMachine(State<TransitionInterface> *parent = {})
-      : State<TransitionInterface>(parent), m_currentState(0)
+      : State<TransitionInterface>(parent),
+        m_currentState(nullptr)
   {
   }
 
@@ -148,7 +151,7 @@ public:
   void stop()
   {
     performExit(this);
-    m_currentState = 0;
+    m_currentState = nullptr;
   }
 
 protected:

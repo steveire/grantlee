@@ -130,7 +130,7 @@ void ExtendsNode::render(OutputStream *stream, Context *c) const
                               QStringLiteral("Cannot load template."));
   }
 
-  QVariant &variant = c->renderContext()->data(0);
+  QVariant &variant = c->renderContext()->data(nullptr);
   auto blockContext = variant.value<BlockContext>();
   blockContext.addBlocks(m_blocks);
   variant.setValue(blockContext);

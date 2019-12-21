@@ -29,7 +29,7 @@
 using namespace Grantlee;
 
 ScriptableFilterExpression::ScriptableFilterExpression(QObject *parent)
-    : QObject(parent), m_engine(0)
+    : QObject(parent), m_engine(nullptr)
 {
 }
 

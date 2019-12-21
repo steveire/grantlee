@@ -30,7 +30,7 @@
 #include "scriptableparser.h"
 
 ScriptableNode::ScriptableNode(QObject *parent)
-    : Node(parent), m_scriptEngine(0)
+    : Node(parent), m_scriptEngine(nullptr)
 {
 }
 
@@ -63,7 +63,7 @@ void ScriptableNode::render(OutputStream *stream, Context *c) const
 }
 
 ScriptableNodeFactory::ScriptableNodeFactory(QObject *parent)
-    : AbstractNodeFactory(parent), m_scriptEngine(0)
+    : AbstractNodeFactory(parent), m_scriptEngine(nullptr)
 {
 }
 

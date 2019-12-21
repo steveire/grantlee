@@ -30,7 +30,7 @@
 static const char *const __loadedBlocks = "__loadedBlocks";
 
 // Terrible hack warning.
-#define BLOCK_CONTEXT_KEY 0
+#define BLOCK_CONTEXT_KEY nullptr
 
 BlockNodeFactory::BlockNodeFactory(QObject *parent)
     : AbstractNodeFactory(parent)
@@ -87,7 +87,7 @@ Node *BlockNodeFactory::getNode(const QString &tagContent, Parser *p) const
 }
 
 BlockNode::BlockNode(const QString &name, QObject *parent)
-    : Node(parent), m_name(name), m_stream(0)
+    : Node(parent), m_name(name), m_stream(nullptr)
 {
   qRegisterMetaType<Grantlee::SafeString>("Grantlee::SafeString");
 }
@@ -110,7 +110,7 @@ void BlockNode::render(OutputStream *stream, Context *c) const
               QVariant::fromValue(
                   const_cast<QObject *>(static_cast<const QObject *>(this))));
     m_list.render(stream, c);
-    m_stream = 0;
+    m_stream = nullptr;
   } else {
     auto block = static_cast<const BlockNode *>(blockContext.pop(m_name));
     variant.setValue(blockContext);
@@ -120,7 +120,7 @@ void BlockNode::render(OutputStream *stream, Context *c) const
 
     const auto list = block->m_list;
 
-    block = new BlockNode(block->m_name, 0);
+    block = new BlockNode(block->m_name, nullptr);
     block->setNodeList(list);
     block->m_context = c;
     block->m_stream = stream;

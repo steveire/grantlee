@@ -26,7 +26,7 @@
 #include "util.h"
 
 ScriptableVariable::ScriptableVariable(QObject *parent)
-    : QObject(parent), m_engine(0)
+    : QObject(parent), m_engine(nullptr)
 {
 }
 

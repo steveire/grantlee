@@ -38,9 +38,9 @@ template <typename PluginType> class PluginPointer
 
 public:
   // This allows returning 0 from a function returning a PluginType*
-  PluginPointer(_Dummy * = {}) : m_plugin(0) {}
+  PluginPointer(_Dummy * = {}) : m_plugin(nullptr) {}
 
-  PluginPointer(const QString &fileName) : m_object(0), m_plugin(0)
+  PluginPointer(const QString &fileName) : m_object(nullptr), m_plugin(nullptr)
   {
     m_pluginLoader = QSharedPointer<QPluginLoader>(new QPluginLoader(fileName));
 

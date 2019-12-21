@@ -24,7 +24,7 @@
 
 using namespace Grantlee;
 
-OutputStream::OutputStream() : m_stream(0) {}
+OutputStream::OutputStream() : m_stream(nullptr) {}
 
 OutputStream::OutputStream(QTextStream *stream) : m_stream(stream) {}
 

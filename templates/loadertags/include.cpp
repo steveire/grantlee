@@ -101,7 +101,7 @@ void ConstantIncludeNode::render(OutputStream *stream, Context *c) const
   if (t->error())
     throw Grantlee::Exception(t->error(), t->errorString());
 
-  QVariant &variant = c->renderContext()->data(0);
+  QVariant &variant = c->renderContext()->data(nullptr);
   auto blockContext = variant.value<BlockContext>();
   auto nodes = t->findChildren<BlockNode *>();
   blockContext.remove(nodes);

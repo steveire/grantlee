@@ -5,7 +5,7 @@ class CoverageObject : public QObject
 {
   Q_OBJECT
 public:
-  CoverageObject(QObject *p = NULL) : QObject(p) {}
+  CoverageObject(QObject *p = nullptr) : QObject(p) {}
   virtual void initTest() {}
   virtual void cleanupTest() {}
 protected Q_SLOTS:

@@ -122,7 +122,7 @@ QJSValue ScriptableHelperFunctions::ScriptableVariableConstructor(QString name)
   // It should be the owning scriptableNode. I think I can get that from the
   // scriptContext.
 
-  QObject *parent = 0;
+  QObject *parent = nullptr;
   auto object = new ScriptableVariable(m_scriptEngine, parent);
   object->setContent(name);
 

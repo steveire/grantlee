@@ -300,7 +300,7 @@ QString QtLocalizer::currentLocale() const
 void QtLocalizer::pushLocale(const QString &localeName)
 {
   Q_D(QtLocalizer);
-  Locale *localeStruct = 0;
+  Locale *localeStruct = nullptr;
   if (!d->m_availableLocales.contains(localeName)) {
     localeStruct = new Locale(QLocale(localeName));
     auto qtTranslator = new QTranslator;

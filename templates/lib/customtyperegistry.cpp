@@ -67,7 +67,7 @@ QVariant CustomTypeRegistry::lookup(const QVariant &object,
     if (!info.lookupFunction) {
       qCWarning(GRANTLEE_CUSTOMTYPE)
           << "No lookup function for metatype" << QMetaType::typeName(id);
-      lf = 0;
+      lf = nullptr;
       // :TODO: Print out error message
       return QVariant();
     }
@@ -80,5 +80,5 @@ QVariant CustomTypeRegistry::lookup(const QVariant &object,
 
 bool CustomTypeRegistry::lookupAlreadyRegistered(int id) const
 {
-  return types.contains(id) && types.value(id).lookupFunction != 0;
+  return types.contains(id) && types.value(id).lookupFunction != nullptr;
 }

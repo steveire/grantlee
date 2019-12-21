@@ -196,7 +196,7 @@ TagLibraryInterface *Engine::loadLibrary(const QString &name)
 
 #ifdef QT_QML_LIB
   if (name == QLatin1String(__scriptableLibName))
-    return 0;
+    return nullptr;
 #endif
 
   // already loaded by the engine.
@@ -215,7 +215,7 @@ TagLibraryInterface *Engine::loadLibrary(const QString &name)
   throw Grantlee::Exception(
       TagSyntaxError,
       QStringLiteral("Plugin library '%1' not found.").arg(name));
-  return 0;
+  return nullptr;
 }
 
 TagLibraryInterface *EnginePrivate::loadLibrary(const QString &name,
@@ -236,7 +236,7 @@ EnginePrivate::EnginePrivate(Engine *engine)
     : q_ptr(engine)
 #ifdef QT_QML_LIB
       ,
-      m_scriptableTagLibrary(0)
+      m_scriptableTagLibrary(nullptr)
 #endif
       ,
       m_smartTrimEnabled(false)
@@ -276,7 +276,7 @@ ScriptableLibraryContainer *
 EnginePrivate::loadScriptableLibrary(const QString &name, uint minorVersion)
 {
   if (!m_scriptableTagLibrary)
-    return 0;
+    return nullptr;
 
 #if 0
   if ( !m_libraries.contains( __scriptableLibName ) )
@@ -286,7 +286,7 @@ EnginePrivate::loadScriptableLibrary(const QString &name, uint minorVersion)
   const auto libFileName = getScriptLibraryName(name, minorVersion);
 
   if (libFileName.isEmpty())
-    return 0;
+    return nullptr;
 
   if (m_scriptableLibraries.contains(libFileName)) {
     auto library = m_scriptableLibraries.value(libFileName);
@@ -352,7 +352,7 @@ EnginePrivate::loadCppLibrary(const QString &name, uint minorVersion)
       return plugin;
     }
   }
-  return 0;
+  return nullptr;
 }
 
 Template Engine::loadByName(const QString &name) const

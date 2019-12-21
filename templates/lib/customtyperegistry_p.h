@@ -31,7 +31,7 @@ namespace Grantlee
 
 struct CustomTypeInfo {
 public:
-  CustomTypeInfo() : lookupFunction(0) {}
+  CustomTypeInfo() : lookupFunction(nullptr) {}
 
   Grantlee::MetaType::LookupFunction lookupFunction;
 };

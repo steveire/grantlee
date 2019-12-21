@@ -202,7 +202,7 @@ void ForNode::render(OutputStream *stream, Context *c) const
         Q_FOREACH (const QString &loopVar, m_loopVars) {
           c->push();
           c->insert(QStringLiteral("var"), v);
-          auto resolvedFE = FilterExpression(QStringLiteral("var.") + loopVar, 0)
+          auto resolvedFE = FilterExpression(QStringLiteral("var.") + loopVar, nullptr)
                        .resolve(c);
           c->pop();
           c->insert(loopVar, resolvedFE);

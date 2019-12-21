@@ -36,7 +36,7 @@ BlockNode *BlockContext::getBlock(const QString &name) const
 {
   auto list = m_blocks[name];
   if (list.isEmpty())
-    return 0;
+    return nullptr;
 
   return list.last();
 }
@@ -45,7 +45,7 @@ BlockNode *BlockContext::pop(const QString &name)
 {
   QList<BlockNode *> &list = m_blocks[name];
   if (list.isEmpty())
-    return 0;
+    return nullptr;
   return list.takeLast();
 }
 

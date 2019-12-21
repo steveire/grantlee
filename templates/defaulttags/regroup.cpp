@@ -94,7 +94,7 @@ void RegroupNode::render(OutputStream *stream, Context *c) const
     c->push();
     c->insert(QStringLiteral("var"), var);
     const QString key = getSafeString(
-        FilterExpression(QStringLiteral("var.") + keyName, 0).resolve(c));
+        FilterExpression(QStringLiteral("var.") + keyName, nullptr).resolve(c));
     c->pop();
     QVariantHash hash;
     if (!contextList.isEmpty()) {
