@@ -34,7 +34,7 @@ namespace Grantlee
 
     # ... Application sources etc.
 
-    target_link_libraries(my_application 
+    target_link_libraries(my_application
       PRIVATE
         Qt5::Widgets
         Grantlee5::Templates
@@ -79,9 +79,9 @@ namespace Grantlee
 
     add_executable(my_app, ${my_app_srcs} ${_template_rcc_src})
   @endcode
-  
+
   Application code:
-  
+
   @code
     auto loader = QSharedPointer<FileSystemTemplateLoader>::create();
     loader->setTemplateDirs( QStringList{ ":/templates/" } );
@@ -97,15 +97,15 @@ namespace Grantlee
 
   @code
     auto no_override_loader = QSharedPointer<FileSystemTemplateLoader>::create();
-    no_override_loader->setTemplateDirs( 
-        QStringList{ path_to_non_overridable_templates } 
+    no_override_loader->setTemplateDirs(
+        QStringList{ path_to_non_overridable_templates }
         );
 
     engine->addTemplateLoader( no_override_loader );
 
     auto override_loader = QSharedPointer<FileSystemTemplateLoader>::create();
-    override_loader->setTemplateDirs( 
-        QStringList{ path_to_user_templates, path_to_default_templates } 
+    override_loader->setTemplateDirs(
+        QStringList{ path_to_user_templates, path_to_default_templates }
         );
 
     engine->addTemplateLoader( override_loader );
@@ -165,8 +165,8 @@ namespace Grantlee
   For example, if your custom plugin library contained a custom implementation of the @gr_tag{for} tag:
   @code
     auto engine = new Engine( this );
-    engine->setPluginPaths( 
-        QStringList{ path_to_custom_plugins, path_to_grantlee_defaults } 
+    engine->setPluginPaths(
+        QStringList{ path_to_custom_plugins, path_to_grantlee_defaults }
         );
   @endcode
 
@@ -177,9 +177,9 @@ namespace Grantlee
   @code
     # CMake code:
     set (_rcc_file "my_qtscript_library.qrc")
-    qt5_add_resources(_scripted_rcc_src 
-        ${_rcc_file} 
-        OPTIONS -root "/plugins/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}" 
+    qt5_add_resources(_scripted_rcc_src
+        ${_rcc_file}
+        OPTIONS -root "/plugins/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}"
     )
 
     add_executable(my_app, ${my_app_srcs} ${_scripted_rcc_src})
