@@ -1054,7 +1054,8 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("{% if var %}Yes{% else %}No{% endif %}") << dict
       << QStringLiteral("Yes") << NoError;
 
-  auto r = 0.0;
+  // explicitly double
+  double r = 0.0;
   dict.insert(QStringLiteral("var"), r);
   QTest::newRow("if-truthiness09")
       << QStringLiteral("{% if var %}Yes{% else %}No{% endif %}") << dict
@@ -1064,6 +1065,18 @@ void TestDefaultTags::testIfTag_data()
   QTest::newRow("if-truthiness10")
       << QStringLiteral("{% if var %}Yes{% else %}No{% endif %}") << dict
       << QStringLiteral("Yes") << NoError;
+
+  // explicitly float
+  float f = 0.0f;
+  dict.insert(QStringLiteral("var"), f);
+  QTest::newRow("if-truthiness11")
+    << QStringLiteral("{% if var %}Yes{% else %}No{% endif %}")
+    << dict << QStringLiteral("No") << NoError;
+  f = 7.1;
+  dict.insert(QStringLiteral("var"), f);
+  QTest::newRow("if-truthiness12")
+    << QStringLiteral("{% if var %}Yes{% else %}No{% endif %}")
+    << dict << QStringLiteral("Yes") << NoError;
 
   dict.clear();
   QTest::newRow("if-tag-badarg01")
