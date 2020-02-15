@@ -180,7 +180,32 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
       const auto idx = mo->indexOfProperty(property.toUtf8().constData());
       if (idx >= 0) {
         const auto mp = mo->property(idx);
+
+        if (mp.isEnumType()) {
+          MetaEnumVariable mev(mp.enumerator(), mp.readOnGadget(object.constData()).value<int>());
+          return QVariant::fromValue(mev);
+        }
+
         return mp.readOnGadget(object.constData());
+      }
+
+      QMetaEnum me;
+      for (auto i = 0; i < mo->enumeratorCount(); ++i) {
+        me = mo->enumerator(i);
+
+        if (QLatin1String(me.name()) == property) {
+          MetaEnumVariable mev(me);
+          return QVariant::fromValue(mev);
+        }
+
+        const auto value = me.keyToValue(property.toLatin1().constData());
+
+        if (value < 0) {
+          continue;
+        }
+
+        MetaEnumVariable mev(me, value);
+        return QVariant::fromValue(mev);
       }
     }
   }
