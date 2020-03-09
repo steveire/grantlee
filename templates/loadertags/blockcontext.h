@@ -29,21 +29,22 @@ class BlockNode;
 class BlockContext
 {
 public:
-  void addBlocks( const QHash<QString, BlockNode*> &blocks );
+  void addBlocks(const QHash<QString, BlockNode *> &blocks);
 
-  BlockNode* pop( const QString &name );
+  BlockNode *pop(const QString &name);
 
-  void push( const QString &name, BlockNode const *blockNode ) const;
+  void push(const QString &name, BlockNode const *blockNode);
 
-  BlockNode* getBlock( const QString &name ) const;
+  BlockNode *getBlock(const QString &name) const;
 
   bool isEmpty();
 
-private:
-  mutable QHash<QString, QList<BlockNode*> > m_blocks;
+  void remove(QList<BlockNode *> const &nodes);
 
+private:
+  QHash<QString, QList<BlockNode *>> m_blocks;
 };
 
-Q_DECLARE_METATYPE( BlockContext )
+Q_DECLARE_METATYPE(BlockContext)
 
 #endif

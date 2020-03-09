@@ -22,59 +22,67 @@
 
 #include "util.h"
 
-QVariant DefaultFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant DefaultFilter::doFilter(const QVariant &input,
+                                 const QVariant &argument,
+                                 bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  if ( !input.isValid() || getSafeString( input ).get().isEmpty() )
+  Q_UNUSED(autoescape)
+  if (!input.isValid() || getSafeString(input).get().isEmpty())
     return argument;
-  return getSafeString( input );
+  return getSafeString(input);
 }
 
-QVariant DefaultIfNoneFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant DefaultIfNoneFilter::doFilter(const QVariant &input,
+                                       const QVariant &argument,
+                                       bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  if ( !input.isValid() )
+  Q_UNUSED(autoescape)
+  if (!input.isValid())
     return argument;
-  return getSafeString( input );
+  return getSafeString(input);
 }
 
-QVariant DivisibleByFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant DivisibleByFilter::doFilter(const QVariant &input,
+                                     const QVariant &argument,
+                                     bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  return ( getSafeString( input ).get().toInt()
-           % QVariant( argument ).toInt() == 0 )
-         ? QStringLiteral( "true" ) : QString();
+  Q_UNUSED(autoescape)
+  return (getSafeString(input).get().toInt() % QVariant(argument).value<int>()
+          == 0)
+             ? QStringLiteral("true")
+             : QString();
 }
 
-QVariant YesNoFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant YesNoFilter::doFilter(const QVariant &input, const QVariant &argument,
+                               bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  SafeString arg = getSafeString( argument );
+  Q_UNUSED(autoescape)
+  auto arg = getSafeString(argument);
   QString yes;
   QString no;
   QString maybe;
-  if ( arg.get().isEmpty() ) {
-    yes = QStringLiteral( "yes" );
-    no = QStringLiteral( "no" );
-    maybe = QStringLiteral( "maybe" );
+  if (arg.get().isEmpty()) {
+    yes = QStringLiteral("yes");
+    no = QStringLiteral("no");
+    maybe = QStringLiteral("maybe");
   } else {
-    QStringList argList = arg.get().split( QLatin1Char( ',' ) );
-    int numArgs = argList.size();
-    if (( numArgs < 2 ) || ( numArgs > 3 ) ) {
-      return input.toString();
-    } else if ( numArgs == 2 ) {
+    auto argList = arg.get().split(QLatin1Char(','));
+    auto numArgs = argList.size();
+    if ((numArgs < 2) || (numArgs > 3)) {
+      return input.value<QString>();
+    } else if (numArgs == 2) {
       yes = argList.first();
-      no = argList.at( 1 );
-      maybe = argList.at( 1 );
-    } else if ( numArgs == 3 ) {
+      no = argList.at(1);
+      maybe = argList.at(1);
+    } else if (numArgs == 3) {
       yes = argList.first();
-      no = argList.at( 1 );
-      maybe = argList.at( 2 );
+      no = argList.at(1);
+      maybe = argList.at(2);
     }
   }
-  if ( !input.isValid() )
+  if (!input.isValid())
     return maybe;
-  if ( !getSafeString( input ).get().isEmpty() )
+  if (!getSafeString(input).get().isEmpty())
     return yes;
   return no;
 }

@@ -25,27 +25,27 @@
 
 using namespace Grantlee;
 
-class RangeNodeFactory: public AbstractNodeFactory
+class RangeNodeFactory : public AbstractNodeFactory
 {
 public:
   RangeNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class RangeNode : public Node
 {
   Q_OBJECT
 public:
-  RangeNode( const QString &name, const FilterExpression &startExpression, const FilterExpression &stopExpression, QObject *parent = 0 );
-  RangeNode( const QString &name, const FilterExpression &startExpression, const FilterExpression &stopExpression, const FilterExpression &stepExpression = FilterExpression(), QObject *parent = 0 );
+  RangeNode(const QString &name, const FilterExpression &startExpression,
+            const FilterExpression &stopExpression, QObject *parent = {});
+  RangeNode(const QString &name, const FilterExpression &startExpression,
+            const FilterExpression &stopExpression,
+            const FilterExpression &stepExpression = {}, QObject *parent = {});
 
+  void setNodeList(const NodeList &list);
 
-
-  void setNodeList( NodeList list );
-
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   NodeList m_list;
@@ -54,6 +54,5 @@ private:
   FilterExpression m_stopExpression;
   FilterExpression m_stepExpression;
 };
-
 
 #endif

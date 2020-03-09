@@ -38,22 +38,22 @@ using namespace Grantlee;
 class LoaderTagLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  LoaderTagLibrary() {
-  }
+  LoaderTagLibrary() {}
 
-  QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
-    Q_UNUSED( name );
+  QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
+                                                      = {}) override
+  {
+    Q_UNUSED(name);
 
-    QHash<QString, AbstractNodeFactory*> nodeFactories;
-    nodeFactories.insert( QStringLiteral( "block" ), new BlockNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "extends" ), new ExtendsNodeFactory() );
-    nodeFactories.insert( QStringLiteral( "include" ), new IncludeNodeFactory() );
+    QHash<QString, AbstractNodeFactory *> nodeFactories;
+    nodeFactories.insert(QStringLiteral("block"), new BlockNodeFactory());
+    nodeFactories.insert(QStringLiteral("extends"), new ExtendsNodeFactory());
+    nodeFactories.insert(QStringLiteral("include"), new IncludeNodeFactory());
     return nodeFactories;
   }
 };
-
 
 #endif

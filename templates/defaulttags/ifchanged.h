@@ -25,26 +25,26 @@
 
 using namespace Grantlee;
 
-
 class IfChangedNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
   IfChangedNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class IfChangedNode : public Node
 {
   Q_OBJECT
 public:
-  explicit IfChangedNode( QList<FilterExpression> feList, QObject *parent = 0 );
+  explicit IfChangedNode(const QList<FilterExpression> &feList,
+                         QObject *parent = {});
 
-  void setTrueList( NodeList trueList );
-  void setFalseList( NodeList falseList );
+  void setTrueList(const NodeList &trueList);
+  void setFalseList(const NodeList &falseList);
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   NodeList m_trueList;
@@ -52,7 +52,6 @@ private:
   QList<FilterExpression> m_filterExpressions;
   mutable QVariant m_lastSeen;
   QString m_id;
-
 };
 
 #endif

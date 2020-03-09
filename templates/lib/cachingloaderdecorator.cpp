@@ -26,74 +26,73 @@ namespace Grantlee
 class CachingLoaderDecoratorPrivate
 {
 public:
-  CachingLoaderDecoratorPrivate( QSharedPointer<AbstractTemplateLoader> loader, CachingLoaderDecorator *qq )
-    : q_ptr( qq ), m_wrappedLoader( loader )
+  CachingLoaderDecoratorPrivate(QSharedPointer<AbstractTemplateLoader> loader,
+                                CachingLoaderDecorator *qq)
+      : q_ptr(qq), m_wrappedLoader(loader)
   {
-
   }
 
-  Q_DECLARE_PUBLIC( CachingLoaderDecorator )
-  CachingLoaderDecorator * const q_ptr;
+  Q_DECLARE_PUBLIC(CachingLoaderDecorator)
+  CachingLoaderDecorator *const q_ptr;
 
   const QSharedPointer<AbstractTemplateLoader> m_wrappedLoader;
 
   mutable QHash<QString, Template> m_cache;
 };
-
 }
 
 using namespace Grantlee;
 
-CachingLoaderDecorator::CachingLoaderDecorator( QSharedPointer<AbstractTemplateLoader> loader )
-  : d_ptr( new CachingLoaderDecoratorPrivate( loader, this ) )
+CachingLoaderDecorator::CachingLoaderDecorator(
+    QSharedPointer<AbstractTemplateLoader> loader)
+    : d_ptr(new CachingLoaderDecoratorPrivate(loader, this))
 {
-
 }
 
-CachingLoaderDecorator::~CachingLoaderDecorator()
-{
-  delete d_ptr;
-}
+CachingLoaderDecorator::~CachingLoaderDecorator() { delete d_ptr; }
 
-bool CachingLoaderDecorator::canLoadTemplate( const QString& name ) const
+bool CachingLoaderDecorator::canLoadTemplate(const QString &name) const
 {
-  Q_D( const CachingLoaderDecorator );
-  return d->m_wrappedLoader->canLoadTemplate( name );
+  Q_D(const CachingLoaderDecorator);
+  return d->m_wrappedLoader->canLoadTemplate(name);
 }
 
 void CachingLoaderDecorator::clear()
 {
-  Q_D( CachingLoaderDecorator );
+  Q_D(CachingLoaderDecorator);
   return d->m_cache.clear();
 }
 
 int CachingLoaderDecorator::size() const
 {
-  Q_D( const CachingLoaderDecorator );
+  Q_D(const CachingLoaderDecorator);
   return d->m_cache.size();
 }
 
 bool CachingLoaderDecorator::isEmpty() const
 {
-  Q_D( const CachingLoaderDecorator );
+  Q_D(const CachingLoaderDecorator);
   return d->m_cache.isEmpty();
 }
 
-QPair< QString, QString > CachingLoaderDecorator::getMediaUri( const QString& fileName ) const
+QPair<QString, QString>
+CachingLoaderDecorator::getMediaUri(const QString &fileName) const
 {
-  Q_D( const CachingLoaderDecorator );
-  return d->m_wrappedLoader->getMediaUri( fileName );
+  Q_D(const CachingLoaderDecorator);
+  return d->m_wrappedLoader->getMediaUri(fileName);
 }
 
-Template CachingLoaderDecorator::loadByName( const QString& name, const Grantlee::Engine* engine ) const
+Template
+CachingLoaderDecorator::loadByName(const QString &name,
+                                   const Grantlee::Engine *engine) const
 {
-  Q_D( const CachingLoaderDecorator );
-  if ( d->m_cache.contains( name ) )
-    return d->m_cache.value( name );
+  Q_D(const CachingLoaderDecorator);
+  if (d->m_cache.contains(name))
+    return d->m_cache.value(name);
 
-  const Template t = d->m_wrappedLoader->loadByName( name, engine );
+  const auto t = d->m_wrappedLoader->loadByName(name, engine);
 
-  d->m_cache.insert( name, t );
+  d->m_cache.insert(name, t);
 
   return t;
 }

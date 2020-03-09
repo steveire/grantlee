@@ -20,59 +20,39 @@
 
 #include "scriptablevariable.h"
 
-#include <QtScript/QScriptEngine>
-#include <QDebug>
+#include <QtQml/QJSEngine>
 
-#include "scriptablecontext.h"
 #include "scriptablesafestring.h"
 #include "util.h"
 
-Q_SCRIPT_DECLARE_QMETAOBJECT( ScriptableVariable, QObject* )
-
-QScriptValue ScriptableVariableConstructor( QScriptContext *context,
-    QScriptEngine *engine )
+ScriptableVariable::ScriptableVariable(QObject *parent)
+    : QObject(parent), m_engine(0)
 {
-  // TODO: Decide what the parent should be;
-  // It should be the owning scriptableNode. I think I can get that from the scriptContext.
-
-  QObject *parent = 0;
-  ScriptableVariable *object = new ScriptableVariable( engine, parent );
-  object->setContent( context->argument( 0 ).toString() );
-
-  return engine->newQObject( object );
 }
 
-ScriptableVariable::ScriptableVariable( QObject *parent )
-    : QObject( parent ), m_engine( 0 )
+ScriptableVariable::ScriptableVariable(QJSEngine *engine, QObject *parent)
+    : QObject(parent), m_engine(engine)
 {
-
 }
 
-ScriptableVariable::ScriptableVariable( QScriptEngine *engine, QObject *parent )
-    : QObject( parent ), m_engine( engine )
+void ScriptableVariable::setContent(const QString &content)
 {
-
+  m_variable = Variable(content);
 }
 
-void ScriptableVariable::setContent( const QString& content )
+QVariant ScriptableVariable::resolve(ScriptableContext *c)
 {
-  m_variable = Variable( content );
-}
+  auto var = m_variable.resolve(c->context());
 
-QVariant ScriptableVariable::resolve( ScriptableContext* c )
-{
-  QVariant var = m_variable.resolve( c->context() );
-
-  if ( Grantlee::isSafeString( var ) ) {
-      ScriptableSafeString *ssObj = new ScriptableSafeString( m_engine );
-      ssObj->setContent( getSafeString( var ) );
-      return m_engine->newQObject( ssObj ).toVariant();
+  if (Grantlee::isSafeString(var)) {
+    auto ssObj = new ScriptableSafeString(m_engine);
+    ssObj->setContent(getSafeString(var));
+    return m_engine->newQObject(ssObj).toVariant();
   }
   return var;
 }
 
-
-bool ScriptableVariable::isTrue( ScriptableContext* c )
+bool ScriptableVariable::isTrue(ScriptableContext *c)
 {
-  return m_variable.isTrue( c->context() );
+  return m_variable.isTrue(c->context());
 }

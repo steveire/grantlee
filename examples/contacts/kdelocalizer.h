@@ -32,7 +32,7 @@ class KDELocalizerPrivate;
 class KDELocalizer : public Grantlee::AbstractLocalizer
 {
 public:
-  KDELocalizer( KLocale *locale = 0 );
+  KDELocalizer(KLocale *locale = 0);
   virtual ~KDELocalizer();
 
   // Right to left?
@@ -47,18 +47,33 @@ public:
 
   virtual QString localizeNumber(int number) const;
   virtual QString localizeNumber(qreal number) const;
-  virtual QString localizeMonetaryValue( qreal value, const QString &currencyCode = QString() ) const;
-  virtual QString localizeDate(const QDate& date, QLocale::FormatType formatType = QLocale::ShortFormat) const;
-  virtual QString localizeTime(const QTime& time, QLocale::FormatType formatType = QLocale::ShortFormat) const;
-  virtual QString localizeDateTime(const QDateTime& dateTime, QLocale::FormatType formatType = QLocale::ShortFormat) const;
-  virtual QString localizeString(const QString& string, const QVariantList &arguments = QVariantList() ) const;
-  virtual QString localizeContextString(const QString& string, const QString& context, const QVariantList &arguments = QVariantList() ) const;
-  virtual QString localizePluralContextString(const QString& string, const QString& pluralForm, const QString& context, const QVariantList &arguments = QVariantList() ) const;
-  virtual QString localizePluralString(const QString& string, const QString& pluralForm, const QVariantList &arguments = QVariantList() ) const;
+  virtual QString localizeMonetaryValue(qreal value, const QString &currencyCode
+                                                     = QString()) const;
+  virtual QString localizeDate(const QDate &date, QLocale::FormatType formatType
+                                                  = QLocale::ShortFormat) const;
+  virtual QString localizeTime(const QTime &time, QLocale::FormatType formatType
+                                                  = QLocale::ShortFormat) const;
+  virtual QString localizeDateTime(const QDateTime &dateTime,
+                                   QLocale::FormatType formatType
+                                   = QLocale::ShortFormat) const;
+  virtual QString localizeString(const QString &string,
+                                 const QVariantList &arguments
+                                 = QVariantList()) const;
+  virtual QString
+  localizeContextString(const QString &string, const QString &context,
+                        const QVariantList &arguments = QVariantList()) const;
+  virtual QString localizePluralContextString(const QString &string,
+                                              const QString &pluralForm,
+                                              const QString &context,
+                                              const QVariantList &arguments
+                                              = QVariantList()) const;
+  virtual QString
+  localizePluralString(const QString &string, const QString &pluralForm,
+                       const QVariantList &arguments = QVariantList()) const;
 
 private:
   Q_DECLARE_PRIVATE(KDELocalizer)
-  KDELocalizerPrivate * const d_ptr;
+  KDELocalizerPrivate *const d_ptr;
 };
 
 #endif

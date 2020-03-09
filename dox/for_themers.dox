@@ -3,18 +3,18 @@ namespace Grantlee
 
 /**
 
-  @page for_themers Grantlee for theme artists.
+  @page for_themers Grantlee for theme artists
 
   The syntax of %Grantlee templates is the same as Django templates. This page is an introduction to the syntax, but any Django template introduction is also relevant. Here's some good ones:
 
-  - http://www.djangobook.com/en/2.0/chapter04/
-  - http://www.djangobook.com/en/2.0/chapter09/
+  - https://djangobook.com/mdj2-django-templates/
+  - https://djangobook.com/extending-template-system/
   - http://docs.djangoproject.com/en/dev/topics/templates/
 
 
   @section template_syntax Syntax of Grantlee templates
 
-  The syntax of %Grantlee templates contains four types of tokens- plain text, comments, variables and control tags.
+  The syntax of %Grantlee templates contains four types of tokens - plain text, comments, variables and control tags.
 
   A simple template might look like this:
   @verbatim
@@ -46,45 +46,44 @@ namespace Grantlee
     <h2>A few of my favourite things</h2>
     <ul>
     {% for item in mylist %}
-    <li> {{ item }}
+    <li>{{ item }}</li>
     {% endfor %}
     </ul>
   @endverbatim
 
-  If an int or double is used in a loop, it is treated as a list containing one item. That is, this
+  If an <tt>int</tt> or <tt>double</tt> is used in a loop, it is treated as a list containing one item. That is, this
 
   @verbatim
     {% for item in myint %}
-    <li> {{ item }}
+    <li>{{ item }}</li>
     {% endfor %}
   @endverbatim
 
   would be rendered as
   @verbatim
-    <li> 6
+    <li>6</li>
   @endverbatim
 
-  if myint is 6 in the context.
+  if <tt>myint</tt> is <tt>6</tt> in the context.
 
   @subsection truthiness Truthiness
 
   Truthiness of a variable is evaulated in a similar way to python. That is,
 
-  - The invalid QVariant is false
-  - An empty QString is false
-  - 0 is false
-  - An empty QVariantList is false
-  - An empty QVariantHash is false
-  - Boolean false is false
-  - QObjects that define their own truth behaviour and return false are false.
+  - The invalid QVariant is <tt>false</tt>
+  - An empty QString is <tt>false</tt>
+  - 0 is <tt>false</tt>
+  - An empty container such as QVariantList or QVariantHash is <tt>false</tt>
+  - Boolean <tt>false</tt> is <tt>false</tt>
+  - QObjects that define their own truth behaviour and return <tt>false</tt> are <tt>false</tt>
 
-  Everything else is true.
+  Everything else is <tt>true</tt>.
 
   @verbatim
     {% if mylist %}
     <ul>
     {% for item in mylist %}
-    <li> {{ item }}
+    <li>{{ item }}</li>
     {% endfor %}
     </ul>
     {% endif %}
@@ -92,9 +91,9 @@ namespace Grantlee
 
   @subsection lookups Variable lookups
 
-  So far we've mostly used simple variable lookups in @gr_var{variable} tags, but the template system is capable of a lot more. Complex structures can be evaluated using the dot ('.') character.
+  So far we've mostly used simple variable lookups in @gr_var{variable} tags, but the template system is capable of a lot more. Complex structures can be evaluated using the dot (<tt>'.'</tt>) character.
 
-  The dot can be used for list index lookup (Note that list lookup is 0-indexed.):
+  The dot can be used for list index lookup (Note that list lookup is <tt>0</tt>-indexed):
   @verbatim
     The first item is {{ mylist.0 }}, and the fifth item is {{ mylist.4 }}.
   @endverbatim
@@ -105,7 +104,7 @@ namespace Grantlee
     The hash value is {{ myhash.mykey }}.
   @endverbatim
 
-  And it can retrieve properties from QObjects:
+  And it can retrieve properties from QObject instances:
 
   @verbatim
     The object property is {{ myobj.myprop }}.
@@ -113,7 +112,7 @@ namespace Grantlee
 
   @subsection filters Filters
 
-  Filters can further affect the result of including a variable in a template. Filters are separated by the pipe ('|') character.
+  Filters can further affect the result of including a variable in a template. Filters are separated by the pipe (<tt>'|'</tt>) character.
 
   @verbatim
     Name is {{ name }}, and name in uppercase is {{ name|upper }}.
@@ -122,7 +121,8 @@ namespace Grantlee
     // Name is Alice, and name in uppercase is ALICE.
   @endverbatim
 
-  Note that filters may be combined with dot-lookup. For example, if people is a list of Person objects, and Person objects have name properties:
+  Note that filters may be combined with dot-lookup. For example, if <tt>people</tt> is a list of <tt>Person</tt> objects,
+  and <tt>Person</tt> objects have <tt>name</tt> properties:
 
   @verbatim
     First persons name: {{ people.0.name|upper }}.
@@ -140,9 +140,9 @@ namespace Grantlee
     // First persons name: claire.
   @endverbatim
 
-  Filters may take one string argument, which is delimited by a colon (':').
+  Filters may take one string argument, which is delimited by a colon (<tt>':'</tt>).
 
-  If peoplestring contains "Dave and Ellen and Frank", we can cut the string 'and '
+  If <tt>peoplestring</tt> contains <tt>"Dave and Ellen and Frank"</tt>, we can cut the string <tt>'and '</tt>
 
   @verbatim
     The people are {{ peoplestring|cut:"and " }}
@@ -151,7 +151,7 @@ namespace Grantlee
     // The people are Dave Ellen Frank.
   @endverbatim
 
-  %Grantlee ships with many useful filters including upper, lower, slice, truncate, join, split etc (see&nbsp;http://docs.djangoproject.com/en/dev/ref/templates/builtins/). Application developers and artists can also define their own filters.
+  %Grantlee ships with many useful filters including <tt>upper</tt>, <tt>lower</tt>, <tt>slice</tt>, <tt>truncate</tt>, <tt>join</tt>, <tt>split</tt> etc (see&nbsp;http://docs.djangoproject.com/en/dev/ref/templates/builtins/). Application developers and artists can also define their own filters.
 
   @subsection template_loading Template Inclusion and Inheritance
 
@@ -169,7 +169,7 @@ namespace Grantlee
       {% include "table.html" %}
   @endverbatim
 
-  If "breadcrumbs.html" and "table.html" exist and contain appropriate content, they will be rendered and added to the output of the template.
+  If <tt>"breadcrumbs.html"</tt> and <tt>"table.html"</tt> exist and contain appropriate content, they will be rendered and added to the output of the template.
 
   @subsubsection template_extending
 
@@ -235,16 +235,16 @@ namespace Grantlee
 
   @section templates_safestring Autoescaping in templates.
 
-  When creating HTML string output it is necessary to consider escaping data inserted into the template. HTML escaping involves replacing '&lt;' with '&amp;lt;' and '&amp;' with '&amp;amp;' etc. %Grantlee automatically escapes string input before adding it to the output.
+  When creating HTML string output it is necessary to consider escaping data inserted into the template. HTML escaping involves replacing <tt>'&lt;'</tt> with <tt>'&amp;lt;'</tt> and <tt>'&amp;'</tt> with <tt>'&amp;amp;'</tt> etc. %Grantlee automatically escapes string input before adding it to the output.
 
   This is relevant when writing a variable from the context into the Template.
 
-  If the context object <tt>companies</tt> is a list containing ('Burger King', 'Ben &amp; Jerries', 'Ford'), and it is used in a template such as:
+  If the context object <tt>companies</tt> is a list containing (<tt>'Burger King'</tt>, <tt>'Ben &amp; Jerries'</tt>, <tt>'Ford'</tt>), and it is used in a template such as:
 
   @verbatim
     <ul>
     {% for company in companies %}
-      <li> {{ company }}
+      <li>{{ company }}</li>
     {% endfor %}
     </ul>
   @endverbatim
@@ -253,13 +253,13 @@ namespace Grantlee
 
   @verbatim
     <ul>
-      <li> Burger King
-      <li> Ben &amp; Jerries
-      <li> Ford
+      <li>Burger King</li>
+      <li>Ben &amp; Jerries</li>
+      <li>Ford</li>
     </ul>
   @endverbatim
 
-  Notice that the '&amp;' has been replaced with '&amp;amp;', as is appropriate for html output.
+  Notice that the <tt>'&amp;'</tt> has been replaced with <tt>'&amp;amp;'</tt>, as is appropriate for html output.
 
   Sometimes however, a variable will contain text which has already been escaped and does not need to be escaped again. For example,
   if we already created a <tt>table</tt> in the context containing the content:
@@ -298,7 +298,7 @@ namespace Grantlee
     As you can see in the table...
   @endverbatim
 
-  Note that the content of <tt>table</tt> has already been escaped. That is 'Ben &amp;amp; Jerries' is already used instead of 'Ben &amp; Jerries'. If a variable has already been escaped and should not be escaped again, it can be marked as safe from further escaping using the <tt>safe</tt> filter.
+  Note that the content of <tt>table</tt> has already been escaped. That is <tt>'Ben &amp;amp; Jerries'</tt> is already used instead of <tt>'Ben &amp; Jerries'</tt>. If a variable has already been escaped and should not be escaped again, it can be marked as safe from further escaping using the <tt>safe</tt> filter.
 
   @verbatim
     <h2> Table of companies </h2>
@@ -342,13 +342,13 @@ namespace Grantlee
     {% endautoescape %}
   @endverbatim
 
-  would not escape the content between the autoescape and endautoescape tags. This should only be used for content which is actually already safe.
+  would not escape the content between the <tt>autoescape</tt> and <tt>endautoescape</tt> tags. This should only be used for content which is actually already safe.
 
-  @see http://docs.djangoproject.com/en/1.1/topics/templates/#for-individual-variables
+  @see https://docs.djangoproject.com/en/1.9/ref/templates/language/#for-individual-variables
 
   @subsection extending_syntax Extending the syntax
 
-  It is also possible to extend the syntax of Granltee as you need it using javascript if the application developer chooses. See @ref qtscript_libraries for more. This is considered an advanced topic.
+  It is also possible to extend the syntax of %Grantlee as you need it using Javascript if the application developer chooses. See @ref javascript_libraries for more. This is considered an advanced topic.
 
 */
 

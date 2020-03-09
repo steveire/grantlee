@@ -18,7 +18,6 @@
 
 */
 
-
 #ifndef CUSTOM_TAGS_H
 #define CUSTOM_TAGS_H
 
@@ -31,18 +30,17 @@ using namespace Grantlee;
 class CustomTagsLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  CustomTagsLibrary( QObject *parent = 0 )
-      : QObject( parent ) {
-  }
+  CustomTagsLibrary(QObject *parent = 0) : QObject(parent) {}
 
-  QHash<QString, Filter*> filters( const QString &name = QString() ) {
-    Q_UNUSED( name );
-    QHash<QString, Filter*> _filters;
-    _filters.insert( "to_clean_html", new CleanHtmlFilter() );
-    _filters.insert( "to_plain_text", new PlainTextFilter() );
+  QHash<QString, Filter *> filters(const QString &name = QString())
+  {
+    Q_UNUSED(name);
+    QHash<QString, Filter *> _filters;
+    _filters.insert("to_clean_html", new CleanHtmlFilter());
+    _filters.insert("to_plain_text", new PlainTextFilter());
     return _filters;
   }
 };

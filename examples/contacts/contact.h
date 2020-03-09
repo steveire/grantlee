@@ -21,9 +21,9 @@
 #ifndef CONTACT_H
 #define CONTACT_H
 
-#include <QObject>
-#include <QListWidget>
 #include <QDate>
+#include <QListWidget>
+#include <QObject>
 
 class Address : public QObject
 {
@@ -55,16 +55,16 @@ class Contact : public QObject, public QListWidgetItem
   Q_PROPERTY(QString name READ name)
   Q_PROPERTY(QString email READ email)
   Q_PROPERTY(QString phone READ phone)
-  Q_PROPERTY(QObject* address READ address)
+  Q_PROPERTY(QObject *address READ address)
   Q_PROPERTY(QString nickname READ nickname)
-  Q_PROPERTY(double  salary READ salary)
+  Q_PROPERTY(double salary READ salary)
   Q_PROPERTY(QString salaryCurrency READ salaryCurrency)
-  Q_PROPERTY(double  rating READ rating)
-  Q_PROPERTY(QDate   birthday READ birthday)
+  Q_PROPERTY(double rating READ rating)
+  Q_PROPERTY(QDate birthday READ birthday)
   Q_PROPERTY(QVariant friends READ friends)
 
 public:
-  Contact(QObject* parent = 0);
+  Contact(QObject *parent = 0);
 
   QString name() const;
   void setName(const QString &name);
@@ -75,14 +75,14 @@ public:
   QString phone() const;
   void setPhone(const QString &phone);
 
-  QObject* address() const;
+  QObject *address() const;
   void setAddress(Address *address);
 
   QString nickname() const;
-  void setNickname(const QString& nickname);
+  void setNickname(const QString &nickname);
 
   QString salaryCurrency() const;
-  void setSalaryCurrency(const QString& salaryCurrency);
+  void setSalaryCurrency(const QString &salaryCurrency);
 
   double salary() const;
   void setSalary(double salary);
@@ -94,7 +94,7 @@ public:
   void setBirthday(const QDate &birthday);
 
   QVariant friends() const;
-  void setFriends(const QList<QObject*> &friends);
+  void setFriends(const QList<QObject *> &friends);
 
   /* reimp */ QVariant data(int role) const;
 
@@ -108,11 +108,7 @@ private:
   double m_salary;
   double m_rating;
   QDate m_birthday;
-  QList<QObject*> m_friends;
+  QList<QObject *> m_friends;
 };
-
-Q_DECLARE_METATYPE(Contact*)
-Q_DECLARE_METATYPE(QList<Contact*>)
-Q_DECLARE_METATYPE(QList<QObject*>)
 
 #endif

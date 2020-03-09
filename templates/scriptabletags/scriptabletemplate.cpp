@@ -20,65 +20,40 @@
 
 #include "scriptabletemplate.h"
 
-#include <QtScript/QScriptContext>
-#include <QtScript/QScriptEngine>
-
-#include "engine.h"
 #include "context.h"
+#include "engine.h"
 #include "node.h"
-#include "scriptablecontext.h"
 
-QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
-    QScriptEngine *engine )
+ScriptableTemplate::ScriptableTemplate(Grantlee::Template t, QObject *parent)
+    : QObject(parent), m_template(t)
 {
-  QString content = context->argument( 0 ).toString();
-  QString name = context->argument( 1 ).toString();
-  QObject *parent = context->argument( 2 ).toQObject();
-  Engine *templateEngine = engine->property( "templateEngine" ).value<Engine *>();
-
-  if ( !templateEngine )
-    return QScriptValue();
-
-  Template t = templateEngine->newTemplate( content, name );
-
-  ScriptableTemplate *object = new ScriptableTemplate( t, parent );
-  return engine->newQObject( object );
 }
 
-ScriptableTemplate::ScriptableTemplate( Grantlee::Template t, QObject* parent )
-    : QObject( parent ), m_template( t )
+QString ScriptableTemplate::render(ScriptableContext *c) const
 {
-
+  return m_template->render(c->context());
 }
 
-QString ScriptableTemplate::render( ScriptableContext* c ) const
+QList<QObject *> ScriptableTemplate::nodeList() const
 {
-  return m_template->render( c->context() );
-}
+  auto nodeList = m_template->nodeList();
+  QList<QObject *> objList;
 
-QObjectList ScriptableTemplate::nodeList() const
-{
-  NodeList nodeList = m_template->nodeList();
-  QObjectList objList;
-
-  QListIterator<Node *> it( nodeList );
-  while ( it.hasNext() ) {
-    objList << it.next();
+  for (auto n : nodeList) {
+    objList << n;
   }
   return objList;
 }
 
-void ScriptableTemplate::setNodeList( const QObjectList& list )
+void ScriptableTemplate::setNodeList(const QList<QObject *> &list)
 {
   NodeList nodeList;
 
-  QListIterator<QObject *> it( list );
-
-  while ( it.hasNext() ) {
-    Node *n = qobject_cast<Node*>( it.next() );
-    if ( n ) {
+  for (auto obj : list) {
+    auto n = qobject_cast<Node *>(obj);
+    if (n) {
       nodeList << n;
     }
   }
-  m_template->setNodeList( nodeList );
+  m_template->setNodeList(nodeList);
 }

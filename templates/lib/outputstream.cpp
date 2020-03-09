@@ -24,24 +24,13 @@
 
 using namespace Grantlee;
 
-OutputStream::OutputStream()
-  : m_stream( 0 )
-{
+OutputStream::OutputStream() : m_stream(0) {}
 
-}
+OutputStream::OutputStream(QTextStream *stream) : m_stream(stream) {}
 
-OutputStream::OutputStream( QTextStream *stream )
-  : m_stream( stream )
-{
+OutputStream::~OutputStream() {}
 
-}
-
-OutputStream::~OutputStream()
-{
-
-}
-
-QString OutputStream::escape( const QString &input ) const
+QString OutputStream::escape(const QString &input) const
 {
   // This could be replaced by QString::toHtmlEscaped()
   // but atm it does not escape single quotes
@@ -67,38 +56,37 @@ QString OutputStream::escape( const QString &input ) const
   return rich;
 }
 
-QString OutputStream::escape( const Grantlee::SafeString& input ) const
+QString OutputStream::escape(const Grantlee::SafeString &input) const
 {
-  return escape( input.get() );
+  return escape(input.get());
 }
 
-QString OutputStream::conditionalEscape( const Grantlee::SafeString& input ) const
+QString OutputStream::conditionalEscape(const Grantlee::SafeString &input) const
 {
-  if ( !input.isSafe() )
-    return escape( input.get() );
+  if (!input.isSafe())
+    return escape(input.get());
   return input;
 }
 
-QSharedPointer<OutputStream> OutputStream::clone( QTextStream *stream ) const
+QSharedPointer<OutputStream> OutputStream::clone(QTextStream *stream) const
 {
-  return QSharedPointer<OutputStream>( new OutputStream( stream ) );
+  return QSharedPointer<OutputStream>(new OutputStream(stream));
 }
 
-
-OutputStream& OutputStream::operator<<( const QString& input )
+OutputStream &OutputStream::operator<<(const QString &input)
 {
-  if ( m_stream )
-    ( *m_stream ) << input;
+  if (m_stream)
+    (*m_stream) << input;
   return *this;
 }
 
-OutputStream& OutputStream::operator<<( const Grantlee::SafeString& input )
+OutputStream &OutputStream::operator<<(const Grantlee::SafeString &input)
 {
-  if ( m_stream ) {
-    if ( input.needsEscape() )
-      ( *m_stream ) << escape( input.get() );
+  if (m_stream) {
+    if (input.needsEscape())
+      (*m_stream) << escape(input.get());
     else
-      ( *m_stream ) << input.get();
+      (*m_stream) << input.get();
   }
   return *this;
 }
@@ -109,10 +97,10 @@ OutputStream& OutputStream::operator<<(const Grantlee::OutputStream::Escape& e)
   return *this;
 }*/
 
-OutputStream& OutputStream::operator<<( QTextStream* stream )
+OutputStream &OutputStream::operator<<(QTextStream *stream)
 {
-  if ( m_stream )
-    ( *m_stream ) << stream->readAll();
+  if (m_stream)
+    (*m_stream) << stream->readAll();
   return *this;
 }
 /*

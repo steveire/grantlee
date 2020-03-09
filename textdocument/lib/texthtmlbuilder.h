@@ -22,13 +22,12 @@
 #define GRANTLEE_TEXTHTMLBUILDER_H
 
 #ifdef Q_CC_MSVC
-#pragma warning( disable : 4250 )
+#pragma warning(disable : 4250)
 #endif
 
 #include "abstractmarkupbuilder.h"
 #include "grantlee_textdocument_export.h"
 #include "markupdirector.h"
-
 
 namespace Grantlee
 {
@@ -40,9 +39,12 @@ class TextHTMLBuilderPrivate;
 /**
   @brief The TextHTMLBuilder creates a clean html markup output.
 
-  This class creates html output which is as minimal as possible and restricted to the rich text features supported in Qt. (http://doc.trolltech.com/4.4/richtext-html-subset.htm)
+  This class creates html output which is as minimal as possible and restricted
+  to the rich text features supported in %Qt.
+  (https://doc.qt.io/qt-5/richtext-html-subset.html)
 
-  The output contains only the body content, not the head element or other metadata.
+  The output contains only the body content, not the head element or other
+  metadata.
 
   eg:
 
@@ -52,77 +54,94 @@ class TextHTMLBuilderPrivate;
     </p>
   @endcode
 
-  instead of the content produced by qt:
+  instead of the content produced by %Qt:
 
   @code
-    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-    <html><head><meta name="qrichtext" content="1" /><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><style type="text/css">
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN"
+  "http://www.w3.org/TR/REC-html40/strict.dtd">
+    <html><head><meta name="qrichtext" content="1" /><meta
+  http-equiv="Content-Type" content="text/html; charset=UTF-8" /><style
+  type="text/css">
     p, li { white-space: pre-wrap; }
-    </style></head><body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-    <p style=" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is some <span style=" font-weight:600;">formatted content</span> in a paragraph. </p></body></html>
+    </style></head><body style=" font-family:'Sans Serif'; font-size:10pt;
+  font-weight:400; font-style:normal;">
+    <p style=" margin-top:12px; margin-bottom:12px; margin-left:0px;
+  margin-right:0px; -qt-block-indent:0; text-indent:0px;">This is some <span
+  style=" font-weight:600;">formatted content</span> in a paragraph.
+  </p></body></html>
   @endcode
 
   Such tags should be created separately. For example:
 
   @code
-    AbstractMarkupBuilder *b = new TextHTMLBuilder();
-    MarkupDirector *md = new MarkupDirector(b);
+    auto b = new TextHTMLBuilder();
+    auto md = new MarkupDirector(b);
     md->constructContent();
-    QString cleanHtml("<head>\n<title>%1</title>\n</head>\n<body>%2</body>\n</html>")
+    QString cleanHtml(
+      "<head>\n<title>%1</title>\n</head>\n<body>%2</body>\n</html>")
                       .arg(document.metaInformation(QTextDocument::DocumentTitle))
                       .arg(b->getOutput());
-    QFile.write(cleanHtml);
+    file.write(cleanHtml);
   @endcode
 
-  Font formatting information on elements is represented by individual span elements.
+  Font formatting information on elements is represented by individual span
+  elements.
+
   eg:
   @code
-    <span style"color:blue;"><span style="background-color:red;">Blue text on red background</span></span>
+    <span style"color:blue;">
+      <span style="background-color:red;">
+        Blue text on red background
+      </span>
+    </span>
   @endcode
+
   instead of
+
   @code
-    <span style="color:blue;background-color:red;">Blue text on red background</span>
+    <span style="color:blue;background-color:red;">
+      Blue text on red background
+    </span>
   @endcode
+
   It my be possible to change this if necessary.
 
   @author Stephen Kelly <steveire@gmail.com>
 */
-class GRANTLEE_TEXTDOCUMENT_EXPORT TextHTMLBuilder : virtual public AbstractMarkupBuilder
+class GRANTLEE_TEXTDOCUMENT_EXPORT TextHTMLBuilder
+    : virtual public AbstractMarkupBuilder
 {
 public:
-
-  /**
-    Creates a new TextHTMLBuilder.
-  */
   TextHTMLBuilder();
-  virtual ~TextHTMLBuilder();
+  ~TextHTMLBuilder() override;
 
-  /* reimp */ void beginStrong();
-  /* reimp */ void endStrong();
-  /* reimp */ void beginEmph();
-  /* reimp */ void endEmph();
-  /* reimp */ void beginUnderline();
-  /* reimp */ void endUnderline();
-  /* reimp */ void beginStrikeout();
-  /* reimp */ void endStrikeout();
-  /* reimp */ void beginForeground( const QBrush &brush );
-  /* reimp */ void endForeground();
-  /* reimp */ void beginBackground( const QBrush &brush );
-  /* reimp */ void endBackground();
-  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
-  /* reimp */ void endAnchor();
+  void beginStrong() override;
+  void endStrong() override;
+  void beginEmph() override;
+  void endEmph() override;
+  void beginUnderline() override;
+  void endUnderline() override;
+  void beginStrikeout() override;
+  void endStrikeout() override;
+  void beginForeground(const QBrush &brush) override;
+  void endForeground() override;
+  void beginBackground(const QBrush &brush) override;
+  void endBackground() override;
+  void beginAnchor(const QString &href = {}, const QString &name = {}) override;
+  void endAnchor() override;
 
-  // Maybe this stuff should just be added to a list, and then when I add literal text,
+  // Maybe this stuff should just be added to a list, and then when I add
+  // literal text,
   // add some kind of style attribute in one span instead of many.
-  /* reimp */ void beginFontFamily( const QString &family );
-  /* reimp */ void endFontFamily();
+  void beginFontFamily(const QString &family) override;
+  void endFontFamily() override;
 
   /**
     Begin a new font point size
     @param size The new size to begin.
   */
-  /* reimp */ void beginFontPointSize( int size );
-  /* reimp */ void endFontPointSize();
+  void beginFontPointSize(int size) override;
+  void endFontPointSize() override;
 
   /**
     Begin a new paragraph
@@ -132,54 +151,57 @@ public:
     @param leftMargin The new paragraph leftMargin
     @param rightMargin The new paragraph rightMargin
   */
-  /* reimp */ void beginParagraph( Qt::Alignment al = Qt::AlignLeft, qreal topMargin = 0.0, qreal bottomMargin = 0.0, qreal leftMargin = 0.0, qreal rightMargin = 0.0 );
+  void beginParagraph(Qt::Alignment al = Qt::AlignLeft, qreal topMargin = 0.0,
+                      qreal bottomMargin = 0.0, qreal leftMargin = 0.0,
+                      qreal rightMargin = 0.0) override;
 
   /**
     Begin a new header element.
     @param level The new level to begin.
   */
-  /* reimp */ void beginHeader( int level );
+  void beginHeader(int level) override;
 
   /**
     End a header element.
     @param level The new level to end.
   */
-  /* reimp */ void endHeader( int level );
+  void endHeader(int level) override;
 
-  /* reimp */ void endParagraph();
-  /* reimp */ void addNewline();
+  void endParagraph() override;
+  void addNewline() override;
 
-  /* reimp */ void insertHorizontalRule( int width = -1 );
+  void insertHorizontalRule(int width = -1) override;
 
-  /* reimp */ void insertImage( const QString &src, qreal width, qreal height );
+  void insertImage(const QString &src, qreal width, qreal height) override;
 
-  /* reimp */ void beginList( QTextListFormat::Style type );
+  void beginList(QTextListFormat::Style type) override;
 
-  /* reimp */ void endList();
+  void endList() override;
 
-  /* reimp */ void beginListItem();
-  /* reimp */ void endListItem();
+  void beginListItem() override;
+  void endListItem() override;
 
-  /* reimp */ void beginSuperscript();
+  void beginSuperscript() override;
 
-  /* reimp */ void endSuperscript();
+  void endSuperscript() override;
 
-  /* reimp */ void beginSubscript();
+  void beginSubscript() override;
 
-  /* reimp */ void endSubscript();
+  void endSubscript() override;
 
+  void beginTable(qreal cellpadding, qreal cellspacing,
+                  const QString &width) override;
 
-  /* reimp */ void beginTable( qreal cellpadding, qreal cellspacing, const QString &width );
+  void beginTableRow() override;
+  void beginTableHeaderCell(const QString &width, int colspan,
+                            int rowspan) override;
 
-  /* reimp */ void beginTableRow();
-  /* reimp */ void beginTableHeaderCell( const QString &width, int colspan, int rowspan );
+  void beginTableCell(const QString &width, int colspan, int rowspan) override;
 
-  /* reimp */ void beginTableCell( const QString &width, int colspan, int rowspan );
-
-  /* reimp */ void endTable();
-  /* reimp */ void endTableRow();
-  /* reimp */ void endTableHeaderCell();
-  /* reimp */ void endTableCell();
+  void endTable() override;
+  void endTableRow() override;
+  void endTableHeaderCell() override;
+  void endTableCell() override;
 
   /**
     Reimplemented from AbstractMarkupBuilder.
@@ -196,23 +218,21 @@ public:
       A sample &lt;b&gt;bold&lt;/b&gt; word.
     @endverbatim
   */
-  /* reimp */ void appendLiteralText( const QString &text );
+  void appendLiteralText(const QString &text) override;
 
   /**
     Append @p text without escaping.
 
     This is useful if extending MarkupDirector
   */
-  /* reimp */ void appendRawText( const QString &text );
+  void appendRawText(const QString &text) override;
 
-  /* reimp */ QString getResult();
+  QString getResult() override;
 
 private:
   TextHTMLBuilderPrivate *d_ptr;
-  Q_DECLARE_PRIVATE( TextHTMLBuilder )
-
+  Q_DECLARE_PRIVATE(TextHTMLBuilder)
 };
-
 }
 
 #endif

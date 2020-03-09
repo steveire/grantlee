@@ -25,30 +25,29 @@
 
 using namespace Grantlee;
 
-
 class RegroupNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
   RegroupNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class RegroupNode : public Node
 {
   Q_OBJECT
 public:
-  RegroupNode( FilterExpression target, FilterExpression expression, const QString &varName, QObject *parent = 0 );
+  RegroupNode(const FilterExpression &target,
+              const FilterExpression &expression, const QString &varName,
+              QObject *parent = {});
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   FilterExpression m_target;
   FilterExpression m_expression;
   QString m_varName;
-
 };
 
 #endif

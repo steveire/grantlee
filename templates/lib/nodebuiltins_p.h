@@ -29,17 +29,19 @@ namespace Grantlee
 /**
   @internal
 
-  A Node for plain text. Plain text is everything between variables, comments and template tags.
+  A Node for plain text. Plain text is everything between variables, comments
+  and template tags.
 */
 class GRANTLEE_TEMPLATES_EXPORT TextNode : public Node
 {
   Q_OBJECT
 public:
-  explicit TextNode( const QString &content, QObject *parent = 0 );
+  explicit TextNode(const QString &content, QObject *parent = {});
 
-  /* reimp */ void render( OutputStream *stream, Context *c ) const { // krazy:exclude:inline
-    Q_UNUSED( c );
-    ( *stream ) << m_content;
+  void render(OutputStream *stream, Context *c) const override
+  { // krazy:exclude:inline
+    Q_UNUSED(c);
+    (*stream) << m_content;
   }
 
 private:
@@ -55,14 +57,13 @@ class GRANTLEE_TEMPLATES_EXPORT VariableNode : public Node
 {
   Q_OBJECT
 public:
-  explicit VariableNode( const FilterExpression &fe, QObject *parent = 0 );
+  explicit VariableNode(const FilterExpression &fe, QObject *parent = {});
 
-  /* reimp */ void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   FilterExpression m_filterExpression;
 };
-
 }
 
 #endif

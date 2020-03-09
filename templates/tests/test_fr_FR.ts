@@ -113,5 +113,10 @@
             <numerusform>%n personnes a visité aujourd&apos;hui</numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="test_input.cpp" line="18"/>
+        <source>Snowman: ☃</source>
+        <translation>bonhomme de neige: ☃</translation>
+    </message>
 </context>
 </TS>

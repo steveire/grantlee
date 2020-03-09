@@ -1,12 +1,15 @@
-project(grantlee_templates)
 
-configure_file(grantlee_version.h.cmake ${PROJECT_BINARY_DIR}/grantlee_version.h)
+configure_file(grantlee_version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/grantlee_version.h)
 
 set(Grantlee_PLUGIN_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR} )
 
-configure_file(grantlee_config_p.h.cmake  ${PROJECT_BINARY_DIR}/grantlee_config_p.h)
+configure_file(grantlee_config_p.h.cmake  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_config_p.h)
 
-set (grantlee_templates_SRCS
+set_source_files_properties(taglibraryinterface.h PROPERTIES
+  SKIP_AUTOMOC TRUE
+)
+
+add_library(Grantlee_Templates SHARED
   abstractlocalizer.cpp
   cachingloaderdecorator.cpp
   customtyperegistry.cpp
@@ -30,28 +33,8 @@ set (grantlee_templates_SRCS
   typeaccessors.cpp
   util.cpp
   variable.cpp
-)
 
-set(scriptabletags_FILES
-  scriptablecontext.cpp
-  scriptablefilterexpression.cpp
-  scriptablenode.cpp
-  scriptableparser.cpp
-  scriptablesafestring.cpp
-  scriptabletags.cpp
-  scriptabletemplate.cpp
-  scriptablevariable.cpp
-  scriptablefilter.cpp
-)
-
-foreach(file ${scriptabletags_FILES})
-  list(APPEND scriptabletags_SRCS ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
-endforeach()
-
-set(Grantlee5_TEMPLATES_LIB_SOVERSION ${Grantlee5_VERSION_MAJOR})
-
-# Help IDEs find some non-compiled files.
-set(header_only_sources
+  # Help IDEs find some non-compiled files.
   customtyperegistry_p.h
   engine_p.h
   exception.h
@@ -69,16 +52,59 @@ set(header_only_sources
   token.h
   typeaccessor.h
 )
-list(APPEND grantlee_templates_SRCS ${header_only_sources})
-
-add_library(Grantlee_Templates SHARED
-  ${grantlee_templates_SRCS}
-  ${scriptabletags_SRCS}
-)
 add_library(Grantlee5::Templates ALIAS Grantlee_Templates)
 generate_export_header(Grantlee_Templates)
-set_property(TARGET Grantlee_Templates PROPERTY EXPORT_NAME Templates)
-target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
+set_property(TARGET Grantlee_Templates PROPERTY
+  EXPORT_NAME Templates
+)
+target_compile_features(Grantlee_Templates
+  PRIVATE
+    cxx_auto_type
+  PUBLIC
+    cxx_override
+)
+
+if (CMAKE_GENERATOR MATCHES "Visual Studio")
+
+  set_property(TARGET Grantlee_Templates PROPERTY DEBUG_POSTFIX "d")
+
+  foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
+    string(TOUPPER ${cfg} CFG)
+    set_target_properties(Grantlee_Templates
+      PROPERTIES
+      LIBRARY_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_BINARY_DIR}"
+      RUNTIME_OUTPUT_DIRECTORY_${CFG} "${CMAKE_CURRENT_BINARY_DIR}"
+      )
+  endforeach()
+endif()
+target_compile_definitions(Grantlee_Templates
+  PRIVATE
+    PLUGINS_PREFER_DEBUG_POSTFIX=$<CONFIG:Debug>
+)
+
+if (Qt5Qml_FOUND)
+  set(scriptabletags_FILES
+    scriptablecontext.cpp
+    scriptablefilterexpression.cpp
+    scriptablenode.cpp
+    scriptableparser.cpp
+    scriptablesafestring.cpp
+    scriptabletags.cpp
+    scriptabletemplate.cpp
+    scriptablevariable.cpp
+    scriptablefilter.cpp
+    )
+
+  foreach(file ${scriptabletags_FILES})
+    list(APPEND scriptabletags_SRCS ${CMAKE_SOURCE_DIR}/templates/scriptabletags/${file})
+  endforeach()
+
+  target_sources(Grantlee_Templates PRIVATE ${scriptabletags_SRCS})
+  target_include_directories(Grantlee_Templates PRIVATE ../scriptabletags)
+  target_link_libraries(Grantlee_Templates
+    PRIVATE Qt5::Qml
+  )
+endif()
 
 if (BUILD_TESTS)
   set(GRANTLEE_TESTS_EXPORT "GRANTLEE_TEMPLATES_EXPORT")
@@ -86,27 +112,20 @@ endif()
 
 configure_file(grantlee_test_export.h.in "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h")
 
-file(READ "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h" _content)
-
-file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h" "${_content}")
-
 target_link_libraries(Grantlee_Templates
   LINK_PUBLIC Qt5::Core
-  LINK_PRIVATE Qt5::Script
 )
 
-if (NOT CMAKE_BUILD_TYPE MATCHES TestCocoon)
-  set_target_properties(Grantlee_Templates PROPERTIES
-    VERSION    ${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}
-    SOVERSION  ${Grantlee5_TEMPLATES_LIB_SOVERSION}
-  )
-endif()
+set_target_properties(Grantlee_Templates PROPERTIES
+  VERSION    ${Grantlee5_VERSION}
+  SOVERSION  ${Grantlee5_VERSION_MAJOR}
+)
 
 install(TARGETS Grantlee_Templates EXPORT grantlee_targets
-         RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT Templates
-         LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
-         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
-         INCLUDES DESTINATION include
+  RUNTIME DESTINATION bin COMPONENT Templates
+  LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
+  ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT Templates
+  INCLUDES DESTINATION include
 )
 
 install(FILES
@@ -117,8 +136,8 @@ install(FILES
   exception.h
   filter.h
   filterexpression.h
-  ${PROJECT_BINARY_DIR}/grantlee_templates_export.h
-  ${PROJECT_BINARY_DIR}/grantlee_version.h
+  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h
+  ${CMAKE_CURRENT_BINARY_DIR}/grantlee_version.h
   metatype.h
   node.h
   outputstream.h
@@ -133,10 +152,10 @@ install(FILES
   token.h
   util.h
   variable.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/grantlee COMPONENT Templates
+  DESTINATION include/grantlee COMPONENT Templates
 )
 
 install(FILES
   grantlee_templates.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Templates
+  DESTINATION include COMPONENT Templates
 )

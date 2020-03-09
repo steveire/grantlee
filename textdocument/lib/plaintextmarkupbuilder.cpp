@@ -26,19 +26,18 @@ namespace Grantlee
 class PlainTextMarkupBuilderPrivate
 {
 public:
-  PlainTextMarkupBuilderPrivate( PlainTextMarkupBuilder *b )
-      : q_ptr( b ) {
-  }
+  PlainTextMarkupBuilderPrivate(PlainTextMarkupBuilder *b) : q_ptr(b) {}
 
   /**
     Get a letter string to represent a number.
 
-    The numbers 1-26 are represented by a-z, and 27-52 by aa-az, 53-79 by ba-bz etc.
+    The numbers 1-26 are represented by a-z, and 27-52 by aa-az, 53-79 by
+    ba-bz etc.
 
     @param The number to convert
     @return The letter string representation of the number.
   */
-  QString getLetterString( int itemNumber );
+  QString getLetterString(int itemNumber);
 
   QString getRomanString(int itemNumber);
 
@@ -58,10 +57,8 @@ public:
 
   PlainTextMarkupBuilder *q_ptr;
 
-  Q_DECLARE_PUBLIC( PlainTextMarkupBuilder )
-
+  Q_DECLARE_PUBLIC(PlainTextMarkupBuilder)
 };
-
 }
 
 using namespace Grantlee;
@@ -69,56 +66,57 @@ using namespace Grantlee;
 QString PlainTextMarkupBuilderPrivate::getRomanString(int item)
 {
   QString result;
-  //Code based to gui/text/qtextlist.cpp
+  // Code based to gui/text/qtextlist.cpp
   if (item < 5000) {
-      QString romanNumeral;
+    QString romanNumeral;
 
-      // works for up to 4999 items
-      QString romanSymbols = QStringLiteral("iiivixxxlxcccdcmmmm");
-      int c[] = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
-      int n = item;
-      for (int i = 12; i >= 0; n %= c[i], i--) {
-          int q = n / c[i];
-          if (q > 0) {
-              int startDigit = i + (i+3)/4;
-              int numDigits;
-              if (i % 4) {
-                  // c[i] == 4|5|9|40|50|90|400|500|900
-                  if ((i-2) % 4) {
-                      // c[i] == 4|9|40|90|400|900 => with subtraction (IV, IX, XL, XC, ...)
-                      numDigits = 2;
-                  }
-                  else {
-                      // c[i] == 5|50|500 (V, L, D)
-                      numDigits = 1;
-                  }
-              }
-              else {
-                  // c[i] == 1|10|100|1000 (I, II, III, X, XX, ...)
-                  numDigits = q;
-              }
-
-              romanNumeral.append(romanSymbols.mid(startDigit, numDigits));
+    // works for up to 4999 items
+    auto romanSymbols = QStringLiteral("iiivixxxlxcccdcmmmm");
+    int c[] = {1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
+    auto n = item;
+    for (auto i = 12; i >= 0; n %= c[i], i--) {
+      auto q = n / c[i];
+      if (q > 0) {
+        auto startDigit = i + (i + 3) / 4;
+        int numDigits;
+        if (i % 4) {
+          // c[i] == 4|5|9|40|50|90|400|500|900
+          if ((i - 2) % 4) {
+            // c[i] == 4|9|40|90|400|900
+            //   => with subtraction (IV, IX, XL, XC, ...)
+            numDigits = 2;
+          } else {
+            // c[i] == 5|50|500 (V, L, D)
+            numDigits = 1;
           }
+        } else {
+          // c[i] == 1|10|100|1000 (I, II, III, X, XX, ...)
+          numDigits = q;
+        }
+
+        romanNumeral.append(romanSymbols.mid(startDigit, numDigits));
       }
-      result = romanNumeral;
+    }
+    result = romanNumeral;
   } else {
-      result = QStringLiteral("?");
+    result = QStringLiteral("?");
   }
   return result;
 }
 
-QString PlainTextMarkupBuilderPrivate::getLetterString( int itemNumber )
+QString PlainTextMarkupBuilderPrivate::getLetterString(int itemNumber)
 {
   QString letterString;
-  while ( true ) {
+  while (true) {
     // Create the letter string by prepending one char at a time.
-    // The itemNumber is converted to a number in the base 36 (number of letters in the
-    // alphabet plus 10) after being increased by 10 (to pass out the digits 0 to 9).
-    letterString.prepend( QString::fromLatin1( "%1" ).arg(( itemNumber % LETTERSINALPHABET ) + DIGITSOFFSET,
-                          0, // no padding while building this string.
-                          LETTERSINALPHABET + DIGITSOFFSET ) );
-    if (( itemNumber >= LETTERSINALPHABET ) ) {
+    // The itemNumber is converted to a number in the base 36 (number of
+    // letters in the alphabet plus 10) after being increased by 10
+    // (to pass out the digits 0 to 9).
+    letterString.prepend(QStringLiteral("%1").arg(
+        (itemNumber % LETTERSINALPHABET) + DIGITSOFFSET,
+        0, // no padding while building this string.
+        LETTERSINALPHABET + DIGITSOFFSET));
+    if ((itemNumber >= LETTERSINALPHABET)) {
       itemNumber = itemNumber / LETTERSINALPHABET;
       itemNumber--;
     } else {
@@ -131,143 +129,144 @@ QString PlainTextMarkupBuilderPrivate::getLetterString( int itemNumber )
 QString PlainTextMarkupBuilderPrivate::getReferences()
 {
   QString refs;
-  if ( !m_urls.isEmpty() ) {
-    refs.append( QStringLiteral( "\n--------\n" ) );
+  if (!m_urls.isEmpty()) {
+    refs.append(QStringLiteral("\n--------\n"));
 
-    int index = 1;
-    while ( !m_urls.isEmpty() ) {
-      refs.append( QString::fromLatin1( "[%1] %2\n" ).arg( index++ ).arg( m_urls.takeFirst() ) );
+    auto index = 1;
+    while (!m_urls.isEmpty()) {
+      refs.append(
+          QStringLiteral("[%1] %2\n").arg(index++).arg(m_urls.takeFirst()));
     }
   }
   return refs;
 }
 
 PlainTextMarkupBuilder::PlainTextMarkupBuilder()
-  : d_ptr( new PlainTextMarkupBuilderPrivate( this ) )
+    : d_ptr(new PlainTextMarkupBuilderPrivate(this))
 {
 }
 
-PlainTextMarkupBuilder::~PlainTextMarkupBuilder()
-{
-  delete d_ptr;
-}
+PlainTextMarkupBuilder::~PlainTextMarkupBuilder() { delete d_ptr; }
 
 void PlainTextMarkupBuilder::beginStrong()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '*' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('*'));
 }
 
 void PlainTextMarkupBuilder::endStrong()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '*' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('*'));
 }
 
 void PlainTextMarkupBuilder::beginEmph()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '/' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('/'));
 }
 
 void PlainTextMarkupBuilder::endEmph()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '/' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('/'));
 }
 
 void PlainTextMarkupBuilder::beginUnderline()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '_' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('_'));
 }
 
 void PlainTextMarkupBuilder::endUnderline()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '_' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('_'));
 }
 
 void PlainTextMarkupBuilder::beginStrikeout()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '-' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('-'));
 }
 
 void PlainTextMarkupBuilder::endStrikeout()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '-' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('-'));
 }
 
-void PlainTextMarkupBuilder::beginAnchor( const QString &href, const QString &name )
+void PlainTextMarkupBuilder::beginAnchor(const QString &href,
+                                         const QString &name)
 {
-  Q_D( PlainTextMarkupBuilder );
-  Q_UNUSED( name );
-  if ( !d->m_urls.contains( href ) ) {
+  Q_D(PlainTextMarkupBuilder);
+  Q_UNUSED(name);
+  if (!d->m_urls.contains(href)) {
 
-    d->m_urls.append( href );
+    d->m_urls.append(href);
   }
   d->activeLink = href;
 }
 
 void PlainTextMarkupBuilder::endAnchor()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QString::fromLatin1( "[%1]" ).arg( d->m_urls.indexOf( d->activeLink ) + 1 ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(
+      QStringLiteral("[%1]").arg(d->m_urls.indexOf(d->activeLink) + 1));
 }
 
 void PlainTextMarkupBuilder::endParagraph()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '\n' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('\n'));
 }
 
 void PlainTextMarkupBuilder::addNewline()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '\n' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('\n'));
 }
 
-void PlainTextMarkupBuilder::insertHorizontalRule( int width )
+void PlainTextMarkupBuilder::insertHorizontalRule(int width)
 {
-  Q_UNUSED( width )
-  Q_D( PlainTextMarkupBuilder );
+  Q_UNUSED(width)
+  Q_D(PlainTextMarkupBuilder);
 
-  d->m_text.append( QStringLiteral( "--------------------\n" ) );
+  d->m_text.append(QStringLiteral("--------------------\n"));
 }
 
-int PlainTextMarkupBuilder::addReference( const QString& reference )
+int PlainTextMarkupBuilder::addReference(const QString &reference)
 {
-  Q_D( PlainTextMarkupBuilder );
+  Q_D(PlainTextMarkupBuilder);
 
-  if ( !d->m_urls.contains( reference ) )
-    d->m_urls.append( reference );
-  return d->m_urls.indexOf( reference ) + 1;
+  if (!d->m_urls.contains(reference))
+    d->m_urls.append(reference);
+  return d->m_urls.indexOf(reference) + 1;
 }
 
-void PlainTextMarkupBuilder::insertImage( const QString &src, qreal width, qreal height )
+void PlainTextMarkupBuilder::insertImage(const QString &src, qreal width,
+                                         qreal height)
 {
-  Q_D( PlainTextMarkupBuilder );
-  Q_UNUSED( width )
-  Q_UNUSED( height )
+  Q_D(PlainTextMarkupBuilder);
+  Q_UNUSED(width)
+  Q_UNUSED(height)
 
-  int ref = addReference( src );
+  auto ref = addReference(src);
 
-  d->m_text.append( QString::fromLatin1( "[%1]" ).arg( ref ) );
+  d->m_text.append(QStringLiteral("[%1]").arg(ref));
 }
 
-void PlainTextMarkupBuilder::beginList( QTextListFormat::Style style )
+void PlainTextMarkupBuilder::beginList(QTextListFormat::Style style)
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->currentListItemStyles.append( style );
-  d->currentListItemNumbers.append( 0 );
+  Q_D(PlainTextMarkupBuilder);
+  d->currentListItemStyles.append(style);
+  d->currentListItemNumbers.append(0);
 }
 
 void PlainTextMarkupBuilder::endList()
 {
-  Q_D( PlainTextMarkupBuilder );
-  if ( !d->currentListItemNumbers.isEmpty() ) {
+  Q_D(PlainTextMarkupBuilder);
+  if (!d->currentListItemNumbers.isEmpty()) {
     d->currentListItemStyles.removeLast();
     d->currentListItemNumbers.removeLast();
   }
@@ -275,37 +274,41 @@ void PlainTextMarkupBuilder::endList()
 
 void PlainTextMarkupBuilder::beginListItem()
 {
-  Q_D( PlainTextMarkupBuilder );
-  for ( int i = 0; i < d->currentListItemNumbers.size(); i++ ) {
-    d->m_text.append( QStringLiteral( "    " ) );
+  Q_D(PlainTextMarkupBuilder);
+  for (auto i = 0; i < d->currentListItemNumbers.size(); i++) {
+    d->m_text.append(QStringLiteral("    "));
   }
 
-  int itemNumber = d->currentListItemNumbers.last();
+  auto itemNumber = d->currentListItemNumbers.last();
 
-  switch ( d->currentListItemStyles.last() ) {
+  switch (d->currentListItemStyles.last()) {
   case QTextListFormat::ListDisc:
-    d->m_text.append( QStringLiteral( " *  " ) );
+    d->m_text.append(QStringLiteral(" *  "));
     break;
   case QTextListFormat::ListCircle:
-    d->m_text.append( QStringLiteral( " o  " ) );
+    d->m_text.append(QStringLiteral(" o  "));
     break;
   case QTextListFormat::ListSquare:
-    d->m_text.append( QStringLiteral( " -  " ) );
+    d->m_text.append(QStringLiteral(" -  "));
     break;
   case QTextListFormat::ListDecimal:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( itemNumber + 1 ) );
+    d->m_text.append(QStringLiteral(" %1. ").arg(itemNumber + 1));
     break;
   case QTextListFormat::ListLowerAlpha:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getLetterString( itemNumber ) ) );
+    d->m_text.append(
+        QStringLiteral(" %1. ").arg(d->getLetterString(itemNumber)));
     break;
   case QTextListFormat::ListUpperAlpha:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getLetterString( itemNumber ).toUpper() ) );
+    d->m_text.append(
+        QStringLiteral(" %1. ").arg(d->getLetterString(itemNumber).toUpper()));
     break;
   case QTextListFormat::ListLowerRoman:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getRomanString( itemNumber +1 ) ) );
+    d->m_text.append(
+        QStringLiteral(" %1. ").arg(d->getRomanString(itemNumber + 1)));
     break;
   case QTextListFormat::ListUpperRoman:
-    d->m_text.append( QString::fromLatin1( " %1. " ).arg( d->getRomanString( itemNumber +1 ).toUpper() ) );
+    d->m_text.append(QStringLiteral(" %1. ").arg(
+        d->getRomanString(itemNumber + 1).toUpper()));
     break;
   default:
     break;
@@ -314,157 +317,126 @@ void PlainTextMarkupBuilder::beginListItem()
 
 void PlainTextMarkupBuilder::endListItem()
 {
-  Q_D( PlainTextMarkupBuilder );
+  Q_D(PlainTextMarkupBuilder);
   d->currentListItemNumbers.last() = d->currentListItemNumbers.last() + 1;
-  d->m_text.append( QLatin1Char('\n') );
+  d->m_text.append(QLatin1Char('\n'));
 }
 
 void PlainTextMarkupBuilder::beginSuperscript()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QStringLiteral( "^{" ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QStringLiteral("^{"));
 }
 
 void PlainTextMarkupBuilder::endSuperscript()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '}' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('}'));
 }
 
 void PlainTextMarkupBuilder::beginSubscript()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QStringLiteral( "_{" ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QStringLiteral("_{"));
 }
 
 void PlainTextMarkupBuilder::endSubscript()
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( QLatin1Char( '}' ) );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(QLatin1Char('}'));
 }
 
-void PlainTextMarkupBuilder::appendLiteralText( const QString &text )
+void PlainTextMarkupBuilder::appendLiteralText(const QString &text)
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( text );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(text);
 }
 
-void PlainTextMarkupBuilder::appendRawText( const QString &text )
+void PlainTextMarkupBuilder::appendRawText(const QString &text)
 {
-  Q_D( PlainTextMarkupBuilder );
-  d->m_text.append( text );
+  Q_D(PlainTextMarkupBuilder);
+  d->m_text.append(text);
 }
 
 QString PlainTextMarkupBuilder::getResult()
 {
-  Q_D( PlainTextMarkupBuilder );
-  QString ret = d->m_text;
-  ret.append( d->getReferences() );
+  Q_D(PlainTextMarkupBuilder);
+  auto ret = d->m_text;
+  ret.append(d->getReferences());
   d->m_text.clear();
   return ret;
 }
 
-void PlainTextMarkupBuilder::beginBackground( const QBrush& brush )
+void PlainTextMarkupBuilder::beginBackground(const QBrush &brush)
 {
-  Q_UNUSED( brush );
+  Q_UNUSED(brush);
 }
 
-void PlainTextMarkupBuilder::beginFontFamily( const QString& family )
+void PlainTextMarkupBuilder::beginFontFamily(const QString &family)
 {
-  Q_UNUSED( family );
+  Q_UNUSED(family);
 }
 
-void PlainTextMarkupBuilder::beginFontPointSize( int size )
+void PlainTextMarkupBuilder::beginFontPointSize(int size) { Q_UNUSED(size); }
+
+void PlainTextMarkupBuilder::beginForeground(const QBrush &brush)
 {
-  Q_UNUSED( size );
+  Q_UNUSED(brush);
 }
 
-void PlainTextMarkupBuilder::beginForeground( const QBrush& brush )
+void PlainTextMarkupBuilder::beginHeader(int level) { Q_UNUSED(level); }
+
+void PlainTextMarkupBuilder::beginParagraph(Qt::Alignment a, qreal top,
+                                            qreal bottom, qreal left,
+                                            qreal right)
 {
-  Q_UNUSED( brush );
+  Q_UNUSED(a);
+  Q_UNUSED(top);
+  Q_UNUSED(bottom);
+  Q_UNUSED(left);
+  Q_UNUSED(right);
 }
 
-void PlainTextMarkupBuilder::beginHeader( int level )
+void PlainTextMarkupBuilder::beginTable(qreal cellpadding, qreal cellspacing,
+                                        const QString &width)
 {
-  Q_UNUSED( level );
+  Q_UNUSED(cellpadding);
+  Q_UNUSED(cellspacing);
+  Q_UNUSED(width);
 }
 
-void PlainTextMarkupBuilder::beginParagraph( Qt::Alignment a, qreal top, qreal bottom, qreal left, qreal right )
+void PlainTextMarkupBuilder::beginTableCell(const QString &width, int colSpan,
+                                            int rowSpan)
 {
-  Q_UNUSED( a );
-  Q_UNUSED( top );
-  Q_UNUSED( bottom );
-  Q_UNUSED( left );
-  Q_UNUSED( right );
+  Q_UNUSED(width);
+  Q_UNUSED(colSpan);
+  Q_UNUSED(rowSpan);
 }
 
-void PlainTextMarkupBuilder::beginTable( qreal cellpadding, qreal cellspacing, const QString& width )
+void PlainTextMarkupBuilder::beginTableHeaderCell(const QString &width,
+                                                  int colSpan, int rowSpan)
 {
-  Q_UNUSED( cellpadding );
-  Q_UNUSED( cellspacing );
-  Q_UNUSED( width );
+  Q_UNUSED(width);
+  Q_UNUSED(colSpan);
+  Q_UNUSED(rowSpan);
 }
 
-void PlainTextMarkupBuilder::beginTableCell( const QString& width, int colSpan, int rowSpan )
-{
-  Q_UNUSED( width );
-  Q_UNUSED( colSpan );
-  Q_UNUSED( rowSpan );
-}
+void PlainTextMarkupBuilder::beginTableRow() {}
 
-void PlainTextMarkupBuilder::beginTableHeaderCell( const QString& width, int colSpan, int rowSpan )
-{
-  Q_UNUSED( width );
-  Q_UNUSED( colSpan );
-  Q_UNUSED( rowSpan );
-}
+void PlainTextMarkupBuilder::endBackground() {}
 
-void PlainTextMarkupBuilder::beginTableRow()
-{
+void PlainTextMarkupBuilder::endFontFamily() {}
 
-}
+void PlainTextMarkupBuilder::endFontPointSize() {}
 
-void PlainTextMarkupBuilder::endBackground()
-{
+void PlainTextMarkupBuilder::endForeground() {}
 
-}
+void PlainTextMarkupBuilder::endHeader(int level) { Q_UNUSED(level) }
 
-void PlainTextMarkupBuilder::endFontFamily()
-{
+void PlainTextMarkupBuilder::endTable() {}
 
-}
+void PlainTextMarkupBuilder::endTableCell() {}
 
-void PlainTextMarkupBuilder::endFontPointSize()
-{
+void PlainTextMarkupBuilder::endTableHeaderCell() {}
 
-}
-
-void PlainTextMarkupBuilder::endForeground()
-{
-
-}
-
-void PlainTextMarkupBuilder::endHeader( int level )
-{
-  Q_UNUSED( level )
-}
-
-void PlainTextMarkupBuilder::endTable()
-{
-
-}
-
-void PlainTextMarkupBuilder::endTableCell()
-{
-
-}
-
-void PlainTextMarkupBuilder::endTableHeaderCell()
-{
-
-}
-
-void Grantlee::PlainTextMarkupBuilder::endTableRow()
-{
-
-}
+void Grantlee::PlainTextMarkupBuilder::endTableRow() {}

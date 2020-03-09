@@ -31,29 +31,24 @@ class AutoescapeNodeFactory : public AbstractNodeFactory
 public:
   AutoescapeNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class AutoescapeNode : public Node
 {
   Q_OBJECT
 public:
+  enum State { On, Off };
 
-  enum State {
-    On,
-    Off
-  };
+  explicit AutoescapeNode(int state, QObject *parent = {});
 
-  explicit AutoescapeNode( int state, QObject *parent = 0 );
+  void setList(const NodeList &list);
 
-  void setList( NodeList list );
-
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   NodeList m_list;
   int m_state;
-
 };
 
 #endif

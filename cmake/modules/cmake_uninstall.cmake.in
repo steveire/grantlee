@@ -1,41 +1,42 @@
-IF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
-  MESSAGE(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt\"")
-ENDIF(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+cmake_minimum_required(VERSION 3.5)
 
-FILE(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
-STRING(REGEX REPLACE "\n" ";" files "${files}")
-FOREACH(file ${files})
-  MESSAGE(STATUS "Uninstalling \"${file}\"")
-  IF(EXISTS "${file}")
-    EXEC_PROGRAM(
-      "@CMAKE_COMMAND@" ARGS "-E remove \"${file}\""
+if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+  message(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt\"")
+endif()
+
+file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
+string(REGEX REPLACE "\n" ";" files "${files}")
+foreach(file ${files})
+  message(STATUS "Uninstalling \"${file}\"")
+  if(EXISTS "${file}")
+    execute_process(COMMAND
+      "@CMAKE_COMMAND@" -E remove "${file}"
       OUTPUT_VARIABLE rm_out
-      RETURN_VALUE rm_retval
+      RESULT_VARIABLE rm_retval
       )
-    IF("${rm_retval}" STREQUAL 0)
-    ELSE("${rm_retval}" STREQUAL 0)
-      MESSAGE(FATAL_ERROR "Problem when removing \"${file}\"")
-    ENDIF("${rm_retval}" STREQUAL 0)
-  ELSE(EXISTS "${file}")
-    MESSAGE(STATUS "File \"${file}\" does not exist.")
-  ENDIF(EXISTS "${file}")
-  get_filename_component(path ${file} PATH )
+    if(NOT "${rm_retval}" STREQUAL 0)
+      message(FATAL_ERROR "Problem when removing \"${file}\": ${rm_out}")
+    endif()
+  else()
+    message(STATUS "File \"${file}\" does not exist.")
+  endif()
+  get_filename_component(path ${file} DIRECTORY)
 
   # Remove include/grantlee lib/grantlee/${version} and lib/grantlee if no other
   # versions are present.
   while( ${path} MATCHES ".*grantlee.*" )
-    FILE(GLOB contents RELATIVE ${path} "${path}/*" )
-    if ( "${contents}" STREQUAL "" )
+    file(GLOB contents RELATIVE ${path} "${path}/*" )
+    if (NOT contents)
       message(STATUS "Removing empty directory: ${path}")
 
-      exec_program(
-        "@CMAKE_COMMAND@" ARGS "-E remove_directory \"${path}\""
+      execute_process(COMMAND
+        "@CMAKE_COMMAND@" -E remove_directory "${path}"
         OUTPUT_VARIABLE rm_out
-        RETURN_VALUE rm_retval
+        RESULT_VARIABLE rm_retval
       )
 
       if("${rm_retval}" STREQUAL 0)
-        get_filename_component(path ${path} PATH )
+        get_filename_component(path ${path} DIRECTORY)
       else()
         message(FATAL_ERROR "Problem when removing \"${path}\"")
       endif()
@@ -43,4 +44,4 @@ FOREACH(file ${files})
       break()
     endif()
   endwhile()
-ENDFOREACH(file)
+endforeach()

@@ -1,8 +1,9 @@
+cmake_minimum_required(VERSION 3.5)
+
 project(textedit_grantlee)
 
-cmake_minimum_required(VERSION 3.0)
-
 find_package(Grantlee5 REQUIRED)
+find_package(Qt5Widgets REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -18,8 +19,8 @@ add_library(customtags MODULE
 grantlee_adjust_plugin_name(customtags)
 
 target_link_libraries(customtags
-  ${Grantlee_TEMPLATES_LIBRARIES}
-  ${Grantlee_TEXTDOCUMENT_LIBRARIES}
+  Grantlee5::Templates
+  Grantlee5::TextDocument
 )
 
 
@@ -35,7 +36,6 @@ configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
 add_executable(textedit
   main.cpp
-  audiotextedit.cpp
   audioobject.cpp
   textedit.cpp
   textedit.qrc
@@ -43,7 +43,6 @@ add_executable(textedit
 
 target_link_libraries(
   textedit
-  Qt4::QtWebKit
-  Qt4::phonon
-  ${Grantlee_TEMPLATES_LIBRARIES}
+  Grantlee5::Templates
+  Qt5::Widgets
 )

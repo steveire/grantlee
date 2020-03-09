@@ -43,14 +43,14 @@
 
 #include <QtGui>
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(books);
+  Q_INIT_RESOURCE(books);
 
-    QApplication app(argc, argv);
+  QApplication app(argc, argv);
 
-    BookWindow win;
-    win.show();
+  BookWindow win;
+  win.show();
 
-    return app.exec();
+  return app.exec();
 }

@@ -20,41 +20,35 @@
 
 #include "audiotextdocumentoutputter.h"
 
-AudioTextHtmlBuilder::AudioTextHtmlBuilder()
-{
+AudioTextHtmlBuilder::AudioTextHtmlBuilder() {}
 
+void AudioTextHtmlBuilder::addAudioTag(const QString &source)
+{
+  appendRawText(QString("<audio src=\"%1\" />").arg(source));
 }
 
-void AudioTextHtmlBuilder::addAudioTag( const QString &source )
+AudioPlainTextBuilder::AudioPlainTextBuilder() {}
+
+void AudioPlainTextBuilder::addAudioTag(const QString &source)
 {
-  appendLiteralText( QString( "<audio src=\"%1\" />").arg( source ) );
-//   appendRawText( QString( "<audio src=\"%1\" />").arg( source ) );
+  int ref = addReference(source);
+
+  appendRawText(QString("[%1]").arg(ref));
 }
 
-AudioPlainTextBuilder::AudioPlainTextBuilder()
+AudioTextDocumentDirector::AudioTextDocumentDirector(
+    AbstractAudioBuilder *builder)
+    : MarkupDirector(builder), m_builder(builder)
 {
-
 }
 
-void AudioPlainTextBuilder::addAudioTag(const QString& source)
+void AudioTextDocumentDirector::processCustomFragment(
+    const QTextFragment &fragment, const QTextDocument *doc)
 {
-  int ref = addReference( source );
+  if (fragment.charFormat().objectType() != AudioType)
+    return Grantlee::MarkupDirector::processCustomFragment(fragment, doc);
 
-  appendRawText( QString( "[%1]" ).arg( ref ) );
-}
+  QString name = fragment.charFormat().property(AudioProperty).toString();
 
-AudioTextDocumentDirector::AudioTextDocumentDirector(AbstractAudioBuilder* builder)
-  : MarkupDirector(builder), m_builder(builder)
-{
-
-}
-
-void AudioTextDocumentDirector::processCustomFragment(const QTextFragment& fragment, const QTextDocument* doc)
-{
-  if ( fragment.charFormat().objectType() != AudioType )
-    return Grantlee::MarkupDirector::processCustomFragment( fragment, doc );
-
-  QString name = fragment.charFormat().property( AudioProperty ).toString();
-
-  m_builder->addAudioTag( name );
+  m_builder->addAudioTag(name);
 }

@@ -27,8 +27,7 @@
 namespace Grantlee
 {
 
-template<typename TransitionInterface>
-class State
+template <typename TransitionInterface> class State
 {
 public:
   typedef TransitionInterface Type;
@@ -36,54 +35,67 @@ public:
   {
   public:
     typedef TransitionInterface Type;
-    explicit Transition( State<TransitionInterface> *parent = 0 )
+    explicit Transition(State<TransitionInterface> *parent = {})
     {
-      if ( parent )
-        parent->addTransition( this );
+      if (parent)
+        parent->addTransition(this);
     }
-    void setTargetState( State<TransitionInterface> *state ) { m_targetState = state; }
+    void setTargetState(State<TransitionInterface> *state)
+    {
+      m_targetState = state;
+    }
     State<TransitionInterface> *targetState() const { return m_targetState; }
+
   private:
     State<TransitionInterface> *m_targetState;
   };
 
-  explicit State( State<TransitionInterface>* parent = 0 )
-    : m_initialState( 0 ),
-      m_parent( parent ),
-      m_endTransition( 0 ),
-      m_unconditionalTransition( 0 )
+  explicit State(State<TransitionInterface> *parent = {})
+      : m_initialState(0), m_parent(parent), m_endTransition(0),
+        m_unconditionalTransition(0)
   {
-    if ( parent )
-      parent->addChild( this );
+    if (parent)
+      parent->addChild(this);
   }
 
   virtual ~State()
   {
-    qDeleteAll( m_transitions );
-    qDeleteAll( m_children );
+    qDeleteAll(m_transitions);
+    qDeleteAll(m_children);
   }
 
-  void addChild( State<TransitionInterface> *state ) { m_children.append( state ); }
-  QVector<State<TransitionInterface>*> children() const { return m_children; }
-  State<TransitionInterface>* parent() const { return m_parent; }
+  void addChild(State<TransitionInterface> *state) { m_children.append(state); }
+  QVector<State<TransitionInterface> *> children() const { return m_children; }
+  State<TransitionInterface> *parent() const { return m_parent; }
 
-  void setInitialState( State<TransitionInterface> *state ) { m_initialState = state; }
-  State<TransitionInterface>* initialState() { return m_initialState; }
+  void setInitialState(State<TransitionInterface> *state)
+  {
+    m_initialState = state;
+  }
+  State<TransitionInterface> *initialState() { return m_initialState; }
 
-  void addTransition( Transition *transition ) { m_transitions.append(transition); }
-  QVector<Transition*> transitions() { return m_transitions; }
+  void addTransition(Transition *transition)
+  {
+    m_transitions.append(transition);
+  }
+  QVector<Transition *> transitions() { return m_transitions; }
 
-  void setEndTransition( Transition *transition ) {
+  void setEndTransition(Transition *transition)
+  {
     delete m_endTransition;
     m_endTransition = transition;
   }
-  Transition * endTransition() const { return m_endTransition; }
+  Transition *endTransition() const { return m_endTransition; }
 
-  void setUnconditionalTransition( State<TransitionInterface> *transition ) {
+  void setUnconditionalTransition(State<TransitionInterface> *transition)
+  {
     delete m_unconditionalTransition;
     m_unconditionalTransition = transition;
   }
-  State<TransitionInterface>* unconditionalTransition() const { return m_unconditionalTransition; }
+  State<TransitionInterface> *unconditionalTransition() const
+  {
+    return m_unconditionalTransition;
+  }
 
   void enter() { onEntry(); }
   void exit() { onExit(); }
@@ -94,32 +106,32 @@ protected:
 
 private:
   State<TransitionInterface> *m_initialState;
-  QVector<Transition*> m_transitions;
-  QVector<State<TransitionInterface>*> m_children;
-  State<TransitionInterface> * const m_parent;
-  Transition  *m_endTransition;
+  QVector<Transition *> m_transitions;
+  QVector<State<TransitionInterface> *> m_children;
+  State<TransitionInterface> *const m_parent;
+  Transition *m_endTransition;
   State<TransitionInterface> *m_unconditionalTransition;
   QString m_stateName;
 };
 
-template<typename TransitionInterface>
+template <typename TransitionInterface>
 class StateMachine : public State<TransitionInterface>
 {
 public:
   typedef typename State<TransitionInterface>::Transition Transition;
 
-  explicit StateMachine( State<TransitionInterface>* parent = 0 )
-    : State<TransitionInterface>( parent ), m_currentState( 0 )
+  explicit StateMachine(State<TransitionInterface> *parent = {})
+      : State<TransitionInterface>(parent), m_currentState(0)
   {
-
   }
 
   void finished()
   {
     State<TransitionInterface> *s = m_currentState;
-    Q_FOREVER {
-      Q_ASSERT( s );
-      if ( !handleFinished( s ) )
+    Q_FOREVER
+    {
+      Q_ASSERT(s);
+      if (!handleFinished(s))
         s = s->parent();
       else
         break;
@@ -129,87 +141,90 @@ public:
   void start()
   {
     m_currentState = this->initialState();
-    Q_ASSERT( m_currentState );
-    performEnter( m_currentState );
+    Q_ASSERT(m_currentState);
+    performEnter(m_currentState);
   }
 
   void stop()
   {
-    performExit( this );
+    performExit(this);
     m_currentState = 0;
   }
 
 protected:
-  State<TransitionInterface>* currentState() const { return m_currentState; }
+  State<TransitionInterface> *currentState() const { return m_currentState; }
 
-  void executeTransition( State<TransitionInterface> *sourceState, Transition *transition )
+  void executeTransition(State<TransitionInterface> *sourceState,
+                         Transition *transition)
   {
-    performExit( sourceState );
+    performExit(sourceState);
     transition->onTransition();
     m_currentState = transition->targetState();
     State<TransitionInterface> *enteredState = m_currentState;
-    Q_ASSERT( enteredState );
-    performEnter( enteredState );
-    triggerUnconditionalTransition( enteredState );
+    Q_ASSERT(enteredState);
+    performEnter(enteredState);
+    triggerUnconditionalTransition(enteredState);
   }
 
 private:
-  void performEnter( State<TransitionInterface>* toState )
+  void performEnter(State<TransitionInterface> *toState)
   {
     toState->enter();
-    Q_FOREVER if ( toState->initialState() ) {
+    Q_FOREVER if (toState->initialState())
+    {
       toState = toState->initialState();
-      Q_ASSERT( toState );
+      Q_ASSERT(toState);
       toState->enter();
       m_currentState = toState;
-    } else {
-      Q_ASSERT( toState->children().isEmpty() );
+    }
+    else
+    {
+      Q_ASSERT(toState->children().isEmpty());
       break;
     }
   }
 
-  void performExit( State<TransitionInterface>* fromState )
+  void performExit(State<TransitionInterface> *fromState)
   {
     State<TransitionInterface> *exitedState = m_currentState;
     do {
       exitedState->exit();
       exitedState = exitedState->parent();
-    } while ( exitedState && exitedState != fromState );
+    } while (exitedState && exitedState != fromState);
   }
 
-  void triggerUnconditionalTransition( State<TransitionInterface> *enteredState )
+  void triggerUnconditionalTransition(State<TransitionInterface> *enteredState)
   {
     State<TransitionInterface> *childState = m_currentState;
     do {
-      Q_ASSERT( childState );
+      Q_ASSERT(childState);
 
-      if ( childState->unconditionalTransition() ) {
+      if (childState->unconditionalTransition()) {
         Transition *t = new Transition;
-        t->setTargetState( childState->unconditionalTransition() );
-        executeTransition( childState, t );
+        t->setTargetState(childState->unconditionalTransition());
+        executeTransition(childState, t);
         delete t;
         return;
       }
       childState = childState->parent();
-      Q_ASSERT( childState != enteredState );
-      Q_UNUSED( enteredState );
-    } while ( childState );
+      Q_ASSERT(childState != enteredState);
+      Q_UNUSED(enteredState);
+    } while (childState);
   }
 
-  bool handleFinished( State<TransitionInterface> *state )
+  bool handleFinished(State<TransitionInterface> *state)
   {
     Transition *handler = state->endTransition();
-    if ( !handler )
+    if (!handler)
       return false;
 
-    executeTransition( state, handler );
+    executeTransition(state, handler);
     return true;
   }
 
 private:
   State<TransitionInterface> *m_currentState;
 };
-
 }
 
 #endif

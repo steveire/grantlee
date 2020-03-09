@@ -31,10 +31,10 @@ class IfEqualNodeFactory : public AbstractNodeFactory
 public:
   IfEqualNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 
 protected:
-  Node* do_getNode( const QString& tagContent, Parser *p, bool negate ) const;
+  Node *do_getNode(const QString &tagContent, Parser *p, bool negate) const;
 };
 
 class IfNotEqualNodeFactory : public IfEqualNodeFactory
@@ -43,19 +43,20 @@ class IfNotEqualNodeFactory : public IfEqualNodeFactory
 public:
   IfNotEqualNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class IfEqualNode : public Node
 {
   Q_OBJECT
 public:
-  IfEqualNode( FilterExpression val11, FilterExpression val2, bool negate, QObject *parent = 0 );
+  IfEqualNode(const FilterExpression &val11, const FilterExpression &val2,
+              bool negate, QObject *parent = {});
 
-  void setTrueList( NodeList trueList );
-  void setFalseList( NodeList falseList );
+  void setTrueList(const NodeList &trueList);
+  void setFalseList(const NodeList &falseList);
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   FilterExpression m_var1;
@@ -63,7 +64,6 @@ private:
   NodeList m_trueList;
   NodeList m_falseList;
   bool m_negate;
-
 };
 
 #endif

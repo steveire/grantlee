@@ -24,49 +24,67 @@
 #include "node.h"
 #include "taglibraryinterface.h"
 
-// #include <QtScript/QScriptEngine>
+#include <QtQml/QJSValue>
 
-// #include <QtScript/QSharedPointer>
-// typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
-
-class QScriptEngine;
+class QJSEngine;
 
 namespace Grantlee
 {
 class Engine;
 class Parser;
 
+class ScriptableHelperFunctions : public QObject
+{
+  Q_OBJECT
+  QJSEngine *m_scriptEngine;
+
+public:
+  ScriptableHelperFunctions(QJSEngine *scriptEngine)
+      : m_scriptEngine(scriptEngine)
+  {
+  }
+
+  Q_INVOKABLE QJSValue markSafeFunction(QJSValue inputValue);
+  Q_INVOKABLE QJSValue ScriptableFilterExpressionConstructor(QString name,
+                                                             QObject *parserObj
+                                                             = {});
+  Q_INVOKABLE QJSValue ScriptableNodeConstructor(QJSValue callContext);
+  Q_INVOKABLE QJSValue ScriptableVariableConstructor(QString name);
+  Q_INVOKABLE QJSValue ScriptableTemplateConstructor(QString content,
+                                                     QString name,
+                                                     QObject *parent);
+};
+
 class ScriptableTagLibrary : public QObject, public TagLibraryInterface
 {
   Q_OBJECT
-  Q_INTERFACES( Grantlee::TagLibraryInterface )
+  Q_INTERFACES(Grantlee::TagLibraryInterface)
   Q_PLUGIN_METADATA(IID "org.grantlee.TagLibraryInterface")
 public:
-  ScriptableTagLibrary( QObject *parent = 0 );
+  ScriptableTagLibrary(QObject *parent = {});
 
-  virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() );
+  QHash<QString, AbstractNodeFactory *> nodeFactories(const QString &name
+                                                      = {}) override;
 
-  virtual QHash<QString, Filter*> filters( const QString &name = QString() );
+  QHash<QString, Filter *> filters(const QString &name = {}) override;
 
 public Q_SLOTS:
-  void addFactory( const QString &factoryName, const QString &tagname );
-  void addFilter( const QString &filterName );
+  void addFactory(const QString &factoryName, const QString &tagname);
+  void addFilter(const QString &filterName);
 
 protected:
-  bool evaluateScript( const QString &name );
-  QHash<QString, AbstractNodeFactory*> getFactories();
-  QHash<QString, Filter*> getFilters();
+  bool evaluateScript(const QString &name);
+  QHash<QString, AbstractNodeFactory *> getFactories();
+  QHash<QString, Filter *> getFilters();
 
 private:
-//   ScriptEnginePointer m_scriptEngine;
-  QScriptEngine *m_scriptEngine;
-  QHash<QString, AbstractNodeFactory*> m_nodeFactories;
+  QJSEngine *m_scriptEngine;
+  QJSValue m_functions;
+  QHash<QString, AbstractNodeFactory *> m_nodeFactories;
   QHash<QString, QString> m_factoryNames;
   QStringList m_filterNames;
-  QHash<QString, Filter*> m_filters;
-
+  QHash<QString, Filter *> m_filters;
 };
-
 }
 
 #endif

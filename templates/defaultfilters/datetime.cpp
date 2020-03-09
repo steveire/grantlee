@@ -24,116 +24,126 @@
 
 #include <QtCore/QDateTime>
 
-QVariant timeSince( QDateTime early, QDateTime late )
+QVariant timeSince(const QDateTime &early, const QDateTime &late)
 {
-  Q_ASSERT( early.isValid() );
-  Q_ASSERT( late.isValid() );
+  Q_ASSERT(early.isValid());
+  Q_ASSERT(late.isValid());
 
-  int secsSince = early.secsTo( late );
+  auto secsSince = early.secsTo(late);
 
-  if ( secsSince < 0 )
-    return SafeString( QStringLiteral( "0 minutes" ) );
+  if (secsSince < 0)
+    return SafeString(QStringLiteral("0 minutes"));
 
   // TODO: i18n
   QStringList singularNames;
-  singularNames << QStringLiteral( "year" )
-                << QStringLiteral( "month" )
-                << QStringLiteral( "week" )
-                << QStringLiteral( "day" )
-                << QStringLiteral( "hour" )
-                << QStringLiteral( "minute" );
+  singularNames << QStringLiteral("year") << QStringLiteral("month")
+                << QStringLiteral("week") << QStringLiteral("day")
+                << QStringLiteral("hour") << QStringLiteral("minute");
 
   QStringList pluralNames;
-  pluralNames << QStringLiteral( "years" )
-              << QStringLiteral( "months" )
-              << QStringLiteral( "weeks" )
-              << QStringLiteral( "days" )
-              << QStringLiteral( "hours" )
-              << QStringLiteral( "minutes" );
+  pluralNames << QStringLiteral("years") << QStringLiteral("months")
+              << QStringLiteral("weeks") << QStringLiteral("days")
+              << QStringLiteral("hours") << QStringLiteral("minutes");
 
   QList<int> seconds;
-  seconds << ( 60 * 60 * 24 * 365 ) // year
-          << ( 60 * 60 * 24 * 30 ) // month
-          << ( 60 * 60 * 24 * 7 ) // week
-          << ( 60 * 60 * 24 ) // day
-          << ( 60 * 60 ) // hour
-          << ( 60 ); // minute
+  seconds << (60 * 60 * 24 * 365) // year
+          << (60 * 60 * 24 * 30)  // month
+          << (60 * 60 * 24 * 7)   // week
+          << (60 * 60 * 24)       // day
+          << (60 * 60)            // hour
+          << (60);                // minute
 
-  int count = secsSince;
-  int i = 0;
-  while ( i < seconds.size() ) {
-    count = ( int )( secsSince / seconds.at( i ) );
+  auto count = secsSince;
+  auto i = 0;
+  while (i < seconds.size()) {
+    count = (secsSince / seconds.at(i));
     ++i;
-    if ( count != 0 )
+    if (count != 0)
       break;
   }
   QString firstChunk;
 
-  if ( count != 1 )
-    firstChunk.append( QString::fromLatin1( "%1 %2" ).arg( count ).arg( pluralNames.at( i - 1 ) ) );
+  if (count != 1)
+    firstChunk.append(
+        QStringLiteral("%1 %2").arg(count).arg(pluralNames.at(i - 1)));
   else {
-    firstChunk.append( QString::fromLatin1( "%1 %2" ).arg( count ).arg( singularNames.at( i - 1 ) ) );
+    firstChunk.append(
+        QStringLiteral("%1 %2").arg(count).arg(singularNames.at(i - 1)));
   }
-  if ( seconds.size() > i ) {
-    int count2 = ( secsSince - ( seconds.at( i - 1 ) * count ) ) / seconds.at( i );
-    if ( count2 != 0 ) {
-      if ( count2 > 1 )
-        firstChunk.append( QString::fromLatin1( ", %1 %2" ).arg( count2 ).arg( pluralNames.at( i ) ) );
+  if (seconds.size() > i) {
+    auto count2 = (secsSince - (seconds.at(i - 1) * count)) / seconds.at(i);
+    if (count2 != 0) {
+      if (count2 > 1)
+        firstChunk.append(
+            QStringLiteral(", %1 %2").arg(count2).arg(pluralNames.at(i)));
       else
-        firstChunk.append( QString::fromLatin1( ", %1 %2" ).arg( count2 ).arg( singularNames.at( i ) ) );
+        firstChunk.append(
+            QStringLiteral(", %1 %2").arg(count2).arg(singularNames.at(i)));
     }
   }
   return firstChunk;
 }
 
-QVariant timeUntil( QDateTime dt, QDateTime now = QDateTime() )
+QVariant DateFilter::doFilter(const QVariant &input, const QVariant &argument,
+                              bool autoescape) const
 {
-  if ( !now.isValid() )
-    now = QDateTime::currentDateTime();
+  Q_UNUSED(autoescape)
+  auto d = QDateTime::fromString(getSafeString(input),
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+                                 QStringLiteral("yyyy-MM-ddThh:mm:ss")
+#else
+                                 QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")
+#endif
+  );
 
-  return timeSince( now, dt );
+  auto argString = getSafeString(argument);
+
+  if (!argString.get().isEmpty())
+    return d.toString(argString);
+
+  return d.toString(QStringLiteral("MMM. d, yyyy"));
 }
 
-QVariant DateFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant TimeFilter::doFilter(const QVariant &input, const QVariant &argument,
+                              bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  QDateTime d = QDateTime::fromString( getSafeString( input ), QStringLiteral( "yyyy-MM-ddThh:mm:ss" ) );
-
-  SafeString argString = getSafeString( argument );
-
-  if ( !argString.get().isEmpty() )
-    return d.toString( argString );
-
-  return d.toString( QStringLiteral( "MMM. d, yyyy" ) );
+  Q_UNUSED(autoescape)
+  auto argString = getSafeString(argument);
+  return QDateTime::fromString(getSafeString(input),
+                               QStringLiteral("yyyy-MM-ddThh:mm:ss"))
+      .toString(argString);
 }
 
-QVariant TimeFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant TimeSinceFilter::doFilter(const QVariant &input,
+                                   const QVariant &argument,
+                                   bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  SafeString argString = getSafeString( argument );
-  return QDateTime::fromString( getSafeString( input ), QStringLiteral( "yyyy-MM-ddThh:mm:ss" ) ).toString( argString );
-}
-
-QVariant TimeSinceFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
-{
-  Q_UNUSED( autoescape )
+  Q_UNUSED(autoescape)
   QDateTime late;
-  if ( argument.type() != QVariant::DateTime )
+  if (argument.userType() != qMetaTypeId<QDateTime>())
     late = QDateTime::currentDateTime();
   else
-    late = argument.toDateTime();
+    late = argument.value<QDateTime>();
 
-  return timeSince( input.toDateTime(), late );
+  auto early = input.value<QDateTime>();
+  if (!early.isValid())
+    return QVariant();
+  return timeSince(early, late);
 }
 
-QVariant TimeUntilFilter::doFilter( const QVariant& input, const QVariant &argument, bool autoescape ) const
+QVariant TimeUntilFilter::doFilter(const QVariant &input,
+                                   const QVariant &argument,
+                                   bool autoescape) const
 {
-  Q_UNUSED( autoescape )
+  Q_UNUSED(autoescape)
   QDateTime early;
-  if ( argument.type() != QVariant::DateTime )
+  if (argument.userType() != qMetaTypeId<QDateTime>())
     early = QDateTime::currentDateTime();
   else
-    early = argument.toDateTime();
+    early = argument.value<QDateTime>();
 
-  return timeSince( early, input.toDateTime() );
+  auto late = input.value<QDateTime>();
+  if (!late.isValid())
+    return QVariant();
+  return timeSince(early, late);
 }

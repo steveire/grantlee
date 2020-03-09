@@ -27,7 +27,8 @@
 #include <QWebView>
 #include <grantlee/templateloader.h>
 
-namespace Grantlee {
+namespace Grantlee
+{
 class Engine;
 }
 
@@ -37,7 +38,8 @@ class MainWindow : public QWidget
 {
   Q_OBJECT
 public:
-  MainWindow(const QString &templateDir, QWidget* parent = 0, Qt::WindowFlags f = 0);
+  MainWindow(const QString &templateDir, QWidget *parent = 0,
+             Qt::WindowFlags f = 0);
 
 protected:
   virtual void initLocalizer();
@@ -56,24 +58,23 @@ private:
   QString m_templateDir;
 
   Grantlee::Engine *m_engine;
-  QSharedPointer<Grantlee::FileSystemTemplateLoader>  m_templateLoader;
+  QSharedPointer<Grantlee::FileSystemTemplateLoader> m_templateLoader;
 };
 
-template<typename T>
-class AppMainWindow : public MainWindow
+template <typename T> class AppMainWindow : public MainWindow
 {
 public:
-  AppMainWindow(const QString& templateDir, QWidget* parent = 0, Qt::WindowFlags f = 0)
-    : MainWindow(templateDir, parent, f)
+  AppMainWindow(const QString &templateDir, QWidget *parent = 0,
+                Qt::WindowFlags f = 0)
+      : MainWindow(templateDir, parent, f)
   {
-
   }
+
 protected:
   virtual void initLocalizer()
   {
-    m_localizer = QSharedPointer<Grantlee::AbstractLocalizer>( new T );
+    m_localizer = QSharedPointer<Grantlee::AbstractLocalizer>(new T);
   }
 };
-
 
 #endif

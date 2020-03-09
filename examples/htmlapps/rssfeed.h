@@ -21,8 +21,8 @@
 #ifndef RSS_FEED_H
 #define RSS_FEED_H
 
-#include <grantlee/node.h>
 #include <grantlee/filter.h>
+#include <grantlee/node.h>
 
 namespace Grantlee
 {
@@ -37,24 +37,26 @@ class RssFeedNodeFactory : public Grantlee::AbstractNodeFactory
 public:
   RssFeedNodeFactory(QObject *parent = 0);
 
-  virtual Grantlee::Node* getNode(const QString& tagContent, Grantlee::Parser* p) const;
-
+  virtual Grantlee::Node *getNode(const QString &tagContent,
+                                  Grantlee::Parser *p) const;
 };
 
 class RssFeedNode : public Grantlee::Node
 {
   Q_OBJECT
 public:
-  RssFeedNode(const Grantlee::FilterExpression &url, const Grantlee::FilterExpression &query, QObject *parent = 0);
+  RssFeedNode(const Grantlee::FilterExpression &url,
+              const Grantlee::FilterExpression &query, QObject *parent = 0);
 
-  void setChildNodes(QList<Node*> childNodes);
+  void setChildNodes(QList<Node *> childNodes);
 
-  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c) const;
+  virtual void render(Grantlee::OutputStream *stream,
+                      Grantlee::Context *c) const;
 
 private:
   Grantlee::FilterExpression m_url;
   Grantlee::FilterExpression m_query;
-  QList<Node*> m_childNodes;
+  QList<Node *> m_childNodes;
 };
 
 class XmlRoleNodeFactory : public Grantlee::AbstractNodeFactory
@@ -63,8 +65,8 @@ class XmlRoleNodeFactory : public Grantlee::AbstractNodeFactory
 public:
   XmlRoleNodeFactory(QObject *parent = 0);
 
-  virtual Grantlee::Node* getNode(const QString& tagContent, Grantlee::Parser* p) const;
-
+  virtual Grantlee::Node *getNode(const QString &tagContent,
+                                  Grantlee::Parser *p) const;
 };
 
 class XmlRoleNode : public Grantlee::Node
@@ -73,7 +75,8 @@ class XmlRoleNode : public Grantlee::Node
 public:
   XmlRoleNode(const Grantlee::FilterExpression &query, QObject *parent = 0);
 
-  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c) const;
+  virtual void render(Grantlee::OutputStream *stream,
+                      Grantlee::Context *c) const;
 
 private:
   Grantlee::FilterExpression m_name;
@@ -87,17 +90,19 @@ class XmlNamespaceNodeFactory : public Grantlee::AbstractNodeFactory
 public:
   XmlNamespaceNodeFactory(QObject *parent = 0);
 
-  virtual Grantlee::Node* getNode(const QString& tagContent, Grantlee::Parser* p) const;
-
+  virtual Grantlee::Node *getNode(const QString &tagContent,
+                                  Grantlee::Parser *p) const;
 };
 
 class XmlNamespaceNode : public Grantlee::Node
 {
   Q_OBJECT
 public:
-  XmlNamespaceNode(const Grantlee::FilterExpression &query, const QString &name, QObject *parent = 0);
+  XmlNamespaceNode(const Grantlee::FilterExpression &query, const QString &name,
+                   QObject *parent = 0);
 
-  virtual void render(Grantlee::OutputStream* stream, Grantlee::Context* c) const;
+  virtual void render(Grantlee::OutputStream *stream,
+                      Grantlee::Context *c) const;
 
 private:
   QString m_name;
@@ -107,7 +112,9 @@ private:
 class ResizeFilter : public Grantlee::Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter(const QVariant &input,
+                    const QVariant &argument = QVariant(),
+                    bool autoescape = false) const;
 };
 
 #endif

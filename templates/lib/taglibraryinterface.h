@@ -34,7 +34,8 @@ class Filter;
 /// @headerfile taglibraryinterface.h grantlee/taglibraryinterface.h
 
 /**
-  @brief The TagLibraryInterface returns available tags and filters from libraries.
+  @brief The **%TagLibraryInterface** returns available tags and filters from
+  libraries.
 
   This interface must be implemented in tag and filter libraries.
 
@@ -46,11 +47,12 @@ class Filter;
       Q_OBJECT
       Q_INTERFACES( Grantlee::TagLibraryInterface )
     public:
-      MyTagLibrary( QObject *parent = 0 )
+      MyTagLibrary( QObject *parent = {} )
           : QObject( parent ) {
       }
 
-      QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
+      QHash<QString, AbstractNodeFactory*>
+      nodeFactories(const QString &name = {}) {
         Q_UNUSED( name );
         QHash<QString, AbstractNodeFactory*> nodeFactories;
         nodeFactories.insert( "mytag1", new MyTag1() );
@@ -58,7 +60,7 @@ class Filter;
         return nodeFactories;
       }
 
-      QHash<QString, Filter*> filters( const QString &name = QString() ) {
+      QHash<QString, Filter*> filters( const QString &name = {} ) {
         Q_UNUSED( name );
 
         QHash<QString, Filter*> filters;
@@ -81,24 +83,27 @@ public:
   /**
     Returns the AbstractNodeFactory implementations available in this library.
   */
-  virtual QHash<QString, AbstractNodeFactory*> nodeFactories( const QString &name = QString() ) {
-    Q_UNUSED( name );
-    static const QHash<QString, AbstractNodeFactory*> h;
+  virtual QHash<QString, AbstractNodeFactory *>
+  nodeFactories(const QString &name = {})
+  {
+    Q_UNUSED(name);
+    static const QHash<QString, AbstractNodeFactory *> h;
     return h;
   };
 
   /**
     Returns the Filter implementations available in this library.
   */
-  virtual QHash<QString, Filter*> filters( const QString &name = QString() ) {
-    Q_UNUSED( name );
-    static const QHash<QString, Filter*> h;
+  virtual QHash<QString, Filter *> filters(const QString &name = {})
+  {
+    Q_UNUSED(name);
+    static const QHash<QString, Filter *> h;
     return h;
   };
 };
-
 }
 
-Q_DECLARE_INTERFACE( Grantlee::TagLibraryInterface, "org.grantlee.TagLibraryInterface/1.0" )
+Q_DECLARE_INTERFACE(Grantlee::TagLibraryInterface,
+                    "org.grantlee.TagLibraryInterface/1.0")
 
 #endif

@@ -18,17 +18,16 @@
 
 */
 
-
 #include "designwidget.h"
 
 #include "codegentableview.h"
-#include "methodmodel.h"
 #include "comboboxdelegate.h"
+#include "methodmodel.h"
 
 #include <QDebug>
 
-DesignWidget::DesignWidget(QWidget* parent, Qt::WindowFlags f)
-  : QWidget(parent, f)
+DesignWidget::DesignWidget(QWidget *parent, Qt::WindowFlags f)
+    : QWidget(parent, f)
 {
   ui.setupUi(this);
   setInitialContent();
@@ -52,36 +51,44 @@ void DesignWidget::setInitialContent()
   QList<QStringList> args;
 
   m_methodModel = new MethodModel(this);
-  insertMethod("public", false, "QString", "getResult", true );
-  args << ( QStringList() << "QString" << "silly" );
-  args << ( QStringList() << "int" << "number" << "9" );
-  insertMethod("public slots", false, "void", "somethingStupid", false, args );
-  insertMethod("protected", false, "void", "reset", false );
+  insertMethod("public", false, "QString", "getResult", true);
+  args << (QStringList() << "QString"
+                         << "silly");
+  args << (QStringList() << "int"
+                         << "number"
+                         << "9");
+  insertMethod("public slots", false, "void", "somethingStupid", false, args);
+  insertMethod("protected", false, "void", "reset", false);
   args.clear();
-  args << ( QStringList() << "int" << "var" );
-  args << ( QStringList() << "QString" << "input" << "QString()" );
-  insertMethod("protected", false, "QModelIndex", "findIndex", true, args );
-  insertMethod("protected", true, "void", "clear", false );
-  insertMethod("private", false, "void", "internalMethod", true );
+  args << (QStringList() << "int"
+                         << "var");
+  args << (QStringList() << "QString"
+                         << "input"
+                         << "QString()");
+  insertMethod("protected", false, "QModelIndex", "findIndex", true, args);
+  insertMethod("protected", true, "void", "clear", false);
+  insertMethod("private", false, "void", "internalMethod", true);
 
   ui.methods_table->setModel(m_methodModel);
 
-  connect( ui.methods_table->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), SLOT(setArgsRootIndex(QModelIndex)));
+  connect(ui.methods_table->selectionModel(),
+          SIGNAL(currentRowChanged(QModelIndex, QModelIndex)),
+          SLOT(setArgsRootIndex(QModelIndex)));
   m_argsModel = new ArgsModel(this);
   m_argsModel->setSourceModel(m_methodModel);
 
   setArgsRootIndex(QModelIndex());
 
-  connect( ui.pushButton, SIGNAL(clicked(bool)), SIGNAL(generateClicked(bool)));
+  connect(ui.pushButton, SIGNAL(clicked(bool)), SIGNAL(generateClicked(bool)));
 }
 
-void DesignWidget::insertMethod(const QString& access, bool _virtual, const QString& type, const QString& name, bool _const, QList<QStringList> args)
+void DesignWidget::insertMethod(const QString &access, bool _virtual,
+                                const QString &type, const QString &name,
+                                bool _const, QList<QStringList> args)
 {
-  QList<QStandardItem*> method;
-  method << new QStandardItem(access)
-         << new QStandardItem()
-         << new QStandardItem(type)
-         << new QStandardItem(name)
+  QList<QStandardItem *> method;
+  method << new QStandardItem(access) << new QStandardItem()
+         << new QStandardItem(type) << new QStandardItem(name)
          << new QStandardItem();
 
   method.at(1)->setEditable(false);
@@ -91,13 +98,10 @@ void DesignWidget::insertMethod(const QString& access, bool _virtual, const QStr
   method.at(1)->setCheckState(_virtual ? Qt::Checked : Qt::Unchecked);
   method.at(4)->setCheckState(_const ? Qt::Checked : Qt::Unchecked);
 
-  if (!args.isEmpty())
-  {
-    Q_FOREACH(const QStringList &arg, args)
-    {
-      QList<QStandardItem*> argItem;
-      argItem << new QStandardItem(arg.at(0))
-              << new QStandardItem(arg.at(1))
+  if (!args.isEmpty()) {
+    Q_FOREACH (const QStringList &arg, args) {
+      QList<QStandardItem *> argItem;
+      argItem << new QStandardItem(arg.at(0)) << new QStandardItem(arg.at(1))
               << new QStandardItem(arg.value(2));
       method.first()->appendRow(argItem);
     }
@@ -106,7 +110,8 @@ void DesignWidget::insertMethod(const QString& access, bool _virtual, const QStr
   m_methodModel->appendRow(method);
 }
 
-void DesignWidget::insertProperty(int row, const QString& type, const QString& name, bool readonly)
+void DesignWidget::insertProperty(int row, const QString &type,
+                                  const QString &name, bool readonly)
 {
   ui.properties_table->setItem(row, 0, new QTableWidgetItem(type));
   ui.properties_table->setItem(row, 1, new QTableWidgetItem(name));
@@ -120,7 +125,8 @@ void DesignWidget::insertProperty(int row, const QString& type, const QString& n
 void DesignWidget::setArgsRootIndex(const QModelIndex &index)
 {
   ui.args_table->setModel(index.isValid() ? m_argsModel : 0);
-  ui.args_table->setRootIndex(m_argsModel->mapFromSource(index.sibling(index.row(), 0)));
+  ui.args_table->setRootIndex(
+      m_argsModel->mapFromSource(index.sibling(index.row(), 0)));
 }
 
 Grantlee::Context DesignWidget::getContext()
@@ -133,8 +139,7 @@ Grantlee::Context DesignWidget::getContext()
   c.insert("qobject", true);
   c.insert("licence", ui.licence_combo->currentText());
 
-  if ( ui.baseClassAccess->currentText() != "None" )
-  {
+  if (ui.baseClassAccess->currentText() != "None") {
     QVariantHash baseClass;
     baseClass.insert("module", ui.baseModule->currentText());
     baseClass.insert("access", ui.baseClassAccess->currentText());
@@ -143,36 +148,35 @@ Grantlee::Context DesignWidget::getContext()
   }
 
   QVariantList properties;
-  for (int row = 0; row < ui.properties_table->rowCount(); ++row )
-  {
+  for (int row = 0; row < ui.properties_table->rowCount(); ++row) {
     QVariantHash property;
 
     property.insert("type", ui.properties_table->item(row, 0)->text());
     property.insert("name", ui.properties_table->item(row, 1)->text());
-    property.insert("readonly", ui.properties_table->item(row, 2)->checkState() == Qt::Checked);
+    property.insert("readonly", ui.properties_table->item(row, 2)->checkState()
+                                    == Qt::Checked);
 
     properties << property;
   }
-  c.insert( "properties", QVariant( properties ) );
+  c.insert("properties", QVariant(properties));
 
   QVariantList methods;
-  for (int row = 0; row < m_methodModel->rowCount(); ++row)
-  {
+  for (int row = 0; row < m_methodModel->rowCount(); ++row) {
     QVariantHash method;
     QStandardItem *firstColumn = m_methodModel->item(row, 0);
 
     method.insert("accessType", firstColumn->text());
-    method.insert("virtual", m_methodModel->item(row, 1)->checkState() == Qt::Checked);
+    method.insert("virtual",
+                  m_methodModel->item(row, 1)->checkState() == Qt::Checked);
     method.insert("type", m_methodModel->item(row, 2)->text());
     method.insert("name", m_methodModel->item(row, 3)->text());
-    method.insert("const", m_methodModel->item(row, 4)->checkState() == Qt::Checked);
+    method.insert("const",
+                  m_methodModel->item(row, 4)->checkState() == Qt::Checked);
 
-    if (firstColumn->hasChildren())
-    {
+    if (firstColumn->hasChildren()) {
       QVariantList args;
 
-      for (int argRow = 0; argRow < firstColumn->rowCount(); ++argRow )
-      {
+      for (int argRow = 0; argRow < firstColumn->rowCount(); ++argRow) {
         QVariantHash arg;
 
         arg.insert("type", firstColumn->child(argRow, 0)->text());
@@ -186,7 +190,7 @@ Grantlee::Context DesignWidget::getContext()
     methods << method;
   }
 
-  c.insert( "methods", QVariant( methods ) );
+  c.insert("methods", QVariant(methods));
   return c;
 }
 

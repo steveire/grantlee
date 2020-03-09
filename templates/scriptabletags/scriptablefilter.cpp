@@ -23,77 +23,79 @@
 
 #include "util.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
-ScriptableFilter::ScriptableFilter( QScriptValue filterObject, QScriptEngine *engine )
-    : m_filterObject( filterObject ), m_scriptEngine( engine )
+ScriptableFilter::ScriptableFilter(const QJSValue &filterObject,
+                                   QJSEngine *engine)
+    : m_filterObject(filterObject), m_scriptEngine(engine)
 {
 }
 
-ScriptableFilter::~ScriptableFilter()
-{
-
-}
+ScriptableFilter::~ScriptableFilter() {}
 
 bool ScriptableFilter::isSafe() const
 {
-  QScriptValue safety = m_filterObject.property( QStringLiteral( "isSafe" ) );
-  if ( safety.isBool() ) {
+  auto safety = m_filterObject.property(QStringLiteral("isSafe"));
+  if (safety.isBool()) {
     return safety.toBool();
   }
   return false;
 }
 
-QVariant ScriptableFilter::doFilter( const QVariant &input, const QVariant& argument, bool autoescape ) const
+QVariant ScriptableFilter::doFilter(const QVariant &input,
+                                    const QVariant &argument,
+                                    bool autoescape) const
 {
-  Q_UNUSED( autoescape )
-  QScriptValueList args;
-  if ( input.type() == QVariant::List ) {
-    QVariantList inputList = input.toList();
-    QScriptValue array = m_scriptEngine->newArray( inputList.size() );
-    for ( int i = 0; i < inputList.size(); ++i ) {
-      if ( inputList.at( i ).canConvert<QObject*>() ) {
-        array.setProperty( i, m_scriptEngine->newQObject( inputList.at( i ).value<QObject*>() ) );
+  Q_UNUSED(autoescape)
+  QJSValueList args;
+  if (input.userType() == qMetaTypeId<QVariantList>()) {
+    auto inputList = input.value<QVariantList>();
+    auto array = m_scriptEngine->newArray(inputList.size());
+    for (auto i = 0; i < inputList.size(); ++i) {
+      if (inputList.at(i).canConvert<QObject *>()) {
+        array.setProperty(
+            i, m_scriptEngine->newQObject(inputList.at(i).value<QObject *>()));
       } else {
-        array.setProperty( i, m_scriptEngine->newVariant( inputList.at( i ) ) );
+        array.setProperty(i, m_scriptEngine->toScriptValue(inputList.at(i)));
       }
     }
     args << array;
   } else {
-    if ( isSafeString( input ) ) {
-      ScriptableSafeString *ssObj = new ScriptableSafeString( m_scriptEngine );
-      ssObj->setContent( getSafeString( input ) );
-      args << m_scriptEngine->newQObject( ssObj );
-    } else if ( input.canConvert<QObject*>() ) {
-      args << m_scriptEngine->newQObject( input.value<QObject*>() );
+    if (isSafeString(input)) {
+      auto ssObj = new ScriptableSafeString(m_scriptEngine);
+      ssObj->setContent(getSafeString(input));
+      args << m_scriptEngine->newQObject(ssObj);
+    } else if (input.canConvert<QObject *>()) {
+      args << m_scriptEngine->newQObject(input.value<QObject *>());
     } else {
-      args << m_scriptEngine->newVariant( input );
+      args << m_scriptEngine->toScriptValue(input);
     }
   }
 
-  if ( argument.userType() == qMetaTypeId<SafeString>() ) {
-    ScriptableSafeString *ssObj = new ScriptableSafeString( m_scriptEngine );
-    ssObj->setContent( getSafeString( argument ) );
-    args << m_scriptEngine->newQObject( ssObj );
+  if (argument.userType() == qMetaTypeId<SafeString>()) {
+    auto ssObj = new ScriptableSafeString(m_scriptEngine);
+    ssObj->setContent(getSafeString(argument));
+    args << m_scriptEngine->newQObject(ssObj);
   } else {
-    args << m_scriptEngine->newVariant( argument );
+    args << m_scriptEngine->toScriptValue(argument);
   }
-  QScriptValue filterObject = m_filterObject;
-  QScriptValue returnValue = filterObject.call( QScriptValue(), args );
+  auto filterObject = m_filterObject;
+  auto returnValue = filterObject.call(args);
 
-  if ( returnValue.isString() ) {
-    return getSafeString( returnValue.toString() );
-  } else if ( returnValue.isQObject() ) {
-    QObject *returnedObject = qscriptvalue_cast<QObject *>( returnValue );
-    ScriptableSafeString *returnedStringObject = qobject_cast<ScriptableSafeString*>( returnedObject );
-    if ( !returnedStringObject )
+  if (returnValue.isString()) {
+    return getSafeString(returnValue.toString());
+  } else if (returnValue.isQObject()) {
+    auto returnedObject = qjsvalue_cast<QObject *>(returnValue);
+    auto returnedStringObject
+        = qobject_cast<ScriptableSafeString *>(returnedObject);
+    if (!returnedStringObject)
       return QVariant();
-    SafeString returnedString = returnedStringObject->wrappedString();
+    auto returnedString = returnedStringObject->wrappedString();
     return returnedString;
-  } else if ( returnValue.isVariant() ) {
-    return qscriptvalue_cast<QVariant>( returnValue );
-  } else if ( returnValue.isArray() ) {
-    return qscriptvalue_cast<QVariantList>( returnValue );
+  } else if (returnValue.isVariant()) {
+    return qjsvalue_cast<QVariant>(returnValue);
+  } else if (returnValue.isArray()) {
+    return qjsvalue_cast<QVariantList>(returnValue);
   }
   return QVariant();
 }

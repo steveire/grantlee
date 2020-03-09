@@ -22,10 +22,8 @@
 #define SCRIPTABLE_TEMPLATE_H
 
 #include <QtCore/QObject>
-#include <QtCore/QVariant>
 
-#include <QtScript/QScriptValue>
-
+#include "scriptablecontext.h"
 #include "template.h"
 
 namespace Grantlee
@@ -33,31 +31,23 @@ namespace Grantlee
 class Node;
 }
 
-class QScriptContext;
-
-class ScriptableContext;
-
 using namespace Grantlee;
-
-QScriptValue ScriptableTemplateConstructor( QScriptContext *context,
-    QScriptEngine *engine );
 
 class ScriptableTemplate : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableTemplate( Template t, QObject* parent = 0 );
+  explicit ScriptableTemplate(Template t, QObject *parent = {});
 
 public Q_SLOTS:
-  QString render( ScriptableContext *c ) const;
+  QString render(ScriptableContext *c) const;
 
-  QObjectList nodeList() const;
+  QList<QObject *> nodeList() const;
 
-  void setNodeList( const QObjectList &list );
+  void setNodeList(const QList<QObject *> &list);
 
 private:
   Template m_template;
-
 };
 
 #endif

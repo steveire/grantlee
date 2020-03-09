@@ -27,9 +27,12 @@
 
 #include "audiotextdocumentoutputter.h"
 
-QVariant CleanHtmlFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant CleanHtmlFilter::doFilter(const QVariant &input,
+                                   const QVariant &argument,
+                                   bool autoescape) const
 {
-  QTextDocument *document = qobject_cast<QTextDocument*>(input.value<QObject*>());
+  QTextDocument *document
+      = qobject_cast<QTextDocument *>(input.value<QObject *>());
 
   if (!document)
     return QString();
@@ -44,9 +47,12 @@ QVariant CleanHtmlFilter::doFilter(const QVariant& input, const QVariant& argume
   return markSafe(result);
 }
 
-QVariant PlainTextFilter::doFilter(const QVariant& input, const QVariant& argument, bool autoescape) const
+QVariant PlainTextFilter::doFilter(const QVariant &input,
+                                   const QVariant &argument,
+                                   bool autoescape) const
 {
-  QTextDocument *document = qobject_cast<QTextDocument*>(input.value<QObject*>());
+  QTextDocument *document
+      = qobject_cast<QTextDocument *>(input.value<QObject *>());
 
   if (!document)
     return QString();

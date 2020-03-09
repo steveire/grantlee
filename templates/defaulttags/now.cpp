@@ -25,32 +25,29 @@
 
 #include <QtCore/QDateTime>
 
+NowNodeFactory::NowNodeFactory() {}
 
-NowNodeFactory::NowNodeFactory()
+Node *NowNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = tagContent.split(QLatin1Char('"'), QString::KeepEmptyParts);
 
-}
-
-Node* NowNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  QStringList expr = tagContent.split( QLatin1Char( '"' ), QString::KeepEmptyParts );
-
-  if ( expr.size() != 3 ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "now tag takes one argument" ) );
+  if (expr.size() != 3) {
+    throw Grantlee::Exception(TagSyntaxError,
+                              QStringLiteral("now tag takes one argument"));
   }
 
-  QString formatString = expr.at( 1 );
+  auto formatString = expr.at(1);
 
-  return new NowNode( formatString, p );
+  return new NowNode(formatString, p);
 }
 
-NowNode::NowNode( const QString &formatString, QObject *parent )
-    : Node( parent ), m_formatString( formatString )
+NowNode::NowNode(const QString &formatString, QObject *parent)
+    : Node(parent), m_formatString(formatString)
 {
 }
 
-void NowNode::render( OutputStream *stream, Context *c ) const
+void NowNode::render(OutputStream *stream, Context *c) const
 {
-  Q_UNUSED( c )
-  ( *stream ) << QDateTime::currentDateTime().toString( m_formatString );
+  Q_UNUSED(c)
+  (*stream) << QDateTime::currentDateTime().toString(m_formatString);
 }

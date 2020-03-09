@@ -18,5 +18,4 @@
 
 */
 
-
 #include "bookwrapper.h"

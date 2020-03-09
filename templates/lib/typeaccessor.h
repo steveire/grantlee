@@ -31,22 +31,16 @@ namespace Grantlee
 {
 
 #ifndef Q_QDOC
-template <typename T>
-struct TypeAccessor
-{
-  static QVariant lookUp( const T object, const QString &property );
+template <typename T> struct TypeAccessor {
+  static QVariant lookUp(const T object, const QString &property);
 };
 
-template <typename T>
-struct TypeAccessor<T*>
-{
-  static QVariant lookUp( const T * const object, const QString &property );
+template <typename T> struct TypeAccessor<T *> {
+  static QVariant lookUp(const T *const object, const QString &property);
 };
 
-template <typename T>
-struct TypeAccessor<T&>
-{
-  static QVariant lookUp( const T &object, const QString &property );
+template <typename T> struct TypeAccessor<T &> {
+  static QVariant lookUp(const T &object, const QString &property);
 };
 #endif
 }

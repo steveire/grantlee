@@ -1,6 +1,6 @@
-project(contacts_grantlee)
+cmake_minimum_required(VERSION 3.5)
 
-cmake_minimum_required(VERSION 2.8.11)
+project(contacts_grantlee)
 
 find_package(Grantlee5 REQUIRED)
 
@@ -9,14 +9,10 @@ set(CMAKE_AUTOMOC ON)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-set(contacts_example_SRCS
-  mainwindow.cpp
-  contact.cpp
-)
-
 add_executable(contacts_linguist
   main_linguist.cpp
-  ${contacts_example_SRCS}
+  mainwindow.cpp
+  contact.cpp
 )
 
 find_package(Qt5WebKitWidgets REQUIRED)
@@ -40,7 +36,7 @@ set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_lingu
 set (CONTACTS_LOCALES "fr_FR" "de_DE" )
 
 foreach(CONTACT_LOCALE ${CONTACTS_LOCALES})
-    set( LINGUIST_TS_ARGS ${LINGUIST_TS_ARGS} "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.ts" )
+    list(APPEND LINGUIST_TS_ARGS "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.ts" )
 endforeach()
 
 add_custom_target(linguist_ts
@@ -48,10 +44,8 @@ add_custom_target(linguist_ts
     VERBATIM
 )
 
-set( LINGUIST_QM_ARGS COMMAND Qt5::lrelease )
-
 foreach(CONTACT_LOCALE ${CONTACTS_LOCALES})
-    set( _LINGUIST_QM_ARGS ${_LINGUIST_QM_ARGS} ${LINGUIST_QM_ARGS} "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.ts" "-qm" "${CMAKE_BINARY_DIR}/contacts_${CONTACT_LOCALE}.qm" )
+    list(APPEND _LINGUIST_QM_ARGS COMMAND Qt5::lrelease "${CMAKE_SOURCE_DIR}/${CONTACT_LOCALE}.ts" "-qm" "${CMAKE_BINARY_DIR}/contacts_${CONTACT_LOCALE}.qm" )
 endforeach()
 
 add_custom_target(linguist_qm

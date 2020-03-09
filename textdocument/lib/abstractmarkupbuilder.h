@@ -36,13 +36,15 @@ class AbstractMarkupBuilderPrivate;
 /// @headerfile abstractmarkupbuilder.h grantlee/abstractmarkupbuilder.h
 
 /**
-  @brief The AbstractMarkupBuilder class serves as a base class for creating marked up plain text output.
+  @brief Interface for creating marked-up text output.
 
-  The AbstractMarkupBuilder is used by a MarkupDirector to create marked up output such as html or markdown.
+  The **%AbstractMarkupBuilder** is used by a MarkupDirector to create marked-up
+  output such as html or markdown.
 
   See PlainTextMarkupBuilder and TextHTMLBuilder for example implementations.
 
-  This interface can be extended to handle custom format types in a QTextDocument. @see @ref custom_qtextobject
+  This interface can be extended to handle custom format types in a
+  QTextDocument. @see @ref custom_qtextobject
 
   @author Stephen Kelly <steveire@gmail.com>
 */
@@ -76,14 +78,20 @@ public:
   /** Close the struck out element in the markup */
   virtual void endStrikeout() = 0;
 
-  /** Begin a decorarated foreground element in the markup (A text color) using @p brush */
-  virtual void beginForeground( const QBrush &brush ) = 0;
+  /**
+    Begin a decorarated foreground element in the markup (A text color)
+    using @p brush
+  */
+  virtual void beginForeground(const QBrush &brush) = 0;
 
   /** Close the decorarated foreground element in the markup */
   virtual void endForeground() = 0;
 
-  /** Begin a decorarated background element in the markup (A text background color) using @p brush */
-  virtual void beginBackground( const QBrush &brush ) = 0;
+  /**
+    Begin a decorarated background element in the markup (A text background
+    color) using @p brush
+   */
+  virtual void beginBackground(const QBrush &brush) = 0;
 
   /** Close the decorarated background element in the markup */
   virtual void endBackground() = 0;
@@ -93,7 +101,8 @@ public:
     @param href The href of the anchor.
     @param name The name of the anchor.
   */
-  virtual void beginAnchor( const QString &href = QString(), const QString &name = QString() ) = 0;
+  virtual void beginAnchor(const QString &href = {}, const QString &name = {})
+      = 0;
 
   /** Close the anchor element */
   virtual void endAnchor() = 0;
@@ -102,7 +111,7 @@ public:
     Begin a new font familiy element in the markup
     @param family The name of the font family to begin.
   */
-  virtual void beginFontFamily( const QString &family ) = 0;
+  virtual void beginFontFamily(const QString &family) = 0;
 
   /** End font family element */
   virtual void endFontFamily() = 0;
@@ -111,7 +120,7 @@ public:
     Begin a new font point size element in the markup
     @param size The point size to begin.
   */
-  virtual void beginFontPointSize( int size ) = 0;
+  virtual void beginFontPointSize(int size) = 0;
 
   /** End font point size element */
   virtual void endFontPointSize() = 0;
@@ -124,7 +133,10 @@ public:
     @param left The left margin of the new paragraph.
     @param right The right margin of the new paragraph.
   */
-  virtual void beginParagraph( Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0 ) = 0;
+  virtual void beginParagraph(Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0,
+                              qreal bottom = 0.0, qreal left = 0.0,
+                              qreal right = 0.0)
+      = 0;
 
   /** Close the paragraph in the markup. */
   virtual void endParagraph() = 0;
@@ -135,7 +147,7 @@ public:
     Insert a horizontal rule into the markup.
     @param width The width of the rule. Default is full width.
   */
-  virtual void insertHorizontalRule( int width = -1 ) = 0;
+  virtual void insertHorizontalRule(int width = -1) = 0;
 
   /**
     Insert a new image element into the markup.
@@ -143,14 +155,14 @@ public:
     @param width The width of the image
     @param height The height of the image.
   */
-  virtual void insertImage( const QString &url, qreal width, qreal height ) = 0;
+  virtual void insertImage(const QString &url, qreal width, qreal height) = 0;
 
   /**
     Begin a new list element in the markup.
     A list element contains list items, and may contain other lists.
     @param style The style of list to create.
   */
-  virtual void beginList( QTextListFormat::Style style ) = 0;
+  virtual void beginList(QTextListFormat::Style style) = 0;
 
   /**
     Close the list.
@@ -180,12 +192,15 @@ public:
 
     @param cellpadding The padding attribute for the table.
     @param cellspacing The spacing attribute for the table.
-    @param width The width of the table. May be either an integer, or a percentage value.
+    @param width The width of the table. May be either an integer, or a
+    percentage value.
   */
-  virtual void beginTable( qreal cellpadding, qreal cellspacing, const QString &width ) = 0;
+  virtual void beginTable(qreal cellpadding, qreal cellspacing,
+                          const QString &width)
+      = 0;
 
   /**
-    Begins a new table row.
+    Begin a new table row
   */
   virtual void beginTableRow() = 0;
 
@@ -195,7 +210,9 @@ public:
     @param colSpan The column span of the cell.
     @param rowSpan The row span of the cell.
   */
-  virtual void beginTableHeaderCell( const QString &width, int colSpan, int rowSpan ) = 0;
+  virtual void beginTableHeaderCell(const QString &width, int colSpan,
+                                    int rowSpan)
+      = 0;
 
   /**
     Begin a new table cell.
@@ -203,7 +220,8 @@ public:
     @param colSpan The column span of the cell.
     @param rowSpan The row span of the cell.
   */
-  virtual void beginTableCell( const QString &width, int colSpan, int rowSpan ) = 0;
+  virtual void beginTableCell(const QString &width, int colSpan, int rowSpan)
+      = 0;
 
   /** End a table element */
   virtual void endTable() = 0;
@@ -218,37 +236,38 @@ public:
   virtual void endTableCell() = 0;
 
   /**
-    Begin a level @p level header.
+    Begin a level @p level header
     @param level An integer between 1 and 6
   */
-  virtual void beginHeader( int level ) = 0;
+  virtual void beginHeader(int level) = 0;
 
   /**
-    End a level @p level header.
+    End a level @p level header
     @param level An integer between 1 and 6
   */
-  virtual void endHeader( int level ) = 0;
+  virtual void endHeader(int level) = 0;
 
   /**
-    Append the plain text @p text to the markup.
+    Append the plain text @p text to the markup
 
     @param text The text to append.
   */
-  virtual void appendLiteralText( const QString &text ) = 0;
+  virtual void appendLiteralText(const QString &text) = 0;
 
   /**
-    Appends the raw text @p text to the markup. @p text is added unescaped.
+    Append the raw text @p text to the markup. @p text is added unescaped
   */
-  virtual void appendRawText( const QString &text ) = 0;
+  virtual void appendRawText(const QString &text) = 0;
 
   /**
-    Return the fully marked up result of the building process. This may contain metadata etc, such as a head element in html.
+    Return the fully marked up result of the building process.
+
+    This may contain metadata etc, such as a head element in html.
 
     @return The fully marked up text.
   */
   virtual QString getResult() = 0;
 };
-
 }
 
 #endif

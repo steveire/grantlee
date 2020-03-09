@@ -31,18 +31,16 @@ class CommentNodeFactory : public AbstractNodeFactory
 public:
   CommentNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
-
 
 class CommentNode : public Node
 {
   Q_OBJECT
 public:
-  CommentNode( QObject *parent = 0 );
+  CommentNode(QObject *parent = {});
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 };
 
 #endif

@@ -37,11 +37,11 @@ namespace Grantlee
 
 #ifndef Q_QDOC
 /**
-  @brief The MetaType is the interface to the Grantlee introspection system.
+  @brief The **%MetaType** is the interface to the Grantlee introspection
+  system.
 
-  The MetaType class is used as part of the type registration system of %Grantlee.
-
-  The init method should be called in some location where types to be introspected are defined.
+  The **%MetaType** class is used as part of the type registration system of
+  %Grantlee.
 
   @see @ref generic_types_and_templates
   @author Michael Jansen <kde@michael-jansen.biz>
@@ -53,12 +53,12 @@ public:
   /**
     @internal The signature for a property lookup method
    */
-  typedef QVariant ( *LookupFunction )( const QVariant &, const QString & );
+  typedef QVariant (*LookupFunction)(const QVariant &, const QString &);
 
   /**
     @internal Registers a property lookup method
    */
-  static void registerLookUpOperator( int id, LookupFunction f );
+  static void registerLookUpOperator(int id, LookupFunction f);
 
   /**
     @internal
@@ -73,12 +73,12 @@ public:
   /**
     @internal
    */
-  static QVariant lookup( const QVariant &object, const QString &property );
+  static QVariant lookup(const QVariant &object, const QString &property);
 
   /**
     @internal
    */
-  static bool lookupAlreadyRegistered( int id );
+  static bool lookupAlreadyRegistered(int id);
 
 private:
   MetaType();
@@ -89,62 +89,58 @@ namespace
 {
 
 /*
- * This is a helper to select an appropriate overload of indexAccess
+  This is a helper to select an appropriate overload of indexAccess
  */
-template<typename RealType, typename HandleAs>
-struct LookupTrait
-{
-  static QVariant doLookUp( const QVariant &object, const QString &property )
+template <typename RealType, typename HandleAs> struct LookupTrait {
+  static QVariant doLookUp(const QVariant &object, const QString &property)
   {
     typedef typename Grantlee::TypeAccessor<RealType> Accessor;
-    return Accessor::lookUp( object.value<RealType>(), property );
+    return Accessor::lookUp(object.value<RealType>(), property);
   }
 };
 
-template<typename RealType, typename HandleAs>
-struct LookupTrait<RealType&, HandleAs&>
-{
-  static QVariant doLookUp( const QVariant &object, const QString &property )
+template <typename RealType, typename HandleAs>
+struct LookupTrait<RealType &, HandleAs &> {
+  static QVariant doLookUp(const QVariant &object, const QString &property)
   {
-    typedef typename Grantlee::TypeAccessor<HandleAs&> Accessor;
-    return Accessor::lookUp( object.value<HandleAs>(), property );
+    typedef typename Grantlee::TypeAccessor<HandleAs &> Accessor;
+    return Accessor::lookUp(object.value<HandleAs>(), property);
   }
 };
 
-template<typename RealType, typename HandleAs>
-static int doRegister( int id )
+template <typename RealType, typename HandleAs> static int doRegister(int id)
 {
-  if ( MetaType::lookupAlreadyRegistered( id ) )
+  if (MetaType::lookupAlreadyRegistered(id))
     return id;
 
-  QVariant ( *lf )( const QVariant&, const QString& ) = LookupTrait<RealType, HandleAs>::doLookUp;
+  QVariant (*lf)(const QVariant &, const QString &)
+      = LookupTrait<RealType, HandleAs>::doLookUp;
 
-  MetaType::registerLookUpOperator( id, reinterpret_cast<MetaType::LookupFunction>( lf ) );
+  MetaType::registerLookUpOperator(
+      id, reinterpret_cast<MetaType::LookupFunction>(lf));
 
   return id;
 }
 
 /*
- * Register a type so grantlee knows how to handle it.
+  Register a type so grantlee knows how to handle it.
  */
-template<typename RealType, typename HandleAs>
-struct InternalRegisterType
-{
-  static int doReg() {
+template <typename RealType, typename HandleAs> struct InternalRegisterType {
+  static int doReg()
+  {
     const int id = qMetaTypeId<RealType>();
-    return doRegister<RealType&, HandleAs&>( id );
+    return doRegister<RealType &, HandleAs &>(id);
   }
 };
 
-template<typename RealType, typename HandleAs>
-struct InternalRegisterType<RealType*, HandleAs*>
-{
-  static int doReg() {
-    const int id = qMetaTypeId<RealType*>();
-    return doRegister<RealType*, HandleAs*>( id );
+template <typename RealType, typename HandleAs>
+struct InternalRegisterType<RealType *, HandleAs *> {
+  static int doReg()
+  {
+    const int id = qMetaTypeId<RealType *>();
+    return doRegister<RealType *, HandleAs *>(id);
   }
 };
-
 }
 
 /**
@@ -176,14 +172,14 @@ struct InternalRegisterType<RealType*, HandleAs*>
 
     registerMetaType<SomeType>();
 
-    // Only the introspectable API from SomeType is needed, so we can reuse that registration.
+    // Only the introspectable API from SomeType is needed, so we can reuse that
+  registration.
     registerMetaType<OtherType, SomeType>();
   @endcode
 
   @see @ref generic_types_and_templates
  */
-template<typename RealType, typename HandleAs>
-int registerMetaType()
+template <typename RealType, typename HandleAs> int registerMetaType()
 {
   MetaType::internalLock();
 
@@ -197,12 +193,11 @@ int registerMetaType()
 #ifndef Q_QDOC
 /**
   @internal
-  Register a type so grantlee knows how to handle it.
+  Register a type so %Grantlee knows how to handle it.
 
   This is a convenience method.
  */
-template<typename Type>
-int registerMetaType()
+template <typename Type> int registerMetaType()
 {
   return registerMetaType<Type, Type>();
 }
@@ -215,33 +210,35 @@ int registerMetaType()
 
   @see @ref generic_types
  */
-#define GRANTLEE_BEGIN_LOOKUP(Type)                                                        \
-namespace Grantlee                                                                         \
-{                                                                                          \
-template<>                                                                                 \
-inline QVariant TypeAccessor<Type&>::lookUp( const Type &object, const QString &property ) \
-{                                                                                          \
+#define GRANTLEE_BEGIN_LOOKUP(Type)                                            \
+  namespace Grantlee                                                           \
+  {                                                                            \
+  template <>                                                                  \
+  inline QVariant TypeAccessor<Type &>::lookUp(const Type &object,             \
+                                               const QString &property)        \
+  {
 
 /**
   Top boundary of a lookup function for Type*.
 
   @see @ref generic_types
  */
-#define GRANTLEE_BEGIN_LOOKUP_PTR(Type)                                                            \
-namespace Grantlee                                                                                 \
-{                                                                                                  \
-template<>                                                                                         \
-inline QVariant TypeAccessor<Type*>::lookUp( const Type * const object, const QString &property )  \
-{                                                                                                  \
+#define GRANTLEE_BEGIN_LOOKUP_PTR(Type)                                        \
+  namespace Grantlee                                                           \
+  {                                                                            \
+  template <>                                                                  \
+  inline QVariant TypeAccessor<Type *>::lookUp(const Type *const object,       \
+                                               const QString &property)        \
+  {
 
 /**
   Bottom boundary of a lookup function for Type.
 
   @see @ref generic_types
  */
-#define GRANTLEE_END_LOOKUP                                                              \
-  return QVariant();                                                                     \
-}                                                                                        \
-}                                                                                        \
+#define GRANTLEE_END_LOOKUP                                                    \
+  return QVariant();                                                           \
+  }                                                                            \
+  }
 
 #endif // #define GRANTLEE_METATYPE_H

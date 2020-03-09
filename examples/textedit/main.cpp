@@ -42,14 +42,14 @@
 #include "textedit.h"
 #include <QApplication>
 
-int main( int argc, char ** argv )
+int main(int argc, char **argv)
 {
-    Q_INIT_RESOURCE(textedit);
+  Q_INIT_RESOURCE(textedit);
 
-    QApplication a( argc, argv );
-    a.setApplicationName("textedit");
-    TextEdit mw;
-    mw.resize( 700, 800 );
-    mw.show();
-    return a.exec();
+  QApplication a(argc, argv);
+  a.setApplicationName("textedit");
+  TextEdit mw;
+  mw.resize(1600, 1200);
+  mw.show();
+  return a.exec();
 }

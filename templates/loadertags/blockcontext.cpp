@@ -22,39 +22,46 @@
 
 #include "block.h"
 
-void BlockContext::addBlocks( const QHash<QString, BlockNode*> &blocks )
+void BlockContext::addBlocks(const QHash<QString, BlockNode *> &blocks)
 {
-  QHash<QString, BlockNode*>::const_iterator it = blocks.constBegin();
-  const QHash<QString, BlockNode*>::const_iterator end = blocks.constEnd();
+  auto it = blocks.constBegin();
+  const auto end = blocks.constEnd();
 
-  for ( ; it != end; ++it ) {
-    m_blocks[ it.key() ].prepend( it.value() );
+  for (; it != end; ++it) {
+    m_blocks[it.key()].prepend(it.value());
   }
 }
 
-BlockNode* BlockContext::getBlock( const QString& name ) const
+BlockNode *BlockContext::getBlock(const QString &name) const
 {
-  QList<BlockNode*> list = m_blocks[ name ];
-  if ( list.isEmpty() )
+  auto list = m_blocks[name];
+  if (list.isEmpty())
     return 0;
 
   return list.last();
 }
 
-BlockNode* BlockContext::pop( const QString& name )
+BlockNode *BlockContext::pop(const QString &name)
 {
-  QList<BlockNode*> &list = m_blocks[ name ];
-  if ( list.isEmpty() )
+  QList<BlockNode *> &list = m_blocks[name];
+  if (list.isEmpty())
     return 0;
   return list.takeLast();
 }
 
-void BlockContext::push( const QString& name, BlockNode const* blockNode ) const
+void BlockContext::push(const QString &name, BlockNode const *blockNode)
 {
-  m_blocks[ name ].append( const_cast<BlockNode*>(blockNode) );
+  m_blocks[name].append(const_cast<BlockNode *>(blockNode));
 }
 
-bool BlockContext::isEmpty()
+bool BlockContext::isEmpty() { return m_blocks.isEmpty(); }
+
+void BlockContext::remove(QList<BlockNode *> const &nodes)
 {
-  return m_blocks.isEmpty();
+  for (auto node : nodes) {
+    m_blocks[node->name()].removeOne(node);
+    if (m_blocks[node->name()].isEmpty()) {
+      m_blocks.remove(node->name());
+    }
+  }
 }

@@ -31,25 +31,24 @@ class WithNodeFactory : public AbstractNodeFactory
 public:
   WithNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class WithNode : public Node
 {
   Q_OBJECT
 public:
-  WithNode( const FilterExpression &expression, const QString &name, QObject *parent = 0 );
+  WithNode(const FilterExpression &expression, const QString &name,
+           QObject *parent = {});
 
-  void setNodeList( NodeList nodeList );
+  void setNodeList(const NodeList &nodeList);
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   FilterExpression m_filterExpression;
   QString m_name;
   NodeList m_list;
-
 };
 
 #endif

@@ -32,53 +32,48 @@ namespace Grantlee
 class MediaWikiMarkupBuilder : public AbstractMarkupBuilder
 {
 public:
-
-  /**
-    Creates a new MediaWikiMarkupBuilder
-  */
   MediaWikiMarkupBuilder();
-  virtual ~MediaWikiMarkupBuilder();
+  ~MediaWikiMarkupBuilder() override;
 
-  /* reimp */ void beginStrong();
-  /* reimp */ void endStrong();
-  /* reimp */ void beginEmph();
-  /* reimp */ void endEmph();
-  /* reimp */ void beginUnderline();
-  /* reimp */ void endUnderline();
-  /* reimp */ void beginStrikeout();
-  /* reimp */ void endStrikeout();
+  void beginStrong() override;
+  void endStrong() override;
+  void beginEmph() override;
+  void endEmph() override;
+  void beginUnderline() override;
+  void endUnderline() override;
+  void beginStrikeout() override;
+  void endStrikeout() override;
 
-  /* reimp */ void endParagraph();
-  /* reimp */ void addNewline();
+  void endParagraph() override;
+  void addNewline() override;
 
-  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
-  /* reimp */ void endAnchor();
+  void beginAnchor(const QString &href = {}, const QString &name = {}) override;
+  void endAnchor() override;
 
-  /* reimp */ void beginHeader( int level );
-  /* reimp */ void endHeader( int level );
+  void beginHeader(int level) override;
+  void endHeader(int level) override;
 
-  /* reimp */ void beginList( QTextListFormat::Style type );
+  void beginList(QTextListFormat::Style type) override;
 
-  /* reimp */ void endList();
+  void endList() override;
 
-  /* reimp */ void beginListItem();
-  /* reimp */ void endListItem();
+  void beginListItem() override;
+  void endListItem() override;
 
-  /* reimp */ void appendLiteralText( const QString &text );
+  void appendLiteralText(const QString &text) override;
 
   /**
     Escapes @p text appropriately for MediaWiki.
   */
-  const QString escape( const QString &s );
+  const QString escape(const QString &s);
 
-  /* reimp */ QString getResult();
+  QString getResult() override;
 
 private:
   QList<QTextListFormat::Style> currentListItemStyles;
 
   QString m_text;
 };
-
 }
 
 #endif

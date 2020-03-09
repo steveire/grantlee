@@ -291,6 +291,10 @@ span.vhdllogic {
 	color: #ff0000
 }
 
+code {
+	background-color: rgba(29, 28, 29, 0.09)
+}
+
 /* @end */
 
 .search {

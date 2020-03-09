@@ -20,68 +20,52 @@
 
 #include "scriptablefilterexpression.h"
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
 
 #include "parser.h"
-#include "scriptablecontext.h"
 #include "scriptablesafestring.h"
 #include "util.h"
 
 using namespace Grantlee;
 
-Q_SCRIPT_DECLARE_QMETAOBJECT( ScriptableFilterExpression, QObject* )
-
-QScriptValue ScriptableFilterExpressionConstructor( QScriptContext *context,
-    QScriptEngine *engine )
+ScriptableFilterExpression::ScriptableFilterExpression(QObject *parent)
+    : QObject(parent), m_engine(0)
 {
-  ScriptableFilterExpression *object = new ScriptableFilterExpression( engine );
-
-  QObject *parserObj = context->argument( 1 ).toQObject();
-  Parser *p = qobject_cast<Parser*>( parserObj );
-
-  object->init( context->argument( 0 ).toString(), p );
-
-  return engine->newQObject( object );
 }
 
-
-ScriptableFilterExpression::ScriptableFilterExpression( QObject *parent )
-    : QObject( parent ), m_engine( 0 )
+ScriptableFilterExpression::ScriptableFilterExpression(QJSEngine *engine,
+                                                       QObject *parent)
+    : QObject(parent), m_engine(engine)
 {
-
 }
 
-ScriptableFilterExpression::ScriptableFilterExpression( QScriptEngine *engine, QObject *parent )
-    : QObject( parent ), m_engine( engine )
+void ScriptableFilterExpression::init(const QString &content,
+                                      Grantlee::Parser *parser)
 {
-
+  m_filterExpression = FilterExpression(content, parser);
 }
 
-void ScriptableFilterExpression::init( const QString& content, Grantlee::Parser* parser )
+QVariant ScriptableFilterExpression::resolve(ScriptableContext *c)
 {
-  m_filterExpression = FilterExpression( content, parser );
-}
+  auto var = m_filterExpression.resolve(c->context());
 
-
-QVariant ScriptableFilterExpression::resolve( ScriptableContext* c )
-{
-  QVariant var = m_filterExpression.resolve( c->context() );
-
-  if ( Grantlee::isSafeString( var ) ) {
-      ScriptableSafeString *ssObj = new ScriptableSafeString( m_engine );
-      ssObj->setContent( getSafeString( var ) );
-      return m_engine->newQObject( ssObj ).toVariant();
+  if (Grantlee::isSafeString(var)) {
+    auto ssObj = new ScriptableSafeString(m_engine);
+    ssObj->setContent(getSafeString(var));
+    return m_engine->newQObject(ssObj).toVariant();
   }
   return var;
 }
 
-bool ScriptableFilterExpression::isTrue( ScriptableContext* c )
+bool ScriptableFilterExpression::isTrue(ScriptableContext *c)
 {
-  return m_filterExpression.isTrue( c->context() );
+  return m_filterExpression.isTrue(c->context());
 }
 
-bool ScriptableFilterExpression::equals( ScriptableFilterExpression* other, ScriptableContext *scriptableC )
+bool ScriptableFilterExpression::equals(ScriptableFilterExpression *other,
+                                        ScriptableContext *scriptableC)
 {
-  Context *c = scriptableC->context();
-  return Grantlee::equals( m_filterExpression.resolve( c ), other->m_filterExpression.resolve( c ) );
+  auto c = scriptableC->context();
+  return Grantlee::equals(m_filterExpression.resolve(c),
+                          other->m_filterExpression.resolve(c));
 }

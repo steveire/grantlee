@@ -7,10 +7,10 @@ namespace Grantlee
 
   @section generic_types Generic type support
 
-  %Grantlee offers powerful support for using any type or container in a QVariant as part of the Context. Although
-  QObject based introspection based on Q_PROPERTY is the most convenient way to access properties on objects in the
-  context, sometimes it is necessary to use classes which do not derive from QObject (and therefore can't have Q_PROPERTY macros)
-  and where it would not be practical to create QObject wrappers around all related classes.
+  %Grantlee offers powerful support for using any type or container in a QVariant as part of the Context.
+  %Qt introspection based on Q_PROPERTY is the most convenient way to access properties on QObject derived type or types decorated with the <tt>Q_GADGET</tt> macro.
+  However, sometimes it is necessary to use classes which do can't have Q_PROPERTY macros (perhaps because they are defined in third-party headers)
+  and where it would not be practical to create QObject/<tt>Q_GADGET</tt> wrappers around all related classes.
 
   In such cases the metatype can be registered with %Grantlee and an introspection method can be written.
 
@@ -92,15 +92,15 @@ namespace Grantlee
   @endcode
 
   There are several necessary steps and consequences.
-  @li The type must be registered as a QMetaType with Q_DECLARE_METATYPE. Note that this is not needed for QObject derived types.
+  @li The type must be registered as a QMetaType with <tt>Q_DECLARE_METATYPE</tt>. Note that this is not needed for QObject derived types.
   @li All containers are supported. (See @ref generic_containers)
-  @li The GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros help to define the introspection of the type. Between them is the definition of a method with the signature QVariant getProperty(const Type &object, const QString &property).
+  @li The <tt>GRANTLEE_BEGIN_LOOKUP</tt> and <tt>GRANTLEE_END_LOOKUP</tt> macros help to define the introspection of the type. Between them is the definition of a method with the signature <tt>QVariant&nbsp;getProperty(const&nbsp;Type&nbsp;&object,&nbsp;const&nbsp;QString&nbsp;&property)</tt>.
   @li Grantlee::registerMetaType must be called at some point in the program before attempting to use the type in a Context.
   @li The Context is created and used as normal.
 
   @section generic_containers Generic container support
 
-  %Grantlee supports most Qt and stl containers by default if they are registered with the QMetaType system as shown in @ref generic_types.
+  %Grantlee supports most %Qt and STL containers by default if they are registered with the QMetaType system as shown in @ref generic_types.
   Where a container does not have built in support it can easily be added (See @ref third_party_containers).
 
   The following containers have built in support:
@@ -154,12 +154,12 @@ namespace Grantlee
   @li Any type registered with Grantlee::registerMetaType
   @li Any supported container
 
-  Note that QSet&lt;T&gt; is an exception and will only work with types for which qHash(T) is defined. This means that QSet&lt;QVariant&gt;
+  Note that QSet&lt;T&gt; is an exception and will only work with types for which <tt>qHash(T)</tt> is defined. This means that QSet&lt;QVariant&gt;
   is not possible for example.
 
   Note also that containers of pointers to QObject derived types can be stored in containers, and they do not need to be explicitly
-  registered with %Grantlee. Where the class has sufficient Q_PROPERTYs defined, the introspection method described above with
-  GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP is also not necessary. Note also that any type or container can be used through a Q_PROPERTY.
+  registered with %Grantlee. Where the class has sufficient <tt>Q_PROPERTY</tt>s defined, the introspection method described above with
+  <tt>GRANTLEE_BEGIN_LOOKUP</tt> and <tt>GRANTLEE_END_LOOKUP</tt> is also not necessary. Note also that any type or container can be used through a <tt>Q_PROPERTY</tt>.
 
   @code
     class PersonObject : public QObject
@@ -201,15 +201,15 @@ namespace Grantlee
 
       QSet<QObject*> clubs;
       {
-        SportsClub *club = new SportsClub("Smithfield Tennis Club", "Tennis", this);
+        auto club = new SportsClub("Smithfield Tennis Club", "Tennis", this);
 
         std::vector<QObject*> members;
         {
-          QObject *member = new PersonObject("Alice", 21, this);
+          auto member = new PersonObject("Alice", 21, this);
           members.push_back(member);
         }
         {
-          QObject *member = new PersonObject("Bob", 22, this);
+          auto member = new PersonObject("Bob", 22, this);
           members.push_back(member);
         }
         club.setMembers(members);
@@ -223,7 +223,7 @@ namespace Grantlee
 
     QString createOutput()
     {
-      Template t = m_engine->newTemplate(
+      auto t = m_engine->newTemplate(
         "{% regroup sportsClubs by sport as groupedSports %}"
         "{% for groupedClub in groupedSports %}"
           "<h1>{{ groupedClub.grouper }}</h1>"
@@ -238,13 +238,13 @@ namespace Grantlee
         "{% endfor %}"
         );
 
-      Context c = getContext();
+      auto c = getContext();
 
       return t->render(&c);
     }
   @endcode
 
-  @see <a href="http://docs.djangoproject.com/en/1.1/ref/templates/builtins/#regroup">The regroup tag</a>
+  @see <a href="http://docs.djangoproject.com/en/1.9/ref/templates/builtins/#regroup">The regroup tag</a>
 
   The output would be something like
 
@@ -272,7 +272,7 @@ namespace Grantlee
 
   Of course, it is possible to use containers of pointers to concrete QObject subclasses, such as QSet&lt;PersonObject*&gt; and std::vector&lt;SportsClub*&gt; too.
 
-  Because any supported container can also be used as a contained type, nested containers are also supported.
+  Because any supported container can also be used as a contained type, nested containers such as <tt>QVector<QList<PersonObject*>></tt> are also supported.
 
   Note that if a type is registered with Grantlee::registerMetaType, built in containers of that type do not also need to be registered.
   Third party containers do need to be registered however (See @ref third_party_containers)
@@ -284,7 +284,8 @@ namespace Grantlee
     {
       Grantlee::registerMetaType<Person>();
 
-      // Now any of the nested containers can be put in a Context and used in a Template.
+      // Now any of the nested containers can be put 
+      // in a Context and used in a Template.
     }
   @endcode
 
@@ -292,8 +293,8 @@ namespace Grantlee
 
   To support another, non-built in container it is necessary to use some macros to register it with %Grantlee.
 
-  For a sequential container, Q_DECLARE_SEQUENTIAL_CONTAINER_METATYPE,
-  and Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE are needed.
+  For a sequential container, <tt>Q_DECLARE_SEQUENTIAL_CONTAINER_METATYPE</tt>,
+  and <tt>Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE</tt> are needed.
 
   @code
     #include <boost/circular_buffer>
@@ -324,11 +325,11 @@ namespace Grantlee
 
   @see @ref lookups
 
-  For associative containers Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE is needed.
+  For associative containers <tt>Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE</tt> is needed.
 
   @section smart_pointers Smart Pointers
 
-  Shared pointer types containing a custom type should be introspected as normal using GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP
+  Shared pointer types containing a custom type should be introspected as normal using <tt>GRANTLEE_BEGIN_LOOKUP</tt> and <tt>GRANTLEE_END_LOOKUP</tt>
 
   @code
     Q_DECLARE_METATYPE(QSharedPointer<Person>)
@@ -345,7 +346,7 @@ namespace Grantlee
   @endcode
 
   Note that if only shared pointers to the type is in your introspectable API you only need to define the property access for the
-  shared pointer. In the case above, there is no need to use Q_DECLARE_METATYPE or GRANTLEE_BEGIN_LOOKUP with Person or Person*.
+  shared pointer. In the case above, there is no need to use <tt>Q_DECLARE_METATYPE</tt> or <tt>GRANTLEE_BEGIN_LOOKUP</tt> with <tt>Person</tt> or <tt>Person*</tt>.
 
   This is of course true of any smart pointer:
 
@@ -360,18 +361,18 @@ namespace Grantlee
 
   QSharedPointers containing QObject derived types get special treatment.
 
-  QObjects are automatically introspected for their Q_PROPERTYs (See @ref custom_objects).
+  QObjects are automatically introspected for their <tt>Q_PROPERTY</tt>s (See @ref custom_objects).
 
-  If you have QSharedPointer&lt;PersonObject&gt; where PersonObject is derived from QObject it will be automatically
-  introspected just like a QObject* is without requiring the GRANTLEE_BEGIN_LOOKUP and GRANTLEE_END_LOOKUP macros,
-  the Q_DECLARE_METATYPE macro, or registration with the %Grantlee metatype system. All of the access registration
-  is handled by Qt.
+  If you have QSharedPointer&lt;PersonObject&gt; where <tt>PersonObject</tt> is derived from QObject it will be automatically
+  introspected just like a QObject* is without requiring the <tt>GRANTLEE_BEGIN_LOOKUP</tt> and <tt>GRANTLEE_END_LOOKUP</tt> macros,
+  the <tt>Q_DECLARE_METATYPE</tt> macro, or registration with the %Grantlee metatype system. All of the access registration
+  is handled by %Qt.
 
   @code
     void getContext()
     {
       Grantlee::Context c;
-      QSharedPointer<PersonObject> p( new PersonObject );
+      auto p = QSharedPointer<PersonObject>::create();
       c.insert("person", QVariant::fromValue(p));
       return c;
     }
@@ -379,16 +380,16 @@ namespace Grantlee
     QString createOutput()
     {
       // Uses Q_PROPERTYs defined on PersonObject for name and age
-      Template t = m_engine->newTemplate( "{{ person.name }}, {{ person.age }}" );
+      auto t = m_engine->newTemplate( "{{ person.name }}, {{ person.age }}" );
 
-      Context c = getContext();
+      auto c = getContext();
 
       return t->render(&c);
     }
   @endcode
 
   The same technique can be used to support QObject derived types in third party shared pointers, but that requires
-  an extra macro, Q_DECLARE_SMART_POINTER_METATYPE.
+  an extra macro, <tt>Q_DECLARE_SMART_POINTER_METATYPE</tt>.
 
   @code
     Q_DECLARE_SMART_POINTER_METATYPE(boost::shared_ptr)

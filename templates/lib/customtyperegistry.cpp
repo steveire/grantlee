@@ -24,10 +24,10 @@
 #include "metaenumvariable_p.h"
 #include "safestring.h"
 
+#include <QtCore/QLoggingCategory>
+#include <QtCore/QQueue>
 #include <QtCore/QStack>
 #include <QtCore/QStringList>
-#include <QtCore/QQueue>
-#include <QtCore/QLoggingCategory>
 
 Q_LOGGING_CATEGORY(GRANTLEE_CUSTOMTYPE, "grantlee.customtype")
 
@@ -40,29 +40,33 @@ CustomTypeRegistry::CustomTypeRegistry()
   registerBuiltInMetatype<MetaEnumVariable>();
 }
 
-void CustomTypeRegistry::registerLookupOperator( int id, MetaType::LookupFunction f )
+void CustomTypeRegistry::registerLookupOperator(int id,
+                                                MetaType::LookupFunction f)
 {
   CustomTypeInfo &info = types[id];
   info.lookupFunction = f;
 }
 
-QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &property ) const
+QVariant CustomTypeRegistry::lookup(const QVariant &object,
+                                    const QString &property) const
 {
-  if ( !object.isValid() )
+  if (!object.isValid())
     return QVariant();
-  const int id = object.userType();
+  const auto id = object.userType();
   MetaType::LookupFunction lf;
 
   {
-    if ( !types.contains( id ) ) {
-      qCWarning(GRANTLEE_CUSTOMTYPE) << "Don't know how to handle metatype" << QMetaType::typeName( id );
+    if (!types.contains(id)) {
+      qCWarning(GRANTLEE_CUSTOMTYPE)
+          << "Don't know how to handle metatype" << QMetaType::typeName(id);
       // :TODO: Print out error message
       return QVariant();
     }
 
     const CustomTypeInfo &info = types[id];
-    if ( !info.lookupFunction ) {
-      qCWarning(GRANTLEE_CUSTOMTYPE) << "No lookup function for metatype" << QMetaType::typeName( id );
+    if (!info.lookupFunction) {
+      qCWarning(GRANTLEE_CUSTOMTYPE)
+          << "No lookup function for metatype" << QMetaType::typeName(id);
       lf = 0;
       // :TODO: Print out error message
       return QVariant();
@@ -71,10 +75,10 @@ QVariant CustomTypeRegistry::lookup( const QVariant &object, const QString &prop
     lf = info.lookupFunction;
   }
 
-  return lf( object, property );
+  return lf(object, property);
 }
 
-bool CustomTypeRegistry::lookupAlreadyRegistered( int id ) const
+bool CustomTypeRegistry::lookupAlreadyRegistered(int id) const
 {
-  return types.contains( id ) && types.value( id ).lookupFunction != 0;
+  return types.contains(id) && types.value(id).lookupFunction != 0;
 }

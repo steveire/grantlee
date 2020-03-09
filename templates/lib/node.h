@@ -50,9 +50,11 @@ class NodePrivate;
 /**
   @brief Base class for all nodes.
 
-  The Node class can be implemented to make additional functionality available to Templates.
+  The **%Node** class can be implemented to make additional functionality
+  available to Templates.
 
-  A node is represented in template markup as content surrounded by percent signed tokens.
+  A node is represented in template markup as content surrounded by percent
+  signed tokens.
 
   @code
     text content
@@ -64,9 +66,13 @@ class NodePrivate;
     text content
   @endcode
 
-  This is parsed into a tree of Node objects by an implementation of AbstractNodeFactory. The Node objects can then later be rendered by their render method.
+  This is parsed into a tree of **%Node** objects by an implementation of
+  AbstractNodeFactory. The **%Node** objects can then later be rendered by their
+  @ref render method.
 
-  Rendering a Node will usually mean writing some output to the stream. The content written to the stream could be determined by the arguments to the tag, or by the content of child nodes between a start and end tag, or both.
+  Rendering a **%Node** will usually mean writing some output to the stream. The
+  content written to the stream could be determined by the arguments to the tag,
+  or by the content of child nodes between a start and end tag, or both.
 
   @see FilterExpression
   @see @ref tags
@@ -82,46 +88,48 @@ public:
 
     @param parent The parent QObject
   */
-  explicit Node( QObject *parent = 0 );
+  explicit Node(QObject *parent = {});
 
   /**
     Destructor.
   */
-  virtual ~Node();
+  ~Node() override;
 
   /**
     Reimplement this to render the template in the Context @p c.
 
     This will also involve calling render on and child nodes.
   */
-  virtual void render( OutputStream *stream, Context *c ) const = 0;
+  virtual void render(OutputStream *stream, Context *c) const = 0;
 
 #ifndef Q_QDOC
   /**
     @internal
   */
-  virtual bool mustBeFirst() { // krazy:exclude:inline
+  virtual bool mustBeFirst()
+  { // krazy:exclude:inline
     return false;
   }
 #endif
 
 protected:
   /**
-    Renders the value @p input in the Context @p c. This will involve escaping @p input
-    if necessary.
+    Renders the value @p input in the Context @p c. This will involve escaping
+    @p input if necessary.
 
     This is only relevant to developing template tags.
   */
-  void streamValueInContext( OutputStream *stream, const QVariant &input, Grantlee::Context *c ) const;
+  void streamValueInContext(OutputStream *stream, const QVariant &input,
+                            Grantlee::Context *c) const;
 
   /**
-    Returns a raw pointer to the Template this Node is in.
+    Returns a raw pointer to the Template this **%Node** is in.
   */
-  TemplateImpl* containerTemplate() const;
+  TemplateImpl *containerTemplate() const;
 
 private:
-  Q_DECLARE_PRIVATE( Node )
-  NodePrivate * const d_ptr;
+  Q_DECLARE_PRIVATE(Node)
+  NodePrivate *const d_ptr;
 };
 
 /// @headerfile node.h grantlee/node.h
@@ -129,32 +137,37 @@ private:
 /**
   @brief A list of Nodes with some convenience API for rendering them.
 
-  Typically, tags which have an end tag will create and later render a list of child nodes.
+  Typically, tags which have an end tag will create and later render a list of
+  child nodes.
 
-  This class contains API such as append and render to make creating such list easily.
+  This class contains API such as @ref append and @ref render to make creating
+  such list easily.
 
-  The findChildren method behaves similarly to the QObject::findChildren method, returning a list of nodes of
-  a particular type from the Node objects contained in the list (and their children).
+  The @ref findChildren method behaves similarly to the QObject::findChildren
+  method, returning a list of nodes of a particular type from the Node objects
+  contained in the list (and their children).
 
   @see @ref tags_with_end_tags
 */
-class GRANTLEE_TEMPLATES_EXPORT NodeList : public QList<Grantlee::Node*>
+class GRANTLEE_TEMPLATES_EXPORT NodeList : public QList<Grantlee::Node *>
 {
 public:
   /**
-    Creates an empty NodeList.
+    Creates an empty **%NodeList**.
   */
   NodeList();
 
   /**
     Copy constructor.
   */
-  NodeList( const NodeList &list );
+  NodeList(const NodeList &list);
+
+  NodeList &operator=(const NodeList &list);
 
   /**
     Convenience constructor
   */
-  /* implicit */ NodeList( const QList<Grantlee::Node *> &list );
+  /* implicit */ NodeList(const QList<Grantlee::Node *> &list);
 
   /**
     Destructor.
@@ -162,35 +175,35 @@ public:
   ~NodeList();
 
   /**
-    Appends @p node to the end of this NodeList.
+    Appends @p node to the end of this **%NodeList**.
   */
-  void append( Grantlee::Node* node );
+  void append(Grantlee::Node *node);
 
   /**
-    Appends @p nodeList to the end of this NodeList.
+    Appends @p nodeList to the end of this **%NodeList**.
   */
-  void append( QList<Grantlee::Node*> nodeList );
+  void append(QList<Grantlee::Node *> nodeList);
 
   /**
-    Returns true if this NodeList contains non-text nodes.
+    Returns true if this **%NodeList** contains non-text nodes.
   */
   bool containsNonText() const;
 
   /**
     A recursive listing of nodes in this tree of type @p T.
   */
-  template <typename T>
-  QList<T> findChildren() {
+  template <typename T> QList<T> findChildren()
+  {
     QList<T> children;
-    QList<Grantlee::Node*>::const_iterator it;
-    const QList<Grantlee::Node*>::const_iterator first = constBegin();
-    const QList<Grantlee::Node*>::const_iterator last = constEnd();
-    for ( it = first; it != last; ++it ) {
-      T object = qobject_cast<T>( *it );
-      if ( object ) {
+    QList<Grantlee::Node *>::const_iterator it;
+    const QList<Grantlee::Node *>::const_iterator first = constBegin();
+    const QList<Grantlee::Node *>::const_iterator last = constEnd();
+    for (it = first; it != last; ++it) {
+      T object = qobject_cast<T>(*it);
+      if (object) {
         children << object;
       }
-      children << ( *it )->findChildren<T>();
+      children << (*it)->findChildren<T>();
     }
     return children;
   }
@@ -198,7 +211,7 @@ public:
   /**
     Renders the list of Nodes in the Context @p c.
   */
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const;
 
 private:
   bool m_containsNonText;
@@ -214,7 +227,8 @@ class AbstractNodeFactoryPrivate;
   This class can be used to make custom tags available to templates.
   The getNode method should be implemented to return a Node to be rendered.
 
-  A node is represented in template markup as content surrounded by percent signed tokens.
+  A node is represented in template markup as content surrounded by percent
+  signed tokens.
 
   @code
     text content
@@ -226,9 +240,13 @@ class AbstractNodeFactoryPrivate;
     text content
   @endcode
 
-  It is the responsibility of an AbstractNodeFactory implementation to process the contents of a tag and return a Node implementation from its getNode method.
+  It is the responsibility of an **%AbstractNodeFactory** implementation to
+  process the contents of a tag and return a Node implementation from its
+  getNode method.
 
-  The @ref getNode method would for example be called with the tagContent "some_tag arg1 arg2". That content could then be split up, the arguments processed and a Node created
+  The @ref getNode method would for example be called with the tagContent
+  \"<tt>some_tag arg1 arg2</tt>\". That content could then be split up, the
+  arguments processed and a Node created
 
   @code
     Node* SomeTagFactory::getNode(const QString &tagContent, Parser *p) {
@@ -243,7 +261,9 @@ class AbstractNodeFactoryPrivate;
     }
   @endcode
 
-  The @ref getNode implementation might also advance the parser. For example if we had a @gr_tag{times} tag which rendered content the amount of times it was given in its argument, it could be used like this:
+  The @ref getNode implementation might also advance the parser. For example if
+  we had a @gr_tag{times} tag which rendered content the amount of times it was
+  given in its argument, it could be used like this:
 
   @code
     Some text content.
@@ -253,7 +273,8 @@ class AbstractNodeFactoryPrivate;
     End text content
   @endcode
 
-  The argument to @gr_tag{times} might not be a simple number, but could be a FilterExpression such as <tt>someobject.some_property|getDigit:1</tt>.
+  The argument to @gr_tag{times} might not be a simple number, but could be a
+  FilterExpression such as \"<tt>someobject.some_property|getDigit:1</tt>\".
 
   The implementation could look like
 
@@ -265,8 +286,8 @@ class AbstractNodeFactoryPrivate;
 
       FilterExpression arg( parts.first(), p );
 
-      SomeTagNode *node = new SomeTagNode( arg, p );
-      NodeList childNodes = p->parse( node, "end_times" );
+      auto node = new SomeTagNode( arg, p );
+      auto childNodes = p->parse( node, "end_times" );
       node->setChildNodes( childNodes );
       p->removeNextToken();
 
@@ -274,7 +295,9 @@ class AbstractNodeFactoryPrivate;
     }
   @endcode
 
-  Note that it is necessary to invoke the parser to create the child nodes only after creating the Node to return. That node must be passed to the Parser to perform as the parent QObject to the child nodes.
+  Note that it is necessary to invoke the parser to create the child nodes only
+  after creating the Node to return. That node must be passed to the Parser to
+  perform as the parent QObject to the child nodes.
 
   @see Parser::parse
 */
@@ -287,41 +310,48 @@ public:
 
     @param parent The parent QObject
   */
-  explicit AbstractNodeFactory( QObject* parent = 0 );
+  explicit AbstractNodeFactory(QObject *parent = {});
 
   /**
     Destructor.
   */
-  virtual ~AbstractNodeFactory();
+  ~AbstractNodeFactory() override;
 
   /**
-    This method should be reimplemented to return a Node which can be rendered.
+    This method should be reimplemented to return a Node which can be
+    rendered.
 
-    The @p tagContent is the content of the tag including the tag name and arguments. For example,
-    if the template content is @gr_tag{my_tag arg1 arg2}, the tagContent will be &quot;my_tag arg1 arg2&quot;.
+    The @p tagContent is the content of the tag including the tag name and
+    arguments. For example, if the template content is @gr_tag{my_tag arg1
+    arg2}, the tagContent will be &quot;my_tag arg1 arg2&quot;.
 
-    The Parser @p p is available and can be advanced if appropriate. For example, if the tag has an
-    end tag, the parser can be advanced to the end tag.
+    The Parser @p p is available and can be advanced if appropriate. For
+    example, if the tag has an end tag, the parser can be advanced to the end
+    tag.
+
     @see tags
   */
-  virtual Node* getNode( const QString &tagContent, Parser *p ) const = 0;
+  virtual Node *getNode(const QString &tagContent, Parser *p) const = 0;
 
 #ifndef Q_QDOC
   /**
     @internal
 
-    Sets the Engine which created this NodeFactory. Used by the ScriptableNodeFactory.
+    Sets the Engine which created this NodeFactory. Used by the
+    ScriptableNodeFactory.
   */
-  virtual void setEngine( Engine * ) {}
+  virtual void setEngine(Engine *) {}
 #endif
 
 protected:
   /**
     Splits @p str into a list, taking quote marks into account.
 
-    This is typically used in the implementation of getNode with the tagContent.
+    This is typically used in the implementation of getNode with the
+    tagContent.
 
-    If @p str is 'one &quot;two three&quot; four 'five &quot; six' seven', the returned list will contain the following strings:
+    If @p str is 'one &quot;two three&quot; four 'five &quot; six' seven', the
+    returned list will contain the following strings:
 
     - one
     - &quot;two three&quot;
@@ -329,21 +359,22 @@ protected:
     - five &quot; six
     - seven
   */
-  Q_INVOKABLE QStringList smartSplit( const QString &str ) const;
+  Q_INVOKABLE QStringList smartSplit(const QString &str) const;
 
 protected:
   /**
-    Returns a list of FilterExpression objects created with Parser @p p as described by the content of @p list.
+    Returns a list of FilterExpression objects created with Parser @p p as
+    described by the content of @p list.
 
     This is used for convenience when handling the arguments to a tag.
   */
-  QList<FilterExpression> getFilterExpressionList( const QStringList &list, Parser *p ) const;
+  QList<FilterExpression> getFilterExpressionList(const QStringList &list,
+                                                  Parser *p) const;
 
 private:
-  Q_DECLARE_PRIVATE( AbstractNodeFactory )
-  AbstractNodeFactoryPrivate * const d_ptr;
+  Q_DECLARE_PRIVATE(AbstractNodeFactory)
+  AbstractNodeFactoryPrivate *const d_ptr;
 };
-
 }
 
 #endif

@@ -25,39 +25,32 @@
 
 using namespace Grantlee;
 
-
 class ForNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
   ForNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
-
 
 class ForNode : public Node
 {
   Q_OBJECT
 public:
-  enum Reversed {
-    IsNotReversed,
-    IsReversed
-  };
+  enum Reversed { IsNotReversed, IsReversed };
 
-  ForNode( QStringList loopVars, FilterExpression fe, int reversed, QObject *parent = 0 );
+  ForNode(const QStringList &loopVars, const FilterExpression &fe, int reversed,
+          QObject *parent = {});
 
-  void setLoopList( NodeList loopNodeList );
-  void setEmptyList( NodeList emptyList );
+  void setLoopList(const NodeList &loopNodeList);
+  void setEmptyList(const NodeList &emptyList);
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
-  static void insertLoopVariables( Context *c, int listSize, int i );
-  void iterateHash( OutputStream *stream, Context* c, QVariantHash varHash, bool unpack );
-  void renderLoop( OutputStream *stream, Context *c ) const;
-  void handleHashItem( OutputStream *stream, Context *c, QString key, QVariant value, int listSize, int i, bool unpack );
+  static void insertLoopVariables(Context *c, int listSize, int i);
+  void renderLoop(OutputStream *stream, Context *c) const;
 
   QStringList m_loopVars;
   FilterExpression m_filterExpression;
@@ -65,6 +58,5 @@ private:
   NodeList m_emptyNodeList;
   int m_isReversed;
 };
-
 
 #endif

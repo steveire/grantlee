@@ -29,48 +29,41 @@
 namespace Grantlee
 {
 
-struct CustomTypeInfo
-{
+struct CustomTypeInfo {
 public:
-  CustomTypeInfo()
-    : lookupFunction( 0 )
-  {
-  }
+  CustomTypeInfo() : lookupFunction(0) {}
 
   Grantlee::MetaType::LookupFunction lookupFunction;
 };
 
-struct CustomTypeRegistry
-{
+struct CustomTypeRegistry {
   CustomTypeRegistry();
 
-  void registerLookupOperator( int id, MetaType::LookupFunction f );
+  void registerLookupOperator(int id, MetaType::LookupFunction f);
 
-  template<typename RealType, typename HandleAs>
-  int registerBuiltInMetatype()
+  template <typename RealType, typename HandleAs> int registerBuiltInMetatype()
   {
-    QVariant ( *lf )( const QVariant&, const QString& ) = LookupTrait<RealType&, HandleAs&>::doLookUp;
+    QVariant (*lf)(const QVariant &, const QString &)
+        = LookupTrait<RealType &, HandleAs &>::doLookUp;
 
     const int id = qMetaTypeId<RealType>();
 
-    registerLookupOperator( id, reinterpret_cast<MetaType::LookupFunction>( lf ) );
+    registerLookupOperator(id, reinterpret_cast<MetaType::LookupFunction>(lf));
 
     return id;
   }
 
-  template<typename Type>
-  int registerBuiltInMetatype()
+  template <typename Type> int registerBuiltInMetatype()
   {
     return registerBuiltInMetatype<Type, Type>();
   }
 
-  QVariant lookup( const QVariant &object, const QString &property ) const;
-  bool lookupAlreadyRegistered( int id ) const;
+  QVariant lookup(const QVariant &object, const QString &property) const;
+  bool lookupAlreadyRegistered(int id) const;
 
   QHash<int, CustomTypeInfo> types;
   QMutex mutex;
 };
-
 }
 
 #endif

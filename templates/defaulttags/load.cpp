@@ -23,38 +23,31 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
+LoadNodeFactory::LoadNodeFactory() {}
 
-LoadNodeFactory::LoadNodeFactory()
+Node *LoadNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
-}
+  auto expr = tagContent.split(QLatin1Char(' '), QString::SkipEmptyParts);
 
-Node* LoadNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  QStringList expr = tagContent.split( QLatin1Char( ' ' ), QString::SkipEmptyParts );
-
-  if ( expr.size() <= 1 ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expects at least one argument" ).arg( expr.first() ) );
+  if (expr.size() <= 1) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("%1 expects at least one argument").arg(expr.first()));
   }
 
-  expr.takeAt( 0 );
+  expr.takeAt(0);
 
-  QListIterator<QString> i( expr );
-  while ( i.hasNext() ) {
-    QString libName = i.next();
-    p->loadLib( libName );
+  for (auto &i : expr) {
+    p->loadLib(i);
   }
 
-  return new LoadNode( p );
+  return new LoadNode(p);
 }
 
+LoadNode::LoadNode(QObject *parent) : Node(parent) {}
 
-LoadNode::LoadNode( QObject *parent )
-    : Node( parent )
+void LoadNode::render(OutputStream *stream, Context *c) const
 {
-}
-
-void LoadNode::render( OutputStream *stream, Context *c ) const
-{
-  Q_UNUSED( stream )
-  Q_UNUSED( c )
+  Q_UNUSED(stream)
+  Q_UNUSED(c)
 }

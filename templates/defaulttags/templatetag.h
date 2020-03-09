@@ -31,24 +31,23 @@ class TemplateTagNodeFactory : public AbstractNodeFactory
 public:
   TemplateTagNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class TemplateTagNode : public Node
 {
   Q_OBJECT
 public:
-
   /**
   The expression.
   Nodes to render if the expression is true
   Nodes to render if the expression is false
   */
-  explicit TemplateTagNode( const QString &tagName, QObject *parent = 0 );
+  explicit TemplateTagNode(const QString &tagName, QObject *parent = {});
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
-  static bool isKeyword( const QString &name );
+  static bool isKeyword(const QString &name);
 
 private:
   QString m_name;

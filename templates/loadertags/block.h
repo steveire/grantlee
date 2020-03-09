@@ -34,35 +34,34 @@ class BlockNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  explicit BlockNodeFactory( QObject *parent = 0 );
+  explicit BlockNodeFactory(QObject *parent = {});
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class BlockNode : public Node
 {
   Q_OBJECT
-  Q_PROPERTY( Grantlee::SafeString super READ getSuper )
+  Q_PROPERTY(Grantlee::SafeString super READ getSuper)
 public:
-  BlockNode( const QString &blockName, QObject *parent = 0 );
-  ~BlockNode();
+  BlockNode(const QString &blockName, QObject *parent = {});
+  ~BlockNode() override;
 
-  void setNodeList( const NodeList &list ) const;
+  void setNodeList(const NodeList &list) const;
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
-  BlockNode* takeNodeParent();
+  BlockNode *takeNodeParent();
 
   QString name() const;
 
-  void setNodeParent( BlockNode * );
+  void setNodeParent(BlockNode *);
 
-  void addParent( NodeList );
+  void addParent(NodeList);
 
   NodeList nodeList() const;
 
-// Q_SLOTS
+  // Q_SLOTS
   /**
   Returns the block overridden by this one rendered in context.
   */
@@ -73,7 +72,6 @@ private:
   mutable NodeList m_list;
   mutable Context *m_context;
   mutable OutputStream *m_stream;
-
 };
 
 #endif

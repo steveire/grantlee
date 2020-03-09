@@ -21,7 +21,7 @@
 #ifndef INTEGERFILTERS_H
 #define INTEGERFILTERS_H
 
-//krazy:excludeall=includes
+// krazy:excludeall=includes
 
 #include "filter.h"
 
@@ -30,15 +30,15 @@ using namespace Grantlee;
 class AddFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 };
 
 class GetDigitFilter : public Filter
 {
 public:
-  QVariant doFilter( const QVariant &input, const QVariant &argument = QVariant(), bool autoescape = false ) const;
+  QVariant doFilter(const QVariant &input, const QVariant &argument = {},
+                    bool autoescape = {}) const override;
 };
-
-
 
 #endif

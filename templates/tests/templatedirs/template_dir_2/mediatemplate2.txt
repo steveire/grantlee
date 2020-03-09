@@ -1,4 +1,0 @@
-{% media_finder "black.png" %}
-{% media_finder "white.png" %}
-{% media_finder "red.png" %}
-{% media_finder "blue.png" %}

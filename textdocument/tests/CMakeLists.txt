@@ -1,5 +1,3 @@
-project(grantlee_textdocument_tests)
-
 find_package(Qt5Test 5.2.0 REQUIRED)
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
@@ -8,6 +6,7 @@ add_library(textdocument_test_builtins STATIC
   coverageobject.cpp
 )
 target_link_libraries(textdocument_test_builtins Qt5::Test)
+target_compile_features(textdocument_test_builtins PUBLIC cxx_auto_type)
 
 macro(GRANTLEE_TEXTDOCUMENT_UNIT_TESTS)
   foreach(_testname ${ARGN})
@@ -22,3 +21,4 @@ grantlee_textdocument_unit_tests(
   htmlbuildertest
   plainmarkupbuildertest
 )
+target_compile_definitions(plainmarkupbuildertest_exec PRIVATE QT_TESTCASE_BUILDDIR="${CMAKE_BINARY_DIR}")

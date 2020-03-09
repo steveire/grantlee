@@ -23,10 +23,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtScript/QScriptValue>
-
-#include "token.h"
+#include <QtQml/QJSValue>
 
 namespace Grantlee
 {
@@ -39,27 +36,25 @@ class ScriptableParser : public QObject
 {
   Q_OBJECT
 public:
-  explicit ScriptableParser( Parser *p, QObject* parent = 0 );
+  explicit ScriptableParser(Parser *p, QJSEngine *engine);
 
-  Parser* parser() {
-    return m_p;
-  }
+  Parser *parser() { return m_p; }
 
 public Q_SLOTS:
-  QObjectList parse( QObject *parent, const QString &stopAt );
-  QObjectList parse( QObject *parent, const QStringList &stopAt = QStringList() );
+  QList<QObject *> parse(QObject *parent, const QString &stopAt);
+  QList<QObject *> parse(QObject *parent, const QStringList &stopAt = {});
 
-  void skipPast( const QString &tag );
+  void skipPast(const QString &tag);
 
-  Token takeNextToken();
+  QJSValue takeNextToken();
   bool hasNextToken() const;
   void removeNextToken();
 
-  void loadLib( const QString &name );
+  void loadLib(const QString &name);
 
 private:
   Parser *m_p;
-
+  QJSEngine *m_engine;
 };
 
 #endif

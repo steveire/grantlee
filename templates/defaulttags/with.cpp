@@ -23,48 +23,43 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
+WithNodeFactory::WithNodeFactory() {}
 
-WithNodeFactory::WithNodeFactory()
+Node *WithNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = smartSplit(tagContent);
 
-}
-
-Node* WithNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  QStringList expr = smartSplit( tagContent );
-
-  if ( expr.size() != 4 || expr.at( 2 ) != QStringLiteral( "as" ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expected format is 'value as name'" ).arg( expr.first() ) );
+  if (expr.size() != 4 || expr.at(2) != QStringLiteral("as")) {
+    throw Grantlee::Exception(
+        TagSyntaxError, QStringLiteral("%1 expected format is 'value as name'")
+                            .arg(expr.first()));
   }
 
-  FilterExpression fe( expr.at( 1 ), p );
-  QString name( expr.at( 3 ) );
+  FilterExpression fe(expr.at(1), p);
+  QString name(expr.at(3));
 
-  WithNode *n = new WithNode( fe, name, p );
-  NodeList nodeList = p->parse( n, QStringLiteral( "endwith" ) );
-  n->setNodeList( nodeList );
+  auto n = new WithNode(fe, name, p);
+  auto nodeList = p->parse(n, QStringLiteral("endwith"));
+  n->setNodeList(nodeList);
   p->removeNextToken();
 
   return n;
 }
 
-
-WithNode::WithNode( const FilterExpression &fe, const QString &name, QObject *parent )
-    : Node( parent )
+WithNode::WithNode(const FilterExpression &fe, const QString &name,
+                   QObject *parent)
+    : Node(parent)
 {
   m_filterExpression = fe;
   m_name = name;
 }
 
-void WithNode::setNodeList( NodeList nodeList )
-{
-  m_list = nodeList;
-}
+void WithNode::setNodeList(const NodeList &nodeList) { m_list = nodeList; }
 
-void WithNode::render( OutputStream *stream, Context *c ) const
+void WithNode::render(OutputStream *stream, Context *c) const
 {
   c->push();
-  c->insert( m_name, m_filterExpression.resolve( c ) );
-  m_list.render( stream, c );
+  c->insert(m_name, m_filterExpression.resolve(c));
+  m_list.render(stream, c);
   c->pop();
 }

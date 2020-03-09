@@ -31,9 +31,12 @@ class BookWrapper : public QObject
   Q_PROPERTY(QString genre READ genre)
   Q_PROPERTY(int rating READ rating)
 public:
-  BookWrapper(QString author, QString title, QString genre, int rating, QObject *parent = 0)
-      : QObject(parent), m_author(author), m_title(title), m_genre(genre), m_rating(rating)
-  {}
+  BookWrapper(QString author, QString title, QString genre, int rating,
+              QObject *parent = 0)
+      : QObject(parent), m_author(author), m_title(title), m_genre(genre),
+        m_rating(rating)
+  {
+  }
 
   QString author() { return m_author; }
   QString title() { return m_title; }

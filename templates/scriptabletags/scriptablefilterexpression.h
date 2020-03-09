@@ -23,39 +23,31 @@
 
 #include <QtCore/QObject>
 
-#include <QtScript/QScriptValue>
+#include <QtQml/QJSValue>
 
 #include "filterexpression.h"
-
-class QScriptContext;
-
-class ScriptableContext;
-
-QScriptValue ScriptableFilterExpressionConstructor( QScriptContext *context,
-    QScriptEngine *engine );
-
+#include "scriptablecontext.h"
 
 class ScriptableFilterExpression : public QObject
 {
   Q_OBJECT
 public:
-  ScriptableFilterExpression( QObject *parent = 0 );
-  ScriptableFilterExpression( QScriptEngine *engine, QObject *parent = 0 );
+  ScriptableFilterExpression(QObject *parent = {});
+  ScriptableFilterExpression(QJSEngine *engine, QObject *parent = {});
 
-  void init( const QString &content, Grantlee::Parser *parser );
+  void init(const QString &content, Grantlee::Parser *parser);
 
 public Q_SLOTS:
-  QVariant resolve( ScriptableContext *c );
+  QVariant resolve(ScriptableContext *c);
 
-  bool isTrue( ScriptableContext *c );
+  bool isTrue(ScriptableContext *c);
 
-  bool equals( ScriptableFilterExpression *other, ScriptableContext *scriptableC );
-
-  // list? QScriptValueList? Make this a ScriptClass?
+  bool equals(ScriptableFilterExpression *other,
+              ScriptableContext *scriptableC);
 
 private:
   Grantlee::FilterExpression m_filterExpression;
-  QScriptEngine *m_engine;
+  QJSEngine *m_engine;
 };
 
 #endif

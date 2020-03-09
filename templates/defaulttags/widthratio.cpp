@@ -23,62 +23,61 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
+WidthRatioNodeFactory::WidthRatioNodeFactory() {}
 
-WidthRatioNodeFactory::WidthRatioNodeFactory()
+Node *WidthRatioNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = smartSplit(tagContent);
 
-}
-
-Node* WidthRatioNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  QStringList expr = smartSplit( tagContent );
-
-  if ( expr.size() != 4 ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "widthratio takes three arguments" ) );
+  if (expr.size() != 4) {
+    throw Grantlee::Exception(
+        TagSyntaxError, QStringLiteral("widthratio takes three arguments"));
   }
-  FilterExpression valExpr( expr.at( 1 ), p );
-  FilterExpression maxExpr( expr.at( 2 ), p );
-  FilterExpression maxWidth( expr.at( 3 ), p );
+  FilterExpression valExpr(expr.at(1), p);
+  FilterExpression maxExpr(expr.at(2), p);
+  FilterExpression maxWidth(expr.at(3), p);
 
-  return new WidthRatioNode( valExpr, maxExpr, maxWidth, p );
+  return new WidthRatioNode(valExpr, maxExpr, maxWidth, p);
 }
 
-
-WidthRatioNode::WidthRatioNode( FilterExpression valExpr, FilterExpression maxExpr, FilterExpression maxWidth, QObject *parent )
-    : Node( parent )
+WidthRatioNode::WidthRatioNode(const FilterExpression &valExpr,
+                               const FilterExpression &maxExpr,
+                               const FilterExpression &maxWidth,
+                               QObject *parent)
+    : Node(parent)
 {
   m_valExpr = valExpr;
   m_maxExpr = maxExpr;
   m_maxWidth = maxWidth;
 }
 
-int WidthRatioNode::round( qreal number )
+int WidthRatioNode::round(qreal number)
 {
-  int intPart = ( int )number;
-  if ( number < ( intPart + 0.5 ) )
+  auto intPart = (int)number;
+  if (number < (intPart + 0.5))
     return intPart;
   return intPart + 1;
 }
 
-void WidthRatioNode::render( OutputStream *stream, Context *c ) const
+void WidthRatioNode::render(OutputStream *stream, Context *c) const
 {
-  QVariant thisVal = m_valExpr.resolve( c );
-  QVariant maxVal = m_maxExpr.resolve( c );
-  if ( !thisVal.isValid() || !maxVal.isValid() )
+  auto thisVal = m_valExpr.resolve(c);
+  auto maxVal = m_maxExpr.resolve(c);
+  if (!thisVal.isValid() || !maxVal.isValid())
     return;
 
-  qreal tv = thisVal.toDouble();
-  qreal mv = maxVal.toDouble();
+  auto tv = thisVal.value<double>();
+  auto mv = maxVal.value<double>();
 
-  if ( mv == 0 )
+  if (mv == 0)
     return;
 
-  int maxWidth = m_maxWidth.resolve( c ).toInt();
+  auto maxWidth = m_maxWidth.resolve(c).value<int>();
 
-  qreal result = ( tv / mv ) * maxWidth;
+  auto result = (tv / mv) * maxWidth;
 
-  result = round( result );
+  result = round(result);
 
   // TODO put integral streamers in OutputStream?
-  ( *stream ) << QString::number( result );
+  (*stream) << QString::number(result);
 }

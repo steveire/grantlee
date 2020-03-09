@@ -1,7 +1,11 @@
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
 
-project(Grantlee)
+if (POLICY CMP0071)
+  cmake_policy(SET CMP0071 NEW)
+endif()
+
+project(Grantlee5 VERSION 5.2.0)
 
 # Workaround for http://public.kitware.com/Bug/view.php?id=12301
 if (MINGW)
@@ -16,48 +20,35 @@ option( BUILD_TEMPLATES "Build the Grantlee template library" TRUE )
 option( BUILD_TEXTDOCUMENT "Build the Grantlee textdocument library" TRUE )
 option( BUILD_MAIN_PLUGINS "Build the Grantlee Templates plugins" TRUE )
 option( BUILD_I18N_PLUGIN "Build the Grantlee Templates i18n plugin" TRUE )
-option( BUILD_SCRIPT_PLUGIN "Build the Grantlee Templates scriptable tags plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 
 if (BUILD_TESTS)
   enable_testing()
 endif()
 
-set(Grantlee_MODULE_DIR ${Grantlee_SOURCE_DIR}/cmake/modules)
-set(CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
+set(Grantlee_MODULE_DIR ${CMAKE_SOURCE_DIR}/cmake/modules)
+list(APPEND CMAKE_MODULE_PATH ${Grantlee_MODULE_DIR})
 
 include(GenerateExportHeader)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-# create coverage build type
-set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
-if (${CMAKE_VERSION} VERSION_GREATER 2.8.2 AND CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+  # create coverage build type
+  set(CMAKE_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES} Coverage )
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage" "TestCocoon")
+                "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
 endif()
 
-set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
-set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
-set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
-
-set(TESTCOCOON_ARGS "--cs-on --cs-count --cs-include-file-abs-regex=${CMAKE_SOURCE_DIR}/.* --cs-include-file-regex=qrc_* --cs-qt4 --cs-exclude-file-abs-regex=${CMAKE_BINARY_DIR}/.*")
-set(CMAKE_CXX_FLAGS_TESTCOCOON "${CMAKE_CXX_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-set(CMAKE_C_FLAGS_TESTCOCOON "${CMAKE_C_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-set(CMAKE_EXE_LINKER_FLAGS_TESTCOCOON "${CMAKE_EXE_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-set(CMAKE_SHARED_LINKER_FLAGS_TESTCOCOON "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
-set(CMAKE_STATIC_LINKER_FLAGS_TESTCOCOON "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} ${TESTCOCOON_ARGS}")
+if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+  set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
+  set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
+  set(CMAKE_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -fprofile-arcs -ftest-coverage")
+endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wno-long-long -std=iso9899:1990 -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common ")
-
-  if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
-    # Needed on 64 bit
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --cs-libgen=-fPIC")
-  else()
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic-errors")
-  endif()
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wformat-security -fno-check-new -fno-common -pedantic-errors")
 
   if (NOT APPLE)
     set ( CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings -Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
@@ -81,21 +72,14 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 set(CMAKE_AUTOMOC ON)
 
-set(Grantlee5_VERSION_MAJOR 5)
-set(Grantlee5_VERSION_MINOR 0)
-set(Grantlee5_VERSION_PATCH 0)
 set(Grantlee5_MIN_PLUGIN_VERSION 0)
 
 set(Grantlee5_MAJOR_MINOR_VERSION_STRING "${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}" )
-set(Grantlee5_VERSION_STRING "${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}.${Grantlee5_VERSION_PATCH}" )
 
 set (LIB_SUFFIX "" CACHE STRING "Define suffix of library directory name (eg. '64')")
 
 set( LIB_INSTALL_DIR lib${LIB_SUFFIX} )
 set( PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/grantlee/${Grantlee5_MAJOR_MINOR_VERSION_STRING} )
-set( BIN_INSTALL_DIR bin )
-set( INCLUDE_INSTALL_DIR include )
-set( DATA_INSTALL_DIR share/apps )
 
 # set up RPATH/install_name_dir
 set( CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR})
@@ -115,19 +99,19 @@ set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/Grantlee${Grantlee5_VERSIO
 
 configure_file(
   "${Grantlee_MODULE_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake.in"
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
+  "${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
   @ONLY
 )
 
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file("${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
-  VERSION ${Grantlee5_VERSION_STRING}
+write_basic_package_version_file("${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
+  VERSION ${Grantlee5_VERSION}
   COMPATIBILITY AnyNewerVersion
 )
 
 install(FILES
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
-  "${Grantlee_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
+  "${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
+  "${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}ConfigVersion.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Common
 )
@@ -162,7 +146,12 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
 
   # Available from http://gcc.gnu.org/onlinedocs/libstdc++/latest-doxygen/libstdc++.tag
   set(STLTAGFILE "${CMAKE_SOURCE_DIR}/scripts/libstdc++.tag=http://gcc.gnu.org/onlinedocs/libstdc++/latest-doxygen")
-  set(QTTAGFILE "${CMAKE_SOURCE_DIR}/scripts/qttags.tag=http://qt.nokia.com/doc/${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}")
+  find_file(qtcore_tag_file
+    qtcore.tags
+    HINTS
+      "/usr/share/qt5/doc/qtcore"
+    )
+  set(QTTAGFILE "${qtcore_tag_file}=https://doc.qt.io/qt-5/")
 
   set(TAGFILES "${QTTAGFILE} ${STLTAGFILE}")
   set(DOCS_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
@@ -174,13 +163,13 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
   # Add support for a Qt assistant docs target
   # qttags.tag is too big to distribute with Grantlee. Get it
   # from http://api.kde.org/kdereview-api/kdereview.tar.gz for example.
-  if(EXISTS ${CMAKE_SOURCE_DIR}/scripts/qttags.tag)
+  if(EXISTS ${qtcore_tag_file})
     set(DOCS_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qtdocs")
 
     # Available from http://steveire.com/libstdc++-longnames.tag
     # Also recommended: http://www.steveire.com/libstdc++-v3.qch
     set(STLTAGFILE "${CMAKE_SOURCE_DIR}/scripts/libstdc++-longnames.tag=qthelp://org.gnu.libstdcxx/libstdc++-v3/")
-    set(QTTAGFILE "${CMAKE_SOURCE_DIR}/scripts/qttags.tag=qthelp://com.trolltech.qt/qdoc/")
+    set(QTTAGFILE "${qtcore_tag_file}=qthelp://org.qt-project.qtcore/qtcore/")
 
     set(TAGFILES "${QTTAGFILE} ${STLTAGFILE}")
     set(GENERATE_QHP "yes")
@@ -245,85 +234,26 @@ if(LCOV_FOUND)
   )
 
   list(APPEND coverage_ARGS COMMAND ${CMAKE_COMMAND} -E remove_directory coverage)
-  list(APPEND coverage_ARGS COMMAND ${GENHTML_EXECUTABLE} -o coverage/ -s --demangle-cpp -f test_all.info)
+  list(APPEND coverage_ARGS COMMAND ${GENHTML_EXECUTABLE} -o coverage/ -s --demangle-cpp -f test_all.info --prefix ${CMAKE_SOURCE_DIR})
 
   add_custom_target(coverage
     ${coverage_ARGS}
   )
 endif()
 
-if (CMAKE_BUILD_TYPE MATCHES TestCocoon)
-
-  get_property(UNITTESTS GLOBAL PROPERTY TEST_COVERAGE)
-
-  set(coverageDir ${CMAKE_BINARY_DIR})
-
-  set(testcocoon_ARGS)
-
-  foreach(_testpath ${UNITTESTS})
-    list(APPEND testcocoon_ARGS COMMAND "${_testpath}")
-  endforeach()
-
-  find_program(TESTCOCOON_CMMERGE_EXECUTABLE cmmerge)
-  find_program(TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE cmcsexeimport)
-
-  list(APPEND testcocoon_ARGS COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o unittests.csmes)
-  foreach(_testpath ${UNITTESTS})
-    list(APPEND testcocoon_ARGS ${_testpath}.csmes)
-  endforeach()
-  set(_plugins "grantlee_defaultfilters" "grantlee_defaulttags" "grantlee_i18ntags" "grantlee_loadertags")
-  foreach(_plugin ${_plugins})
-    list(APPEND testcocoon_ARGS "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes")
-  endforeach()
-  list(APPEND testcocoon_ARGS "${coverageDir}/templates/lib/libgrantlee_core.so.csmes")
-
-  list(APPEND testcocoon_ARGS
-    COMMAND ${TESTCOCOON_CMCSEXEIMPORT_EXECUTABLE}
-    -m unittests.csmes -t "\"--unnamed--\"" -p
-    merge -e "${coverageDir}/coverage.csexe"
-  )
-
-  list(APPEND testcocoon_ARGS
-    COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_core.so.csmes"
-    -i "${coverageDir}/templates/lib/libgrantlee_core.so.csmes" "${coverageDir}/unittests.csmes"
-  )
-
-  list(APPEND testcocoon_ARGS
-    COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/libgrantlee_gui.so.csmes"
-    -i "${coverageDir}/textdocument/lib/libgrantlee_gui.so.csmes" "${coverageDir}/unittests.csmes"
-  )
-
-  foreach(_plugin ${_plugins})
-    list(APPEND testcocoon_ARGS
-      COMMAND ${TESTCOCOON_CMMERGE_EXECUTABLE} -o "${coverageDir}/${_plugin}.so.csmes"
-      -i "${coverageDir}/grantlee/0.2/${_plugin}.so.csmes" "${coverageDir}/unittests.csmes"
-    )
-  endforeach()
-
-  find_program(TESTCOCOON_CMREPORT_EXECUTABLE cmreport)
-  set(_csmes_files ${_plugins} "libgrantlee_gui" "libgrantlee_core")
-  foreach(_csmes_file ${_csmes_files})
-    list(APPEND testcocoon_ARGS
-      COMMAND echo -n \"${_csmes_file}\" COMMAND ${TESTCOCOON_CMREPORT_EXECUTABLE} -s '.*' -m "${_csmes_file}.so.csmes"
-    )
-  endforeach()
-
-  add_custom_target(testcocoon
-    ${testcocoon_ARGS}
-  )
-endif()
-
 find_package(Cccc)
 if (CCCC_FOUND)
   macro(append_target_sources target)
-    get_target_property(_tar_files ${target} SOURCES)
-    foreach(f ${_tar_files})
-      if(IS_ABSOLUTE f)
-        list(APPEND target_files ${f})
-      else()
-        list(APPEND target_files ${${target}_SOURCE_DIR}/${f})
-      endif()
-    endforeach()
+    if (TARGET ${target})
+      get_target_property(_tar_files ${target} SOURCES)
+      foreach(f ${_tar_files})
+        if(IS_ABSOLUTE f)
+          list(APPEND target_files ${f})
+        else()
+          list(APPEND target_files ${${target}_SOURCE_DIR}/${f})
+        endif()
+      endforeach()
+    endif()
   endmacro()
 
 
@@ -349,7 +279,7 @@ set(CPACK_PACKAGE_VERSION_PATCH ${Grantlee5_VERSION_PATCH})
 set(CPACK_PACKAGE_CONTACT "Stephen Kelly <steveire@gmail.com>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A set of frameworks for use with Qt")
 set(CPACK_GENERATOR "TGZ" )
-set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING.LIB")
 
 set(CPACK_COMPONENT_COMMON_DISPLAY_NAME "Grantlee Common files")

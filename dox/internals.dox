@@ -9,17 +9,17 @@ namespace Grantlee
 
   @section how_works How Grantlee works.
 
-  A template string is first tokenized by the lexer class. The result is a list of tokens with content which can be of type TextToken, CommentToken, VariableToken or TagToken.
+  A template string is first tokenized by the Lexer class. The result is a list of tokens with content which can be of type <tt>TextToken</tt>, <tt>CommentToken</tt>, <tt>VariableToken</tt> or <tt>TagToken</tt>.
 
-  The tokens are further processed by the Parser class. The Parser generates nodes from the token stream. For a TextToken it generates a TextNode, for a CommentToken it generates nothing, for a VariableToken it generates a VariableNode, and for a TagToken it generates another type of Node determined by available plugins. Some plugins are built in, and others may be loaded by the template itself using the @gr_tag{load} tag, or preloaded by the application developer.
+  The tokens are further processed by the Parser class. The Parser generates nodes from the token stream. For a <tt>TextToken</tt> it generates a <tt>TextNode</tt>, for a <tt>CommentToken</tt> it generates nothing, for a <tt>VariableToken</tt> it generates a <tt>VariableNode</tt>, and for a <tt>TagToken</tt> it generates another type of Node determined by available plugins. Some plugins are built in, and others may be loaded by the template itself using the @gr_tag{load} tag, or preloaded by the application developer.
 
-  The plugin uses the Abstract Factory pattern. It returns a list of concrete factories, one for each tag handled by that plugin. The factories have a getNode method which accepts the tag content and the active parser as an argument and returns a concrete Node. The getNode method may advance the parser in the case of begin/end tags etc. When the parser is finished, it has created a tree of nodes, which is essentially a Template object.
+  The plugin uses the Abstract Factory Pattern. It returns a list of concrete factories, one for each tag handled by that plugin. The factories have a <tt>getNode</tt> method which accepts the tag content and the active parser as an argument and returns a concrete Node. The <tt>getNode</tt> method may advance the parser in the case of begin/end tags etc. When the parser is finished, it has created a tree of nodes, which is essentially a Template object.
 
-  A Template is rendered with a Context object. During rendering, each node in the template has its render method called with the Context. The node may contain different sub-trees, one of which is rendered, as is the case for IfNode, or it might contain a single sub-tree which is rendered multiple times, as in the case of ForNode, etc. The rendering outputs a string, which is the rendered output of the template for a particular context. A single Template may be rendered multiple times with mutliple different Contexts.
+  A Template is rendered with a Context object. During rendering, each node in the template has its <tt>render</tt> method called with the Context. The Node may contain different sub-trees, one of which is rendered, as is the case for <tt>IfNode</tt>, or it might contain a single sub-tree which is rendered multiple times, as in the case of <tt>ForNode</tt>, etc. The rendering outputs a string, which is the rendered output of the Template for a particular Context. A single Template may be rendered multiple times with mutliple different Contexts.
 
-  Plugins can return Filters as well as AbstractNodeFactories. Filters can manipulate Variables in some way before rendering them to the output.
+  Plugins can return Filter and AbstractNodeFactory instances. Filters can manipulate Variable instances in some way before rendering them to the output.
 
-  Loading templates to include or extend is accomplished using the loadByName methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins.
+  Loading templates to include or extend is accomplished using the <tt>loadByName</tt> methods. The secondary template should use the same state as the initially created/loaded template, so that it uses the same template loaders, has the same plugins available by default and uses the same search directories to find additional plugins.
 
 */
 

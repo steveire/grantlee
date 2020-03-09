@@ -32,76 +32,74 @@ namespace Grantlee
 class BBCodeBuilder : public AbstractMarkupBuilder
 {
 public:
-
   /**
     Creates a new BBCodeBuilder.
   */
   BBCodeBuilder();
 
-  virtual ~BBCodeBuilder();
+  ~BBCodeBuilder() override;
 
-  /* reimp */ void beginStrong();
-  /* reimp */ void endStrong();
-  /* reimp */ void beginEmph();
-  /* reimp */ void endEmph();
-  /* reimp */ void beginUnderline();
-  /* reimp */ void endUnderline();
-  /* reimp */ void beginStrikeout();
-  /* reimp */ void endStrikeout();
-  /* reimp */ void beginForeground( const QBrush &brush );
-  /* reimp */ void endForeground();
+  void beginStrong() override;
+  void endStrong() override;
+  void beginEmph() override;
+  void endEmph() override;
+  void beginUnderline() override;
+  void endUnderline() override;
+  void beginStrikeout() override;
+  void endStrikeout() override;
+  void beginForeground(const QBrush &brush) override;
+  void endForeground() override;
 
   // Background colour not supported by BBCode.
 
-  /* reimp */ void beginAnchor( const QString &href = QString(), const QString &name = QString() );
-  /* reimp */ void endAnchor();
+  void beginAnchor(const QString &href = {}, const QString &name = {}) override;
+  void endAnchor() override;
 
   // Font family not supported by BBCode.
 
   /**
-    Begin an element of font size @p size. Note that this size is in pixels, and must be converted before
-    it is suitable for use in BBCode.
+    Begin an element of font size @p size. Note that this size is in pixels,
+    and must be converted before it is suitable for use in BBCode.
     @param size The size of font to begin.
   */
-  /* reimp */ void beginFontPointSize( int size );
-  /* reimp */ void endFontPointSize();
+  void beginFontPointSize(int size) override;
+  void endFontPointSize() override;
 
-  /* reimp */ void beginParagraph( Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0, qreal bottom = 0.0, qreal left = 0.0, qreal right = 0.0 );
+  void beginParagraph(Qt::Alignment a = Qt::AlignLeft, qreal top = 0.0,
+                      qreal bottom = 0.0, qreal left = 0.0,
+                      qreal right = 0.0) override;
 
-  /* reimp */ void endParagraph();
-  /* reimp */ void addNewline();
+  void endParagraph() override;
+  void addNewline() override;
 
-  /* reimp */ void insertImage( const QString &src, qreal width, qreal height );
+  void insertImage(const QString &src, qreal width, qreal height) override;
 
-  /* reimp */ void beginList( QTextListFormat::Style type );
+  void beginList(QTextListFormat::Style type) override;
 
-  /* reimp */ void endList();
+  void endList() override;
 
+  void beginListItem() override;
 
-  /* reimp */ void beginListItem();
+  void beginSuperscript() override;
 
-  /* reimp */ void beginSuperscript();
+  void endSuperscript() override;
 
-  /* reimp */ void endSuperscript();
+  void beginSubscript() override;
 
-  /* reimp */ void beginSubscript();
+  void endSubscript() override;
 
-  /* reimp */ void endSubscript();
+  void beginTable(qreal, qreal, const QString &) override;
 
+  void beginTableRow() override;
 
-  /* reimp */ void beginTable( qreal, qreal, const QString & );
-
-  /* reimp */ void beginTableRow();
-
-
-  /* reimp */ void appendLiteralText( const QString &text );
+  void appendLiteralText(const QString &text) override;
 
   /**
     Escapes @p text appropriately for BBCode.
   */
-  const QString escape( const QString &text ) const;
+  const QString escape(const QString &text) const;
 
-  /* reimp */ QString getResult();
+  QString getResult() override;
 
 private:
   QList<QTextListFormat::Style> m_currentListItemStyles;
@@ -109,9 +107,7 @@ private:
   QString m_text;
 
   Qt::Alignment m_currentAlignment;
-
 };
-
 }
 
 #endif

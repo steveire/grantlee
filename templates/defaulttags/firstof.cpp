@@ -24,35 +24,33 @@
 #include "parser.h"
 #include "util.h"
 
+FirstOfNodeFactory::FirstOfNodeFactory() {}
 
-FirstOfNodeFactory::FirstOfNodeFactory()
+Node *FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
-}
+  auto expr = smartSplit(tagContent);
 
-Node* FirstOfNodeFactory::getNode( const QString &tagContent, Parser *p ) const
-{
-  QStringList expr = smartSplit( tagContent );
+  const auto tagName = expr.takeAt(0);
 
-  const QString tagName = expr.takeAt( 0 );
-
-  if ( expr.size() <= 0 ) {
-    throw Grantlee::Exception( TagSyntaxError, QString::fromLatin1( "%1 expects at least one argument" ).arg( tagName ) );
+  if (expr.isEmpty()) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("%1 expects at least one argument").arg(tagName));
   }
 
-  return new FirstOfNode( getFilterExpressionList( expr, p ), p );
+  return new FirstOfNode(getFilterExpressionList(expr, p), p);
 }
 
-
-FirstOfNode::FirstOfNode( QList<FilterExpression> list, QObject *parent )
-    : Node( parent ), m_variableList( list )
+FirstOfNode::FirstOfNode(const QList<FilterExpression> &list, QObject *parent)
+    : Node(parent), m_variableList(list)
 {
 }
 
-void FirstOfNode::render( OutputStream *stream, Context *c ) const
+void FirstOfNode::render(OutputStream *stream, Context *c) const
 {
-  Q_FOREACH( const FilterExpression &fe, m_variableList ) {
-    if ( fe.isTrue( c ) ) {
-      fe.resolve( stream, c );
+  Q_FOREACH (const FilterExpression &fe, m_variableList) {
+    if (fe.isTrue(c)) {
+      fe.resolve(stream, c);
       return;
     }
   }

@@ -21,85 +21,87 @@
 #include "l10n_money.h"
 
 #include "abstractlocalizer.h"
-#include "parser.h"
-#include "template.h"
 #include "engine.h"
 #include "exception.h"
+#include "parser.h"
+#include "template.h"
 #include "util.h"
 
-L10nMoneyNodeFactory::L10nMoneyNodeFactory()
+L10nMoneyNodeFactory::L10nMoneyNodeFactory() {}
+
+Node *L10nMoneyNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = smartSplit(tagContent);
 
-}
+  if (expr.size() < 2)
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("Error: l10n_money tag takes at least one argument"));
 
-Node* L10nMoneyNodeFactory::getNode( const QString& tagContent, Parser* p ) const
-{
-  QStringList expr = smartSplit( tagContent );
-
-  if ( expr.size() < 2 )
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: l10n_money tag takes at least one argument" ) );
-
-  FilterExpression value( expr.at( 1 ), p );
+  FilterExpression value(expr.at(1), p);
 
   FilterExpression currency;
 
-  if ( expr.size() == 3 )
-    currency = FilterExpression( expr.at( 2 ), p );
+  if (expr.size() == 3)
+    currency = FilterExpression(expr.at(2), p);
 
-  return new L10nMoneyNode( value, currency );
+  return new L10nMoneyNode(value, currency);
 }
 
+L10nMoneyVarNodeFactory::L10nMoneyVarNodeFactory() {}
 
-L10nMoneyVarNodeFactory::L10nMoneyVarNodeFactory()
+Grantlee::Node *L10nMoneyVarNodeFactory::getNode(const QString &tagContent,
+                                                 Parser *p) const
 {
 
-}
+  auto expr = smartSplit(tagContent);
 
-Grantlee::Node* L10nMoneyVarNodeFactory::getNode( const QString& tagContent, Parser* p ) const
-{
+  if (expr.size() < 4)
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("Error: l10n_money tag takes at least three arguments"));
 
-  QStringList expr = smartSplit( tagContent );
-
-  if ( expr.size() < 4 )
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: l10n_money tag takes at least three arguments" ) );
-
-  FilterExpression value( expr.at( 1 ), p );
+  FilterExpression value(expr.at(1), p);
 
   FilterExpression currency;
 
+  if (expr.size() == 3)
+    currency = FilterExpression(expr.at(2), p);
 
-  if ( expr.size() == 3 )
-    currency = FilterExpression( expr.at( 2 ), p );
+  auto resultName = expr.last();
 
-  QString resultName = expr.last();
-
-  return new L10nMoneyVarNode( value, currency, resultName );
+  return new L10nMoneyVarNode(value, currency, resultName);
 }
 
-
-L10nMoneyNode::L10nMoneyNode( const FilterExpression &value, const FilterExpression &currency, QObject* parent )
-    : Node( parent ), m_value( value ), m_currency( currency )
+L10nMoneyNode::L10nMoneyNode(const FilterExpression &value,
+                             const FilterExpression &currency, QObject *parent)
+    : Node(parent), m_value(value), m_currency(currency)
 {
-
 }
 
-void L10nMoneyNode::render( OutputStream* stream, Context* c ) const
+void L10nMoneyNode::render(OutputStream *stream, Context *c) const
 {
-  QString resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).toDouble(), getSafeString( m_currency.resolve( c ) ).get() );
+  auto resultString = c->localizer()->localizeMonetaryValue(
+      m_value.resolve(c).value<double>(),
+      getSafeString(m_currency.resolve(c)).get());
 
-  streamValueInContext( stream, resultString, c );
+  streamValueInContext(stream, resultString, c);
 }
 
-L10nMoneyVarNode::L10nMoneyVarNode( const FilterExpression &value, const FilterExpression &currency, const QString &resultName, QObject* parent )
-  : Node( parent ), m_value( value ), m_currency( currency ), m_resultName( resultName )
+L10nMoneyVarNode::L10nMoneyVarNode(const FilterExpression &value,
+                                   const FilterExpression &currency,
+                                   const QString &resultName, QObject *parent)
+    : Node(parent), m_value(value), m_currency(currency),
+      m_resultName(resultName)
 {
-
 }
 
-void L10nMoneyVarNode::render( OutputStream* stream, Context* c ) const
+void L10nMoneyVarNode::render(OutputStream *stream, Context *c) const
 {
-  Q_UNUSED( stream )
-  QString resultString = c->localizer()->localizeMonetaryValue( m_value.resolve( c ).toDouble(), getSafeString( m_currency.resolve( c ) ).get() );
+  Q_UNUSED(stream)
+  auto resultString = c->localizer()->localizeMonetaryValue(
+      m_value.resolve(c).value<double>(),
+      getSafeString(m_currency.resolve(c)).get());
 
-  c->insert( m_resultName, resultString );
+  c->insert(m_resultName, resultString);
 }

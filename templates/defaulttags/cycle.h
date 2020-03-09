@@ -31,37 +31,34 @@ class CycleNodeFactory : public AbstractNodeFactory
 public:
   CycleNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 /**
 Cycles endlessly over elements.
 */
-template <typename T>
-class RingIterator
+template <typename T> class RingIterator
 {
 public:
-  RingIterator<T>()
-  {
+  RingIterator<T>() {}
 
-  }
-
-  RingIterator<T>( const QList<T> &list )
-      : m_begin( list.constBegin() ), m_it( list.constBegin() ), m_end( list.constEnd() )
+  RingIterator<T>(const QList<T> &list)
+      : m_begin(list.constBegin()), m_it(list.constBegin()),
+        m_end(list.constEnd())
   {
-    Q_ASSERT( !list.isEmpty() );
+    Q_ASSERT(!list.isEmpty());
   }
 
   /**
     Returns the next element in the list, or the first element if already
     at the last element.
   */
-  T next() {
-    Q_ASSERT( m_it != m_end );
+  T next()
+  {
+    Q_ASSERT(m_it != m_end);
 
     const T t = *m_it++;
-    if ( m_it == m_end )
+    if (m_it == m_end)
       m_it = m_begin;
     return t;
   }
@@ -74,15 +71,16 @@ private:
 
 typedef RingIterator<FilterExpression> FilterExpressionRotator;
 
-Q_DECLARE_METATYPE( FilterExpressionRotator )
+Q_DECLARE_METATYPE(FilterExpressionRotator)
 
 class CycleNode : public Node
 {
   Q_OBJECT
 public:
-  CycleNode( const QList<FilterExpression> &list, const QString &name, QObject *parent = 0 );
+  CycleNode(const QList<FilterExpression> &list, const QString &name,
+            QObject *parent = {});
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   const QList<FilterExpression> m_list;

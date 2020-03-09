@@ -20,179 +20,258 @@
 
 #include "scriptabletags.h"
 
-#include <QtPlugin>
 #include <QtCore/QFile>
+#include <QtPlugin>
 
-#include <QtScript/QScriptEngine>
+#include <QtQml/QJSEngine>
+#include <QtQml/QJSValueIterator>
 
 #include "nodebuiltins_p.h"
 
-#include "scriptablenode.h"
-#include "scriptablevariable.h"
-#include "scriptablefilterexpression.h"
-#include "scriptablefilter.h"
-#include "scriptabletemplate.h"
-#include "scriptablesafestring.h"
+#include "engine.h"
 #include "exception.h"
+#include "parser.h"
+#include "scriptablefilter.h"
+#include "scriptablefilterexpression.h"
+#include "scriptablenode.h"
+#include "scriptablesafestring.h"
+#include "scriptabletemplate.h"
+#include "scriptablevariable.h"
 
 #include "token.h"
+#include "util.h"
 
-Q_DECLARE_METATYPE( Token )
+Q_DECLARE_METATYPE(Token)
 
 using namespace Grantlee;
 
-QScriptValue tokenToScriptValue( QScriptEngine *engine, const Token &t )
+QJSValue ScriptableHelperFunctions::markSafeFunction(QJSValue inputValue)
 {
-  QScriptValue obj = engine->newObject();
-  obj.setProperty( QStringLiteral( "tokenType" ), t.tokenType );
-  obj.setProperty( QStringLiteral( "content" ), t.content );
-  return obj;
+  if (inputValue.isQObject()) {
+    auto obj = inputValue.toQObject();
+    auto ssObj = qobject_cast<ScriptableSafeString *>(obj);
+    if (!ssObj)
+      return QJSValue::NullValue;
+
+    ssObj->setSafety(true);
+    return m_scriptEngine->newQObject(ssObj);
+
+  } else if (inputValue.isString()) {
+    auto str = inputValue.toString();
+    auto ssObj = new ScriptableSafeString(m_scriptEngine);
+    ssObj->setContent(markSafe(str));
+    return m_scriptEngine->newQObject(ssObj);
+  }
+  return QJSValue::NullValue;
 }
 
-void tokenFromScriptValue( const QScriptValue &obj, Token &t )
+QJSValue ScriptableHelperFunctions::ScriptableFilterExpressionConstructor(
+    QString name, QObject *parserObj)
 {
-  t.tokenType = obj.property( QStringLiteral( "tokenType" ) ).toInt32();
-  t.content = obj.property( QStringLiteral( "content" ) ).toString();
+  auto object = new ScriptableFilterExpression(m_scriptEngine);
+
+  auto p = qobject_cast<Parser *>(parserObj);
+
+  object->init(name, p);
+
+  return m_scriptEngine->newQObject(object);
 }
 
-ScriptableTagLibrary::ScriptableTagLibrary( QObject *parent )
-    : QObject( parent ), m_scriptEngine( 0 )
+QJSValue
+ScriptableHelperFunctions::ScriptableNodeConstructor(QJSValue callContext)
 {
-  m_scriptEngine = new QScriptEngine( this );
+  QJSValueIterator it(callContext);
+  it.next();
+  auto scriptableNodeName = it.value().toString();
+  auto concreteNode
+      = m_scriptEngine->globalObject().property(scriptableNodeName);
 
-  qScriptRegisterMetaType( m_scriptEngine, tokenToScriptValue, tokenFromScriptValue );
-  qScriptRegisterMetaType( m_scriptEngine, nodeToScriptValue, nodeFromScriptValue );
-//   qScriptRegisterMetaType(m_scriptEngine.data(), tokenToScriptValue, tokenFromScriptValue);
-//   qScriptRegisterMetaType(m_scriptEngine.data(), nodeToScriptValue, nodeFromScriptValue);
+  QJSValueList args;
+  while (it.next())
+    args << it.value();
+
+  concreteNode = concreteNode.callAsConstructor(args);
+
+  auto renderMethod = concreteNode.property(QStringLiteral("render"));
+
+  auto object = new ScriptableNode(m_scriptEngine);
+  object->setObjectName(scriptableNodeName);
+  object->setScriptEngine(m_scriptEngine);
+  object->init(concreteNode, renderMethod);
+  return m_scriptEngine->newQObject(object);
+}
+
+QJSValue ScriptableHelperFunctions::ScriptableTemplateConstructor(
+    QString content, QString name, QObject *parent)
+{
+  auto templateEngine
+      = m_scriptEngine->property("templateEngine").value<Engine *>();
+
+  if (!templateEngine)
+    return QJSValue();
+
+  auto t = templateEngine->newTemplate(content, name);
+
+  auto object = new ScriptableTemplate(t, parent);
+  return m_scriptEngine->newQObject(object);
+}
+
+QJSValue ScriptableHelperFunctions::ScriptableVariableConstructor(QString name)
+{
+  // TODO: Decide what the parent should be;
+  // It should be the owning scriptableNode. I think I can get that from the
+  // scriptContext.
+
+  QObject *parent = 0;
+  auto object = new ScriptableVariable(m_scriptEngine, parent);
+  object->setContent(name);
+
+  return m_scriptEngine->newQObject(object);
+}
+
+ScriptableTagLibrary::ScriptableTagLibrary(QObject *parent)
+    : QObject(parent), m_scriptEngine(new QJSEngine(this)),
+      m_functions(m_scriptEngine->newQObject(
+          new ScriptableHelperFunctions(m_scriptEngine)))
+{
+  m_scriptEngine->globalObject().setProperty(
+      QStringLiteral("internalGrantleeFunctions"), m_functions);
 
   // Make Node new-able
-  QScriptValue nodeCtor = m_scriptEngine->newFunction( ScriptableNodeConstructor );
-  QScriptValue nodeMetaObject = m_scriptEngine->newQMetaObject( &ScriptableNode::staticMetaObject, nodeCtor );
-  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Node" ), nodeMetaObject );
+  m_scriptEngine->globalObject().setProperty(
+      QStringLiteral("Node"),
+      m_scriptEngine->evaluate(QStringLiteral(R"javascript(
+            (function() {
+              return internalGrantleeFunctions.ScriptableNodeConstructor(
+                Array.prototype.slice.call(arguments));
+            })
+          )javascript")));
 
   // Make Variable new-able
-  QScriptValue variableCtor = m_scriptEngine->newFunction( ScriptableVariableConstructor );
-  QScriptValue variableMetaObject = m_scriptEngine->newQMetaObject( &VariableNode::staticMetaObject, variableCtor );
-  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Variable" ), variableMetaObject );
+  m_scriptEngine->globalObject().setProperty(
+      QStringLiteral("Variable"),
+      m_functions.property(QStringLiteral("ScriptableVariableConstructor")));
 
   // Make FilterExpression new-able
-  QScriptValue filterExpressionCtor = m_scriptEngine->newFunction( ScriptableFilterExpressionConstructor );
-  QScriptValue filterExpressionMetaObject = m_scriptEngine->newQMetaObject( &ScriptableFilterExpression::staticMetaObject, filterExpressionCtor );
-  m_scriptEngine->globalObject().setProperty( QStringLiteral( "FilterExpression" ), filterExpressionMetaObject );
+  m_scriptEngine->globalObject().setProperty(
+      QStringLiteral("FilterExpression"),
+      m_functions.property(
+          QStringLiteral("ScriptableFilterExpressionConstructor")));
 
   // Make Template new-able
-  QScriptValue templateCtor = m_scriptEngine->newFunction( ScriptableTemplateConstructor );
-  QScriptValue templateMetaObject = m_scriptEngine->newQMetaObject( &ScriptableTemplate::staticMetaObject, templateCtor );
-  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Template" ), templateMetaObject );
+  m_scriptEngine->globalObject().setProperty(
+      QStringLiteral("Template"),
+      m_functions.property(QStringLiteral("ScriptableTemplateConstructor")));
 
   // Create a global Library object
-  QScriptValue libraryObject = m_scriptEngine->newQObject( this );
-  m_scriptEngine->globalObject().setProperty( QStringLiteral( "Library" ), libraryObject );
+  auto libraryObject = m_scriptEngine->newQObject(this);
+  m_scriptEngine->globalObject().setProperty(QStringLiteral("Library"),
+                                             libraryObject);
 
   // Create a global AbstractNodeFactory object to make smartSplit available.
-  ScriptableNodeFactory *nodeFactory = new ScriptableNodeFactory( this );
-  QScriptValue nodeFactoryObject = m_scriptEngine->newQObject( nodeFactory );
-  m_scriptEngine->globalObject().setProperty( QStringLiteral( "AbstractNodeFactory" ), nodeFactoryObject );
+  auto nodeFactory = new ScriptableNodeFactory(this);
+  auto nodeFactoryObject = m_scriptEngine->newQObject(nodeFactory);
+  m_scriptEngine->globalObject().setProperty(
+      QStringLiteral("AbstractNodeFactory"), nodeFactoryObject);
 
   // Make mark_safe a globally available object.
-  QScriptValue markSafeFunctionObject = m_scriptEngine->newFunction( markSafeFunction );
-  m_scriptEngine->globalObject().setProperty( QStringLiteral( "mark_safe" ), markSafeFunctionObject );
-
+  m_scriptEngine->globalObject().setProperty(
+      QStringLiteral("mark_safe"),
+      m_functions.property(QStringLiteral("markSafeFunction")));
 }
 
-bool ScriptableTagLibrary::evaluateScript( const QString &name )
+bool ScriptableTagLibrary::evaluateScript(const QString &name)
 {
-  QFile scriptFile( name );
+  QFile scriptFile(name);
 
-  if ( !scriptFile.exists() || !scriptFile.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
+  if (!scriptFile.exists()
+      || !scriptFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
     return false;
   }
 
-  QTextStream fstream( &scriptFile );
-  fstream.setCodec( "UTF-8" );
-  const QString fileContent = fstream.readAll();
+  QTextStream fstream(&scriptFile);
+  fstream.setCodec("UTF-8");
+  const auto fileContent = fstream.readAll();
 
   scriptFile.close();
 
-  m_scriptEngine->evaluate( fileContent );
+  QJSValue result = m_scriptEngine->evaluate(fileContent);
+  if (result.isError())
+    throw Grantlee::Exception(TagSyntaxError, result.toString());
 
-  if ( m_scriptEngine->hasUncaughtException() ) {
-    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( QChar::fromLatin1( ' ' ) ) );
-  }
   return true;
 }
 
-QHash<QString, AbstractNodeFactory*> ScriptableTagLibrary::nodeFactories( const QString &name )
+QHash<QString, AbstractNodeFactory *>
+ScriptableTagLibrary::nodeFactories(const QString &name)
 {
   m_factoryNames.clear();
   m_nodeFactories.clear();
-  QHash<QString, AbstractNodeFactory*> h;
+  QHash<QString, AbstractNodeFactory *> h;
 
-  if ( !evaluateScript( name ) ) {
+  if (!evaluateScript(name)) {
     return h;
   }
 
   return getFactories();
 }
 
-QHash< QString, Filter* > ScriptableTagLibrary::filters( const QString& name )
+QHash<QString, Filter *> ScriptableTagLibrary::filters(const QString &name)
 {
   m_filterNames.clear();
   m_filters.clear();
-  QHash<QString, Filter*> filters;
+  QHash<QString, Filter *> filters;
 
-  if ( !evaluateScript( name ) ) {
+  if (!evaluateScript(name)) {
     return filters;
   }
 
   return getFilters();
 }
 
-QHash<QString, AbstractNodeFactory*> ScriptableTagLibrary::getFactories()
+QHash<QString, AbstractNodeFactory *> ScriptableTagLibrary::getFactories()
 {
-  QHash<QString, AbstractNodeFactory*> factories;
-  QHashIterator<QString, QString> it( m_factoryNames );
-  while ( it.hasNext() ) {
-    it.next();
-    QString factoryName = it.value();
-    QString tagName = it.key();
+  QHash<QString, AbstractNodeFactory *> factories;
+  for (auto it = m_factoryNames.begin(), end = m_factoryNames.end(); it != end;
+       ++it) {
+    auto factoryName = it.value();
+    auto tagName = it.key();
 
-    QScriptValue factoryObject = m_scriptEngine->globalObject().property( factoryName );
+    auto factoryObject = m_scriptEngine->globalObject().property(factoryName);
 
-    ScriptableNodeFactory *snf = new ScriptableNodeFactory();
-    snf->setScriptEngine( m_scriptEngine );
-    snf->setFactory( factoryObject );
+    auto snf = new ScriptableNodeFactory();
+    snf->setScriptEngine(m_scriptEngine);
+    snf->setFactory(factoryObject);
 
-    factories.insert( tagName, snf );
+    factories.insert(tagName, snf);
   }
 
   return factories;
 }
 
-QHash<QString, Filter*> ScriptableTagLibrary::getFilters()
+QHash<QString, Filter *> ScriptableTagLibrary::getFilters()
 {
-  QHash<QString, Filter*> filters;
+  QHash<QString, Filter *> filters;
 
-  QListIterator<QString> it( m_filterNames );
-  while ( it.hasNext() ) {
-    QScriptValue filterObject = m_scriptEngine->globalObject().property( it.next() );
-    QString filterName = filterObject.property( QStringLiteral( "filterName" ) ).toString();
-    ScriptableFilter *filter = new ScriptableFilter( filterObject, m_scriptEngine );
-    filters.insert( filterName, filter );
-  }
-  if ( m_scriptEngine->hasUncaughtException() ) {
-    throw Grantlee::Exception( TagSyntaxError, m_scriptEngine->uncaughtExceptionBacktrace().join( QChar::fromLatin1( ' ' ) ) );
+  for (auto &filterNameString : m_filterNames) {
+    auto filterObject
+        = m_scriptEngine->globalObject().property(filterNameString);
+    auto filterName
+        = filterObject.property(QStringLiteral("filterName")).toString();
+    auto filter = new ScriptableFilter(filterObject, m_scriptEngine);
+    filters.insert(filterName, filter);
   }
 
   return filters;
 }
 
-void ScriptableTagLibrary::addFactory( const QString &factoryName, const QString &tagName )
+void ScriptableTagLibrary::addFactory(const QString &factoryName,
+                                      const QString &tagName)
 {
-  m_factoryNames.insert( tagName, factoryName );
+  m_factoryNames.insert(tagName, factoryName);
 }
 
-void ScriptableTagLibrary::addFilter( const QString &filterName )
+void ScriptableTagLibrary::addFilter(const QString &filterName)
 {
   m_filterNames << filterName;
 }

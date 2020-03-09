@@ -23,120 +23,143 @@
 #include <QtCore/QStringList>
 
 #include "abstractlocalizer.h"
-#include "parser.h"
-#include "template.h"
 #include "engine.h"
 #include "exception.h"
+#include "parser.h"
+#include "template.h"
 
 #include <QtCore/QDebug>
-#include <util.h>
 #include <complex>
+#include <util.h>
 
-I18ncNodeFactory::I18ncNodeFactory()
+I18ncNodeFactory::I18ncNodeFactory() {}
+
+Node *I18ncNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
+  auto expr = smartSplit(tagContent);
 
-}
+  if (expr.size() < 3)
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("Error: i18nc tag takes at least two arguments"));
 
-Node* I18ncNodeFactory::getNode( const QString& tagContent, Parser* p ) const
-{
-  QStringList expr = smartSplit( tagContent );
+  auto contextText = expr.at(1);
 
-  if ( expr.size() < 3 )
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc tag takes at least two arguments" ) );
-
-  QString contextText = expr.at( 1 );
-
-  if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
-       && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc tag first argument must be a static string." ) );
+  if (!(contextText.startsWith(QLatin1Char('"'))
+        && contextText.endsWith(QLatin1Char('"')))
+      && !(contextText.startsWith(QLatin1Char('\''))
+           && contextText.endsWith(QLatin1Char('\'')))) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral(
+            "Error: i18nc tag first argument must be a static string."));
   }
-  contextText = contextText.mid( 1, contextText.size() - 2 );
+  contextText = contextText.mid(1, contextText.size() - 2);
 
-  QString sourceText = expr.at( 2 );
+  auto sourceText = expr.at(2);
 
-  if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
-       && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc tag second argument must be a static string." ) );
+  if (!(sourceText.startsWith(QLatin1Char('"'))
+        && sourceText.endsWith(QLatin1Char('"')))
+      && !(sourceText.startsWith(QLatin1Char('\''))
+           && sourceText.endsWith(QLatin1Char('\'')))) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral(
+            "Error: i18nc tag second argument must be a static string."));
   }
-  sourceText = sourceText.mid( 1, sourceText.size() - 2 );
+  sourceText = sourceText.mid(1, sourceText.size() - 2);
 
   QList<FilterExpression> feList;
-  for ( int i = 3; i < expr.size(); ++i ) {
-    feList.append( FilterExpression( expr.at( i ), p ) );
+  for (auto i = 3; i < expr.size(); ++i) {
+    feList.append(FilterExpression(expr.at(i), p));
   }
 
-  return new I18ncNode( sourceText, contextText, feList );
+  return new I18ncNode(sourceText, contextText, feList);
 }
 
+I18ncVarNodeFactory::I18ncVarNodeFactory() {}
 
-I18ncVarNodeFactory::I18ncVarNodeFactory()
+Grantlee::Node *I18ncVarNodeFactory::getNode(const QString &tagContent,
+                                             Parser *p) const
 {
+  auto expr = smartSplit(tagContent);
 
-}
+  if (expr.size() < 5)
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral("Error: i18nc_var tag takes at least four arguments"));
 
-Grantlee::Node* I18ncVarNodeFactory::getNode( const QString& tagContent, Parser* p ) const
-{
-  QStringList expr = smartSplit( tagContent );
+  auto contextText = expr.at(1);
 
-  if ( expr.size() < 5 )
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc_var tag takes at least four arguments" ) );
-
-  QString contextText = expr.at( 1 );
-
-  if ( !( contextText.startsWith( QLatin1Char( '"' ) ) && contextText.endsWith( QLatin1Char( '"' ) ) )
-       && !( contextText.startsWith( QLatin1Char( '\'' ) ) && contextText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc_var tag first argument must be a static string." ) );
+  if (!(contextText.startsWith(QLatin1Char('"'))
+        && contextText.endsWith(QLatin1Char('"')))
+      && !(contextText.startsWith(QLatin1Char('\''))
+           && contextText.endsWith(QLatin1Char('\'')))) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral(
+            "Error: i18nc_var tag first argument must be a static string."));
   }
-  contextText = contextText.mid( 1, contextText.size() - 2 );
+  contextText = contextText.mid(1, contextText.size() - 2);
 
-  QString sourceText = expr.at( 2 );
+  auto sourceText = expr.at(2);
 
-  if ( !( sourceText.startsWith( QLatin1Char( '"' ) ) && sourceText.endsWith( QLatin1Char( '"' ) ) )
-       && !( sourceText.startsWith( QLatin1Char( '\'' ) ) && sourceText.endsWith( QLatin1Char( '\'' ) ) ) ) {
-    throw Grantlee::Exception( TagSyntaxError, QStringLiteral( "Error: i18nc_var tag second argument must be a static string." ) );
+  if (!(sourceText.startsWith(QLatin1Char('"'))
+        && sourceText.endsWith(QLatin1Char('"')))
+      && !(sourceText.startsWith(QLatin1Char('\''))
+           && sourceText.endsWith(QLatin1Char('\'')))) {
+    throw Grantlee::Exception(
+        TagSyntaxError,
+        QStringLiteral(
+            "Error: i18nc_var tag second argument must be a static string."));
   }
-  sourceText = sourceText.mid( 1, sourceText.size() - 2 );
+  sourceText = sourceText.mid(1, sourceText.size() - 2);
 
   QList<FilterExpression> feList;
-  for ( int i = 3; i < expr.size() - 2; ++i ) {
-    feList.append( FilterExpression( expr.at( i ), p ) );
+  for (auto i = 3; i < expr.size() - 2; ++i) {
+    feList.append(FilterExpression(expr.at(i), p));
   }
 
-  QString resultName = expr.last();
+  auto resultName = expr.last();
 
-  return new I18ncVarNode( sourceText, contextText, feList, resultName );
+  return new I18ncVarNode(sourceText, contextText, feList, resultName);
 }
 
-
-I18ncNode::I18ncNode( const QString &sourceText, const QString &context, const QList<Grantlee::FilterExpression>& feList, QObject* parent )
-  : Node( parent ), m_sourceText( sourceText ), m_context( context ), m_filterExpressionList( feList )
+I18ncNode::I18ncNode(const QString &sourceText, const QString &context,
+                     const QList<Grantlee::FilterExpression> &feList,
+                     QObject *parent)
+    : Node(parent), m_sourceText(sourceText), m_context(context),
+      m_filterExpressionList(feList)
 {
-
 }
 
-void I18ncNode::render( OutputStream* stream, Context* c ) const
+void I18ncNode::render(OutputStream *stream, Context *c) const
 {
   QVariantList args;
-  Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
-    args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizeContextString( m_sourceText, m_context, args );
+  Q_FOREACH (const FilterExpression &fe, m_filterExpressionList)
+    args.append(fe.resolve(c));
+  auto resultString
+      = c->localizer()->localizeContextString(m_sourceText, m_context, args);
 
-  streamValueInContext( stream, resultString, c );
+  streamValueInContext(stream, resultString, c);
 }
 
-I18ncVarNode::I18ncVarNode( const QString &sourceText, const QString &context, const QList<Grantlee::FilterExpression>& feList, const QString &resultName, QObject* parent )
-  : Node( parent ), m_sourceText( sourceText ), m_context( context ), m_filterExpressionList( feList ), m_resultName( resultName )
+I18ncVarNode::I18ncVarNode(const QString &sourceText, const QString &context,
+                           const QList<Grantlee::FilterExpression> &feList,
+                           const QString &resultName, QObject *parent)
+    : Node(parent), m_sourceText(sourceText), m_context(context),
+      m_filterExpressionList(feList), m_resultName(resultName)
 {
-
 }
 
-void I18ncVarNode::render( OutputStream* stream, Context* c ) const
+void I18ncVarNode::render(OutputStream *stream, Context *c) const
 {
-  Q_UNUSED( stream )
+  Q_UNUSED(stream)
   QVariantList args;
-  Q_FOREACH( const FilterExpression &fe, m_filterExpressionList )
-    args.append( fe.resolve( c ) );
-  QString resultString = c->localizer()->localizeContextString( m_sourceText, m_context, args );
+  Q_FOREACH (const FilterExpression &fe, m_filterExpressionList)
+    args.append(fe.resolve(c));
+  auto resultString
+      = c->localizer()->localizeContextString(m_sourceText, m_context, args);
 
-  c->insert( m_resultName, resultString );
+  c->insert(m_resultName, resultString);
 }

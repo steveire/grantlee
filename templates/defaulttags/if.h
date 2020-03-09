@@ -23,6 +23,8 @@
 
 #include "node.h"
 
+#include <QtCore/QSharedPointer>
+
 using namespace Grantlee;
 
 class IfNodeFactory : public AbstractNodeFactory
@@ -31,40 +33,25 @@ class IfNodeFactory : public AbstractNodeFactory
 public:
   IfNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
+
+class IfToken;
 
 class IfNode : public Node
 {
   Q_OBJECT
 public:
-  enum LinkType {
-    OrLink,
-    AndLink
-  };
+  IfNode(QObject *parent = {});
 
-  /**
-  The expression.
-  Nodes to render if the expression is true
-  Nodes to render if the expression is false
-  */
-  IfNode( QList<QPair<bool, FilterExpression > > boolVars, int linkType, QObject *parent = 0 );
+  void
+  setNodelistConditions(const QVector<QPair<QSharedPointer<IfToken>, NodeList>>
+                            &conditionNodelists);
 
-  void setTrueList( NodeList trueList );
-  void setFalseList( NodeList falseList );
-
-  void render( OutputStream *stream, Context *c ) const;
-
-protected:
-  void renderTrueList( OutputStream *stream, Context *c ) const;
-  void renderFalseList( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
-  QList<QPair<bool, FilterExpression > > m_boolVars;
-  NodeList m_trueList;
-  NodeList m_falseList;
-  int m_linkType;
-
+  QVector<QPair<QSharedPointer<IfToken>, NodeList>> mConditionNodelists;
 };
 
 #endif

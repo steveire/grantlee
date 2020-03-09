@@ -30,19 +30,18 @@ class FilterNodeFactory : public AbstractNodeFactory
 public:
   FilterNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class FilterNode : public Node
 {
   Q_OBJECT
 public:
-  explicit FilterNode( FilterExpression fe, QObject *parent = 0 );
+  explicit FilterNode(const FilterExpression &fe, QObject *parent = {});
 
-  void setNodeList( NodeList filterList );
+  void setNodeList(const NodeList &filterList);
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   FilterExpression m_fe;

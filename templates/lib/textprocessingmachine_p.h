@@ -26,12 +26,8 @@
 namespace Grantlee
 {
 
-struct CharTransitionInterface
-{
-  virtual bool characterTest( QString::const_iterator )
-  {
-    return false;
-  }
+struct CharTransitionInterface {
+  virtual bool characterTest(QString::const_iterator) { return false; }
 
   virtual void onTransition() {}
 
@@ -42,57 +38,49 @@ protected:
 class TextProcessingMachine : public StateMachine<CharTransitionInterface>
 {
 public:
-  void processCharacter( QString::const_iterator character );
+  void processCharacter(QString::const_iterator character);
+
 protected:
-  bool doProcessCharacter( QString::const_iterator character, State<CharTransitionInterface> *state );
+  bool doProcessCharacter(QString::const_iterator character,
+                          State<CharTransitionInterface> *state);
 };
 
 typedef CharTransitionInterface NullTest;
 
-template<typename T, typename U>
-struct AndTest
-{
-  static bool characterTest( QString::const_iterator ch )
+template <typename T, typename U> struct AndTest {
+  static bool characterTest(QString::const_iterator ch)
   {
-    return T::characterTest( ch ) && U::characterTest( ch );
+    return T::characterTest(ch) && U::characterTest(ch);
   }
 };
 
-template<typename T, typename U>
-struct OrTest
-{
-  static bool characterTest( QString::const_iterator ch )
+template <typename T, typename U> struct OrTest {
+  static bool characterTest(QString::const_iterator ch)
   {
-    return T::characterTest( ch ) || U::characterTest( ch );
+    return T::characterTest(ch) || U::characterTest(ch);
   }
 };
 
-template<typename T>
-struct Negate
-{
-  static bool characterTest( QString::const_iterator ch )
+template <typename T> struct Negate {
+  static bool characterTest(QString::const_iterator ch)
   {
-    return !T::characterTest( ch );
+    return !T::characterTest(ch);
   }
 };
 
-struct IsSpace
-{
-  static bool characterTest( QString::const_iterator ch )
+struct IsSpace {
+  static bool characterTest(QString::const_iterator ch)
   {
     return ch->isSpace();
   }
 };
 
-template<char c>
-struct CharacterTest
-{
-  static bool characterTest( QString::const_iterator ch )
+template <char c> struct CharacterTest {
+  static bool characterTest(QString::const_iterator ch)
   {
-    return *ch == QLatin1Char( c );
+    return *ch == QLatin1Char(c);
   }
 };
-
 }
 
 #endif

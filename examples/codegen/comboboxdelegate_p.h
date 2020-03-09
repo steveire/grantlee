@@ -30,7 +30,8 @@
 class ComboBoxEditorCreator : public QItemEditorCreatorBase
 {
 public:
-  explicit ComboBoxEditorCreator(const QStringList &data, ComboBoxDelegate::Type type);
+  explicit ComboBoxEditorCreator(const QStringList &data,
+                                 ComboBoxDelegate::Type type);
   virtual ~ComboBoxEditorCreator();
 
   /* reimp */ QWidget *createWidget(QWidget *parent) const;
@@ -47,7 +48,7 @@ class ViewComboBox : public QComboBox
   Q_OBJECT
   Q_PROPERTY(QString choice READ choice WRITE setChoice)
 public:
-  explicit ViewComboBox(QWidget* parent = 0);
+  explicit ViewComboBox(QWidget *parent = 0);
 
   QString choice() const;
   void setChoice(const QString &choice);

@@ -19,56 +19,48 @@
 */
 
 #include "scriptableparser.h"
-#include "scriptablenode.h"
 
 #include "parser.h"
 
+#include <QtQml/QJSEngine>
 
-ScriptableParser::ScriptableParser( Grantlee::Parser* p, QObject* parent )
-    : QObject( parent ), m_p( p )
+ScriptableParser::ScriptableParser(Grantlee::Parser *p, QJSEngine *engine)
+    : QObject(engine), m_p(p), m_engine(engine)
 {
 }
 
-void ScriptableParser::removeNextToken()
+void ScriptableParser::removeNextToken() { m_p->removeNextToken(); }
+
+bool ScriptableParser::hasNextToken() const { return m_p->hasNextToken(); }
+
+void ScriptableParser::loadLib(const QString &name) { m_p->loadLib(name); }
+
+QJSValue ScriptableParser::takeNextToken()
 {
-  m_p->removeNextToken();
+  Token t = m_p->takeNextToken();
+  auto obj = m_engine->newObject();
+  obj.setProperty(QStringLiteral("tokenType"), t.tokenType);
+  obj.setProperty(QStringLiteral("content"), t.content);
+  return obj;
 }
 
-bool ScriptableParser::hasNextToken() const
+void ScriptableParser::skipPast(const QString &tag) { m_p->skipPast(tag); }
+
+QList<QObject *> ScriptableParser::parse(QObject *parent, const QString &stopAt)
 {
-  return m_p->hasNextToken();
+  return parse(parent, QStringList() << stopAt);
 }
 
-void ScriptableParser::loadLib( const QString& name )
+QList<QObject *> ScriptableParser::parse(QObject *parent,
+                                         const QStringList &stopAt)
 {
-  m_p->loadLib( name );
-}
+  auto node = qobject_cast<Node *>(parent);
+  Q_ASSERT(node);
 
-Token ScriptableParser::takeNextToken()
-{
-  return m_p->takeNextToken();
-}
-
-void ScriptableParser::skipPast( const QString& tag )
-{
-  m_p->skipPast( tag );
-}
-
-QObjectList ScriptableParser::parse( QObject *parent, const QString& stopAt )
-{
-  return parse( parent, QStringList() << stopAt );
-}
-
-QObjectList ScriptableParser::parse( QObject *parent, const QStringList& stopAt )
-{
-  Node *node = qobject_cast<Node*>( parent );
-  Q_ASSERT( node );
-
-  NodeList nodeList = m_p->parse( node, stopAt );
-  QObjectList objList;
-  QListIterator<Node*> it( nodeList );
-  while ( it.hasNext() ) {
-    objList << it.next();
+  auto nodeList = m_p->parse(node, stopAt);
+  QList<QObject *> objList;
+  for (auto n : nodeList) {
+    objList << n;
   }
   return objList;
 }

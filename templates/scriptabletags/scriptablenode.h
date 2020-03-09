@@ -21,14 +21,11 @@
 #ifndef SCRIPTABLE_NODE_H
 #define SCRIPTABLE_NODE_H
 
-#include <QtScript/QScriptValue>
-
-#include <QtCore/QSharedPointer>
+#include <QtQml/QJSValue>
 
 #include "node.h"
 
-class QScriptEngine;
-class QScriptContext;
+class QJSEngine;
 
 namespace Grantlee
 {
@@ -36,57 +33,44 @@ class Context;
 class Engine;
 }
 
-typedef QSharedPointer<QScriptEngine> ScriptEnginePointer;
-
 using namespace Grantlee;
-
-QScriptValue ScriptableNodeConstructor( QScriptContext *context,
-                                        QScriptEngine *engine );
-
-
-QScriptValue nodeToScriptValue( QScriptEngine *engine, Node* const &node );
-
-void nodeFromScriptValue( const QScriptValue &object, Node* &out );
 
 class ScriptableNode : public Node
 {
   Q_OBJECT
 public:
-  ScriptableNode( QObject* parent = 0 );
-  void setScriptEngine( QScriptEngine* engine );
-  void init( const QScriptValue &concreteNode,
-             const QScriptValue &renderMethod );
+  ScriptableNode(QObject *parent = {});
+  void setScriptEngine(QJSEngine *engine);
+  void init(const QJSValue &concreteNode, const QJSValue &renderMethod);
 
-  QScriptEngine* engine();
+  QJSEngine *engine();
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
-  QScriptEngine* m_scriptEngine;
-  QScriptValue m_concreteNode;
-  QScriptValue m_renderMethod;
+  QJSEngine *m_scriptEngine;
+  QJSValue m_concreteNode;
+  QJSValue m_renderMethod;
 
 public Q_SLOTS:
-  void setNodeList( const QString &name, QObjectList );
-
+  void setNodeList(const QString &name, const QList<QObject *> &);
 };
 
 class ScriptableNodeFactory : public AbstractNodeFactory
 {
   Q_OBJECT
 public:
-  ScriptableNodeFactory( QObject* parent = 0 );
-  void setScriptEngine( QScriptEngine *engine );
+  ScriptableNodeFactory(QObject *parent = {});
+  void setScriptEngine(QJSEngine *engine);
 
-  /* reimp */ void setEngine( Grantlee::Engine *engine );
-  void setFactory( QScriptValue factoryMethod );
+  void setEngine(Grantlee::Engine *engine) override;
+  void setFactory(const QJSValue &factoryMethod);
 
-  Node* getNode( const QString &tagContent, Parser *p = 0 ) const;
+  Node *getNode(const QString &tagContent, Parser *p = {}) const override;
 
 private:
-  QScriptEngine* m_scriptEngine;
-  QScriptValue m_factoryMethod;
+  QJSEngine *m_scriptEngine;
+  QJSValue m_factoryMethod;
 };
-
 
 #endif

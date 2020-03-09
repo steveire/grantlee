@@ -31,24 +31,22 @@ class WithLocaleNodeFactory : public AbstractNodeFactory
 public:
   WithLocaleNodeFactory();
 
-  Node* getNode( const QString &tagContent, Parser *p ) const;
-
+  Node *getNode(const QString &tagContent, Parser *p) const override;
 };
 
 class WithLocaleNode : public Node
 {
   Q_OBJECT
 public:
-  WithLocaleNode( const FilterExpression &localeName, QObject *parent = 0 );
+  WithLocaleNode(const FilterExpression &localeName, QObject *parent = {});
 
-  void setNodeList( NodeList nodeList );
+  void setNodeList(const NodeList &nodeList);
 
-  void render( OutputStream *stream, Context *c ) const;
+  void render(OutputStream *stream, Context *c) const override;
 
 private:
   FilterExpression m_localeName;
   NodeList m_list;
-
 };
 
 #endif
