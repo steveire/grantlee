@@ -93,6 +93,8 @@ QVariant DateFilter::doFilter(const QVariant &input, const QVariant &argument,
     d = input.toDateTime();
   } else if (input.type() == QVariant::Date) {
     d.setDate(input.toDate());
+  } else if (input.type() == QVariant::Time) {
+    d.setTime(input.toTime());
   } else {
 #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
     d = QDateTime::fromString(getSafeString(input),

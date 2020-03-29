@@ -472,6 +472,20 @@ void TestFilters::testStringFilters_data()
       << QStringLiteral("{{ a|floatformat }} {{ b|floatformat }}") << dict
       << QStringLiteral("1.4 1.4") << NoError;
 
+  dict.clear();
+  dict.insert(QStringLiteral("a"), double(1234.54321));
+  dict.insert(QStringLiteral("b"), int(1234));
+
+  QTest::newRow("filter-floatformat03")
+      << QStringLiteral("{{ a|floatformat }} {{ b|floatformat }}") << dict
+      << QStringLiteral("1234.5 1234.0") << NoError;
+  QTest::newRow("filter-floatformat04")
+      << QStringLiteral("{{ a|floatformat:2 }} {{ b|floatformat:2 }}") << dict
+      << QStringLiteral("1234.54 1234.00") << NoError;
+  QTest::newRow("filter-floatformat04")
+      << QStringLiteral("{{ a|floatformat:0 }} {{ b|floatformat:0 }}") << dict
+      << QStringLiteral("1235 1234") << NoError;
+
   //  The contents of "linenumbers" is escaped according to the current
   //  autoescape setting.
 
