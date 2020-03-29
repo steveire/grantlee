@@ -115,10 +115,25 @@ QVariant TimeFilter::doFilter(const QVariant &input, const QVariant &argument,
                               bool autoescape) const
 {
   Q_UNUSED(autoescape)
+  QDateTime d;
+  if (input.type() == QVariant::DateTime) {
+    d = input.toDateTime();
+  } else if (input.type() == QVariant::Date) {
+    d.setDate(input.toDate());
+  } else if (input.type() == QVariant::Time) {
+    d.setTime(input.toTime());
+  } else {
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+    d = QDateTime::fromString(getSafeString(input),
+                              QStringLiteral("yyyy-MM-ddThh:mm:ss"));
+#else
+    d = QDateTime::fromString(getSafeString(input),
+                              QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz"));
+#endif
+  }
+
   auto argString = getSafeString(argument);
-  return QDateTime::fromString(getSafeString(input),
-                               QStringLiteral("yyyy-MM-ddThh:mm:ss"))
-      .toString(argString);
+  return d.toString(argString);
 }
 
 QVariant TimeSinceFilter::doFilter(const QVariant &input,
