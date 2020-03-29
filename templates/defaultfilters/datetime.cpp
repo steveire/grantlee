@@ -88,13 +88,20 @@ QVariant DateFilter::doFilter(const QVariant &input, const QVariant &argument,
                               bool autoescape) const
 {
   Q_UNUSED(autoescape)
-  auto d = QDateTime::fromString(getSafeString(input),
+  QDateTime d;
+  if (input.type() == QVariant::DateTime) {
+    d = input.toDateTime();
+  } else if (input.type() == QVariant::Date) {
+    d.setDate(input.toDate());
+  } else {
 #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
-                                 QStringLiteral("yyyy-MM-ddThh:mm:ss")
+    d = QDateTime::fromString(getSafeString(input),
+                              QStringLiteral("yyyy-MM-ddThh:mm:ss"));
 #else
-                                 QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")
+    d = QDateTime::fromString(getSafeString(input),
+                              QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz"));
 #endif
-  );
+  }
 
   auto argString = getSafeString(argument);
 
