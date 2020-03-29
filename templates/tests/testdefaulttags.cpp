@@ -462,10 +462,14 @@ void TestDefaultTags::testIfTag_data()
                                << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
-  dict.insert(QStringLiteral("foostring"), QStringLiteral("foo"));
-  QTest::newRow("if-tag-eq06") << QStringLiteral(
-      "{% if foostring == \'foo\' %}yes{% else %}no{% endif %}")
-                               << dict << QStringLiteral("yes") << NoError;
+  QTest::newRow("if-tag-eq07")
+      << QStringLiteral("{% if \"foo\" == \"foo\" %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
+  dict.clear();
+  dict.insert(QStringLiteral("foo"), QStringLiteral("bar"));
+  QTest::newRow("if-tag-eq08")
+      << QStringLiteral("{% if foo == \"bar\" %}yes{% else %}no{% endif %}")
+      << dict << QStringLiteral("yes") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("zoo"), QVariant::fromValue(new Zoo(this)));
