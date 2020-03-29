@@ -206,8 +206,9 @@ bool InMemoryTemplateLoader::canLoadTemplate(const QString &name) const
 Template InMemoryTemplateLoader::loadByName(const QString &name,
                                             Engine const *engine) const
 {
-  if (m_namedTemplates.contains(name)) {
-    return engine->newTemplate(m_namedTemplates.value(name), name);
+  const auto it = m_namedTemplates.constFind(name);
+  if (it != m_namedTemplates.constEnd()) {
+    return engine->newTemplate(it.value(), name);
   }
   throw Grantlee::Exception(
       TagSyntaxError,

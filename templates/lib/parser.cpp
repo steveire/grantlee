@@ -156,10 +156,12 @@ void Parser::skipPast(const QString &tag)
 QSharedPointer<Filter> Parser::getFilter(const QString &name) const
 {
   Q_D(const Parser);
-  if (!d->m_filters.contains(name))
-    throw Grantlee::Exception(UnknownFilterError,
-                              QStringLiteral("Unknown filter: %1").arg(name));
-  return d->m_filters.value(name);
+  const auto it = d->m_filters.constFind(name);
+  if (it != d->m_filters.constEnd()) {
+    return it.value();
+  }
+  throw Grantlee::Exception(UnknownFilterError,
+                            QStringLiteral("Unknown filter: %1").arg(name));
 }
 
 NodeList Parser::parse(Node *parent, const QString &stopAt)

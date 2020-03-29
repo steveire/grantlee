@@ -101,9 +101,10 @@ QVariant Context::lookup(const QString &str) const
   Q_D(const Context);
 
   // return a variant from the stack.
-  for (auto &h : d->m_variantHashStack) {
-    if (h.contains(str)) {
-      auto var = h.value(str);
+  for (const auto &h : d->m_variantHashStack) {
+    auto it = h.constFind(str);
+    if (it != h.constEnd()) {
+      auto var = it.value();
       // If the user passed a string into the context, turn it into a
       // Grantlee::SafeString.
       if (var.userType() == qMetaTypeId<QString>()) {

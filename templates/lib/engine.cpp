@@ -288,8 +288,9 @@ EnginePrivate::loadScriptableLibrary(const QString &name, uint minorVersion)
   if (libFileName.isEmpty())
     return nullptr;
 
-  if (m_scriptableLibraries.contains(libFileName)) {
-    auto library = m_scriptableLibraries.value(libFileName);
+  const auto it = m_scriptableLibraries.constFind(libFileName);
+  if (it != m_scriptableLibraries.constEnd()) {
+    auto library = it.value();
     library->setNodeFactories(
         m_scriptableTagLibrary->nodeFactories(libFileName));
     library->setFilters(m_scriptableTagLibrary->filters(libFileName));

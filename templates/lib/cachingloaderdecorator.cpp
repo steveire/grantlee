@@ -87,8 +87,10 @@ CachingLoaderDecorator::loadByName(const QString &name,
                                    const Grantlee::Engine *engine) const
 {
   Q_D(const CachingLoaderDecorator);
-  if (d->m_cache.contains(name))
-    return d->m_cache.value(name);
+  const auto it = d->m_cache.constFind(name);
+  if (it != d->m_cache.constEnd()) {
+    return it.value();
+  }
 
   const auto t = d->m_wrappedLoader->loadByName(name, engine);
 
