@@ -489,3 +489,98 @@ QVariant SlugifyFilter::doFilter(const QVariant &input,
   return markSafe(inputString.replace(
       QRegularExpression(QStringLiteral("[-\\s]+")), QChar::fromLatin1('-')));
 }
+
+QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
+                                        const QVariant &argument,
+                                        bool autoescape) const
+{
+  QVariant ret;
+
+  Q_UNUSED(autoescape)
+  const auto arg = getSafeString(argument);
+  bool numberConvert = true;
+
+  qreal size = 0.0f;
+  if (input.canConvert<qreal>()) {
+    size = input.toReal(&numberConvert);
+    if (!numberConvert) {
+      qWarning("%s",
+               "Failed to convert input file size into floating point value.");
+    }
+  } else {
+    size = getSafeString(input).get().toDouble(&numberConvert);
+    if (!numberConvert) {
+      qWarning("%s",
+               "Failed to convert input file size into floating point value.");
+    }
+  }
+
+  int unitSystem = 10;
+  int precision = 2;
+  qreal multiplier = 1.0f;
+
+  if (!arg.get().isEmpty()) {
+    const auto argList = arg.get().split(QLatin1Char(','),
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                                         QString::SkipEmptyParts
+#else
+                                         Qt::SkipEmptyParts
+#endif
+    );
+    const auto numArgs = argList.size();
+    if (numArgs > 0) {
+      unitSystem = argList.at(0).toInt(&numberConvert);
+      if (!numberConvert) {
+        qWarning("%s", "Failed to convert filse size format unit system into "
+                       "integer. Falling back to default 10.");
+        unitSystem = 10;
+      }
+    }
+
+    if (numArgs > 1) {
+      precision = argList.at(1).toInt(&numberConvert);
+      if (!numberConvert) {
+        qWarning("%s", "Failed to convert file size format decimal precision "
+                       "into integer. Falling back to default 2.");
+        precision = 2;
+      }
+    }
+
+    if (numArgs > 2) {
+      multiplier = argList.at(2).toDouble(&numberConvert);
+      if (!numberConvert) {
+        qWarning("%s", "Failed to convert file size format multiplier into "
+                       "double value. Falling back to default 1.0");
+        multiplier = 1.0f;
+      } else {
+        if (multiplier == 0.0f) {
+          qWarning("%s", "It makes no sense to multiply the file size by zero. "
+                         "Using default value 1.0.");
+          multiplier = 1.0f;
+        }
+      }
+    }
+  }
+
+  const double sizeMult = size * multiplier;
+
+  if (unitSystem == 10) {
+    if ((sizeMult > -1000) && (sizeMult < 1000)) {
+      precision = 0;
+    }
+  } else if (unitSystem == 2) {
+    if ((sizeMult > -1024) && (sizeMult < 1024)) {
+      precision = 0;
+    }
+  }
+
+  const std::pair<qreal, QString> sizePair
+      = calcFileSize(size, unitSystem, multiplier);
+
+  const QString retString = QString::number(sizePair.first, 'f', precision)
+                            + QLatin1Char(' ') + sizePair.second;
+
+  ret.setValue(retString);
+
+  return ret;
+}

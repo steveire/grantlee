@@ -985,6 +985,96 @@ void TestFilters::testStringFilters_data()
       << QStringLiteral("{% autoescape off %}{{ a|striptags }} {{ b|striptags "
                         "}}{% endautoescape %}")
       << dict << QStringLiteral("x y x y") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_int_mib"), 1048576);
+
+  QTest::newRow("filter-filesizeformat01")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat }}") << dict
+      << QStringLiteral("1.05 MB") << NoError;
+
+  QTest::newRow("filter-filesizeformat02")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat:\"2\" }}") << dict
+      << QStringLiteral("1.00 MiB") << NoError;
+
+  QTest::newRow("filter-filesizeformat03")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat:\"10,3\" }}") << dict
+      << QStringLiteral("1.049 MB") << NoError;
+
+  QTest::newRow("filter-filesizeformat04")
+      << QStringLiteral("{{ fs_int_mib|filesizeformat:\"10,2,1024\" }}") << dict
+      << QStringLiteral("1.07 GB") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_float_mib"), 1024.5);
+
+  QTest::newRow("filter-filesizeformat05")
+      << QStringLiteral("{{ fs_float_mib|filesizeformat:\"10,2,1024\" }}")
+      << dict << QStringLiteral("1.05 MB") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_string_mib"), QStringLiteral("1024.5"));
+
+  QTest::newRow("filter-filesizeformat06")
+      << QStringLiteral("{{ fs_string_mib|filesizeformat:\"10,2,1024\" }}")
+      << dict << QStringLiteral("1.05 MB") << NoError;
+
+  dict.clear();
+  dict.insert(QStringLiteral("fs_bytes"), 999);
+  dict.insert(QStringLiteral("fs_kb"), 1000);
+  dict.insert(QStringLiteral("fs_10kb"), 10 * 1000);
+  dict.insert(QStringLiteral("fs_1000kb"), 1000 * 1000 - 1);
+  dict.insert(QStringLiteral("fs_mb"), 1000 * 1000);
+  dict.insert(QStringLiteral("fs_50mb"), 1000 * 1000 * 50);
+  dict.insert(QStringLiteral("fs_1000mb"), 1000 * 1000 * 1000 - 1);
+  dict.insert(QStringLiteral("fs_gb"), 1000 * 1000 * 1000);
+  dict.insert(QStringLiteral("fs_tb"),
+              static_cast<double>(1000.0 * 1000.0 * 1000.0 * 1000.0));
+  dict.insert(QStringLiteral("fs_pb"),
+              static_cast<double>(1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0));
+  dict.insert(
+      QStringLiteral("fs_eb"),
+      static_cast<double>(1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0 * 2000.0));
+  dict.insert(QStringLiteral("fs_zb"),
+              static_cast<double>(1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0
+                                  * 1000.0 * 1000.0));
+  dict.insert(QStringLiteral("fs_yb"),
+              static_cast<double>(1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0
+                                  * 1000.0 * 1000.0 * 1000.0));
+  dict.insert(QStringLiteral("fs_2000yb"),
+              static_cast<double>(1000.0 * 1000.0 * 1000.0 * 1000.0 * 1000.0
+                                  * 1000.0 * 1000.0 * 1000.0 * 2000.0));
+  dict.insert(QStringLiteral("fs_0b1"), 0.1);
+  dict.insert(QStringLiteral("fs_0b2"), QString(QChar(0x03B1)));
+  dict.insert(QStringLiteral("fs_neg_1"), -100);
+  dict.insert(QStringLiteral("fs_neg_2"), -1000 * 1000 * 50);
+
+  // fixes tests on MSVC2013
+  QString fsInput;
+  fsInput = QStringLiteral(
+      "{{ fs_bytes|filesizeformat }} {{ fs_kb|filesizeformat }} {{ "
+      "fs_10kb|filesizeformat }} {{ fs_1000kb|filesizeformat }} ");
+  fsInput += QStringLiteral(
+      "{{ fs_mb|filesizeformat }} {{ fs_50mb|filesizeformat }} {{ "
+      "fs_1000mb|filesizeformat }} {{ fs_gb|filesizeformat }} ");
+  fsInput += QStringLiteral(
+      "{{ fs_tb|filesizeformat }} {{ fs_pb|filesizeformat }} {{ "
+      "fs_eb|filesizeformat }} {{ fs_zb|filesizeformat }} ");
+  fsInput += QStringLiteral(
+      "{{ fs_yb|filesizeformat }} {{ fs_2000yb|filesizeformat }} {{ "
+      "fs_0b1|filesizeformat }} {{ fs_0b2|filesizeformat }} ");
+  fsInput += QStringLiteral(
+      "{{ fs_neg_1|filesizeformat }} {{ fs_neg_2|filesizeformat }}");
+
+  QString fsExpect;
+  fsExpect = QStringLiteral("999 bytes 1.00 KB 10.00 KB 1000.00 KB ");
+  fsExpect += QStringLiteral("1.00 MB 50.00 MB 1000.00 MB 1.00 GB ");
+  fsExpect += QStringLiteral("1.00 TB 1.00 PB 2.00 EB 1.00 ZB ");
+  fsExpect += QStringLiteral("1.00 YB 2000.00 YB 0 bytes 0 bytes ");
+  fsExpect += QStringLiteral("-100 bytes -50.00 MB");
+
+  QTest::newRow("filter-filesizeformat07")
+      << fsInput << dict << fsExpect << NoError;
 }
 
 void TestFilters::testListFilters_data()

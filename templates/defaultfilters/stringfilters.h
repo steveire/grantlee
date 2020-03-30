@@ -259,4 +259,14 @@ public:
   bool isSafe() const override { return true; }
 };
 
+class FileSizeFormatFilter : public Filter
+{
+public:
+  QVariant doFilter(const QVariant &input,
+                    const QVariant &argument = QVariant(),
+                    bool autoescape = {}) const override;
+
+  bool isSafe() const override { return true; }
+};
+
 #endif

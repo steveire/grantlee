@@ -168,6 +168,79 @@ bool Grantlee::equals(const QVariant &lhs, const QVariant &rhs)
   return equal;
 }
 
+std::pair<qreal, QString> Grantlee::calcFileSize(qreal size, int unitSystem,
+                                                 qreal multiplier)
+{
+  std::pair<qreal, QString> ret;
+
+  int _unitSystem = unitSystem;
+
+  if ((_unitSystem != 2) && (_unitSystem != 10)) {
+    qWarning("%s", "Unrecognized file size unit system. Falling back to "
+                   "decimal unit system.");
+    _unitSystem = 10;
+  }
+
+  if (size == 0.0) {
+    ret.first = 0.0;
+    ret.second = QStringLiteral("bytes");
+    return ret;
+  } else if ((size == 1.0) || (size == -1.0)) {
+    ret.first = 1.0;
+    ret.second = QStringLiteral("byte");
+    return ret;
+  }
+
+  qreal _size = size * multiplier;
+
+  const bool positiveValue = (_size > 0);
+
+  if (!positiveValue) {
+    _size *= -1;
+  }
+
+  static const QStringList binaryUnits(
+      {QStringLiteral("bytes"), QStringLiteral("KiB"), QStringLiteral("MiB"),
+       QStringLiteral("GiB"), QStringLiteral("TiB"), QStringLiteral("PiB"),
+       QStringLiteral("EiB"), QStringLiteral("ZiB"), QStringLiteral("YiB")});
+
+  static const QStringList decimalUnits(
+      {QStringLiteral("bytes"), QStringLiteral("KB"), QStringLiteral("MB"),
+       QStringLiteral("GB"), QStringLiteral("TB"), QStringLiteral("PB"),
+       QStringLiteral("EB"), QStringLiteral("ZB"), QStringLiteral("YB")});
+
+  bool found = false;
+  int count = 0;
+  const qreal baseVal = (_unitSystem == 10) ? 1000.0f : 1024.0f;
+  qreal current = 1.0f;
+  int units = decimalUnits.size();
+  while (!found && (count < units)) {
+    current *= baseVal;
+    if (_size < current) {
+      found = true;
+      break;
+    }
+    count++;
+  }
+
+  if (count >= units) {
+    count = (units - 1);
+  }
+
+  qreal devider = current / baseVal;
+  _size = _size / devider;
+
+  if (!positiveValue) {
+    _size *= -1.0;
+  }
+
+  ret.first = _size;
+  ret.second
+      = (_unitSystem == 10) ? decimalUnits.at(count) : binaryUnits.at(count);
+
+  return ret;
+}
+
 Grantlee::SafeString Grantlee::toString(const QVariantList &list)
 {
   QString output(QLatin1Char('['));
