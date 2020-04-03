@@ -101,18 +101,26 @@ void RegroupNode::render(OutputStream *stream, Context *c) const
       auto hashVar = contextList.last();
       hash = hashVar.value<QVariantHash>();
     }
-    if (!hash.contains(QStringLiteral("grouper"))
-        || hash.value(QStringLiteral("grouper")) != key) {
-      QVariantHash newHash;
-      hash.insert(QStringLiteral("grouper"), key);
-      hash.insert(QStringLiteral("list"), QVariantList());
-      contextList.append(newHash);
-    }
 
-    auto list = hash.value(QStringLiteral("list")).value<QVariantList>();
-    list.append(var);
-    hash.insert(QStringLiteral("list"), list);
-    contextList[contextList.size() - 1] = hash;
+    const auto it = hash.constFind(QStringLiteral("grouper"));
+    if (it == hash.constEnd() || it.value() != key) {
+      contextList.append(QVariantHash{
+          {QStringLiteral("grouper"), key},
+          {QStringLiteral("list"), QVariantList{var}},
+      });
+    } else {
+      QVariantList list;
+      auto itList = hash.find(QStringLiteral("list"));
+      if (itList != hash.end()) {
+        list = itList.value().value<QVariantList>();
+        list.append(var);
+        *itList = list;
+      } else {
+        list.append(var);
+        hash.insert(QStringLiteral("list"), list);
+      }
+      contextList[contextList.size() - 1] = hash;
+    }
   }
   c->insert(m_varName, contextList);
 }
