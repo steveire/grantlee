@@ -1639,6 +1639,15 @@ void TestDefaultTags::testWithTag_data()
       "{{ key }}{% with dict.key as key %}{{ key }}-{{ dict.key }}-{{ key }}{% "
       "endwith %}{{ key }}")
                           << dict << QStringLiteral("50-50-50") << NoError;
+  QTest::newRow("with03") << QStringLiteral(
+      "{{ key }}{% with key=dict.key %}{{ key }}-{{ dict.key }}-{{ key }}{% "
+      "endwith %}{{ key }}")
+                          << dict << QStringLiteral("50-50-50") << NoError;
+  QTest::newRow("with04") << QStringLiteral(
+      "{{ key1 }}{% with key1=dict.key key2=dict.key key3=dict.key %}{{ key1 "
+      "}}-{{ dict.key }}-{{ key3 }}{% "
+      "endwith %}{{ key }}")
+                          << dict << QStringLiteral("50-50-50") << NoError;
   QTest::newRow("with-error01")
       << QStringLiteral("{% with dict.key xx key %}{{ key }}{% endwith %}")
       << dict << QString() << TagSyntaxError;

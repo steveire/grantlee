@@ -38,16 +38,16 @@ class WithNode : public Node
 {
   Q_OBJECT
 public:
-  WithNode(const FilterExpression &expression, const QString &name,
-           QObject *parent = {});
+  WithNode(
+      const std::vector<std::pair<QString, FilterExpression>> &namedExpressions,
+      QObject *parent = {});
 
   void setNodeList(const NodeList &nodeList);
 
   void render(OutputStream *stream, Context *c) const override;
 
 private:
-  FilterExpression m_filterExpression;
-  QString m_name;
+  std::vector<std::pair<QString, FilterExpression>> m_namedExpressions;
   NodeList m_list;
 };
 
