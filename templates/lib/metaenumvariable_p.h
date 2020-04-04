@@ -44,6 +44,13 @@ struct MetaEnumVariable {
 
   bool operator==(int otherValue) const { return value == otherValue; }
 
+  bool operator<(const MetaEnumVariable &other) const
+  {
+    return value < other.value;
+  }
+
+  bool operator<(int otherValue) const { return value < otherValue; }
+
   QMetaEnum enumerator;
   int value;
 };
