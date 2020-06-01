@@ -477,8 +477,13 @@ MarkupDirector::processImage(QTextBlock::iterator it,
 {
   Q_UNUSED(doc)
   // TODO: Close any open format elements?
-  m_builder->insertImage(imageFormat.name(), imageFormat.width(),
-                         imageFormat.height());
+  QImage image = doc->resource(QTextDocument::ImageResource, QUrl(imageFormat.name())).value<QImage>();
+  if (image.isNull()) {
+    m_builder->insertImage(imageFormat.name(), imageFormat.width(),
+                           imageFormat.height());
+  } else {
+    m_builder->insertImage(image, imageFormat.width(), imageFormat.height());
+  }
   if (!it.atEnd())
     return ++it;
   return it;

@@ -100,6 +100,13 @@ void BBCodeBuilder::insertImage(const QString &src, qreal width, qreal height)
   m_text.append(QStringLiteral("[IMG]%1[/IMG]").arg(src));
 }
 
+void BBCodeBuilder::insertImage(const QImage &image, qreal width, qreal height)
+
+  Q_UNUSED(image);
+  Q_UNUSED(width);
+  Q_UNUSED(height);
+}
+
 void BBCodeBuilder::beginList(QTextListFormat::Style type)
 {
   switch (type) {

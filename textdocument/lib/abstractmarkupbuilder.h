@@ -158,6 +158,14 @@ public:
   virtual void insertImage(const QString &url, qreal width, qreal height) = 0;
 
   /**
+    Insert a new inline image into the markup
+    @param image The image itself
+    @param width The width of the image
+    @param height The height of the image
+   */
+  virtual void insertImage(const QImage &image, qreal width, qreal height) = 0;
+
+  /**
     Begin a new list element in the markup.
     A list element contains list items, and may contain other lists.
     @param style The style of list to create.

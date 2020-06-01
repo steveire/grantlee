@@ -21,6 +21,7 @@
 #include "texthtmlbuilder.h"
 
 #include <QtCore/QList>
+#include <QtCore/QBuffer>
 #include <QtGui/QTextDocument>
 
 namespace Grantlee
@@ -297,6 +298,20 @@ void TextHTMLBuilder::insertImage(const QString &src, qreal width, qreal height)
 {
   Q_D(TextHTMLBuilder);
   d->m_text.append(QStringLiteral("<img src=\"%1\" ").arg(src));
+  if (width != 0)
+    d->m_text.append(QStringLiteral("width=\"%2\" ").arg(width));
+  if (height != 0)
+    d->m_text.append(QStringLiteral("height=\"%2\" ").arg(height));
+  d->m_text.append(QStringLiteral("/>"));
+}
+
+void TextHTMLBuilder::insertImage(const QImage &image, qreal width, qreal height)
+{
+  Q_D(TextHTMLBuilder);
+  QByteArray data;
+  QBuffer buffer(&data);
+  image.save(&buffer, "PNG");
+  d->m_text.append(QStringLiteral("<img src=\"data:image/png;base64,%1\" ").arg(QString::fromLatin1(data.toBase64())));
   if (width != 0)
     d->m_text.append(QStringLiteral("width=\"%2\" ").arg(width));
   if (height != 0)
