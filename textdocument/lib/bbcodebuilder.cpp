@@ -101,7 +101,7 @@ void BBCodeBuilder::insertImage(const QString &src, qreal width, qreal height)
 }
 
 void BBCodeBuilder::insertImage(const QImage &image, qreal width, qreal height)
-
+{
   Q_UNUSED(image);
   Q_UNUSED(width);
   Q_UNUSED(height);
