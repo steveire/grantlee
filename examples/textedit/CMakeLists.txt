@@ -44,5 +44,16 @@ add_executable(textedit
 target_link_libraries(
   textedit
   Grantlee5::Templates
-  Qt5::Widgets
 )
+
+if (GRANTLEE_BUILD_WITH_QT6)
+  target_link_libraries(
+    textedit
+    Qt6::Widgets
+  )
+else()
+  target_link_libraries(
+    textedit
+    Qt5::Widgets
+  )
+endif()

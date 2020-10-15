@@ -1,11 +1,20 @@
-find_package(Qt5Test 5.2.0 REQUIRED)
+
+if (GRANTLEE_BUILD_WITH_QT6)
+    find_package(Qt6Test 6.0.0 REQUIRED)
+else()
+    find_package(Qt5Test 5.2.0 REQUIRED)
+endif()
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 add_library(textdocument_test_builtins STATIC
   coverageobject.cpp
 )
-target_link_libraries(textdocument_test_builtins Qt5::Test)
+if (GRANTLEE_BUILD_WITH_QT6)
+    target_link_libraries(textdocument_test_builtins Qt6::Test)
+else()
+    target_link_libraries(textdocument_test_builtins Qt5::Test)
+endif()
 target_compile_features(textdocument_test_builtins PUBLIC cxx_auto_type)
 
 macro(GRANTLEE_TEXTDOCUMENT_UNIT_TESTS)

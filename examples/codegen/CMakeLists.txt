@@ -40,5 +40,13 @@ find_package(Qt5Widgets REQUIRED)
 target_link_libraries(
   codegen
   Grantlee5::Templates
-  Qt5::Widgets
 )
+if (GRANTLEE_BUILD_WITH_QT6)
+    target_link_libraries(codegen
+      Qt6::Widgets
+    )
+else()
+    target_link_libraries(codegen
+      Qt5::Widgets
+    )
+endif()

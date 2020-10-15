@@ -21,6 +21,7 @@ option( BUILD_TEXTDOCUMENT "Build the Grantlee textdocument library" TRUE )
 option( BUILD_MAIN_PLUGINS "Build the Grantlee Templates plugins" TRUE )
 option( BUILD_I18N_PLUGIN "Build the Grantlee Templates i18n plugin" TRUE )
 option( BUILD_TESTS "Build the Grantlee tests" TRUE )
+option( GRANTLEE_BUILD_WITH_QT6 "Build Grantlee with Qt 6" FALSE)
 
 if (BUILD_TESTS)
   enable_testing()
@@ -214,8 +215,13 @@ if(LCOV_FOUND)
   # For an unknown reason lcov does not work with absolute paths such as ${CMAKE_BINARY_DIR}
   file(RELATIVE_PATH relBinaryDir / ${CMAKE_BINARY_DIR})
 
-  find_package(Qt5Core REQUIRED)
-  get_property(qmake_loc TARGET Qt5::qmake PROPERTY LOCATION)
+  if (GRANTLEE_BUILD_WITH_QT6)
+    find_package(Qt6Core REQUIRED)
+    get_property(qmake_loc TARGET Qt6::qmake PROPERTY LOCATION)
+  else()
+    find_package(Qt5Core REQUIRED)
+    get_property(qmake_loc TARGET Qt5::qmake PROPERTY LOCATION)
+  endif()
   execute_process(COMMAND "${qmake_loc}" -query QT_INSTALL_HEADERS
     RESULT_VARIABLE return_code
     OUTPUT_VARIABLE output

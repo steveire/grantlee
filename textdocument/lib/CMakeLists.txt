@@ -35,9 +35,15 @@ if (CMAKE_GENERATOR MATCHES "Visual Studio")
   endforeach()
 endif()
 
-target_link_libraries(Grantlee_TextDocument
-  PUBLIC Qt5::Gui
-)
+if (GRANTLEE_BUILD_WITH_QT6)
+  target_link_libraries(Grantlee_TextDocument
+    PUBLIC Qt6::Gui
+  )
+else()
+  target_link_libraries(Grantlee_TextDocument
+    PUBLIC Qt5::Gui
+  )
+endif()
 
 set_target_properties(Grantlee_TextDocument PROPERTIES
   VERSION    ${Grantlee5_VERSION}
