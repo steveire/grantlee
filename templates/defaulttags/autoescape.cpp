@@ -31,7 +31,13 @@ AutoescapeNodeFactory::AutoescapeNodeFactory() {}
 
 Node *AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
-  auto expr = tagContent.split(QLatin1Char(' '), QString::SkipEmptyParts);
+  auto expr = tagContent.split(QLatin1Char(' '),
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                                        QString::SkipEmptyParts
+#else
+                                        Qt::SkipEmptyParts
+#endif
+    );
 
   if (expr.size() != 2) {
     throw Grantlee::Exception(

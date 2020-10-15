@@ -56,7 +56,13 @@ Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
   }
 
   for (const QString &arg : expr.mid(0, expr.size() - 2)) {
-    vars << arg.split(QLatin1Char(','), QString::SkipEmptyParts);
+    vars << arg.split(QLatin1Char(','),
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                                        QString::SkipEmptyParts
+#else
+                                        Qt::SkipEmptyParts
+#endif
+      );
   }
 
   for (const QString &var : vars) {

@@ -231,7 +231,13 @@ QVariant TruncateWordsFilter::doFilter(const QVariant &input,
   }
 
   QString inputString = getSafeString(input);
-  auto words = inputString.split(QLatin1Char(' '), QString::SkipEmptyParts);
+  auto words = inputString.split(QLatin1Char(' '),
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                                        QString::SkipEmptyParts
+#else
+                                        Qt::SkipEmptyParts
+#endif
+    );
 
   if (words.size() > numWords) {
     words = words.mid(0, numWords);
@@ -348,7 +354,13 @@ QVariant WordWrapFilter::doFilter(const QVariant &input,
   Q_UNUSED(autoescape)
   QString _input = getSafeString(input);
   auto width = argument.value<int>();
-  auto partList = _input.split(QLatin1Char(' '), QString::SkipEmptyParts);
+  auto partList = _input.split(QLatin1Char(' '),
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                                        QString::SkipEmptyParts
+#else
+                                        Qt::SkipEmptyParts
+#endif
+    );
   if (partList.isEmpty())
     return QVariant();
   auto output = partList.takeFirst();

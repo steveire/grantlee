@@ -301,15 +301,33 @@ public:
     SafeString simplified() const;
 
     QStringList split(const SafeString &sep,
-                      SplitBehavior behavior = KeepEmptyParts,
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
+#else
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
+#endif
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     QStringList split(const QString &sep,
-                      SplitBehavior behavior = KeepEmptyParts,
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
+#else
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
+#endif
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-    QStringList split(const QChar &sep, SplitBehavior behavior = KeepEmptyParts,
+    QStringList split(const QChar &sep,
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
+#else
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
+#endif
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     QStringList split(const QRegularExpression &rx,
-                      SplitBehavior behavior = KeepEmptyParts) const;
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts
+#else
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts
+#endif
+                      ) const;
 
     SafeString toLower() const;
     SafeString toUpper() const;

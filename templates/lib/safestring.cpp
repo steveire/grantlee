@@ -636,21 +636,33 @@ SafeString SafeString::NestedString::simplified() const
 }
 
 QStringList SafeString::NestedString::split(const Grantlee::SafeString &sep,
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                                             QString::SplitBehavior behavior,
+#else
+                                            Qt::SplitBehavior behavior,
+#endif
                                             Qt::CaseSensitivity cs) const
 {
   return QString::split(sep.get(), behavior, cs);
 }
 
 QStringList SafeString::NestedString::split(const QString &sep,
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                                             QString::SplitBehavior behavior,
+#else
+                                            Qt::SplitBehavior behavior,
+#endif
                                             Qt::CaseSensitivity cs) const
 {
   return QString::split(sep, behavior, cs);
 }
 
 QStringList SafeString::NestedString::split(const QChar &sep,
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                                             QString::SplitBehavior behavior,
+#else
+                                            Qt::SplitBehavior behavior,
+#endif
                                             Qt::CaseSensitivity cs) const
 {
   return QString::split(sep, behavior, cs);
@@ -658,7 +670,12 @@ QStringList SafeString::NestedString::split(const QChar &sep,
 
 QStringList
 SafeString::NestedString::split(const QRegularExpression &rx,
-                                QString::SplitBehavior behavior) const
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+                                            QString::SplitBehavior behavior
+#else
+                                            Qt::SplitBehavior behavior
+#endif
+                                ) const
 {
   return QString::split(rx, behavior);
 }
