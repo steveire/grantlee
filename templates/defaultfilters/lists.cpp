@@ -28,6 +28,7 @@
 #include <QtCore/QRandomGenerator>
 #endif
 #include <QtCore/QDateTime>
+#include <QtCore/QSequentialIterable>
 
 QVariant JoinFilter::doFilter(const QVariant &input, const QVariant &argument,
                               bool autoescape) const

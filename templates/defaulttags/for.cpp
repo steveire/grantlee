@@ -24,6 +24,8 @@
 #include "metaenumvariable_p.h"
 #include "parser.h"
 
+#include <QtCore/QSequentialIterable>
+
 ForNodeFactory::ForNodeFactory() {}
 
 Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const

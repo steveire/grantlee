@@ -25,6 +25,8 @@
 #include "metaenumvariable_p.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QSequentialIterable>
+#include <QtCore/QAssociativeIterable>
 
 using namespace Grantlee;
 
