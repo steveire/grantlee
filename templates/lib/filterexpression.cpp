@@ -130,8 +130,7 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
         Q_ASSERT(f);
 
         d->m_filterNames << subString;
-        d->m_filters << qMakePair<QSharedPointer<Filter>, Variable>(f,
-                                                                    Variable());
+        d->m_filters << qMakePair(f, Variable());
 
       } else if (subString.startsWith(QLatin1Char(FILTER_ARGUMENT_SEPARATOR))) {
         if (d->m_filters.isEmpty()
