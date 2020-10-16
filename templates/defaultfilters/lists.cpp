@@ -327,7 +327,7 @@ QVariant DictSortFilter::doFilter(const QVariant &input,
   }
 
   DictSortLessThan lt;
-  qStableSort(keyList.begin(), keyList.end(), lt);
+  std::stable_sort(keyList.begin(), keyList.end(), lt);
 
   QVariantList outList;
   auto it = keyList.constBegin();
