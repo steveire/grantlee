@@ -367,7 +367,7 @@ void TestFilters::testDateBasedFilters_data()
   QTest::newRow("filter-timeuntil15") << QStringLiteral("{{|timeuntil}}")
                                       << dict << QStringLiteral("") << NoError;
 
-  QDateTime d(QDate(2008, 1, 1));
+  QDateTime d(QDate(2008, 1, 1), {});
 
   dict.clear();
   dict.insert(QStringLiteral("d"), d);

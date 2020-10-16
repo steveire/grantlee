@@ -138,7 +138,11 @@ QVariant RandomFilter::doFilter(const QVariant &input, const QVariant &argument,
   if (varList.isEmpty())
     return QVariant();
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 8, 0)
   qsrand(QDateTime::currentDateTimeUtc().toTime_t());
+#else
+  qsrand(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());
+#endif
   auto rnd = qrand() % varList.size();
   return varList.at(rnd);
 }
