@@ -40,6 +40,12 @@ matrix:
     - os: linux
       env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="-5.12.3" QT_VERSION_MM="512"
     - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="-5.13.2" QT_VERSION_MM="513"
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="-5.14.2" QT_VERSION_MM="514"
+    - os: linux
+      env: CONFIGS="Debug Release" GENERATORS="Ninja" COMPILERS="GNU" PPA_INFIX="-5.15.0" QT_VERSION_MM="515"
+    - os: linux
       env: CONFIGS="Coverage" GENERATORS="Makefiles" COMPILERS="GNU" PPA_INFIX="-5.12.3" QT_VERSION_MM="512"
 
 
