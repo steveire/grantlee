@@ -134,9 +134,10 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
 
     auto iter = object.value<QAssociativeIterable>();
 
-    auto mappedValue = iter.value(property);
-    if (mappedValue.isValid())
-      return mappedValue;
+    if (iter.find(property) != iter.end())
+    {
+        return iter.value(property);
+    }
 
     if (property == QStringLiteral("size")
         || property == QStringLiteral("count")) {
