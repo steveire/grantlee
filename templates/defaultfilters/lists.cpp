@@ -196,7 +196,7 @@ QVariant MakeListFilter::doFilter(const QVariant &_input,
   if (input.userType() == qMetaTypeId<SafeString>()
       || input.userType() == qMetaTypeId<QString>()) {
     QVariantList list;
-    Q_FOREACH (const QVariant &var, getSafeString(input).get().split(
+    for (const QVariant &var : getSafeString(input).get().split(
                                         QString(), QString::SkipEmptyParts))
       list << var;
     return list;
@@ -322,7 +322,7 @@ QVariant DictSortFilter::doFilter(const QVariant &input,
 
   QList<QPair<QVariant, QVariant>> keyList;
   const auto inList = input.value<QSequentialIterable>();
-  Q_FOREACH (const QVariant &item, inList) {
+  for (const QVariant &item : inList) {
     auto var = item;
 
     const Variable v(getSafeString(argument));
@@ -331,7 +331,7 @@ QVariant DictSortFilter::doFilter(const QVariant &input,
       var = MetaType::lookup(var, v.literal().value<QString>());
     } else {
       const auto lookups = v.lookups();
-      Q_FOREACH (const QString &lookup, lookups) {
+      for (const QString &lookup : lookups) {
         var = MetaType::lookup(var, lookup);
       }
     }

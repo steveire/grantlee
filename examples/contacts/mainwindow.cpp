@@ -101,7 +101,7 @@ MainWindow::MainWindow(const QString &templateDir, QWidget *parent,
     contactList[i]->setFriends(friends);
   }
 
-  Q_FOREACH (Contact *contact, contactList) {
+  for (Contact *contact : contactList) {
     m_list->addItem(contact);
   }
 
@@ -150,7 +150,7 @@ void MainWindow::render() const
   const QList<QListWidgetItem *> list = m_list->selectedItems();
   QVariantList contacts;
 
-  Q_FOREACH (QListWidgetItem *item, list)
+  for (QListWidgetItem *item : list)
     contacts << QVariant::fromValue(
         static_cast<QObject *>(static_cast<Contact *>(item)));
 

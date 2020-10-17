@@ -99,7 +99,7 @@ Parser::Parser(const QList<Token> &tokenList, QObject *parent)
 
   auto engine = const_cast<Engine *>(cengine);
   engine->loadDefaultLibraries();
-  Q_FOREACH (const QString &libraryName, engine->defaultLibraries()) {
+  for (const QString &libraryName : engine->defaultLibraries()) {
     auto library = engine->loadLibrary(libraryName);
     if (!library)
       continue;

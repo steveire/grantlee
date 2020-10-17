@@ -55,11 +55,11 @@ Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
             .arg(tagContent));
   }
 
-  Q_FOREACH (const QString &arg, expr.mid(0, expr.size() - 2)) {
+  for (const QString &arg : expr.mid(0, expr.size() - 2)) {
     vars << arg.split(QLatin1Char(','), QString::SkipEmptyParts);
   }
 
-  Q_FOREACH (const QString &var, vars) {
+  for (const QString &var : vars) {
     if (var.isEmpty())
       throw Grantlee::Exception(
           TagSyntaxError,
@@ -201,7 +201,7 @@ void ForNode::render(OutputStream *stream, Context *c) const
         // in the list. And each item in the list is not itself a list.
         // Probably have a list of objects that we're taking properties
         // from.
-        Q_FOREACH (const QString &loopVar, m_loopVars) {
+        for (const QString &loopVar : m_loopVars) {
           c->push();
           c->insert(QStringLiteral("var"), v);
           auto resolvedFE = FilterExpression(QStringLiteral("var.") + loopVar, nullptr)

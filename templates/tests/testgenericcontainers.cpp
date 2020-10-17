@@ -59,7 +59,7 @@ template <typename T> QVector<T> getItems()
 template <> QVector<QString> getItems<QString>()
 {
   QVector<QString> items;
-  Q_FOREACH (const int item, getItems<int>())
+  for (const int item : getItems<int>())
     items.push_back(QString::number(item));
   return items;
 }
@@ -67,7 +67,7 @@ template <> QVector<QString> getItems<QString>()
 template <> QVector<QVariant> getItems<QVariant>()
 {
   QVector<QVariant> items;
-  Q_FOREACH (const int item, getItems<int>())
+  for (const int item : getItems<int>())
     items.push_back(item);
   return items;
 }
@@ -105,14 +105,14 @@ template <> QVector<QObject *> getItems<QObject *>()
 template <typename Container> struct ContainerPopulator {
   static void populateSequential(Container &container)
   {
-    Q_FOREACH (const typename Container::value_type item,
+    for (const typename Container::value_type item :
                getItems<typename Container::value_type>())
       container.push_back(item);
   }
   static void populateAssociative(Container &container)
   {
     auto i = 0;
-    Q_FOREACH (const typename Container::mapped_type item,
+    for (const typename Container::mapped_type item :
                getItems<typename Container::mapped_type>())
       container[i++] = item;
   }
@@ -121,7 +121,7 @@ template <typename Container> struct ContainerPopulator {
 template <typename T> struct ContainerPopulator<QSet<T>> {
   static void populateSequential(QSet<T> &container)
   {
-    Q_FOREACH (const T item, getItems<T>())
+    for (const T item : getItems<T>())
       container.insert(item);
   }
 };
@@ -130,7 +130,7 @@ template <typename T> struct ContainerPopulator<QMap<QString, T>> {
   static void populateAssociative(QMap<QString, T> &container)
   {
     auto i = 0;
-    Q_FOREACH (const T item, getItems<T>())
+    for (const T item : getItems<T>())
       container.insert(QString::number(i++), item);
   }
 };
@@ -139,7 +139,7 @@ template <typename T> struct ContainerPopulator<QHash<QString, T>> {
   static void populateAssociative(QHash<QString, T> &container)
   {
     auto i = 0;
-    Q_FOREACH (const T item, getItems<T>())
+    for (const T item : getItems<T>())
       container.insert(QString::number(i++), item);
   }
 };
@@ -148,7 +148,7 @@ template <typename T> struct ContainerPopulator<std::map<QString, T>> {
   static void populateAssociative(std::map<QString, T> &container)
   {
     auto i = 0;
-    Q_FOREACH (const T item, getItems<T>())
+    for (const T item : getItems<T>())
       container[QString::number(i++)] = item;
   }
 };
@@ -265,7 +265,7 @@ void testContainer(const QString &stringTemplate,
     QCOMPARE(result, expectedResults.join(QString()));
   else {
     QVERIFY(result.size() == expectedResults.join(QString()).size());
-    Q_FOREACH (const QString &expectedResult, expectedResults)
+    for (const QString &expectedResult : expectedResults)
       QVERIFY(result.contains(expectedResult));
   }
 

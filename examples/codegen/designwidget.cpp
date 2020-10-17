@@ -99,7 +99,7 @@ void DesignWidget::insertMethod(const QString &access, bool _virtual,
   method.at(4)->setCheckState(_const ? Qt::Checked : Qt::Unchecked);
 
   if (!args.isEmpty()) {
-    Q_FOREACH (const QStringList &arg, args) {
+    for (const QStringList &arg : args) {
       QList<QStandardItem *> argItem;
       argItem << new QStandardItem(arg.at(0)) << new QStandardItem(arg.at(1))
               << new QStandardItem(arg.value(2));

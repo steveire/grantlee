@@ -126,7 +126,7 @@ QString QtLocalizerPrivate::translate(const QString &input,
   }
 
   auto locale = m_locales.last();
-  Q_FOREACH (QTranslator *translator, locale->themeTranslators) {
+  for (QTranslator *translator : locale->themeTranslators) {
     result = translator->translate("GR_FILENAME", input.toUtf8().constData(),
                                    context.toUtf8().constData(), count);
   }
@@ -137,7 +137,7 @@ QString QtLocalizerPrivate::translate(const QString &input,
       return QCoreApplication::translate("GR_FILENAME",
                                          input.toUtf8().constData(),
                                          context.toUtf8().constData(), count);
-    Q_FOREACH (QTranslator *translator, translators) {
+    for (QTranslator *translator : translators) {
       result = translator->translate("GR_FILENAME", input.toUtf8().constData(),
                                      context.toUtf8().constData(), count);
       if (!result.isEmpty())
@@ -237,7 +237,7 @@ static QString substituteArguments(const QString &input,
                                    const QVariantList &arguments)
 {
   auto string = input;
-  Q_FOREACH (const QVariant &arg, arguments) {
+  for (const QVariant &arg : arguments) {
     if (arg.userType() == qMetaTypeId<int>())
       string = string.arg(arg.value<int>());
     else if (arg.userType() == qMetaTypeId<double>())

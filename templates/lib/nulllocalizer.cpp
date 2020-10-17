@@ -95,7 +95,7 @@ static QString substituteArguments(const QString &input,
                                    const QVariantList &arguments)
 {
   auto string = input;
-  Q_FOREACH (const QVariant &arg, arguments) {
+  for (const QVariant &arg : arguments) {
     if (arg.userType() == qMetaTypeId<int>())
       string = string.arg(arg.value<int>());
     else if (arg.userType() == qMetaTypeId<double>())

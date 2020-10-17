@@ -134,7 +134,7 @@ NodeList &NodeList::operator=(const NodeList &list)
 NodeList::NodeList(const QList<Grantlee::Node *> &list)
     : QList<Grantlee::Node *>(list)
 {
-  Q_FOREACH (Grantlee::Node *node, list) {
+  for (Grantlee::Node *node : list) {
     auto textNode = qobject_cast<TextNode *>(node);
     if (!textNode) {
       m_containsNonText = true;
@@ -160,7 +160,7 @@ void NodeList::append(Grantlee::Node *node)
 void NodeList::append(QList<Grantlee::Node *> nodeList)
 {
   if (!m_containsNonText) {
-    Q_FOREACH (Grantlee::Node *node, nodeList) {
+    for (Grantlee::Node *node : nodeList) {
       auto textNode = qobject_cast<TextNode *>(node);
       if (!textNode) {
         m_containsNonText = true;

@@ -571,7 +571,7 @@ void MarkupDirector::processOpeningElements(QTextBlock::iterator it)
   auto fragmentFormat = fragment.charFormat();
   auto elementsToOpenList = getElementsToOpen(it);
 
-  Q_FOREACH (int tag, elementsToOpenList) {
+  for (int tag : elementsToOpenList) {
     switch (tag) {
     case Strong:
       m_builder->beginStrong();
@@ -879,7 +879,7 @@ QList<int> MarkupDirector::sortOpeningOrder(QSet<int> openingOrder,
         // will be
         // closed on the same block.
         // See testDoubleFormat.
-        Q_FOREACH (int tag, elementsToClose) {
+        for (int tag : elementsToClose) {
           if (openingOrder.remove(tag)) {
             sortedOpenedElements.prepend(tag);
           }
@@ -888,7 +888,7 @@ QList<int> MarkupDirector::sortOpeningOrder(QSet<int> openingOrder,
     } else {
       // End of block. Need to close all open elements.
       // Order irrelevant in this case.
-      Q_FOREACH (int tag, openingOrder) {
+      for (int tag : openingOrder) {
         sortedOpenedElements.prepend(tag);
       }
       break;

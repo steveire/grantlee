@@ -85,7 +85,7 @@ void IfNode::render(OutputStream *stream, Context *c) const
   // Evaluate the expression. rendering variables with the context as needed.
   // and processing nodes recursively
 
-  Q_FOREACH (auto &pair, mConditionNodelists) {
+  for (auto &pair : mConditionNodelists) {
     bool match = false;
     if (pair.first) {
       try {

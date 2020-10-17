@@ -1295,7 +1295,7 @@ void TestFilters::testListFilters_data()
   const auto cities
       = QStringList{QStringLiteral("London"), QStringLiteral("Berlin"),
                     QStringLiteral("Paris"), QStringLiteral("Dublin")};
-  Q_FOREACH (const QString &city, cities) {
+  for (const QString &city : cities) {
     QVariantHash map;
     map.insert(QStringLiteral("city"), city);
     mapList << map;

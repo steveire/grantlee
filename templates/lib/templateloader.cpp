@@ -62,7 +62,7 @@ FileSystemTemplateLoader::FileSystemTemplateLoader(
 
 FileSystemTemplateLoader::~FileSystemTemplateLoader()
 {
-  Q_FOREACH (const QString &dir, templateDirs())
+  for (const QString &dir : templateDirs())
     d_ptr->m_localizer->unloadCatalog(dir + QLatin1Char('/') + themeName());
   delete d_ptr;
 }
@@ -74,10 +74,10 @@ InMemoryTemplateLoader::~InMemoryTemplateLoader() {}
 void FileSystemTemplateLoader::setTheme(const QString &themeName)
 {
   Q_D(FileSystemTemplateLoader);
-  Q_FOREACH (const QString &dir, templateDirs())
+  for (const QString &dir : templateDirs())
     d->m_localizer->unloadCatalog(dir + QLatin1Char('/') + d->m_themeName);
   d->m_themeName = themeName;
-  Q_FOREACH (const QString &dir, templateDirs())
+  for (const QString &dir : templateDirs())
     d->m_localizer->loadCatalog(dir + QLatin1Char('/') + themeName, themeName);
 }
 
@@ -91,10 +91,10 @@ void FileSystemTemplateLoader::setTemplateDirs(const QStringList &dirs)
 {
   Q_D(FileSystemTemplateLoader);
 
-  Q_FOREACH (const QString &dir, templateDirs())
+  for (const QString &dir : templateDirs())
     d->m_localizer->unloadCatalog(dir + QLatin1Char('/') + d->m_themeName);
   d->m_templateDirs = dirs;
-  Q_FOREACH (const QString &dir, templateDirs())
+  for (const QString &dir : templateDirs())
     d->m_localizer->loadCatalog(dir + QLatin1Char('/') + d->m_themeName,
                                 d->m_themeName);
 }

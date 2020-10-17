@@ -136,7 +136,7 @@ I18npNode::I18npNode(const QString &sourceText, const QString &pluralText,
 void I18npNode::render(OutputStream *stream, Context *c) const
 {
   QVariantList args;
-  Q_FOREACH (const FilterExpression &fe, m_filterExpressionList)
+  for (const FilterExpression &fe : m_filterExpressionList)
     args.append(fe.resolve(c));
   auto resultString
       = c->localizer()->localizePluralString(m_sourceText, m_pluralText, args);
@@ -156,7 +156,7 @@ void I18npVarNode::render(OutputStream *stream, Context *c) const
 {
   Q_UNUSED(stream)
   QVariantList args;
-  Q_FOREACH (const FilterExpression &fe, m_filterExpressionList)
+  for (const FilterExpression &fe : m_filterExpressionList)
     args.append(fe.resolve(c));
   auto resultString
       = c->localizer()->localizePluralString(m_sourceText, m_pluralText, args);

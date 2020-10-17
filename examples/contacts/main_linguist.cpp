@@ -43,7 +43,7 @@ static QSharedPointer<Grantlee::AbstractLocalizer> getLocalizer()
                                       << "fr_FR";
   if (!locales.contains(QLocale::system().name()))
     locales.append(QLocale::system().name());
-  Q_FOREACH (const QString &localeName, locales) {
+  for (const QString &localeName : locales) {
     QTranslator *qtTranslator = new QTranslator;
     qtTranslator->load("qt_" + localeName,
                        QLibraryInfo::location(QLibraryInfo::TranslationsPath));

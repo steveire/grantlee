@@ -353,7 +353,7 @@ QVariant WordWrapFilter::doFilter(const QVariant &input,
     return QVariant();
   auto output = partList.takeFirst();
   auto pos = output.size() - output.lastIndexOf(QLatin1Char('\n')) - 1;
-  Q_FOREACH (const QString &part, partList) {
+  for (const QString &part : partList) {
     QStringList lines;
     if (part.contains(QLatin1Char('\n'))) {
       lines = part.split(QLatin1Char('\n'));
@@ -397,7 +397,7 @@ QVariant SafeSequenceFilter::doFilter(const QVariant &input,
   Q_UNUSED(autoescape)
   QVariantList list;
   if (input.userType() == qMetaTypeId<QVariantList>())
-    Q_FOREACH (const QVariant &item, input.value<QVariantList>())
+    for (const QVariant &item : input.value<QVariantList>())
       list << markSafe(getSafeString(item));
   return list;
 }
@@ -411,7 +411,7 @@ QVariant LineBreaksFilter::doFilter(const QVariant &input,
   static const QRegularExpression re(QStringLiteral("\n{2,}"));
   QStringList output;
 
-  Q_FOREACH (const QString &bit, inputString.get().split(re)) {
+  for (const QString &bit : inputString.get().split(re)) {
     auto _bit = SafeString(bit, inputString.isSafe());
     if (autoescape)
       _bit = conditionalEscape(_bit);

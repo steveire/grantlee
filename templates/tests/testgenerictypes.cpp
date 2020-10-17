@@ -266,7 +266,7 @@ template <typename T> struct SequentialContainerTester<QSet<T>> {
     auto result = t1->render(&c);
     QStringList output{QStringLiteral("Claire,"), QStringLiteral("Grant,"),
                        QStringLiteral("Alan,")};
-    Q_FOREACH (const QString &s, output) {
+    for (const QString &s : output) {
       QVERIFY(result.contains(s));
     }
 
