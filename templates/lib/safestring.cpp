@@ -145,9 +145,9 @@ SafeString &SafeString::NestedString::append(const QString &str)
   return *m_safeString;
 }
 
-SafeString &SafeString::NestedString::append(const QStringRef &reference)
+SafeString &SafeString::NestedString::append(const QStringRef &ref)
 {
-  QString::append(reference);
+  QString::append(ref);
   m_safeString->m_safety = IsNotSafe;
   return *m_safeString;
 }
