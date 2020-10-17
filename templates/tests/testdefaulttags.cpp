@@ -2471,7 +2471,7 @@ void TestDefaultTags::testUrlTypes()
   Context c(dict);
   auto result = t->render(&c);
   QVERIFY(t->error() == NoError);
-  QVERIFY(result == output.first + output.second);
+  QVERIFY(result == QString(output.first + output.second));
 
   c.setUrlType(Context::RelativeUrls);
   result = t->render(&c);
@@ -2519,7 +2519,7 @@ void TestDefaultTags::testRelativePaths()
   auto result = t->render(&c);
   QVERIFY(t->error() == NoError);
   if (!output.isEmpty())
-    QVERIFY(result == QStringLiteral("file:///path/to/") + output);
+    QVERIFY(result == QString(QStringLiteral("file:///path/to/") + output));
   else
     QVERIFY(result.isEmpty());
 
@@ -2529,7 +2529,7 @@ void TestDefaultTags::testRelativePaths()
   result = t->render(&c);
   QVERIFY(t->error() == NoError);
   if (!output.isEmpty())
-    QVERIFY(result == relativePath + QLatin1Char('/') + output);
+    QVERIFY(result == QString(relativePath + QLatin1Char('/') + output));
   else
     QVERIFY(result.isEmpty());
 }
