@@ -26,7 +26,9 @@
 #include "test_macros.h"
 
 #include "coverageobject.h"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtCore/QLinkedList>
+#endif
 #include <QtCore/QQueue>
 #include <QtCore/QStack>
 #include <QtCore/QVariant>
@@ -305,7 +307,9 @@ template <typename T> void doTestNonHashableContainers()
 {
   doTestSequentialContainer<QVector<T>>();
   doTestSequentialContainer<QList<T>>();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   doTestSequentialContainer<QLinkedList<T>>();
+#endif
   doTestSequentialContainer<QQueue<T>>();
   doTestSequentialContainer<QStack<T>>();
   doTestSequentialContainer<std::list<T>>();
