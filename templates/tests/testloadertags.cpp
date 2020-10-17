@@ -63,7 +63,7 @@ private Q_SLOTS:
 private:
   void doTest();
 
-  QSharedPointer<InMemoryTemplateLoader> loader;
+  QSharedPointer<InMemoryTemplateLoader> m_loader;
   Engine *m_engine;
 };
 
@@ -73,8 +73,8 @@ void TestLoaderTags::initTestCase()
 
   m_engine = new Engine(this);
 
-  loader = QSharedPointer<InMemoryTemplateLoader>(new InMemoryTemplateLoader());
-  m_engine->addTemplateLoader(loader);
+  m_loader = QSharedPointer<InMemoryTemplateLoader>(new InMemoryTemplateLoader());
+  m_engine->addTemplateLoader(m_loader);
 
   auto appDirPath
       = QFileInfo(QCoreApplication::applicationDirPath()).absoluteDir().path();
@@ -165,9 +165,9 @@ void TestLoaderTags::testIncludeTag_data()
 
   Dict dict;
 
-  loader->setTemplate(QStringLiteral("basic-syntax01"),
+  m_loader->setTemplate(QStringLiteral("basic-syntax01"),
                       QStringLiteral("Something cool"));
-  loader->setTemplate(QStringLiteral("basic-syntax02"),
+  m_loader->setTemplate(QStringLiteral("basic-syntax02"),
                       QStringLiteral("{{ headline }}"));
 
   QTest::newRow("include01") << "{% include \"basic-syntax01\" %}" << dict
@@ -188,7 +188,7 @@ void TestLoaderTags::testIncludeTag_data()
                              << QStringLiteral("ab") << TagSyntaxError;
 
   auto incl05 = QStringLiteral("template with a space");
-  loader->setTemplate(QStringLiteral("include 05"), incl05);
+  m_loader->setTemplate(QStringLiteral("include 05"), incl05);
 
   QTest::newRow("include 05")
       << incl05 << dict << QStringLiteral("template with a space") << NoError;
@@ -250,7 +250,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   auto inh1 = QStringLiteral(
       "1{% block first %}&{% endblock %}3{% block second %}_{% endblock %}");
-  loader->setTemplate(QStringLiteral("inheritance01"), inh1);
+  m_loader->setTemplate(QStringLiteral("inheritance01"), inh1);
 
   QTest::newRow("inheritance01")
       << inh1 << dict << QStringLiteral("1&3_") << NoError;
@@ -258,7 +258,7 @@ void TestLoaderTags::testExtendsTag_data()
   auto inh2
       = QStringLiteral("{% extends \"inheritance01\" %}{% block first %}2{% "
                        "endblock %}{% block second %}4{% endblock %}");
-  loader->setTemplate(QStringLiteral("inheritance02"), inh2);
+  m_loader->setTemplate(QStringLiteral("inheritance02"), inh2);
 
   // Standard two-level inheritance
   QTest::newRow("inheritance02")
@@ -270,7 +270,7 @@ void TestLoaderTags::testExtendsTag_data()
   // Two-level with no redefinitions on second level
 
   auto inh4 = QStringLiteral("{% extends \"inheritance01\" %}");
-  loader->setTemplate(QStringLiteral("inheritance04"), inh4);
+  m_loader->setTemplate(QStringLiteral("inheritance04"), inh4);
 
   QTest::newRow("inheritance04")
       << inh4 << dict << QStringLiteral("1&3_") << NoError;
@@ -285,7 +285,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   auto inh7 = QStringLiteral(
       "{% extends 'inheritance01' %}{% block second %}5{% endblock %}");
-  loader->setTemplate(QStringLiteral("inheritance07"), inh7);
+  m_loader->setTemplate(QStringLiteral("inheritance07"), inh7);
 
   dict.clear();
   // Two-level with one block defined, one block not defined
@@ -333,7 +333,7 @@ void TestLoaderTags::testExtendsTag_data()
   auto inh15
       = QStringLiteral("{% extends 'inheritance01' %}{% block first %}2{% "
                        "block inner %}inner{% endblock %}{% endblock %}");
-  loader->setTemplate(QStringLiteral("inheritance15"), inh15);
+  m_loader->setTemplate(QStringLiteral("inheritance15"), inh15);
 
   // A block within another block
   QTest::newRow("inheritance15")
@@ -349,7 +349,7 @@ void TestLoaderTags::testExtendsTag_data()
   // {% load %} tag (parent -- setup for exception04)
   auto inh17 = QStringLiteral(
       "{% load testtags %}{% block first %}1234{% endblock %}");
-  loader->setTemplate(QStringLiteral("inheritance17"), inh17);
+  m_loader->setTemplate(QStringLiteral("inheritance17"), inh17);
 
   dict.clear();
   QTest::newRow("inheritance17")
@@ -369,7 +369,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   auto inh20 = QStringLiteral("{% extends 'inheritance01' %}{% block first "
                               "%}{{ block.super }}a{% endblock %}");
-  loader->setTemplate(QStringLiteral("inheritance20"), inh20);
+  m_loader->setTemplate(QStringLiteral("inheritance20"), inh20);
 
   // Two-level inheritance with {{ block.super }}
   QTest::newRow("inheritance20")
@@ -426,7 +426,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   // Set up a base template to extend
   auto inh26 = QStringLiteral("no tags");
-  loader->setTemplate(QStringLiteral("inheritance26"), inh26);
+  m_loader->setTemplate(QStringLiteral("inheritance26"), inh26);
 
   // Inheritance from a template that doesn't have any blocks
   QTest::newRow("inheritance27")
@@ -434,7 +434,7 @@ void TestLoaderTags::testExtendsTag_data()
       << QStringLiteral("no tags") << NoError;
 
   auto inh28 = QStringLiteral("{% block first %}!{% endblock %}");
-  loader->setTemplate(QStringLiteral("inheritance 28"), inh28);
+  m_loader->setTemplate(QStringLiteral("inheritance 28"), inh28);
 
   QTest::newRow("inheritance 28")
       << inh28 << dict << QStringLiteral("!") << NoError;
@@ -448,7 +448,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   auto inh30 = QStringLiteral(
       "1{% if optional %}{% block opt %}2{% endblock %}{% endif %}3");
-  loader->setTemplate(QStringLiteral("inheritance30"), inh30);
+  m_loader->setTemplate(QStringLiteral("inheritance30"), inh30);
 
   QTest::newRow("inheritance30")
       << inh30 << dict << QStringLiteral("123") << NoError;
@@ -463,7 +463,7 @@ void TestLoaderTags::testExtendsTag_data()
   dict.insert(QStringLiteral("optional"), 1);
   auto inh33 = QStringLiteral("1{% ifequal optional 1 %}{% block opt %}2{% "
                               "endblock %}{% endifequal %}3");
-  loader->setTemplate(QStringLiteral("inheritance33"), inh33);
+  m_loader->setTemplate(QStringLiteral("inheritance33"), inh33);
 
   QTest::newRow("inheritance33")
       << inh33 << dict << QStringLiteral("123") << NoError;
@@ -481,7 +481,7 @@ void TestLoaderTags::testExtendsTag_data()
 
   auto inh36 = QStringLiteral("{% for n in numbers %}_{% block opt %}{{ n }}{% "
                               "endblock %}{% endfor %}_");
-  loader->setTemplate(QStringLiteral("inheritance36"), inh36);
+  m_loader->setTemplate(QStringLiteral("inheritance36"), inh36);
 
   QTest::newRow("inheritance36")
       << inh36 << dict << QStringLiteral("_1_2_3_") << NoError;
@@ -568,10 +568,10 @@ void TestLoaderTags::testIncludeAndExtendsTag_data()
 
   Dict dict;
 
-  loader->setTemplate(QStringLiteral("ext_base"),
+  m_loader->setTemplate(QStringLiteral("ext_base"),
                       QStringLiteral("{% block block1 %}block1{% endblock %}"));
 
-  loader->setTemplate(QStringLiteral("extender"),
+  m_loader->setTemplate(QStringLiteral("extender"),
                       QStringLiteral("{% extends 'ext_base' %}{% block block1 "
                                      "%}block1override{% endblock %}"));
 
@@ -581,7 +581,7 @@ void TestLoaderTags::testIncludeAndExtendsTag_data()
 )django") << dict << QStringLiteral("\nblock1override\nblock1override\n")
                                           << NoError;
 
-  loader->setTemplate(QStringLiteral("anotherextender"),
+  m_loader->setTemplate(QStringLiteral("anotherextender"),
                       QStringLiteral("{% extends 'extender' %}{% block block1 "
                                      "%}block1overrideagain{% endblock %}"));
 
