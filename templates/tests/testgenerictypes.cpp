@@ -325,7 +325,7 @@ void testAssociativeValues(Grantlee::Context &c, bool unordered = {})
     if (!unordered)
       QCOMPARE(result, QStringLiteral("(Claire:23),(Grant:32),(Alan:50),"));
     else {
-      QVERIFY(result.size() == 33);
+      QCOMPARE(result.size(), 33);
       QVERIFY(result.contains(QStringLiteral("(Claire:23),")));
       QVERIFY(result.contains(QStringLiteral("(Grant:32),")));
       QVERIFY(result.contains(QStringLiteral("(Alan:50),")));
@@ -349,7 +349,7 @@ void testAssociativeItems(Grantlee::Context &c, bool unordered)
     if (!unordered)
       QCOMPARE(result, QStringLiteral("(Claire:23),(Grant:32),(Alan:50),"));
     else {
-      QVERIFY(result.size() == 33);
+      QCOMPARE(result.size(), 33);
       QVERIFY(result.contains(QStringLiteral("(Claire:23),")));
       QVERIFY(result.contains(QStringLiteral("(Grant:32),")));
       QVERIFY(result.contains(QStringLiteral("(Alan:50),")));

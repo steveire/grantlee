@@ -266,7 +266,7 @@ void testContainer(const QString &stringTemplate,
   if (!unordered)
     QCOMPARE(result, expectedResults.join(QString()));
   else {
-    QVERIFY(result.size() == expectedResults.join(QString()).size());
+    QCOMPARE(result.size(), expectedResults.join(QString()).size());
     for (const QString &expectedResult : expectedResults)
       QVERIFY(result.contains(expectedResult));
   }

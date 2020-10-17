@@ -2467,16 +2467,16 @@ void TestDefaultTags::testUrlTypes()
   QFETCH(StringPair, output);
 
   auto t = m_engine->newTemplate(input, QLatin1String(QTest::currentDataTag()));
-  QVERIFY(t->error() == NoError);
+  QCOMPARE(t->error(), NoError);
   Context c(dict);
   auto result = t->render(&c);
-  QVERIFY(t->error() == NoError);
-  QVERIFY(result == QString(output.first + output.second));
+  QCOMPARE(t->error(), NoError);
+  QCOMPARE(result, QString(output.first + output.second));
 
   c.setUrlType(Context::RelativeUrls);
   result = t->render(&c);
-  QVERIFY(t->error() == NoError);
-  QVERIFY(result == output.second);
+  QCOMPARE(t->error(), NoError);
+  QCOMPARE(result, output.second);
 }
 
 void TestDefaultTags::testRelativePaths_data()
@@ -2514,12 +2514,12 @@ void TestDefaultTags::testRelativePaths()
   QFETCH(QString, output);
 
   auto t = m_engine->newTemplate(input, QLatin1String(QTest::currentDataTag()));
-  QVERIFY(t->error() == NoError);
+  QCOMPARE(t->error(), NoError);
   Context c(dict);
   auto result = t->render(&c);
-  QVERIFY(t->error() == NoError);
+  QCOMPARE(t->error(), NoError);
   if (!output.isEmpty())
-    QVERIFY(result == QString(QStringLiteral("file:///path/to/") + output));
+    QCOMPARE(result, QString(QStringLiteral("file:///path/to/") + output));
   else
     QVERIFY(result.isEmpty());
 
@@ -2527,9 +2527,9 @@ void TestDefaultTags::testRelativePaths()
   auto relativePath = QStringLiteral("relative/path");
   c.setRelativeMediaPath(relativePath);
   result = t->render(&c);
-  QVERIFY(t->error() == NoError);
+  QCOMPARE(t->error(), NoError);
   if (!output.isEmpty())
-    QVERIFY(result == QString(relativePath + QLatin1Char('/') + output));
+    QCOMPARE(result, QString(relativePath + QLatin1Char('/') + output));
   else
     QVERIFY(result.isEmpty());
 }
