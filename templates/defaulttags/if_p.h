@@ -309,6 +309,7 @@ QVariant IfToken::evaluate(Context *c) const
     case NeqCode:
       return !Grantlee::equals(mArgs.first->evaluate(c),
                                mArgs.second->evaluate(c));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case GtCode:
       return mArgs.first->evaluate(c) > mArgs.second->evaluate(c);
     case GteCode:
@@ -317,6 +318,29 @@ QVariant IfToken::evaluate(Context *c) const
       return mArgs.first->evaluate(c) < mArgs.second->evaluate(c);
     case LteCode:
       return mArgs.first->evaluate(c) <= mArgs.second->evaluate(c);
+#else
+    case GtCode:
+    case GteCode:
+    case LtCode:
+    case LteCode: {
+      auto f = mArgs.first->evaluate(c);
+      auto s = mArgs.second->evaluate(c);
+
+      if (auto comp_opt = QVariant::compare(f, s))
+      {
+        auto comp = *comp_opt;
+        if (mOpCode == GtCode && comp > 0)
+          return true;
+        if (mOpCode == GteCode && comp >= 0)
+          return true;
+        if (mOpCode == LtCode && comp < 0)
+          return true;
+        if (mOpCode == LteCode && comp <= 0)
+          return true;
+      }
+      return false;
+    }
+#endif
     default:
       Q_ASSERT(!"Invalid OpCode");
       return QVariant();
