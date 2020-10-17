@@ -94,10 +94,10 @@ void TestSafeString::testChopping()
 
   safeString1safe.get().chop(4);
   QVERIFY(!safeString1safe.isSafe());
-  QVERIFY(QStringLiteral("this & ") == safeString1safe.get());
+  QVERIFY(QStringLiteral("this & ") == QString(safeString1safe.get()));
   safeString1unsafe.get().chop(4);
   QVERIFY(!safeString1unsafe.isSafe());
-  QVERIFY(QStringLiteral("this & ") == safeString1unsafe.get());
+  QVERIFY(QStringLiteral("this & ") == QString(safeString1unsafe.get()));
 }
 
 void TestSafeString::testReplacing()
