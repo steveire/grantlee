@@ -145,12 +145,14 @@ SafeString &SafeString::NestedString::append(const QString &str)
   return *m_safeString;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 SafeString &SafeString::NestedString::append(const QStringRef &ref)
 {
   QString::append(ref);
   m_safeString->m_safety = IsNotSafe;
   return *m_safeString;
 }
+#endif
 
 SafeString &SafeString::NestedString::append(const QLatin1String &str)
 {

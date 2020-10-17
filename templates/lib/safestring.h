@@ -172,7 +172,9 @@ public:
 
     SafeString &append(const SafeString &str);
     SafeString &append(const QString &str);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     SafeString &append(const QStringRef &ref);
+#endif
     SafeString &append(const QLatin1String &str);
 #ifndef QT_NO_CAST_FROM_ASCII
     SafeString &append(const QByteArray &ba)
