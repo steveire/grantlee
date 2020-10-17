@@ -475,6 +475,12 @@ void TestDefaultTags::testIfTag_data()
       "{% if tigersEnum == zoo.Tigers %}yes{% else %}no{% endif %}")
                                << dict << QStringLiteral("yes") << NoError;
 
+  dict.clear();
+  dict.insert(QStringLiteral("five"), QVariant::fromValue<std::int64_t>(5));
+  QTest::newRow("if-tag-eq08") << QStringLiteral(
+      "{% if five == 5 %}yes{% else %}no{% endif %}")
+                               << dict << QStringLiteral("yes") << NoError;
+
   // Comparison
 
   dict.clear();

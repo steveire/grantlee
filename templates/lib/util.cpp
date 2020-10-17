@@ -163,7 +163,7 @@ bool Grantlee::equals(const QVariant &lhs, const QVariant &rhs)
       equal = (lhs.value<MetaEnumVariable>() == rhs.value<int>());
     }
   } else {
-    equal = ((lhs == rhs) && (lhs.userType() == rhs.userType()));
+    equal = (lhs == rhs);
   }
   return equal;
 }
