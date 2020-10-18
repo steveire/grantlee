@@ -30,6 +30,9 @@
 #include "markupdirector.h"
 #include "plaintextmarkupbuilder.h"
 #include "texthtmlbuilder.h"
+#include "testutils.h"
+
+#include <memory>
 
 using namespace Grantlee;
 
@@ -69,15 +72,15 @@ private Q_SLOTS:
 
 void TestPlainMarkupOutput::testSingleFormat()
 {
-  auto doc = new QTextDocument();
+  QTextDocument doc;
 
   // One format
-  doc->setHtml(QStringLiteral("This <b>text</b> is bold."));
+  doc.setHtml(QStringLiteral("This <b>text</b> is bold."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
   QRegularExpression regex(QStringLiteral("^This \\*text\\* is bold.\\n$"));
 
   QVERIFY(regex.match(result).hasMatch());
@@ -85,15 +88,15 @@ void TestPlainMarkupOutput::testSingleFormat()
 
 void TestPlainMarkupOutput::testDoubleFormat()
 {
-  auto doc = new QTextDocument();
+  QTextDocument doc;
 
   // One format
-  doc->setHtml(QStringLiteral("Some <b><i>formatted</i></b> text."));
+  doc.setHtml(QStringLiteral("Some <b><i>formatted</i></b> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
   QRegularExpression regex(
       QStringLiteral("^Some (\\*/|/\\*)formatted(\\*/|/\\*) text.\\n$"));
 
@@ -102,14 +105,14 @@ void TestPlainMarkupOutput::testDoubleFormat()
 
 void TestPlainMarkupOutput::testAnchor()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("A <a href=\"http://www.kde.org\">link</a> to KDE."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   QRegularExpression regex(QStringLiteral(
       "^A link\\[1\\] to KDE.\\n\\n--------\\n\\[1\\] http://www.kde.org\\n$"));
@@ -121,14 +124,14 @@ void TestPlainMarkupOutput::testAnchor()
 
 void TestPlainMarkupOutput::testAnchorWithFormattedContent()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral(
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral(
       "A <a href=\"http://www.kde.org\"><b>formatted</b> link</a> to KDE."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   QRegularExpression regex(
       QStringLiteral("^A \\*formatted\\* link\\[1\\] to "
@@ -139,15 +142,15 @@ void TestPlainMarkupOutput::testAnchorWithFormattedContent()
 
 void TestPlainMarkupOutput::testAdjacentAnchors()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("Two <a href=\"http://www.kde.org\">links</a><a "
                      "href=\"http://www.google.com\">next</a> to eachother."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   QRegularExpression regex(QStringLiteral(
       "^Two links\\[1\\]next\\[2\\] to eachother.\\n\\n--------\\n\\[1\\] "
@@ -158,13 +161,13 @@ void TestPlainMarkupOutput::testAdjacentAnchors()
 
 void TestPlainMarkupOutput::testNestedFormatting()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("This <b>text is <i>italic</i> and</b> bold."));
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("This <b>text is <i>italic</i> and</b> bold."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   QRegularExpression regex(
       QStringLiteral("^This \\*text is /italic/ and\\* bold.\\n$"));
@@ -174,14 +177,14 @@ void TestPlainMarkupOutput::testNestedFormatting()
 
 void TestPlainMarkupOutput::testSpan()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral(
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral(
       "Some <span style=\"color:#ff0000;\">formatted</span> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(QStringLiteral("^Some formatted text.\\n$"));
 
@@ -190,15 +193,15 @@ void TestPlainMarkupOutput::testSpan()
 
 void TestPlainMarkupOutput::testDoubleSpan()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("Some <span "
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("Some <span "
                               "style=\"color:#ff0000;background-color:#00ff00;"
                               "\">formatted</span> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(QStringLiteral("^Some formatted text.\\n$"));
 
@@ -207,15 +210,15 @@ void TestPlainMarkupOutput::testDoubleSpan()
 
 void TestPlainMarkupOutput::testSpanNesting()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral(
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral(
       "Paragraph <span style=\"background-color:#00ff00;\">with some <span "
       "style=\"color:#ff0000;\">formatted</span> nested</span> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Paragraph with some formatted nested text.\\n$"));
@@ -225,14 +228,14 @@ void TestPlainMarkupOutput::testSpanNesting()
 
 void TestPlainMarkupOutput::testDoubleStartDifferentFinish()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("Paragraph <i><b>with</b> some formatted</i> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Paragraph /\\*with\\* some formatted/ text.\\n$"));
@@ -242,14 +245,14 @@ void TestPlainMarkupOutput::testDoubleStartDifferentFinish()
 
 void TestPlainMarkupOutput::testDoubleStartDifferentFinishReverseOrder()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("Paragraph <b><i>with</i> some formatted</b> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Paragraph \\*/with/ some formatted\\* text.\\n$"));
@@ -259,14 +262,14 @@ void TestPlainMarkupOutput::testDoubleStartDifferentFinishReverseOrder()
 
 void TestPlainMarkupOutput::testDifferentStartDoubleFinish()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("Paragraph <i>with some <b>formatted<b></i> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Paragraph /with some \\*formatted\\*/ text.\\n$"));
@@ -276,14 +279,14 @@ void TestPlainMarkupOutput::testDifferentStartDoubleFinish()
 
 void TestPlainMarkupOutput::testDifferentStartDoubleFinishReverseOrder()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("Paragraph <b>with some <i>formatted</i></b> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Paragraph \\*with some /formatted/\\* text.\\n$"));
@@ -293,14 +296,14 @@ void TestPlainMarkupOutput::testDifferentStartDoubleFinishReverseOrder()
 
 void TestPlainMarkupOutput::testOverlap()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral(
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral(
       "Paragraph <b>with <i>some</i></b><i> formatted</i> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Paragraph \\*with /some/\\*/ formatted/ text.\\n$"));
@@ -310,13 +313,13 @@ void TestPlainMarkupOutput::testOverlap()
 
 void TestPlainMarkupOutput::testEdgeCaseLeft()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("Paragraph <b>with some formatted text.</b>"));
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("Paragraph <b>with some formatted text.</b>"));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Paragraph \\*with some formatted text.\\*\\n$"));
@@ -326,13 +329,13 @@ void TestPlainMarkupOutput::testEdgeCaseLeft()
 
 void TestPlainMarkupOutput::testEdgeCaseRight()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("<b>Paragraph with some formatted</b> text."));
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("<b>Paragraph with some formatted</b> text."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^\\*Paragraph with some formatted\\* text.\\n$"));
@@ -342,15 +345,15 @@ void TestPlainMarkupOutput::testEdgeCaseRight()
 
 void TestPlainMarkupOutput::testImage()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("Paragraph with an inline <img "
                      "src=\"http://kde.org/img/kde41.png\" /> image."));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(QStringLiteral(
       "^Paragraph with an inline \\[1\\] image.\\n\\n--------\\n\\[1\\] "
@@ -363,18 +366,18 @@ void TestPlainMarkupOutput::testImageResized()
 {
   QString result;
   QRegularExpression regex;
-  PlainTextMarkupBuilder *hb;
-  MarkupDirector *md;
-  auto doc = new QTextDocument();
+  std::unique_ptr<PlainTextMarkupBuilder> hb;
+  std::unique_ptr<MarkupDirector> md;
+  QTextDocument doc;
 
   // width
-  doc->setHtml(QStringLiteral(
+  doc.setHtml(QStringLiteral(
       "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
       "width=\"10\" /> image."));
 
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral(
@@ -383,13 +386,13 @@ void TestPlainMarkupOutput::testImageResized()
   QVERIFY(regex.match(result).hasMatch());
 
   // height
-  doc->setHtml(QStringLiteral(
+  doc.setHtml(QStringLiteral(
       "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
       "height=\"10\" /> image."));
 
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral(
@@ -398,13 +401,13 @@ void TestPlainMarkupOutput::testImageResized()
   QVERIFY(regex.match(result).hasMatch());
 
   // height and width
-  doc->setHtml(QStringLiteral(
+  doc.setHtml(QStringLiteral(
       "Paragraph with an inline <img src=\"http://kde.org/img/kde41.png\" "
       "height=\"10\" width=\"10\" /> image."));
 
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral(
@@ -418,55 +421,55 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 {
   QString result;
   QRegularExpression regex;
-  PlainTextMarkupBuilder *hb;
-  MarkupDirector *md;
-  auto doc = new QTextDocument();
+  std::unique_ptr<PlainTextMarkupBuilder> hb;
+  std::unique_ptr<MarkupDirector> md;
+  QTextDocument doc;
 
   // Test bold
-  doc->setHtml(QStringLiteral("Some <b>formatted</b> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  doc.setHtml(QStringLiteral("Some <b>formatted</b> text."));
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some \\*formatted\\* text.\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Italic
-  doc->setHtml(QStringLiteral("Some <i>formatted</i> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  doc.setHtml(QStringLiteral("Some <i>formatted</i> text."));
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some /formatted/ text.\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Underline
-  doc->setHtml(QStringLiteral("Some <u>formatted</u> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  doc.setHtml(QStringLiteral("Some <u>formatted</u> text."));
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some _formatted_ text.\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Strikeout
-  doc->setHtml(QStringLiteral("Some <s>formatted</s> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  doc.setHtml(QStringLiteral("Some <s>formatted</s> text."));
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some -formatted- text.\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Superscript
-  doc->setHtml(QStringLiteral("Some <sup>formatted</sup> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  doc.setHtml(QStringLiteral("Some <sup>formatted</sup> text."));
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(
@@ -474,10 +477,10 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Subscript
-  doc->setHtml(QStringLiteral("Some <sub>formatted</sub> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  doc.setHtml(QStringLiteral("Some <sub>formatted</sub> text."));
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex
@@ -485,44 +488,44 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Foreground
-  doc->setHtml(QStringLiteral(
+  doc.setHtml(QStringLiteral(
       "Some <span style=\"color:#ff0000;\">formatted</span> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some formatted text.\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Background
-  doc->setHtml(QStringLiteral(
+  doc.setHtml(QStringLiteral(
       "Some <span style=\"background-color:#ff0000;\">formatted</span> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some formatted text.\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Font Family
-  doc->setHtml(QStringLiteral(
+  doc.setHtml(QStringLiteral(
       "Some <span style=\"font-family:courier;\">formatted</span> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some formatted text.\\n$"));
   QVERIFY(regex.match(result).hasMatch());
 
   // Test Font Size
-  doc->setHtml(QStringLiteral(
+  doc.setHtml(QStringLiteral(
       "Some <span style=\"font-size:20pt;\">formatted</span> text."));
-  hb = new PlainTextMarkupBuilder();
-  md = new MarkupDirector(hb);
-  md->processDocument(doc);
+  hb = testMakeUnique<PlainTextMarkupBuilder>();
+  md = testMakeUnique<MarkupDirector>(hb.get());
+  md->processDocument(&doc);
   result = hb->getResult();
 
   regex = QRegularExpression(QStringLiteral("^Some formatted text.\\n$"));
@@ -531,15 +534,15 @@ void TestPlainMarkupOutput::testEachFormatTagSingly()
 
 void TestPlainMarkupOutput::testHorizontalRule()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(
+  QTextDocument doc;
+  doc.setHtml(
       QStringLiteral("<p style=\"margin-top:0;margin-bottom:0;\">Foo</p><hr "
                      "/><p style=\"margin-top:0;margin-bottom:0;\">Bar</p>"));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(
       QStringLiteral("^Foo\\n--------------------\\nBar\\n$"));
@@ -549,13 +552,13 @@ void TestPlainMarkupOutput::testHorizontalRule()
 
 void TestPlainMarkupOutput::testNewlines()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("<p>Foo</p>\n<br /><br />\n<p>Bar</p>"));
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("<p>Foo</p>\n<br /><br />\n<p>Bar</p>"));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(QStringLiteral("^Foo\\n\\n\\nBar\\n$"));
 
@@ -564,13 +567,13 @@ void TestPlainMarkupOutput::testNewlines()
 
 void TestPlainMarkupOutput::testEmptyParagraphs()
 {
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("<p>Foo</p>\n<br /><br />\n<p>Bar</p>"));
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("<p>Foo</p>\n<br /><br />\n<p>Bar</p>"));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(QStringLiteral("^Foo\\n\\n\\nBar\\n$"));
 
@@ -588,10 +591,10 @@ void TestPlainMarkupOutput::testNewlinesThroughQTextCursor()
   cursor.insertText(QStringLiteral("\n"));
   cursor.insertText(QStringLiteral("Bar"));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(doc);
+  auto result = hb.getResult();
 
   auto regex = QRegularExpression(QStringLiteral("^Foo\\n\\n\\nBar\\n$"));
 
@@ -601,13 +604,13 @@ void TestPlainMarkupOutput::testNewlinesThroughQTextCursor()
 void TestPlainMarkupOutput::testBrInsideParagraph()
 {
 
-  auto doc = new QTextDocument();
-  doc->setHtml(QStringLiteral("<p>Foo<br /><br /><br />Bar</p>"));
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("<p>Foo<br /><br /><br />Bar</p>"));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   // Two paragraphs separated by two line breaks
 
@@ -624,10 +627,10 @@ void TestPlainMarkupOutput::testLongDocument()
   QVERIFY(sourceHtml.open(QIODevice::ReadOnly));
   doc.setHtml(QString::fromLatin1(sourceHtml.readAll().constData()));
 
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(&doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
   QVERIFY2(
       result.startsWith(QLatin1String("Hello,\nThis is some text\nIt shows how "
                                       "grantlee is used from kmail\n")),
@@ -659,10 +662,10 @@ void TestPlainMarkupOutput::testNestedList()
                                "<ul type=\"circle\">\n"
                                "  <li>Elem5</li>\n"
                                "</ul>"));
-  auto hb = new PlainTextMarkupBuilder();
-  auto md = new MarkupDirector(hb);
-  md->processDocument(&doc);
-  auto result = hb->getResult();
+  PlainTextMarkupBuilder hb;
+  MarkupDirector md(&hb);
+  md.processDocument(&doc);
+  auto result = hb.getResult();
 
   const QString expected = QStringLiteral("     1. Elem1 \n"
                                           "     2. Elem2 \n"
