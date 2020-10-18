@@ -849,8 +849,8 @@ public:
     m_numberList.push_back(7);
     m_gadgetList.push_back(CustomGadget{});
     m_gadgetList.push_back(CustomGadget{});
-    m_personList.push_back(new PersonObject{QStringLiteral("Joe"), 20});
-    m_personList.push_back(new PersonObject{QStringLiteral("Mike"), 22});
+    m_personList.push_back(new PersonObject{QStringLiteral("Joe"), 20, this});
+    m_personList.push_back(new PersonObject{QStringLiteral("Mike"), 22, this});
     m_personPtrList.push_back(
         QSharedPointer<PersonObject>::create(QStringLiteral("Niall"), 23));
     m_personPtrList.push_back(
