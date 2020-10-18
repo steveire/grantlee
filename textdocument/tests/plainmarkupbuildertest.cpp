@@ -637,7 +637,6 @@ void TestPlainMarkupOutput::testLongDocument()
       qPrintable(result));
   QVERIFY2(result.endsWith(QLatin1String("This is the end of the signature\n")),
            qPrintable(result));
-  // qDebug() << result;
 }
 
 void TestPlainMarkupOutput::testNestedList()
