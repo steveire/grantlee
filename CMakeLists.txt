@@ -24,6 +24,7 @@ option( BUILD_TESTS "Build the Grantlee tests" TRUE )
 option( GRANTLEE_BUILD_WITH_QT6 "Build Grantlee with Qt 6" FALSE)
 
 if (BUILD_TESTS)
+  include (CTest)
   enable_testing()
 endif()
 
