@@ -24,9 +24,9 @@
 #include "customtyperegistry_p.h"
 #include "metaenumvariable_p.h"
 
+#include <QtCore/QAssociativeIterable>
 #include <QtCore/QDebug>
 #include <QtCore/QSequentialIterable>
-#include <QtCore/QAssociativeIterable>
 
 using namespace Grantlee;
 
@@ -134,9 +134,8 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
 
     auto iter = object.value<QAssociativeIterable>();
 
-    if (iter.find(property) != iter.end())
-    {
-        return iter.value(property);
+    if (iter.find(property) != iter.end()) {
+      return iter.value(property);
     }
 
     if (property == QStringLiteral("size")
@@ -185,7 +184,9 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
         const auto mp = mo->property(idx);
 
         if (mp.isEnumType()) {
-          MetaEnumVariable mev(mp.enumerator(), mp.readOnGadget(object.constData()).value<int>());
+          MetaEnumVariable mev(
+              mp.enumerator(),
+              mp.readOnGadget(object.constData()).value<int>());
           return QVariant::fromValue(mev);
         }
 

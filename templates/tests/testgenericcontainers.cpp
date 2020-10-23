@@ -108,14 +108,14 @@ template <typename Container> struct ContainerPopulator {
   static void populateSequential(Container &container)
   {
     for (const typename Container::value_type item :
-               getItems<typename Container::value_type>())
+         getItems<typename Container::value_type>())
       container.push_back(item);
   }
   static void populateAssociative(Container &container)
   {
     auto i = 0;
     for (const typename Container::mapped_type item :
-               getItems<typename Container::mapped_type>())
+         getItems<typename Container::mapped_type>())
       container[i++] = item;
   }
 };

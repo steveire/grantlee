@@ -326,8 +326,7 @@ QVariant IfToken::evaluate(Context *c) const
       auto f = mArgs.first->evaluate(c);
       auto s = mArgs.second->evaluate(c);
 
-      if (auto comp_opt = QVariant::compare(f, s))
-      {
+      if (auto comp_opt = QVariant::compare(f, s)) {
         auto comp = *comp_opt;
         if (mOpCode == GtCode && comp > 0)
           return true;

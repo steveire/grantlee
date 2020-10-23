@@ -196,14 +196,14 @@ QVariant MakeListFilter::doFilter(const QVariant &_input,
   if (input.userType() == qMetaTypeId<SafeString>()
       || input.userType() == qMetaTypeId<QString>()) {
     QVariantList list;
-    for (const QVariant &var : getSafeString(input).get().split(
-                                        QString(),
+    for (const QVariant &var :
+         getSafeString(input).get().split(QString(),
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                                        QString::SkipEmptyParts
+                                          QString::SkipEmptyParts
 #else
-                                        Qt::SkipEmptyParts
+                                          Qt::SkipEmptyParts
 #endif
-                                        ))
+                                          ))
       list << var;
     return list;
   }

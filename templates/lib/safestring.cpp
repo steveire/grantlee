@@ -670,14 +670,13 @@ QStringList SafeString::NestedString::split(const QChar &sep,
   return QString::split(sep, behavior, cs);
 }
 
-QStringList
-SafeString::NestedString::split(const QRegularExpression &rx,
+QStringList SafeString::NestedString::split(const QRegularExpression &rx,
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                                             QString::SplitBehavior behavior
 #else
                                             Qt::SplitBehavior behavior
 #endif
-                                ) const
+                                            ) const
 {
   return QString::split(rx, behavior);
 }

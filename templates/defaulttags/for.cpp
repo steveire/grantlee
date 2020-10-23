@@ -58,11 +58,11 @@ Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
   for (const QString &arg : expr.mid(0, expr.size() - 2)) {
     vars << arg.split(QLatin1Char(','),
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                                        QString::SkipEmptyParts
+                      QString::SkipEmptyParts
 #else
-                                        Qt::SkipEmptyParts
+                      Qt::SkipEmptyParts
 #endif
-      );
+    );
   }
 
   for (const QString &var : vars) {
@@ -210,8 +210,9 @@ void ForNode::render(OutputStream *stream, Context *c) const
         for (const QString &loopVar : m_loopVars) {
           c->push();
           c->insert(QStringLiteral("var"), v);
-          auto resolvedFE = FilterExpression(QStringLiteral("var.") + loopVar, nullptr)
-                       .resolve(c);
+          auto resolvedFE
+              = FilterExpression(QStringLiteral("var.") + loopVar, nullptr)
+                    .resolve(c);
           c->pop();
           c->insert(loopVar, resolvedFE);
         }

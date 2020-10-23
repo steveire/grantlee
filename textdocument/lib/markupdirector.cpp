@@ -208,7 +208,8 @@ MarkupDirector::processList(QTextFrame::iterator it, const QTextBlock &_block,
       ++it;
     block = block.next();
     // Processing nested list
-    if (block.isValid() && block.textList() && block.textList()->format().indent() > list->format().indent()) {
+    if (block.isValid() && block.textList()
+        && block.textList()->format().indent() > list->format().indent()) {
       auto obj = block.document()->objectForFormat(block.blockFormat());
       auto group = qobject_cast<QTextBlockGroup *>(obj);
       if (group && group != list) {
@@ -217,7 +218,8 @@ MarkupDirector::processList(QTextFrame::iterator it, const QTextBlock &_block,
         block = pair.second;
       }
     }
-    curList = qobject_cast<QTextList *>(block.document()->objectForFormat(block.blockFormat()));
+    curList = qobject_cast<QTextList *>(
+        block.document()->objectForFormat(block.blockFormat()));
   }
   m_builder->endList();
   return qMakePair(it, block);
@@ -652,7 +654,8 @@ QSet<int> MarkupDirector::getElementsToClose(QTextBlock::iterator it) const
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     auto elementsToClose = d->m_openElements.toSet();
 #else
-    auto elementsToClose = QSet<int>(d->m_openElements.begin(), d->m_openElements.end());
+    auto elementsToClose
+        = QSet<int>(d->m_openElements.begin(), d->m_openElements.end());
 #endif
     return elementsToClose.unite(d->m_elementsToOpen);
   }

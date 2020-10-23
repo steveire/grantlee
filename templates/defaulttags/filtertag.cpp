@@ -32,11 +32,11 @@ Grantlee::Node *FilterNodeFactory::getNode(const QString &tagContent,
 {
   auto expr = tagContent.split(QLatin1Char(' '),
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                                        QString::SkipEmptyParts
+                               QString::SkipEmptyParts
 #else
-                                        Qt::SkipEmptyParts
+                               Qt::SkipEmptyParts
 #endif
-);
+  );
 
   expr.removeFirst();
 

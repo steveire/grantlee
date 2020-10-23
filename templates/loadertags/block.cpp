@@ -41,11 +41,11 @@ Node *BlockNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
   const auto expr = tagContent.split(QLatin1Char(' '),
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                                        QString::SkipEmptyParts
+                                     QString::SkipEmptyParts
 #else
-                                        Qt::SkipEmptyParts
+                                     Qt::SkipEmptyParts
 #endif
-    );
+  );
 
   if (expr.size() != 2) {
     throw Grantlee::Exception(TagSyntaxError,

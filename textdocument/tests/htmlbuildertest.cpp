@@ -27,8 +27,8 @@
 
 #include "coverageobject.h"
 #include "markupdirector.h"
-#include "texthtmlbuilder.h"
 #include "testutils.h"
+#include "texthtmlbuilder.h"
 
 #include <memory>
 
@@ -192,8 +192,8 @@ void TestHtmlOutput::testDoubleSpan()
 {
   QTextDocument doc;
   doc.setHtml(QStringLiteral("Some <span "
-                              "style=\"color:#ff0000;background-color:#00ff00;"
-                              "\">formatted</span> text."));
+                             "style=\"color:#ff0000;background-color:#00ff00;"
+                             "\">formatted</span> text."));
 
   TextHTMLBuilder hb;
   MarkupDirector md(&hb);
@@ -353,9 +353,8 @@ void TestHtmlOutput::testEdgeCaseRight()
 void TestHtmlOutput::testImage()
 {
   QTextDocument doc;
-  doc.setHtml(
-      QStringLiteral("Paragraph with an inline <img "
-                     "src=\"http://kde.org/img/kde41.png\" /> image."));
+  doc.setHtml(QStringLiteral("Paragraph with an inline <img "
+                             "src=\"http://kde.org/img/kde41.png\" /> image."));
 
   TextHTMLBuilder hb;
   MarkupDirector md(&hb);

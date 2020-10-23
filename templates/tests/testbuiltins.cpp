@@ -96,15 +96,15 @@ private:
  */
 class GadgetClass
 {
-    Q_GADGET
-    Q_PROPERTY(PersonName personName READ personName)
+  Q_GADGET
+  Q_PROPERTY(PersonName personName READ personName)
 public:
-    GadgetClass() {}
+  GadgetClass() {}
 
-    enum PersonName { Mike = 0, Natalie, Oliver };
-    Q_ENUM(PersonName)
+  enum PersonName { Mike = 0, Natalie, Oliver };
+  Q_ENUM(PersonName)
 
-    PersonName personName() const { return Oliver; }
+  PersonName personName() const { return Oliver; }
 };
 Q_DECLARE_METATYPE(GadgetClass)
 
@@ -890,59 +890,75 @@ void TestBuiltinSyntax::testEnums_data()
                                   << QStringLiteral("1") << NoError;
   QTest::newRow("gadget-enums03") << QStringLiteral("{{ var.Oliver }}") << dict
                                   << QStringLiteral("2") << NoError;
-  QTest::newRow("gadget-enums04") << QStringLiteral("{{ var.Patricia }}") << dict
-                                  << QString() << NoError;
-  QTest::newRow("gadget-enums05") << QStringLiteral("{{ var.Natalie.name }}") << dict
-                                  << QStringLiteral("PersonName") << NoError;
-  QTest::newRow("gadget-enums06") << QStringLiteral("{{ var.Natalie.scope }}") << dict
-                                  << QStringLiteral("GadgetClass") << NoError;
-  QTest::newRow("gadget-enums07") << QStringLiteral("{{ var.Natalie.value }}") << dict
-                                  << QStringLiteral("1") << NoError;
-  QTest::newRow("gadget-enums08") << QStringLiteral("{{ var.Natalie.key }}") << dict
-                                  << QStringLiteral("Natalie") << NoError;
-  QTest::newRow("gadget-enums09") << QStringLiteral("{{ var.personName }}") << dict
-                                  << QStringLiteral("2") << NoError;
-  QTest::newRow("gadget-enums10") << QStringLiteral("{{ var.personName.name }}") << dict
-                                  << QStringLiteral("PersonName") << NoError;
-  QTest::newRow("gadget-enums11") << QStringLiteral("{{ var.personName.scope }}") << dict
-                                  << QStringLiteral("GadgetClass") << NoError;
-  QTest::newRow("gadget-enums12") << QStringLiteral("{{ var.personName.value }}") << dict
-                                  << QStringLiteral("2") << NoError;
-  QTest::newRow("gadget-enums13") << QStringLiteral("{{ var.personName.key }}") << dict
-                                  << QStringLiteral("Oliver") << NoError;
-  QTest::newRow("gadget-enums14") << QStringLiteral("{{ var.PersonName.0 }}") << dict
-                                  << QStringLiteral("0") << NoError;
-  QTest::newRow("gadget-enums15") << QStringLiteral("{{ var.PersonName.2 }}") << dict
-                                  << QStringLiteral("2") << NoError;
-  QTest::newRow("gadget-enums16") << QStringLiteral("{{ var.PersonName.3 }}") << dict
-                                  << QString() << NoError;
-  QTest::newRow("gadget-enums17") << QStringLiteral("{{ var.PersonName.0.name }}") << dict
-                                  << QStringLiteral("PersonName") << NoError;
-  QTest::newRow("gadget-enums18") << QStringLiteral("{{ var.PersonName.0.scope }}") << dict
-                                  << QStringLiteral("GadgetClass") << NoError;
-  QTest::newRow("gadget-enums19") << QStringLiteral("{{ var.PersonName.0.value }}")
+  QTest::newRow("gadget-enums04")
+      << QStringLiteral("{{ var.Patricia }}") << dict << QString() << NoError;
+  QTest::newRow("gadget-enums05")
+      << QStringLiteral("{{ var.Natalie.name }}") << dict
+      << QStringLiteral("PersonName") << NoError;
+  QTest::newRow("gadget-enums06")
+      << QStringLiteral("{{ var.Natalie.scope }}") << dict
+      << QStringLiteral("GadgetClass") << NoError;
+  QTest::newRow("gadget-enums07") << QStringLiteral("{{ var.Natalie.value }}")
+                                  << dict << QStringLiteral("1") << NoError;
+  QTest::newRow("gadget-enums08")
+      << QStringLiteral("{{ var.Natalie.key }}") << dict
+      << QStringLiteral("Natalie") << NoError;
+  QTest::newRow("gadget-enums09") << QStringLiteral("{{ var.personName }}")
+                                  << dict << QStringLiteral("2") << NoError;
+  QTest::newRow("gadget-enums10")
+      << QStringLiteral("{{ var.personName.name }}") << dict
+      << QStringLiteral("PersonName") << NoError;
+  QTest::newRow("gadget-enums11")
+      << QStringLiteral("{{ var.personName.scope }}") << dict
+      << QStringLiteral("GadgetClass") << NoError;
+  QTest::newRow("gadget-enums12")
+      << QStringLiteral("{{ var.personName.value }}") << dict
+      << QStringLiteral("2") << NoError;
+  QTest::newRow("gadget-enums13")
+      << QStringLiteral("{{ var.personName.key }}") << dict
+      << QStringLiteral("Oliver") << NoError;
+  QTest::newRow("gadget-enums14") << QStringLiteral("{{ var.PersonName.0 }}")
                                   << dict << QStringLiteral("0") << NoError;
-  QTest::newRow("gadget-enums20") << QStringLiteral("{{ var.PersonName.0.key }}")
-                                  << dict << QStringLiteral("Mike") << NoError;
-  QTest::newRow("gadget-enums21") << QStringLiteral("{{ var.PersonName.2.key }}")
-                                  << dict << QStringLiteral("Oliver") << NoError;
-  QTest::newRow("gadget-enums22") << QStringLiteral("{{ var.PersonName.samba }}")
+  QTest::newRow("gadget-enums15") << QStringLiteral("{{ var.PersonName.2 }}")
+                                  << dict << QStringLiteral("2") << NoError;
+  QTest::newRow("gadget-enums16") << QStringLiteral("{{ var.PersonName.3 }}")
                                   << dict << QString() << NoError;
+  QTest::newRow("gadget-enums17")
+      << QStringLiteral("{{ var.PersonName.0.name }}") << dict
+      << QStringLiteral("PersonName") << NoError;
+  QTest::newRow("gadget-enums18")
+      << QStringLiteral("{{ var.PersonName.0.scope }}") << dict
+      << QStringLiteral("GadgetClass") << NoError;
+  QTest::newRow("gadget-enums19")
+      << QStringLiteral("{{ var.PersonName.0.value }}") << dict
+      << QStringLiteral("0") << NoError;
+  QTest::newRow("gadget-enums20")
+      << QStringLiteral("{{ var.PersonName.0.key }}") << dict
+      << QStringLiteral("Mike") << NoError;
+  QTest::newRow("gadget-enums21")
+      << QStringLiteral("{{ var.PersonName.2.key }}") << dict
+      << QStringLiteral("Oliver") << NoError;
+  QTest::newRow("gadget-enums22")
+      << QStringLiteral("{{ var.PersonName.samba }}") << dict << QString()
+      << NoError;
   QTest::newRow("gadget-enums23")
-      << QStringLiteral("{% with var.personName as result %}{{ result.key }},{{ "
-                        "result }},{{ result.scope }}{% endwith %}")
+      << QStringLiteral(
+             "{% with var.personName as result %}{{ result.key }},{{ "
+             "result }},{{ result.scope }}{% endwith %}")
       << dict << QStringLiteral("Oliver,2,GadgetClass") << NoError;
   QTest::newRow("gadget-enums24")
-      << QStringLiteral("{% with var.PersonName.2 as result %}{{ result.key }},{{ "
-                        "result }},{{ result.scope }}{% endwith %}")
+      << QStringLiteral(
+             "{% with var.PersonName.2 as result %}{{ result.key }},{{ "
+             "result }},{{ result.scope }}{% endwith %}")
       << dict << QStringLiteral("Oliver,2,GadgetClass") << NoError;
   QTest::newRow("gadget-enums25")
       << QStringLiteral("{% with var.Oliver as result %}{{ result.key }},{{ "
                         "result }},{{ result.scope }}{% endwith %}")
       << dict << QStringLiteral("Oliver,2,GadgetClass") << NoError;
   QTest::newRow("gadget-enums26")
-      << QStringLiteral("{% with var.PersonName as result %}{{ result.0.key }},{{ "
-                        "result.1.key }},{{ result.2.key }}{% endwith %}")
+      << QStringLiteral(
+             "{% with var.PersonName as result %}{{ result.0.key }},{{ "
+             "result.1.key }},{{ result.2.key }}{% endwith %}")
       << dict << QStringLiteral("Mike,Natalie,Oliver") << NoError;
 
   QTest::newRow("gadget-enums-loops01")

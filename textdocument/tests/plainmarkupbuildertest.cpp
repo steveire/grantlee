@@ -29,8 +29,8 @@
 #include "coverageobject.h"
 #include "markupdirector.h"
 #include "plaintextmarkupbuilder.h"
-#include "texthtmlbuilder.h"
 #include "testutils.h"
+#include "texthtmlbuilder.h"
 
 #include <memory>
 
@@ -195,8 +195,8 @@ void TestPlainMarkupOutput::testDoubleSpan()
 {
   QTextDocument doc;
   doc.setHtml(QStringLiteral("Some <span "
-                              "style=\"color:#ff0000;background-color:#00ff00;"
-                              "\">formatted</span> text."));
+                             "style=\"color:#ff0000;background-color:#00ff00;"
+                             "\">formatted</span> text."));
 
   PlainTextMarkupBuilder hb;
   MarkupDirector md(&hb);
@@ -346,9 +346,8 @@ void TestPlainMarkupOutput::testEdgeCaseRight()
 void TestPlainMarkupOutput::testImage()
 {
   QTextDocument doc;
-  doc.setHtml(
-      QStringLiteral("Paragraph with an inline <img "
-                     "src=\"http://kde.org/img/kde41.png\" /> image."));
+  doc.setHtml(QStringLiteral("Paragraph with an inline <img "
+                             "src=\"http://kde.org/img/kde41.png\" /> image."));
 
   PlainTextMarkupBuilder hb;
   MarkupDirector md(&hb);
@@ -641,26 +640,26 @@ void TestPlainMarkupOutput::testLongDocument()
 
 void TestPlainMarkupOutput::testNestedList()
 {
-    QTextDocument doc;
-    doc.setHtml(QStringLiteral("<ol>\n"
-                               "  <li>Elem1</li>\n"
-                               "  <li>Elem2\n"
-                               "    <ul>\n"
-                               "      <li>Subelem1</li>\n"
-                               "      <li>Subelem2</li>\n"
-                               "    </ul>\n"
-                               "  </li>\n"
-                               "  <li>Elem3</li>\n"
-                               "  <li>Elem4\n"
-                               "    <ul>\n"
-                               "      <li>Subelem3</li>\n"
-                               "      <li>Subelem4</li>\n"
-                               "    </ul>\n"
-                               "  </li>\n"
-                               "</ol>"
-                               "<ul type=\"circle\">\n"
-                               "  <li>Elem5</li>\n"
-                               "</ul>"));
+  QTextDocument doc;
+  doc.setHtml(QStringLiteral("<ol>\n"
+                             "  <li>Elem1</li>\n"
+                             "  <li>Elem2\n"
+                             "    <ul>\n"
+                             "      <li>Subelem1</li>\n"
+                             "      <li>Subelem2</li>\n"
+                             "    </ul>\n"
+                             "  </li>\n"
+                             "  <li>Elem3</li>\n"
+                             "  <li>Elem4\n"
+                             "    <ul>\n"
+                             "      <li>Subelem3</li>\n"
+                             "      <li>Subelem4</li>\n"
+                             "    </ul>\n"
+                             "  </li>\n"
+                             "</ol>"
+                             "<ul type=\"circle\">\n"
+                             "  <li>Elem5</li>\n"
+                             "</ul>"));
   PlainTextMarkupBuilder hb;
   MarkupDirector md(&hb);
   md.processDocument(&doc);

@@ -51,9 +51,7 @@ public:
   };
 
   explicit State(State<TransitionInterface> *parent = {})
-      : m_initialState(nullptr),
-        m_parent(parent),
-        m_endTransition(nullptr),
+      : m_initialState(nullptr), m_parent(parent), m_endTransition(nullptr),
         m_unconditionalTransition(nullptr)
   {
     if (parent)
@@ -123,8 +121,7 @@ public:
   typedef typename State<TransitionInterface>::Transition Transition;
 
   explicit StateMachine(State<TransitionInterface> *parent = {})
-      : State<TransitionInterface>(parent),
-        m_currentState(nullptr)
+      : State<TransitionInterface>(parent), m_currentState(nullptr)
   {
   }
 

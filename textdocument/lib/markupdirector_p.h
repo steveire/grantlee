@@ -36,7 +36,10 @@ namespace Grantlee
 */
 class MarkupDirectorPrivate
 {
-  MarkupDirectorPrivate(MarkupDirector *md) : q_ptr(md), m_openFontPointSize(0), m_fontPointSizeToOpen(0) {}
+  MarkupDirectorPrivate(MarkupDirector *md)
+      : q_ptr(md), m_openFontPointSize(0), m_fontPointSizeToOpen(0)
+  {
+  }
 
   Q_DECLARE_PUBLIC(MarkupDirector)
   MarkupDirector *const q_ptr;

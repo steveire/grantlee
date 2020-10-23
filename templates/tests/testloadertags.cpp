@@ -73,7 +73,8 @@ void TestLoaderTags::initTestCase()
 
   m_engine = new Engine(this);
 
-  m_loader = QSharedPointer<InMemoryTemplateLoader>(new InMemoryTemplateLoader());
+  m_loader
+      = QSharedPointer<InMemoryTemplateLoader>(new InMemoryTemplateLoader());
   m_engine->addTemplateLoader(m_loader);
 
   auto appDirPath
@@ -166,9 +167,9 @@ void TestLoaderTags::testIncludeTag_data()
   Dict dict;
 
   m_loader->setTemplate(QStringLiteral("basic-syntax01"),
-                      QStringLiteral("Something cool"));
+                        QStringLiteral("Something cool"));
   m_loader->setTemplate(QStringLiteral("basic-syntax02"),
-                      QStringLiteral("{{ headline }}"));
+                        QStringLiteral("{{ headline }}"));
 
   QTest::newRow("include01") << "{% include \"basic-syntax01\" %}" << dict
                              << QStringLiteral("Something cool") << NoError;
@@ -568,12 +569,14 @@ void TestLoaderTags::testIncludeAndExtendsTag_data()
 
   Dict dict;
 
-  m_loader->setTemplate(QStringLiteral("ext_base"),
-                      QStringLiteral("{% block block1 %}block1{% endblock %}"));
+  m_loader->setTemplate(
+      QStringLiteral("ext_base"),
+      QStringLiteral("{% block block1 %}block1{% endblock %}"));
 
-  m_loader->setTemplate(QStringLiteral("extender"),
-                      QStringLiteral("{% extends 'ext_base' %}{% block block1 "
-                                     "%}block1override{% endblock %}"));
+  m_loader->setTemplate(
+      QStringLiteral("extender"),
+      QStringLiteral("{% extends 'ext_base' %}{% block block1 "
+                     "%}block1override{% endblock %}"));
 
   QTest::newRow("include-extender-twice") << QStringLiteral(R"django(
 {% include "extender" %}
@@ -581,9 +584,10 @@ void TestLoaderTags::testIncludeAndExtendsTag_data()
 )django") << dict << QStringLiteral("\nblock1override\nblock1override\n")
                                           << NoError;
 
-  m_loader->setTemplate(QStringLiteral("anotherextender"),
-                      QStringLiteral("{% extends 'extender' %}{% block block1 "
-                                     "%}block1overrideagain{% endblock %}"));
+  m_loader->setTemplate(
+      QStringLiteral("anotherextender"),
+      QStringLiteral("{% extends 'extender' %}{% block block1 "
+                     "%}block1overrideagain{% endblock %}"));
 
   QTest::newRow("include-deeper-extender-twice")
       << QStringLiteral(R"django(
