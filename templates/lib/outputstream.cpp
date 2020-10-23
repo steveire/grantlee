@@ -37,6 +37,7 @@ QString OutputStream::escape(const QString &input) const
   temp.replace(QLatin1Char('<'), QStringLiteral("&lt;"));
   temp.replace(QLatin1Char('>'), QStringLiteral("&gt;"));
   temp.replace(QLatin1Char('\''), QStringLiteral("&#39;"));
+  temp.replace(QLatin1Char('"'), QStringLiteral("&quot;"));
   return temp;
 }
 
