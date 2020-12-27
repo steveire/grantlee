@@ -302,34 +302,51 @@ public:
     SafeString &setUtf16(const ushort *unicode, int size);
     SafeString simplified() const;
 
+    // QT_DEPRECATED_SINCE(5, 15) to support consumers building with
+    // -DQT_DISABLE_DEPRECATED_BEFORE=0x050f00
+    // where QString enums will be invisible to the compiler
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT_DEPRECATED_SINCE(5, 15)
+    // Calls with default argument for "behavior" should pick the Qt >= 5.14 version, if available
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QStringList split(const SafeString &sep,
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
-#else
-                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
-#endif
+                      QString::SplitBehavior behavior,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     QStringList split(const QString &sep,
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
-#else
-                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
-#endif
+                      QString::SplitBehavior behavior,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     QStringList split(const QChar &sep,
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
-#else
-                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
-#endif
+                      QString::SplitBehavior behavior,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     QStringList split(const QRegularExpression &rx,
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                      QString::SplitBehavior behavior = QString::KeepEmptyParts
+                      QString::SplitBehavior behavior) const;
 #else
-                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts
+    QStringList split(const SafeString &sep,
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
+                      Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    QStringList split(const QString &sep,
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
+                      Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    QStringList split(const QChar &sep,
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts,
+                      Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    QStringList split(const QRegularExpression &rx,
+                      QString::SplitBehavior behavior = QString::KeepEmptyParts) const;
 #endif
-                      ) const;
+#endif
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QStringList split(const SafeString &sep,
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
+                      Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    QStringList split(const QString &sep,
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
+                      Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    QStringList split(const QChar &sep,
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts,
+                      Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    QStringList split(const QRegularExpression &rx,
+                      Qt::SplitBehavior behavior = Qt::KeepEmptyParts) const;
+#endif
 
     SafeString toLower() const;
     SafeString toUpper() const;
