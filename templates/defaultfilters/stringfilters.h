@@ -269,4 +269,14 @@ public:
   bool isSafe() const override { return true; }
 };
 
+class TruncateCharsFilter : public Filter
+{
+public:
+  QVariant doFilter(const QVariant &input,
+                    const QVariant &argument = QVariant(),
+                    bool autoescape = {}) const override;
+
+  bool isSafe() const override { return true; }
+};
+
 #endif

@@ -100,6 +100,7 @@ public:
     filters.insert(QStringLiteral("wordcount"), new WordCountFilter());
     filters.insert(QStringLiteral("wordwrap"), new WordWrapFilter());
     filters.insert(QStringLiteral("yesno"), new YesNoFilter());
+    filters.insert(QStringLiteral("truncatechars"), new TruncateCharsFilter());
 
     return filters;
   }

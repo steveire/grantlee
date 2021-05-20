@@ -584,3 +584,18 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
 
   return ret;
 }
+
+QVariant TruncateCharsFilter::doFilter(const QVariant &input,
+                                       const QVariant &argument,
+                                       bool autoescape) const
+{
+  Q_UNUSED(autoescape)
+  QString retString = getSafeString(input);
+  int count = getSafeString(argument).get().toInt();
+
+  if (retString.length() < count)
+    return retString;
+  retString.truncate(count);
+  retString.append(QStringLiteral("..."));
+  return retString;
+}
