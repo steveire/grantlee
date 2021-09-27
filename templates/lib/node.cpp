@@ -157,7 +157,7 @@ void NodeList::append(Grantlee::Node *node)
   QList<Grantlee::Node *>::append(node);
 }
 
-void NodeList::append(QList<Grantlee::Node *> nodeList)
+void NodeList::append(const QList<Grantlee::Node *> &nodeList)
 {
   if (!m_containsNonText) {
     for (Grantlee::Node *node : nodeList) {

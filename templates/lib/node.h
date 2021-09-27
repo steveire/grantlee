@@ -182,7 +182,7 @@ public:
   /**
     Appends @p nodeList to the end of this **%NodeList**.
   */
-  void append(QList<Grantlee::Node *> nodeList);
+  void append(const QList<Grantlee::Node *> &nodeList);
 
   /**
     Returns true if this **%NodeList** contains non-text nodes.
