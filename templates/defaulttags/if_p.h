@@ -326,15 +326,15 @@ QVariant IfToken::evaluate(Context *c) const
       auto f = mArgs.first->evaluate(c);
       auto s = mArgs.second->evaluate(c);
 
-      if (auto comp_opt = QVariant::compare(f, s)) {
-        auto comp = *comp_opt;
-        if (mOpCode == GtCode && comp > 0)
+      auto comp = QVariant::compare(f, s);
+      if (comp != QPartialOrdering::Unordered) {
+        if (mOpCode == GtCode && comp == QPartialOrdering::Greater)
           return true;
-        if (mOpCode == GteCode && comp >= 0)
+        if (mOpCode == GteCode && comp != QPartialOrdering::Less)
           return true;
-        if (mOpCode == LtCode && comp < 0)
+        if (mOpCode == LtCode && comp == QPartialOrdering::Less)
           return true;
-        if (mOpCode == LteCode && comp <= 0)
+        if (mOpCode == LteCode && comp != QPartialOrdering::Greater)
           return true;
       }
       return false;
