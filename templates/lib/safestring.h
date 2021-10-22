@@ -306,16 +306,14 @@ public:
     // -DQT_DISABLE_DEPRECATED_BEFORE=0x050f00
     // where QString enums will be invisible to the compiler
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && QT_DEPRECATED_SINCE(5, 15)
-    // Calls with default argument for "behavior" should pick the Qt >= 5.14 version, if available
+    // Calls with default argument for "behavior" should pick the Qt >= 5.14
+    // version, if available
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QStringList split(const SafeString &sep,
-                      QString::SplitBehavior behavior,
+    QStringList split(const SafeString &sep, QString::SplitBehavior behavior,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-    QStringList split(const QString &sep,
-                      QString::SplitBehavior behavior,
+    QStringList split(const QString &sep, QString::SplitBehavior behavior,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-    QStringList split(const QChar &sep,
-                      QString::SplitBehavior behavior,
+    QStringList split(const QChar &sep, QString::SplitBehavior behavior,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     QStringList split(const QRegularExpression &rx,
                       QString::SplitBehavior behavior) const;
@@ -330,7 +328,8 @@ public:
                       QString::SplitBehavior behavior = QString::KeepEmptyParts,
                       Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     QStringList split(const QRegularExpression &rx,
-                      QString::SplitBehavior behavior = QString::KeepEmptyParts) const;
+                      QString::SplitBehavior behavior
+                      = QString::KeepEmptyParts) const;
 #endif
 #endif
 

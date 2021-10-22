@@ -659,8 +659,9 @@ QStringList SafeString::NestedString::split(const QChar &sep,
   return QString::split(sep, behavior, cs);
 }
 
-QStringList SafeString::NestedString::split(const QRegularExpression &rx,
-                                            QString::SplitBehavior behavior) const
+QStringList
+SafeString::NestedString::split(const QRegularExpression &rx,
+                                QString::SplitBehavior behavior) const
 {
   return QString::split(rx, behavior);
 }
