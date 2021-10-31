@@ -675,7 +675,20 @@ QSet<int> MarkupDirector::getElementsToClose(QTextBlock::iterator it) const
   auto fontForeground = fragmentFormat.foreground();
   auto fontBackground = fragmentFormat.background();
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   auto fontFamily = fragmentFormat.fontFamily();
+#else
+  QString fontFamily;
+  auto fontFamilies = fragmentFormat.fontFamilies();
+  if (fontFamilies.isValid())
+  {
+    auto fflist = fontFamilies.value<QList<QString>>();
+    if (!fflist.isEmpty())
+    {
+      fontFamily = fflist[0];
+    }
+  }
+#endif
   auto fontPointSize = fragmentFormat.font().pointSize();
   auto anchorHref = fragmentFormat.anchorHref();
 
@@ -773,7 +786,20 @@ QList<int> MarkupDirector::getElementsToOpen(QTextBlock::iterator it)
   auto fontForeground = fragmentFormat.foreground();
   auto fontBackground = fragmentFormat.background();
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   auto fontFamily = fragmentFormat.fontFamily();
+#else
+  QString fontFamily;
+  auto fontFamilies = fragmentFormat.fontFamilies();
+  if (fontFamilies.isValid())
+  {
+    auto fflist = fontFamilies.value<QList<QString>>();
+    if (!fflist.isEmpty())
+    {
+      fontFamily = fflist[0];
+    }
+  }
+#endif
   auto fontPointSize = fragmentFormat.font().pointSize();
   auto anchorHref = fragmentFormat.anchorHref();
 
