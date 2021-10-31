@@ -680,11 +680,9 @@ QSet<int> MarkupDirector::getElementsToClose(QTextBlock::iterator it) const
 #else
   QString fontFamily;
   auto fontFamilies = fragmentFormat.fontFamilies();
-  if (fontFamilies.isValid())
-  {
+  if (fontFamilies.isValid()) {
     auto fflist = fontFamilies.value<QList<QString>>();
-    if (!fflist.isEmpty())
-    {
+    if (!fflist.isEmpty()) {
       fontFamily = fflist[0];
     }
   }
@@ -791,11 +789,9 @@ QList<int> MarkupDirector::getElementsToOpen(QTextBlock::iterator it)
 #else
   QString fontFamily;
   auto fontFamilies = fragmentFormat.fontFamilies();
-  if (fontFamilies.isValid())
-  {
+  if (fontFamilies.isValid()) {
     auto fflist = fontFamilies.value<QList<QString>>();
-    if (!fflist.isEmpty())
-    {
+    if (!fflist.isEmpty()) {
       fontFamily = fflist[0];
     }
   }

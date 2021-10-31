@@ -36,8 +36,7 @@ Node *WithNodeFactory::getNode(const QString &tagContent, Parser *p) const
       const auto parts = expr.at(i).split(QLatin1Char('='));
       if (parts.size() == 2) {
         namedExpressions.push_back(
-            {parts.at(0),
-             FilterExpression(parts.at(1), p)});
+            {parts.at(0), FilterExpression(parts.at(1), p)});
         newSyntax = true;
       } else {
         newSyntax = false;
