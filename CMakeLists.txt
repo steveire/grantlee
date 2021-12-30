@@ -90,6 +90,14 @@ set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 include("${Grantlee_MODULE_DIR}/GrantleeMacros.cmake")
 
+if (GRANTLEE_BUILD_WITH_QT6)
+    find_package(Qt6Core 6.0.0 REQUIRED)
+    find_package(Qt6Qml 6.0.0)
+else()
+    find_package(Qt5Core 5.2.0 REQUIRED)
+    find_package(Qt5Qml 5.2.0)
+endif()
+
 if (BUILD_TEMPLATES)
   add_subdirectory(templates)
 endif()
