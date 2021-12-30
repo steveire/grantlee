@@ -100,6 +100,12 @@ endif()
 
 set(CMAKECONFIG_INSTALL_DIR "${LIB_INSTALL_DIR}/cmake/Grantlee${Grantlee5_VERSION_MAJOR}" )
 
+if (GRANTLEE_BUILD_WITH_QT6)
+  set(Grantlee_REQUIRED_QT_VERSION 6)
+else()
+  set(Grantlee_REQUIRED_QT_VERSION 5)
+endif()
+
 configure_file(
   "${Grantlee_MODULE_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake.in"
   "${CMAKE_BINARY_DIR}/Grantlee${Grantlee5_VERSION_MAJOR}Config.cmake"
