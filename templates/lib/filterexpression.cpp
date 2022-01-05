@@ -28,7 +28,7 @@
 #include "parser.h"
 #include "util.h"
 
-typedef QPair<QSharedPointer<Grantlee::Filter>, Grantlee::Variable> ArgFilter;
+using ArgFilter = QPair<QSharedPointer<Grantlee::Filter>, Grantlee::Variable>;
 
 namespace Grantlee
 {

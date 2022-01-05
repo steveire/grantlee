@@ -22,65 +22,61 @@
 
 using namespace Grantlee;
 
-typedef State<TextProcessingMachine::Type> TextProcessingState;
-typedef TextProcessingMachine::Transition TextProcessingTransition;
+using TextProcessingState = State<TextProcessingMachine::Type>;
+using TextProcessingTransition = TextProcessingMachine::Transition;
 
-typedef LexerObject<TextProcessingState, NullTest, MarksClearer> ChurningState;
-typedef LexerObject<TextProcessingState, NullTest, TokenFinalizer>
-    FinalizeTokenState;
-typedef LexerObject<TextProcessingTransition, NullTest, TokenFinalizer>
-    EofHandler;
-typedef LexerObject<TextProcessingTransition, NullTest,
-                    TokenFinalizerWithTrimming>
-    EofHandlerWithTrimming;
+using ChurningState = LexerObject<TextProcessingState, NullTest, MarksClearer>;
+using FinalizeTokenState
+    = LexerObject<TextProcessingState, NullTest, TokenFinalizer>;
+using EofHandler
+    = LexerObject<TextProcessingTransition, NullTest, TokenFinalizer>;
+using EofHandlerWithTrimming = LexerObject<TextProcessingTransition, NullTest,
+                                           TokenFinalizerWithTrimming>;
 
-typedef CharacterTransition<'{'> MaybeTemplateSyntaxHandler;
+using MaybeTemplateSyntaxHandler = CharacterTransition<'{'>;
 
-typedef CharacterTransition<'%', MarkStartSyntax> TagStartHandler;
-typedef CharacterTransition<'#', MarkStartSyntax> CommentStartHandler;
-typedef CharacterTransition<'%'> TagEndHandler;
-typedef CharacterTransition<'#'> CommentEndHandler;
-typedef CharacterTransition<'{', MarkStartSyntax> BeginValueHandler;
-typedef CharacterTransition<'}'> MaybeEndValueHandler;
-typedef CharacterTransition<'\n', MarkNewline> NewlineHandler;
-typedef CharacterTransition<'}', MarkEndSyntax> EndTemplateSyntaxHandler;
-typedef NegateCharacterTransition<'}'> NotEndTemplateSyntaxHandler;
+using TagStartHandler = CharacterTransition<'%', MarkStartSyntax>;
+using CommentStartHandler = CharacterTransition<'#', MarkStartSyntax>;
+using TagEndHandler = CharacterTransition<'%'>;
+using CommentEndHandler = CharacterTransition<'#'>;
+using BeginValueHandler = CharacterTransition<'{', MarkStartSyntax>;
+using MaybeEndValueHandler = CharacterTransition<'}'>;
+using NewlineHandler = CharacterTransition<'\n', MarkNewline>;
+using EndTemplateSyntaxHandler = CharacterTransition<'}', MarkEndSyntax>;
+using NotEndTemplateSyntaxHandler = NegateCharacterTransition<'}'>;
 
-typedef LexerObject<
+using NotBeginTemplateSyntaxHandler = LexerObject<
     TextProcessingTransition,
     Negate<OrTest<CharacterTest<'{'>,
-                  OrTest<CharacterTest<'#'>, CharacterTest<'%'>>>>>
-    NotBeginTemplateSyntaxHandler;
+                  OrTest<CharacterTest<'#'>, CharacterTest<'%'>>>>>;
 
-typedef LexerObject<
+using NotBeginTemplateSyntaxOrNewlineHandler = LexerObject<
     TextProcessingTransition,
     Negate<OrTest<CharacterTest<'{'>,
                   OrTest<CharacterTest<'#'>,
-                         OrTest<CharacterTest<'%'>, CharacterTest<'\n'>>>>>>
-    NotBeginTemplateSyntaxOrNewlineHandler;
+                         OrTest<CharacterTest<'%'>, CharacterTest<'\n'>>>>>>;
 
-typedef LexerObject<
+using NotTagCommentOrNewlineHandler = LexerObject<
     TextProcessingTransition,
     Negate<OrTest<CharacterTest<'#'>,
-                  OrTest<CharacterTest<'%'>, CharacterTest<'\n'>>>>>
-    NotTagCommentOrNewlineHandler;
+                  OrTest<CharacterTest<'%'>, CharacterTest<'\n'>>>>>;
 
-typedef LexerObject<TextProcessingTransition,
-                    Negate<OrTest<IsSpace, CharacterTest<'{'>>>>
-    NonWhitespaceLineTextHandler;
+using NonWhitespaceLineTextHandler
+    = LexerObject<TextProcessingTransition,
+                  Negate<OrTest<IsSpace, CharacterTest<'{'>>>>;
 
-typedef LexerObject<TextProcessingTransition,
-                    AndTest<Negate<CharacterTest<'\n'>>, IsSpace>>
-    WhitespaceNonNewlineHandler;
+using WhitespaceNonNewlineHandler
+    = LexerObject<TextProcessingTransition,
+                  AndTest<Negate<CharacterTest<'\n'>>, IsSpace>>;
 
-typedef LexerObject<TextProcessingTransition,
-                    Negate<OrTest<CharacterTest<'{'>, IsSpace>>, TokenFinalizer>
-    FinalizingLineTextHandler;
+using FinalizingLineTextHandler
+    = LexerObject<TextProcessingTransition,
+                  Negate<OrTest<CharacterTest<'{'>, IsSpace>>, TokenFinalizer>;
 
-typedef CharacterTransition<'\n', TokenFinalizerWithTrimmingAndNewline>
-    SyntaxBoundaryNewlineHandler;
-typedef CharacterTransition<'{', FinalizeAndMarkStartSyntax>
-    SyntaxBoundaryHandler;
+using SyntaxBoundaryNewlineHandler
+    = CharacterTransition<'\n', TokenFinalizerWithTrimmingAndNewline>;
+using SyntaxBoundaryHandler
+    = CharacterTransition<'{', FinalizeAndMarkStartSyntax>;
 
 template <typename Transition>
 void addTransition(TextProcessingState *source, Lexer *lexer,

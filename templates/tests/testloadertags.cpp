@@ -32,7 +32,7 @@
 #include "grantlee_paths.h"
 #include "template.h"
 
-typedef QHash<QString, QVariant> Dict;
+using Dict = QHash<QString, QVariant>;
 
 Q_DECLARE_METATYPE(Grantlee::Error)
 

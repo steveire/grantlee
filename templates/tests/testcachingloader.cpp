@@ -31,7 +31,7 @@
 #include "template.h"
 #include <metaenumvariable_p.h>
 
-typedef QHash<QString, QVariant> Dict;
+using Dict = QHash<QString, QVariant>;
 
 Q_DECLARE_METATYPE(Grantlee::Error)
 

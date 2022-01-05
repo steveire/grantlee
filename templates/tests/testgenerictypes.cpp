@@ -578,9 +578,9 @@ void TestGenericTypes::testThirdPartySharedPointer()
   QCOMPARE(t1->render(&c), QStringLiteral("Grant Lee 2"));
 }
 
-typedef QList<QVector<qint16>> ListVectorInt;
-typedef QMap<int, QList<QVector<qint16>>> MapListVectorInt;
-typedef QStack<QMap<int, QList<QVector<qint16>>>> StackMapListVectorInt;
+using ListVectorInt = QList<QVector<qint16>>;
+using MapListVectorInt = QMap<int, QList<QVector<qint16>>>;
+using StackMapListVectorInt = QStack<QMap<int, QList<QVector<qint16>>>>;
 
 static QVector<qint16> getNumbers()
 {

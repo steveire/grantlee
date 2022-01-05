@@ -32,9 +32,9 @@
 #include "template.h"
 #include "util.h"
 
-typedef QList<QVariantList> Table;
-typedef QHash<QString, QVariant> Dict;
-typedef QPair<QString, QString> StringPair;
+using Table = QList<QVariantList>;
+using Dict = QHash<QString, QVariant>;
+using StringPair = QPair<QString, QString>;
 
 Q_DECLARE_METATYPE(Grantlee::Error)
 

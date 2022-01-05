@@ -311,7 +311,7 @@ void TestInternationalization::testStrings_data()
 #endif
 }
 
-typedef QHash<QString, QVariant> Dict;
+using Dict = QHash<QString, QVariant>;
 
 void TestInternationalization::testLocalizedTemplate()
 {
