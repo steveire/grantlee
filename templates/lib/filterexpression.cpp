@@ -263,7 +263,7 @@ QVariantList FilterExpression::toList(Context *c) const
 {
   const auto var = resolve(c);
   if (!var.canConvert<QVariantList>())
-    return QVariantList();
+    return {};
   return var.value<QVariantList>();
 }
 

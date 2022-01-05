@@ -34,7 +34,7 @@ QVariant JoinFilter::doFilter(const QVariant &input, const QVariant &argument,
                               bool autoescape) const
 {
   if (!input.canConvert<QVariantList>())
-    return QVariant();
+    return {};
 
   auto iter = input.value<QSequentialIterable>();
 
@@ -66,7 +66,7 @@ QVariant LengthFilter::doFilter(const QVariant &input, const QVariant &argument,
       || input.userType() == qMetaTypeId<QString>())
     return getSafeString(input).get().size();
 
-  return QVariant();
+  return {};
 }
 
 QVariant LengthIsFilter::doFilter(const QVariant &input,
@@ -76,7 +76,7 @@ QVariant LengthIsFilter::doFilter(const QVariant &input,
   Q_UNUSED(autoescape)
   if (!input.isValid() || (input.userType() == qMetaTypeId<int>())
       || (input.userType() == qMetaTypeId<QDateTime>()))
-    return QVariant();
+    return {};
 
   auto size = 0;
   if (input.canConvert<QVariantList>())
@@ -89,7 +89,7 @@ QVariant LengthIsFilter::doFilter(const QVariant &input,
   auto argInt = getSafeString(argument).get().toInt(&ok);
 
   if (!ok)
-    return QVariant();
+    return {};
 
   return size == argInt;
 }
@@ -101,7 +101,7 @@ QVariant FirstFilter::doFilter(const QVariant &input, const QVariant &argument,
   Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
-    return QVariant();
+    return {};
 
   auto iter = input.value<QSequentialIterable>();
 
@@ -118,7 +118,7 @@ QVariant LastFilter::doFilter(const QVariant &input, const QVariant &argument,
   Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
-    return QVariant();
+    return {};
 
   auto iter = input.value<QSequentialIterable>();
 
@@ -135,12 +135,12 @@ QVariant RandomFilter::doFilter(const QVariant &input, const QVariant &argument,
   Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
-    return QVariant();
+    return {};
 
   auto varList = input.value<QVariantList>();
 
   if (varList.isEmpty())
-    return QVariant();
+    return {};
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
   auto rnd = QRandomGenerator::global()->bounded((int)varList.size());
@@ -163,7 +163,7 @@ QVariant SliceFilter::doFilter(const QVariant &input, const QVariant &argument,
   auto splitterIndex = argString.get().indexOf(QLatin1Char(':'));
   QString inputString = getSafeString(input);
   if (inputString.isEmpty())
-    return QVariant();
+    return {};
 
   if (splitterIndex >= 0) {
     auto left = argString.get().left(splitterIndex).get().toInt();
@@ -209,7 +209,7 @@ QVariant MakeListFilter::doFilter(const QVariant &_input,
       list << QVariant(var);
     return list;
   }
-  return QVariant();
+  return {};
 }
 
 QVariant UnorderedListFilter::doFilter(const QVariant &input,
@@ -219,7 +219,7 @@ QVariant UnorderedListFilter::doFilter(const QVariant &input,
   Q_UNUSED(argument)
 
   if (!input.canConvert<QVariantList>())
-    return QVariant();
+    return {};
 
   return markSafe(processList(input.value<QVariantList>(), 1, autoescape));
 }
@@ -326,7 +326,7 @@ QVariant DictSortFilter::doFilter(const QVariant &input,
   Q_UNUSED(autoescape)
 
   if (!input.canConvert<QVariantList>())
-    return QVariant();
+    return {};
 
   QList<QPair<QVariant, QVariant>> keyList;
   const auto inList = input.value<QSequentialIterable>();

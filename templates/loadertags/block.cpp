@@ -158,7 +158,7 @@ SafeString BlockNode::getSuper() const
       return markSafe(superContent);
     }
   }
-  return SafeString();
+  return {};
 }
 
 NodeList BlockNode::nodeList() const { return m_list; }

@@ -145,12 +145,12 @@ Template FileSystemTemplateLoader::loadByName(const QString &fileName,
     if (file.exists()
         && !fi.canonicalFilePath().contains(
             QDir(d->m_templateDirs.at(i)).canonicalPath()))
-      return Template();
+      return {};
     ++i;
   }
 
   if (!file.exists() || !file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    return Template();
+    return {};
   }
 
   QTextStream fstream(&file);
@@ -189,7 +189,7 @@ FileSystemTemplateLoader::getMediaUri(const QString &fileName) const
     }
     ++i;
   }
-  return QPair<QString, QString>();
+  return {};
 }
 
 void InMemoryTemplateLoader::setTemplate(const QString &name,
@@ -221,5 +221,5 @@ InMemoryTemplateLoader::getMediaUri(const QString &fileName) const
 {
   Q_UNUSED(fileName)
   // This loader doesn't make any media available yet.
-  return QPair<QString, QString>();
+  return {};
 }

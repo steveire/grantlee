@@ -115,7 +115,7 @@ QVariant Context::lookup(const QString &str) const
     }
   }
 
-  return QVariant();
+  return {};
 }
 
 void Context::push()

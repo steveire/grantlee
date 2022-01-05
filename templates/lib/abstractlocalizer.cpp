@@ -45,5 +45,5 @@ QString AbstractLocalizer::localize(const QVariant &variant) const
     return localizeNumber(variant.value<double>());
   else if (variant.canConvert<int>())
     return localizeNumber(variant.value<int>());
-  return QString();
+  return {};
 }

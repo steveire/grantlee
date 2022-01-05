@@ -68,7 +68,7 @@ class QtLocalizerPrivate
     Q_ASSERT(!m_locales.isEmpty());
     if (m_locales.isEmpty()) {
       qCWarning(GRANTLEE_LOCALIZER) << "Invalid Locale";
-      return QLocale();
+      return {};
     }
     return m_locales.last()->locale;
   }

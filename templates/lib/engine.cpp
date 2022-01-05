@@ -268,7 +268,7 @@ QString EnginePrivate::getScriptLibraryName(const QString &name,
       return pair.first + pair.second;
     }
   }
-  return QString();
+  return {};
 }
 
 #ifdef QT_QML_LIB

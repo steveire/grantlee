@@ -362,7 +362,7 @@ QVariant WordWrapFilter::doFilter(const QVariant &input,
 #endif
   );
   if (partList.isEmpty())
-    return QVariant();
+    return {};
   auto output = partList.takeFirst();
   auto pos = output.size() - output.lastIndexOf(QLatin1Char('\n')) - 1;
   for (const QString &part : partList) {

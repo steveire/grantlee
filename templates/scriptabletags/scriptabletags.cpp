@@ -108,7 +108,7 @@ QJSValue ScriptableHelperFunctions::ScriptableTemplateConstructor(
       = m_scriptEngine->property("templateEngine").value<Engine *>();
 
   if (!templateEngine)
-    return QJSValue();
+    return {};
 
   auto t = templateEngine->newTemplate(content, name);
 

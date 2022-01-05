@@ -51,7 +51,7 @@ QVariant CustomTypeRegistry::lookup(const QVariant &object,
                                     const QString &property) const
 {
   if (!object.isValid())
-    return QVariant();
+    return {};
   const auto id = object.userType();
   MetaType::LookupFunction lf;
 
@@ -65,7 +65,7 @@ QVariant CustomTypeRegistry::lookup(const QVariant &object,
                                      << QMetaType(id).name();
 #endif
       // :TODO: Print out error message
-      return QVariant();
+      return {};
     }
 
     const CustomTypeInfo &info = it.value();
@@ -78,7 +78,7 @@ QVariant CustomTypeRegistry::lookup(const QVariant &object,
 #endif
       lf = nullptr;
       // :TODO: Print out error message
-      return QVariant();
+      return {};
     }
 
     lf = info.lookupFunction;

@@ -168,7 +168,7 @@ TypeAccessor<Grantlee::SafeString &>::lookUp(const Grantlee::SafeString &object,
   if (property == QStringLiteral("upper")) {
     return object.get().toUpper();
   }
-  return QVariant();
+  return {};
 }
 
 template <>
@@ -191,13 +191,13 @@ TypeAccessor<MetaEnumVariable &>::lookUp(const MetaEnumVariable &object,
   const auto listIndex = property.toInt(&ok);
   if (ok) {
     if (listIndex >= object.enumerator.keyCount())
-      return QVariant();
+      return {};
 
     const MetaEnumVariable mev(object.enumerator,
                                object.enumerator.value(listIndex));
     return QVariant::fromValue(mev);
   }
 
-  return QVariant();
+  return {};
 }
 }

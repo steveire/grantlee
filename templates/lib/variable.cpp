@@ -181,7 +181,7 @@ QVariant Variable::resolve(Context *c) const
     if (d->m_lookups.at(i) == QStringLiteral("Qt")) {
       ++i;
       if (d->m_lookups.size() <= i)
-        return QVariant();
+        return {};
 
       const auto nextPart = d->m_lookups.at(i);
       ++i;
@@ -210,7 +210,7 @@ QVariant Variable::resolve(Context *c) const
           break;
       }
       if (!var.isValid())
-        return QVariant();
+        return {};
 
     } else {
       var = c->lookup(d->m_lookups.at(i++));
@@ -218,7 +218,7 @@ QVariant Variable::resolve(Context *c) const
     while (i < d->m_lookups.size()) {
       var = MetaType::lookup(var, d->m_lookups.at(i++));
       if (!var.isValid())
-        return QVariant();
+        return {};
     }
   } else {
     if (isSafeString(d->m_literal))

@@ -159,7 +159,7 @@ NullLocalizer::localizePluralString(const QString &_string,
                    : substituteArguments(string, arguments);
 }
 
-QString NullLocalizer::currentLocale() const { return QString(); }
+QString NullLocalizer::currentLocale() const { return {}; }
 
 void NullLocalizer::pushLocale(const QString &localeName)
 {

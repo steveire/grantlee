@@ -52,7 +52,7 @@ public:
   {
     if (m_existingMedia.contains(fileName))
       return qMakePair(QStringLiteral("/path/to/"), fileName);
-    return QPair<QString, QString>();
+    return {};
   }
 
 private:

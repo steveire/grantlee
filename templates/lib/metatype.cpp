@@ -51,11 +51,11 @@ static QVariant doQobjectLookUp(const QObject *const object,
                                 const QString &property)
 {
   if (!object)
-    return QVariant();
+    return {};
   if (property == QStringLiteral("children")) {
     const auto childList = object->children();
     if (childList.isEmpty())
-      return QVariant();
+      return {};
     QVariantList children;
 
     auto it = childList.constBegin();
@@ -125,7 +125,7 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
     const auto listIndex = property.toInt(&ok);
 
     if (!ok || listIndex >= iter.size()) {
-      return QVariant();
+      return {};
     }
 
     return iter.at(listIndex);
@@ -173,7 +173,7 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
       return list;
     }
 
-    return QVariant();
+    return {};
   }
   auto mo = QMetaType(object.userType()).metaObject();
   if (mo) {

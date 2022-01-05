@@ -89,7 +89,7 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
     auto returnedStringObject
         = qobject_cast<ScriptableSafeString *>(returnedObject);
     if (!returnedStringObject)
-      return QVariant();
+      return {};
     auto returnedString = returnedStringObject->wrappedString();
     return returnedString;
   } else if (returnValue.isVariant()) {
@@ -97,5 +97,5 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
   } else if (returnValue.isArray()) {
     return qjsvalue_cast<QVariantList>(returnValue);
   }
-  return QVariant();
+  return {};
 }
