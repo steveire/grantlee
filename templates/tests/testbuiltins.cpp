@@ -109,7 +109,7 @@ public:
   enum PersonName { Mike = 0, Natalie, Oliver };
   Q_ENUM(PersonName)
 
-  GadgetClass() {}
+  GadgetClass() = default;
   GadgetClass(PersonName pn) : m_personName(pn) {}
 
   PersonName personName() const { return m_personName; }

@@ -25,7 +25,7 @@
 #include "parser.h"
 #include "util.h"
 
-SpacelessNodeFactory::SpacelessNodeFactory() {}
+SpacelessNodeFactory::SpacelessNodeFactory() = default;
 
 Node *SpacelessNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

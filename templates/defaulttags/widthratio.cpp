@@ -23,7 +23,7 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
-WidthRatioNodeFactory::WidthRatioNodeFactory() {}
+WidthRatioNodeFactory::WidthRatioNodeFactory() = default;
 
 Node *WidthRatioNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

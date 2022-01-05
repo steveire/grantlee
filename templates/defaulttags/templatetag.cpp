@@ -24,7 +24,7 @@
 #include "grantlee_tags_p.h"
 #include "parser.h"
 
-TemplateTagNodeFactory::TemplateTagNodeFactory() {}
+TemplateTagNodeFactory::TemplateTagNodeFactory() = default;
 
 Node *TemplateTagNodeFactory::getNode(const QString &tagContent,
                                       Parser *p) const

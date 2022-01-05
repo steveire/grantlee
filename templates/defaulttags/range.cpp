@@ -25,7 +25,7 @@
 #include "parser.h"
 #include "util.h"
 
-RangeNodeFactory::RangeNodeFactory() {}
+RangeNodeFactory::RangeNodeFactory() = default;
 
 Grantlee::Node *RangeNodeFactory::getNode(const QString &tagContent,
                                           Parser *p) const

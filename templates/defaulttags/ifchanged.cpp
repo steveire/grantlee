@@ -24,7 +24,7 @@
 
 #include <QtCore/QDateTime>
 
-IfChangedNodeFactory::IfChangedNodeFactory() {}
+IfChangedNodeFactory::IfChangedNodeFactory() = default;
 
 Node *IfChangedNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

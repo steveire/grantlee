@@ -27,7 +27,7 @@
 #include "template.h"
 #include "util.h"
 
-L10nMoneyNodeFactory::L10nMoneyNodeFactory() {}
+L10nMoneyNodeFactory::L10nMoneyNodeFactory() = default;
 
 Node *L10nMoneyNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
@@ -48,7 +48,7 @@ Node *L10nMoneyNodeFactory::getNode(const QString &tagContent, Parser *p) const
   return new L10nMoneyNode(value, currency);
 }
 
-L10nMoneyVarNodeFactory::L10nMoneyVarNodeFactory() {}
+L10nMoneyVarNodeFactory::L10nMoneyVarNodeFactory() = default;
 
 Grantlee::Node *L10nMoneyVarNodeFactory::getNode(const QString &tagContent,
                                                  Parser *p) const

@@ -26,9 +26,9 @@
 
 using namespace Grantlee;
 
-AbstractLocalizer::AbstractLocalizer() {}
+AbstractLocalizer::AbstractLocalizer() = default;
 
-AbstractLocalizer::~AbstractLocalizer() {}
+AbstractLocalizer::~AbstractLocalizer() = default;
 
 QString AbstractLocalizer::localize(const QVariant &variant) const
 {

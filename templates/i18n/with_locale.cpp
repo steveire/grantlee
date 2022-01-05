@@ -27,7 +27,7 @@
 #include <QDebug>
 #include <abstractlocalizer.h>
 
-WithLocaleNodeFactory::WithLocaleNodeFactory() {}
+WithLocaleNodeFactory::WithLocaleNodeFactory() = default;
 
 Node *WithLocaleNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

@@ -98,7 +98,7 @@ BlockNode::BlockNode(const QString &name, QObject *parent)
   qRegisterMetaType<Grantlee::SafeString>("Grantlee::SafeString");
 }
 
-BlockNode::~BlockNode() {}
+BlockNode::~BlockNode() = default;
 
 void BlockNode::setNodeList(const NodeList &list) const { m_list = list; }
 

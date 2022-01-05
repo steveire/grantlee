@@ -27,7 +27,7 @@
 
 #include <QtCore/QFile>
 
-AutoescapeNodeFactory::AutoescapeNodeFactory() {}
+AutoescapeNodeFactory::AutoescapeNodeFactory() = default;
 
 Node *AutoescapeNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

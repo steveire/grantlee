@@ -25,7 +25,7 @@
 
 #include <QtCore/QDateTime>
 
-NowNodeFactory::NowNodeFactory() {}
+NowNodeFactory::NowNodeFactory() = default;
 
 Node *NowNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

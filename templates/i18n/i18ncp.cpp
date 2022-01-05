@@ -32,7 +32,7 @@
 #include <complex>
 #include <util.h>
 
-I18ncpNodeFactory::I18ncpNodeFactory() {}
+I18ncpNodeFactory::I18ncpNodeFactory() = default;
 
 Node *I18ncpNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {
@@ -90,7 +90,7 @@ Node *I18ncpNodeFactory::getNode(const QString &tagContent, Parser *p) const
   return new I18ncpNode(contextText, sourceText, pluralText, feList);
 }
 
-I18ncpVarNodeFactory::I18ncpVarNodeFactory() {}
+I18ncpVarNodeFactory::I18ncpVarNodeFactory() = default;
 
 Grantlee::Node *I18ncpVarNodeFactory::getNode(const QString &tagContent,
                                               Parser *p) const

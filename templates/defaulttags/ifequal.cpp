@@ -24,7 +24,7 @@
 #include "parser.h"
 #include "util.h"
 
-IfEqualNodeFactory::IfEqualNodeFactory() {}
+IfEqualNodeFactory::IfEqualNodeFactory() = default;
 
 Node *IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p,
                                      bool negate) const
@@ -63,7 +63,7 @@ Node *IfEqualNodeFactory::getNode(const QString &tagContent, Parser *p) const
   return do_getNode(tagContent, p, false);
 }
 
-IfNotEqualNodeFactory::IfNotEqualNodeFactory() {}
+IfNotEqualNodeFactory::IfNotEqualNodeFactory() = default;
 
 Node *IfNotEqualNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

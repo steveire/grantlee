@@ -27,7 +27,7 @@
 
 #include <QtCore/QUrl>
 
-MediaFinderNodeFactory::MediaFinderNodeFactory() {}
+MediaFinderNodeFactory::MediaFinderNodeFactory() = default;
 
 Grantlee::Node *MediaFinderNodeFactory::getNode(const QString &tagContent,
                                                 Parser *p) const

@@ -22,9 +22,9 @@
 
 using namespace Grantlee;
 
-MediaWikiMarkupBuilder::MediaWikiMarkupBuilder() {}
+MediaWikiMarkupBuilder::MediaWikiMarkupBuilder() = default;
 
-MediaWikiMarkupBuilder::~MediaWikiMarkupBuilder() {}
+MediaWikiMarkupBuilder::~MediaWikiMarkupBuilder() = default;
 
 void MediaWikiMarkupBuilder::beginStrong()
 {

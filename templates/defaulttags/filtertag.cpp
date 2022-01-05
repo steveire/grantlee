@@ -25,7 +25,7 @@
 #include "parser.h"
 #include "util.h"
 
-FilterNodeFactory::FilterNodeFactory() {}
+FilterNodeFactory::FilterNodeFactory() = default;
 
 Grantlee::Node *FilterNodeFactory::getNode(const QString &tagContent,
                                            Grantlee::Parser *p) const

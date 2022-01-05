@@ -22,7 +22,7 @@
 
 #include "parser.h"
 
-CommentNodeFactory::CommentNodeFactory() {}
+CommentNodeFactory::CommentNodeFactory() = default;
 
 Node *CommentNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

@@ -24,7 +24,7 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
-IfNodeFactory::IfNodeFactory() {}
+IfNodeFactory::IfNodeFactory() = default;
 
 Node *IfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

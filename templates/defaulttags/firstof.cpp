@@ -24,7 +24,7 @@
 #include "parser.h"
 #include "util.h"
 
-FirstOfNodeFactory::FirstOfNodeFactory() {}
+FirstOfNodeFactory::FirstOfNodeFactory() = default;
 
 Node *FirstOfNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

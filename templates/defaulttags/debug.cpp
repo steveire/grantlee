@@ -22,7 +22,7 @@
 
 #include "parser.h"
 
-DebugNodeFactory::DebugNodeFactory() {}
+DebugNodeFactory::DebugNodeFactory() = default;
 
 Node *DebugNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

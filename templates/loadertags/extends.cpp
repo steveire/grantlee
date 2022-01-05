@@ -73,7 +73,7 @@ ExtendsNode::ExtendsNode(const FilterExpression &fe, QObject *parent)
 {
 }
 
-ExtendsNode::~ExtendsNode() {}
+ExtendsNode::~ExtendsNode() = default;
 
 static QHash<QString, BlockNode *> createNodeMap(const QList<BlockNode *> &list)
 {

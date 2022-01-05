@@ -31,7 +31,7 @@ ScriptableFilter::ScriptableFilter(const QJSValue &filterObject,
 {
 }
 
-ScriptableFilter::~ScriptableFilter() {}
+ScriptableFilter::~ScriptableFilter() = default;
 
 bool ScriptableFilter::isSafe() const
 {

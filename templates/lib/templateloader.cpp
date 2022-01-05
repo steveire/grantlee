@@ -30,7 +30,7 @@
 
 using namespace Grantlee;
 
-AbstractTemplateLoader::~AbstractTemplateLoader() {}
+AbstractTemplateLoader::~AbstractTemplateLoader() = default;
 
 namespace Grantlee
 {
@@ -69,7 +69,7 @@ FileSystemTemplateLoader::~FileSystemTemplateLoader()
 
 InMemoryTemplateLoader::InMemoryTemplateLoader() : AbstractTemplateLoader() {}
 
-InMemoryTemplateLoader::~InMemoryTemplateLoader() {}
+InMemoryTemplateLoader::~InMemoryTemplateLoader() = default;
 
 void FileSystemTemplateLoader::setTheme(const QString &themeName)
 {

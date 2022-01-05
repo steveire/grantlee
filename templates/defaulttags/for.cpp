@@ -26,7 +26,7 @@
 
 #include <QtCore/QSequentialIterable>
 
-ForNodeFactory::ForNodeFactory() {}
+ForNodeFactory::ForNodeFactory() = default;
 
 Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

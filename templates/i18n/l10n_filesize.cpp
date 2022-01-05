@@ -28,7 +28,7 @@
 
 #include <limits>
 
-L10nFileSizeNodeFactory::L10nFileSizeNodeFactory() {}
+L10nFileSizeNodeFactory::L10nFileSizeNodeFactory() = default;
 
 Node *L10nFileSizeNodeFactory::getNode(const QString &tagContent,
                                        Parser *p) const
@@ -61,7 +61,7 @@ Node *L10nFileSizeNodeFactory::getNode(const QString &tagContent,
   return new L10nFileSizeNode(size, unitSystem, precision, multiplier, p);
 }
 
-L10nFileSizeVarNodeFactory::L10nFileSizeVarNodeFactory() {}
+L10nFileSizeVarNodeFactory::L10nFileSizeVarNodeFactory() = default;
 
 Node *L10nFileSizeVarNodeFactory::getNode(const QString &tagContent,
                                           Parser *p) const

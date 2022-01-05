@@ -29,7 +29,7 @@
 #include "template.h"
 #include "util.h"
 
-IncludeNodeFactory::IncludeNodeFactory() {}
+IncludeNodeFactory::IncludeNodeFactory() = default;
 
 Node *IncludeNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

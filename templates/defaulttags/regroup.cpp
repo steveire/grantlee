@@ -24,7 +24,7 @@
 #include "parser.h"
 #include "util.h"
 
-RegroupNodeFactory::RegroupNodeFactory() {}
+RegroupNodeFactory::RegroupNodeFactory() = default;
 
 Node *RegroupNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

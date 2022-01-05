@@ -56,7 +56,7 @@ QVariant CapFirstFilter::doFilter(const QVariant &input,
                       safeString.get().right(safeString.get().size() - 1)));
 }
 
-EscapeJsFilter::EscapeJsFilter() {}
+EscapeJsFilter::EscapeJsFilter() = default;
 
 static QList<QPair<QString, QString>> getJsEscapes()
 {

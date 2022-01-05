@@ -22,7 +22,7 @@
 
 using namespace Grantlee;
 
-Filter::~Filter() {}
+Filter::~Filter() = default;
 
 void Filter::setStream(Grantlee::OutputStream *stream) { m_stream = stream; }
 

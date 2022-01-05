@@ -24,9 +24,9 @@
 
 using namespace Grantlee;
 
-NullLocalizer::NullLocalizer() {}
+NullLocalizer::NullLocalizer() = default;
 
-NullLocalizer::~NullLocalizer() {}
+NullLocalizer::~NullLocalizer() = default;
 
 QString NullLocalizer::localizeDate(const QDate &date,
                                     QLocale::FormatType formatType) const

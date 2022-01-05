@@ -27,7 +27,7 @@
 
 static const char _namedCycleNodes[] = "_namedCycleNodes";
 
-CycleNodeFactory::CycleNodeFactory() {}
+CycleNodeFactory::CycleNodeFactory() = default;
 
 Node *CycleNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

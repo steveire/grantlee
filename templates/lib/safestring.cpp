@@ -46,7 +46,7 @@ SafeString::SafeString(const QString &str, Safety safety)
 {
 }
 
-SafeString::~SafeString() {}
+SafeString::~SafeString() = default;
 
 void SafeString::setNeedsEscape(bool needsEscape)
 {

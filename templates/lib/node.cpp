@@ -144,7 +144,7 @@ NodeList::NodeList(const QList<Grantlee::Node *> &list)
   m_containsNonText = false;
 }
 
-NodeList::~NodeList() {}
+NodeList::~NodeList() = default;
 
 void NodeList::append(Grantlee::Node *node)
 {

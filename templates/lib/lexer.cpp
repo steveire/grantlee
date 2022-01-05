@@ -246,7 +246,7 @@ Lexer::Lexer(const QString &templateString) : m_templateString(templateString)
 {
 }
 
-Lexer::~Lexer() {}
+Lexer::~Lexer() = default;
 
 void Lexer::clearMarkers()
 {

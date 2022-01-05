@@ -23,7 +23,7 @@
 #include "../lib/exception.h"
 #include "parser.h"
 
-LoadNodeFactory::LoadNodeFactory() {}
+LoadNodeFactory::LoadNodeFactory() = default;
 
 Node *LoadNodeFactory::getNode(const QString &tagContent, Parser *p) const
 {

@@ -28,7 +28,7 @@ OutputStream::OutputStream() : m_stream(nullptr) {}
 
 OutputStream::OutputStream(QTextStream *stream) : m_stream(stream) {}
 
-OutputStream::~OutputStream() {}
+OutputStream::~OutputStream() = default;
 
 QString OutputStream::escape(const QString &input) const
 {

@@ -24,7 +24,7 @@ using namespace Grantlee;
 
 BBCodeBuilder::BBCodeBuilder() : m_currentAlignment(Qt::AlignLeft) {}
 
-BBCodeBuilder::~BBCodeBuilder() {}
+BBCodeBuilder::~BBCodeBuilder() = default;
 
 void BBCodeBuilder::beginStrong() { m_text.append(QStringLiteral("[B]")); }
 void BBCodeBuilder::endStrong() { m_text.append(QStringLiteral("[/B]")); }
