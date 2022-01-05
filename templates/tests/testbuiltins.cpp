@@ -122,7 +122,7 @@ Q_DECLARE_METATYPE(GadgetClass)
 class NoEscapeOutputStream : public OutputStream
 {
 public:
-  NoEscapeOutputStream() : OutputStream() {}
+  NoEscapeOutputStream() {}
 
   NoEscapeOutputStream(QTextStream *stream) : OutputStream(stream) {}
 
@@ -137,7 +137,7 @@ public:
 class JSOutputStream : public OutputStream
 {
 public:
-  JSOutputStream() : OutputStream() {}
+  JSOutputStream() {}
 
   JSOutputStream(QTextStream *stream) : OutputStream(stream) {}
 

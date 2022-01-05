@@ -154,7 +154,7 @@ QString QtLocalizerPrivate::translate(const QString &input,
 }
 
 QtLocalizer::QtLocalizer(const QLocale &locale)
-    : AbstractLocalizer(), d_ptr(new QtLocalizerPrivate(this, locale))
+    : d_ptr(new QtLocalizerPrivate(this, locale))
 {
 }
 

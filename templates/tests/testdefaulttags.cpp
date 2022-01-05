@@ -41,7 +41,7 @@ Q_DECLARE_METATYPE(Grantlee::Error)
 class FakeTemplateLoader : public Grantlee::InMemoryTemplateLoader
 {
 public:
-  FakeTemplateLoader() : Grantlee::InMemoryTemplateLoader()
+  FakeTemplateLoader()
   {
     m_existingMedia << QStringLiteral("existing_image.png")
                     << QStringLiteral("another_existing_image.png")
