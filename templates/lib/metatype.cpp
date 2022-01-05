@@ -175,7 +175,7 @@ QVariant Grantlee::MetaType::lookup(const QVariant &object,
 
     return QVariant();
   }
-  auto mo = QMetaType::metaObjectForType(object.userType());
+  auto mo = QMetaType(object.userType()).metaObject();
   if (mo) {
     QMetaType mt(object.userType());
     if (mt.flags().testFlag(QMetaType::IsGadget)) {
