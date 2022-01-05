@@ -169,9 +169,9 @@ static KLocalizedString substituteArguments(const KLocalizedString &_string,
 {
   KLocalizedString string = _string;
   for (const QVariant &arg : args) {
-    if (arg.type() == QVariant::Int)
+    if (arg.type() == QMetaType::Int)
       string = string.subs(arg.toInt());
-    else if (arg.type() == QVariant::Double)
+    else if (arg.type() == QMetaType::Double)
       string = string.subs(arg.toDouble());
     else
       string = string.subs(arg.toString());

@@ -191,7 +191,7 @@ QVariant MakeListFilter::doFilter(const QVariant &_input,
   auto input = _input;
 
   if (input.userType() == qMetaTypeId<int>())
-    input.convert(QVariant::String);
+    input.convert(QMetaType::QString);
 
   if (input.userType() == qMetaTypeId<SafeString>()
       || input.userType() == qMetaTypeId<QString>()) {
@@ -274,27 +274,27 @@ struct DictSortLessThan {
     const auto l = lp.first;
     const auto r = rp.first;
     switch (l.userType()) {
-    case QVariant::Invalid:
+    case QMetaType::UnknownType:
       return (r.isValid());
-    case QVariant::Int:
+    case QMetaType::Int:
       return l.value<int>() < r.value<int>();
-    case QVariant::UInt:
+    case QMetaType::UInt:
       return l.value<uint>() < r.value<uint>();
-    case QVariant::LongLong:
+    case QMetaType::LongLong:
       return l.value<long long>() < r.value<long long>();
-    case QVariant::ULongLong:
+    case QMetaType::ULongLong:
       return l.value<unsigned long long>() < r.value<unsigned long long>();
     case QMetaType::Float:
       return l.value<float>() < r.value<float>();
-    case QVariant::Double:
+    case QMetaType::Double:
       return l.value<double>() < r.value<double>();
-    case QVariant::Char:
+    case QMetaType::QChar:
       return l.value<QChar>() < r.value<QChar>();
-    case QVariant::Date:
+    case QMetaType::QDate:
       return l.value<QDate>() < r.value<QDate>();
-    case QVariant::Time:
+    case QMetaType::QTime:
       return l.value<QTime>() < r.value<QTime>();
-    case QVariant::DateTime:
+    case QMetaType::QDateTime:
       return l.value<QDateTime>() < r.value<QDateTime>();
     case QMetaType::QObjectStar:
       return l.value<QObject *>() < r.value<QObject *>();

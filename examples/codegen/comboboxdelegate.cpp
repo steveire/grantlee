@@ -67,7 +67,7 @@ ComboBoxDelegate::ComboBoxDelegate(const QStringList &data, Type type,
 {
   QItemEditorFactory *factory = new QItemEditorFactory;
   QItemEditorCreatorBase *creator = new ComboBoxEditorCreator(data, type);
-  factory->registerEditor(QVariant::String, creator);
+  factory->registerEditor(QMetaType::QString, creator);
 
   setItemEditorFactory(factory);
 }

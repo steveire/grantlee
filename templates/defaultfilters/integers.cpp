@@ -40,7 +40,7 @@ QVariant AddFilter::doFilter(const QVariant &input, const QVariant &argument,
   }
 
   if (input.userType() == qMetaTypeId<QStringList>()) {
-    if (argument.userType() == QVariant::StringList)
+    if (argument.userType() == QMetaType::QStringList)
       return input.value<QStringList>() + argument.value<QStringList>();
     return input;
   }

@@ -89,11 +89,11 @@ QVariant DateFilter::doFilter(const QVariant &input, const QVariant &argument,
 {
   Q_UNUSED(autoescape)
   QDateTime d;
-  if (input.type() == QVariant::DateTime) {
+  if (input.userType() == QMetaType::QDateTime) {
     d = input.toDateTime();
-  } else if (input.type() == QVariant::Date) {
+  } else if (input.userType() == QMetaType::QDate) {
     d.setDate(input.toDate());
-  } else if (input.type() == QVariant::Time) {
+  } else if (input.userType() == QMetaType::QTime) {
     d.setTime(input.toTime());
   } else {
 #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
@@ -118,11 +118,11 @@ QVariant TimeFilter::doFilter(const QVariant &input, const QVariant &argument,
 {
   Q_UNUSED(autoescape)
   QDateTime d;
-  if (input.type() == QVariant::DateTime) {
+  if (input.userType() == QMetaType::QDateTime) {
     d = input.toDateTime();
-  } else if (input.type() == QVariant::Date) {
+  } else if (input.userType() == QMetaType::QDate) {
     d.setDate(input.toDate());
-  } else if (input.type() == QVariant::Time) {
+  } else if (input.userType() == QMetaType::QTime) {
     d.setTime(input.toTime());
   } else {
 #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)

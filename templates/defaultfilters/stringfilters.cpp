@@ -393,11 +393,11 @@ QVariant FloatFormatFilter::doFilter(const QVariant &input,
   Q_UNUSED(autoescape)
   double inputDouble;
   switch (input.type()) {
-  case QVariant::Int:
-  case QVariant::UInt:
-  case QVariant::LongLong:
-  case QVariant::ULongLong:
-  case QVariant::Double:
+  case QMetaType::Int:
+  case QMetaType::UInt:
+  case QMetaType::LongLong:
+  case QMetaType::ULongLong:
+  case QMetaType::Double:
     inputDouble = input.toDouble();
     break;
   default:
