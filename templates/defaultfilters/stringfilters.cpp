@@ -137,8 +137,7 @@ QVariant CutFilter::doFilter(const QVariant &input, const QVariant &argument,
 
   if (inputSafe && argString.get() != QChar::fromLatin1(';'))
     return markSafe(retString);
-  else
-    return retString;
+  return retString;
 }
 
 QVariant SafeFilter::doFilter(const QVariant &input, const QVariant &argument,

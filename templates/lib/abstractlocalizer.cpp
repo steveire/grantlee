@@ -38,12 +38,12 @@ QString AbstractLocalizer::localize(const QVariant &variant) const
     return localizeTime(variant.value<QTime>());
   if (variant.userType() == qMetaTypeId<QDateTime>())
     return localizeDateTime(variant.value<QDateTime>());
-  else if (isSafeString(variant))
+  if (isSafeString(variant))
     return localizeString(getSafeString(variant).get());
-  else if (variant.userType() == qMetaTypeId<double>()
-           || variant.userType() == qMetaTypeId<float>())
+  if (variant.userType() == qMetaTypeId<double>()
+      || variant.userType() == qMetaTypeId<float>())
     return localizeNumber(variant.value<double>());
-  else if (variant.canConvert<int>())
+  if (variant.canConvert<int>())
     return localizeNumber(variant.value<int>());
   return {};
 }

@@ -70,7 +70,8 @@ QVariant YesNoFilter::doFilter(const QVariant &input, const QVariant &argument,
     auto numArgs = argList.size();
     if ((numArgs < 2) || (numArgs > 3)) {
       return input.value<QString>();
-    } else if (numArgs == 2) {
+    }
+    if (numArgs == 2) {
       yes = argList.first();
       no = argList.at(1);
       maybe = argList.at(1);

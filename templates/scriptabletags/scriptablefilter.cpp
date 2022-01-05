@@ -84,7 +84,8 @@ QVariant ScriptableFilter::doFilter(const QVariant &input,
 
   if (returnValue.isString()) {
     return getSafeString(returnValue.toString());
-  } else if (returnValue.isQObject()) {
+  }
+  if (returnValue.isQObject()) {
     auto returnedObject = qjsvalue_cast<QObject *>(returnValue);
     auto returnedStringObject
         = qobject_cast<ScriptableSafeString *>(returnedObject);

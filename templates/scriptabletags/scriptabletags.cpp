@@ -55,8 +55,8 @@ QJSValue ScriptableHelperFunctions::markSafeFunction(QJSValue inputValue)
 
     ssObj->setSafety(true);
     return m_scriptEngine->newQObject(ssObj);
-
-  } else if (inputValue.isString()) {
+  }
+  if (inputValue.isString()) {
     auto str = inputValue.toString();
     auto ssObj = new ScriptableSafeString(m_scriptEngine);
     ssObj->setContent(markSafe(str));

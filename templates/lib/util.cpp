@@ -106,9 +106,8 @@ Grantlee::SafeString Grantlee::getSafeString(const QVariant &input)
 {
   if (input.userType() == qMetaTypeId<Grantlee::SafeString>()) {
     return input.value<Grantlee::SafeString>();
-  } else {
-    return input.value<QString>();
   }
+  return input.value<QString>();
 }
 
 bool Grantlee::isSafeString(const QVariant &input)
@@ -185,7 +184,8 @@ std::pair<qreal, QString> Grantlee::calcFileSize(qreal size, int unitSystem,
     ret.first = 0.0;
     ret.second = QStringLiteral("bytes");
     return ret;
-  } else if ((size == 1.0) || (size == -1.0)) {
+  }
+  if ((size == 1.0) || (size == -1.0)) {
     ret.first = 1.0;
     ret.second = QStringLiteral("byte");
     return ret;

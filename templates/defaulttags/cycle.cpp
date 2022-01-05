@@ -82,10 +82,9 @@ Node *CycleNodeFactory::getNode(const QString &tagContent, Parser *p) const
     hash.insert(name, QVariant::fromValue(node));
     p->setProperty(_namedCycleNodes, QVariant(hash));
     return node;
-  } else {
-    auto list = expr.mid(1, exprSize - 1);
-    return new CycleNode(getFilterExpressionList(list, p), QString(), p);
   }
+  auto list = expr.mid(1, exprSize - 1);
+  return new CycleNode(getFilterExpressionList(list, p), QString(), p);
 }
 
 CycleNode::CycleNode(const QList<FilterExpression> &list, const QString &name,

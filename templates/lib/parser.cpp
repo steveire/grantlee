@@ -308,14 +308,13 @@ void Parser::invalidBlockTag(const Token &token, const QString &command,
         QStringLiteral("Invalid block tag on line %1: '%2', expected '%3'")
             .arg(token.linenumber)
             .arg(command, stopAt.join(QStringLiteral("', '"))));
-  } else {
-    throw Grantlee::Exception(
-        InvalidBlockTagError,
-        QStringLiteral("Invalid block tag on line %1: '%2\''. Did you forget "
-                       "to register or load this tag?")
-            .arg(token.linenumber)
-            .arg(command));
   }
+  throw Grantlee::Exception(
+      InvalidBlockTagError,
+      QStringLiteral("Invalid block tag on line %1: '%2\''. Did you forget "
+                     "to register or load this tag?")
+          .arg(token.linenumber)
+          .arg(command));
 }
 
 void Parser::prependToken(const Token &token)

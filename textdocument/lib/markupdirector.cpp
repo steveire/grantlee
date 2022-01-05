@@ -85,9 +85,8 @@ QTextFrame::iterator MarkupDirector::processBlock(QTextFrame::iterator it,
     auto object = block.document()->objectForFormat(fmt);
     if (object) {
       return processObject(it, block, object);
-    } else {
-      return processBlockContents(it, block);
     }
+    return processBlockContents(it, block);
   }
 
   if (!it.atEnd())
@@ -143,9 +142,8 @@ QTextFrame::iterator MarkupDirector::processTable(QTextFrame::iterator it,
         if (alreadyProcessedCells.contains(tableCell)) {
           // Already processed this cell. Move on.
           continue;
-        } else {
-          alreadyProcessedCells.append(tableCell);
         }
+        alreadyProcessedCells.append(tableCell);
       }
 
       auto cellWidth = colLengths.at(column);
@@ -617,12 +615,10 @@ void MarkupDirector::processOpeningElements(QTextBlock::iterator it)
             // Doesn't matter if anchorHref is empty.
             m_builder->beginAnchor(fragmentFormat.anchorHref(), n);
             break;
-          } else {
-            // Empty <a> tags allow multiple names for the same
-            // section.
-            m_builder->beginAnchor(QString(), n);
-            m_builder->endAnchor();
-          }
+          } // Empty <a> tags allow multiple names for the same
+          // section.
+          m_builder->beginAnchor(QString(), n);
+          m_builder->endAnchor();
         }
       } else {
         m_builder->beginAnchor(fragmentFormat.anchorHref());

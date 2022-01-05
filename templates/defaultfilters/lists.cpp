@@ -172,9 +172,8 @@ QVariant SliceFilter::doFilter(const QVariant &input, const QVariant &argument,
       right = inputString.size() + right;
     }
     return inputString.mid(left, right);
-  } else {
-    return QString(inputString.at(argument.value<int>()));
   }
+  return QString(inputString.at(argument.value<int>()));
 }
 
 QVariant MakeListFilter::doFilter(const QVariant &_input,
@@ -303,7 +302,8 @@ struct DictSortLessThan {
       if (r.userType() == qMetaTypeId<Grantlee::SafeString>()) {
         return l.value<Grantlee::SafeString>().get()
                < r.value<Grantlee::SafeString>().get();
-      } else if (r.userType() == qMetaTypeId<QString>()) {
+      }
+      if (r.userType() == qMetaTypeId<QString>()) {
         return l.value<Grantlee::SafeString>().get() < r.value<QString>();
       }
     } else if (r.userType() == qMetaTypeId<Grantlee::SafeString>()) {

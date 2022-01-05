@@ -111,7 +111,7 @@ Q_DECLARE_METATYPE(PersonGadget)
 GRANTLEE_BEGIN_LOOKUP(Person)
 if (property == QStringLiteral("name"))
   return QString::fromStdString(object.name);
-else if (property == QStringLiteral("age"))
+if (property == QStringLiteral("age"))
   return object.age;
 GRANTLEE_END_LOOKUP
 
@@ -780,7 +780,7 @@ Q_DECLARE_METATYPE(Person *)
 GRANTLEE_BEGIN_LOOKUP_PTR(Person)
 if (property == QStringLiteral("name"))
   return QString::fromStdString(object->name);
-else if (property == QStringLiteral("age"))
+if (property == QStringLiteral("age"))
   return object->age;
 GRANTLEE_END_LOOKUP
 
