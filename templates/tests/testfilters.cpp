@@ -1654,6 +1654,15 @@ void TestFilters::testIntegerFilters_data()
 
   QTest::newRow("add08") << QStringLiteral("{{ 1|add:2 }}") << dict
                          << QStringLiteral("3") << NoError;
+  dict.clear();
+  dict.insert(QStringLiteral("l1"),
+              QStringList{QStringLiteral("one"), QStringLiteral("two")});
+  dict.insert(QStringLiteral("l2"),
+              QStringList{QStringLiteral("three"), QStringLiteral("four")});
+
+  QTest::newRow("add09") << QStringLiteral("{{ l1|add:l2|join:\", \" }}")
+                         << dict << QStringLiteral("one, two, three, four")
+                         << NoError;
 
   QTest::newRow("filter-getdigit01") << QStringLiteral("{{ 123|get_digit:1 }}")
                                      << dict << QStringLiteral("3") << NoError;
