@@ -60,12 +60,10 @@ static QRegularExpression getFilterRegexp()
 
   const QLatin1String varChars(
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.");
-  const QLatin1String numChars("[-+\\.]?\\d[\\d\\.e]*");
+  const QLatin1String numChars(R"([-+\.]?\d[\d\.e]*)");
   const QString i18nOpen(QRegularExpression::escape(QStringLiteral("_(")));
-  const QLatin1String doubleQuoteStringLiteral(
-      "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"");
-  const QLatin1String singleQuoteStringLiteral(
-      "\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'");
+  const QLatin1String doubleQuoteStringLiteral(R"("[^"\\]*(?:\\.[^"\\]*)*")");
+  const QLatin1String singleQuoteStringLiteral(R"('[^'\\]*(?:\\.[^'\\]*)*')");
   const QString i18nClose(QRegularExpression::escape(QStringLiteral(")")));
   const QString variable = QLatin1Char('[') + varChars + QStringLiteral("]+");
 

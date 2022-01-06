@@ -1529,14 +1529,14 @@ void TestDefaultTags::testIfEqualTag_data()
   dict.insert(QStringLiteral("x"), QStringLiteral("aaa"));
 
   QTest::newRow("ifequal-filter04")
-      << "{% ifequal x|slice:\"1\" \"a\" %}x{% endifequal %}" << dict
+      << R"({% ifequal x|slice:"1" "a" %}x{% endifequal %})" << dict
       << QStringLiteral("x") << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("x"), QStringLiteral("aaa"));
 
   QTest::newRow("ifequal-filter05")
-      << "{% ifequal x|slice:\"1\"|upper \"A\" %}x{% endifequal %}" << dict
+      << R"({% ifequal x|slice:"1"|upper "A" %}x{% endifequal %})" << dict
       << QStringLiteral("x") << NoError;
 
   QTest::newRow("ifequal-error01")
@@ -2330,7 +2330,7 @@ void TestDefaultTags::testMediaFinderTag_data()
       << "{% media_finder \"does_not_exist.png\" %}" << dict << QString()
       << NoError;
   QTest::newRow("media_finder-tag03")
-      << "{% media_finder \"existing_image.png\" \"does_not_exist.png\" %}"
+      << R"({% media_finder "existing_image.png" "does_not_exist.png" %})"
       << dict << QStringLiteral("file:///path/to/existing_image.png")
       << NoError;
 

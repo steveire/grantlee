@@ -617,9 +617,9 @@ void TestBuiltinSyntax::testBasicSyntax_data()
   QTest::newRow("basic-syntax25")
       << "{{ \"fred\" }}" << dict << QStringLiteral("fred") << NoError;
   QTest::newRow("basic-syntax26")
-      << "{{ \"\\\"fred\\\"\" }}" << dict << "\"fred\"" << NoError;
+      << R"({{ "\"fred\"" }})" << dict << "\"fred\"" << NoError;
   QTest::newRow("basic-syntax27")
-      << "{{ _(\"\\\"fred\\\"\") }}" << dict << "&quot;fred&quot;" << NoError;
+      << R"({{ _("\"fred\"") }})" << dict << "&quot;fred&quot;" << NoError;
 
   dict.clear();
   hash.clear();
@@ -1226,7 +1226,7 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   dict.clear();
   dict.insert(QStringLiteral("var"), QVariant());
   QTest::newRow("filter-syntax10")
-      << "{{ var|default_if_none:\" endquote\\\" hah\" }}" << dict
+      << R"({{ var|default_if_none:" endquote\" hah" }})" << dict
       << " endquote\" hah" << NoError;
   // Variable as argument
   dict.insert(QStringLiteral("var2"), QStringLiteral("happy"));
@@ -1258,10 +1258,10 @@ void TestBuiltinSyntax::testFilterSyntax_data()
   // Escaped backslash in argument
   dict.clear();
   dict.insert(QStringLiteral("var"), QVariant());
-  QTest::newRow("filter-syntax15") << "{{ var|default_if_none:\"foo\\bar\" }}"
+  QTest::newRow("filter-syntax15") << R"({{ var|default_if_none:"foo\bar" }})"
                                    << dict << "foo\\bar" << NoError;
   // Escaped backslash using known escape char
-  QTest::newRow("filter-syntax16") << "{{ var|default_if_none:\"foo\\now\" }}"
+  QTest::newRow("filter-syntax16") << R"({{ var|default_if_none:"foo\now" }})"
                                    << dict << "foo\\now" << NoError;
   // Empty strings can be passed as arguments to filters
   dict.clear();
@@ -1284,7 +1284,7 @@ void TestBuiltinSyntax::testFilterSyntax_data()
       << QStringLiteral("hello ...") << NoError;
   // filters should accept empty string constants
   dict.clear();
-  QTest::newRow("filter-syntax20") << "{{ \"\"|default_if_none:\"was none\" }}"
+  QTest::newRow("filter-syntax20") << R"({{ ""|default_if_none:"was none" }})"
                                    << dict << QString() << NoError;
 
   QTest::newRow("filter-syntax21")

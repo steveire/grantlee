@@ -401,7 +401,7 @@ void TestFilters::testStringFilters_data()
   QTest::newRow("filter-addslash01")
       << QStringLiteral("{% autoescape off %}{{ a|addslashes }} {{ "
                         "b|addslashes }}{% endautoescape %}")
-      << dict << "<a>\\\' <a>\\\'" << NoError;
+      << dict << R"(<a>\' <a>\')" << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("<a>\'"));
@@ -410,7 +410,7 @@ void TestFilters::testStringFilters_data()
 
   QTest::newRow("filter-addslash02")
       << QStringLiteral("{{ a|addslashes }} {{ b|addslashes }}") << dict
-      << "&lt;a&gt;\\&#39; <a>\\\'" << NoError;
+      << R"(&lt;a&gt;\&#39; <a>\')" << NoError;
 
   dict.clear();
   dict.insert(QStringLiteral("a"), QStringLiteral("fred>"));
@@ -604,7 +604,7 @@ void TestFilters::testStringFilters_data()
          "b|stringformat:\"%2\" }}.{% endautoescape %}"
       << dict << QStringLiteral(".a<b. .a<b.") << NoError;
   QTest::newRow("filter-stringformat02")
-      << ".{{ a|stringformat:\"%1\" }}. .{{ b|stringformat:\"%2\" }}." << dict
+      << R"(.{{ a|stringformat:"%1" }}. .{{ b|stringformat:"%2" }}.)" << dict
       << QStringLiteral(".a&lt;b. .a<b.") << NoError;
   QTest::newRow("filter-stringformat03")
       << ".{{ a|stringformat:\"foo %1 bar\" }}. .{{ b|stringformat:\"baz %2 "
@@ -641,7 +641,7 @@ void TestFilters::testStringFilters_data()
       << dict << QStringLiteral("alpha & ... alpha &amp; ...") << NoError;
 
   QTest::newRow("filter-truncatewords02")
-      << "{{ a|truncatewords:\"2\" }} {{ b|truncatewords:\"2\"}}" << dict
+      << R"({{ a|truncatewords:"2" }} {{ b|truncatewords:"2"}})" << dict
       << QStringLiteral("alpha &amp; ... alpha &amp; ...") << NoError;
 
   //  The "upper" filter messes up entities (which are case-sensitive),
@@ -803,7 +803,7 @@ void TestFilters::testStringFilters_data()
       << dict << QStringLiteral(".a&b  . .a&b  .") << NoError;
 
   QTest::newRow("filter-ljust02")
-      << ".{{ a|ljust:\"5\" }}. .{{ b|ljust:\"5\" }}." << dict
+      << R"(.{{ a|ljust:"5" }}. .{{ b|ljust:"5" }}.)" << dict
       << QStringLiteral(".a&amp;b  . .a&b  .") << NoError;
 
   QTest::newRow("filter-rjust01")
@@ -812,7 +812,7 @@ void TestFilters::testStringFilters_data()
       << dict << QStringLiteral(".  a&b. .  a&b.") << NoError;
 
   QTest::newRow("filter-rjust02")
-      << ".{{ a|rjust:\"5\" }}. .{{ b|rjust:\"5\" }}." << dict
+      << R"(.{{ a|rjust:"5" }}. .{{ b|rjust:"5" }}.)" << dict
       << QStringLiteral(".  a&amp;b. .  a&b.") << NoError;
 
   QTest::newRow("filter-center01")
@@ -822,7 +822,7 @@ void TestFilters::testStringFilters_data()
       << dict << QStringLiteral(". a&b . . a&b .") << NoError;
 
   QTest::newRow("filter-center02")
-      << ".{{ a|center:\"5\" }}. .{{ b|center:\"5\" }}." << dict
+      << R"(.{{ a|center:"5" }}. .{{ b|center:"5" }}.)" << dict
       << QStringLiteral(". a&amp;b . . a&b .") << NoError;
 
   dict.clear();
@@ -834,13 +834,13 @@ void TestFilters::testStringFilters_data()
       << "{% autoescape off %}{{ a|cut:\"x\" }} {{ "
          "b|cut:\"x\" }}{% endautoescape %}"
       << dict << QStringLiteral("&y &amp;y") << NoError;
-  QTest::newRow("filter-cut02") << "{{ a|cut:\"x\" }} {{ b|cut:\"x\" }}" << dict
+  QTest::newRow("filter-cut02") << R"({{ a|cut:"x" }} {{ b|cut:"x" }})" << dict
                                 << QStringLiteral("&amp;y &amp;y") << NoError;
   QTest::newRow("filter-cut03")
       << "{% autoescape off %}{{ a|cut:\"&\" }} {{ "
          "b|cut:\"&\" }}{% endautoescape %}"
       << dict << QStringLiteral("xy xamp;y") << NoError;
-  QTest::newRow("filter-cut04") << "{{ a|cut:\"&\" }} {{ b|cut:\"&\" }}" << dict
+  QTest::newRow("filter-cut04") << R"({{ a|cut:"&" }} {{ b|cut:"&" }})" << dict
                                 << QStringLiteral("xy xamp;y") << NoError;
 
   //  Passing ";" to cut can break existing HTML entities, so those strings
@@ -851,7 +851,7 @@ void TestFilters::testStringFilters_data()
          "b|cut:\";\" }}{% endautoescape %}"
       << dict << QStringLiteral("x&y x&ampy") << NoError;
   QTest::newRow("filter-cut06")
-      << "{{ a|cut:\";\" }} {{ b|cut:\";\" }}" << dict
+      << R"({{ a|cut:";" }} {{ b|cut:";" }})" << dict
       << QStringLiteral("x&amp;y x&amp;ampy") << NoError;
 
   //  The "escape" filter works the same whether autoescape is on or off,
@@ -958,7 +958,7 @@ void TestFilters::testStringFilters_data()
               QVariantList{QStringLiteral("&"), QStringLiteral("<")});
 
   QTest::newRow("filter-safeseq01")
-      << "{{ a|join:\", \" }} -- {{ a|safeseq|join:\", \" }}" << dict
+      << R"({{ a|join:", " }} -- {{ a|safeseq|join:", " }})" << dict
       << QStringLiteral("&amp;, &lt; -- &, <") << NoError;
   QTest::newRow("filter-safeseq02")
       << "{% autoescape off %}{{ a|join:\", \" "
@@ -972,7 +972,7 @@ void TestFilters::testStringFilters_data()
                                        "<a>x</a> <p><b>y</b></p>"))));
 
   QTest::newRow("filter-removetags01")
-      << "{{ a|removetags:\"a b\" }} {{ b|removetags:\"a b\" }}" << dict
+      << R"({{ a|removetags:"a b" }} {{ b|removetags:"a b" }})" << dict
       << QStringLiteral("x &lt;p&gt;y&lt;/p&gt; x <p>y</p>") << NoError;
   QTest::newRow("filter-removetags02")
       << "{% autoescape off %}{{ a|removetags:\"a b\" }} {{ b|removetags:\"a "
@@ -1143,7 +1143,7 @@ void TestFilters::testListFilters_data()
               QVariant::fromValue(markSafe(QStringLiteral("a&b"))));
 
   QTest::newRow("filter-slice01")
-      << "{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}" << dict
+      << R"({{ a|slice:"1:3" }} {{ b|slice:"1:3" }})" << dict
       << QStringLiteral("&amp;b &b") << NoError;
   QTest::newRow("filter-slice02")
       << "{% autoescape off %}{{ a|slice:\"1:3\" }} {{ b|slice:\"1:3\" }}{% "
@@ -1536,7 +1536,7 @@ void TestFilters::testMiscFilters_data()
               QVariant::fromValue(markSafe(QStringLiteral("a < b"))));
 
   QTest::newRow("chaining01")
-      << "{{ a|capfirst|center:\"7\" }}.{{ b|capfirst|center:\"7\" }}" << dict
+      << R"({{ a|capfirst|center:"7" }}.{{ b|capfirst|center:"7" }})" << dict
       << QStringLiteral(" A &lt; b . A < b ") << NoError;
   QTest::newRow("chaining02")
       << "{% autoescape off %}{{ a|capfirst|center:\"7\" }}.{{ "
@@ -1546,7 +1546,7 @@ void TestFilters::testMiscFilters_data()
   //  Using a filter that forces a string back to unsafe:
 
   QTest::newRow("chaining03")
-      << "{{ a|cut:\"b\"|capfirst }}.{{ b|cut:\"b\"|capfirst }}" << dict
+      << R"({{ a|cut:"b"|capfirst }}.{{ b|cut:"b"|capfirst }})" << dict
       << QStringLiteral("A &lt; .A < ") << NoError;
   QTest::newRow("chaining04")
       << "{% autoescape off %}{{ a|cut:\"b\"|capfirst }}.{{ "
