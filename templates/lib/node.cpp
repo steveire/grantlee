@@ -118,10 +118,7 @@ TemplateImpl *Node::containerTemplate() const
 
 NodeList::NodeList() : QList<Grantlee::Node *>(), m_containsNonText(false) {}
 
-NodeList::NodeList(const NodeList &list) : QList<Grantlee::Node *>(list)
-{
-  m_containsNonText = list.m_containsNonText;
-}
+NodeList::NodeList(const NodeList &list) = default;
 
 NodeList &NodeList::operator=(const NodeList &list)
 {
