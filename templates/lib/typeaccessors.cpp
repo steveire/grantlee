@@ -51,7 +51,7 @@ TypeAccessor<Grantlee::SafeString &>::lookUp(const Grantlee::SafeString &object,
 {
   if (property == QStringLiteral("capitalize")) {
     const QString s = object.get();
-    return QVariant(s.at(0).toUpper() + s.right(s.length() - 1));
+    return {s.at(0).toUpper() + s.right(s.length() - 1)};
   }
 
   static const QLatin1String falseString("False");

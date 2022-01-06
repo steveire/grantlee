@@ -34,7 +34,7 @@ SafeString Filter::escape(const QString &input) const
 SafeString Filter::escape(const SafeString &input) const
 {
   if (input.isSafe())
-    return SafeString(m_stream->escape(input), SafeString::IsSafe);
+    return {m_stream->escape(input), SafeString::IsSafe};
   return m_stream->escape(input);
 }
 
