@@ -129,7 +129,7 @@ NodeList &NodeList::operator=(const NodeList &list)
 }
 
 NodeList::NodeList(const QList<Grantlee::Node *> &list)
-    : QList<Grantlee::Node *>(list)
+    : QList<Grantlee::Node *>(list), m_containsNonText(false)
 {
   for (Grantlee::Node *node : list) {
     auto textNode = qobject_cast<TextNode *>(node);
@@ -138,7 +138,6 @@ NodeList::NodeList(const QList<Grantlee::Node *> &list)
       return;
     }
   }
-  m_containsNonText = false;
 }
 
 NodeList::~NodeList() = default;
