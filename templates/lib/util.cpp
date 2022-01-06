@@ -211,8 +211,8 @@ std::pair<qreal, QString> Grantlee::calcFileSize(qreal size, int unitSystem,
 
   bool found = false;
   int count = 0;
-  const qreal baseVal = (_unitSystem == 10) ? 1000.0f : 1024.0f;
-  qreal current = 1.0f;
+  const qreal baseVal = (_unitSystem == 10) ? 1000.0F : 1024.0F;
+  qreal current = 1.0F;
   int units = decimalUnits.size();
   while (!found && (count < units)) {
     current *= baseVal;

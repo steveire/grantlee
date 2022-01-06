@@ -1071,7 +1071,7 @@ void TestDefaultTags::testIfTag_data()
       << QStringLiteral("Yes") << NoError;
 
   // explicitly float
-  float f = 0.0f;
+  float f = 0.0F;
   dict.insert(QStringLiteral("var"), f);
   QTest::newRow("if-truthiness11")
       << QStringLiteral("{% if var %}Yes{% else %}No{% endif %}") << dict

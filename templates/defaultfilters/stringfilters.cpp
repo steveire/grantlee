@@ -499,7 +499,7 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
   const auto arg = getSafeString(argument);
   bool numberConvert = true;
 
-  qreal size = 0.0f;
+  qreal size = 0.0F;
   if (input.canConvert<qreal>()) {
     size = input.toReal(&numberConvert);
     if (!numberConvert) {
@@ -516,7 +516,7 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
 
   int unitSystem = 10;
   int precision = 2;
-  qreal multiplier = 1.0f;
+  qreal multiplier = 1.0F;
 
   if (!arg.get().isEmpty()) {
     const auto argList = arg.get().split(QLatin1Char(','),
@@ -550,12 +550,12 @@ QVariant FileSizeFormatFilter::doFilter(const QVariant &input,
       if (!numberConvert) {
         qWarning("%s", "Failed to convert file size format multiplier into "
                        "double value. Falling back to default 1.0");
-        multiplier = 1.0f;
+        multiplier = 1.0F;
       } else {
-        if (multiplier == 0.0f) {
+        if (multiplier == 0.0F) {
           qWarning("%s", "It makes no sense to multiply the file size by zero. "
                          "Using default value 1.0.");
-          multiplier = 1.0f;
+          multiplier = 1.0F;
         }
       }
     }

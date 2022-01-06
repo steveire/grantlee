@@ -112,7 +112,7 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
 {
   bool convertNumbers = true;
 
-  qreal size = 0.0f;
+  qreal size = 0.0F;
   if (m_size.resolve(c).canConvert<qreal>()) {
     size = m_size.resolve(c).toReal(&convertNumbers);
   } else {
@@ -144,17 +144,17 @@ void L10nFileSizeNode::render(OutputStream *stream, Context *c) const
 
   qreal multiplier = m_multiplier.isValid()
                          ? m_multiplier.resolve(c).toReal(&convertNumbers)
-                         : 1.0f;
+                         : 1.0F;
   if (!convertNumbers) {
     qWarning("%s", "Failed to convert multiplier file size into a floating "
                    "point number. Using default value 1.0.");
-    multiplier = 1.0f;
+    multiplier = 1.0F;
   }
 
-  if (multiplier == 0.0f) {
+  if (multiplier == 0.0F) {
     qWarning("%s", "It makes no sense to multiply the file size by zero. Using "
                    "default value 1.0.");
-    multiplier = 1.0f;
+    multiplier = 1.0F;
   }
 
   const qreal sizeMult = size * multiplier;
@@ -221,7 +221,7 @@ void L10nFileSizeVarNode::render(OutputStream *stream, Context *c) const
   Q_UNUSED(stream)
   bool convertNumbers = true;
 
-  qreal size = 0.0f;
+  qreal size = 0.0F;
   if (m_size.resolve(c).canConvert<qreal>()) {
     size = m_size.resolve(c).toReal(&convertNumbers);
   } else {
@@ -253,17 +253,17 @@ void L10nFileSizeVarNode::render(OutputStream *stream, Context *c) const
 
   qreal multiplier = m_multiplier.isValid()
                          ? m_multiplier.resolve(c).toReal(&convertNumbers)
-                         : 1.0f;
+                         : 1.0F;
   if (!convertNumbers) {
     qWarning("%s", "Failed to convert multiplier file size into a floating "
                    "point number. Using default value 1.0.");
-    multiplier = 1.0f;
+    multiplier = 1.0F;
   }
 
-  if (multiplier == 0.0f) {
+  if (multiplier == 0.0F) {
     qWarning("%s", "It makes no sense to mulitply the file size by zero. Using "
                    "default value 1.0.");
-    multiplier = 1.0f;
+    multiplier = 1.0F;
   }
 
   const double sizeMult = size * multiplier;
