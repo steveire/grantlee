@@ -46,7 +46,7 @@ Engine::Engine(QObject *parent)
                             << QStringLiteral("grantlee_loadertags")
                             << QStringLiteral("grantlee_defaultfilters");
 
-  d_ptr->m_pluginDirs = QCoreApplication::instance()->libraryPaths();
+  d_ptr->m_pluginDirs = QCoreApplication::libraryPaths();
   d_ptr->m_pluginDirs << QString::fromLocal8Bit(GRANTLEE_PLUGIN_PATH);
 }
 
