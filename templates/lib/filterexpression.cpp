@@ -99,14 +99,12 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
   int len;
   QString subString;
 
-  auto vs = varString;
-
   static const auto sFilterRe = getFilterRegexp();
 
   // This is one fo the few constructors that can throw so we make sure to
   // delete its d->pointer.
   try {
-    auto i = sFilterRe.globalMatch(vs);
+    auto i = sFilterRe.globalMatch(varString);
     while (i.hasNext()) {
       auto match = i.next();
       len = match.capturedLength();
@@ -118,7 +116,7 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
         throw Grantlee::Exception(
             TagSyntaxError,
             QStringLiteral("Could not parse some characters: \"%1\"")
-                .arg(vs.mid(lastPos, pos)));
+                .arg(varString.mid(lastPos, pos)));
       }
 
       if (subString.startsWith(QLatin1Char(FILTER_SEPARATOR))) {
@@ -133,7 +131,7 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
       } else if (subString.startsWith(QLatin1Char(FILTER_ARGUMENT_SEPARATOR))) {
         if (d->m_filters.isEmpty()
             || d->m_filters.at(d->m_filters.size() - 1).second.isValid()) {
-          const auto remainder = vs.right(vs.size() - lastPos);
+          const auto remainder = varString.right(varString.size() - lastPos);
           throw Grantlee::Exception(
               TagSyntaxError,
               QStringLiteral("Could not parse the remainder, %1 from %2")
@@ -157,7 +155,7 @@ FilterExpression::FilterExpression(const QString &varString, Parser *parser)
       lastPos = pos;
     }
 
-    const auto remainder = vs.right(vs.size() - lastPos);
+    const auto remainder = varString.right(varString.size() - lastPos);
     if (!remainder.isEmpty()) {
       throw Grantlee::Exception(
           TagSyntaxError,
