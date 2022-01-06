@@ -345,8 +345,7 @@ void Lexer::finalizeToken(int nextPosition, bool processSyntax)
 
   m_processedUpto = m_endSyntaxPosition;
 
-  const auto differentiator
-      = *(m_templateString.constData() + m_startSyntaxPosition);
+  const auto differentiator = m_templateString.at(m_startSyntaxPosition);
   if (differentiator == QLatin1Char('#'))
     return;
 
