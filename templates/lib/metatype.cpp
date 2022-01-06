@@ -53,7 +53,7 @@ static QVariant doQobjectLookUp(const QObject *const object,
   if (!object)
     return {};
   if (property == QStringLiteral("children")) {
-    const auto childList = object->children();
+    const auto &childList = object->children();
     if (childList.isEmpty())
       return {};
     QVariantList children;
