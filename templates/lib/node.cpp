@@ -122,6 +122,9 @@ NodeList::NodeList(const NodeList &list) = default;
 
 NodeList &NodeList::operator=(const NodeList &list)
 {
+  if (&list == this) {
+    return *this;
+  }
   static_cast<QList<Grantlee::Node *> &>(*this)
       = static_cast<QList<Grantlee::Node *>>(list);
   m_containsNonText = list.m_containsNonText;
