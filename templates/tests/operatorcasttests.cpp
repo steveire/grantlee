@@ -73,10 +73,10 @@ public:
 class WrappingSubclassSafeString
 {
 public:
-  WrappingSubclassSafeString() : m_isSafe(false), m_wrappedSubclass(this) {}
+  WrappingSubclassSafeString() : m_wrappedSubclass(this), m_isSafe(false) {}
 
   WrappingSubclassSafeString(const QString &)
-      : m_isSafe(false), m_wrappedSubclass(this)
+      : m_wrappedSubclass(this), m_isSafe(false)
   {
     std::cout
         << "WrappingSubclassSafeString::WrappingSubclassSafeString(QString)"
