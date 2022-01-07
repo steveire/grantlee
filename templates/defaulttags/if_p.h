@@ -61,7 +61,8 @@ private:
 static bool contains(const QVariant &needle, const QVariant &var)
 {
   if (Grantlee::isSafeString(var)) {
-    return getSafeString(var).get().contains(getSafeString(needle));
+    return Grantlee::getSafeString(var).get().contains(
+        Grantlee::getSafeString(needle));
   } else if (var.canConvert<QVariantList>()) {
     auto container = var.value<QVariantList>();
     if (Grantlee::isSafeString(needle)) {
@@ -285,7 +286,7 @@ QSharedPointer<IfToken> IfParser::createNode(const QString &content) const
       Grantlee::FilterExpression(content, mParser));
 }
 
-QVariant IfToken::evaluate(Context *c) const
+QVariant IfToken::evaluate(Grantlee::Context *c) const
 {
   try {
     switch (mOpCode) {
