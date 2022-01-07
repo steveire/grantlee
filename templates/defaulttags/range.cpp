@@ -116,7 +116,6 @@ void RangeNode::render(OutputStream *stream, Context *c) const
 
   Q_ASSERT(start < stop);
 
-  QString ret;
   for (auto i = start; i < stop; i += step) {
     if (insertContext) {
       c->push();

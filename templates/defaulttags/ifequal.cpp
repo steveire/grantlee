@@ -37,8 +37,6 @@ Node *IfEqualNodeFactory::do_getNode(const QString &tagContent, Parser *p,
         QStringLiteral("%1 tag takes two arguments.").arg(expr.first()));
   }
 
-  QStringList vars;
-
   FilterExpression val1(expr.at(1), p);
   FilterExpression val2(expr.at(2), p);
 
