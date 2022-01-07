@@ -156,6 +156,8 @@ Template FileSystemTemplateLoader::loadByName(const QString &fileName,
   QTextStream fstream(&file);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   fstream.setCodec("UTF-8");
+#else
+  fstream.setEncoding(QStringConverter::Utf8);
 #endif
   const auto fileContent = fstream.readAll();
 
