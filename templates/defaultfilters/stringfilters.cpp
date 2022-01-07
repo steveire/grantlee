@@ -391,7 +391,7 @@ QVariant FloatFormatFilter::doFilter(const QVariant &input,
 {
   Q_UNUSED(autoescape)
   double inputDouble;
-  switch (input.type()) {
+  switch (static_cast<int>(input.type())) {
   case QMetaType::Int:
   case QMetaType::UInt:
   case QMetaType::LongLong:
