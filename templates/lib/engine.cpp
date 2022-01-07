@@ -159,7 +159,7 @@ void Engine::loadDefaultLibraries()
   }
 #endif
 
-  for (const QString &libName : d->m_defaultLibraries) {
+  for (const QString &libName : qAsConst(d->m_defaultLibraries)) {
     if (libName == QLatin1String(s_scriptableLibName))
       continue;
 

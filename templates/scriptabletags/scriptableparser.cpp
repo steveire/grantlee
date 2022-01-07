@@ -59,7 +59,7 @@ QList<QObject *> ScriptableParser::parse(QObject *parent,
 
   auto nodeList = m_p->parse(node, stopAt);
   QList<QObject *> objList;
-  for (auto n : nodeList) {
+  for (auto n : qAsConst(nodeList)) {
     objList << n;
   }
   return objList;

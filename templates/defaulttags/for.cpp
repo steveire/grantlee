@@ -65,7 +65,7 @@ Node *ForNodeFactory::getNode(const QString &tagContent, Parser *p) const
     );
   }
 
-  for (const QString &var : vars) {
+  for (const QString &var : qAsConst(vars)) {
     if (var.isEmpty())
       throw Grantlee::Exception(
           TagSyntaxError,
