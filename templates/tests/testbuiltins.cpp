@@ -1358,7 +1358,7 @@ void TestBuiltinSyntax::testEscaping_data()
   // html escaping is not to be confused with for example url escaping.
   dict.insert(QStringLiteral("var"), QStringLiteral("< > & \" \' # = % $"));
   QTest::newRow("escape01")
-      << QString::fromLatin1("{{ var }}") << dict
+      << QStringLiteral("{{ var }}") << dict
       << "&lt; &gt; &amp; &quot; &#39; # = % $" << NoError;
 
   dict.clear();
