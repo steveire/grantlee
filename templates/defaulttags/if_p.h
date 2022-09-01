@@ -30,6 +30,24 @@
 #include "node.h"
 #include "util.h"
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)) && \
+    (QT_VERSION  < QT_VERSION_CHECK(6, 0, 0))
+namespace {
+class ComparableVariant : public QVariant
+{
+  public:
+    ComparableVariant(const QVariant &other)
+      : QVariant(other) { }
+
+    // Make QVariant::compare() public.
+    int compare(const QVariant &other) const
+    {
+        return QVariant::compare(other);
+    }
+};
+}
+#endif
+
 namespace Grantlee
 {
 class Parser;
@@ -310,7 +328,8 @@ QVariant IfToken::evaluate(Grantlee::Context *c) const
     case NeqCode:
       return !Grantlee::equals(mArgs.first->evaluate(c),
                                mArgs.second->evaluate(c));
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    // Pre Qt-5.15, use the operators (first deprecated in Qt 5.15).
     case GtCode:
       return mArgs.first->evaluate(c) > mArgs.second->evaluate(c);
     case GteCode:
@@ -319,7 +338,22 @@ QVariant IfToken::evaluate(Grantlee::Context *c) const
       return mArgs.first->evaluate(c) < mArgs.second->evaluate(c);
     case LteCode:
       return mArgs.first->evaluate(c) <= mArgs.second->evaluate(c);
-#else
+#elif QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // From Qt 5.15, but before Qt 6, use a QVariant wrapper to access
+    // the protected QVariant::compare() function instead.
+    case GtCode:
+      return ComparableVariant(mArgs.first->evaluate(c))
+        .compare(mArgs.second->evaluate(c)) > 0;
+    case GteCode:
+      return ComparableVariant(mArgs.first->evaluate(c))
+        .compare(mArgs.second->evaluate(c)) >= 0;
+    case LtCode:
+      return ComparableVariant(mArgs.first->evaluate(c))
+        .compare(mArgs.second->evaluate(c)) < 0;
+    case LteCode:
+      return ComparableVariant(mArgs.first->evaluate(c))
+        .compare(mArgs.second->evaluate(c)) <= 0;
+#else // From Qt6, use QPartialOrdering (added in Qt 6.0).
     case GtCode:
     case GteCode:
     case LtCode:
