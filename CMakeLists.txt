@@ -5,7 +5,7 @@ if (POLICY CMP0071)
   cmake_policy(SET CMP0071 NEW)
 endif()
 
-project(Grantlee5 VERSION 5.2.0)
+project(Grantlee5 VERSION 5.3.0)
 
 # Workaround for http://public.kitware.com/Bug/view.php?id=12301
 if (MINGW)
