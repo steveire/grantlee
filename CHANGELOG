@@ -5,6 +5,19 @@ The Grantlee Template System
 Version History
 ---------------
 
+-- Version 5.3   --
+-------------------
+* Use C++11 nullptr where appropriate
+* Use QRandomGenerator instead of deprecated qRand
+* Increase compatibility with Qt 6 APIs
+* Add CMake option to build with Qt 6 - GRANTLEE_BUILD_WITH_QT6
+* Support enum introspection on Q_GADGET
+* filesizeformat implementation as well as localized filesize
+* Make enums comparable with more operations
+* Add "truncatechars" filter
+* Fix concatenation of string lists
+
+
 -- Version 5.2   --
 -------------------
 * Increase CMake requirement to version 3.5
