@@ -52,7 +52,6 @@ target_link_libraries(htmlapps
 
 if (GRANTLEE_BUILD_WITH_QT6)
   target_link_libraries(htmlapps
-    Qt6::WebKitWidgets
   )
 else()
   target_link_libraries(htmlapps

@@ -20,11 +20,9 @@ target_link_libraries(
 )
 
 if (GRANTLEE_BUILD_WITH_QT6)
-  find_package(Qt6WebKitWidgets REQUIRED)
   find_package(Qt6LinguistTools REQUIRED)
   target_link_libraries(
     contacts_linguist
-    Qt6::WebKitWidgets
   )
   set(lupdate_exe Qt6::lupdate)
   set(lrelease_exe Qt6::lrelease)
