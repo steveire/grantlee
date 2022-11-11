@@ -19,25 +19,14 @@ target_link_libraries(
   Grantlee5::Templates
 )
 
-if (GRANTLEE_BUILD_WITH_QT6)
-  find_package(Qt6WebKitWidgets REQUIRED)
-  find_package(Qt6LinguistTools REQUIRED)
-  target_link_libraries(
-    contacts_linguist
-    Qt6::WebKitWidgets
-  )
-  set(lupdate_exe Qt6::lupdate)
-  set(lrelease_exe Qt6::lrelease)
-else()
-  find_package(Qt5WebKitWidgets REQUIRED)
-  find_package(Qt5LinguistTools REQUIRED)
-  target_link_libraries(
-    contacts_linguist
-    Qt5::WebKitWidgets
-  )
-  set(lupdate_exe Qt5::lupdate)
-  set(lrelease_exe Qt5::lrelease)
-endif()
+find_package(Qt5WebKitWidgets REQUIRED)
+find_package(Qt5LinguistTools REQUIRED)
+target_link_libraries(
+  contacts_linguist
+  Qt5::WebKitWidgets
+)
+set(lupdate_exe Qt5::lupdate)
+set(lrelease_exe Qt5::lrelease)
 
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${PROJECT_SOURCE_DIR}/../../scripts" "${PROJECT_SOURCE_DIR}/scripts")
 

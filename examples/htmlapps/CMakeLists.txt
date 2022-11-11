@@ -25,17 +25,10 @@ find_package(Qt5 REQUIRED XmlPatterns Network)
 target_link_libraries(customplugin
   Grantlee5::Templates
 )
-if (GRANTLEE_BUILD_WITH_QT6)
-  target_link_libraries(customplugin
-    Qt6::XmlPatterns
-    Qt6::Network
-  )
-else()
-  target_link_libraries(customplugin
-    Qt5::XmlPatterns
-    Qt5::Network
-  )
-endif()
+target_link_libraries(customplugin
+  Qt5::XmlPatterns
+  Qt5::Network
+)
 
 add_executable(htmlapps
   main.cpp
@@ -50,12 +43,6 @@ target_link_libraries(htmlapps
   Grantlee5::Templates
 )
 
-if (GRANTLEE_BUILD_WITH_QT6)
-  target_link_libraries(htmlapps
-    Qt6::WebKitWidgets
-  )
-else()
-  target_link_libraries(htmlapps
-    Qt5::WebKitWidgets
-  )
-endif()
+target_link_libraries(htmlapps
+  Qt5::WebKitWidgets
+)

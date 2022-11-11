@@ -24,21 +24,23 @@ ExternalProject_Add(codegen
   DEPENDS books
 )
 
-ExternalProject_Add(contacts
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/contacts
-  INSTALL_COMMAND ""
-  CMAKE_ARGS
-    -DCMAKE_PREFIX_PATH=${prefixPath}
-  DEPENDS codegen
-)
+if (NOT GRANTLEE_BUILD_WITH_QT6)
+  ExternalProject_Add(contacts
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/contacts
+    INSTALL_COMMAND ""
+    CMAKE_ARGS
+      -DCMAKE_PREFIX_PATH=${prefixPath}
+    DEPENDS codegen
+  )
 
-ExternalProject_Add(htmlapps
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/htmlapps
-  INSTALL_COMMAND ""
-  CMAKE_ARGS
-    -DCMAKE_PREFIX_PATH=${prefixPath}
-  DEPENDS contacts
-)
+  ExternalProject_Add(htmlapps
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/htmlapps
+    INSTALL_COMMAND ""
+    CMAKE_ARGS
+      -DCMAKE_PREFIX_PATH=${prefixPath}
+    DEPENDS contacts
+  )
+endif()
 
 ExternalProject_Add(textedit
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/textedit
