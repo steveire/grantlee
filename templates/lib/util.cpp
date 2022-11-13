@@ -23,6 +23,7 @@
 #include "metaenumvariable_p.h"
 #include "metatype.h"
 
+#include <cfloat>
 #include <QtCore/QStringList>
 
 QString Grantlee::unescapeStringLiteral(const QString &input)
@@ -212,7 +213,13 @@ std::pair<qreal, QString> Grantlee::calcFileSize(qreal size, int unitSystem,
   bool found = false;
   int count = 0;
   const qreal baseVal = (_unitSystem == 10) ? 1000.0F : 1024.0F;
+#if FLT_EVAL_METHOD == 2
+  // Avoid that this is treated as long double, as the increased
+  // precision breaks the comparison below.
+  volatile qreal current = 1.0F;
+#else
   qreal current = 1.0F;
+#endif
   int units = decimalUnits.size();
   while (!found && (count < units)) {
     current *= baseVal;
