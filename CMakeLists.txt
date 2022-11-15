@@ -77,7 +77,7 @@ set(CMAKE_AUTOMOC ON)
 
 set(Grantlee5_MIN_PLUGIN_VERSION 0)
 
-set(Grantlee5_MAJOR_MINOR_VERSION_STRING "${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}" )
+set(Grantlee5_MAJOR_MINOR_VERSION_STRING "${Grantlee5_VERSION_MAJOR}_${Grantlee5_VERSION_MINOR}" )
 
 set (LIB_SUFFIX "" CACHE STRING "Define suffix of library directory name (eg. '64')")
 
