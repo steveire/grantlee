@@ -73,6 +73,7 @@ public:
   void addNewline() override;
 
   void insertImage(const QString &src, qreal width, qreal height) override;
+  void insertImage(const QImage &image, qreal width, qreal height) override;
 
   void beginList(QTextListFormat::Style type) override;
 

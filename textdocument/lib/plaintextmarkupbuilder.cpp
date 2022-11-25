@@ -256,6 +256,15 @@ void PlainTextMarkupBuilder::insertImage(const QString &src, qreal width,
   d->m_text.append(QStringLiteral("[%1]").arg(ref));
 }
 
+void PlainTextMarkupBuilder::insertImage(const QImage &image, qreal width,
+                                         qreal height)
+{
+  Q_D(PlainTextMarkupBuilder);
+  Q_UNUSED(image)
+  Q_UNUSED(width)
+  Q_UNUSED(height)
+}
+
 void PlainTextMarkupBuilder::beginList(QTextListFormat::Style style)
 {
   Q_D(PlainTextMarkupBuilder);
