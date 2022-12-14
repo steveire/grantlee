@@ -39,7 +39,7 @@ class MainWindow : public QWidget
   Q_OBJECT
 public:
   MainWindow(const QString &templateDir, QWidget *parent = 0,
-             Qt::WindowFlags f = 0);
+             Qt::WindowFlags f = Qt::Widget);
 
 protected:
   virtual void initLocalizer();
@@ -65,7 +65,7 @@ template <typename T> class AppMainWindow : public MainWindow
 {
 public:
   AppMainWindow(const QString &templateDir, QWidget *parent = 0,
-                Qt::WindowFlags f = 0)
+                Qt::WindowFlags f = Qt::Widget)
       : MainWindow(templateDir, parent, f)
   {
   }

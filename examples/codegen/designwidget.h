@@ -34,7 +34,7 @@ class DesignWidget : public QWidget
 {
   Q_OBJECT
 public:
-  DesignWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
+  DesignWidget(QWidget *parent = 0, Qt::WindowFlags f = Qt::Widget);
 
   Grantlee::Context getContext();
 

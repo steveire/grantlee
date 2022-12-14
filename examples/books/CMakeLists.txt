@@ -16,8 +16,13 @@ get_filename_component(Grantlee_PLUGIN_DIR ${Grantlee_PLUGIN_DIR} PATH)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Sql REQUIRED)
+if (GRANTLEE_BUILD_WITH_QT6)
+    find_package(Qt6Widgets REQUIRED)
+    find_package(Qt6Sql REQUIRED)
+else()
+    find_package(Qt5Widgets REQUIRED)
+    find_package(Qt5Sql REQUIRED)
+endif()
 
 add_executable(books
   main.cpp
@@ -31,6 +36,7 @@ target_link_libraries(
   books
   Grantlee5::Templates
 )
+
 if (GRANTLEE_BUILD_WITH_QT6)
     target_link_libraries(books
       Qt6::Widgets
