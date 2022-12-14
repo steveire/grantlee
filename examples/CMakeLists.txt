@@ -10,12 +10,6 @@ else()
   set(prefixPath ${CMAKE_BINARY_DIR}/${CMAKE_PREFIX_PATH})
 endif()
 
-ExternalProject_Add(books
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/books
-  INSTALL_COMMAND ""
-  CMAKE_ARGS
-    -DCMAKE_PREFIX_PATH=${prefixPath}
-)
 ExternalProject_Add(codegen
   SOURCE_DIR ${CMAKE_SOURCE_DIR}/codegen
   INSTALL_COMMAND ""
@@ -25,6 +19,13 @@ ExternalProject_Add(codegen
 )
 
 if (NOT GRANTLEE_BUILD_WITH_QT6)
+  ExternalProject_Add(books
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/books
+    INSTALL_COMMAND ""
+    CMAKE_ARGS
+      -DCMAKE_PREFIX_PATH=${prefixPath}
+  )
+
   ExternalProject_Add(contacts
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/contacts
     INSTALL_COMMAND ""
@@ -40,12 +41,12 @@ if (NOT GRANTLEE_BUILD_WITH_QT6)
       -DCMAKE_PREFIX_PATH=${prefixPath}
     DEPENDS contacts
   )
-endif()
 
-ExternalProject_Add(textedit
-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/textedit
-  INSTALL_COMMAND ""
-  CMAKE_ARGS
-    -DCMAKE_PREFIX_PATH=${prefixPath}
-  DEPENDS htmlapps
-)
+  ExternalProject_Add(textedit
+    SOURCE_DIR ${CMAKE_SOURCE_DIR}/textedit
+    INSTALL_COMMAND ""
+    CMAKE_ARGS
+      -DCMAKE_PREFIX_PATH=${prefixPath}
+    DEPENDS htmlapps
+  )
+endif()
