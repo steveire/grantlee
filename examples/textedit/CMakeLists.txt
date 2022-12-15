@@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 3.5)
 project(textedit_grantlee)
 
 find_package(Grantlee5 REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+
+if (GRANTLEE_BUILD_WITH_QT6)
+    find_package(Qt6Widgets REQUIRED)
+else()
+    find_package(Qt5Widgets REQUIRED)
+endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -47,13 +52,13 @@ target_link_libraries(
 )
 
 if (GRANTLEE_BUILD_WITH_QT6)
-  target_link_libraries(
-    textedit
-    Qt6::Widgets
-  )
+    target_link_libraries(
+      textedit
+      Qt6::Widgets
+    )
 else()
-  target_link_libraries(
-    textedit
-    Qt5::Widgets
-  )
+    target_link_libraries(
+      textedit
+      Qt5::Widgets
+    )
 endif()

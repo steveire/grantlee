@@ -16,7 +16,7 @@ get_filename_component(Grantlee_PLUGIN_DIR ${Grantlee_PLUGIN_DIR} PATH)
 
 configure_file(grantlee_paths.h.cmake ${PROJECT_BINARY_DIR}/grantlee_paths.h)
 
-qt5_add_resources(
+qt_add_resources(
   codegen_example_RCS_SRCS
   custom_tags.qrc
   OPTIONS -root "/plugins/grantlee/${Grantlee5_VERSION_MAJOR}.${Grantlee5_VERSION_MINOR}/"
@@ -35,12 +35,17 @@ add_executable(codegen
 )
 target_compile_definitions(codegen PRIVATE QT_DISABLE_DEPRECATED_BEFORE=0)
 
-find_package(Qt5Widgets REQUIRED)
+if (GRANTLEE_BUILD_WITH_QT6)
+    find_package(Qt6Widgets REQUIRED)
+else()
+    find_package(Qt5Widgets REQUIRED)
+endif()
 
 target_link_libraries(
   codegen
   Grantlee5::Templates
 )
+
 if (GRANTLEE_BUILD_WITH_QT6)
     target_link_libraries(codegen
       Qt6::Widgets
