@@ -28,9 +28,7 @@ target_link_libraries(
 set(lupdate_exe Qt5::lupdate)
 set(lrelease_exe Qt5::lrelease)
 
-execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${PROJECT_SOURCE_DIR}/../../scripts" "${PROJECT_SOURCE_DIR}/scripts")
-
-set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/scripts/extract_strings_linguist.py"
+set( LINGUIST_TS_ARGS COMMAND "${CMAKE_SOURCE_DIR}/../../scripts/extract_strings_linguist.py"
   "${CMAKE_SOURCE_DIR}/themes/linguist/bashful/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sneezy/*.html"
   "${CMAKE_SOURCE_DIR}/themes/linguist/sleepy/*.html"
