@@ -24,6 +24,9 @@
 #include "exception.h"
 #include "grantlee_config_p.h"
 #include "grantlee_version.h"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include "metaenumvariable_p.h"
+#endif
 #ifdef QT_QML_LIB
 #include "scriptabletags.h"
 #endif
@@ -32,6 +35,9 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QtCore/QMetaType>
+#endif
 #include <QtCore/QPluginLoader>
 #include <QtCore/QTextStream>
 
@@ -48,6 +54,10 @@ Engine::Engine(QObject *parent)
 
   d_ptr->m_pluginDirs = QCoreApplication::libraryPaths();
   d_ptr->m_pluginDirs << QString::fromLocal8Bit(GRANTLEE_PLUGIN_PATH);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  QMetaType::registerComparators<MetaEnumVariable>();
+#endif
 }
 
 Engine::~Engine()
